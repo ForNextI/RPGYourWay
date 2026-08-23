@@ -8,7 +8,7 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; dependencies?: Record<string, string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.3.0')
+assert.equal(pkg.version, '1.3.1')
 assert.equal(pkg.dependencies?.next, '16.2.6')
 
 for (const file of [
@@ -93,10 +93,14 @@ assert.match(css, /--cyan:\s*oklch\(0\.78 0\.15 195\)/)
 assert.match(css, /--amber:\s*oklch\(0\.78 0\.17 55\)/)
 assert.match(css, /\.brand-logo-card/)
 assert.match(css, /\.hero-thesis/)
+assert.match(css, /align-items:\s*start/)
+assert.match(css, /hero-thesis-line/)
+assert.match(css, /white-space:\s*nowrap/)
+assert.match(css, /font-size:\s*clamp\(1\.05rem, 2\.4vw, 2\.2rem\)/)
 assert.match(css, /\.hero-audience/)
 assert.match(css, /\.audience-accordion/)
 assert.match(css, /\.audience-item/)
 assert.match(css, /@media \(max-width: 620px\)/)
 assert.match(css, /@media \(prefers-reduced-motion: reduce\)/)
 
-console.log('RPG Your Way 1.3.0 landing thesis and Play / Shape / Read navigation passed validation.')
+console.log('RPG Your Way 1.3.1 compact top-aligned landing thesis passed validation.')

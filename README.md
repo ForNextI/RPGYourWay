@@ -1,5 +1,9 @@
 # RPG Your Way
 
+**Build 1.3.1 · Compact top-aligned landing thesis**
+
+Build 1.3.1 moves the landing thesis and full RPG Your Way logo to the top of the hero on the same visual line, and reduces the thesis from oversized display copy to compact introductory copy. “Tabletop gaming is best in person.” stays on one line where space permits, followed by “No question.” and “But sometimes...”.
+
 **Build 1.3.0 · Landing thesis, Play / Shape / Read navigation**
 
 Build 1.3.0 moves the site thesis to the first content position on the landing page and restores the three-part Play / Shape / Read navigation used by the broader project family.

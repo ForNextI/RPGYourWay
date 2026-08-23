@@ -54,7 +54,7 @@ export default function HomePage() {
         <section className="hero">
           <div className="shell hero-grid">
             <div className="hero-copy hero-thesis">
-              <h1>Tabletop gaming is best in person.<br /><span>No question.</span></h1>
+              <h1><span className="hero-thesis-line">Tabletop gaming is best in person.</span><span className="hero-no-question">No question.</span></h1>
               <p className="hero-sometimes">But sometimes...</p>
 
               <details className="audience-accordion hero-audience">
