@@ -20,6 +20,33 @@ const features = [
   },
 ]
 
+const audiences = [
+  {
+    title: 'Solo players',
+    copy: "Or people who can't get a group together right now. Run a party of up to six characters instead of waiting for everyone's schedules to line up.",
+  },
+  {
+    title: 'Neurodivergent players',
+    copy: 'Who may be uncomfortable playing with strangers or putting the game in the hands of an unfamiliar DM. Play in a lower-pressure setting, at your own pace.',
+  },
+  {
+    title: 'Forever DMs',
+    copy: 'Who are usually the person running the game. Sit on the player side of the table for a change, without having to try to find somebody competent to DM.',
+  },
+  {
+    title: 'Blind players and screen-reader users',
+    copy: 'Use screen-reader support and voice-guided play, including spoken AIGM replies and important visual information communicated in words.',
+  },
+  {
+    title: 'Players with irregular or limited schedules',
+    copy: "Start a session when you have time and stop when you need to, without coordinating a full group's calendar. Or play at four in the morning.",
+  },
+  {
+    title: 'Beginners and returning players',
+    copy: 'Learn or relearn the game gradually and at your own pace, without worrying about being judged or made fun of.',
+  },
+]
+
 export default function HomePage() {
   return (
     <PageShell>
@@ -89,6 +116,40 @@ export default function HomePage() {
                 </article>
               ))}
             </div>
+          </div>
+        </section>
+
+
+        <section className="section audience-section" aria-labelledby="audience-heading">
+          <div className="shell">
+            <details className="audience-accordion">
+              <summary className="audience-summary">
+                <div>
+                  <p className="kicker">When the table isn&apos;t available</p>
+                  <h2 id="audience-heading">Tabletop gaming is best in person. <span>No question.</span></h2>
+                  <p>But sometimes in person isn&apos;t an option. Open this to see who RPG Your Way is for.</p>
+                </div>
+                <span className="accordion-plus" aria-hidden="true">+</span>
+              </summary>
+
+              <div className="audience-body">
+                <p className="audience-intro"><strong>This site is for:</strong></p>
+                <div className="audience-list">
+                  {audiences.map((audience, index) => (
+                    <details className="audience-item" key={audience.title}>
+                      <summary>
+                        <span>{audience.title}</span>
+                        <span className="accordion-plus" aria-hidden="true">+</span>
+                      </summary>
+                      <p>{audience.copy}</p>
+                      {index === 1 ? (
+                        <p className="builder-note"><em>I belong to both of those groups. They&apos;re part of why I built this site.</em></p>
+                      ) : null}
+                    </details>
+                  ))}
+                </div>
+              </div>
+            </details>
           </div>
         </section>
 

@@ -1,15 +1,20 @@
 # RPG Your Way
 
-**Build 0.1.1 · First brand assets**
+**Build 0.1.2 · Audience accordions**
 
-RPG Your Way is a fresh Next.js project for the commercial AIGM product. Build 0.1.1 installs the first approved RPG Your Way brand assets while preserving the 0.1.0 commercial skeleton.
+RPG Your Way is a fresh Next.js project for the commercial AIGM product. Build 0.1.2 adds a compact, mobile-friendly explanation of who the site is for without turning the landing page into a wall of text.
 
-## What changed in 0.1.1
+## What changed in 0.1.2
 
-- Added the full RPG Your Way compass logo to the landing-page hero.
-- Replaced the temporary header `R` mark with the standalone compass rose.
-- Added the compass rose as the browser favicon and app icon, including an Apple touch icon.
-- Kept the existing mobile-first layout, routes, accessibility behavior, and temporary no-index policy unchanged.
+- Added an outer landing-page accordion built around “Tabletop gaming is best in person. No question.”
+- Added nested accordions for solo players, neurodivergent players, forever DMs, blind and screen-reader users, players with irregular schedules, and beginners or returning players.
+- Preserved the personal note explaining that solo and neurodivergent play are part of why the site was built.
+- Used native `<details>` and `<summary>` controls for a lightweight, keyboard-friendly, no-JavaScript interaction that works well on phones.
+- Kept the 0.1.1 logo and favicon work unchanged.
+
+## Previous build
+
+Build 0.1.1 installed the approved RPG Your Way logo, compass mark, favicon, app icon, and Apple touch icon.
 
 ## Foundation inherited from 0.1.0
 

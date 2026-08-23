@@ -253,6 +253,95 @@ h1, h2, h3 { font-family: "Trebuchet MS", ui-sans-serif, system-ui, sans-serif; 
 .feature-card h3 { margin-bottom: .7rem; font-size: 1.45rem; }
 .feature-card > p:last-child { color: var(--muted); }
 
+
+.audience-section { padding-top: 0; }
+.audience-accordion {
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--cyan) 28%, var(--border));
+  border-radius: 24px;
+  background:
+    linear-gradient(145deg, var(--cyan-soft), transparent 38%),
+    var(--panel);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .06), 0 20px 50px rgb(0 0 0 / .14);
+}
+.audience-summary,
+.audience-item > summary {
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.audience-summary::-webkit-details-marker,
+.audience-item > summary::-webkit-details-marker { display: none; }
+.audience-summary {
+  min-height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: clamp(1.35rem, 4vw, 2.3rem);
+}
+.audience-summary:hover { background: rgb(255 255 255 / .025); }
+.audience-summary > div { max-width: 850px; }
+.audience-summary .kicker { margin-bottom: .65rem; }
+.audience-summary h2 {
+  margin-bottom: .55rem;
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -.035em;
+}
+.audience-summary h2 span { color: var(--cyan); }
+.audience-summary p:last-child { margin-bottom: 0; color: var(--muted); }
+.accordion-plus {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  color: var(--cyan);
+  background: rgb(0 0 0 / .12);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1;
+  transition: transform 160ms ease, border-color 160ms ease;
+}
+.audience-accordion[open] > .audience-summary .accordion-plus,
+.audience-item[open] > summary .accordion-plus { transform: rotate(45deg); }
+.audience-accordion[open] > .audience-summary { border-bottom: 1px solid var(--border); }
+.audience-body { padding: clamp(1rem, 3vw, 1.6rem); }
+.audience-intro { margin: 0 0 .8rem; color: var(--text); font-size: 1.05rem; }
+.audience-list { display: grid; gap: .65rem; }
+.audience-item {
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: color-mix(in oklab, var(--bg-deep) 55%, transparent);
+}
+.audience-item > summary {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .8rem .9rem .8rem 1rem;
+  font-family: "Trebuchet MS", ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.06rem;
+  font-weight: 850;
+}
+.audience-item > summary:hover { background: rgb(255 255 255 / .025); }
+.audience-item > summary .accordion-plus { width: 32px; height: 32px; font-size: 1.15rem; }
+.audience-item > p {
+  margin: 0;
+  border-top: 1px solid var(--border);
+  padding: 1rem;
+  color: var(--muted);
+}
+.audience-item .builder-note {
+  border-top: 0;
+  padding-top: 0;
+  color: color-mix(in oklab, var(--amber) 76%, white 12%);
+}
+
 .callout {
   display: flex;
   align-items: end;
@@ -331,6 +420,9 @@ h1, h2, h3 { font-family: "Trebuchet MS", ui-sans-serif, system-ui, sans-serif; 
   .hero-actions { display: grid; grid-template-columns: 1fr; }
   .button { width: 100%; }
   .preview-row { grid-template-columns: 1fr; }
+  .audience-summary { align-items: flex-start; gap: 1rem; }
+  .audience-summary > .accordion-plus { margin-top: .15rem; }
+  .audience-item > summary { font-size: 1rem; }
   .pricing-points p { grid-template-columns: 1fr; gap: .25rem; }
   .footer-inner { align-items: flex-start; flex-direction: column; }
 }
