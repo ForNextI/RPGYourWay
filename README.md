@@ -1,5 +1,9 @@
 # RPG Your Way
 
+**Build 1.3.11 · Compact landing thesis font hotfix**
+
+Build 1.3.11 fixes the landing-page thesis font rule so it actually overrides the generic hero heading style on desktop. “Tabletop gaming is best in person.” is now compact introductory copy rather than a full-size display headline.
+
 **Build 1.3.1 · Compact top-aligned landing thesis**
 
 Build 1.3.1 moves the landing thesis and full RPG Your Way logo to the top of the hero on the same visual line, and reduces the thesis from oversized display copy to compact introductory copy. “Tabletop gaming is best in person.” stays on one line where space permits, followed by “No question.” and “But sometimes...”.
