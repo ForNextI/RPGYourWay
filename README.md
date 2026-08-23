@@ -1,30 +1,24 @@
 # RPG Your Way
 
-**Build 0.1.2 · Audience accordions**
+**Build 1.3.0 · Landing thesis, Play / Shape / Read navigation**
 
-RPG Your Way is a fresh Next.js project for the commercial AIGM product. Build 0.1.2 adds a compact, mobile-friendly explanation of who the site is for without turning the landing page into a wall of text.
+Build 1.3.0 moves the site thesis to the first content position on the landing page and restores the three-part Play / Shape / Read navigation used by the broader project family.
 
-## What changed in 0.1.2
+## What changed in 1.3.0
 
-- Added an outer landing-page accordion built around “Tabletop gaming is best in person. No question.”
-- Added nested accordions for solo players, neurodivergent players, forever DMs, blind and screen-reader users, players with irregular schedules, and beginners or returning players.
-- Preserved the personal note explaining that solo and neurodivergent play are part of why the site was built.
-- Used native `<details>` and `<summary>` controls for a lightweight, keyboard-friendly, no-JavaScript interaction that works well on phones.
-- Kept the 0.1.1 logo and favicon work unchanged.
+- The landing page now opens with **“Tabletop gaming is best in person. No question.”** followed by **“But sometimes...”**
+- The audience explanation now sits directly beneath that thesis behind a compact **“Who RPG Your Way is for”** accordion.
+- The existing plus-sign accordion controls remain in place as a visual echo of the compass-rose brand mark.
+- Primary navigation is now **Play / Shape / Read**.
+- Added a `/shape` placeholder for the returning transcript-to-prose tool. Shape is explicitly separate from the Play balance and will be quoted per conversion.
+- Added a deliberately minimal `/read` page pointing novel readers to **TheReadingOfTheWardens.com**.
+- Preserved the approved RPG Your Way logo, compass favicon, nested audience accordions, and mobile-first styling.
 
-## Previous build
+## Current product rules
 
-Build 0.1.1 installed the approved RPG Your Way logo, compass mark, favicon, app icon, and Apple touch icon.
-
-## Foundation inherited from 0.1.0
-
-- Next.js 16.2.6 / React 19 / TypeScript
-- Responsive landing page
-- `/play`, `/pricing`, `/account`, `/support`, `/legal/privacy`, and `/legal/terms`
-- Accessibility skip link and visible focus treatment
-- Reduced-motion handling
-- Temporary `robots.txt` policy that blocks indexing while the commercial site is under construction
-- Release validator
+- **Play:** prepaid usage balance.
+- **Shape:** separately quoted one-time price per conversion; never silently deducted from Play balance.
+- **Read:** the novel lives on the separate free reading site.
 
 ## Still intentionally not wired
 
@@ -32,7 +26,8 @@ Build 0.1.1 installed the approved RPG Your Way logo, compass mark, favicon, app
 - No authentication provider yet
 - No payment provider yet
 - No OpenAI API key or gameplay route yet
-- No final pricing
+- No final Play pricing
+- Shape quotation and conversion processing are not yet implemented
 - No final legal copy
 - No analytics or advertising code
 
@@ -51,7 +46,3 @@ pnpm run validate:release
 pnpm run build
 git diff --check
 ```
-
-## Next infrastructure layer
-
-The intended next build is account and billing infrastructure, followed by migration of the AIGM and campaign data model. The exact providers should be wired deliberately rather than faked in this starter.

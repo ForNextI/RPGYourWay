@@ -3,8 +3,8 @@ import Link from 'next/link'
 
 const links = [
   { href: '/play', label: 'Play' },
-  { href: '/pricing', label: 'Pricing' },
-  { href: '/account', label: 'Account' },
+  { href: '/shape', label: 'Shape' },
+  { href: '/read', label: 'Read' },
 ]
 
 export function SiteHeader() {

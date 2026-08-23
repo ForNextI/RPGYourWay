@@ -131,6 +131,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 
 .hero-copy { max-width: 680px; }
+.hero-thesis h1 { margin-bottom: 1rem; font-size: clamp(2.75rem, 6vw, 5.6rem); }
+.hero-sometimes { margin: 0 0 1.4rem; color: var(--muted); font-family: "Trebuchet MS", ui-sans-serif, system-ui, sans-serif; font-size: clamp(1.35rem, 3vw, 2rem); font-weight: 800; }
+.hero-audience { margin-top: .25rem; }
+.hero-audience > .audience-summary { min-height: 74px; padding: 1rem 1.1rem 1rem 1.25rem; }
+.audience-prompt { font-family: "Trebuchet MS", ui-sans-serif, system-ui, sans-serif; font-size: clamp(1.05rem, 2.4vw, 1.3rem); font-weight: 900; }
 .hero-side { display: grid; gap: 1rem; }
 .brand-logo-card {
   overflow: hidden;
@@ -254,7 +259,6 @@ h1, h2, h3 { font-family: "Trebuchet MS", ui-sans-serif, system-ui, sans-serif; 
 .feature-card > p:last-child { color: var(--muted); }
 
 
-.audience-section { padding-top: 0; }
 .audience-accordion {
   overflow: hidden;
   border: 1px solid color-mix(in oklab, var(--cyan) 28%, var(--border));

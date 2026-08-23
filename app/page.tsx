@@ -53,18 +53,33 @@ export default function HomePage() {
       <main id="main-content" tabIndex={-1}>
         <section className="hero">
           <div className="shell hero-grid">
-            <div className="hero-copy">
-              <p className="kicker">Paid beta in development</p>
-              <h1>Tabletop roleplaying.<br /><span>Your way.</span></h1>
-              <p className="hero-lede">
-                An AI Game Master for people who want a campaign they can return to on their own schedule.
-                Simple to start, built to keep going.
-              </p>
-              <div className="hero-actions">
-                <Link className="button button-primary" href="/play">See the play area</Link>
-                <Link className="button button-secondary" href="/pricing">How access will work</Link>
-              </div>
-              <p className="microcopy">Pricing is not final yet. The payment and usage system will be built before prices are locked.</p>
+            <div className="hero-copy hero-thesis">
+              <h1>Tabletop gaming is best in person.<br /><span>No question.</span></h1>
+              <p className="hero-sometimes">But sometimes...</p>
+
+              <details className="audience-accordion hero-audience">
+                <summary className="audience-summary">
+                  <span className="audience-prompt">Who RPG Your Way is for</span>
+                  <span className="accordion-plus" aria-hidden="true">+</span>
+                </summary>
+
+                <div className="audience-body">
+                  <div className="audience-list">
+                    {audiences.map((audience, index) => (
+                      <details className="audience-item" key={audience.title}>
+                        <summary>
+                          <span>{audience.title}</span>
+                          <span className="accordion-plus" aria-hidden="true">+</span>
+                        </summary>
+                        <p>{audience.copy}</p>
+                        {index === 1 ? (
+                          <p className="builder-note"><em>I belong to both of those groups. They&apos;re part of why I built this site.</em></p>
+                        ) : null}
+                      </details>
+                    ))}
+                  </div>
+                </div>
+              </details>
             </div>
 
             <div className="hero-side">
@@ -116,40 +131,6 @@ export default function HomePage() {
                 </article>
               ))}
             </div>
-          </div>
-        </section>
-
-
-        <section className="section audience-section" aria-labelledby="audience-heading">
-          <div className="shell">
-            <details className="audience-accordion">
-              <summary className="audience-summary">
-                <div>
-                  <p className="kicker">When the table isn&apos;t available</p>
-                  <h2 id="audience-heading">Tabletop gaming is best in person. <span>No question.</span></h2>
-                  <p>But sometimes in person isn&apos;t an option. Open this to see who RPG Your Way is for.</p>
-                </div>
-                <span className="accordion-plus" aria-hidden="true">+</span>
-              </summary>
-
-              <div className="audience-body">
-                <p className="audience-intro"><strong>This site is for:</strong></p>
-                <div className="audience-list">
-                  {audiences.map((audience, index) => (
-                    <details className="audience-item" key={audience.title}>
-                      <summary>
-                        <span>{audience.title}</span>
-                        <span className="accordion-plus" aria-hidden="true">+</span>
-                      </summary>
-                      <p>{audience.copy}</p>
-                      {index === 1 ? (
-                        <p className="builder-note"><em>I belong to both of those groups. They&apos;re part of why I built this site.</em></p>
-                      ) : null}
-                    </details>
-                  ))}
-                </div>
-              </div>
-            </details>
           </div>
         </section>
 
