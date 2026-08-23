@@ -94,13 +94,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
   place-items: center;
   width: 36px;
   height: 36px;
-  border: 1px solid color-mix(in oklab, var(--cyan) 58%, white 6%);
+  border: 1px solid color-mix(in oklab, var(--cyan) 38%, white 6%);
   border-radius: 11px;
-  background: linear-gradient(145deg, color-mix(in oklab, var(--cyan) 26%, var(--panel)), var(--panel));
-  color: var(--cyan);
+  background: color-mix(in oklab, var(--panel) 88%, black 12%);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), 0 8px 22px rgb(0 0 0 / 0.26);
-  font-family: "Trebuchet MS", ui-sans-serif, system-ui, sans-serif;
+  overflow: hidden;
 }
+.brand-mark img { width: 30px; height: 30px; object-fit: contain; }
 
 .brand-words { white-space: nowrap; }
 
@@ -131,6 +131,19 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 
 .hero-copy { max-width: 680px; }
+.hero-side { display: grid; gap: 1rem; }
+.brand-logo-card {
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--amber) 35%, var(--border));
+  border-radius: 24px;
+  background: #f7ead2;
+  box-shadow: var(--shadow), inset 0 1px 0 rgb(255 255 255 / 0.28);
+}
+.brand-logo-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 .kicker {
   margin: 0 0 .85rem;
   color: var(--cyan);

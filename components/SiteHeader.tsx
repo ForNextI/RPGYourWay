@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 const links = [
@@ -11,7 +12,9 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="shell header-inner">
         <Link className="brand" href="/" aria-label="RPG Your Way home">
-          <span className="brand-mark" aria-hidden="true">R</span>
+          <span className="brand-mark" aria-hidden="true">
+            <Image src="/rpgyw-compass.png" alt="" width={36} height={36} priority />
+          </span>
           <span className="brand-words">RPG Your Way</span>
         </Link>
         <nav aria-label="Primary navigation" className="main-nav">

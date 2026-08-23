@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { PageShell } from '@/components/PageShell'
 
@@ -39,21 +40,34 @@ export default function HomePage() {
               <p className="microcopy">Pricing is not final yet. The payment and usage system will be built before prices are locked.</p>
             </div>
 
-            <div className="preview-card" aria-label="Preview of the future player dashboard">
-              <div className="preview-topline">
-                <span className="status-dot" aria-hidden="true" />
-                <span>Campaign dashboard</span>
-                <span className="preview-badge">Preview</span>
+            <div className="hero-side">
+              <div className="brand-logo-card">
+                <Image
+                  className="brand-logo-image"
+                  src="/rpgyw-logo.png"
+                  alt="RPG Your Way compass logo"
+                  width={1254}
+                  height={1254}
+                  priority
+                />
               </div>
-              <div className="campaign-card">
-                <p className="campaign-label">Continue campaign</p>
-                <h2>Your adventure</h2>
-                <p>Last played recently</p>
-                <div className="fake-button">Continue playing</div>
-              </div>
-              <div className="preview-row">
-                <div><strong>Usage</strong><span>Prepaid access</span></div>
-                <div><strong>Voice</strong><span>Available</span></div>
+
+              <div className="preview-card" aria-label="Preview of the future player dashboard">
+                <div className="preview-topline">
+                  <span className="status-dot" aria-hidden="true" />
+                  <span>Campaign dashboard</span>
+                  <span className="preview-badge">Preview</span>
+                </div>
+                <div className="campaign-card">
+                  <p className="campaign-label">Continue campaign</p>
+                  <h2>Your adventure</h2>
+                  <p>Last played recently</p>
+                  <div className="fake-button">Continue playing</div>
+                </div>
+                <div className="preview-row">
+                  <div><strong>Usage</strong><span>Prepaid access</span></div>
+                  <div><strong>Voice</strong><span>Available</span></div>
+                </div>
               </div>
             </div>
           </div>

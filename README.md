@@ -1,13 +1,19 @@
 # RPG Your Way
 
-**Build 0.1.0 · Commercial skeleton**
+**Build 0.1.1 · First brand assets**
 
-RPG Your Way is a fresh Next.js project for the commercial AIGM product. It deliberately does **not** clone WardensPC wholesale. This first build establishes the public shell, route structure, mobile-first styling, and placeholders for the systems that will be wired next.
+RPG Your Way is a fresh Next.js project for the commercial AIGM product. Build 0.1.1 installs the first approved RPG Your Way brand assets while preserving the 0.1.0 commercial skeleton.
 
-## What is in 0.1.0
+## What changed in 0.1.1
+
+- Added the full RPG Your Way compass logo to the landing-page hero.
+- Replaced the temporary header `R` mark with the standalone compass rose.
+- Added the compass rose as the browser favicon and app icon, including an Apple touch icon.
+- Kept the existing mobile-first layout, routes, accessibility behavior, and temporary no-index policy unchanged.
+
+## Foundation inherited from 0.1.0
 
 - Next.js 16.2.6 / React 19 / TypeScript
-- WPC-derived dark slate, cyan, and amber palette without WPC branding
 - Responsive landing page
 - `/play`, `/pricing`, `/account`, `/support`, `/legal/privacy`, and `/legal/terms`
 - Accessibility skip link and visible focus treatment
@@ -15,7 +21,7 @@ RPG Your Way is a fresh Next.js project for the commercial AIGM product. It deli
 - Temporary `robots.txt` policy that blocks indexing while the commercial site is under construction
 - Release validator
 
-## What is intentionally not in 0.1.0
+## Still intentionally not wired
 
 - No WardensPC gameplay code yet
 - No authentication provider yet
