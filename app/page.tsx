@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { PageShell } from '@/components/PageShell'
 
 const features = [
@@ -47,21 +46,39 @@ const audiences = [
   },
 ]
 
+function AccordionPlus() {
+  return <span className="accordion-plus" aria-hidden="true" />
+}
+
+function UniqueAccordion() {
+  return (
+    <details className="landing-accordion unique-accordion">
+      <summary className="landing-accordion-summary">
+        <span className="landing-accordion-prompt">What makes RPG Your Way unique?</span>
+        <AccordionPlus />
+      </summary>
+      <div className="landing-accordion-body unique-body">
+        <p>We&apos;ll fill this comparison out as the rest of RPG Your Way moves in.</p>
+      </div>
+    </details>
+  )
+}
+
 function AudienceAccordion() {
   return (
-    <details className="audience-accordion">
-      <summary className="audience-summary">
-        <span className="audience-prompt">Who RPG Your Way is for</span>
-        <span className="accordion-plus" aria-hidden="true">+</span>
+    <details className="landing-accordion audience-accordion">
+      <summary className="landing-accordion-summary audience-summary">
+        <span className="landing-accordion-prompt audience-prompt">Who RPG Your Way is for</span>
+        <AccordionPlus />
       </summary>
 
-      <div className="audience-body">
+      <div className="landing-accordion-body audience-body">
         <div className="audience-list">
           {audiences.map((audience, index) => (
             <details className="audience-item" key={audience.title}>
               <summary>
                 <span>{audience.title}</span>
-                <span className="accordion-plus" aria-hidden="true">+</span>
+                <AccordionPlus />
               </summary>
               <p>{audience.copy}</p>
               {index === 1 ? (
@@ -81,35 +98,25 @@ export default function HomePage() {
       <main id="main-content" tabIndex={-1}>
         <section className="hero">
           <div className="shell hero-grid">
-            <div className="hero-column hero-main-column">
-              <div className="hero-thesis">
-                <h1>
-                  <span className="hero-thesis-line">Tabletop gaming is best in person.</span>
-                  <span className="hero-no-question">No question.</span>
-                </h1>
-                <p className="hero-sometimes">But sometimes...</p>
+            <div className="preview-card" aria-label="Preview of the future player dashboard">
+              <div className="preview-topline">
+                <span className="status-dot" aria-hidden="true" />
+                <span>Campaign dashboard</span>
+                <span className="preview-badge">Preview</span>
               </div>
-
-              <div className="preview-card" aria-label="Preview of the future player dashboard">
-                <div className="preview-topline">
-                  <span className="status-dot" aria-hidden="true" />
-                  <span>Campaign dashboard</span>
-                  <span className="preview-badge">Preview</span>
-                </div>
-                <div className="campaign-card">
-                  <p className="campaign-label">Continue campaign</p>
-                  <h2>Your adventure</h2>
-                  <p>Last played recently</p>
-                  <div className="fake-button">Continue playing</div>
-                </div>
-                <div className="preview-row">
-                  <div><strong>Usage</strong><span>Prepaid access</span></div>
-                  <div><strong>Voice</strong><span>Available</span></div>
-                </div>
+              <div className="campaign-card">
+                <p className="campaign-label">Continue campaign</p>
+                <h2>Your adventure</h2>
+                <p>Last played recently</p>
+                <div className="fake-button">Continue playing</div>
+              </div>
+              <div className="preview-row">
+                <div><strong>Usage</strong><span>Prepaid access</span></div>
+                <div><strong>Voice</strong><span>Available</span></div>
               </div>
             </div>
 
-            <div className="hero-column hero-side">
+            <div className="hero-brand-stack">
               <div className="brand-logo-card">
                 <Image
                   className="brand-logo-image"
@@ -121,40 +128,34 @@ export default function HomePage() {
                 />
               </div>
 
-              <div className="hero-audience" aria-label="Who RPG Your Way is for">
-                <AudienceAccordion />
+              <div className="hero-thesis">
+                <h1>
+                  <span className="hero-thesis-line">Tabletop gaming is best in person.</span>
+                  <span className="hero-no-question">No question.</span>
+                </h1>
+                <p className="hero-sometimes">But sometimes...</p>
               </div>
             </div>
-          </div>
-        </section>
 
-        <section className="section" aria-labelledby="what-it-is">
-          <div className="shell">
-            <div className="section-heading">
-              <p className="kicker">The product</p>
-              <h2 id="what-it-is">Less site. More game.</h2>
-              <p>RPG Your Way is being separated from WardensPC so the commercial experience can be focused, faster, and much easier to use on a phone.</p>
+            <div className="hero-unique" aria-label="What makes RPG Your Way unique">
+              <UniqueAccordion />
             </div>
-            <div className="feature-grid">
-              {features.map((feature) => (
-                <article className="feature-card" key={feature.title}>
-                  <p className="feature-eyebrow">{feature.eyebrow}</p>
-                  <h3>{feature.title}</h3>
-                  <p>{feature.copy}</p>
-                </article>
-              ))}
+
+            <div className="hero-audience" aria-label="Who RPG Your Way is for">
+              <AudienceAccordion />
             </div>
           </div>
         </section>
 
-        <section className="section section-tight" aria-labelledby="beta-heading">
-          <div className="shell callout">
-            <div>
-              <p className="kicker">Building now</p>
-              <h2 id="beta-heading">The foundation comes first.</h2>
-              <p>Accounts, prepaid usage, campaign storage, payments, and the gameplay engine will be connected here next. No decorative maze required.</p>
-            </div>
-            <Link className="text-link" href="/pricing">View the access model →</Link>
+        <section className="feature-section" aria-label="RPG Your Way features">
+          <div className="shell feature-grid">
+            {features.map((feature) => (
+              <article className="feature-card" key={feature.title}>
+                <p className="feature-eyebrow">{feature.eyebrow}</p>
+                <h3>{feature.title}</h3>
+                <p>{feature.copy}</p>
+              </article>
+            ))}
           </div>
         </section>
       </main>
