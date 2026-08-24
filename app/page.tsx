@@ -19,30 +19,90 @@ const features = [
   },
 ]
 
+const whyCreated = [
+  {
+    title: 'RPGs are better at full throttle',
+    paragraphs: [
+      'Every game runs on the same high-capability AI.',
+      'Choose how much you want to play, and get the same quality of play every time.',
+    ],
+  },
+  {
+    title: 'Buy play and use it when you want',
+    paragraphs: [
+      'Your purchased usage stays yours until you use it.',
+      "Play tonight, next week, or months from now. Your balance is there when you're ready to continue.",
+    ],
+  },
+  {
+    title: 'Run at cost',
+    paragraphs: [
+      'RPG Your Way is designed to cover the cost of providing your play, and nothing more.',
+      'Your usage pays for the technology that powers the experience: the AI, speech-to-text, voice responses, and the other services used while you play.',
+      "The price is there to keep the game running. That's all you're paying for.",
+    ],
+  },
+  {
+    title: 'Campaigns should last',
+    paragraphs: [
+      'RPG Your Way is built for persistent campaigns that can grow with your characters over the long haul.',
+      'Start at the beginning. Build relationships, history, and consequences. Keep the same campaign going all the way to level 20.',
+    ],
+  },
+  {
+    title: 'Turn the campaign into a story',
+    paragraphs: [
+      'Shape transforms the campaign you actually played into narrative prose.',
+      'Large campaigns can be divided into manageable sections, and before you begin a Shape request, you receive a maximum estimated cost.',
+      'That estimate is the most you will pay.',
+    ],
+  },
+  {
+    title: 'Your characters. Your campaign. Your pace.',
+    paragraphs: [
+      "Play when you want. Keep going as long as you want. Come back when you're ready.",
+    ],
+  },
+]
+
 const audiences = [
   {
     title: 'Solo players',
-    copy: "Or people who can't get a group together right now. Run a party of up to six characters instead of waiting for everyone's schedules to line up.",
+    paragraphs: [
+      "Or people who can't get a group together right now. Run a party of up to six characters instead of waiting for everyone's schedules to line up.",
+    ],
   },
   {
     title: 'Neurodivergent players',
-    copy: 'Who may be uncomfortable playing with strangers or putting the game in the hands of an unfamiliar DM. Play in a lower-pressure setting, at your own pace.',
+    paragraphs: [
+      'Who may prefer familiar, lower-pressure play without strangers or an unfamiliar DM. Play at your own pace and take the time you need.',
+    ],
+    note: "I'm in both of those groups. They're part of why I created RPG Your Way.",
   },
   {
     title: 'Forever DMs',
-    copy: 'Who are usually the person running the game. Sit on the player side of the table for a change, without having to try to find somebody competent to DM.',
+    paragraphs: [
+      'Usually the one running the game? Sit on the player side of the table for a change, without needing to recruit another DM.',
+    ],
   },
   {
     title: 'Blind players and screen-reader users',
-    copy: 'Use screen-reader support and voice-guided play, including spoken game-master replies and important visual information communicated in words.',
+    paragraphs: [
+      'Use screen-reader support, voice input, and spoken game-master replies, with important visual information communicated in words.',
+    ],
   },
   {
     title: 'Players with irregular or limited schedules',
-    copy: "Start a session when you have time and stop when you need to, without coordinating a full group's calendar. Or play at four in the morning.",
+    paragraphs: [
+      "Start a session when you have time and stop when you need to, without coordinating a full group's calendar.",
+      'Or play at four in the morning.',
+    ],
   },
   {
     title: 'Beginners and returning players',
-    copy: 'Learn or relearn the game gradually and at your own pace, without worrying about being judged or made fun of.',
+    paragraphs: [
+      'Learn or relearn the game gradually and at your own pace, with room to experiment, ask basic questions, and get comfortable with the game.',
+    ],
   },
 ]
 
@@ -50,15 +110,40 @@ function AccordionPlus() {
   return <span className="accordion-plus" aria-hidden="true" />
 }
 
-function UniqueAccordion() {
+type AccordionItem = {
+  title: string
+  paragraphs: string[]
+  note?: string
+}
+
+function NestedAccordionList({ items }: { items: AccordionItem[] }) {
+  return (
+    <div className="audience-list">
+      {items.map((item) => (
+        <details className="audience-item" key={item.title}>
+          <summary>
+            <span>{item.title}</span>
+            <AccordionPlus />
+          </summary>
+          <div className="nested-accordion-copy">
+            {item.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            {item.note ? <p className="builder-note"><em>{item.note}</em></p> : null}
+          </div>
+        </details>
+      ))}
+    </div>
+  )
+}
+
+function WhyCreatedAccordion() {
   return (
     <details className="landing-accordion unique-accordion">
       <summary className="landing-accordion-summary">
-        <span className="landing-accordion-prompt">What makes RPG Your Way unique?</span>
+        <span className="landing-accordion-prompt">Why I Created RPG Your Way</span>
         <AccordionPlus />
       </summary>
       <div className="landing-accordion-body unique-body">
-        <p>We&apos;ll fill this comparison out as the rest of RPG Your Way moves in.</p>
+        <NestedAccordionList items={whyCreated} />
       </div>
     </details>
   )
@@ -68,25 +153,11 @@ function AudienceAccordion() {
   return (
     <details className="landing-accordion audience-accordion">
       <summary className="landing-accordion-summary audience-summary">
-        <span className="landing-accordion-prompt audience-prompt">Who RPG Your Way is for</span>
+        <span className="landing-accordion-prompt audience-prompt">The Players I Built RPG Your Way For</span>
         <AccordionPlus />
       </summary>
-
       <div className="landing-accordion-body audience-body">
-        <div className="audience-list">
-          {audiences.map((audience, index) => (
-            <details className="audience-item" key={audience.title}>
-              <summary>
-                <span>{audience.title}</span>
-                <AccordionPlus />
-              </summary>
-              <p>{audience.copy}</p>
-              {index === 1 ? (
-                <p className="builder-note"><em>I belong to both of those groups. They&apos;re part of why I built this site.</em></p>
-              ) : null}
-            </details>
-          ))}
-        </div>
+        <NestedAccordionList items={audiences} />
       </div>
     </details>
   )
@@ -96,6 +167,48 @@ export default function HomePage() {
   return (
     <PageShell>
       <main id="main-content" tabIndex={-1}>
+        <section className="welcome-banner-section" aria-labelledby="welcome-rpgyw">
+          <div className="shell">
+            <div className="welcome-banner">
+              <p className="welcome-kicker">The doors are open</p>
+              <h1 id="welcome-rpgyw">WELCOME TO RPG YOUR WAY</h1>
+              <p className="welcome-lede">
+                RPG Your Way is being built in public. Accounts are open now, so feel free to look around while we bring the game online.
+              </p>
+              <p className="welcome-lede welcome-lede-secondary">
+                Shape, Play, and native multiplayer are coming online as soon as possible.
+              </p>
+
+              <details className="welcome-details">
+                <summary>What is coming, and when?</summary>
+                <div className="welcome-details-copy">
+                  <p>
+                    <strong>Shape</strong> will turn campaign transcripts into narrative prose, with large campaigns divided into manageable sections and a maximum estimated cost shown before a request begins.
+                  </p>
+                  <p>
+                    <strong>Play</strong> will bring the RPG Your Way AI Game Master online for persistent campaigns you can return to over the long haul.
+                  </p>
+                  <p>
+                    <strong>Native multiplayer</strong> will follow so friends can share those campaigns together online.
+                  </p>
+                  <p>
+                    Those three pieces are the immediate priority and are being brought online as quickly as we can do it safely. You may see pages, wording, and controls change while that work is happening.
+                  </p>
+                  <p>
+                    After the core RPG Your Way experience is running, we plan to add <strong>Foundry VTT integration</strong> as the first step toward connecting RPG Your Way with existing virtual tabletops.
+                  </p>
+                  <p>
+                    If you already have a campaign at WardensPC, you will be able to export it there and bring it with you when RPG Your Way Play is ready.
+                  </p>
+                  <p>
+                    We will keep this notice updated as each part comes online.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </section>
+
         <section className="hero">
           <div className="shell hero-grid">
             <div className="preview-card" aria-label="Preview of the future player dashboard">
@@ -137,11 +250,11 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="hero-unique" aria-label="What makes RPG Your Way unique">
-              <UniqueAccordion />
+            <div className="hero-unique" aria-label="Why I Created RPG Your Way">
+              <WhyCreatedAccordion />
             </div>
 
-            <div className="hero-audience" aria-label="Who RPG Your Way is for">
+            <div className="hero-audience" aria-label="The Players I Built RPG Your Way For">
               <AudienceAccordion />
             </div>
           </div>

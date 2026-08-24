@@ -62,6 +62,18 @@ export function AuthPrompt() {
   }, [])
 
   useEffect(() => {
+    function openForProtectedAction() {
+      setReturnTo(currentReturnPath())
+      setStatus('')
+      setError('')
+      setOpen(true)
+    }
+
+    window.addEventListener('rpgyw:open-auth', openForProtectedAction)
+    return () => window.removeEventListener('rpgyw:open-auth', openForProtectedAction)
+  }, [])
+
+  useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
 
