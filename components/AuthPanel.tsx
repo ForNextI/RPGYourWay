@@ -12,7 +12,7 @@ type AuthPanelProps = {
 const statusMessages: Record<string, string> = {
   'signed-in': 'Signed in. Your RPG Your Way account is connected.',
   created: 'Account created and signed in.',
-  'check-email': 'If this address is new, check your email to confirm it. If you already have an account, use Sign in.',
+  'check-email': 'If you’re new to RPG Your Way, check your email to confirm your account. If you already have an account, use Sign in.',
   confirmed: 'Email confirmed. Your account is ready.',
 }
 
