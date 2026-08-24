@@ -1,5 +1,9 @@
 # RPG Your Way
 
+**Build 1.3.12 · Parchment-map UI foundation**
+
+Build 1.3.12 establishes the first RPG Your Way visual system: the approved tan-on-tan overland map as the global background, cream/parchment content surfaces, forest-green framing, moss accents, and lime action highlights. The landing page now keeps the Campaign Dashboard directly beneath the opening thesis, aligns it with the logo column, and moves the audience accordion below the hero. The Play route uses a quieter cream-and-hex field instead of the map so the eventual game interface can develop its own immersive treatment.
+
 **Build 1.3.11 · Compact landing thesis font hotfix**
 
 Build 1.3.11 fixes the landing-page thesis font rule so it actually overrides the generic hero heading style on desktop. “Tabletop gaming is best in person.” is now compact introductory copy rather than a full-size display headline.

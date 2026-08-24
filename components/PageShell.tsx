@@ -2,9 +2,14 @@ import type { ReactNode } from 'react'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 
-export function PageShell({ children }: { children: ReactNode }) {
+type PageShellProps = {
+  children: ReactNode
+  variant?: 'site' | 'play'
+}
+
+export function PageShell({ children, variant = 'site' }: PageShellProps) {
   return (
-    <div className="site-frame">
+    <div className={`site-frame${variant === 'play' ? ' site-frame-play' : ''}`}>
       <SiteHeader />
       {children}
       <SiteFooter />

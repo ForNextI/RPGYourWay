@@ -35,7 +35,7 @@ const audiences = [
   },
   {
     title: 'Blind players and screen-reader users',
-    copy: 'Use screen-reader support and voice-guided play, including spoken AIGM replies and important visual information communicated in words.',
+    copy: 'Use screen-reader support and voice-guided play, including spoken game-master replies and important visual information communicated in words.',
   },
   {
     title: 'Players with irregular or limited schedules',
@@ -53,65 +53,72 @@ export default function HomePage() {
       <main id="main-content" tabIndex={-1}>
         <section className="hero">
           <div className="shell hero-grid">
-            <div className="hero-copy hero-thesis">
-              <h1><span className="hero-thesis-line">Tabletop gaming is best in person.</span><span className="hero-no-question">No question.</span></h1>
+            <div className="hero-thesis">
+              <h1>
+                <span className="hero-thesis-line">Tabletop gaming is best in person.</span>
+                <span className="hero-no-question">No question.</span>
+              </h1>
               <p className="hero-sometimes">But sometimes...</p>
-
-              <details className="audience-accordion hero-audience">
-                <summary className="audience-summary">
-                  <span className="audience-prompt">Who RPG Your Way is for</span>
-                  <span className="accordion-plus" aria-hidden="true">+</span>
-                </summary>
-
-                <div className="audience-body">
-                  <div className="audience-list">
-                    {audiences.map((audience, index) => (
-                      <details className="audience-item" key={audience.title}>
-                        <summary>
-                          <span>{audience.title}</span>
-                          <span className="accordion-plus" aria-hidden="true">+</span>
-                        </summary>
-                        <p>{audience.copy}</p>
-                        {index === 1 ? (
-                          <p className="builder-note"><em>I belong to both of those groups. They&apos;re part of why I built this site.</em></p>
-                        ) : null}
-                      </details>
-                    ))}
-                  </div>
-                </div>
-              </details>
             </div>
 
             <div className="hero-side">
               <div className="brand-logo-card">
                 <Image
                   className="brand-logo-image"
-                  src="/rpgyw-logo.png"
+                  src="/rpgyw-logo-bordered.png"
                   alt="RPG Your Way compass logo"
                   width={1254}
                   height={1254}
                   priority
                 />
               </div>
+            </div>
 
-              <div className="preview-card" aria-label="Preview of the future player dashboard">
-                <div className="preview-topline">
-                  <span className="status-dot" aria-hidden="true" />
-                  <span>Campaign dashboard</span>
-                  <span className="preview-badge">Preview</span>
-                </div>
-                <div className="campaign-card">
-                  <p className="campaign-label">Continue campaign</p>
-                  <h2>Your adventure</h2>
-                  <p>Last played recently</p>
-                  <div className="fake-button">Continue playing</div>
-                </div>
-                <div className="preview-row">
-                  <div><strong>Usage</strong><span>Prepaid access</span></div>
-                  <div><strong>Voice</strong><span>Available</span></div>
-                </div>
+            <div className="preview-card" aria-label="Preview of the future player dashboard">
+              <div className="preview-topline">
+                <span className="status-dot" aria-hidden="true" />
+                <span>Campaign dashboard</span>
+                <span className="preview-badge">Preview</span>
+              </div>
+              <div className="campaign-card">
+                <p className="campaign-label">Continue campaign</p>
+                <h2>Your adventure</h2>
+                <p>Last played recently</p>
+                <div className="fake-button">Continue playing</div>
+              </div>
+              <div className="preview-row">
+                <div><strong>Usage</strong><span>Prepaid access</span></div>
+                <div><strong>Voice</strong><span>Available</span></div>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="audience-section" aria-label="Who RPG Your Way is for">
+          <div className="shell">
+            <details className="audience-accordion">
+              <summary className="audience-summary">
+                <span className="audience-prompt">Who RPG Your Way is for</span>
+                <span className="accordion-plus" aria-hidden="true">+</span>
+              </summary>
+
+              <div className="audience-body">
+                <div className="audience-list">
+                  {audiences.map((audience, index) => (
+                    <details className="audience-item" key={audience.title}>
+                      <summary>
+                        <span>{audience.title}</span>
+                        <span className="accordion-plus" aria-hidden="true">+</span>
+                      </summary>
+                      <p>{audience.copy}</p>
+                      {index === 1 ? (
+                        <p className="builder-note"><em>I belong to both of those groups. They&apos;re part of why I built this site.</em></p>
+                      ) : null}
+                    </details>
+                  ))}
+                </div>
+              </div>
+            </details>
           </div>
         </section>
 
@@ -139,7 +146,7 @@ export default function HomePage() {
             <div>
               <p className="kicker">Building now</p>
               <h2 id="beta-heading">The foundation comes first.</h2>
-              <p>Accounts, prepaid usage, campaign storage, payments, and the AIGM will be connected here next. No decorative maze required.</p>
+              <p>Accounts, prepaid usage, campaign storage, payments, and the gameplay engine will be connected here next. No decorative maze required.</p>
             </div>
             <Link className="text-link" href="/pricing">View the access model →</Link>
           </div>

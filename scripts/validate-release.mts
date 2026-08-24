@@ -8,7 +8,7 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; dependencies?: Record<string, string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.3.11')
+assert.equal(pkg.version, '1.3.12')
 assert.equal(pkg.dependencies?.next, '16.2.6')
 
 for (const file of [
@@ -28,7 +28,9 @@ for (const file of [
   'components/SiteHeader.tsx',
   'components/SiteFooter.tsx',
   'public/rpgyw-logo.png',
+  'public/rpgyw-logo-bordered.png',
   'public/rpgyw-compass.png',
+  'public/rpgyw-map-tan.png',
 ]) {
   assert.ok(exists(file), `Missing ${file}`)
 }
@@ -43,24 +45,27 @@ for (const file of fs.readdirSync(path.join(root, 'app'), { recursive: true })
 const layout = read('app/layout.tsx')
 assert.match(layout, /href="#main-content"/)
 assert.match(layout, /RPG Your Way/)
+assert.match(layout, /colorScheme: 'light'/)
 
 const home = read('app/page.tsx')
 assert.match(home, /Tabletop gaming is best in person/)
 assert.match(home, /No question\./)
 assert.match(home, /But sometimes\.\.\./)
 assert.match(home, /Who RPG Your Way is for/)
-assert.match(home, /src="\/rpgyw-logo\.png"/)
+assert.match(home, /src="\/rpgyw-logo-bordered\.png"/)
 assert.match(home, /alt="RPG Your Way compass logo"/)
+assert.match(home, /Campaign dashboard/)
+assert.match(home, /Continue campaign/)
+assert.match(home, /Your adventure/)
 assert.match(home, /Solo players/)
 assert.match(home, /Neurodivergent players/)
 assert.match(home, /Forever DMs/)
 assert.match(home, /Blind players and screen-reader users/)
 assert.match(home, /Players with irregular or limited schedules/)
 assert.match(home, /Beginners and returning players/)
-assert.match(home, /<details className="audience-accordion hero-audience">/)
+assert.match(home, /<section className="audience-section"/)
+assert.match(home, /<details className="audience-accordion">/)
 assert.match(home, /<details className="audience-item"/)
-assert.doesNotMatch(home, /When the table isn&apos;t available/)
-assert.doesNotMatch(home, /Open this to see who RPG Your Way is for/)
 
 const header = read('components/SiteHeader.tsx')
 assert.match(header, /src="\/rpgyw-compass\.png"/)
@@ -69,6 +74,9 @@ assert.match(header, /href: '\/shape', label: 'Shape'/)
 assert.match(header, /href: '\/read', label: 'Read'/)
 assert.doesNotMatch(header, /href: '\/pricing', label: 'Pricing'/)
 assert.doesNotMatch(header, /href: '\/account', label: 'Account'/)
+
+const play = read('app/play/page.tsx')
+assert.match(play, /<PageShell variant="play">/)
 
 const shape = read('app/shape/page.tsx')
 assert.match(shape, /Turn the game into the story/)
@@ -89,18 +97,18 @@ const robots = read('app/robots.ts')
 assert.match(robots, /disallow:\s*['"]\/['"]/)
 
 const css = read('app/globals.css')
-assert.match(css, /--cyan:\s*oklch\(0\.78 0\.15 195\)/)
-assert.match(css, /--amber:\s*oklch\(0\.78 0\.17 55\)/)
-assert.match(css, /\.brand-logo-card/)
-assert.match(css, /\.hero-thesis/)
-assert.match(css, /align-items:\s*start/)
-assert.match(css, /hero-thesis-line/)
-assert.match(css, /white-space:\s*nowrap/)
-assert.match(css, /font-size:\s*clamp\(1rem, 1\.55vw, 1\.55rem\)/)
-assert.match(css, /\.hero-audience/)
+assert.match(css, /--forest:/)
+assert.match(css, /--cream:/)
+assert.match(css, /--lime:/)
+assert.match(css, /url\('\/rpgyw-map-tan\.png'\)/)
+assert.match(css, /\.site-frame-play/)
+assert.match(css, /data:image\/svg\+xml/)
+assert.match(css, /grid-template-areas:/)
+assert.match(css, /"thesis logo"/)
+assert.match(css, /"dashboard logo"/)
+assert.match(css, /\.audience-section/)
 assert.match(css, /\.audience-accordion/)
-assert.match(css, /\.audience-item/)
 assert.match(css, /@media \(max-width: 620px\)/)
 assert.match(css, /@media \(prefers-reduced-motion: reduce\)/)
 
-console.log('RPG Your Way 1.3.11 compact landing thesis font hotfix passed validation.')
+console.log('RPG Your Way 1.3.12 parchment-map UI foundation passed validation.')
