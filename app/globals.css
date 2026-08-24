@@ -37,7 +37,7 @@ body {
   background-size: cover;
   background-attachment: fixed;
   color: var(--ink);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: Georgia, Cambria, "Times New Roman", serif;
   font-size: 16px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
@@ -45,6 +45,7 @@ body {
 
 a { color: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
+button, input, textarea, select { font: inherit; }
 
 .skip-link {
   position: fixed;
@@ -117,17 +118,26 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .brand-mark img { width: 38px; height: 38px; object-fit: contain; }
 .brand-words { white-space: nowrap; font-family: Georgia, Cambria, "Times New Roman", serif; font-size: 1.05rem; }
 
-.main-nav { display: flex; align-items: center; gap: .28rem; }
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: .12rem;
+}
+.nav-item-group {
+  display: inline-flex;
+  align-items: center;
+  gap: .12rem;
+}
 .main-nav a {
   min-height: 42px;
   display: inline-flex;
   align-items: center;
   border: 1px solid transparent;
   border-radius: 10px;
-  padding: .55rem .86rem;
+  padding: .55rem .78rem;
   color: var(--forest-ink);
   text-decoration: none;
-  font-size: .92rem;
+  font-size: .98rem;
   font-weight: 800;
 }
 .main-nav a:hover {
@@ -135,21 +145,86 @@ button, a { -webkit-tap-highlight-color: transparent; }
   background: rgb(255 255 255 / .36);
   color: var(--forest-deep);
 }
+.nav-jeweled-divider {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 1px;
+  height: 26px;
+  margin-inline: .26rem;
+  background: color-mix(in srgb, var(--moss-deep) 58%, var(--cream-deep));
+}
+.nav-jeweled-divider::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 1px solid var(--moss-deep);
+  background: var(--cream-deep);
+}
+.fullscreen-toggle {
+  width: 40px;
+  height: 40px;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid color-mix(in srgb, var(--forest) 62%, var(--cream-deep));
+  border-radius: 10px;
+  background: rgb(251 242 230 / .72);
+  color: var(--forest-deep);
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+.fullscreen-toggle:hover {
+  border-color: var(--forest);
+  background: var(--cream-bright);
+}
+.fullscreen-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 .hero {
-  padding: clamp(1.35rem, 3vw, 2.4rem) 0 clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(1.35rem, 3vw, 2.4rem) 0 clamp(2rem, 5vw, 4rem);
 }
 .hero-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr);
-  grid-template-areas:
-    "thesis logo"
-    "dashboard logo";
-  grid-template-rows: auto 1fr;
-  gap: 1rem clamp(1rem, 2.6vw, 2.1rem);
-  align-items: stretch;
+  gap: clamp(1rem, 2.6vw, 2.1rem);
+  align-items: start;
 }
-.hero-thesis { grid-area: thesis; align-self: start; }
+.hero-column {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.hero-thesis {
+  border: 2px solid color-mix(in srgb, var(--forest) 72%, var(--cream-deep));
+  border-radius: 18px;
+  background: rgb(251 242 230 / .95);
+  padding: clamp(1rem, 2.2vw, 1.35rem);
+  box-shadow: var(--shadow-soft);
+}
 .hero-thesis h1 {
   margin: 0 0 .45rem;
   font-size: clamp(1.08rem, 1.7vw, 1.55rem);
@@ -166,9 +241,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
   font-weight: 700;
   font-style: italic;
 }
-.hero-side { grid-area: logo; align-self: stretch; }
+.hero-side { align-self: start; }
 .brand-logo-card {
-  height: 100%;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 22px;
   background: var(--cream-bright);
@@ -178,8 +254,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
+.hero-audience { width: 100%; }
 
 h1, h2, h3, p { margin-top: 0; }
 h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var(--forest-deep); }
@@ -211,7 +288,7 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
   font-weight: 900;
   box-shadow: var(--shadow-soft);
 }
-.button-primary { background: var(--forest); color: var(--cream-bright); }
+.button-primary { border-color: var(--lime); background: var(--moss-deep); color: var(--cream-bright); }
 .button-primary:hover { background: var(--forest-deep); }
 .button-secondary { background: var(--cream-bright); color: var(--forest-deep); }
 .button-secondary:hover { background: var(--lime-soft); }
@@ -260,14 +337,13 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 .campaign-label { margin-bottom: .32rem; color: var(--moss-deep); font-size: .72rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 .campaign-card h2 { margin-bottom: .2rem; color: var(--forest-deep); font-size: 1.8rem; }
 .campaign-card > p:not(.campaign-label) { color: var(--muted); }
-.fake-button { margin-top: 1.35rem; border: 2px solid var(--forest-deep); border-radius: 10px; background: var(--lime); color: var(--forest-deep); padding: .72rem .9rem; text-align: center; font-weight: 950; }
+.fake-button { margin-top: 1.35rem; border: 3px solid var(--lime); border-radius: 10px; background: var(--moss-deep); color: var(--cream-bright); padding: .68rem .9rem; text-align: center; font-weight: 950; box-shadow: 0 4px 12px rgb(4 58 45 / .18); }
 .preview-row { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-top: .7rem; }
 .preview-row div { border: 1px solid rgb(244 228 207 / .38); border-radius: 12px; padding: .82rem; background: rgb(0 0 0 / .10); }
 .preview-row strong, .preview-row span { display: block; }
 .preview-row strong { font-size: .78rem; color: var(--cream-bright); }
 .preview-row span { margin-top: .2rem; color: #d9ddc7; font-size: .76rem; }
 
-.audience-section { padding: 0 0 clamp(2rem, 5vw, 4rem); }
 .audience-accordion {
   overflow: hidden;
   border: 2px solid var(--forest);
@@ -433,17 +509,19 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 
 @media (max-width: 860px) {
   body { background-attachment: scroll; }
-  .hero-grid {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "thesis"
-      "logo"
-      "dashboard";
-    grid-template-rows: auto;
+  .header-inner { flex-wrap: wrap; padding-block: .45rem; }
+  .main-nav {
+    width: 100%;
+    justify-content: center;
+    border-top: 1px solid color-mix(in srgb, var(--forest) 24%, transparent);
+    padding-top: .35rem;
   }
-  .hero-side { width: min(100%, 560px); }
-  .brand-logo-image { height: auto; object-fit: contain; }
-  .preview-card { width: min(100%, 680px); min-height: 0; }
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-main-column { order: 1; }
+  .hero-side { order: 2; width: min(100%, 680px); }
+  .preview-card { min-height: 0; }
+  .brand-logo-card { width: min(100%, 560px); }
+  .hero-audience { width: min(100%, 680px); }
   .feature-grid { grid-template-columns: 1fr; }
   .feature-card { min-height: 0; }
   .feature-eyebrow { margin-bottom: 1.1rem; }
@@ -457,7 +535,10 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
   .brand-mark { width: 34px; height: 34px; }
   .brand-mark img { width: 33px; height: 33px; }
   .main-nav { gap: 0; }
-  .main-nav a { min-height: 40px; padding-inline: .52rem; font-size: .8rem; }
+  .main-nav a { min-height: 40px; padding-inline: .38rem; font-size: .84rem; }
+  .nav-jeweled-divider { height: 22px; margin-inline: .16rem; }
+  .nav-jeweled-divider::after { width: 6px; height: 6px; }
+  .fullscreen-toggle { width: 38px; height: 38px; }
   .hero { padding-top: 1.1rem; }
   .hero-thesis h1 { font-size: clamp(1.04rem, 4.6vw, 1.28rem); }
   .hero-thesis-line { white-space: normal; }

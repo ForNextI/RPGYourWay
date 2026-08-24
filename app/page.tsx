@@ -47,21 +47,69 @@ const audiences = [
   },
 ]
 
+function AudienceAccordion() {
+  return (
+    <details className="audience-accordion">
+      <summary className="audience-summary">
+        <span className="audience-prompt">Who RPG Your Way is for</span>
+        <span className="accordion-plus" aria-hidden="true">+</span>
+      </summary>
+
+      <div className="audience-body">
+        <div className="audience-list">
+          {audiences.map((audience, index) => (
+            <details className="audience-item" key={audience.title}>
+              <summary>
+                <span>{audience.title}</span>
+                <span className="accordion-plus" aria-hidden="true">+</span>
+              </summary>
+              <p>{audience.copy}</p>
+              {index === 1 ? (
+                <p className="builder-note"><em>I belong to both of those groups. They&apos;re part of why I built this site.</em></p>
+              ) : null}
+            </details>
+          ))}
+        </div>
+      </div>
+    </details>
+  )
+}
+
 export default function HomePage() {
   return (
     <PageShell>
       <main id="main-content" tabIndex={-1}>
         <section className="hero">
           <div className="shell hero-grid">
-            <div className="hero-thesis">
-              <h1>
-                <span className="hero-thesis-line">Tabletop gaming is best in person.</span>
-                <span className="hero-no-question">No question.</span>
-              </h1>
-              <p className="hero-sometimes">But sometimes...</p>
+            <div className="hero-column hero-main-column">
+              <div className="hero-thesis">
+                <h1>
+                  <span className="hero-thesis-line">Tabletop gaming is best in person.</span>
+                  <span className="hero-no-question">No question.</span>
+                </h1>
+                <p className="hero-sometimes">But sometimes...</p>
+              </div>
+
+              <div className="preview-card" aria-label="Preview of the future player dashboard">
+                <div className="preview-topline">
+                  <span className="status-dot" aria-hidden="true" />
+                  <span>Campaign dashboard</span>
+                  <span className="preview-badge">Preview</span>
+                </div>
+                <div className="campaign-card">
+                  <p className="campaign-label">Continue campaign</p>
+                  <h2>Your adventure</h2>
+                  <p>Last played recently</p>
+                  <div className="fake-button">Continue playing</div>
+                </div>
+                <div className="preview-row">
+                  <div><strong>Usage</strong><span>Prepaid access</span></div>
+                  <div><strong>Voice</strong><span>Available</span></div>
+                </div>
+              </div>
             </div>
 
-            <div className="hero-side">
+            <div className="hero-column hero-side">
               <div className="brand-logo-card">
                 <Image
                   className="brand-logo-image"
@@ -72,53 +120,11 @@ export default function HomePage() {
                   priority
                 />
               </div>
-            </div>
 
-            <div className="preview-card" aria-label="Preview of the future player dashboard">
-              <div className="preview-topline">
-                <span className="status-dot" aria-hidden="true" />
-                <span>Campaign dashboard</span>
-                <span className="preview-badge">Preview</span>
-              </div>
-              <div className="campaign-card">
-                <p className="campaign-label">Continue campaign</p>
-                <h2>Your adventure</h2>
-                <p>Last played recently</p>
-                <div className="fake-button">Continue playing</div>
-              </div>
-              <div className="preview-row">
-                <div><strong>Usage</strong><span>Prepaid access</span></div>
-                <div><strong>Voice</strong><span>Available</span></div>
+              <div className="hero-audience" aria-label="Who RPG Your Way is for">
+                <AudienceAccordion />
               </div>
             </div>
-          </div>
-        </section>
-
-        <section className="audience-section" aria-label="Who RPG Your Way is for">
-          <div className="shell">
-            <details className="audience-accordion">
-              <summary className="audience-summary">
-                <span className="audience-prompt">Who RPG Your Way is for</span>
-                <span className="accordion-plus" aria-hidden="true">+</span>
-              </summary>
-
-              <div className="audience-body">
-                <div className="audience-list">
-                  {audiences.map((audience, index) => (
-                    <details className="audience-item" key={audience.title}>
-                      <summary>
-                        <span>{audience.title}</span>
-                        <span className="accordion-plus" aria-hidden="true">+</span>
-                      </summary>
-                      <p>{audience.copy}</p>
-                      {index === 1 ? (
-                        <p className="builder-note"><em>I belong to both of those groups. They&apos;re part of why I built this site.</em></p>
-                      ) : null}
-                    </details>
-                  ))}
-                </div>
-              </div>
-            </details>
           </div>
         </section>
 

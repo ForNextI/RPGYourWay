@@ -1,11 +1,16 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { FullscreenToggle } from '@/components/FullscreenToggle'
 
 const links = [
   { href: '/play', label: 'Play' },
   { href: '/shape', label: 'Shape' },
   { href: '/read', label: 'Read' },
 ]
+
+function JeweledDivider() {
+  return <span className="nav-jeweled-divider" aria-hidden="true" />
+}
 
 export function SiteHeader() {
   return (
@@ -18,9 +23,14 @@ export function SiteHeader() {
           <span className="brand-words">RPG Your Way</span>
         </Link>
         <nav aria-label="Primary navigation" className="main-nav">
-          {links.map((link) => (
-            <Link key={link.href} href={link.href}>{link.label}</Link>
+          {links.map((link, index) => (
+            <span className="nav-item-group" key={link.href}>
+              {index > 0 ? <JeweledDivider /> : null}
+              <Link href={link.href}>{link.label}</Link>
+            </span>
           ))}
+          <JeweledDivider />
+          <FullscreenToggle />
         </nav>
       </div>
     </header>

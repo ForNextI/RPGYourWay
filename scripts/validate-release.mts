@@ -8,7 +8,7 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; dependencies?: Record<string, string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.3.12')
+assert.equal(pkg.version, '1.3.13')
 assert.equal(pkg.dependencies?.next, '16.2.6')
 
 for (const file of [
@@ -27,6 +27,7 @@ for (const file of [
   'app/favicon.ico',
   'components/SiteHeader.tsx',
   'components/SiteFooter.tsx',
+  'components/FullscreenToggle.tsx',
   'public/rpgyw-logo.png',
   'public/rpgyw-logo-bordered.png',
   'public/rpgyw-compass.png',
@@ -63,7 +64,7 @@ assert.match(home, /Forever DMs/)
 assert.match(home, /Blind players and screen-reader users/)
 assert.match(home, /Players with irregular or limited schedules/)
 assert.match(home, /Beginners and returning players/)
-assert.match(home, /<section className="audience-section"/)
+assert.match(home, /<div className="hero-audience"/)
 assert.match(home, /<details className="audience-accordion">/)
 assert.match(home, /<details className="audience-item"/)
 
@@ -74,6 +75,8 @@ assert.match(header, /href: '\/shape', label: 'Shape'/)
 assert.match(header, /href: '\/read', label: 'Read'/)
 assert.doesNotMatch(header, /href: '\/pricing', label: 'Pricing'/)
 assert.doesNotMatch(header, /href: '\/account', label: 'Account'/)
+assert.match(header, /FullscreenToggle/)
+assert.match(header, /nav-jeweled-divider/)
 
 const play = read('app/play/page.tsx')
 assert.match(play, /<PageShell variant="play">/)
@@ -103,12 +106,13 @@ assert.match(css, /--lime:/)
 assert.match(css, /url\('\/rpgyw-map-tan\.png'\)/)
 assert.match(css, /\.site-frame-play/)
 assert.match(css, /data:image\/svg\+xml/)
-assert.match(css, /grid-template-areas:/)
-assert.match(css, /"thesis logo"/)
-assert.match(css, /"dashboard logo"/)
-assert.match(css, /\.audience-section/)
+assert.match(css, /\.hero-column/)
+assert.match(css, /aspect-ratio: 1 \/ 1/)
+assert.match(css, /\.hero-audience/)
+assert.match(css, /\.nav-jeweled-divider/)
+assert.match(css, /\.fullscreen-toggle/)
 assert.match(css, /\.audience-accordion/)
 assert.match(css, /@media \(max-width: 620px\)/)
 assert.match(css, /@media \(prefers-reduced-motion: reduce\)/)
 
-console.log('RPG Your Way 1.3.12 parchment-map UI foundation passed validation.')
+console.log('RPG Your Way 1.3.13 landing QA and navigation polish passed validation.')

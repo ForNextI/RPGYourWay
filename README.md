@@ -1,5 +1,9 @@
 # RPG Your Way
 
+**Build 1.3.13 · Landing QA and navigation polish**
+
+Build 1.3.13 puts the opening thesis on a cream card, keeps the full RPG Your Way logo square instead of stretching it to the dashboard height, and tucks the audience accordion beneath the logo on desktop. The campaign Continue action now uses olive fill with a lime outline as the visual language for “what happens next.” The site also moves to a screen-friendly serif stack, restores the jeweled line-and-diamond navigation dividers from the WardensPC design language, and adds an accessible full-screen / restore control to the primary header.
+
 **Build 1.3.12 · Parchment-map UI foundation**
 
 Build 1.3.12 establishes the first RPG Your Way visual system: the approved tan-on-tan overland map as the global background, cream/parchment content surfaces, forest-green framing, moss accents, and lime action highlights. The landing page now keeps the Campaign Dashboard directly beneath the opening thesis, aligns it with the logo column, and moves the audience accordion below the hero. The Play route uses a quieter cream-and-hex field instead of the map so the eventual game interface can develop its own immersive treatment.
