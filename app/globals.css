@@ -495,6 +495,63 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 .account-placeholder p:last-child { margin-bottom: 0; color: var(--muted); }
 .prose-page p:not(.kicker) { color: var(--muted); font-size: 1.05rem; }
 
+.auth-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.auth-card,
+.account-signed-in {
+  border: 2px solid color-mix(in srgb, var(--forest) 58%, var(--border));
+  border-radius: var(--radius);
+  background: var(--cream-bright);
+  padding: clamp(1.2rem, 3vw, 1.6rem);
+  box-shadow: var(--shadow-soft);
+}
+.auth-card h2,
+.account-signed-in h2 { margin-bottom: .9rem; font-size: 1.55rem; }
+.account-state-label {
+  margin-bottom: .35rem;
+  color: var(--moss-deep);
+  font-size: .74rem;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.auth-form { display: grid; gap: .95rem; }
+.auth-form label { display: grid; gap: .38rem; color: var(--forest-ink); font-weight: 800; }
+.auth-form input {
+  width: 100%;
+  min-height: 48px;
+  border: 2px solid color-mix(in srgb, var(--forest) 45%, var(--cream-deep));
+  border-radius: 10px;
+  background: #fffaf2;
+  color: var(--ink);
+  padding: .72rem .82rem;
+}
+.auth-form input:focus-visible { border-color: var(--forest); }
+.auth-submit { width: 100%; margin-top: .25rem; cursor: pointer; }
+.auth-hint { margin: -.2rem 0 0; color: var(--muted); font-size: .82rem; }
+.auth-message {
+  margin: 0 0 1rem;
+  border-radius: 12px;
+  padding: .9rem 1rem;
+  font-weight: 800;
+}
+.auth-message-success { border: 2px solid var(--lime); background: var(--lime-soft); color: var(--forest-deep); }
+.auth-message-error { border: 2px solid #c4867f; background: #f8e2dc; color: var(--danger); }
+.account-signed-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.account-email { margin-bottom: .45rem; color: var(--forest-deep); font-size: 1.05rem; font-weight: 900; overflow-wrap: anywhere; }
+.account-foundation-note { max-width: 560px; margin: 0; color: var(--muted); }
+.footer-version { color: var(--lime-soft); white-space: nowrap; }
+
 .site-footer {
   border-top: 2px solid color-mix(in srgb, var(--moss) 62%, var(--cream));
   background: rgb(4 58 45 / .96);
@@ -530,6 +587,8 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 }
 
 @media (max-width: 620px) {
+  .auth-grid { grid-template-columns: 1fr; }
+  .account-signed-in { align-items: stretch; flex-direction: column; }
   .shell, .narrow-shell { width: min(100% - 1.2rem, 1180px); }
   .header-inner { min-height: 62px; }
   .brand-words { font-size: .92rem; }

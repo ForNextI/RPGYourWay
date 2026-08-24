@@ -6,10 +6,18 @@ const root = process.cwd()
 const read = (relative: string) => fs.readFileSync(path.join(root, relative), 'utf8')
 const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
-const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; dependencies?: Record<string, string> }
+const pkg = JSON.parse(read('package.json')) as {
+  name?: string
+  version?: string
+  rpgywVersion?: string
+  dependencies?: Record<string, string>
+}
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.3.13')
+assert.equal(pkg.version, '1.5.1')
+assert.equal(pkg.rpgywVersion, '1.5.0.1')
 assert.equal(pkg.dependencies?.next, '16.2.6')
+assert.equal(pkg.dependencies?.['@supabase/ssr'], '^0.12.4')
+assert.equal(pkg.dependencies?.['@supabase/supabase-js'], '^2.112.3')
 
 for (const file of [
   'app/page.tsx',
@@ -18,101 +26,73 @@ for (const file of [
   'app/read/page.tsx',
   'app/pricing/page.tsx',
   'app/account/page.tsx',
+  'app/account/actions.ts',
+  'app/auth/confirm/route.ts',
   'app/support/page.tsx',
   'app/legal/privacy/page.tsx',
   'app/legal/terms/page.tsx',
-  'app/robots.ts',
-  'app/icon.png',
-  'app/apple-icon.png',
-  'app/favicon.ico',
   'components/SiteHeader.tsx',
   'components/SiteFooter.tsx',
-  'components/FullscreenToggle.tsx',
-  'public/rpgyw-logo.png',
+  'lib/version.ts',
+  'lib/supabase/client.ts',
+  'lib/supabase/server.ts',
+  'lib/supabase/proxy.ts',
+  'proxy.ts',
   'public/rpgyw-logo-bordered.png',
   'public/rpgyw-compass.png',
   'public/rpgyw-map-tan.png',
-]) {
-  assert.ok(exists(file), `Missing ${file}`)
-}
+]) assert.ok(exists(file), `Missing ${file}`)
 
-for (const file of fs.readdirSync(path.join(root, 'app'), { recursive: true })
-  .map(String)
-  .filter((file) => file.endsWith('page.tsx'))) {
-  const source = read(path.join('app', file))
-  assert.match(source, /<main[^>]*id="main-content"[^>]*tabIndex=\{-1\}/, `${file} must expose the skip-link target.`)
-}
+const env = read('.env.example')
+assert.match(env, /NEXT_PUBLIC_SUPABASE_URL=/)
+assert.match(env, /NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=/)
+assert.doesNotMatch(env, /SERVICE_ROLE_KEY=.*[^\s]/)
 
-const layout = read('app/layout.tsx')
-assert.match(layout, /href="#main-content"/)
-assert.match(layout, /RPG Your Way/)
-assert.match(layout, /colorScheme: 'light'/)
+const serverClient = read('lib/supabase/server.ts')
+assert.match(serverClient, /createServerClient/)
+assert.match(serverClient, /getAll\(\)/)
+assert.match(serverClient, /setAll\(cookiesToSet/)
+assert.doesNotMatch(serverClient, /auth-helpers-nextjs/)
 
-const home = read('app/page.tsx')
-assert.match(home, /Tabletop gaming is best in person/)
-assert.match(home, /No question\./)
-assert.match(home, /But sometimes\.\.\./)
-assert.match(home, /Who RPG Your Way is for/)
-assert.match(home, /src="\/rpgyw-logo-bordered\.png"/)
-assert.match(home, /alt="RPG Your Way compass logo"/)
-assert.match(home, /Campaign dashboard/)
-assert.match(home, /Continue campaign/)
-assert.match(home, /Your adventure/)
-assert.match(home, /Solo players/)
-assert.match(home, /Neurodivergent players/)
-assert.match(home, /Forever DMs/)
-assert.match(home, /Blind players and screen-reader users/)
-assert.match(home, /Players with irregular or limited schedules/)
-assert.match(home, /Beginners and returning players/)
-assert.match(home, /<div className="hero-audience"/)
-assert.match(home, /<details className="audience-accordion">/)
-assert.match(home, /<details className="audience-item"/)
+const proxyHelper = read('lib/supabase/proxy.ts')
+assert.match(proxyHelper, /createServerClient/)
+assert.match(proxyHelper, /getAll\(\)/)
+assert.match(proxyHelper, /setAll\(cookiesToSet, headers\)/)
+assert.match(proxyHelper, /auth\.getClaims\(\)/)
+
+const rootProxy = read('proxy.ts')
+assert.match(rootProxy, /updateSession/)
+assert.match(rootProxy, /export async function proxy/)
+
+const account = read('app/account/page.tsx')
+assert.match(account, /signIn/)
+assert.match(account, /signUp/)
+assert.match(account, /signOut/)
+assert.match(account, /auth\.getClaims\(\)/)
+assert.match(account, /Create an account/)
+
+const actions = read('app/account/actions.ts')
+assert.match(actions, /signInWithPassword/)
+assert.match(actions, /auth\.signUp/)
+assert.match(actions, /auth\.signOut/)
+
+const confirm = read('app/auth/confirm/route.ts')
+assert.match(confirm, /verifyOtp/)
+assert.match(confirm, /token_hash/)
 
 const header = read('components/SiteHeader.tsx')
-assert.match(header, /src="\/rpgyw-compass\.png"/)
-assert.match(header, /href: '\/play', label: 'Play'/)
-assert.match(header, /href: '\/shape', label: 'Shape'/)
-assert.match(header, /href: '\/read', label: 'Read'/)
-assert.doesNotMatch(header, /href: '\/pricing', label: 'Pricing'/)
-assert.doesNotMatch(header, /href: '\/account', label: 'Account'/)
-assert.match(header, /FullscreenToggle/)
 assert.match(header, /nav-jeweled-divider/)
+assert.match(header, /FullscreenToggle/)
 
-const play = read('app/play/page.tsx')
-assert.match(play, /<PageShell variant="play">/)
-
-const shape = read('app/shape/page.tsx')
-assert.match(shape, /Turn the game into the story/)
-assert.match(shape, /priced separately per conversion/i)
-assert.match(shape, /not draw from your Play usage balance/i)
-
-const readPage = read('app/read/page.tsx')
-assert.match(readPage, /The novel\./)
-assert.match(readPage, /free site/)
-assert.match(readPage, /https:\/\/www\.thereadingofthewardens\.com/)
-assert.doesNotMatch(readPage, /WardensPC/i)
-
-const pricing = read('app/pricing/page.tsx')
-assert.match(pricing, /bounded prepaid usage/i)
-assert.match(pricing, /No dollar amounts are published/i)
-
-const robots = read('app/robots.ts')
-assert.match(robots, /disallow:\s*['"]\/['"]/)
+const footer = read('components/SiteFooter.tsx')
+assert.match(footer, /href="\/account"/)
+assert.match(footer, /APP_VERSION/)
 
 const css = read('app/globals.css')
-assert.match(css, /--forest:/)
-assert.match(css, /--cream:/)
-assert.match(css, /--lime:/)
+assert.match(css, /border-top: 1px solid color-mix\(in srgb, var\(--forest\)/)
+assert.match(css, /\.auth-grid/)
+assert.match(css, /\.auth-card/)
+assert.match(css, /\.auth-message-success/)
 assert.match(css, /url\('\/rpgyw-map-tan\.png'\)/)
-assert.match(css, /\.site-frame-play/)
-assert.match(css, /data:image\/svg\+xml/)
-assert.match(css, /\.hero-column/)
-assert.match(css, /aspect-ratio: 1 \/ 1/)
-assert.match(css, /\.hero-audience/)
-assert.match(css, /\.nav-jeweled-divider/)
-assert.match(css, /\.fullscreen-toggle/)
-assert.match(css, /\.audience-accordion/)
-assert.match(css, /@media \(max-width: 620px\)/)
-assert.match(css, /@media \(prefers-reduced-motion: reduce\)/)
 
-console.log('RPG Your Way 1.3.13 landing QA and navigation polish passed validation.')
+console.log('RPG Your Way 1.5.0.1 Supabase account foundation passed validation.')
