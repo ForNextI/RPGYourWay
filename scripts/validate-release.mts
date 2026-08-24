@@ -13,8 +13,8 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.5.300')
-assert.equal(pkg.rpgywVersion, '1.5.300')
+assert.equal(pkg.version, '1.5.400')
+assert.equal(pkg.rpgywVersion, '1.5.400')
 assert.equal(pkg.dependencies?.next, '16.2.6')
 assert.equal(pkg.dependencies?.['@supabase/ssr'], '^0.12.4')
 assert.equal(pkg.dependencies?.['@supabase/supabase-js'], '^2.112.3')
@@ -25,6 +25,8 @@ for (const file of [
   'app/shape/page.tsx',
   'app/api/shape/jobs/route.ts',
   'app/api/shape/transform/route.ts',
+  'app/api/shape/projects/route.ts',
+  'app/api/shape/usage/route.ts',
   'app/read/page.tsx',
   'app/pricing/page.tsx',
   'app/account/page.tsx',
@@ -38,11 +40,14 @@ for (const file of [
   'components/ShapeWorkspace.tsx',
   'lib/version.ts',
   'lib/shape/access.ts',
+  'lib/shape/config.ts',
   'lib/shape/transcript.ts',
   'lib/supabase/client.ts',
   'lib/supabase/server.ts',
   'lib/supabase/proxy.ts',
   'supabase/migrations/20260824163000_shape_jobs.sql',
+  'supabase/migrations/20260824194500_shape_beta_instrumentation.sql',
+  'scripts/test-shape-runtime.mts',
   'proxy.ts',
   'public/rpgyw-logo-bordered.png',
   'public/rpgyw-compass.png',
@@ -78,15 +83,24 @@ assert.match(shapePage, /1,000,000 characters/)
 assert.match(shapePage, /ShapeSignInGate/)
 assert.match(shapePage, /ShapeWorkspace/)
 assert.match(shapePage, /shapeEmailAllowed/)
+assert.match(shapePage, /How Shape pricing will work/)
+assert.match(shapePage, /maximum estimated price/)
+assert.match(shapePage, /no payment is collected during these tests/)
 
 const jobs = read('app/api/shape/jobs/route.ts')
 assert.match(jobs, /shape_jobs/)
 assert.match(jobs, /buildShapeAnalysisChunks/)
 assert.match(jobs, /buildShapeTranscriptChunks/)
 assert.match(jobs, /RPGYW_SHAPE_BETA_EMAILS|shapeEmailAllowed/)
+assert.match(jobs, /shape_projects/)
+assert.match(jobs, /confirm_duplicate/)
+assert.match(jobs, /cached_input_tokens/)
+assert.match(jobs, /\['processing', 'error', 'completed'\]/)
 
 const transform = read('app/api/shape/transform/route.ts')
-assert.match(transform, /ProseMaker v5\.1\.0 · RPG Your Way/)
+assert.match(transform, /SHAPE_PROMPT_VERSION/)
+const shapeConfig = read('lib/shape/config.ts')
+assert.match(shapeConfig, /ProseMaker v5\.1\.0 · RPG Your Way/)
 assert.match(transform, /api\.openai\.com\/v1\/responses/)
 assert.match(transform, /Idempotency-Key/)
 assert.match(transform, /provisionalProseTail/)
@@ -94,11 +108,24 @@ assert.match(transform, /replaceProvisionalProseTail/)
 assert.match(transform, /status: 'error'/)
 assert.match(transform, /input_tokens/)
 assert.match(transform, /output_tokens/)
+assert.match(transform, /shape_usage_events/)
+assert.match(transform, /cached_input_tokens/)
+assert.match(transform, /PRIOR PROJECT CONTINUITY/)
+assert.match(transform, /providerRequestId/)
+const usageRoute = read('app/api/shape/usage/route.ts')
+assert.doesNotMatch(usageRoute, /transcript,result_text|result_text,transcript/)
+assert.match(usageRoute, /No transcript or finished prose is included/)
 
 const migration = read('supabase/migrations/20260824163000_shape_jobs.sql')
 assert.match(migration, /create table if not exists public\.shape_jobs/)
 assert.match(migration, /enable row level security/)
 assert.match(migration, /auth\.uid\(\) = user_id/)
+
+const instrumentation = read('supabase/migrations/20260824194500_shape_beta_instrumentation.sql')
+assert.match(instrumentation, /create table if not exists public\.shape_projects/)
+assert.match(instrumentation, /create table if not exists public\.shape_usage_events/)
+assert.match(instrumentation, /cached_input_tokens/)
+assert.match(instrumentation, /unique \(job_id, operation\)/)
 
 const authPrompt = read('components/AuthPrompt.tsx')
 assert.match(authPrompt, /rpgyw:open-auth/)
@@ -111,6 +138,8 @@ assert.match(env, /RPGYW_SHAPE_BETA_EMAILS=/)
 const css = read('app/globals.css')
 assert.match(css, /\.shape-workbench/)
 assert.match(css, /\.shape-result/)
+assert.match(css, /\.shape-steps/)
+assert.match(css, /\.shape-usage-grid/)
 assert.match(css, /\.nested-accordion-copy/)
 assert.match(css, /url\('\/rpgyw-map-tan\.png'\)/)
 
@@ -118,4 +147,4 @@ const footer = read('components/SiteFooter.tsx')
 assert.match(footer, /© 2026 dodo ink\. Independent creative projects\./)
 assert.match(footer, /APP_VERSION/)
 
-console.log('RPG Your Way 1.5.300 Shape foundation and landing accordions passed validation.')
+console.log('RPG Your Way 1.5.400 Shape private beta, instrumentation, projects, pricing copy, and landing continuity passed validation.')

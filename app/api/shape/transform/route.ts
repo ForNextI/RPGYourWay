@@ -1,5 +1,7 @@
 import { shapeEmailAllowed } from '@/lib/shape/access'
+import { SHAPE_PROMPT_VERSION, selectedShapeModel } from '@/lib/shape/config'
 import {
+  SHAPE_PROVISIONAL_PROSE_CHARACTERS,
   SHAPE_SINGLE_PASS_CHARACTERS,
   buildShapeAnalysisChunks,
   buildShapeTranscriptChunks,
@@ -12,8 +14,6 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const maxDuration = 120
 
-const DEFAULT_MODEL = 'gpt-5.6-terra'
-const PROSEMAKER_VERSION = 'ProseMaker v5.1.0 · RPG Your Way'
 const MAX_CONTINUITY_CHARACTERS = 20_000
 const MAX_REVISED_PREVIOUS_PROSE_CHARACTERS = 14_000
 
@@ -22,39 +22,54 @@ const ANALYSIS_PROMPT = `You are ProseMaker's continuity editor. Read this chron
 Build and maintain a compact continuity ledger that the prose writer can use for every section. Record only story-bearing facts: character names, identities, pronouns, appearances, relationships, locations, chronology, possessions, injuries, conditions, discoveries, goals, unresolved threads, important dialogue or promises, and corrections. Ignore dice arithmetic, menus, rules administration, repeated narration, abandoned declarations, talk-to-text debris, and irrelevant out-of-character conversation.
 
 TIME SCOPE IS CRITICAL. Do not flatten the campaign into its final state. Use these canon rules:
-- RETROACTIVE CORRECTION: an earlier transcript statement was wrong and a player or Game Master explicitly corrects it. State what earlier fact is superseded and how far backward the correction applies. Continued play using a replacement is sufficient confirmation.
-- SUPERSEDED ACTION: when a player changes or retracts a declared action before it is finally resolved, the corrected declaration wins. Remove the abandoned action even if the Game Master had already begun narrating it.
+- RETROACTIVE CORRECTION: an earlier transcript statement was wrong and a player or Game Master explicitly corrects it. State what earlier fact is superseded and how far backward the correction applies. A corrected NPC name replaces the mistaken name from the original introduction when that is clearly the intended scope. Continued play using the replacement is sufficient confirmation; do not require a formal approval phrase.
+- SUPERSEDED ACTION: when a player changes or retracts a declared action before it is finally resolved, the corrected declaration wins. Remove the abandoned action even if the Game Master had already begun narrating it. Preserve only the action the transcript ultimately treats as having happened and its consequences.
 - REVELATION OR DISCOVERY: a fact may have been true earlier, but the characters or narrator did not know it yet. Preserve the earlier viewpoint and apply the knowledge only from the discovery point forward.
-- FORWARD CHANGE: a name, title, relationship, allegiance, injury, possession, location, condition, identity choice, or other state changes during play. Preserve the old state before the effective point and the new state afterward.
-- FIRST-ESTABLISHED FACT DEFAULT: if the transcript later contradicts an already established minor fact without an explicit correction or an in-story change, treat the earliest clear version as canon and the later isolated contradiction as accidental drift.
+- FORWARD CHANGE: a name, title, relationship, allegiance, injury, possession, location, condition, identity choice, or other state changes during play. Preserve the old state before the effective point and the new state afterward. A later spelling or pronunciation correction to a newly chosen name may correct that choice from the moment the choice was made, but it must not rename the character in scenes before the choice.
+- FIRST-ESTABLISHED FACT DEFAULT: if the transcript later contradicts an already established minor fact without an explicit correction or an in-story change, treat the earliest clear version as canon and the later isolated contradiction as accidental drift. Later repetition of the original fact strengthens that conclusion. Do not invent a disguise, transformation, hidden explanation, or retcon to reconcile ordinary drift.
 Never turn a development into a retcon merely because it appears later in the transcript.
 
-When ROLLING CONTINUITY is supplied, merge it with the current transcript section into one updated, timeline-aware ledger. Process sections strictly in chronological order.
+When ROLLING CONTINUITY is supplied, it is the compact record from earlier analysis sections of this same submission. Merge it with the current transcript section into one updated, timeline-aware ledger. When the current section truly corrects an earlier section, preserve the correction with its retroactive scope. When it merely reveals or changes something, preserve the earlier state and the effective transition point. When it merely drifts from a previously established minor fact, preserve the first-established fact unless later text explicitly corrects it or depicts a real change.
+
+When PRIOR PROJECT CONTINUITY is supplied, it comes from earlier completed Shape project parts. Carry it forward using the same rules. If a later part explicitly corrects an earlier-project fact, record the corrected canon and its scope in the continuity ledger. Do not create customer-facing editing homework.
+
+When no rolling continuity is supplied, begin the ledger from the current transcript section. Process sections strictly in chronological order. The final ledger after the last section must represent the complete submitted transcript while preserving when facts became true, known, or superseded.
 
 Return only valid JSON with this exact shape:
-{"continuity":"compact timeline-aware continuity ledger","retcon_notices":[]}`
+{"continuity":"compact timeline-aware continuity ledger","retcon_notices":[]}
+The retcon_notices field exists only for compatibility and must always be an empty array. Resolve ordinary contradictions with the rules above and record any genuinely uncertain material neutrally inside the continuity ledger rather than producing a human-review notice.`
 
-const SINGLE_PASS_PROMPT = `You are ProseMaker, a one-shot converter that turns a raw tabletop roleplaying transcript into finished third-person, past-tense fantasy prose. Read the entire transcript before writing and determine what actually happened. Respect chronology when resolving later information. An explicit player or Game Master correction can retroactively replace an earlier mistake. If a player changes or retracts an action before it is finally resolved, use only the corrected action. A later discovery or state change does not rewrite earlier scenes. When a later isolated detail contradicts an earlier established minor fact without an explicit correction or in-story change, keep the first-established fact and treat the later contradiction as drift.
+const SINGLE_PASS_PROMPT = `You are ProseMaker, a one-shot converter that turns a raw tabletop roleplaying transcript into finished third-person, past-tense fantasy prose. Read the entire transcript before writing and determine what actually happened. Respect chronology when resolving later information. An explicit player or Game Master correction can retroactively replace an earlier mistake, including a mistaken NPC name. Continued play with the replacement is enough confirmation. If a player changes or retracts an action before it is finally resolved, use only the corrected action even when the Game Master had already begun narrating the abandoned version. A later discovery, injury, relationship change, possession change, title, allegiance, or chosen name is a forward change and does not rewrite earlier scenes. If a character adopts a new name midway through the story, use the old name before that choice and the new name afterward; a later spelling correction to the chosen name may repair it from the moment of choice without reaching farther back. When a later isolated detail contradicts an earlier established minor fact without an explicit correction or in-story change, keep the first-established fact and treat the later contradiction as drift. Omit abandoned actions, dice arithmetic, menus, rules discussion, game administration, talk-to-text errors, repeated narration, and irrelevant out-of-character conversation. Tell each event once.
 
-Omit abandoned actions, dice arithmetic, menus, rules discussion, game administration, talk-to-text errors, repeated narration, and irrelevant out-of-character conversation. Tell each event once. Preserve player choices, sequence, identities, locations, injuries, actions, consequences, important dialogue, humor, tactics, spells, abilities, and established facts. Combine a player's declared action and the Game Master's result into one complete fictional event. Use maximum reasonable inference and minimum invention. Fill only obvious connective gaps and never invent unsupported events, motives, private thoughts, dialogue, discoveries, outcomes, or conclusions.
+Preserve player choices, sequence, identities, locations, injuries, actions, consequences, important dialogue, humor, tactics, spells, abilities, and established facts. Combine a player's declared action and the Game Master's result into one complete fictional event. Use maximum reasonable inference and minimum invention: fill only obvious connective gaps, and never invent unsupported events, motives, private thoughts, dialogue, discoveries, outcomes, or conclusions. You may add non-eventful sensory texture that naturally fits an already established place, action, or mood, but it must not change what happened.
 
-Build paragraphs around complete dramatic beats. Vary sentence length, use natural transitions, preserve distinctive speech, and favor specific source details over stock fantasy language. Check names, speakers, pronouns, locations, injuries, and actions before finalizing. Avoid commentary, headings, prefaces, markdown, manufactured endings, and false cliffhangers. Output only the finished prose.`
+Build paragraphs around complete dramatic beats. Group related movement, observation, dialogue, reaction, and consequence into coherent paragraphs instead of restating each transcript line as a separate paragraph. Vary sentence length, use natural transitions, preserve distinctive speech, and favor specific source details over stock fantasy language.
+
+Check names, speakers, pronouns, locations, injuries, and actions before finalizing. Avoid commentary, headings, prefaces, markdown, repetitive dramatic button sentences, manufactured endings, and false cliffhangers. Preserve a real ending when one exists; otherwise stop where the source stops. Output only the finished prose.`
 
 const WRITING_PROMPT = `You are ProseMaker, a rolling converter that turns raw tabletop roleplaying transcripts into finished third-person, past-tense fantasy prose.
 
-The complete current transcript was analyzed before writing began. The CONTINUITY LEDGER is timeline-aware. Follow it without erasing chronology. Apply a later fact backward only when the ledger identifies it as a retroactive correction. A superseded declaration is not an event. Do not apply a revelation or forward change to earlier scenes.
+The complete current transcript was analyzed before writing began. The CONTINUITY LEDGER below is timeline-aware. Follow it without erasing chronology. At each moment in the story, use the name, knowledge, relationship, possessions, injuries, conditions, and other state that were actually in force at that point. Apply a later fact backward only when the ledger identifies it as a RETROACTIVE CORRECTION. A superseded declaration is not an event: if the player changed or retracted an action before final resolution, write only the corrected action and its actual consequences. Do not apply a REVELATION or FORWARD CHANGE to earlier scenes. If a character chooses a new name midway through the story, use the old name before that choice and the new name afterward. A later correction to the spelling of that newly chosen name may repair the choice from that moment forward without reaching farther back. When the ledger identifies ordinary descriptive drift, preserve the first-established fact instead of inventing an explanation for the contradiction.
 
-You are writing one section of a longer document with a soft seam. CONTEXT BEFORE and CONTEXT AFTER overlap neighboring source sections. PREVIOUS PROSE TAIL is deliberately provisional and may be revised now that you can see both sides of the seam.
+You are writing one section of a longer document with a soft seam. CONTEXT BEFORE and CONTEXT AFTER overlap neighboring source sections. PREVIOUS PROSE TAIL is deliberately provisional: it is the final several paragraphs produced by the preceding section and may be revised now that you can see the source on both sides of the seam.
 
-Return only valid JSON with exactly these fields: {"revised_previous_tail":"...","new_prose":"..."}. REVISED PREVIOUS PROSE TAIL must be a complete replacement for the supplied provisional tail. Preserve every real event already represented there while repairing repetition, false endings, awkward transitions, or continuity mistakes. If the supplied tail is empty, return an empty string. NEW PROSE must cover only NEW TRANSCRIPT MATERIAL and must not retell context overlap.
+Return two fields. REVISED PREVIOUS PROSE TAIL must be a complete replacement for the supplied provisional tail. Preserve every real event, action, consequence, and important line already represented there, but repair repetition, false endings, awkward transitions, mistaken continuity, or a sentence that clearly belongs with the new material. If the supplied tail is empty, return an empty string. NEW PROSE must cover only NEW TRANSCRIPT MATERIAL. Do not retell CONTEXT BEFORE, and do not prematurely write CONTEXT AFTER. Together, the revised tail and new prose must create one continuous manuscript with no duplicated or missing event at the seam.
 
-Resolve player declarations and Game Master results into complete fictional events. Omit abandoned actions, dice arithmetic, menus, rules discussion, game administration, talk-to-text errors, repeated narration, and irrelevant out-of-character conversation. Preserve player choices, sequence, identities, locations, injuries, actions, consequences, important dialogue, humor, tactics, spells, abilities, and established facts. Use maximum reasonable inference and minimum invention. Avoid commentary, summaries, headings, prefaces, markdown, manufactured endings, and false cliffhangers.`
+The raw transcript may repeat the same event several ways: a player declares an action, the Game Master restates it, the Game Master gives the result, and a later context-restoration message may summarize it again. Those are not four story events. Merge declaration, restatement, and outcome into one fictional beat. Ignore later source recap when the event has already been written. Before returning, compare every paragraph of NEW PROSE with the REVISED PREVIOUS PROSE TAIL and with the other paragraphs in NEW PROSE. If two passages narrate the same conversation, action, revelation, or outcome from duplicated source material, merge them and tell the event once.
+
+Resolve player declarations and Game Master results into complete fictional events. Omit abandoned actions, dice arithmetic, menus, rules discussion, game administration, talk-to-text errors, repeated narration, and irrelevant out-of-character conversation. Tell each event once.
+
+Preserve player choices, sequence, identities, locations, injuries, actions, consequences, important dialogue, humor, tactics, spells, abilities, and established facts. Use maximum reasonable inference and minimum invention. Fill only obvious connective gaps, and never invent unsupported events, motives, private thoughts, dialogue, discoveries, outcomes, or conclusions. Non-eventful sensory texture may be added when it fits an established place, action, or mood and does not change what happened.
+
+Build paragraphs around complete dramatic beats. Group related movement, observation, dialogue, reaction, and consequence into coherent paragraphs. Vary sentence length, use natural transitions, preserve distinctive speech, and favor specific source details over stock fantasy language.
+
+Check names, speakers, pronouns, locations, injuries, and actions before finalizing. Avoid commentary, summaries, headings, prefaces, markdown, manufactured endings, and false cliffhangers. For a nonfinal section, do not force its last paragraph to sound like an ending because its final paragraphs will remain provisional until the next section is written. On the final section, preserve a real ending when one exists; otherwise stop where the source stops.`
 
 const DESCRIPTION_PROMPTS = {
-  plain: 'DESCRIPTION LEVEL: PLAIN AND SIMPLE. Write clean, economical prose. Add only the description needed for clarity, place, and continuity.',
+  plain: 'DESCRIPTION LEVEL: PLAIN AND SIMPLE. Write clean, economical prose. Add only the description needed for clarity, place, and continuity. Keep imagery restrained and sentences direct.',
   light: 'DESCRIPTION LEVEL: SLIGHTLY DESCRIPTIVE. Add selective sensory detail, smoother transitions, and a little atmosphere. Keep the prose natural and readable rather than ornate.',
-  rich: 'DESCRIPTION LEVEL: VERY DESCRIPTIVE. Use fuller sensory detail, stronger scene texture, varied sentence rhythms, and more evocative language. Remain faithful to the transcript.',
-  purple: 'DESCRIPTION LEVEL: EXCESSIVELY FLOWERY AND PURPLE. Deliberately use lavish, ornate, image-heavy prose and heightened metaphor while keeping events and outcomes faithful to the transcript.',
+  rich: 'DESCRIPTION LEVEL: VERY DESCRIPTIVE. Use fuller sensory detail, stronger scene texture, varied sentence rhythms, and more evocative language. Remain faithful to the transcript and do not add new plot facts or player-character thoughts.',
+  purple: 'DESCRIPTION LEVEL: EXCESSIVELY FLOWERY AND PURPLE. Deliberately use lavish, ornate, image-heavy prose, elaborate descriptions, and heightened metaphor. The style may be gloriously excessive, but the events, dialogue, motives, and outcomes must still remain faithful to the transcript.',
 } as const
 
 type DescriptionLevel = keyof typeof DESCRIPTION_PROMPTS
@@ -67,24 +82,35 @@ type ShapeJobRow = {
   transcript: string
   transcript_characters: number
   fingerprint: string
-  status: 'processing' | 'error' | 'completed'
+  status: 'processing' | 'error' | 'completed' | 'cancelled'
   phase: string
   analysis_total: number
   writing_total: number
   next_analysis_chunk_index: number
   next_chunk_index: number
   continuity: string
+  prior_continuity: string
   prose_text: string
   result_text: string | null
   prompt_version: string | null
+  model: string | null
+  project_id: string | null
+  project_part_number: number
   input_tokens: number
+  cached_input_tokens: number
   output_tokens: number
+  request_count: number
   error_message: string | null
   created_at: string
   updated_at: string
 }
 
-type OpenAiUsage = { input_tokens?: number; output_tokens?: number }
+type OpenAiUsage = {
+  input_tokens?: number
+  output_tokens?: number
+  total_tokens?: number
+  input_tokens_details?: { cached_tokens?: number }
+}
 
 type OpenAiPayload = {
   id?: string
@@ -92,6 +118,15 @@ type OpenAiPayload = {
   output?: Array<{ type?: string; content?: Array<{ type?: string; text?: string }> }>
   usage?: OpenAiUsage
 }
+
+type UsageSummary = {
+  inputTokens: number
+  cachedInputTokens: number
+  outputTokens: number
+  totalTokens: number
+}
+
+type ServerSupabase = Awaited<ReturnType<typeof createClient>>
 
 function serializeJob(row: ShapeJobRow, includeResult = false) {
   return {
@@ -106,17 +141,18 @@ function serializeJob(row: ShapeJobRow, includeResult = false) {
     next_analysis_chunk_index: row.next_analysis_chunk_index,
     next_chunk_index: row.next_chunk_index,
     prompt_version: row.prompt_version,
+    model: row.model,
+    project_id: row.project_id,
+    project_part_number: row.project_part_number || 1,
     error_message: row.error_message,
     input_tokens: row.input_tokens || 0,
+    cached_input_tokens: row.cached_input_tokens || 0,
     output_tokens: row.output_tokens || 0,
+    request_count: row.request_count || 0,
     result_text: includeResult ? row.result_text : undefined,
     created_at: row.created_at,
     updated_at: row.updated_at,
   }
-}
-
-function selectedModel() {
-  return process.env.OPENAI_SHAPE_MODEL?.trim() || process.env.OPENAI_MODEL?.trim() || DEFAULT_MODEL
 }
 
 function outputText(payload: OpenAiPayload) {
@@ -129,34 +165,158 @@ function outputText(payload: OpenAiPayload) {
     .trim()
 }
 
-async function openAiResponse(system: string, user: string, maxOutputTokens: number, idempotencyKey: string) {
+function usageSummary(payload: OpenAiPayload): UsageSummary {
+  const usage = payload.usage || {}
+  const inputTokens = Math.max(0, Math.floor(usage.input_tokens || 0))
+  const cachedInputTokens = Math.max(0, Math.floor(usage.input_tokens_details?.cached_tokens || 0))
+  const outputTokens = Math.max(0, Math.floor(usage.output_tokens || 0))
+  return {
+    inputTokens,
+    cachedInputTokens,
+    outputTokens,
+    totalTokens: Math.max(0, Math.floor(usage.total_tokens || inputTokens + outputTokens)),
+  }
+}
+
+async function recordUsageEvent(
+  supabase: ServerSupabase,
+  userId: string,
+  job: ShapeJobRow,
+  details: {
+    phase: string
+    operation: string
+    model: string
+    providerRequestId: string | null
+    inputCharacters: number
+    durationMs: number
+    success: boolean
+    statusCode: number | null
+    usage: UsageSummary
+  },
+) {
+  const { error } = await supabase.from('shape_usage_events').upsert({
+    user_id: userId,
+    job_id: job.id,
+    project_id: job.project_id,
+    phase: details.phase,
+    operation: details.operation,
+    model: details.model,
+    provider_request_id: details.providerRequestId,
+    input_tokens: details.usage.inputTokens,
+    cached_input_tokens: details.usage.cachedInputTokens,
+    output_tokens: details.usage.outputTokens,
+    total_tokens: details.usage.totalTokens,
+    input_characters: details.inputCharacters,
+    duration_ms: details.durationMs,
+    success: details.success,
+    status_code: details.statusCode,
+    created_at: new Date().toISOString(),
+  }, { onConflict: 'job_id,operation' })
+  if (error) console.error('Shape usage ledger write failed', error.message)
+}
+
+async function openAiStep(
+  supabase: ServerSupabase,
+  userId: string,
+  job: ShapeJobRow,
+  details: {
+    phase: string
+    operation: string
+    inputCharacters: number
+    system: string
+    user: string
+    maxOutputTokens: number
+    idempotencyKey: string
+    jsonSchema?: { name: string; schema: Record<string, unknown> }
+  },
+) {
   const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) throw new Error('Shape is not connected to OPENAI_API_KEY.')
-  const response = await fetch('https://api.openai.com/v1/responses', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      'Idempotency-Key': idempotencyKey,
-    },
-    body: JSON.stringify({
-      model: selectedModel(),
-      store: false,
-      reasoning: { effort: 'low' },
-      max_output_tokens: maxOutputTokens,
-      input: [
-        { role: 'system', content: `${PROSEMAKER_VERSION}\n\n${system}` },
-        { role: 'user', content: user },
-      ],
-    }),
-    signal: AbortSignal.timeout(115_000),
-  })
-  if (!response.ok) {
-    const detail = await response.text().catch(() => '')
-    console.error('Shape OpenAI request failed', response.status, detail.slice(0, 1_000))
-    throw new Error('The AI service did not complete this Shape step.')
+  const model = selectedShapeModel()
+  const startedAt = Date.now()
+  let statusCode: number | null = null
+  let providerRequestId: string | null = null
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'Idempotency-Key': details.idempotencyKey,
+      },
+      body: JSON.stringify({
+        model,
+        store: false,
+        reasoning: { effort: 'low' },
+        max_output_tokens: details.maxOutputTokens,
+        input: [
+          { role: 'system', content: `${SHAPE_PROMPT_VERSION}\n\n${details.system}` },
+          { role: 'user', content: details.user },
+        ],
+        ...(details.jsonSchema ? {
+          text: {
+            format: {
+              type: 'json_schema',
+              name: details.jsonSchema.name,
+              strict: true,
+              schema: details.jsonSchema.schema,
+            },
+          },
+        } : {}),
+      }),
+      signal: AbortSignal.timeout(115_000),
+    })
+    statusCode = response.status
+    providerRequestId = response.headers.get('x-request-id')
+
+    if (!response.ok) {
+      const detail = await response.text().catch(() => '')
+      console.error('Shape OpenAI request failed', response.status, detail.slice(0, 1_000))
+      await recordUsageEvent(supabase, userId, job, {
+        phase: details.phase,
+        operation: details.operation,
+        model,
+        providerRequestId,
+        inputCharacters: details.inputCharacters,
+        durationMs: Date.now() - startedAt,
+        success: false,
+        statusCode,
+        usage: { inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, totalTokens: 0 },
+      })
+      throw new Error('The AI service did not complete this Shape step.')
+    }
+
+    const payload = await response.json() as OpenAiPayload
+    providerRequestId = providerRequestId || payload.id || null
+    const usage = usageSummary(payload)
+    await recordUsageEvent(supabase, userId, job, {
+      phase: details.phase,
+      operation: details.operation,
+      model,
+      providerRequestId,
+      inputCharacters: details.inputCharacters,
+      durationMs: Date.now() - startedAt,
+      success: true,
+      statusCode,
+      usage,
+    })
+    return { payload, usage, model }
+  } catch (caught) {
+    if (caught instanceof Error && caught.message === 'The AI service did not complete this Shape step.') throw caught
+    await recordUsageEvent(supabase, userId, job, {
+      phase: details.phase,
+      operation: details.operation,
+      model,
+      providerRequestId,
+      inputCharacters: details.inputCharacters,
+      durationMs: Date.now() - startedAt,
+      success: false,
+      statusCode,
+      usage: { inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, totalTokens: 0 },
+    })
+    throw caught
   }
-  return await response.json() as OpenAiPayload
 }
 
 function parseContinuity(raw: string) {
@@ -175,6 +335,35 @@ function parseRolling(raw: string) {
   return { revised_previous_tail: parsed.revised_previous_tail.trim(), new_prose: parsed.new_prose.trim() }
 }
 
+const ROLLING_SCHEMA = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    revised_previous_tail: { type: 'string' },
+    new_prose: { type: 'string' },
+  },
+  required: ['revised_previous_tail', 'new_prose'],
+} as const
+
+async function updateProjectAfterCompletion(supabase: ServerSupabase, userId: string, job: ShapeJobRow, now: string) {
+  if (!job.project_id || !job.continuity) return
+  const { error } = await supabase
+    .from('shape_projects')
+    .update({ continuity: job.continuity, completed_parts: job.project_part_number, updated_at: now })
+    .eq('id', job.project_id)
+    .eq('user_id', userId)
+  if (error) throw new Error('Shape finished this part but could not update the campaign project continuity.')
+}
+
+function addUsage(job: ShapeJobRow, usage: UsageSummary) {
+  return {
+    input_tokens: (job.input_tokens || 0) + usage.inputTokens,
+    cached_input_tokens: (job.cached_input_tokens || 0) + usage.cachedInputTokens,
+    output_tokens: (job.output_tokens || 0) + usage.outputTokens,
+    request_count: (job.request_count || 0) + 1,
+  }
+}
+
 export async function POST(request: Request) {
   const supabase = await createClient()
   const { data: userData, error: userError } = await supabase.auth.getUser()
@@ -191,29 +380,34 @@ export async function POST(request: Request) {
   if (error || !data) return Response.json({ error: 'Shape could not find that saved job.' }, { status: 404 })
   const job = data as ShapeJobRow
   if (job.status === 'completed') return Response.json({ job: serializeJob(job, true) }, { headers: { 'Cache-Control': 'no-store' } })
+  if (job.status === 'cancelled') return Response.json({ error: 'This Shape job was discarded.' }, { status: 409 })
 
   const now = new Date().toISOString()
 
   try {
-    if (job.transcript.length <= SHAPE_SINGLE_PASS_CHARACTERS) {
-      const response = await openAiResponse(
-        `${SINGLE_PASS_PROMPT}\n\n${DESCRIPTION_PROMPTS[job.description_level]}`,
-        `DOCUMENT TITLE: ${job.title}\n\nCOMPLETE RAW GAMEPLAY TRANSCRIPT:\n${job.transcript}`,
-        12_000,
-        `shape-${job.id}-single-${job.fingerprint}`,
-      )
-      const prose = outputText(response)
+    const useSinglePass = !job.project_id && job.transcript.length <= SHAPE_SINGLE_PASS_CHARACTERS
+    if (useSinglePass) {
+      const userPrompt = `DOCUMENT TITLE: ${job.title}\n\nCOMPLETE RAW GAMEPLAY TRANSCRIPT:\n${job.transcript}`
+      const step = await openAiStep(supabase, user.id, job, {
+        phase: 'writing',
+        operation: 'single:1/1',
+        inputCharacters: job.transcript.length,
+        system: `${SINGLE_PASS_PROMPT}\n\n${DESCRIPTION_PROMPTS[job.description_level]}`,
+        user: userPrompt,
+        maxOutputTokens: 12_000,
+        idempotencyKey: `shape-${job.id}-single-${job.fingerprint}`,
+      })
+      const prose = outputText(step.payload)
       if (!prose) throw new Error('Shape returned an empty story.')
-      const usage = response.usage || {}
       const update = {
         status: 'completed',
         phase: 'completed',
         next_chunk_index: 1,
         prose_text: prose,
         result_text: prose,
-        prompt_version: PROSEMAKER_VERSION,
-        input_tokens: (job.input_tokens || 0) + (usage.input_tokens || 0),
-        output_tokens: (job.output_tokens || 0) + (usage.output_tokens || 0),
+        prompt_version: SHAPE_PROMPT_VERSION,
+        model: step.model,
+        ...addUsage(job, step.usage),
         error_message: null,
         updated_at: now,
         completed_at: now,
@@ -226,29 +420,35 @@ export async function POST(request: Request) {
     const analysisChunks = buildShapeAnalysisChunks(job.transcript)
     if (job.next_analysis_chunk_index < analysisChunks.length) {
       const index = job.next_analysis_chunk_index
-      const response = await openAiResponse(
-        ANALYSIS_PROMPT,
-        [
-          `DOCUMENT TITLE: ${job.title}`,
-          `CONTINUITY SECTION: ${index + 1} OF ${analysisChunks.length}`,
-          `THIS IS THE FINAL CONTINUITY SECTION: ${index === analysisChunks.length - 1 ? 'YES' : 'NO'}`,
-          `ROLLING CONTINUITY FROM EARLIER SECTIONS:\n${job.continuity || '[No earlier continuity was supplied.]'}`,
-          `RAW GAMEPLAY TRANSCRIPT SECTION:\n${analysisChunks[index]}`,
-        ].join('\n\n'),
-        5_000,
-        `shape-${job.id}-analysis-${index}-${job.fingerprint}`,
-      )
-      const continuity = parseContinuity(outputText(response))
-      const usage = response.usage || {}
+      const userPrompt = [
+        `DOCUMENT TITLE: ${job.title}`,
+        `CAMPAIGN PART: ${job.project_part_number || 1}`,
+        `CONTINUITY SECTION: ${index + 1} OF ${analysisChunks.length}`,
+        `THIS IS THE FINAL CONTINUITY SECTION: ${index === analysisChunks.length - 1 ? 'YES' : 'NO'}`,
+        `ROLLING CONTINUITY FROM EARLIER SECTIONS OF THIS SUBMISSION:\n${job.continuity || '[No earlier section continuity was supplied.]'}`,
+        `PRIOR PROJECT CONTINUITY FROM EARLIER COMPLETED SUBMISSIONS:\n${job.prior_continuity || '[No earlier Shape project continuity was supplied.]'}`,
+        `RAW GAMEPLAY TRANSCRIPT SECTION:\n${analysisChunks[index]}`,
+      ].join('\n\n')
+      const inputCharacters = analysisChunks[index].length + (job.continuity?.length || 0) + (job.prior_continuity?.length || 0)
+      const step = await openAiStep(supabase, user.id, job, {
+        phase: 'analysis',
+        operation: `analysis:${index + 1}/${analysisChunks.length}`,
+        inputCharacters,
+        system: ANALYSIS_PROMPT,
+        user: userPrompt,
+        maxOutputTokens: 5_000,
+        idempotencyKey: `shape-${job.id}-analysis-${index}-${job.fingerprint}`,
+      })
+      const continuity = parseContinuity(outputText(step.payload))
       const nextIndex = index + 1
       const update = {
         status: 'processing',
         phase: nextIndex >= analysisChunks.length ? 'writing' : 'analysis',
         continuity,
         next_analysis_chunk_index: nextIndex,
-        prompt_version: PROSEMAKER_VERSION,
-        input_tokens: (job.input_tokens || 0) + (usage.input_tokens || 0),
-        output_tokens: (job.output_tokens || 0) + (usage.output_tokens || 0),
+        prompt_version: SHAPE_PROMPT_VERSION,
+        model: step.model,
+        ...addUsage(job, step.usage),
         error_message: null,
         updated_at: now,
       }
@@ -262,29 +462,34 @@ export async function POST(request: Request) {
       const index = job.next_chunk_index
       const chunk = chunks[index]
       const previousTail = index > 0 ? provisionalProseTail(job.prose_text) : ''
-      const response = await openAiResponse(
-        `${WRITING_PROMPT}\n\n${DESCRIPTION_PROMPTS[job.description_level]}`,
-        [
-          `DOCUMENT TITLE: ${job.title}`,
-          `SECTION: ${index + 1} OF ${chunks.length}`,
-          `THIS IS THE FINAL SECTION: ${index === chunks.length - 1 ? 'YES' : 'NO'}`,
-          `CONTINUITY LEDGER:\n${job.continuity}`,
-          `PREVIOUS PROSE TAIL:\n${previousTail || '[No previous prose. Return an empty revised_previous_tail.]'}`,
-          `CONTEXT BEFORE:\n${chunk.contextBefore || '[Beginning of transcript.]'}`,
-          `NEW TRANSCRIPT MATERIAL:\n${chunk.source}`,
-          `CONTEXT AFTER:\n${chunk.contextAfter || '[End of transcript.]'}`,
-        ].join('\n\n'),
-        16_000,
-        `shape-${job.id}-writing-${index}-${job.fingerprint}`,
-      )
-      const section = parseRolling(outputText(response))
+      const userPrompt = [
+        `DOCUMENT TITLE: ${job.title}`,
+        `SECTION: ${index + 1} OF ${chunks.length}`,
+        `THIS IS THE FINAL SECTION: ${index === chunks.length - 1 ? 'YES' : 'NO'}`,
+        `CONTINUITY LEDGER:\n${job.continuity}`,
+        `PREVIOUS PROSE TAIL (provisional; return a complete revised replacement):\n${previousTail || '[No previous prose. Return an empty revised_previous_tail.]'}`,
+        `CONTEXT BEFORE (source overlap; use only to understand and repair the seam):\n${chunk.contextBefore || '[Beginning of transcript.]'}`,
+        `NEW TRANSCRIPT MATERIAL (write this section):\n${chunk.source}`,
+        `CONTEXT AFTER (lookahead only; understand consequences and corrections but do not write these events yet):\n${chunk.contextAfter || '[End of transcript.]'}`,
+      ].join('\n\n')
+      const inputCharacters = chunk.source.length + chunk.contextBefore.length + chunk.contextAfter.length + job.continuity.length + previousTail.length
+      const step = await openAiStep(supabase, user.id, job, {
+        phase: 'writing',
+        operation: `writing:${index + 1}/${chunks.length}`,
+        inputCharacters,
+        system: `${WRITING_PROMPT}\n\n${DESCRIPTION_PROMPTS[job.description_level]}`,
+        user: userPrompt,
+        maxOutputTokens: 16_000,
+        idempotencyKey: `shape-${job.id}-writing-${index}-${job.fingerprint}`,
+        jsonSchema: { name: 'prosemaker_rolling_section', schema: ROLLING_SCHEMA as unknown as Record<string, unknown> },
+      })
+      const section = parseRolling(outputText(step.payload))
       if (section.revised_previous_tail.length > MAX_REVISED_PREVIOUS_PROSE_CHARACTERS) throw new Error('Shape returned an oversized seam revision.')
       if (previousTail && !section.revised_previous_tail) throw new Error('Shape did not return the previous prose seam revision.')
       if (!previousTail && section.revised_previous_tail) throw new Error('Shape unexpectedly returned prose before the first section.')
 
       const revisedExisting = previousTail ? replaceProvisionalProseTail(job.prose_text, previousTail, section.revised_previous_tail) : job.prose_text.trim()
       const proseText = [revisedExisting, section.new_prose].filter(Boolean).join('\n\n').trim()
-      const usage = response.usage || {}
       const nextIndex = index + 1
       const complete = nextIndex >= chunks.length
       const update = {
@@ -293,18 +498,20 @@ export async function POST(request: Request) {
         prose_text: proseText,
         result_text: complete ? proseText : null,
         next_chunk_index: nextIndex,
-        prompt_version: PROSEMAKER_VERSION,
-        input_tokens: (job.input_tokens || 0) + (usage.input_tokens || 0),
-        output_tokens: (job.output_tokens || 0) + (usage.output_tokens || 0),
+        prompt_version: SHAPE_PROMPT_VERSION,
+        model: step.model,
+        ...addUsage(job, step.usage),
         error_message: null,
         updated_at: now,
         completed_at: complete ? now : null,
       }
       const { data: saved, error: saveError } = await supabase.from('shape_jobs').update(update).eq('id', job.id).eq('user_id', user.id).select('*').single()
       if (saveError || !saved) throw new Error('Shape completed a writing step but could not save the checkpoint.')
+      if (complete) await updateProjectAfterCompletion(supabase, user.id, saved as ShapeJobRow, now)
       return Response.json({ job: serializeJob(saved as ShapeJobRow, complete) }, { headers: { 'Cache-Control': 'no-store' } })
     }
 
+    if (job.project_id) await updateProjectAfterCompletion(supabase, user.id, job, now)
     const fallbackUpdate = { status: 'completed', phase: 'completed', result_text: job.prose_text, completed_at: now, updated_at: now, error_message: null }
     const { data: saved } = await supabase.from('shape_jobs').update(fallbackUpdate).eq('id', job.id).eq('user_id', user.id).select('*').single()
     return Response.json({ job: serializeJob((saved || job) as ShapeJobRow, true) }, { headers: { 'Cache-Control': 'no-store' } })
