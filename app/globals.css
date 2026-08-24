@@ -84,6 +84,7 @@ button, input, textarea, select { font: inherit; }
   position: sticky;
   top: 0;
   z-index: 30;
+  border-top: 1px solid color-mix(in srgb, var(--forest) 58%, var(--parchment));
   border-bottom: 2px solid color-mix(in srgb, var(--forest) 58%, var(--parchment));
   background: rgb(247 234 211 / .94);
   box-shadow: 0 4px 18px rgb(57 43 19 / .10);
