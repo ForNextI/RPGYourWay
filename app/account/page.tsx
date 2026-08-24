@@ -1,6 +1,7 @@
+import { AuthPanel } from '@/components/AuthPanel'
 import { PageShell } from '@/components/PageShell'
 import { createClient } from '@/lib/supabase/server'
-import { signIn, signOut, signUp } from './actions'
+import { signOut } from './actions'
 
 export const metadata = { title: 'Account' }
 export const dynamic = 'force-dynamic'
@@ -10,11 +11,7 @@ type AccountPageProps = {
 }
 
 const statusMessages: Record<string, string> = {
-  'signed-in': 'Signed in. Your RPG Your Way account is connected.',
   'signed-out': 'You are signed out.',
-  created: 'Account created and signed in.',
-  'check-email': 'Account created. Check your email and confirm the address before signing in.',
-  confirmed: 'Email confirmed. Your account is ready.',
 }
 
 export default async function AccountPage({ searchParams }: AccountPageProps) {
@@ -27,21 +24,15 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
   const claims = data?.claims
   const email = typeof claims?.email === 'string' ? claims.email : null
 
-  const statusText = statusMessages[status]
-  const errorText = error === 'confirmation'
-    ? 'That confirmation link could not be verified. Please try signing in or request a new confirmation email later.'
-    : error
-
   return (
     <PageShell>
       <main id="main-content" tabIndex={-1} className="inner-main">
         <div className="shell narrow-shell">
           <p className="kicker">Account</p>
           <h1 className="page-title">Your campaigns. Your account.</h1>
-          <p className="page-lede">RPG Your Way now has its first real account layer. Email and password authentication is handled by Supabase, with cookie-backed sessions that work on the server and in the browser.</p>
+          <p className="page-lede">Sign in here any time to reach your account directly. This page will also become the home for campaign ownership, Shape jobs, balances, purchases, and other account settings as those systems come online.</p>
 
-          {statusText ? <p className="auth-message auth-message-success" role="status">{statusText}</p> : null}
-          {errorText ? <p className="auth-message auth-message-error" role="alert">{errorText}</p> : null}
+          {statusMessages[status] ? <p className="auth-message auth-message-success" role="status">{statusMessages[status]}</p> : null}
 
           {claims ? (
             <section className="account-signed-in" aria-labelledby="account-connected-heading">
@@ -56,43 +47,10 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
               </form>
             </section>
           ) : (
-            <div className="auth-grid">
-              <section className="auth-card" aria-labelledby="sign-in-heading">
-                <p className="account-state-label">Already have an account?</p>
-                <h2 id="sign-in-heading">Sign in</h2>
-                <form action={signIn} className="auth-form">
-                  <label>
-                    <span>Email</span>
-                    <input name="email" type="email" autoComplete="email" required />
-                  </label>
-                  <label>
-                    <span>Password</span>
-                    <input name="password" type="password" autoComplete="current-password" required />
-                  </label>
-                  <button className="button button-primary auth-submit" type="submit">Sign in</button>
-                </form>
-              </section>
-
-              <section className="auth-card" aria-labelledby="sign-up-heading">
-                <p className="account-state-label">New to RPG Your Way?</p>
-                <h2 id="sign-up-heading">Create an account</h2>
-                <form action={signUp} className="auth-form">
-                  <label>
-                    <span>Email</span>
-                    <input name="email" type="email" autoComplete="email" required />
-                  </label>
-                  <label>
-                    <span>Password</span>
-                    <input name="password" type="password" autoComplete="new-password" minLength={8} required />
-                  </label>
-                  <p className="auth-hint">Use at least 8 characters. We’ll ask you to confirm your email address.</p>
-                  <button className="button button-secondary auth-submit" type="submit">Create account</button>
-                </form>
-              </section>
-            </div>
+            <AuthPanel returnTo="/account" status={status} error={error} />
           )}
 
-          <p className="note-box">This is the account foundation, not the finished account dashboard. No campaign data, billing data, or Shape jobs are being stored here yet.</p>
+          <p className="note-box">The account layer is now live, but this is still an early account dashboard. Paid access, campaign storage, and Shape job history are not connected yet.</p>
         </div>
       </main>
     </PageShell>

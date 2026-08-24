@@ -550,7 +550,64 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 }
 .account-email { margin-bottom: .45rem; color: var(--forest-deep); font-size: 1.05rem; font-weight: 900; overflow-wrap: anywhere; }
 .account-foundation-note { max-width: 560px; margin: 0; color: var(--muted); }
-.footer-version { color: var(--lime-soft); white-space: nowrap; }
+.auth-panel-compact .auth-grid { margin-top: 0; }
+
+.auth-dialog {
+  width: min(920px, calc(100% - 1.4rem));
+  max-height: min(90vh, 760px);
+  overflow: auto;
+  border: 2px solid var(--forest);
+  border-radius: 22px;
+  background: var(--cream);
+  color: var(--ink);
+  padding: 0;
+  box-shadow: 0 28px 80px rgb(20 32 25 / .34);
+}
+.auth-dialog::backdrop {
+  background: rgb(17 30 24 / .58);
+  backdrop-filter: blur(3px);
+}
+.auth-dialog-inner { padding: clamp(1rem, 3vw, 1.65rem); }
+.auth-dialog-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.auth-dialog-heading h2 {
+  margin: .12rem 0 .35rem;
+  color: var(--forest-deep);
+  font-size: clamp(1.45rem, 3vw, 2rem);
+}
+.auth-dialog-heading p:last-child { margin: 0; color: var(--muted); }
+.auth-dialog-close {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--forest) 62%, var(--cream-deep));
+  border-radius: 10px;
+  background: var(--cream-bright);
+  color: var(--forest-deep);
+  cursor: pointer;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.auth-dialog-close:hover { background: var(--lime-soft); }
+.auth-dialog-footer { display: flex; justify-content: flex-end; margin-top: .8rem; }
+.auth-not-now {
+  border: 0;
+  background: transparent;
+  color: var(--forest-deep);
+  padding: .5rem .25rem;
+  cursor: pointer;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+.auth-not-now:hover { color: var(--moss-deep); }
 
 .site-footer {
   border-top: 2px solid color-mix(in srgb, var(--moss) 62%, var(--cream));
@@ -558,12 +615,34 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
   color: var(--cream-bright);
   box-shadow: 0 -5px 18px rgb(57 43 19 / .10);
 }
-.footer-inner { min-height: 104px; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding-block: 1.35rem; }
-.footer-brand { margin-bottom: .15rem; color: var(--cream-bright); font-family: Georgia, Cambria, "Times New Roman", serif; font-weight: 900; }
-.footer-note { margin: 0; color: #d6dccb; font-size: .8rem; }
+.footer-inner {
+  min-height: 104px;
+  display: grid;
+  gap: 1rem;
+  padding-block: 1.35rem;
+}
+.footer-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.footer-owner p { margin: 0; }
+.footer-owner p:first-child { color: var(--cream-bright); font-size: .9rem; }
+.footer-build { margin-top: .18rem !important; color: #d6dccb; font-size: .76rem; }
 .footer-links { display: flex; gap: 1rem; flex-wrap: wrap; }
 .footer-links a { color: var(--cream); font-size: .82rem; font-weight: 800; text-decoration: none; }
 .footer-links a:hover { color: var(--lime); }
+.footer-srd-attribution {
+  margin: 0;
+  border-top: 1px solid rgb(244 228 207 / .18);
+  padding-top: .9rem;
+  color: #d6dccb;
+  font-size: .72rem;
+  line-height: 1.5;
+}
+.footer-srd-attribution a { color: var(--cream); overflow-wrap: anywhere; }
+.footer-srd-attribution a:hover { color: var(--lime); }
 
 @media (max-width: 860px) {
   body { background-attachment: scroll; }
@@ -588,6 +667,8 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 
 @media (max-width: 620px) {
   .auth-grid { grid-template-columns: 1fr; }
+  .auth-dialog { width: min(100% - .7rem, 920px); }
+  .auth-dialog-inner { padding: .9rem; }
   .account-signed-in { align-items: stretch; flex-direction: column; }
   .shell, .narrow-shell { width: min(100% - 1.2rem, 1180px); }
   .header-inner { min-height: 62px; }
@@ -608,7 +689,7 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
   .audience-summary { align-items: center; gap: 1rem; }
   .audience-item > summary { font-size: 1rem; }
   .pricing-points p { grid-template-columns: 1fr; gap: .25rem; }
-  .footer-inner { align-items: flex-start; flex-direction: column; }
+  .footer-topline { align-items: flex-start; flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {
