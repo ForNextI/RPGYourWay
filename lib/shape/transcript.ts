@@ -118,9 +118,22 @@ export function buildShapeRecoverySubchunks(source: string) {
   return chunks
 }
 
-export function reconcileShapeWritingSection(existingProse: string, originalTail: string, revisedTail: string, newProse: string) {
+export type ShapeWritingDisposition = 'prose' | 'no_new_prose'
+
+export function reconcileShapeWritingSection(
+  existingProse: string,
+  originalTail: string,
+  revisedTail: string,
+  newProse: string,
+  disposition: ShapeWritingDisposition = 'prose',
+) {
   const cleanNewProse = newProse.trim()
-  if (!cleanNewProse) throw new Error('Shape returned an incomplete writing section.')
+  if (disposition === 'prose' && !cleanNewProse) {
+    throw new Error('Shape writing response declared prose but returned empty new_prose.')
+  }
+  if (disposition === 'no_new_prose' && cleanNewProse) {
+    throw new Error('Shape writing response declared no_new_prose but returned new prose.')
+  }
 
   const cleanOriginalTail = originalTail.trim()
   const cleanRevisedTail = revisedTail.trim()

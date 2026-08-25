@@ -71,6 +71,44 @@ const unchangedSeam = reconcileShapeWritingSection(
 requireCondition(unchangedSeam.includes(provisionalTail), 'An empty revised seam must preserve the already-checkpointed provisional prose tail.')
 requireCondition(unchangedSeam.endsWith('The next section begins without requiring any change to the already-written seam.'), 'No-change seam recovery must still append the new prose.')
 
+const administrativeOnly = reconcileShapeWritingSection(
+  seamFixture,
+  provisionalTail,
+  '',
+  '',
+  'no_new_prose',
+)
+requireCondition(administrativeOnly === replaceProvisionalProseTail(seamFixture, provisionalTail, provisionalTail), 'A successfully processed administrative-only section must preserve existing prose and advance without inventing new prose.')
+
+const administrativeCorrectionTail = 'This provisional ending is corrected by later administrative canon without adding a new scene.'
+const administrativeCorrection = reconcileShapeWritingSection(
+  seamFixture,
+  provisionalTail,
+  administrativeCorrectionTail,
+  '',
+  'no_new_prose',
+)
+requireCondition(administrativeCorrection.endsWith(administrativeCorrectionTail), 'A no-new-prose section may still repair the provisional seam when the source contains a retroactive correction.')
+
+const emptyFirstAdministrativeSection = reconcileShapeWritingSection('', '', '', '', 'no_new_prose')
+requireCondition(emptyFirstAdministrativeSection === '', 'An administrative-only first section must be allowed to checkpoint without manufacturing prose.')
+
+let rejectedEmptyDeclaredProse = false
+try {
+  reconcileShapeWritingSection(seamFixture, provisionalTail, '', '', 'prose')
+} catch (error) {
+  rejectedEmptyDeclaredProse = error instanceof Error && error.message.includes('declared prose')
+}
+requireCondition(rejectedEmptyDeclaredProse, 'A response that declares prose but returns empty new_prose must still fail validation.')
+
+let rejectedContradictoryNoProse = false
+try {
+  reconcileShapeWritingSection(seamFixture, provisionalTail, '', 'Unexpected prose.', 'no_new_prose')
+} catch (error) {
+  rejectedContradictoryNoProse = error instanceof Error && error.message.includes('declared no_new_prose')
+}
+requireCondition(rejectedContradictoryNoProse, 'A no_new_prose response must not carry contradictory new prose.')
+
 const troublesomeSource = [
   'PLAYER\nI correct what happened earlier.\n\nGAME MASTER\nUnderstood; the earlier description is superseded.\n\n',
   'A'.repeat(11_000),
@@ -104,4 +142,4 @@ const windows = normalizeShapeTranscriptForFingerprint('One  \r\n\r\n\r\nTwo\t\r
 const unix = normalizeShapeTranscriptForFingerprint('One\n\nTwo\n')
 requireCondition(windows === unix, 'Harmless line-ending and blank-line differences must normalize identically.')
 
-console.log('RPG Your Way Shape runtime sanity checks passed: limits, chunk coverage, resilient seams, recovery subdivision, WardensPC import, and fingerprint normalization.')
+console.log('RPG Your Way Shape runtime sanity checks passed: limits, chunk coverage, explicit no-new-prose handling, resilient seams, recovery subdivision, WardensPC import, and fingerprint normalization.')

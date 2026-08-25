@@ -8,6 +8,7 @@ import {
   buildShapeTranscriptChunks,
   provisionalProseTail,
   reconcileShapeWritingSection,
+  type ShapeWritingDisposition,
 } from '@/lib/shape/transcript'
 import { createClient } from '@/lib/supabase/server'
 
@@ -54,7 +55,7 @@ The complete current transcript was analyzed before writing began. The CONTINUIT
 
 You are writing one section of a longer document with a soft seam. CONTEXT BEFORE and CONTEXT AFTER overlap neighboring source sections. PREVIOUS PROSE TAIL is deliberately provisional: it is the final several paragraphs produced by the preceding section and may be revised now that you can see the source on both sides of the seam.
 
-Return two fields. REVISED PREVIOUS PROSE TAIL must be a complete replacement for the supplied provisional tail. Preserve every real event, action, consequence, and important line already represented there, but repair repetition, false endings, awkward transitions, mistaken continuity, or a sentence that clearly belongs with the new material. If the supplied tail is empty, return an empty string. NEW PROSE must cover only NEW TRANSCRIPT MATERIAL. Do not retell CONTEXT BEFORE, and do not prematurely write CONTEXT AFTER. Together, the revised tail and new prose must create one continuous manuscript with no duplicated or missing event at the seam.
+Return three fields. SECTION DISPOSITION must be either prose or no_new_prose. Use prose when NEW TRANSCRIPT MATERIAL contains at least one story-bearing event that belongs in the manuscript; in that case NEW PROSE must be nonempty. Use no_new_prose only when you successfully processed the entire NEW TRANSCRIPT MATERIAL and, after applying the omission rules below, none of it belongs as new narrative prose; in that case NEW PROSE must be an empty string. A no_new_prose section is a successful processed section, not a failure. Do not use no_new_prose merely because the material is difficult, corrected, repetitive, or awkward if any story-bearing event remains. REVISED PREVIOUS PROSE TAIL must be a complete replacement for the supplied provisional tail. Preserve every real event, action, consequence, and important line already represented there, but repair repetition, false endings, awkward transitions, mistaken continuity, or a sentence that clearly belongs with the new material. If the supplied tail is empty, return an empty string. NEW PROSE must cover only NEW TRANSCRIPT MATERIAL. Do not retell CONTEXT BEFORE, and do not prematurely write CONTEXT AFTER. Together, the revised tail and new prose must create one continuous manuscript with no duplicated or missing event at the seam. Administrative-only material may therefore legitimately return no_new_prose while still revising the previous tail if a correction within the current source affects that provisional seam.
 
 The raw transcript may repeat the same event several ways: a player declares an action, the Game Master restates it, the Game Master gives the result, and a later context-restoration message may summarize it again. Those are not four story events. Merge declaration, restatement, and outcome into one fictional beat. Ignore later source recap when the event has already been written. Before returning, compare every paragraph of NEW PROSE with the REVISED PREVIOUS PROSE TAIL and with the other paragraphs in NEW PROSE. If two passages narrate the same conversation, action, revelation, or outcome from duplicated source material, merge them and tell the event once.
 
@@ -332,21 +333,37 @@ function parseContinuity(raw: string) {
   return unfenced.slice(0, MAX_CONTINUITY_CHARACTERS) || 'No additional continuity ledger was produced.'
 }
 
-function parseRolling(raw: string) {
+function parseRolling(raw: string): { section_disposition: ShapeWritingDisposition; revised_previous_tail: string; new_prose: string } {
   const unfenced = raw.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '')
-  const parsed = JSON.parse(unfenced) as { revised_previous_tail?: unknown; new_prose?: unknown }
-  if (typeof parsed.revised_previous_tail !== 'string' || typeof parsed.new_prose !== 'string' || !parsed.new_prose.trim()) throw new Error('Shape returned an incomplete writing section.')
-  return { revised_previous_tail: parsed.revised_previous_tail.trim(), new_prose: parsed.new_prose.trim() }
+  const parsed = JSON.parse(unfenced) as { section_disposition?: unknown; revised_previous_tail?: unknown; new_prose?: unknown }
+  if (parsed.section_disposition !== 'prose' && parsed.section_disposition !== 'no_new_prose') {
+    throw new Error('Shape returned a writing response without a valid section_disposition.')
+  }
+  if (typeof parsed.revised_previous_tail !== 'string' || typeof parsed.new_prose !== 'string') {
+    throw new Error('Shape returned malformed rolling prose fields.')
+  }
+  if (parsed.section_disposition === 'prose' && !parsed.new_prose.trim()) {
+    throw new Error('Shape writing response declared prose but returned empty new_prose.')
+  }
+  if (parsed.section_disposition === 'no_new_prose' && parsed.new_prose.trim()) {
+    throw new Error('Shape writing response declared no_new_prose but returned new prose.')
+  }
+  return {
+    section_disposition: parsed.section_disposition,
+    revised_previous_tail: parsed.revised_previous_tail.trim(),
+    new_prose: parsed.new_prose.trim(),
+  }
 }
 
 const ROLLING_SCHEMA = {
   type: 'object',
   additionalProperties: false,
   properties: {
+    section_disposition: { type: 'string', enum: ['prose', 'no_new_prose'] },
     revised_previous_tail: { type: 'string' },
     new_prose: { type: 'string' },
   },
-  required: ['revised_previous_tail', 'new_prose'],
+  required: ['section_disposition', 'revised_previous_tail', 'new_prose'],
 } as const
 
 async function updateProjectAfterCompletion(supabase: ServerSupabase, userId: string, job: ShapeJobRow, now: string) {
@@ -489,7 +506,7 @@ export async function POST(request: Request) {
       const applyWritingResponse = (raw: string, existingProse: string, previousTail: string) => {
         const section = parseRolling(raw)
         if (section.revised_previous_tail.length > MAX_REVISED_PREVIOUS_PROSE_CHARACTERS) throw new Error('Shape returned an oversized seam revision.')
-        return reconcileShapeWritingSection(existingProse, previousTail, section.revised_previous_tail, section.new_prose)
+        return reconcileShapeWritingSection(existingProse, previousTail, section.revised_previous_tail, section.new_prose, section.section_disposition)
       }
 
       const writingPrompt = (source: string, contextBefore: string, contextAfter: string, previousTail: string, label: string, isFinalSection: boolean) => [
@@ -540,8 +557,8 @@ export async function POST(request: Request) {
           contextBefore: chunk.contextBefore,
           contextAfter: chunk.contextAfter,
           existingProse: proseText,
-          operation: `writing:${index + 1}/${chunks.length}`,
-          idempotencyKey: `shape-${job.id}-writing-${index}-${job.fingerprint}`,
+          operation: `writing:${index + 1}/${chunks.length}:v2`,
+          idempotencyKey: `shape-${job.id}-writing-v2-${index}-${job.fingerprint}`,
           label: `SECTION: ${index + 1} OF ${chunks.length}`,
           isFinalSection: index === chunks.length - 1,
         })
@@ -560,11 +577,11 @@ export async function POST(request: Request) {
             contextBefore: chunk.contextBefore,
             contextAfter: chunk.contextAfter,
             existingProse: proseText,
-            operation: `writing-repair:${index + 1}/${chunks.length}`,
-            idempotencyKey: `shape-${job.id}-writing-repair-v1-${index}-${job.fingerprint}`,
+            operation: `writing-repair:${index + 1}/${chunks.length}:v2`,
+            idempotencyKey: `shape-${job.id}-writing-repair-v2-${index}-${job.fingerprint}`,
             label: `RECOVERY PASS FOR SECTION: ${index + 1} OF ${chunks.length}`,
             isFinalSection: index === chunks.length - 1,
-            recoveryInstruction: 'RECOVERY PASS: The previous attempt could not be incorporated safely. Return valid structured output. If the supplied previous prose tail needs no change, copy it back verbatim rather than omitting story material. Resolve explicit corrections and retcons from the continuity ledger, but never skip source events merely to make the seam easier.',
+            recoveryInstruction: 'RECOVERY PASS: The previous attempt could not be incorporated safely. Return valid structured output. If the supplied previous prose tail needs no change, copy it back verbatim rather than omitting story material. Resolve explicit corrections and retcons from the continuity ledger. Preserve every story-bearing source event, but do not invent narrative prose for material that the main prompt tells you to omit. If the entire NEW TRANSCRIPT MATERIAL is administrative or otherwise legitimately non-narrative, return section_disposition no_new_prose with an empty new_prose.',
           })
           proseText = repaired.proseText
           model = repaired.model
@@ -589,11 +606,11 @@ export async function POST(request: Request) {
               contextBefore,
               contextAfter,
               existingProse: proseText,
-              operation: `writing-recovery:${index + 1}/${chunks.length}:${partIndex + 1}/${recoveryParts.length}`,
-              idempotencyKey: `shape-${job.id}-writing-recovery-v1-${index}-${partIndex}-${job.fingerprint}`,
+              operation: `writing-recovery:${index + 1}/${chunks.length}:${partIndex + 1}/${recoveryParts.length}:v2`,
+              idempotencyKey: `shape-${job.id}-writing-recovery-v2-${index}-${partIndex}-${job.fingerprint}`,
               label: `RECOVERY SUBSECTION ${partIndex + 1} OF ${recoveryParts.length} FOR ORIGINAL SECTION ${index + 1} OF ${chunks.length}`,
               isFinalSection: index === chunks.length - 1 && partIndex === recoveryParts.length - 1,
-              recoveryInstruction: 'RECOVERY SUBSECTION: This troublesome source section has been divided at natural boundaries. Write every event in NEW TRANSCRIPT MATERIAL exactly once. If the supplied previous prose tail needs no change, copy it back verbatim. Do not omit confusing or corrected material; use the continuity ledger to choose the final canon.',
+              recoveryInstruction: 'RECOVERY SUBSECTION: This troublesome source section has been divided at natural boundaries. Write every story-bearing event in NEW TRANSCRIPT MATERIAL exactly once. If the supplied previous prose tail needs no change, copy it back verbatim. Do not omit confusing or corrected story material; use the continuity ledger to choose the final canon. Material that is entirely game administration, rules discussion, talk-to-text debris, repeated recap, or irrelevant out-of-character conversation may correctly return section_disposition no_new_prose with an empty new_prose.',
             })
             proseText = recovered.proseText
             model = recovered.model
