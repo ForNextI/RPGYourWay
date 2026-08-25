@@ -21,14 +21,10 @@ function speakingInstructions(voice: NarrationVoice) {
 }
 
 export async function POST(request: Request) {
-  let account
   try {
-    account = await requireUsageAccount()
+    await requireUsageAccount()
   } catch (error) {
     return billingErrorResponse(error)
-  }
-  if (!account.ownerQa) {
-    return NextResponse.json({ error: 'Voice is being readied for prepaid Play billing. Typed Play is available now.' }, { status: 503 })
   }
 
   const apiKey = process.env.OPENAI_API_KEY

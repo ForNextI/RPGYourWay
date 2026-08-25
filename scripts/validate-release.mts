@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.4')
-assert.equal(pkg.rpgywVersion, '1.7.4')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.4'/)
+assert.equal(pkg.version, '1.7.5')
+assert.equal(pkg.rpgywVersion, '1.7.5')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.5'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -213,4 +213,29 @@ for (const productionFile of ['lib/stripe/checkout.ts', 'lib/shape/billing.ts', 
   assert.doesNotMatch(read(productionFile), /from ['"][^'"]+\.ts['"]/, `${productionFile} must not import .ts extensions.`)
 }
 
-console.log('RPG Your Way 1.7.4 Play motion-provider runtime fix checks passed.')
+
+const playAccess175 = read('app/api/play/access/route.ts')
+assert.match(playAccess175, /voice_available:\s*true/)
+assert.doesNotMatch(playAccess175, /voice_available:\s*account\.ownerQa/)
+for (const voiceRoute175 of ['app/api/aigm/speech/route.ts', 'app/api/aigm/transcribe/route.ts']) {
+  const source175 = read(voiceRoute175)
+  assert.match(source175, /await requireUsageAccount\(\)/)
+  assert.doesNotMatch(source175, /if \(!account\.ownerQa\)/)
+  assert.doesNotMatch(source175, /being readied for prepaid Play billing/)
+}
+const gameplay175 = read('components/aigm/aigm-gameplay-shell.tsx')
+assert.match(gameplay175, /aigm-character-reorder/)
+assert.match(gameplay175, /Character record/)
+assert.doesNotMatch(gameplay175, /Complete character record/)
+assert.match(gameplay175, /character-sheet-dialog/)
+assert.match(gameplay175, /character-sheet-actions/)
+assert.match(gameplay175, /aigm-gameplay-send/)
+const voiceControls175 = read('components/aigm/aigm-voice-controls.tsx')
+assert.match(voiceControls175, /aigm-voice-controls/)
+const css175 = read('app/globals.css')
+assert.match(css175, /RPG Your Way 1\.7\.5 Play UI and voice cleanup/)
+assert.match(css175, /grid-template-columns:\s*minmax\(230px, \.64fr\)/)
+assert.match(css175, /\.aigm-character-reorder/)
+assert.match(css175, /\.character-sheet-dialog/)
+
+console.log('RPG Your Way 1.7.5 Play UI and voice cleanup checks passed.')

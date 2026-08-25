@@ -8,7 +8,7 @@ export async function GET() {
     const account = await requireUsageAccount()
     return Response.json({
       owner_qa: account.ownerQa,
-      voice_available: account.ownerQa,
+      voice_available: true,
     }, { headers: { 'Cache-Control': 'no-store' } })
   } catch (error) {
     return billingErrorResponse(error)

@@ -710,7 +710,7 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
   }
 
   return (
-    <div className="relative flex shrink-0 items-center gap-2">
+    <div className="aigm-voice-controls relative flex shrink-0 items-center gap-2">
       <button
         type="button"
         onClick={handleMicrophoneButton}

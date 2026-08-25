@@ -1470,3 +1470,103 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
   .aigm-mobile-nav { inset-inline: .35rem; bottom: .25rem; padding: .25rem; border-radius: .85rem; }
   .aigm-mobile-nav button { min-height: 2.5rem; font-size: .72rem; }
 }
+
+
+/* RPG Your Way 1.7.5 Play UI and voice cleanup */
+/* Preserve readable type. Reclaim geometry from chrome and utility rails instead. */
+.aigm-character-reorder {
+  left: auto;
+  right: .5rem;
+  top: auto;
+  bottom: .5rem;
+}
+
+.aigm-character-list {
+  margin-right: -.75rem;
+  padding-right: .75rem;
+}
+
+.character-smart-level-button {
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 10%, var(--background));
+}
+
+@media (min-width: 1024px) {
+  .aigm-gameplay-main { padding: .75rem; }
+  .aigm-gameplay-grid {
+    grid-template-columns: minmax(230px, .64fr) minmax(0, 2.85fr) minmax(235px, .70fr);
+    gap: .75rem;
+  }
+  .aigm-tools-panel,
+  .aigm-characters-panel { padding: .75rem; }
+  .aigm-gameplay-topbar { padding: .6rem .85rem; }
+  .aigm-gameplay-composer { padding: .55rem .7rem; }
+  .aigm-character-card > button { padding: .625rem; }
+}
+
+@media (max-width: 639px) {
+  .aigm-gameplay-composer form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: .5rem;
+  }
+  .aigm-gameplay-composer .aigm-gameplay-message-input {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+  .aigm-gameplay-composer .aigm-voice-controls {
+    grid-column: 1;
+    justify-self: start;
+  }
+  .aigm-gameplay-composer .aigm-gameplay-send {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  .character-sheet-dialog {
+    overflow-y: auto;
+    border-radius: 1.35rem;
+  }
+  .character-sheet-header {
+    flex: none;
+    padding: .85rem;
+  }
+  .character-sheet-body {
+    flex: none;
+    overflow: visible;
+    padding: .75rem;
+  }
+  .character-sheet-heading-row {
+    position: relative;
+    display: block;
+  }
+  .character-sheet-heading-main {
+    gap: .7rem;
+    padding-right: 3rem;
+  }
+  .character-sheet-heading-row > button:last-child {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .character-sheet-portrait {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1rem;
+  }
+  .character-sheet-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: .5rem;
+  }
+  .character-sheet-actions > button {
+    width: 100%;
+    min-height: 2.75rem;
+    justify-content: center;
+    padding-inline: .8rem;
+    font-size: .9rem;
+    line-height: 1.2;
+  }
+  .aigm-character-card > button { padding: .625rem; }
+}

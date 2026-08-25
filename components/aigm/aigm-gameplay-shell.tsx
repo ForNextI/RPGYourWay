@@ -364,7 +364,7 @@ function CharacterCard({
   const subclasses = subclassSummary(result)
 
   return (
-    <article className={`group/card relative overflow-hidden rounded-2xl border bg-card transition focus-within:ring-2 focus-within:ring-ring ${isLeader ? 'border-[#6d28d9] ring-2 ring-[#6d28d9]/25 hover:border-[#7c3aed]' : 'border-border hover:border-primary/60'}`}>
+    <article className={`aigm-character-card group/card relative overflow-hidden rounded-2xl border bg-card transition focus-within:ring-2 focus-within:ring-ring ${isLeader ? 'border-[#6d28d9] ring-2 ring-[#6d28d9]/25 hover:border-[#7c3aed]' : 'border-border hover:border-primary/60'}`}>
       <button
         type="button"
         onClick={() => onOpen(character.id)}
@@ -396,7 +396,7 @@ function CharacterCard({
         </p>
       </button>
 
-      <div className="absolute left-3 top-[2.55rem] z-10 flex items-center gap-1 rounded-lg border border-border/80 bg-card/95 p-0.5 shadow-sm transition md:opacity-0 md:group-hover/card:opacity-100 md:group-focus-within/card:opacity-100" aria-label={`Reorder ${name} in the party`}>
+      <div className="aigm-character-reorder absolute left-3 top-[2.55rem] z-10 flex items-center gap-1 rounded-lg border border-border/80 bg-card/95 p-0.5 shadow-sm transition md:opacity-0 md:group-hover/card:opacity-100 md:group-focus-within/card:opacity-100" aria-label={`Reorder ${name} in the party`}>
         <button type="button" onClick={() => onMoveUp(character.id)} disabled={!canMoveUp} className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition hover:bg-secondary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30" aria-label={`Move ${name} up in party order`} title={`Move ${name} up`}><ArrowUp className="size-3.5" aria-hidden="true" /></button>
         <button type="button" onClick={() => onMoveDown(character.id)} disabled={!canMoveDown} className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition hover:bg-secondary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30" aria-label={`Move ${name} down in party order`} title={`Move ${name} down`}><ArrowDown className="size-3.5" aria-hidden="true" /></button>
       </div>
@@ -800,19 +800,19 @@ function CharacterSheetOverlay({
 
   return (
     <div ref={dialogRef} tabIndex={-1} className="fixed inset-0 z-[100] flex items-stretch justify-center overflow-hidden bg-background/92 p-2 outline-none backdrop-blur-sm sm:p-5" role="dialog" aria-modal="true" aria-labelledby="character-sheet-title">
-      <div className="relative flex w-full max-w-6xl flex-col overflow-hidden rounded-3xl border border-primary/45 bg-card shadow-2xl">
-        <div className="border-b border-border bg-secondary/55 px-4 py-4 sm:px-6">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex min-w-0 items-start gap-4">
-              <div className="flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-border bg-background/75 sm:size-24">
+      <div className="character-sheet-dialog relative flex w-full max-w-6xl flex-col overflow-hidden rounded-3xl border border-primary/45 bg-card shadow-2xl">
+        <div className="character-sheet-header border-b border-border bg-secondary/55 px-4 py-4 sm:px-6">
+          <div className="character-sheet-heading-row flex items-start justify-between gap-4">
+            <div className="character-sheet-heading-main flex min-w-0 items-start gap-4">
+              <div className="character-sheet-portrait flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-border bg-background/75 sm:size-24">
                 {character.portraitUrl ? <img src={character.portraitUrl} alt="" className="size-full object-contain" /> : <UserRound className="size-10 text-muted-foreground" aria-hidden="true" />}
               </div>
               <div className="min-w-0">
-                <p className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-primary">Complete character record</p>
+                <p className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-primary">Character record</p>
                 <h2 ref={headingRef} tabIndex={-1} id="character-sheet-title" className="mt-1 font-display text-2xl font-bold sm:text-3xl">{result.character.name}</h2>
                 <p className="mt-1 text-sm leading-relaxed text-muted-foreground">Name used in play: <span className="font-semibold text-foreground">{playNameFor(character)}</span><span aria-hidden="true"> · </span><span className="font-semibold text-foreground">{classSummary(result)}</span></p>
                 <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{[result.character.species, result.character.sex, result.character.pronouns, result.character.age ? `Age ${result.character.age}` : '', result.character.alignment, result.character.background].filter(Boolean).join(' · ')}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="character-sheet-actions mt-3 flex flex-wrap gap-2">
                   <button type="button" onClick={openRecordEditor} className="inline-flex min-h-9 items-center gap-2 rounded-lg bg-primary px-3 text-xs font-bold text-primary-foreground">
                     <ClipboardPaste className="size-4" aria-hidden="true" />Edit character sheet
                   </button>
@@ -822,7 +822,7 @@ function CharacterSheetOverlay({
                   <button type="button" onClick={() => onLevelUp(character.id)} disabled={!canLevelUp} title={canLevelUp ? 'This character has earned a level.' : 'The AIGM will make Level Up available when this character earns a level.'} className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-3 text-xs font-bold text-primary disabled:cursor-not-allowed disabled:opacity-45">
                     <Sparkles className="size-4" aria-hidden="true" />Level Up
                   </button>
-                  <button type="button" onClick={() => setShowSmartLevelingHelp((open) => !open)} aria-expanded={showSmartLevelingHelp} className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-accent/45 bg-accent/5 px-3 text-xs font-bold text-accent transition hover:bg-accent/10">
+                  <button type="button" onClick={() => setShowSmartLevelingHelp((open) => !open)} aria-expanded={showSmartLevelingHelp} className="character-smart-level-button inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/45 bg-primary/10 px-3 text-xs font-bold text-primary transition hover:bg-primary/15">
                     <HelpCircle className="size-4" aria-hidden="true" />Smart way to level
                   </button>
                 </div>
@@ -966,7 +966,7 @@ Properties: finesse, light`}
           )}
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-3 py-4 sm:px-6 sm:py-6">
+        <div className="character-sheet-body min-h-0 flex-1 overflow-y-auto px-3 py-4 sm:px-6 sm:py-6">
           <div className="grid gap-4">
             <RecordSection title="Current state" {...recordSectionProps('live')}>
               <div className="grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
@@ -2003,7 +2003,7 @@ export function AigmGameplayShell() {
     <main id="main-content" tabIndex={-1} className="medieval-page medieval-page--play aigm-gameplay-main h-[100dvh] overflow-hidden p-3 pb-[calc(5.75rem+env(safe-area-inset-bottom))] text-foreground sm:p-4 sm:pb-[calc(5.75rem+env(safe-area-inset-bottom))] lg:pb-4">
       <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{screenReaderAnnouncement}</div>
       <div className="aigm-gameplay-grid mx-auto grid h-full max-w-[1700px] grid-cols-1 gap-3 lg:grid-cols-[minmax(260px,0.78fr)_minmax(0,2.4fr)_minmax(250px,0.86fr)] lg:gap-4">
-        <aside className={`${mobilePanel === 'tools' ? 'flex' : 'hidden'} order-1 min-h-0 min-w-0 flex-col gap-3 overflow-y-auto rounded-2xl border border-border bg-card p-4 lg:order-1 lg:flex`} aria-label="Dice and initiative controls">
+        <aside className={`${mobilePanel === 'tools' ? 'flex' : 'hidden'} aigm-tools-panel order-1 min-h-0 min-w-0 flex-col gap-3 overflow-y-auto rounded-2xl border border-border bg-card p-4 lg:order-1 lg:flex`} aria-label="Dice and initiative controls">
           <button type="button" onClick={() => setMobilePanel('gameplay')} className="mb-1 inline-flex min-h-10 items-center justify-center rounded-xl border border-primary/45 bg-primary/10 px-4 text-sm font-bold text-primary lg:hidden">Back to gameplay</button>
           <section>
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -2155,7 +2155,7 @@ export function AigmGameplayShell() {
                   onBusyChange={(busy) => { setVoiceCaptureBusy(busy); if (!busy && !voiceGuidedPlay.enabled) requestAnimationFrame(() => textareaRef.current?.focus()) }}
                   onError={setError}
                 /> : null}
-                <button type="submit" disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0 || !message.trim()} className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground disabled:opacity-45" aria-label="Send gameplay turn">{sending ? <LoaderCircle className="size-5 animate-spin" aria-hidden="true" /> : <Send className="size-5" aria-hidden="true" />}</button>
+                <button type="submit" disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0 || !message.trim()} className="aigm-gameplay-send flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground disabled:opacity-45" aria-label="Send gameplay turn">{sending ? <LoaderCircle className="size-5 animate-spin" aria-hidden="true" /> : <Send className="size-5" aria-hidden="true" />}</button>
               </form>
 
               <div className="aigm-session-tools mt-2 grid gap-2 border-t border-border/70 pt-2 sm:grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)]" aria-label="Session tools and export guidance">
@@ -2187,7 +2187,7 @@ export function AigmGameplayShell() {
 
         </section>
 
-        <aside className={`${mobilePanel === 'characters' ? 'flex' : 'hidden'} order-3 min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-4 lg:flex`} aria-label="Current characters">
+        <aside className={`${mobilePanel === 'characters' ? 'flex' : 'hidden'} aigm-characters-panel order-3 min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-4 lg:flex`} aria-label="Current characters">
           <button type="button" onClick={() => setMobilePanel('gameplay')} className="mb-3 inline-flex min-h-10 items-center justify-center rounded-xl border border-primary/45 bg-primary/10 px-4 text-sm font-bold text-primary lg:hidden">Back to gameplay</button>
           <div className="flex items-start justify-between gap-3">
             <div><p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Current party</p><h2 className="mt-1 font-display text-xl font-bold">Characters</h2></div>
@@ -2195,7 +2195,7 @@ export function AigmGameplayShell() {
           </div>
           <p className="mt-2 text-xs leading-relaxed text-muted-foreground">HP, AC, conditions, currency, and tracked resources update as the Game Master returns structured state changes.</p>
 
-          <div className="mt-4 min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+          <div className="aigm-character-list mt-4 min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
             {orderedCharacters.length > 0 ? orderedCharacters.map((character, index) => (
               <CharacterCard
                 key={character.id}
