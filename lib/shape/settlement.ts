@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { terraCostMicrousd } from '@/lib/usage/openai-cost'
+import { roundUsageMicrousdToCent } from '@/lib/usage/money'
 
 type ServerSupabase = Awaited<ReturnType<typeof createClient>>
 
@@ -45,13 +46,15 @@ export async function settleShapeJobUsage(supabase: ServerSupabase, job: Billabl
     return { providerCostMicrousd, billedMicrousd: 0, legacyNoCharge: true as const }
   }
 
-  const billedMicrousd = Math.min(providerCostMicrousd, maximumMicrousd)
+  const roundedProviderCostMicrousd = roundUsageMicrousdToCent(providerCostMicrousd)
+  const billedMicrousd = Math.min(roundedProviderCostMicrousd, maximumMicrousd)
   const { data, error } = await supabase.rpc('rpgyw_capture_usage', {
     p_hold_id: holdId,
     p_actual_microusd: billedMicrousd,
     p_metadata: {
       shape_job_id: job.id,
       provider_cost_microusd: providerCostMicrousd,
+      rounded_customer_cost_microusd: roundedProviderCostMicrousd,
       maximum_deduction_microusd: maximumMicrousd,
       billed_microusd: billedMicrousd,
       capped_at_maximum: providerCostMicrousd > maximumMicrousd,

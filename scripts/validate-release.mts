@@ -9,11 +9,11 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
 assert.equal(pkg.version, '1.6.2')
-assert.equal(pkg.rpgywVersion, '1.6.200')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.6\.200'/)
+assert.equal(pkg.rpgywVersion, '1.6.202')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.6\.202'/)
 
 for (const file of [
-  'app/page.tsx', 'app/play/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
+  'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
   'app/account/page.tsx', 'app/pricing/page.tsx', 'app/pricing/actions.ts',
   'app/api/shape/jobs/route.ts', 'app/api/shape/quote/route.ts', 'app/api/shape/transform/route.ts',
   'app/api/shape/projects/route.ts', 'app/api/shape/usage/route.ts', 'app/api/stripe/webhook/route.ts',
@@ -37,6 +37,10 @@ const packs = read('lib/billing/play-packs.ts')
 for (const amount of ['priceCents: 600', 'priceCents: 1_690', 'priceCents: 3_340', 'priceCents: 4_990', 'priceCents: 7_200', 'priceCents: 9_950']) assert.match(packs, new RegExp(amount))
 for (const usage of ['usageCents: 500', 'usageCents: 1_500', 'usageCents: 3_000', 'usageCents: 4_500', 'usageCents: 6_500', 'usageCents: 9_000']) assert.match(packs, new RegExp(usage))
 
+const layout = read('app/layout.tsx')
+assert.match(layout, /@vercel\/analytics\/next/)
+assert.match(layout, /<Analytics \/>/)
+
 const header = read('components/SiteHeader.tsx')
 assert.match(header, /href: '\/account', label: 'Account'/)
 assert.match(header, /thereadingofthewardens\.com/)
@@ -55,7 +59,9 @@ assert.match(footer, /fill="#FF5E5B"/)
 assert.match(footer, /kofi-cup/)
 
 const home = read('app/page.tsx')
-assert.match(home, /<Link className="fake-button" href="\/play">Continue playing<\/Link>/)
+assert.match(home, /href="\/start">New Player<\/Link>/)
+assert.match(home, /href="\/play">Continue playing<\/Link>/)
+assert.match(read('app/start/page.tsx'), /permanent front door to RPG Your Way onboarding/)
 
 const pricing = read('app/pricing/page.tsx')
 assert.match(pricing, /permanentRedirect\('\/account#add-usage'\)/)
@@ -69,6 +75,8 @@ const workspace = read('components/ShapeWorkspace.tsx')
 assert.match(workspace, /See maximum usage/)
 assert.match(workspace, /Begin Script · max/)
 assert.match(workspace, /Maximum estimated deduction/)
+assert.match(workspace, /Progress advances only when a real Script step finishes/)
+assert.match(workspace, /role="progressbar"/)
 assert.match(workspace, /setQuoteMicrousd\(null\)/)
 assert.match(workspace, /Add usage in Account/)
 assert.doesNotMatch(workspace, /Begin private Script test|Script opens soon|Preview only/)
@@ -89,7 +97,8 @@ assert.doesNotMatch(transform, /diagnostic:\s*message/)
 assert.doesNotMatch(transform, /shapeEmailAllowed|private test list/)
 
 const settlement = read('lib/shape/settlement.ts')
-assert.match(settlement, /Math\.min\(providerCostMicrousd, maximumMicrousd\)/)
+assert.match(settlement, /roundUsageMicrousdToCent\(providerCostMicrousd\)/)
+assert.match(settlement, /Math\.min\(roundedProviderCostMicrousd, maximumMicrousd\)/)
 assert.match(settlement, /rpgyw_capture_usage/)
 assert.match(settlement, /cache_write_tokens/)
 
@@ -117,4 +126,4 @@ for (const productionFile of ['lib/stripe/checkout.ts', 'lib/shape/billing.ts', 
   assert.doesNotMatch(read(productionFile), /from ['"][^'"]+\.ts['"]/, `${productionFile} must not import .ts extensions.`)
 }
 
-console.log('RPG Your Way 1.6.200 account, funding, navigation, support, and commercial Script checks passed.')
+console.log('RPG Your Way 1.6.202 cent settlement, truthful progress, Start route, and analytics checks passed.')

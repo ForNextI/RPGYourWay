@@ -1197,3 +1197,87 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 /* Script commercial error links */
 .shape-error a { color: inherit; text-decoration: underline; text-underline-offset: .14em; font-weight: 800; }
 .shape-error a:hover { text-decoration-thickness: 2px; }
+
+
+/* 1.6.202 truthful Script progress and onboarding front door */
+.campaign-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .7rem;
+  margin-top: 1.35rem;
+}
+.campaign-actions .fake-button { margin-top: 0; }
+.fake-button-secondary {
+  border-color: var(--forest-deep);
+  background: var(--cream-bright);
+  color: var(--forest-deep);
+}
+.fake-button-secondary:hover { background: var(--lime-soft); }
+
+.start-main { padding-top: clamp(2rem, 5vw, 4.2rem); }
+.start-placeholder {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: start;
+  margin-top: 1.4rem;
+  border: 1px solid var(--border-green);
+  border-radius: 18px;
+  background: rgb(251 242 230 / .96);
+  padding: 1.2rem;
+  box-shadow: var(--shadow-soft);
+}
+.start-placeholder h2 { margin: 0 0 .35rem; font-size: 1.35rem; }
+.start-placeholder p { margin: 0; color: var(--muted); line-height: 1.6; }
+
+.shape-live-progress {
+  display: grid;
+  gap: .55rem;
+  margin-top: 1rem;
+  border: 1px solid var(--border-green);
+  border-radius: 14px;
+  background: rgb(117 134 90 / .06);
+  padding: .85rem 1rem;
+}
+.shape-live-progress-copy {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: .6rem;
+  align-items: center;
+  color: var(--muted);
+  font-size: .85rem;
+}
+.shape-live-progress-copy strong { color: var(--forest-deep); }
+.shape-live-working-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--moss);
+  box-shadow: 0 0 0 4px rgb(117 134 90 / .12);
+}
+.shape-live-working-dot.active { animation: rpgyw-working-pulse 1.2s ease-in-out infinite; }
+.shape-live-progress-track {
+  height: 12px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--forest) 38%, var(--cream-deep));
+  border-radius: 999px;
+  background: var(--cream-bright);
+}
+.shape-live-progress-track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--moss-deep);
+  transition: width 180ms ease;
+}
+.shape-live-progress small { color: var(--muted); }
+@keyframes rpgyw-working-pulse {
+  0%, 100% { opacity: .38; transform: scale(.86); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 620px) {
+  .campaign-actions { grid-template-columns: 1fr; }
+  .shape-live-progress-copy { grid-template-columns: auto 1fr; }
+  .shape-live-progress-copy > span:last-child { grid-column: 2; }
+}

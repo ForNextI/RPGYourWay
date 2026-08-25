@@ -72,6 +72,18 @@ function progressLabel(job: ShapeJob) {
   return 'Preparing Script job'
 }
 
+function realProgress(job: ShapeJob) {
+  const analysisTotal = Math.max(0, Number(job.analysis_total || 0))
+  const writingTotal = Math.max(0, Number(job.writing_total || 0))
+  const total = Math.max(1, analysisTotal + writingTotal)
+  const completed = job.status === 'completed'
+    ? total
+    : Math.min(analysisTotal, Math.max(0, Number(job.next_analysis_chunk_index || 0)))
+      + Math.min(writingTotal, Math.max(0, Number(job.next_chunk_index || 0)))
+  const percent = Math.min(100, Math.max(0, (completed / total) * 100))
+  return { completed, total, percent }
+}
+
 export function ShapeWorkspace() {
   const [title, setTitle] = useState('')
   const [transcript, setTranscript] = useState('')
@@ -333,6 +345,7 @@ export function ShapeWorkspace() {
   if (job) {
     const persistedError = job.status === 'error' ? (job.error_message || '') : ''
     const visibleError = error || persistedError
+    const progress = realProgress(job)
     return (
       <section className="shape-workbench" aria-labelledby="shape-job-title">
         <div className="shape-job-heading">
@@ -343,6 +356,27 @@ export function ShapeWorkspace() {
           </div>
           <div className="shape-progress-pill">{job.transcript_characters.toLocaleString()} characters</div>
         </div>
+
+        {job.status !== 'completed' ? (
+          <div className="shape-live-progress" role="status" aria-live="polite">
+            <div className="shape-live-progress-copy">
+              <span className={running ? 'shape-live-working-dot active' : 'shape-live-working-dot'} aria-hidden="true" />
+              <strong>{progressLabel(job)}</strong>
+              <span>{progress.completed} of {progress.total} completed</span>
+            </div>
+            <div
+              className="shape-live-progress-track"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={progress.total}
+              aria-valuenow={progress.completed}
+              aria-valuetext={`${progressLabel(job)}. ${progress.completed} of ${progress.total} completed.`}
+            >
+              <span style={{ width: `${progress.percent}%` }} />
+            </div>
+            <small>Progress advances only when a real Script step finishes.</small>
+          </div>
+        ) : null}
 
         <div className="shape-progress-grid shape-commercial-progress" aria-label="Script processing and usage progress">
           <div><strong>{job.analysis_total ? `${job.next_analysis_chunk_index}/${job.analysis_total}` : '—'}</strong><span>continuity sections</span></div>

@@ -23,5 +23,5 @@
     "@types/react-dom": "^19",
     "typescript": "5.7.3"
   },
-  "rpgywVersion": "1.6.200"
+  "rpgywVersion": "1.6.202"
 }
