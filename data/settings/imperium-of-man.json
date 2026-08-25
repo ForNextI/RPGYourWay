@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 1,
+  "id": "imperium-of-man",
+  "displayName": "The Imperium of Man",
+  "aliases": [
+    "Imperium of Man",
+    "Imperium",
+    "Imperium Sanctus",
+    "Imperium Nihilus",
+    "Dark Imperium",
+    "Human Imperium",
+    "Warhammer 40,000",
+    "40K"
+  ],
+  "canonFrame": {
+    "defaultEra": "Era Indomitus, after the opening of the Great Rift",
+    "editionAssumptions": "Use the contemporary Warhammer 40,000 setting after the fall of Cadia, the formation of the Cicatrix Maledictum, the return of Roboute Guilliman, and the launch of the Indomitus Crusade. Avoid assigning a precise universal date unless the campaign selects a published war zone, because Imperial chronology, warp travel, and publication retcons make synchronization difficult.",
+    "timelineNotes": "The Imperium is split between Imperium Sanctus, which retains more reliable access to Terra and the Astronomican, and Imperium Nihilus, where many worlds are isolated beyond the Great Rift. Current official stories continue to advance individual fronts. Do not assume every crusade fleet, primarch, xenos invasion, or war zone is geographically or temporally adjacent."
+  },
+  "campaignFoundations": [
+    "The Imperium is a vast, decaying, authoritarian human empire spread across roughly a million worlds.",
+    "It is not a heroic utopia; its cruelty, xenophobia, fanaticism, and waste are central to the setting's satire and horror.",
+    "The Emperor is enthroned on Terra, physically ruined yet psychically essential to Imperial survival.",
+    "Warp travel and astropathic communication bind the empire while making distance, delay, mutation, and uncertainty unavoidable.",
+    "Imperial institutions overlap, feud, duplicate effort, and interpret ancient authority differently.",
+    "Technology is powerful but poorly understood, ritualized, scarce, and maintained by the Adeptus Mechanicus.",
+    "Most humans never see a Space Marine; ordinary Imperial life is shaped more by local rulers, labor, faith, and bureaucracy.",
+    "Chaos, xenos empires, rebellion, mutation, hunger, and institutional collapse threaten the Imperium from every direction.",
+    "Imperial propaganda is not objective narration.",
+    "Local worlds vary enormously in technology, environment, culture, law, and knowledge."
+  ],
+  "gameMasterGuidance": [
+    "Keep scale immense but scenes personal; one hab block, regiment, ship, shrine, or investigation can embody the setting.",
+    "Use unreliable records and delayed communication without making every fact arbitrary.",
+    "Distinguish what characters believe from what the setting establishes.",
+    "Do not present Imperial ideology as morally correct merely because protagonists serve Imperial institutions.",
+    "Treat requisition, rank, patronage, faith, and jurisdiction as practical forces.",
+    "Let Imperial agencies conflict over authority and acceptable losses.",
+    "Make technology feel material, maintained, scarce, and ritualized rather than magical convenience.",
+    "Use Space Marines sparingly unless the campaign is explicitly about them.",
+    "Remember that many Imperial victories preserve a terrible status quo at enormous cost.",
+    "Mark invented sectors, worlds, regiments, and institutions as campaign-created."
+  ],
+  "canonBoundaries": [
+    "Do not describe the Imperium as a single efficient chain of command.",
+    "Do not make every Imperial citizen a fanatic with identical beliefs.",
+    "Do not treat the Emperor as openly walking, speaking, or governing in person.",
+    "Do not make faster-than-light travel safe, punctual, or universally available.",
+    "Do not assume Imperium Nihilus receives reliable Astronomican guidance or Terra's orders.",
+    "Do not portray Space Marines as common police or ordinary soldiers.",
+    "Do not treat machine spirits as proven to be only superstition or only literal artificial intelligence in every case.",
+    "Do not make the Inquisition a unified organization with one policy.",
+    "Do not present the Mechanicus as understanding all technology it operates.",
+    "Do not import real-world fascist symbols or advocacy into the setting's fictional satire."
+  ],
+  "referenceChunks": [
+    {
+      "id": "era-indomitus",
+      "title": "The Era Indomitus",
+      "tags": [
+        "Era Indomitus",
+        "Great Rift",
+        "Cicatrix Maledictum",
+        "Cadia",
+        "Guilliman"
+      ],
+      "era": "Late M41 into the Era Indomitus",
+      "editionScope": "Current Warhammer 40,000",
+      "text": "The current setting follows the destruction of Cadia and the opening of the Cicatrix Maledictum, a warp rift that tears across the galaxy. The catastrophe darkened the Astronomican for a time, unleashed daemonic incursions, severed routes, and split the Imperium. Worlds on Terra's side of the rift are broadly called Imperium Sanctus. Much of the far side is Imperium Nihilus, where navigation and communication are unreliable and local powers may operate without meaningful contact with central authority. Roboute Guilliman, primarch of the Ultramarines, returned and became Lord Commander of the Imperium. He launched the Indomitus Crusade, a vast collection of crusade fleets intended to reinforce, reconnect, and reclaim Imperial worlds. Primaris Space Marines and new materiel accompanied the crusade. The campaign did not repair the Imperium. It created islands of renewed authority amid continuing collapse. Current narratives include the wars of the Arks of Omen, Tyranid attacks from the galactic west, Necron expansion, the Nachmund Gauntlet, continuing Chaos offensives, and innumerable local wars. These fronts do not occur in one convenient neighborhood. Warp distortion and revised publication chronology make exact universal dating hazardous. For play, identify a sector and its relationship to the Rift. Is the Astronomican visible? Can astropathic messages reach a capital? Did an Indomitus fleet pass through, promise aid, or strip local resources? A world may call itself loyal while having followed emergency law for generations. Do not describe the Era Indomitus as a clean new political order. It is a desperate attempt to coordinate a civilization whose scale and institutions were already failing before the galaxy split."
+    },
+    {
+      "id": "imperial-structure",
+      "title": "The Structure of the Imperium",
+      "tags": [
+        "High Lords",
+        "Adeptus Terra",
+        "Administratum",
+        "sectors",
+        "governors"
+      ],
+      "era": "Stable Imperial foundation",
+      "editionScope": "All modern editions",
+      "text": "The Imperium is a feudal-bureaucratic empire rather than a modern centralized state. Terra claims ultimate authority through the Emperor, the Senatorum Imperialis, and the High Lords. In practice, layers of institutions, sectors, subsectors, systems, and planetary governments interpret orders across immense distances. A planetary governor usually retains broad control so long as tithes are paid, worship remains acceptable, psykers are surrendered, and rebellion is suppressed. The Adeptus Administratum records populations, taxes, troop levies, shipping, law, and countless categories whose original purposes may be forgotten. Records can arrive centuries late, be copied incorrectly, or conflict with local reality. This does not make bureaucracy decorative. A misplaced classification can starve a hive, redirect a regiment, or condemn a world as delinquent. The Adeptus Terra includes many organizations, but institutional boundaries are messy. Departments maintain private troops, fleets, archives, legal claims, and patronage. The Ecclesiarchy, Adeptus Mechanicus, Inquisition, Space Marine Chapters, Navis Nobilite, and other powers possess distinctive authority that can bypass ordinary government. Their jurisdictions overlap and produce conflict. Imperial law is not uniform in daily life. A shrine world, forge world, hive world, agri world, frontier colony, and void station can maintain radically different customs. What unites them is obligation upward: faith, tithe, sanctioned institutions, and military need. In play, decide which office can actually enforce an order. A seal from Terra may be theoretically supreme but useless without ships. A local governor may obey publicly while delaying in practice. Rival officials can all possess authentic warrants. The Imperium's horror often comes from systems functioning exactly as designed at a scale where individuals are expendable."
+    },
+    {
+      "id": "emperor-terra-astronomican",
+      "title": "The Emperor, Terra, and the Astronomican",
+      "tags": [
+        "Emperor",
+        "Golden Throne",
+        "Terra",
+        "Astronomican",
+        "Custodes"
+      ],
+      "era": "Ten millennia after the Horus Heresy",
+      "editionScope": "All modern editions",
+      "text": "The Emperor of Mankind is the Imperium's sovereign and central religious figure. Mortally wounded during the Horus Heresy, he has remained upon the Golden Throne for roughly ten thousand years. His body is ruined, and ordinary government does not receive clear daily instructions from him. Competing institutions interpret ancient commands, visions, doctrine, and political necessity in his name. The Golden Throne sustains functions essential to the Imperium and is itself an ancient, failing technological and psychic system. The Emperor's psychic power contributes to the Astronomican, the beacon used by Navigators to orient warp travel. The Astronomican is not a map or a guarantee of safe passage. Its visibility varies with distance, storms, the Great Rift, and local conditions. Terra is the throneworld, administrative center, pilgrimage destination, and one of the most densely defended places in the galaxy. The Imperial Palace covers a vast portion of the surface. Holy sites, ministries, fortresses, slums, processions, and orbital infrastructure crowd the system. Mars, seat of the Adeptus Mechanicus, is a separate power joined to the Imperium through ancient compact. The Adeptus Custodes guard the Emperor and possess authority, knowledge, and martial ability beyond ordinary Imperial forces. The Sisters of Silence are psychic nulls associated with the Black Ships and ancient Imperial defense. Neither group should appear casually on an unimportant world. Imperial citizens may believe the Emperor speaks through miracles, saints, tarot, dreams, or institutional decisions. Some miracles are real; many interpretations are propaganda, coincidence, fraud, or sincere misunderstanding. Preserve the distinction between the Emperor's metaphysical importance and the inability of most characters to know his immediate will with certainty."
+    },
+    {
+      "id": "warp-travel-and-communication",
+      "title": "Warp Travel and Communication",
+      "tags": [
+        "warp",
+        "Navigators",
+        "Gellar field",
+        "astropaths",
+        "voidships"
+      ],
+      "era": "Stable Imperial foundation",
+      "editionScope": "All modern editions",
+      "text": "Interstellar civilization depends on the warp, a psychic dimension shaped by emotion and inhabited by predatory entities. Voidships enter it to cross distances that would otherwise take generations. Navigators, mutant human nobles with a specialized warp sense, guide ships by reading the Astronomican and local currents. Short calculated jumps are possible without a Navigator, but major routes depend on their houses and expertise. Warp travel is unreliable. A journey can take longer or shorter than expected, emerge far from its destination, or suffer temporal distortion. Warp storms can isolate systems for centuries. A functioning Gellar field protects a ship by maintaining a bubble of realspace; failure can expose crew and vessel to daemonic intrusion. Astropaths transmit psychic messages across interstellar distances. Messages are symbolic, difficult, expensive, and subject to interception, distortion, fatigue, and loss. Choirs improve range and reliability. Ordinary citizens do not make personal interstellar calls. Couriers carrying sealed data remain important. The Great Rift worsens every limitation. Imperium Nihilus often lacks reliable sight of the Astronomican, forcing local routes, risky beacons, short jumps, and long isolation. A sector capital may not know whether Terra's order is recent, authentic, or already obsolete. In play, travel should generate operational choices rather than random punishment. A convoy must decide whether to wait for a Navigator, cross a storm, ration supplies, answer a distress signal, or trust an old chart. Communication delay lets commanders act independently while making accountability dangerous. Never use warp travel as instant teleportation unless the campaign deliberately invokes an exceptional route or artifact."
+    },
+    {
+      "id": "imperial-creed",
+      "title": "The Imperial Creed and Ecclesiarchy",
+      "tags": [
+        "Ecclesiarchy",
+        "Adeptus Ministorum",
+        "Imperial Creed",
+        "saints",
+        "heresy"
+      ],
+      "era": "Post-Heresy Imperium",
+      "editionScope": "All modern editions",
+      "text": "The Adeptus Ministorum, commonly called the Ecclesiarchy, teaches worship of the Emperor as a god. The Imperial Creed is universal in demand but extremely varied in local expression. A world may depict the Emperor as a sun, ancestor, warrior, machine, or lawgiver so long as authorities judge the practice compatible with orthodoxy. Priests administer shrines, pilgrimages, charity, education, relics, confession, public punishment, and political loyalty. Cardinals and powerful church institutions own resources, command armed followers, and influence governors. The Decree Passive limits the Ecclesiarchy from maintaining conventional 'men under arms,' a restriction historically associated with the rise of the all-female Adepta Sororitas. Legal interpretation and actual military power are more complex than the slogan. Saints, miracles, visions, and relics are real features of the setting, but fraud and propaganda surround them. A shrine world may depend economically on pilgrims. Declaring a miracle can enrich a faction, trigger a crusade, or attract the Inquisition. Heresy is an elastic category covering forbidden belief, Chaos worship, disobedience, mutation, xenos sympathy, doctrinal deviation, and political threats. Different authorities disagree over evidence and punishment. Sincere faith can inspire courage, mutual aid, martyrdom, and resistance, while the institution remains coercive and violent. Do not portray every priest as knowingly corrupt or every citizen as a chanting caricature. Faith is one of the few frameworks ordinary people possess for meaning in an incomprehensible empire. Its emotional truth to characters does not make Imperial doctrine objectively humane."
+    },
+    {
+      "id": "adeptus-mechanicus",
+      "title": "The Adeptus Mechanicus and Imperial Technology",
+      "tags": [
+        "Adeptus Mechanicus",
+        "Mars",
+        "Omnissiah",
+        "STC",
+        "machine spirits"
+      ],
+      "era": "Current Imperium",
+      "editionScope": "All modern editions",
+      "text": "The Adeptus Mechanicus is a semi-autonomous priesthood centered on Mars and bound to the Imperium by ancient treaties. It worships the Machine God and recognizes the Emperor as the Omnissiah under orthodox Imperial agreement. Forge worlds, magi, tech-priests, Skitarii, and Titan Legions control much of the manufacture and maintenance required by the Imperium. Imperial technology descends from lost human achievement, surviving Standard Template Construct patterns, local invention, rediscovery, and countless modifications. Knowledge is compartmentalized. A tech-priest may understand one reactor deeply while treating another device through memorized rites. Innovation can be condemned as heretek practice, yet sanctioned experimentation and reinterpretation occur, especially under powerful patrons. Machine spirits may describe genuine artificial cognition, complex interfaces, ritualized maintenance behavior, religious interpretation, or some combination. Do not settle the question universally. A tank crew's prayers may coincide with correct start-up procedure; an ancient weapon may also possess a distinct will. Forge worlds are industrial societies with their own hierarchies, labor systems, data cults, and rival doctrines. Mars does not exercise perfect control over every forge. Explorator fleets seek lost technology, sometimes competing with the Inquisition, Rogue Traders, xenos collectors, or other Mechanicus factions. Technology should have supply chains. Ammunition, replacement parts, trained operators, sacred oils, reactor fuel, and transport matter. A plasma weapon is not simply futuristic treasure; it may require a forge's cooperation and carry legal or religious obligations. The Imperium fields extraordinary machines while remaining unable to reproduce or fully understand many of its greatest artifacts."
+    },
+    {
+      "id": "inquisition",
+      "title": "The Inquisition and Imperial Agents",
+      "tags": [
+        "Inquisition",
+        "Ordo Hereticus",
+        "Ordo Xenos",
+        "Ordo Malleus",
+        "Rogue Traders"
+      ],
+      "era": "Current Imperium",
+      "editionScope": "All modern editions",
+      "text": "The Inquisition is a decentralized body of investigators and judges claiming authority to defend humanity from enemies within, without, and beyond. Inquisitors carry immense personal power, but the institution has no single chain of command capable of preventing rivalry, doctrinal schism, or open conflict. Influence depends on reputation, allies, evidence, and the forces an inquisitor can mobilize. The three best-known major ordos are the Ordo Hereticus, concerned with internal corruption and witchcraft; the Ordo Xenos, concerned with alien threats; and the Ordo Malleus, concerned with daemons and Chaos. Numerous minor ordos pursue narrower dangers. Radical and puritan philosophies cut across these categories. An inquisitor may use forbidden tools to fight a greater enemy while another considers that act the greater threat. Retinues include interrogators, soldiers, savants, psykers, assassins, priests, tech experts, sanctioned mutants, and local specialists. Imperial Agents can also include the Adeptus Arbites, Officio Assassinorum, Navigators, Rogue Traders, and household forces seconded by oath or necessity. Rogue Traders possess ancient warrants granting exceptional freedom to explore, trade, conquer, and negotiate beyond ordinary Imperial borders. Their dynasties combine commerce, naval power, diplomacy, and private empire. They are not automatically loyal heroes or pirates. In an investigative campaign, authority should create complications rather than solve every problem. Declaring oneself can frighten witnesses, trigger cover-ups, and start jurisdictional struggles. Exterminatus and other extreme powers exist, but using them is consequential and politically dangerous. The Inquisition protects the Imperium by methods that can destroy the people it claims to save."
+    },
+    {
+      "id": "astra-militarum-and-navy",
+      "title": "Astra Militarum and Imperial Navy",
+      "tags": [
+        "Astra Militarum",
+        "Imperial Guard",
+        "Imperial Navy",
+        "regiments",
+        "commissars"
+      ],
+      "era": "Current Imperium",
+      "editionScope": "All modern editions",
+      "text": "The Astra Militarum is the Imperium's vast ground army, raised through planetary tithes and emergency levies. Regiments preserve the culture, training, equipment, and doctrine of their home worlds. Cadian, Catachan, Krieg, Tallarn, Mordian, Valhallan, and other famous traditions are examples, not universal templates. Most regiments are locally named forces that may never appear in published lore. Regiments are often specialized as infantry, armor, artillery, reconnaissance, siege, or other formations. Imperial logistics can combine units from many worlds, creating language, doctrine, and supply problems. Soldiers may be brave, frightened, devout, cynical, professional, or conscripted. Their commanders range from gifted strategists to political appointees. Commissars enforce discipline, courage, and political loyalty. Summary execution is part of their feared authority, but effective commissars also understand morale, example, negotiation, and unit culture. Portraying them only as random murderers makes the army less functional and the setting less credible. The Imperial Navy controls most major void warfare and transport separate from the army. Warships are immense communities containing officers, ratings, press-ganged labor, technical clans, armsmen, priests, and inherited shipboard traditions. Naval command, troop command, and planetary authority can conflict. Guard campaigns should emphasize comradeship, supply, orders, intelligence failure, artillery, evacuation, fortification, and civilian consequence. Billions may fight in the background, but a squad still cares whether its rations arrive and whether the lieutenant understands the map."
+    },
+    {
+      "id": "adeptus-astartes",
+      "title": "Adeptus Astartes",
+      "tags": [
+        "Space Marines",
+        "Adeptus Astartes",
+        "Chapters",
+        "Primaris",
+        "gene-seed"
+      ],
+      "era": "Era Indomitus",
+      "editionScope": "Current Warhammer 40,000",
+      "text": "Space Marines are genetically and surgically transformed warrior-monks organized mainly into Chapters. They are extraordinarily powerful infantry but extremely rare compared with the population and armies of the Imperium. Many citizens regard them as legendary Angels of Death and will never see one. Chapters possess distinct gene-seed, home worlds or fleets, traditions, heraldry, command structures, and relationships with Imperial authority. The Codex Astartes influences many Chapters without eliminating variation. First Founding Chapters such as the Ultramarines, Blood Angels, Dark Angels, Imperial Fists, Space Wolves, Salamanders, Iron Hands, Raven Guard, and White Scars have many successors. Primaris Space Marines were introduced during the Era Indomitus through the work of Belisarius Cawl and Guilliman. Reinforcements reached existing Chapters, and new Chapters were founded. The transition created practical and cultural tensions rather than replacing every older Marine instantly. A Chapter is legally and militarily independent in many respects. It can refuse ordinary governors, pursue ancient oaths, and maintain secrets. Chapters also depend on recruitment, gene-seed, forge support, ships, and political legitimacy. Their small numbers force them to choose decisive targets while Guard and Navy forces hold territory. Do not use Space Marines as routine law enforcement or universally compassionate saviors. They are posthuman weapons shaped by indoctrination and Chapter culture. Some protect civilians at great cost; others consider civilian loss irrelevant. In non-Astartes campaigns, their arrival should change the scale and politics of a situation."
+    },
+    {
+      "id": "sororitas-and-imperial-faithful",
+      "title": "Adepta Sororitas and Faithful Orders",
+      "tags": [
+        "Adepta Sororitas",
+        "Sisters of Battle",
+        "Orders Militant",
+        "Hospitallers"
+      ],
+      "era": "Current Imperium",
+      "editionScope": "All modern editions",
+      "text": "The Adepta Sororitas are the armed and institutional orders of the Ecclesiarchy, most famously represented by the power-armored Sisters of Battle. Orders Militant fight heretics, aliens, witches, and daemons, but the Sororitas also include Hospitallers, Dialogus, Famulous, and other orders devoted to medicine, language, diplomacy, education, and administration. Their origins lie in the Age of Apostasy, when the Daughters of the Emperor were manipulated by Goge Vandire and later turned against him. The post-crisis settlement shaped the Ecclesiarchy's legal relationship to armed forces. The Sororitas remain intensely devout and institutionally powerful. Miracles associated with faith occur in the setting, though characters can interpret their source differently. Living saints and extraordinary manifestations are rare and politically explosive. Most Sisters rely on training, discipline, equipment, organization, and belief. Orders maintain their own histories, patron saints, convents, vows, and rivalries. A Hospitaller may work in a plague zone beside an Inquisitor whose methods she questions. A Famulous can shape noble succession through advice and arranged alliances. A Dialogus can determine the meaning of a disputed ancient command. Avoid portraying every Sister as a shouting zealot without technical competence or personal judgment. Their devotion can coexist with compassion, ambition, trauma, doubt, and institutional cruelty. Their perspective remains Imperial and can support horrific policies even when the individual acts heroically."
+    },
+    {
+      "id": "worlds-and-everyday-life",
+      "title": "Imperial Worlds and Everyday Life",
+      "tags": [
+        "hive world",
+        "agri world",
+        "forge world",
+        "shrine world",
+        "frontier"
+      ],
+      "era": "Current Imperium",
+      "editionScope": "All modern editions",
+      "text": "Imperial classification groups worlds by function, but each category contains enormous variation. Hive worlds concentrate billions in layered cities dependent on imported food and industrial systems. Agri worlds produce food through methods ranging from estates to continent- scale processing. Forge worlds answer primarily to the Mechanicus. Shrine worlds revolve around pilgrimage and relics. Death worlds contain environments considered exceptionally lethal. Civilized, feudal, frontier, mining, fortress, and void settlements follow other patterns. Local government can be hereditary, corporate, clerical, military, oligarchic, or otherwise, provided obligations to the Imperium are met. Many citizens understand their home city and faith but know little reliable galactic geography. A worker may believe Space Marines are immortal spirits and still be skilled at maintaining a complex machine. Social life includes family, guild, hab-clan, regiment, congregation, work shift, gang, and neighborhood. Food, recreation, marriage, mourning, humor, music, sport, and local festivals continue despite oppression. Showing these makes destruction matter and prevents the setting from becoming one continuous parade of slogans. Servitors, sanctioned mutants, abhumans, psykers, and cybernetic modification occupy contested social positions. Imperial tolerance depends on classification and usefulness rather than consistent ethics. Unsanctioned mutation can invite persecution even when harmless. Choose a world's tithe, environment, ruling class, relationship to the warp, major industry, and local expression of the Creed. Then decide what crisis threatens that arrangement. A believable Imperial world is not required to resemble medieval Europe, a single hive aesthetic, or any famous planet."
+    },
+    {
+      "id": "imperium-sanctus-nihilus",
+      "title": "Imperium Sanctus and Imperium Nihilus",
+      "tags": [
+        "Imperium Sanctus",
+        "Imperium Nihilus",
+        "Dark Imperium",
+        "Nachmund Gauntlet"
+      ],
+      "era": "Era Indomitus",
+      "editionScope": "Current Warhammer 40,000",
+      "text": "The Great Rift divides Imperial space. Imperium Sanctus remains on the side with more dependable access to the Astronomican and Terra, though it is still beset by war, invasion, and bureaucratic failure. Imperium Nihilus lies beyond the Rift and is often called the Dark Imperium because much of it cannot see the Astronomican. The division is not a perfectly drawn political border. Warp routes twist, storms change, and passages such as the Nachmund Gauntlet become strategically critical. Control of a stable route can determine whether fleets, information, and reinforcements reach entire regions. Vigilus is important because of its relationship to such passage. Worlds in Nihilus may survive through local beacons, short jumps, old charts, autonomous fleets, Chapter protection, or isolated alliances. Some remain loyal in name while developing new laws. Others fall to Chaos, xenos attack, famine, or civil war without Terra learning for years. Dante of the Blood Angels has held broad regency in part of Nihilus, but his authority does not produce uniform control. Sanctus is not safe. Guilliman's logistics, Indomitus fleets, Tyranid invasions, Necron zones, and Chaos war fronts stretch resources. Central authorities may demand more from worlds because they can reach them. In play, the divide changes expectations. In Sanctus, help may exist but come with requisition and oversight. In Nihilus, the party may be the only surviving link between systems. Avoid depicting Nihilus as uniformly conquered or Sanctus as restored. Both are fragments of an empire under intolerable pressure."
+    },
+    {
+      "id": "chaos-and-the-warp",
+      "title": "Chaos, Daemons, and Corruption",
+      "tags": [
+        "Chaos",
+        "daemons",
+        "Khorne",
+        "Tzeentch",
+        "Nurgle",
+        "Slaanesh"
+      ],
+      "era": "All eras",
+      "editionScope": "All modern editions",
+      "text": "Chaos arises from the warp and the psychic resonance of mortal emotion. The four major Chaos Gods are Khorne, associated with bloodshed and rage; Tzeentch, with change, ambition, and sorcery; Nurgle, with decay, disease, endurance, and despair; and Slaanesh, with excess, obsession, and sensation. They are not simple patrons who honor contracts fairly. Their gifts transform desire into dependency and identity into service. Daemons are warp entities given form through emotion, ritual, possession, or breaches in reality. Their appearance and behavior can follow symbolism rather than material biology. Chaos corruption can spread through cults, artifacts, trauma, ambition, psychic exposure, ideology, and desperate bargains. Not every rebel is a Chaos cultist, and assuming so can create the conditions for real corruption. The Traitor Legions and other Chaos Space Marines descend from or emulate forces that rebelled during the Horus Heresy. Abaddon the Despoiler remains the foremost warlord of Chaos and played a central role in Cadia's fall. Warbands vary in loyalty, doctrine, resources, and relations with daemons. Imperial secrecy about Chaos protects some populations from dangerous knowledge while causing ignorance, panic, and abuse. Inquisitors disagree over how much truth can be tolerated. Use corruption as temptation and consequence, not an arbitrary infection for asking questions. A cult should meet a need the Imperium has failed to meet: food, revenge, healing, status, community, forbidden knowledge, or escape. Its horror emerges as the promised solution becomes another form of enslavement."
+    },
+    {
+      "id": "xenos-and-external-threats",
+      "title": "Xenos Powers and External Threats",
+      "tags": [
+        "Aeldari",
+        "Drukhari",
+        "Orks",
+        "Necrons",
+        "Tyranids",
+        "T'au"
+      ],
+      "era": "Era Indomitus",
+      "editionScope": "Current Warhammer 40,000",
+      "text": "The Imperium shares the galaxy with many intelligent species and polities. Aeldari craftworlds preserve remnants of an ancient civilization and pursue survival through paths, prophecy, and difficult choices. Drukhari raid from Commorragh and sustain themselves through inflicted suffering. Neither group is politically uniform. Orks are a widespread engineered species whose societies revolve around conflict, momentum, improvisation, and collective psychic effects. A Waaagh! can grow from raids into a galactic threat. Necrons are ancient machine dynasties awakening with different rulers, goals, and levels of coherence. The Silent King's return and blackstone projects create major strategic pressure. Tyranids are extragalactic hive fleets consuming biological matter, while Genestealer Cults undermine societies before invasion and can develop generations of sincere revolutionary identity. The T'au Empire is a younger expansionist power organized around the Greater Good, advanced technology, caste, auxiliaries, diplomacy, and coercion. Leagues of Votann are human-descended clone societies with advanced technology and Ancestor Cores. Imperial doctrine labels xenos categorically hostile, but local reality includes war, avoidance, manipulation, secret trade, temporary alliance, and mutual enemies. The Imperium's xenophobia remains morally monstrous even when particular alien forces are genuinely dangerous. Do not make every species a single strategy. A Necron dynasty, Ork clan, Aeldari craftworld, or T'au sept needs local goals. External threats are most useful when they force Imperial characters to choose between doctrine, survival, and incomplete knowledge."
+    },
+    {
+      "id": "economy-law-and-logistics",
+      "title": "Economy, Law, and Logistics",
+      "tags": [
+        "tithe",
+        "thrones",
+        "requisition",
+        "Adeptus Arbites",
+        "supply"
+      ],
+      "era": "Current Imperium",
+      "editionScope": "All modern editions",
+      "text": "The Imperium has no single everyday currency used identically across all worlds. Local money, ration chits, guild credit, military scrip, barter, and institutional requisition coexist. Terms such as throne gelt appear regionally. For a campaign, choose a practical local currency and distinguish personal purchasing from access controlled by rank or patronage. Planetary tithes can include troops, food, ore, manufactured goods, psykers, or other resources. Assessment errors and rising military demand can destroy a local economy. Ships, fuel, ammunition, spare parts, food, and trained personnel determine whether armies can act. The Imperium's size does not provide limitless resources at the location where they are needed. The Adeptus Arbites enforces Imperial law, especially obligations to the wider Imperium. Local enforcers handle most ordinary crime and may be state police, private security, militia, guild forces, or gangs in uniform. Arbites are not a universal street patrol. Legal procedure depends on world and institution. Trial, torture, confession, data records, psychic inquiry, noble privilege, and summary judgment can all appear. An authentic seal can matter more than factual innocence. In play, logistics should create leverage. A chartist captain, quartermaster, dock guild, forge liaison, astropath, or food administrator can be more important than a general. Corruption is not merely stealing money; it includes redirecting troop ships, falsifying tithe grades, selling exemptions, and hiding failed machinery. The system produces crime because survival often requires bypassing the system."
+    },
+    {
+      "id": "tone-and-satire",
+      "title": "Tone, Satire, and Human Perspective",
+      "tags": [
+        "grimdark",
+        "satire",
+        "authoritarianism",
+        "horror",
+        "tone"
+      ],
+      "era": "All eras",
+      "editionScope": "All modern editions",
+      "text": "Warhammer 40,000 presents a galaxy of extreme violence, institutional decay, fanaticism, and cosmic horror. Games Workshop explicitly describes the Imperium as a monstrous civilization and a cautionary satire, not an aspirational government. Imperial protagonists can perform courage, sacrifice, and kindness without making the regime good. Grim darkness is not the same as constant emotional monotony. Humor, friendship, pride in work, family loyalty, religious comfort, beauty, and small victories are necessary contrasts. They show what characters are defending and what institutions consume. Propaganda should sound persuasive to people raised inside it. Citizens rarely possess an external political vocabulary. A guardsman can love a regiment and hate an officer. A priest can run a genuine soup kitchen while preaching intolerance. A governor can avert famine and still deliver dissidents to the Inquisition. Avoid using suffering as decoration without consequence. Establish whose labor fuels a cathedral, who is displaced by a fortress, and what a victory costs. Do not reward real-world hate or reproduce its symbols as endorsement. The setting's fictional xenophobia and purity ideology are part of its horror. Scale should deepen rather than erase agency. The party cannot save the galaxy, but it can save a ship, expose a cult, preserve evidence, evacuate a district, prevent a massacre, or choose which terrible institution gains power. Those decisions are meaningful precisely because the wider system resists change."
+    },
+    {
+      "id": "common-imperium-canon-traps",
+      "title": "Common Imperium Canon Traps",
+      "tags": [
+        "canon",
+        "errors",
+        "Imperium",
+        "timeline",
+        "propaganda"
+      ],
+      "era": "All eras",
+      "editionScope": "All modern editions",
+      "text": "Do not present the Imperium as efficient, unified, or benevolent. It survives through scale, inertia, violence, sacrifice, local competence, and occasional extraordinary coordination. Do not treat propaganda as neutral truth. Space Marines are powerful but rare. The Inquisition is divided. The Mechanicus does not fully understand all technology. Governors have broad local power. The Emperor does not issue ordinary spoken orders. Do not make warp travel punctual or astropathic communication clear. Distance and delay are core setting constraints. Imperium Nihilus is not simply a province with poor reception. Avoid assigning one exact date to every current storyline. Publication chronology has been revised, and warp effects disrupt synchronization. Anchor the campaign to an event, sector, and local record. Do not make every rebellion Chaos-driven or every xenos encounter secretly treacherous. Genuine threats coexist with Imperial paranoia. Temporary alliances and local exceptions occur without reforming Imperial ideology. Do not treat all worlds as hives, all soldiers as Cadians, all priests as identical, or all technology as medieval machinery with skulls. Local variation is enormous. Never mistake in-universe fascistic rhetoric for authorial approval. The Imperium's hatred and cruelty are explicit parts of the satire and tragedy. When lore is uncertain, use the uncertainty as an in-world record problem only if that supports play. Do not use 'everything is unreliable' as permission to invent major facts without marking them as campaign-created."
+    }
+  ]
+}

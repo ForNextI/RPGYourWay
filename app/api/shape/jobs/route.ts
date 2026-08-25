@@ -12,6 +12,7 @@ import {
 } from '@/lib/shape/transcript'
 import { createClient } from '@/lib/supabase/server'
 import { formatUsageDollars } from '@/lib/usage/money'
+import { isOwnerQaEmail } from '@/lib/usage/owner-qa'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -55,7 +56,7 @@ async function authenticatedClient() {
   const supabase = await createClient()
   const { data, error } = await supabase.auth.getUser()
   if (error || !data.user) return { error: Response.json({ error: 'Sign in before using Script.' }, { status: 401 }) }
-  return { supabase, user: data.user }
+  return { supabase, user: data.user, ownerQa: isOwnerQaEmail(data.user.email) }
 }
 
 const JOB_SELECT = 'id,title,description_level,transcript_characters,status,phase,analysis_total,writing_total,next_analysis_chunk_index,next_chunk_index,prompt_version,model,project_id,project_part_number,error_message,input_tokens,cached_input_tokens,cache_write_tokens,output_tokens,request_count,maximum_deduction_microusd,provider_cost_microusd,billed_microusd,result_text,prose_text,created_at,updated_at'
@@ -165,24 +166,28 @@ export async function POST(request: Request) {
   }
 
   const jobId = randomUUID()
-  const holdExpiry = new Date(Date.now() + SHAPE_HOLD_DAYS * 24 * 60 * 60 * 1000).toISOString()
-  const { data: holdId, error: holdError } = await auth.supabase.rpc('rpgyw_reserve_usage', {
-    p_maximum_microusd: maximumDeductionMicrousd,
-    p_source: 'shape',
-    p_source_ref: jobId,
-    p_idempotency_key: `shape:job:${jobId}`,
-    p_expires_at: holdExpiry,
-  })
-  if (holdError || !holdId) {
-    const insufficient = /insufficient rpg your way usage balance/i.test(holdError?.message || '')
-    return Response.json({
-      error: insufficient
-        ? `This Script request can reserve up to ${formatUsageDollars(maximumDeductionMicrousd)}, but your available balance is lower. Add usage in Account and try again.`
-        : `Script could not reserve the maximum estimated deduction: ${holdError?.message || 'unknown balance error'}`,
-      insufficient_balance: insufficient,
-      maximum_microusd: maximumDeductionMicrousd,
-      maximum_display: formatUsageDollars(maximumDeductionMicrousd),
-    }, { status: insufficient ? 402 : 503 })
+  let holdId: string | null = null
+  if (!auth.ownerQa) {
+    const holdExpiry = new Date(Date.now() + SHAPE_HOLD_DAYS * 24 * 60 * 60 * 1000).toISOString()
+    const holdResult = await auth.supabase.rpc('rpgyw_reserve_usage', {
+      p_maximum_microusd: maximumDeductionMicrousd,
+      p_source: 'shape',
+      p_source_ref: jobId,
+      p_idempotency_key: `shape:job:${jobId}`,
+      p_expires_at: holdExpiry,
+    })
+    holdId = typeof holdResult.data === 'string' ? holdResult.data : null
+    if (holdResult.error || !holdId) {
+      const insufficient = /insufficient rpg your way usage balance/i.test(holdResult.error?.message || '')
+      return Response.json({
+        error: insufficient
+          ? `This Script request can reserve up to ${formatUsageDollars(maximumDeductionMicrousd)}, but your available balance is lower. Add usage in Account and try again.`
+          : `Script could not reserve the maximum estimated deduction: ${holdResult.error?.message || 'unknown balance error'}`,
+        insufficient_balance: insufficient,
+        maximum_microusd: maximumDeductionMicrousd,
+        maximum_display: formatUsageDollars(maximumDeductionMicrousd),
+      }, { status: insufficient ? 402 : 503 })
+    }
   }
 
   let createdProjectId: string | null = null
@@ -193,7 +198,7 @@ export async function POST(request: Request) {
       .select('id,title,continuity,completed_parts')
       .single()
     if (projectError || !project) {
-      await auth.supabase.rpc('rpgyw_release_usage', { p_hold_id: holdId })
+      holdId ? await auth.supabase.rpc('rpgyw_release_usage', { p_hold_id: holdId }) : undefined
       return Response.json({ error: 'Script could not create the campaign project. Apply the Script database foundation first.' }, { status: 503 })
     }
     projectId = project.id
@@ -240,7 +245,7 @@ export async function POST(request: Request) {
     .single()
 
   if (error || !data) {
-    await auth.supabase.rpc('rpgyw_release_usage', { p_hold_id: holdId })
+    holdId ? await auth.supabase.rpc('rpgyw_release_usage', { p_hold_id: holdId }) : undefined
     if (createdProjectId) await auth.supabase.from('shape_projects').delete().eq('id', createdProjectId).eq('user_id', auth.user.id)
     return Response.json({ error: 'Script could not save the job. Confirm the Script commercial-billing database migration has been applied.' }, { status: 503 })
   }

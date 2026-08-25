@@ -1,0 +1,281 @@
+{
+  "schemaVersion": 1,
+  "id": "dragonlance",
+  "displayName": "Dragonlance",
+  "aliases": [
+    "Dragonlance",
+    "Krynn",
+    "Ansalon",
+    "War of the Lance",
+    "351 AC",
+    "Shadow of the Dragon Queen"
+  ],
+  "canonFrame": {
+    "defaultEra": "351 AC, the opening phase of the War of the Lance",
+    "editionAssumptions": "Use Dragonlance: Shadow of the Dragon Queen as the current fifth-edition game layer and the classic War of the Lance setting as the historical foundation. The default begins while the Dragon Armies are advancing and before the war's famous outcomes are assumed. Use fifth-edition rules for mechanics while preserving Krynn's setting-specific treatment of gods, moons, wizardry, knighthood, dragons, and the Cataclysm.",
+    "timelineNotes": "Dragonlance has several major eras, including the Age of Dreams, Age of Might, Cataclysm, War of the Lance, postwar periods, Chaos War, Age of Mortals, and later transformations. The default 351 AC frame should not include later divine, draconic, geographic, or political outcomes. Published novels and adventures offer a famous history, but player characters are not required to reproduce it."
+  },
+  "campaignFoundations": [
+    "Krynn is the world; Ansalon is the principal continent of the classic Dragonlance campaign.",
+    "The Cataclysm shattered the old order and remains central to religion, politics, geography, and historical memory.",
+    "In the default era, the true gods have returned to active mortal awareness after centuries of apparent absence.",
+    "The War of the Lance is beginning, and the Dragon Armies serve Takhisis through conquest, draconians, dragons, and collaborators.",
+    "Metallic dragons and their relationship to the war are constrained by events that should not be assumed resolved.",
+    "The three moons and gods of magic shape arcane spellcasting and the Orders of High Sorcery.",
+    "The Knights of Solamnia are influential but burdened by rigid tradition, political failure, and public resentment.",
+    "Kender, dwarves, elves, gnomes, minotaurs, humans, ogres, draconians, and other peoples have distinct cultures and internal divisions.",
+    "Faith, sacrifice, companionship, war, and the tension between ideal and institution are central themes.",
+    "The player characters should become heroes of their own front rather than assistants to the novel protagonists."
+  ],
+  "gameMasterGuidance": [
+    "Default to 351 AC and do not assume the canonical end of the War of the Lance.",
+    "Ask whether famous novel heroes and events exist, are background, or are replaced.",
+    "Treat the Cataclysm as contested history rather than a simple punishment narrative.",
+    "Use war through civilians, supply, occupation, rumor, refugees, and local choices.",
+    "Keep dragons rare and consequential.",
+    "Distinguish Knights of Solamnia as an institution from individual knights.",
+    "Use Orders of High Sorcery, moons, and the Test as setting institutions rather than generic wizard flavor.",
+    "Avoid reducing kender, gully dwarves, gnomes, minotaurs, or draconians to comic or moral stereotypes.",
+    "Preserve regional cultures across Ansalon.",
+    "Mark altered novel events and new war outcomes as campaign canon."
+  ],
+  "canonBoundaries": [
+    "Do not assume the Heroes of the Lance have completed their famous journey.",
+    "Do not import postwar, Chaos War, or Age of Mortals conditions into 351 AC.",
+    "Do not make the gods completely absent in the default frame.",
+    "Do not make clerical healing universally known at the campaign's opening.",
+    "Do not treat the Cataclysm as proof that ordinary survivors deserved punishment.",
+    "Do not portray every Solamnic knight as noble or every critic as dishonorable.",
+    "Do not make all elves, dwarves, kender, gnomes, minotaurs, or draconians identical.",
+    "Do not treat dragonlances as common weapons.",
+    "Do not use Forgotten Realms gods or cosmology.",
+    "Do not force published adventure or novel outcomes."
+  ],
+  "referenceChunks": [
+    {
+      "id": "krynn-and-ansalon",
+      "title": "Krynn and Ansalon",
+      "tags": [
+        "Krynn",
+        "Ansalon",
+        "Taladas",
+        "geography",
+        "continents"
+      ],
+      "era": "Stable world foundation",
+      "editionScope": "All Dragonlance editions",
+      "text": "Krynn is the world of Dragonlance. Ansalon is the principal continent of the classic setting and the War of the Lance, but it is not the whole planet. Taladas and other lands exist beyond the familiar maps and possess their own histories. Ansalon contains the plains of Abanasinia, Solamnia's fertile and fortified lands, the elven realms of Qualinesti and Silvanesti, the dwarven kingdom of Thorbardin, the volcanic regions around Sanction, the eastern empire of Istar's legacy, Ergothian islands, Icewall, the Blood Sea, Neraka, Nordmaar, Khur, Balifor, and many smaller territories. The Cataclysm changed coastlines, drowned cities, raised mountains, and isolated communities. Political control is fragmented in 351 AC. The Dragon Armies expand from eastern and southern bases. Solamnia's old order has weakened. Elven nations face internal division and external invasion. Dwarven gates and old grievances shape access to Thorbardin. Independent cities, tribes, nomads, pirates, mercenaries, and local rulers respond differently to war. Travel depends on roads damaged by centuries, mountain passes, ships, horses, weather, and wartime checkpoints. Flying citadels and dragon flight are strategic wonders, not ordinary transport. Use regional scale. A rumor from Solace may be weeks out of date in Palanthas or Kalaman. A village can know the local patrol pattern without understanding Takhisis's strategy. Krynn's epic war becomes believable through distances, delayed news, and communities whose choices matter."
+    },
+    {
+      "id": "ages-and-calendar",
+      "title": "Ages and the 351 AC Baseline",
+      "tags": [
+        "Age of Dreams",
+        "Age of Might",
+        "Cataclysm",
+        "Age of Despair",
+        "351 AC"
+      ],
+      "era": "Mythic history to 351 AC",
+      "editionScope": "Classic and fifth-edition Dragonlance",
+      "text": "Krynn's history is divided into broad ages. The Age of Starbirth and Age of Dreams contain creation traditions, early peoples, dragon wars, and ancient civilizations. The Age of Might includes the rise of Istar and other powerful states. The Cataclysm ended that age. The following Age of Despair saw social collapse, migration, false religions, loss of clerical magic, and the gradual rise of new powers. The common post-Cataclysm calendar uses AC, Alt Cataclius or After Cataclysm, while earlier dates use PC. The default campaign begins around 351 AC as Dragon Armies invade and the War of the Lance spreads. Shadow of the Dragon Queen presents a northern front around Kalaman and does not require the party to follow the exact path of the novel heroes. Later eras include the end of the War of the Lance, reconstruction, the Chaos War, the Age of Mortals, the War of Souls, and further changes. Their gods, magic, dragons, nations, and geography must not be brought backward into 351 AC. Dates in Dragonlance adaptations and sources can differ in detail. When an exact battle or character location matters, follow the selected campaign source rather than merging novel, module, and game chronology. The default should preserve uncertainty. Characters may know that armies move and old gods return without knowing how history is 'supposed' to end. Their choices can save another city, expose a traitor, or alter an entire theater of war."
+    },
+    {
+      "id": "cataclysm-and-istar",
+      "title": "Istar and the Cataclysm",
+      "tags": [
+        "Istar",
+        "Kingpriest",
+        "Cataclysm",
+        "fiery mountain",
+        "divine punishment"
+      ],
+      "era": "Pre-Cataclysm to 351 AC",
+      "editionScope": "All Dragonlance editions",
+      "text": "Istar became a powerful empire and religious center during the Age of Might. Its Kingpriest pursued a vision of moral purity that became authoritarian, persecuting people and powers labeled evil and attempting to command divine authority. In the classic account, a fiery mountain struck Istar, shattering Ansalon and creating the Blood Sea. The Cataclysm killed countless people who did not control the Kingpriest's actions. Treating it only as deserved punishment reproduces the arrogance the story criticizes. Inhabitants of 351 AC debate whether the gods abandoned mortals, whether mortals abandoned the gods, and what justice could mean after such indiscriminate destruction. The disaster altered geography, trade, government, and faith. Coastal cities vanished, seas appeared, famine and migration followed, and old political systems collapsed. Clerical magic disappeared from ordinary human knowledge for centuries, while false healers and exploitative religions filled the gap. Ruins of Istar and pre-Cataclysm civilizations contain art, law, relics, records, magical systems, and evidence that complicates official stories. The Blood Sea and sunken sites preserve literal remnants of catastrophe. Use the Cataclysm through inherited consequences: a family lost land, a temple became a fortress, a road now ends at water, or a community distrusts claims of divine authority. Do not use it merely as distant lore or proof that the gods' actions require no moral examination."
+    },
+    {
+      "id": "gods-and-balance",
+      "title": "The Gods and the Principle of Balance",
+      "tags": [
+        "Paladine",
+        "Takhisis",
+        "Gilean",
+        "gods",
+        "balance"
+      ],
+      "era": "351 AC",
+      "editionScope": "Classic War of the Lance and fifth edition",
+      "text": "Dragonlance traditionally organizes major gods into forces of good, evil, and neutrality. Paladine is a leading god of good, Takhisis the principal goddess of evil, and Gilean a central neutral power. Many other deities govern nature, healing, war, knowledge, craft, death, and mortal concerns. The setting often speaks of balance, but balance does not require moral equivalence between cruelty and compassion or demand that every good victory be punished. It describes a cosmos in which no alignment of divine power should permanently eliminate mortal choice and all opposition. After the Cataclysm, the gods seemed absent to most people. In the War of the Lance era, true divine magic and knowledge of the gods return through sacred discoveries, chosen servants, and renewed faith. At the campaign's beginning, many communities still rely on false priests or assume old gods are myths. Clerics are therefore socially disruptive. Healing can overturn local authority and demonstrate that forgotten faith has real power. Temples, Knights, Dragon Armies, and ordinary people respond with hope, fear, denial, or exploitation. Do not give every priest complete theology. The gods act through signs, artifacts, dreams, and servants while mortals interpret events. Takhisis's Dragon Armies do not make every evil-aligned creature her willing servant. Paladine's cause does not make every good institution wise. The exact divine status of later eras is timeline-sensitive. Use the War of the Lance pantheon and current rules for 351 AC."
+    },
+    {
+      "id": "moons-and-high-sorcery",
+      "title": "The Moons and Orders of High Sorcery",
+      "tags": [
+        "Solinari",
+        "Lunitari",
+        "Nuitari",
+        "High Sorcery",
+        "Tower of Wayreth"
+      ],
+      "era": "351 AC",
+      "editionScope": "All Dragonlance editions, fifth-edition mechanics",
+      "text": "Arcane magic is closely associated with three moon gods: Solinari, Lunitari, and Nuitari. Their visible moons correspond traditionally to the White, Red, and Black Robes of High Sorcery and to philosophies of good, neutrality, and evil. Nuitari's black moon is invisible to most people. The Orders of High Sorcery regulate powerful wizardry through traditions, towers, mentorship, conclave politics, and the Test of High Sorcery. The Test challenges a wizard's ability, judgment, ambition, and relationship to magic. Failure can mean death or lasting change. The purpose is to prevent untrained power from repeating ancient disasters, though the Orders can be rigid, political, and secretive. The Tower of Wayreth is the principal surviving center in the default era and is difficult to find without permission or magical guidance. Other towers have histories tied to persecution and lost power. Fifth-edition character rules allow flexibility in how a wizard joins or relates to the Orders. Do not strip class abilities because a player has not reenacted an older edition's progression. Use the Test and robes as social institutions and story choices. Moon phases can affect classic spellcasting traditions, but apply only the mechanics of the selected ruleset. A wizard can respect a moon without embodying a stereotype. White Robes can make harmful choices, Black Robes can cooperate against Takhisis, and Red Robes can hold passionate convictions. Sorcery outside the Orders, divine magic, artifacts, and later forms of magic are timeline-sensitive. Keep the 351 AC magical framework coherent."
+    },
+    {
+      "id": "war-of-the-lance",
+      "title": "The War of the Lance",
+      "tags": [
+        "War of the Lance",
+        "Dragon Armies",
+        "Highlords",
+        "Neraka",
+        "invasion"
+      ],
+      "era": "351 AC onward",
+      "editionScope": "Shadow of the Dragon Queen and classic War of the Lance",
+      "text": "The War of the Lance begins as the Dragon Armies of Takhisis expand across Ansalon. Their forces include human soldiers, draconians, dragons, goblins, ogres, mercenaries, priests, spies, and collaborators under Dragon Highlords. They use terror, occupation, propaganda, magical weapons, and strategic surprise. The armies are divided into color-associated commands and theaters rather than one perfectly coordinated host. Rival Highlords compete for favor and territory. Local commanders possess different competence, cruelty, and political goals. At the opening of the war, many targets do not understand that dragons have returned or that scattered attacks form a continental campaign. Refugees, missing patrols, strange troops, disrupted trade, and rumors arrive before reliable intelligence. Shadow of the Dragon Queen focuses on a northern front involving Kalaman and the Red Dragon Army. Its battles and NPCs are not required to occur in every Dragonlance campaign. A party can fight on another front, prevent a different occupation, or alter the known campaign. The war should affect food, horses, healing, roads, family separation, prisoners, civic authority, and morale. Battles matter, but so do reconnaissance, sabotage, diplomacy, evacuation, and exposing collaborators. Do not assume the canonical victory of the Heroes of the Lance. Takhisis's plan, metallic dragon involvement, and dragonlances should emerge through player discovery and chosen campaign history."
+    },
+    {
+      "id": "dragons-draconians-and-lances",
+      "title": "Dragons, Draconians, and Dragonlances",
+      "tags": [
+        "dragons",
+        "draconians",
+        "dragonlance",
+        "metallic dragons",
+        "chromatic dragons"
+      ],
+      "era": "351 AC",
+      "editionScope": "War of the Lance",
+      "text": "Dragons are central to the War of the Lance after centuries of absence from ordinary mortal life. Chromatic dragons serve Takhisis and the Dragon Armies for reasons including allegiance, ambition, coercion, and ancient rivalry. Metallic dragons are constrained from entering the war by a terrible bargain involving their eggs, a fact that should emerge only when appropriate to the campaign. Draconians are created through the corruption of metallic dragon eggs. Different types possess distinct abilities and often dangerous death effects. They are soldiers and persons produced through an atrocity, not ordinary dragonborn and not all psychologically identical. Later lore explores draconian identity beyond service; in 351 AC most mortals know little about their origin. Dragonlances are legendary weapons capable of killing dragons. They require rare knowledge, materials, and the return of lost traditions. They are not common polearms sold by military quartermasters. Their creation and use can become strategic campaign goals. Dragon orbs and other artifacts can influence dragons at enormous risk. Such relics have history and will, not merely bonuses. A dragon's appearance should change a battle, settlement, or political calculation. Even allies create logistical and cultural consequences. Do not fill routine patrols with dragons merely because the war is named for them. Use draconians through units, commanders, spies, defectors, and individuals. Preserve the horror of their creation without denying them agency."
+    },
+    {
+      "id": "knights-of-solamnia",
+      "title": "The Knights of Solamnia",
+      "tags": [
+        "Knights of Solamnia",
+        "Oath and Measure",
+        "Crown",
+        "Sword",
+        "Rose"
+      ],
+      "era": "351 AC",
+      "editionScope": "Classic and fifth-edition Dragonlance",
+      "text": "The Knights of Solamnia descend from an ideal of honor, defense, justice, and service embodied in the Oath and the Measure. The three traditional orders are the Crown, Sword, and Rose. Their codes, ranks, noble traditions, and military organization shaped Solamnia for centuries. After the Cataclysm, many people blamed the Knights for failing to prevent disaster or protect communities. Political withdrawal, rigidity, internal division, and public resentment weakened the institution. Individual knights can be courageous while the order makes serious mistakes. In 351 AC, the advancing Dragon Armies expose the need for defense and the costs of old prejudice. Questions of who can become a knight, how the Measure should be interpreted, and whether honor serves people or status are active campaign themes. Solamnic territories include castles, estates, towns, farms, garrisons, and local nobles rather than one continuous military camp. Some lords cooperate, some resist reform, and some make private deals. Fifth-edition backgrounds and feats can represent Knightly training without requiring a character to be an uncritical institutional loyalist. Rank should bring duties, expectations, and political access. Avoid portraying every knight as pompous comic obstruction or flawless paladin. The order is compelling because its ideals can inspire sacrifice while its traditions can enable exclusion and failure."
+    },
+    {
+      "id": "solamnia-palanthas-and-kalaman",
+      "title": "Solamnia, Palanthas, and Kalaman",
+      "tags": [
+        "Solamnia",
+        "Palanthas",
+        "Kalaman",
+        "Northern Ergoth",
+        "Vingaard"
+      ],
+      "era": "351 AC",
+      "editionScope": "War of the Lance",
+      "text": "Solamnia occupies much of northwestern Ansalon and contains fertile lands, old fortresses, noble estates, towns, and the institutional legacy of the Knights. Its political unity is imperfect, especially after the Cataclysm and before the war forces coordinated defense. Palanthas is a great northern city associated with trade, scholarship, temples, noble power, and important magical history. Its walls, harbor, libraries, estates, and surrounding lands make it a strategic prize. The city should not be treated as automatically aware of every southern event. Kalaman stands farther east on the coast of the Solamnic region and is the principal city in Shadow of the Dragon Queen. It faces invasion, refugees, military mobilization, political strain, and the need to understand an unfamiliar enemy. Its defense can be used without requiring the exact published adventure. Roads such as routes through the Vingaard region, coastal shipping, and mountain approaches shape the war. Northern Ergoth and nearby islands retain their own powers and memories of older empires. Solamnic campaigns work through local command. A mayor, knight, militia captain, merchant, priest, or refugee leader may possess the information the party needs. The Grand Master of an order does not manage every village. Use civic institutions before famous heroes. A city at war contains rationing, repairs, hospitals, rumors, funerals, deserters, spies, and arguments over who is allowed to lead."
+    },
+    {
+      "id": "abanasinia-and-solace",
+      "title": "Abanasinia, Solace, and the Plains",
+      "tags": [
+        "Abanasinia",
+        "Solace",
+        "Plains of Dust",
+        "Que-Shu",
+        "Haven"
+      ],
+      "era": "351 AC",
+      "editionScope": "Classic War of the Lance",
+      "text": "Abanasinia lies in central Ansalon and includes forests, plains, roads, towns, and communities with different forms of authority. Solace is famous for homes and businesses built among immense vallenwood trees. It functions as a crossroads and ordinary community before becoming a famous campaign landmark. Haven is a larger center of trade and religious authority. In the opening War of the Lance era, false priests and Seekers can hold power because true clerical magic has been absent from public life. Their institutions may provide order while suppressing threatening evidence. Plains peoples such as the Que-Shu maintain their own communities, traditions, leaders, and relationships to land. They should not be portrayed as generic nomads or mystical guides for outsiders. The Inn of the Last Home and other famous sites can exist, but the player party should form its own relationships. Do not require the Companions' reunion or reproduce their route. Dragon Army pressure can arrive through occupied roads, burned settlements, scouts, refugees, and collaborators. Abanasinia's lack of one strong kingdom creates both vulnerability and local flexibility. Use vallenwood ecology, market routes, old ruins, faith, and community ties. A village deciding whether to evacuate, hide refugees, trust a knight, or accept a false priest can matter as much as a battle."
+    },
+    {
+      "id": "elves-of-ansalon",
+      "title": "Elven Nations of Ansalon",
+      "tags": [
+        "Silvanesti",
+        "Qualinesti",
+        "Kagonesti",
+        "elves",
+        "Lorac"
+      ],
+      "era": "351 AC",
+      "editionScope": "Classic and fifth-edition Dragonlance",
+      "text": "Ansalon's major elven cultures include Silvanesti, Qualinesti, and Kagonesti, along with mixed and diasporic communities. They share ancient history without forming one political nation. Silvanesti is an old, hierarchical kingdom with deep magical and cultural traditions. Its isolation, pride, internal divisions, and the actions of King Lorac become central to wartime tragedy. Do not assume later devastation has already occurred unless selected. Qualinesti was founded by elves who rejected aspects of Silvanesti rule and developed a different kingdom and relationship to neighboring peoples. It still contains hierarchy, political conflict, and disputes over isolation. Kagonesti communities maintain traditions tied closely to land, hunting, and mobility and have often been patronized or exploited by other elves. They should not be treated as less civilized or as one uniform forest tribe. Elven lifespans create long memory of human kingdoms, the Cataclysm, old wars, and family grievance. That memory does not create unanimous policy. Young and old elves can disagree over retreat, alliance, and war. Use specific settlements, houses, clans, professions, and political factions. Avoid generic graceful speech and collective superiority. Elven nations face real invasion and displacement while also carrying their own prejudices and failures."
+    },
+    {
+      "id": "dwarves-gnomes-kender-and-minotaurs",
+      "title": "Dwarves, Gnomes, Kender, and Minotaurs",
+      "tags": [
+        "Thorbardin",
+        "hill dwarves",
+        "gnomes",
+        "kender",
+        "minotaurs"
+      ],
+      "era": "351 AC",
+      "editionScope": "Current inclusive presentation with classic foundations",
+      "text": "Dwarven peoples include mountain dwarves of Thorbardin, hill dwarves, and several clans with old political and social divisions. The Dwarfgate Wars and disputes over refuge after the Cataclysm remain sources of bitterness. Thorbardin is a complex underground kingdom, not a single sealed hall. Gnomes are strongly associated with Mount Nevermind and traditions of invention, guilds, life quests, experimentation, and elaborate bureaucracy. Their devices can be brilliant, impractical, dangerous, or all three. Avoid treating every gnome as a verbal gag or every invention as guaranteed failure. Kender are curious, fearless or unusually resistant to fear, social, and associated with wandering. Older depictions often turn handling and missing property into a joke that removes consent. Current play should establish boundaries and portray individual kender with responsibility, motive, and awareness of consequences. Minotaurs possess maritime, imperial, martial, family, religious, and political traditions. They are not merely monsters or gladiators. Their societies contain hierarchy, ambition, dissent, trade, and relationships with eastern Ansalon. Gully dwarves, traditionally called Aghar, require careful portrayal because older material relies on demeaning comedy. Present individuals and communities with agency, survival knowledge, relationships, and variation rather than using intellectual disability as humor. Ancestry does not determine allegiance in the War of the Lance. Build characters through homeland, clan, profession, faith, war experience, and chosen loyalty."
+    },
+    {
+      "id": "neraka-sanction-and-eastern-powers",
+      "title": "Neraka, Sanction, and Eastern Powers",
+      "tags": [
+        "Neraka",
+        "Sanction",
+        "Takhisis",
+        "Khur",
+        "Nordmaar",
+        "Blood Sea"
+      ],
+      "era": "351 AC",
+      "editionScope": "War of the Lance",
+      "text": "Neraka is a center of Takhisis's power and Dragon Army command in the War of the Lance era. Its temples, military infrastructure, cult hierarchy, and location make it symbolically and strategically important. It should not be treated as a normal capital whose citizens all understand the war's deepest secrets. Sanction is a volcanic city associated with industry, military activity, dragons, and terrible secrets connected to the war. Its geography and labor matter; armies require smiths, food, prisoners, transport, and administration. Khur contains nomadic and settled human communities with their own tribes, routes, trade, and politics. Nordmaar lies in the northeast with different landscapes and peoples. The Blood Sea surrounds the site of destroyed Istar and shapes maritime travel, trade, storms, piracy, and myth. Dragon Army expansion depends on alliances, coercion, collaborators, tribute, and occupation. Eastern peoples are not automatically servants of Takhisis. Some resist, some bargain, some exploit the war, and some are divided. Adventures can involve escaping occupied territory, disrupting supply, protecting local autonomy, investigating temples, or negotiating with groups the western powers misunderstand. Do not make Neraka's leadership omniscient or every eastern city a dark fortress. Takhisis's coalition is dangerous partly because it assembles diverse forces under pressure and ambition, not because it erases all local life."
+    },
+    {
+      "id": "factions-orders-and-faiths",
+      "title": "Factions, Orders, and Faiths",
+      "tags": [
+        "Seekers",
+        "Knights of Solamnia",
+        "Orders of High Sorcery",
+        "Dragon Armies",
+        "Whitestone Council"
+      ],
+      "era": "351 AC",
+      "editionScope": "War of the Lance",
+      "text": "The War of the Lance era contains institutions whose ideals and authority conflict. The Knights of Solamnia claim honor and defense but face public distrust and internal rigidity. The Orders of High Sorcery protect arcane tradition while demanding obedience and secrecy. The Dragon Armies combine conquest, cult, military hierarchy, and personal ambition. Seeker movements and false priesthoods gained influence during centuries without recognized divine magic. Some leaders are frauds; others sincerely attempt to provide ethics and order. The return of true clerics threatens their legitimacy without making every follower malicious. Elven courts, dwarven thanes, merchant powers, local militias, tribal councils, pirate fleets, and city governments shape regional response. Later wartime alliances such as the Whitestone Council should not be assumed fully formed at campaign opening. Factions require messengers, supplies, translators, healers, scouts, and political support. A heroic institution can fail because its representatives refuse cooperation. A corrupt institution can contain a person willing to help. Introduce factions through named local agents. A knight's order does not speak with one voice, and a Black Robe wizard is not automatically loyal to Takhisis. Characters should earn trust and create alliances. The war's epic coalition should emerge through decisions rather than arrive as predetermined novel history."
+    },
+    {
+      "id": "war-society-and-daily-life",
+      "title": "War, Society, and Daily Life",
+      "tags": [
+        "war",
+        "refugees",
+        "occupation",
+        "trade",
+        "healing"
+      ],
+      "era": "351 AC",
+      "editionScope": "War of the Lance",
+      "text": "The War of the Lance changes everyday life before every community sees a dragon. Prices rise, messengers disappear, refugees arrive, roads close, rumors spread, and local rulers demand soldiers or supplies. People must decide whether to flee, collaborate, hide resources, join resistance, or trust strangers. Clerical healing returns unevenly and can destabilize local authority. A single true healer may attract desperate crowds, religious conflict, and military interest. Herbalists, midwives, surgeons, and false priests continue to matter. Coins, barter, guild credit, livestock, grain, and military requisition coexist. Rules prices do not guarantee wartime availability. Horses, arrows, winter stores, wagons, and ships can become strategic. Occupation varies by commander. Some forces terrorize openly; others seek taxes, hostages, information, or compliance. Draconians and dragons create fear, but human collaborators and administrators make occupation durable. News travels through refugees, merchants, knights, sailors, bards, and military couriers. Most reports are incomplete. A distant city may dismiss an invasion until survivors arrive. Preserve humor, friendship, craft, faith, and celebration. Dragonlance's epic tone depends on people having lives worth defending. War should create choices about whom to save and what ideals survive, not only larger encounters."
+    },
+    {
+      "id": "common-dragonlance-traps",
+      "title": "Common Dragonlance Canon Traps",
+      "tags": [
+        "canon",
+        "351 AC",
+        "War of the Lance",
+        "novels",
+        "errors"
+      ],
+      "era": "All Dragonlance eras",
+      "editionScope": "All editions",
+      "text": "The main error is importing later eras into 351 AC. Do not use postwar borders, Chaos War magic, Age of Mortals divine conditions, later dragon overlords, or later geography without an explicit overlay. Do not assume the Heroes of the Lance completed their novel history. Famous characters can exist elsewhere, be omitted, or have their roles replaced. Shadow of the Dragon Queen is one war front, not mandatory global history. The gods are returning to mortal awareness in the default frame. True clerical healing is extraordinary at first. The three moons and Orders of High Sorcery matter. Dragonlances and metallic dragons should not be available casually. The Cataclysm should not be narrated as simple deserved punishment of all victims. Institutional versions of faith, knighthood, and wizardry can be flawed without making their ideals meaningless. Avoid caricatures of kender, gnomes, gully dwarves, elves, dwarves, minotaurs, and draconians. Update harmful humor and species-wide assumptions. Krynn is not the Forgotten Realms. Use its gods, calendar, magical institutions, history, and geography. When novel, module, and modern source chronology conflict, follow the selected campaign source. Mark alternate outcomes as campaign canon rather than inventing a claim that all versions happened."
+    }
+  ]
+}

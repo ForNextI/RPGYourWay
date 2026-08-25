@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.6.2')
-assert.equal(pkg.rpgywVersion, '1.6.202')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.6\.202'/)
+assert.equal(pkg.version, '1.7.0')
+assert.equal(pkg.rpgywVersion, '1.7.000')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.000'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -22,6 +22,22 @@ for (const file of [
   'lib/stripe/server.ts', 'lib/stripe/checkout.ts', 'lib/usage/money.ts', 'lib/usage/openai-cost.ts',
   'supabase/migrations/20260825003000_shared_usage_balance.sql',
   'supabase/migrations/20260825060000_script_commercial_billing.sql',
+  'supabase/migrations/20260825120000_play_provider_usage.sql',
+  'app/api/play/access/route.ts',
+  'app/api/aigm/gameplay-chat/route.ts',
+  'app/api/aigm/speech/route.ts',
+  'app/api/aigm/transcribe/route.ts',
+  'components/aigm/rpgyw-play-entry.tsx',
+  'components/aigm/aigm-gameplay-shell.tsx',
+  'lib/aigm/campaign-storage.ts',
+  'lib/aigm/campaign-persistence.ts',
+  'lib/aigm/character-display-rules.ts',
+  'lib/usage/owner-qa.ts',
+  'lib/usage/play-cost.ts',
+  'lib/usage/server-billing.ts',
+  'postcss.config.mjs',
+  'data/settings/eberron.json',
+  'data/rules/corpora/dnd-5.5e-srd-5.2.1.json',
 ]) assert.ok(exists(file), `Missing ${file}`)
 
 const account = read('app/account/page.tsx')
@@ -115,6 +131,67 @@ assert.match(migration, /maximum_deduction_microusd/)
 assert.match(migration, /provider_cost_microusd/)
 assert.match(migration, /billed_microusd/)
 
+
+const playPage = read('app/play/page.tsx')
+assert.match(playPage, /Existing WardensPC adventures can be imported/)
+assert.match(playPage, /<RpgywPlayEntry \/>/)
+
+const playEntry = read('components/aigm/rpgyw-play-entry.tsx')
+assert.match(playEntry, /Import Existing Adventure/)
+assert.match(playEntry, /parseAdventureState/)
+assert.match(playEntry, /imported\.stage !== 'complete'/)
+assert.match(playEntry, /Campaigns stay in this browser/)
+assert.match(playEntry, /There is no cloud campaign synchronization/)
+
+const campaignPersistence = read('lib/aigm/campaign-persistence.ts')
+assert.match(campaignPersistence, /rpgyw-aigm-campaigns/)
+assert.doesNotMatch(campaignPersistence, /wardenspc-aigm-campaigns/)
+
+const ownerQa = read('lib/usage/owner-qa.ts')
+assert.match(ownerQa, /OWNER_QA_EMAIL = 'brett@rpgyourway\.com'/)
+assert.doesNotMatch(ownerQa, /@.*@/)
+
+const gameplay = read('app/api/aigm/gameplay-chat/route.ts')
+assert.match(gameplay, /requireUsageAccount/)
+assert.match(gameplay, /reserveUsage/)
+assert.match(gameplay, /settleUsage/)
+assert.match(gameplay, /terraProviderCostMicrousd/)
+assert.match(gameplay, /usage_billing/)
+assert.match(gameplay, /x-rpgyw-operation-id/)
+
+const billing = read('lib/usage/server-billing.ts')
+assert.match(billing, /rpgyw_reserve_usage/)
+assert.match(billing, /rpgyw_capture_usage/)
+assert.match(billing, /roundUsageMicrousdToCent/)
+assert.match(billing, /ownerQa/)
+assert.match(billing, /provider_usage_events/)
+
+const playAccess = read('app/api/play/access/route.ts')
+assert.match(playAccess, /voice_available: account\.ownerQa/)
+const speech = read('app/api/aigm/speech/route.ts')
+const transcribe = read('app/api/aigm/transcribe/route.ts')
+assert.match(speech, /if \(!account\.ownerQa\)/)
+assert.match(transcribe, /if \(!account\.ownerQa\)/)
+
+const shapeJobs = read('app/api/shape/jobs/route.ts')
+assert.match(shapeJobs, /isOwnerQaEmail/)
+assert.match(shapeJobs, /if \(!auth\.ownerQa\)/)
+const shapeSettlement = read('lib/shape/settlement.ts')
+assert.match(shapeSettlement, /ownerQa/)
+assert.match(shapeSettlement, /billed_microusd: 0/)
+
+const playMigration = read('supabase/migrations/20260825120000_play_provider_usage.sql')
+assert.match(playMigration, /provider_usage_events/)
+assert.match(playMigration, /owner_qa_exempt/)
+assert.match(playMigration, /no browser read\/write policies/i)
+
+assert.equal(pkg.dependencies?.['@vercel/analytics'], '^1.5.0')
+assert.equal(pkg.dependencies?.['lucide-react'], '^1.16.0')
+const devDependencies = (pkg as { devDependencies?: Record<string,string> }).devDependencies || {}
+assert.equal(devDependencies['tailwindcss'], '^4.3.3')
+assert.equal(devDependencies['@tailwindcss/postcss'], '^4.3.3')
+assert.match(read('postcss.config.mjs'), /@tailwindcss\/postcss/)
+
 const env = read('.env.example')
 assert.match(env, /OPENAI_API_KEY=/)
 assert.match(env, /STRIPE_SECRET_KEY=/)
@@ -126,4 +203,4 @@ for (const productionFile of ['lib/stripe/checkout.ts', 'lib/shape/billing.ts', 
   assert.doesNotMatch(read(productionFile), /from ['"][^'"]+\.ts['"]/, `${productionFile} must not import .ts extensions.`)
 }
 
-console.log('RPG Your Way 1.6.202 cent settlement, truthful progress, Start route, and analytics checks passed.')
+console.log('RPG Your Way 1.7.000A import-only Play foundation checks passed.')

@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { formatUsageDollars, signedUsageDollars, usageMicrousd } from '@/lib/usage/money'
 import { finalizeCheckoutSessionById } from '@/lib/stripe/server'
 import { signOut } from './actions'
+import { isOwnerQaEmail } from '@/lib/usage/owner-qa'
 
 export const metadata = { title: 'Account' }
 export const dynamic = 'force-dynamic'
@@ -56,6 +57,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
   const { data: authData } = await supabase.auth.getUser()
   const user = authData.user
   const email = user?.email ?? null
+  const ownerQa = isOwnerQaEmail(email)
   let paymentNotice = ''
   let paymentError = ''
 
@@ -99,7 +101,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
   const balance = usageMicrousd(wallet?.balance_microusd)
   const reserved = usageMicrousd(wallet?.reserved_microusd)
   const available = Math.max(0, balance - reserved)
-  const lowBalance = !walletUnavailable && available > 0 && available <= 1_000_000
+  const lowBalance = !ownerQa && !walletUnavailable && available > 0 && available <= 1_000_000
 
   return (
     <PageShell>
@@ -125,7 +127,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                     <p className="account-state-label">Connected account</p>
                     <h2 id="account-connected-heading">You&apos;re signed in.</h2>
                     <p className="account-email">{email ?? 'Authenticated RPG Your Way user'}</p>
-                    <p className="account-foundation-note">Your account keeps your purchases, balance history, Script projects, and future Play campaigns together.</p>
+                    <p className="account-foundation-note">Your account keeps purchases and usage together. Play campaigns stay in this browser unless you export them.</p>
                   </div>
                   <form action={signOut}>
                     <button className="button button-secondary" type="submit">Sign out</button>
@@ -140,13 +142,15 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
               <section id="usage-balance" className="usage-balance-card" aria-labelledby="usage-balance-heading">
                 <div className="usage-balance-heading-row">
                   <div>
-                    <p className="account-state-label">Usage balance</p>
-                    <h2 id="usage-balance-heading">Available for Play and Script</h2>
+                    <p className="account-state-label">{ownerQa ? 'Owner QA account' : 'Usage balance'}</p>
+                    <h2 id="usage-balance-heading">{ownerQa ? 'Provider usage tracked; wallet not deducted' : 'Available for Play and Script'}</h2>
                   </div>
-                  {!walletUnavailable ? <p className="usage-balance-amount" aria-label={`${formatUsageDollars(available)} available`}>{formatUsageDollars(available)}</p> : null}
+                  {!ownerQa && !walletUnavailable ? <p className="usage-balance-amount" aria-label={`${formatUsageDollars(available)} available`}>{formatUsageDollars(available)}</p> : null}
                 </div>
 
-                {walletUnavailable ? (
+                {ownerQa ? (
+                  <p className="usage-balance-copy">This account is the RPG Your Way owner QA account. Play and Script provider usage is still measured for internal cost tracking, but customer balance deductions are skipped. No Play Pack purchase is required.</p>
+                ) : walletUnavailable ? (
                   <p className="auth-message auth-message-error">The usage balance is not available yet. Apply the shared-balance database migration, then reload this page.</p>
                 ) : (
                   <>
@@ -157,7 +161,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                 )}
               </section>
 
-              <section id="add-usage" className="play-pack-section" aria-labelledby="add-usage-heading">
+              {!ownerQa ? <section id="add-usage" className="play-pack-section" aria-labelledby="add-usage-heading">
                 <div className="play-pack-heading">
                   <div>
                     <p className="account-state-label">Add usage</p>
@@ -191,7 +195,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                   </div>
                   <UsageNote />
                 </div>
-              </section>
+              </section> : null}
 
               {!walletUnavailable ? (
                 <section className="usage-activity" aria-labelledby="usage-activity-heading">

@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { terraCostMicrousd } from '@/lib/usage/openai-cost'
 import { roundUsageMicrousdToCent } from '@/lib/usage/money'
+import { isOwnerQaEmail } from '@/lib/usage/owner-qa'
 
 type ServerSupabase = Awaited<ReturnType<typeof createClient>>
 
@@ -39,6 +40,17 @@ export async function settleShapeJobUsage(supabase: ServerSupabase, job: Billabl
   const providerCostMicrousd = await shapeProviderCostMicrousd(supabase, job.id)
   const maximumMicrousd = Math.max(0, Number(job.maximum_deduction_microusd || 0))
   const holdId = typeof job.usage_hold_id === 'string' ? job.usage_hold_id : ''
+  const { data: authData } = await supabase.auth.getUser()
+  const ownerQa = isOwnerQaEmail(authData.user?.email)
+
+  if (ownerQa) {
+    const { error: updateError } = await supabase
+      .from('shape_jobs')
+      .update({ provider_cost_microusd: providerCostMicrousd, billed_microusd: 0, updated_at: new Date().toISOString() })
+      .eq('id', job.id)
+    if (updateError) console.error('Script measured owner QA usage but could not save the billing summary.', updateError.message)
+    return { providerCostMicrousd, billedMicrousd: 0, balanceMicrousd: null, ownerQaExempt: true as const, legacyNoCharge: false as const }
+  }
 
   // Jobs created before the commercial billing release had no reservation and remain
   // historical/private-test jobs. New public jobs always have both values.

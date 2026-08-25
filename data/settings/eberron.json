@@ -1,0 +1,270 @@
+{
+  "schemaVersion": 1,
+  "id": "eberron",
+  "displayName": "Eberron",
+  "aliases": [
+    "Eberron",
+    "Khorvaire",
+    "Sharn",
+    "City of Towers",
+    "Five Nations",
+    "998 YK",
+    "Rising from the Last War"
+  ],
+  "canonFrame": {
+    "defaultEra": "998 YK, four years after the end of the Last War",
+    "editionAssumptions": "Eberron traditionally begins in 998 YK regardless of Dungeons & Dragons edition. Use Eberron: Rising from the Last War and current official material for fifth-edition rules presentation, while treating earlier Eberron setting books and creator material as valuable setting depth. The setting's core historical mystery and unresolved politics should remain open for the campaign.",
+    "timelineNotes": "The Last War ended in 994 YK after the destruction of Cyre and the Treaty of Thronehold. The default presents a cold peace only four years later. Do not advance the timeline, identify the cause of the Mourning, restore Cyre, or settle the succession to Galifar unless the campaign does so."
+  },
+  "campaignFoundations": [
+    "Eberron is designed for pulp adventure, noir intrigue, and a world shaped by widespread low-level magic.",
+    "The Last War ended recently, and almost every institution carries veterans, losses, debts, secrets, and unresolved claims.",
+    "The cause of the Mourning is deliberately unknown.",
+    "The dragonmarked houses are transnational economic powers, not noble families governing countries.",
+    "Magic functions as industry through trained specialists, bound elementals, magewrights, and inherited marks.",
+    "Powerful player-character magic remains exceptional even in a magically developed society.",
+    "Religion is based on faith and experience; the gods do not routinely provide objective public proof.",
+    "Alignment is not destiny, and traditional monster categories do not determine morality.",
+    "The world contains Khorvaire, Sarlona, Xen'drik, Argonnessen, Aerenal, and other regions with distinct histories.",
+    "The player characters should uncover answers rather than receive a single canonical solution to Eberron's central mysteries."
+  ],
+  "gameMasterGuidance": [
+    "Default to 998 YK and preserve the cold peace.",
+    "Ask before deciding the cause of the Mourning, the truth of the Draconic Prophecy, or the existence of gods.",
+    "Use newspapers, rail travel, airships, universities, guilds, and urban institutions to support pulp and noir play.",
+    "Keep high-level magic rare even where magical services are common.",
+    "Make every faction internally divided and capable of both useful and harmful action.",
+    "Treat warforged, changelings, kalashtar, goblinoids, orcs, and other peoples as cultures and individuals rather than monster roles.",
+    "Use dragonmarked houses through local enclaves, heirs, guilds, and business interests.",
+    "Let evidence create choices rather than providing simple moral labels.",
+    "Mark invented answers to setting mysteries as campaign canon.",
+    "Do not import Forgotten Realms gods, cosmology, or assumptions."
+  ],
+  "canonBoundaries": [
+    "Do not reveal one official cause of the Mourning; none is canonical by design.",
+    "Do not restart the Last War automatically.",
+    "Do not make dragonmarked houses sovereign governments.",
+    "Do not make magic equivalent to modern electronics in every function.",
+    "Do not portray warforged as mindless constructs or legally owned property after the Treaty of Thronehold.",
+    "Do not treat goblinoid civilizations as inherently savage.",
+    "Do not assume the Sovereign Host visibly walks the world.",
+    "Do not make the Draconic Prophecy a fixed script with one interpretation.",
+    "Do not turn every adventure into a continent-wide conspiracy.",
+    "Do not advance famous NPCs or national politics beyond 998 YK without player choice."
+  ],
+  "referenceChunks": [
+    {
+      "id": "last-war-and-thronehold",
+      "title": "The Last War and the Treaty of Thronehold",
+      "tags": [
+        "Last War",
+        "Treaty of Thronehold",
+        "Galifar",
+        "Five Nations",
+        "994 YK"
+      ],
+      "era": "894 to 998 YK",
+      "editionScope": "All Eberron editions",
+      "text": "The Last War began after King Jarot of Galifar died and his heirs disputed succession. The Five Nations, once administrative heartlands of a united kingdom, became principal rivals: Aundair, Breland, Cyre, Karrnath, and Thrane. The war lasted roughly a century and involved shifting alliances, mercenaries, summoned creatures, undead troops, warforged armies, espionage, and dragonmarked logistics. The destruction of Cyre on the Day of Mourning in 994 YK shocked the continent and made further escalation terrifying. The Treaty of Thronehold recognized multiple sovereign states, ended formal hostilities, outlawed the creation of new warforged, emancipated existing warforged, and established other terms intended to stabilize Khorvaire. The treaty created a ceasefire more than reconciliation. Borders, prisoners, reparations, intelligence networks, displaced populations, veterans, military industries, and succession claims remain contentious. National leaders prepare for peace while fearing that rivals are preparing for war. In 998 YK, adults remember the conflict directly. Roads, villages, families, and institutions bear scars. A veteran's uniform can open one door and close another. Military magic has entered civilian markets, while weapons and specialists have become unemployed. Do not assume the war restarts or that peace endures. The default is tension. Adventures can prevent escalation, expose provocations, exploit uncertainty, or reveal interests that profit from renewed conflict. The party's actions should determine whether one crisis becomes another war."
+    },
+    {
+      "id": "mourning-and-mournland",
+      "title": "The Mourning and the Mournland",
+      "tags": [
+        "Mourning",
+        "Mournland",
+        "Cyre",
+        "dead-gray mist",
+        "Day of Mourning"
+      ],
+      "era": "994 to 998 YK",
+      "editionScope": "All Eberron editions",
+      "text": "On 20 Olarune 994 YK, a magical catastrophe destroyed the nation of Cyre. A wall of dead-gray mist formed around the devastated territory, which became known as the Mournland. The disaster killed or transformed most people inside, altered creatures and magic, and left cities, battlefields, workshops, and treasures in unnatural conditions. No official source establishes one true cause. Possibilities include a weapon, planar interaction, the accumulated magic of war, sabotage, prophecy, divine judgment, or something stranger. The Game Master should select or develop an answer only for the campaign. Cyran survivors are scattered across Khorvaire. New Cyre in Breland is one important refugee settlement, while Prince Oargev ir'Wynarn represents hopes of national restoration. Cyrans differ over identity, land, blame, assimilation, revenge, and what should be recovered. The Mournland's effects vary. Healing can behave strangely, corpses may not decay, living spells wander, weather and terrain defy expectation, and war machines remain active. These conditions should create discovery and dread rather than one uniform environmental rule. Salvagers, houses, governments, warforged, spies, refugees, and scholars all seek what Cyre left behind. A recovered ledger can affect treaties; a factory can restart war production; a family heirloom can matter more than an artifact. Do not solve the Mourning casually or make every expedition about treasure. It is a national catastrophe, refugee crisis, military mystery, and wound in the continent's identity."
+    },
+    {
+      "id": "khorvaire-and-five-nations",
+      "title": "Khorvaire and the Five Nations",
+      "tags": [
+        "Khorvaire",
+        "Aundair",
+        "Breland",
+        "Karrnath",
+        "Thrane",
+        "Cyre"
+      ],
+      "era": "998 YK",
+      "editionScope": "All Eberron editions",
+      "text": "Khorvaire is the principal continent for most Eberron campaigns. The Five Nations formed the heart of old Galifar. Aundair is associated with arcane education, fertile lands, aristocracy, and disputed western territories. Breland is a large, industrial, comparatively cosmopolitan monarchy containing Sharn and a strong parliamentary tradition. Karrnath combines military discipline, harsh winters, aristocracy, and the legacy of using undead soldiers. Thrane is ruled through the Church of the Silver Flame and balances faith, civic life, and memories of war. Cyre survives through refugees after the Mourning. These nations are not the whole continent. The Eldeen Reaches separated from Aundair. The Mror Holds, Lhazaar Principalities, Talenta Plains, Q'barra, Shadow Marches, Droaam, Darguun, Zilargo, and Valenar each have distinct governments and histories. Borders remain contested. Aundair claims the Eldeen Reaches and land held by Thrane. Breland debates monarchy and relations with Droaam. Karrnath's treatment of undead and secret ties to the Blood of Vol create internal conflict. Thrane's theocracy contains both principled service and political rigidity. National stereotypes are propaganda tools, not character templates. A Karrn veteran, Aundairian farmer, Brelish factory worker, Thrane priest, and Cyran refugee should be built from local life and personal history. Travel between nations changes law, papers, currency, accents, and attitudes. The Treaty of Thronehold provides a diplomatic framework without erasing checkpoints, spies, tariffs, and wartime memory."
+    },
+    {
+      "id": "sharn-city-of-towers",
+      "title": "Sharn, the City of Towers",
+      "tags": [
+        "Sharn",
+        "City of Towers",
+        "Breland",
+        "Dura",
+        "Menthis",
+        "Skyway"
+      ],
+      "era": "998 YK",
+      "editionScope": "Eberron: Rising from the Last War and Sharn sources",
+      "text": "Sharn rises in the Dagger River estuary above ancient ruins and manifest-zone magic tied to Syrania. Towers, bridges, lifts, skycoaches, balconies, and districts stack vertically. Elevation corresponds partly to wealth and power, but every ward contains exceptions and internal variety. The city is divided into broad quarters and wards. Central Plateau contains government and high commerce. Menthis Plateau is associated with universities, entertainment, and culture. Dura includes old districts, markets, poverty, and criminal power. Tavick's Landing connects travel, trade, and military interests. Northedge contains residential neighborhoods. Skyway floats above the highest towers as an elite enclave. Cogs and ruins lie below. Sharn is governed by a city council and lord mayor within Breland, while noble families, dragonmarked houses, guilds, criminal organizations, universities, temples, and watch forces possess substantial power. The Sharn Watch is divided by district and competence. The King's Citadel and Dark Lanterns represent royal intelligence and security interests. The Boromar Clan, Daask, Tyrants, and other criminal groups have different social bases and methods. A newspaper such as the Sharn Inquisitive can shape public reaction. Morgrave University sponsors expeditions and scholarship with mixed academic ethics. Use vertical geography to affect play. Falling, flight, lift access, bridge control, weather, and social elevation matter. Sharn is not simply New York with magic. Its architecture depends on a manifest zone and its politics depend on being a Brelish city built over older civilizations."
+    },
+    {
+      "id": "dragonmarked-houses",
+      "title": "Dragonmarked Houses",
+      "tags": [
+        "dragonmarks",
+        "Twelve",
+        "House Cannith",
+        "House Orien",
+        "House Lyrandar"
+      ],
+      "era": "998 YK",
+      "editionScope": "All Eberron editions",
+      "text": "Dragonmarks are hereditary magical sigils associated with particular bloodlines and practical powers. The dragonmarked houses transformed these gifts into transnational guilds that dominate industries such as transport, communication, healing, hospitality, security, animals, weather, construction, and manufacturing. The houses are not traditional noble houses and are restricted by the Korth Edicts from holding land or noble titles in the same manner as national aristocracy. They possess wealth, enclaves, contracts, private security, and influence that often rivals governments. House Cannith controls much magical industry and created the warforged. It is divided after the destruction of its Cyre leadership. House Orien operates lightning rail and overland transport. House Lyrandar controls elemental airships and weather-related services. House Sivis supports messaging, notarization, and communication. House Kundarak provides banking and security. House Jorasco offers healing through its guilds. Other houses maintain equally specific monopolies. A house contains heirs, unmarked relatives, guild workers, clients, excoriates, reformers, and internal factions. Not every employee bears a dragonmark. Mixed-mark unions are taboo in house culture because aberrant marks and political inheritance threaten the system. Use houses through contracts and dependency. A railway line can determine a town's survival. A healing enclave can save lives while enforcing price and policy. A Cannith workshop may hide wartime research. The houses benefit from peace and from instability in different ways; none should be treated as a single mind."
+    },
+    {
+      "id": "wide-magic-and-magewrights",
+      "title": "Wide Magic and Magewright Society",
+      "tags": [
+        "wide magic",
+        "magewrights",
+        "artificers",
+        "everbright lanterns",
+        "industry"
+      ],
+      "era": "998 YK",
+      "editionScope": "All Eberron editions",
+      "text": "Eberron is a world of wide magic rather than universally high magic. Low-level magical effects are taught, standardized, and embedded in trades. Magewrights learn limited practical rituals and spells for professions such as healing, construction, communication, farming, investigation, entertainment, or security. Artificers and exceptional spellcasters remain more versatile. Cities use everbright lanterns, cleansing stones, magical signs, wards, and other services. Bound elementals power airships, lightning rail, and some vessels. Speaking stones and Sivis stations enable long-distance messages. House enclaves organize reliable access. This development does not reproduce modern Earth exactly. There is no universal electrical grid, digital computer network, or mass ownership of every convenience. Services depend on marks, guilds, components, manifest zones, specialized labor, and political agreements. High-level spells remain rare. Resurrection, teleportation, powerful divination, and reality- altering magic are not routine public utilities. A nation may possess a few specialists or relics rather than a catalog of available casters. Magical industry creates labor and class conflict. Guild monopolies restrict independent workers. War surplus enters criminal markets. Factories can pollute or exploit. A village may depend on one magewright whose death becomes a crisis. When adapting a modern mystery or pulp device, ask how Eberron's magic supports the function and what institution controls it. Preserve limitations so travel, evidence, and danger remain meaningful."
+    },
+    {
+      "id": "transport-and-communication",
+      "title": "Transport, Communication, and Trade",
+      "tags": [
+        "lightning rail",
+        "airships",
+        "Orien",
+        "Lyrandar",
+        "Sivis"
+      ],
+      "era": "998 YK",
+      "editionScope": "All Eberron editions",
+      "text": "The lightning rail connects major parts of Khorvaire through conductor stones and elemental power. House Orien operates much of the network. Routes were damaged or divided by the Last War and the Mourning, so rail travel depends on borders, repaired lines, schedules, and house agreements. Elemental airships operated primarily through House Lyrandar are relatively new, prestigious, and limited by the need for marked pilots and specialized vessels. They do not replace roads, ships, caravans, or rail. Conventional and elemental sea travel remains central to trade. House Sivis speaking stones support rapid long-distance communication between stations. Messages are paid services, routed through institutions, recorded or authenticated, and limited by access. Couriers, newspapers, sending spells, and ordinary letters remain important. House Orien also maintains couriers and caravan services. House Lyrandar influences ports and weather. House Kundarak supports credit and secure transfer, allowing large commerce without moving chests of coin. Border crossings require papers and inspection. Refugees, war criminals, spies, and deserters make identity politically sensitive. Lightning rail stations and airship towers are strategic sites with customs, hotels, freight yards, and criminal opportunities. Travel should be faster than in many fantasy settings without becoming instant. Schedules, sabotage, weather, jurisdiction, and route damage create adventure. A train is a moving social environment; an airship is a scarce asset whose crew and elemental binding matter."
+    },
+    {
+      "id": "faiths-and-philosophies",
+      "title": "Faiths and Philosophies",
+      "tags": [
+        "Sovereign Host",
+        "Dark Six",
+        "Silver Flame",
+        "Blood of Vol",
+        "Path of Light"
+      ],
+      "era": "998 YK",
+      "editionScope": "All Eberron editions",
+      "text": "Eberron's major religions are matters of faith rather than universally verified divine biography. Clerics receive power, but the gods do not routinely appear to settle doctrine. This preserves mystery and permits sincere disagreement. The Sovereign Host is a broad pantheon associated with civilization, craft, law, nature, war, knowledge, and daily life. The Dark Six represent dangerous, rejected, or uncontrolled forces, though worshippers may understand them more positively than Host doctrine suggests. The Church of the Silver Flame venerates a divine force that binds fiends and inspires protection against supernatural evil. The church governs Thrane and contains compassionate servants, political institutions, zealots, reformers, and local traditions. The historical lycanthropic purge remains a moral wound. The Blood of Vol teaches the divinity within mortal blood and rejects dependence on distant gods. It is not simply worship of undead. Some leaders use undead and secrecy, while ordinary faithful seek community, self-reliance, and victory over death. The Emerald Claw is a violent organization with connections to Karrn history and Blood of Vol imagery but does not represent every seeker. The Path of Light guides many kalashtar against the Dreaming Dark. The Undying Court of Aerenal, druidic sects, the Cults of the Dragon Below, and regional beliefs offer other frameworks. Separate a faith's theology, church, political institution, and individual believer. Divine magic proves commitment and supernatural connection, not that every historical claim is objectively true."
+    },
+    {
+      "id": "planes-and-manifest-zones",
+      "title": "Planes and Manifest Zones",
+      "tags": [
+        "planes",
+        "manifest zones",
+        "Syrania",
+        "Dal Quor",
+        "Xoriat",
+        "coterminous"
+      ],
+      "era": "998 YK",
+      "editionScope": "All Eberron editions",
+      "text": "Eberron has a distinctive planar cosmology. Thirteen planes embody concepts and environments such as peace, war, order, chaos, dreams, madness, fire, ice, nature, death, and celestial ideal. Their relationship to Eberron changes through cycles described as coterminous, remote, or intermediate. Manifest zones are locations where a plane's influence shapes the material world. Sharn's towers depend on a Syranian manifest zone that supports flight. Other zones affect weather, emotion, growth, magic, undead, industry, or local culture. Communities can build laws, temples, businesses, and myths around them. Dal Quor, the Region of Dreams, is separated from ordinary planar travel and connected to the conflict between kalashtar and quori. Xoriat is associated with madness and aberrant invasions. Khyber contains demiplanes, bound fiends, and impossible spaces rather than functioning only as underground geography. Planar scholars disagree about cycles and influence. The moons, dragonshards, and planes interact with magic without providing one simple astronomical machine. Use manifest zones as infrastructure and social history, not only encounter modifiers. A healing town may depend on a zone that is changing. A prison may use planar properties. A cult may interpret a natural cycle as prophecy. Do not import the standard Great Wheel as Eberron's everyday cosmology. Connections to the wider D&D multiverse can exist, but Eberron's planar structure should remain the operating model."
+    },
+    {
+      "id": "peoples-of-khorvaire",
+      "title": "Peoples of Khorvaire",
+      "tags": [
+        "warforged",
+        "changelings",
+        "shifters",
+        "kalashtar",
+        "goblinoids"
+      ],
+      "era": "998 YK",
+      "editionScope": "All Eberron editions",
+      "text": "Khorvaire's peoples are shaped by nation, war, migration, ancestry, faith, and class. Warforged were created as soldiers and recognized as free persons by the Treaty of Thronehold. They differ in purpose, personality, religion, and relationship to their former owners. The ban on creating new warforged makes reproduction and the meaning of a people central questions. Changelings can alter appearance and maintain identities in many ways. Some live openly, some use multiple personas, and some hide because of prejudice. Their abilities do not make them automatically deceptive criminals. Shifters possess traits associated with lycanthropic ancestry and have distinct communities and traditions. They suffered heavily during the Silver Crusade and later purges. Kalashtar are linked to quori spirits opposed to the Dreaming Dark and often follow the Path of Light. Goblins, hobgoblins, and bugbears descend from peoples central to the ancient Dhakaani Empire. Darguun is a modern goblinoid state but does not encompass all Dhakaani cultures or claims. Orc traditions include Gatekeepers who helped resist aberrant invasions and communities in the Shadow Marches and Eldeen regions. Elves, dwarves, halflings, humans, gnomes, and other ancestries likewise contain several cultures. Valenar elves, Aereni elves, Mror dwarves, Talenta halflings, and urban citizens require separate treatment. Do not build personality from ancestry. Determine homeland, wartime experience, language, work, faith, and relationship to the Treaty."
+    },
+    {
+      "id": "factions-and-espionage",
+      "title": "Factions, Espionage, and Criminal Power",
+      "tags": [
+        "Dark Lanterns",
+        "King's Citadel",
+        "Emerald Claw",
+        "Aurum",
+        "Boromar Clan"
+      ],
+      "era": "998 YK",
+      "editionScope": "All Eberron editions",
+      "text": "The cold peace sustains extensive espionage. Breland's King's Citadel includes the Dark Lanterns, while other nations maintain intelligence services, military remnants, diplomats, and covert assets. Agents may work to preserve peace, gain advantage, recover weapons, or conceal wartime crimes. The Aurum is a society of wealthy individuals who use business, patronage, and secret influence. Its inner ranks can pursue agendas beyond ordinary commerce. The Order of the Emerald Claw is a militant and terrorist organization associated with Karrnathi history, necromancy, and Lady Illmarrow. It should not represent all Karrns or all Blood of Vol faithful. Sharn's Boromar Clan, Daask, Tyrants, and other groups control different criminal markets and communities. House Tarkanan gathers people with aberrant dragonmarks and has both criminal and political dimensions. Dragonmarked houses maintain internal investigators and deniable operations. The Trust in Zilargo exemplifies a security organization whose reach supports public stability through surveillance, secrecy, and fear. The Dreaming Dark manipulates institutions through quori possession and long plans, while the Lords of Dust seek to release ancient fiendish overlords. Factions should not know everything. A local cell has limited information and may misunderstand headquarters. Avoid stacking every conspiracy behind one job. Noir works when several actors have partial truths, compromised motives, and reasons to prevent a clean solution."
+    },
+    {
+      "id": "darguun-droaam-and-frontiers",
+      "title": "Darguun, Droaam, and Contested Nations",
+      "tags": [
+        "Darguun",
+        "Droaam",
+        "Daughters of Sora Kell",
+        "Dhakaani",
+        "monstrous nations"
+      ],
+      "era": "998 YK",
+      "editionScope": "All Eberron editions",
+      "text": "Darguun emerged during the Last War when goblinoid forces seized territory from Cyre. It contains modern clans, war leaders, urban populations, foreign interests, and hidden or isolated heirs of the ancient Dhakaani Empire. The Dhakaani possess disciplined martial, artistic, and cultural traditions and may view modern Khorvaire as built on their lost land. Droaam was formed in western Breland by the Daughters of Sora Kell, three powerful hags who united many communities traditionally labeled monsters. The nation lacks recognition under the Treaty of Thronehold but trades, negotiates, and uses services such as monstrous labor and the mercenary organization House Tharashk helps export. Droaam is not a benevolent utopia or a wilderness full of enemies. It contains cities, warlords, gnolls, harpies, ogres, medusas, trolls, kobolds, tieflings, and many other peoples living under varied local rule. The Daughters' long goals remain uncertain. Both nations raise questions about who receives legitimacy. Galifar's successor states judge goblinoid and monstrous sovereignty through wartime memory and prejudice while benefiting from their labor or trade. Adventures can involve diplomacy, archaeological claims, mercenary contracts, border incidents, refugees, and competing concepts of law. Do not assume Breland has a morally superior claim to every disputed area or that every Darguun clan follows one leader."
+    },
+    {
+      "id": "continents-beyond-khorvaire",
+      "title": "Beyond Khorvaire",
+      "tags": [
+        "Xen'drik",
+        "Sarlona",
+        "Argonnessen",
+        "Aerenal",
+        "Everice"
+      ],
+      "era": "998 YK",
+      "editionScope": "All Eberron editions",
+      "text": "Xen'drik lies south of Khorvaire and contains giant ruins, drow cultures, dangerous magic, curses, shifting geography, expeditions, and the port of Stormreach. It is not an empty continent for Khorvairian explorers. Local peoples possess histories and claims, while foreign universities, houses, and treasure seekers often behave colonially. Sarlona is the ancestral continent of humanity and home to the empire of Riedra, where Inspired rulers maintain order through ideology, psychic power, and quori influence. Adar contains mountain communities and kalashtar resistance. Sarlona is culturally diverse beyond this conflict. Argonnessen is dominated by dragons and central to study of the Draconic Prophecy. Dragons are not one government, and their internal factions differ over how to interpret and manage prophecy. Most Khorvairians know little reliable detail. Aerenal is an elven island nation guided by the deathless Undying Court. Its traditions value ancestors, long memory, and mastery. Valenar elves on Khorvaire follow different traditions and should not be treated as Aerenal's military branch. The Frostfell, Everice, seas, and smaller islands support other cultures and mysteries. Travel beyond Khorvaire should change assumptions about history, religion, magic, and who considers the visitors civilized. Use regional material where available. When canon is sparse, mark invented nations and customs as campaign-created rather than filling maps with generic fantasy."
+    },
+    {
+      "id": "pulp-noir-and-mystery",
+      "title": "Pulp, Noir, and Campaign Tone",
+      "tags": [
+        "pulp",
+        "noir",
+        "mystery",
+        "intrigue",
+        "morality"
+      ],
+      "era": "998 YK",
+      "editionScope": "All Eberron editions",
+      "text": "Eberron combines pulp adventure with noir intrigue. Pulp provides momentum, daring travel, trains, airships, crumbling ruins, rooftop chases, lost artifacts, and villains with ambitious plans. Noir provides compromised institutions, incomplete justice, secrets, war trauma, class power, and choices without perfect outcomes. These modes can coexist. A party may swing aboard an airship to recover evidence proving that its employer caused the crisis. Heroism remains possible, but institutions rarely become pure because one villain is defeated. Central setting mysteries are tools, not answers to be looked up. The Mourning, gods, prophecy, ancient fiends, and house conspiracies should generate clues and interpretations. Decide the campaign's truth only when it will improve play. Newspapers, inquisitives, universities, guilds, embassies, rail stations, veterans' groups, refugee communities, and salons give mysteries social context. Evidence has owners and consequences. Avoid grim monotony. Eberron includes humor, romance, wonder, civic pride, and sincere reform. A corrupt city still contains good neighbors. A dragonmarked heir can challenge a house. A veteran can prevent another war. Reward characters for investigation, daring, relationships, and choosing what to protect. The setting is strongest when spectacular action changes a morally complicated situation rather than replacing it."
+    },
+    {
+      "id": "common-eberron-traps",
+      "title": "Common Eberron Canon Traps",
+      "tags": [
+        "canon",
+        "998 YK",
+        "Mourning",
+        "dragonmarked houses",
+        "errors"
+      ],
+      "era": "All eras",
+      "editionScope": "All Eberron editions",
+      "text": "Eberron's default date is 998 YK. Do not automatically advance it because a newer rules edition exists. The Last War ended four years earlier, and the cause of the Mourning remains intentionally unresolved. Dragonmarked houses are transnational economic powers, not sovereign nations or ordinary nobles. Wide magic means common low-level services, not universally available high-level spells or modern electronics with fantasy names. Warforged are free people under the treaty, not default property. Goblinoids, orcs, changelings, shifters, and peoples of Droaam are not alignment categories. Religion lacks routine objective proof even though divine magic works. Do not import the Forgotten Realms pantheon, Great Wheel assumptions, or generic medieval isolation. Eberron has newspapers, rapid communication, rail, airships, professional investigators, and international institutions, all with limitations. Do not solve every conspiracy through the Dreaming Dark, Lords of Dust, or dragonmarked houses. Local greed and wartime secrets are enough. Older sourcebooks provide deep lore but should not override the fixed default or current rules. Keith Baker commentary is valuable for intent and possibilities, yet distinguish creator guidance from facts formally established in a selected source. When uncertain, preserve the mystery or label a new answer as campaign canon. Eberron is designed to give the Game Master unanswered questions."
+    }
+  ]
+}

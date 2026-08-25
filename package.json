@@ -1,6 +1,6 @@
 {
   "name": "rpg-your-way",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "private": true,
   "packageManager": "pnpm@10.14.0",
   "scripts": {
@@ -10,18 +10,22 @@
     "validate:release": "node --no-warnings --experimental-strip-types scripts/validate-release.mts && node --no-warnings --experimental-strip-types scripts/test-shape-runtime.mts && node --no-warnings --experimental-strip-types scripts/test-usage-money.mts && node --no-warnings --experimental-strip-types scripts/test-provider-cost.mts && node --no-warnings --experimental-strip-types scripts/test-stripe-funding.mts"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.12.4",
-    "@supabase/supabase-js": "^2.112.3",
-    "@vercel/analytics": "^2.0.1",
     "next": "16.2.6",
     "react": "^19",
-    "react-dom": "^19"
+    "react-dom": "^19",
+    "@supabase/ssr": "^0.12.4",
+    "@supabase/supabase-js": "^2.112.3",
+    "@vercel/analytics": "^1.5.0",
+    "lucide-react": "^1.16.0"
   },
   "devDependencies": {
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "typescript": "5.7.3"
+    "typescript": "5.7.3",
+    "@tailwindcss/postcss": "^4.3.3",
+    "postcss": "^8.5",
+    "tailwindcss": "^4.3.3"
   },
-  "rpgywVersion": "1.6.202"
+  "rpgywVersion": "1.7.000"
 }

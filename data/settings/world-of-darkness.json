@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 1,
+  "id": "world-of-darkness",
+  "displayName": "World of Darkness",
+  "aliases": [
+    "World of Darkness",
+    "WoD",
+    "Vampire: The Masquerade",
+    "Werewolf: The Apocalypse",
+    "Hunter: The Reckoning",
+    "modern gothic-punk"
+  ],
+  "canonFrame": {
+    "defaultEra": "The contemporary fifth-edition World of Darkness",
+    "editionAssumptions": "Use the current fifth-edition setting for Vampire: The Masquerade, Werewolf: The Apocalypse, and Hunter: The Reckoning as the primary shared world. Treat earlier editions and the separate Chronicles of Darkness game line as alternate continuities. Other classic World of Darkness lines can be added through explicit overlays rather than assumed to match unrevised legacy lore.",
+    "timelineNotes": "The World of Darkness resembles the present day but is harsher, more corrupt, and secretly shaped by supernatural predation. Current fifth-edition material updates technology, politics, sects, cosmology, and social structures. Avoid copying the 1990s metaplot forward without checking what the current game line retains, revises, or leaves uncertain."
+  },
+  "campaignFoundations": [
+    "The World of Darkness is a modern gothic-punk reflection of the real world, not a separate fantasy planet.",
+    "Supernatural beings hide within or behind human society, and secrecy is maintained imperfectly.",
+    "Personal horror and moral consequence matter more than encyclopedic crossover.",
+    "Vampire, Werewolf, and Hunter present different perspectives on the same broad world.",
+    "Each game line has its own central themes and should not be subordinated to another line's cosmology.",
+    "Human institutions can be cruel and corrupt without supernatural control.",
+    "Technology, surveillance, media, inequality, climate crisis, policing, and political fear are part of the current setting.",
+    "Supernatural factions are internally divided and do not know the full truth.",
+    "Player characters should face choices about identity, hunger, rage, duty, violence, and community.",
+    "Real-world communities and tragedies require respectful fictionalization."
+  ],
+  "gameMasterGuidance": [
+    "Choose a primary game line before loading detailed supernatural lore.",
+    "Keep crossover limited unless the campaign explicitly wants a supernatural ensemble.",
+    "Use a real or fictional city through neighborhoods, institutions, histories, and communities.",
+    "Distinguish character belief from objective cosmology.",
+    "Make secrecy a social practice with witnesses, media, favors, and cover stories.",
+    "Use horror to explore choices and systems, not to target player identities.",
+    "Treat hunger, rage, desperation, and conviction as pressures rather than excuses.",
+    "Let ordinary humans retain agency and responsibility.",
+    "Use content boundaries and safety tools.",
+    "Mark invented clans, packs, cells, conspiracies, and local histories as campaign-created."
+  ],
+  "canonBoundaries": [
+    "Do not blend World of Darkness with Chronicles of Darkness.",
+    "Do not assume every legacy game line has a fully current fifth-edition canon.",
+    "Do not make one game's creation myth objectively correct for all supernatural beings.",
+    "Do not make vampires, werewolves, hunters, mages, ghosts, and fae one cooperative hidden society.",
+    "Do not use real ethnic, religious, gender, or sexual identities as shorthand for corruption.",
+    "Do not portray every human institution as supernaturally controlled.",
+    "Do not make the Masquerade flawless in an age of cameras and data.",
+    "Do not treat clans, tribes, creeds, or sects as personalities.",
+    "Do not excuse abuse because a character is a monster.",
+    "Do not import 1990s politics, technology, or terminology into a current chronicle without revision."
+  ],
+  "referenceChunks": [
+    {
+      "id": "shared-world-and-tone",
+      "title": "The Shared World and Gothic-Punk Tone",
+      "tags": [
+        "gothic-punk",
+        "modern horror",
+        "secret supernatural",
+        "personal horror"
+      ],
+      "era": "Contemporary nights",
+      "editionScope": "World of Darkness fifth edition",
+      "text": "The World of Darkness resembles the contemporary real world but emphasizes inequality, decaying institutions, predatory power, alienation, and the survival of older horrors inside modern life. Gothic elements appear through inherited guilt, ancient authority, forbidden desire, haunted places, and the past refusing to remain buried. Punk appears through resistance, subculture, anger, chosen family, and people creating meaning outside institutions that exploit them. Supernatural beings exist, but most humans do not possess a coherent public understanding of them. Secrecy results from deliberate cover-ups, disbelief, manipulation, selective violence, institutional complicity, and the fact that evidence can be discredited. The world is not unchanged; rumors, occult communities, intelligence agencies, conspiracy media, and survivors know pieces. Each game line frames horror differently. Vampire centers hunger, exploitation, immortality, and the struggle to retain humanity. Werewolf centers spiritual war, rage, ecological collapse, and inherited failure. Hunter centers ordinary or nearly ordinary people confronting monsters without reliable authority or complete knowledge. Do not force these perspectives into one objective theology. A vampire's account of the soul, a Garou spirit tradition, and a hunter's religious conviction can all produce power and meaning without one narrator solving the universe. The setting works best at city and relationship scale. A landlord, police unit, corporation, congregation, gang, hospital, family, and supernatural court can create overlapping pressure. Global metaplot should deepen local stakes rather than replace them."
+    },
+    {
+      "id": "continuities-and-game-lines",
+      "title": "Continuities and Game-Line Boundaries",
+      "tags": [
+        "World of Darkness",
+        "Chronicles of Darkness",
+        "fifth edition",
+        "legacy"
+      ],
+      "era": "All publication eras",
+      "editionScope": "World of Darkness only",
+      "text": "World of Darkness is the continuity containing games such as Vampire: The Masquerade, Werewolf: The Apocalypse, Hunter: The Reckoning, Mage: The Ascension, Wraith: The Oblivion, Changeling: The Dreaming, and related titles. Chronicles of Darkness is a separate setting line containing Vampire: The Requiem, Werewolf: The Forsaken, Mage: The Awakening, and others. Similar concepts and terminology do not make them interchangeable. The current fifth-edition World of Darkness has active modern versions of Vampire, Werewolf, and Hunter. These editions revise parts of earlier lore, remove or reshape institutions, update technology, and refocus themes. Legacy books remain useful historical and creative sources, but their metaplot should not be assumed current. Mage, Wraith, Changeling, Demon, Mummy, and other classic lines contain rich cosmologies that can conflict when treated as literal universal truth. Until a current overlay is selected, keep their existence broad and avoid loading faction lists or definitive metaphysics. Crossovers require scale decisions. Vampires may know that werewolves are dangerous without knowing tribes. Hunters may classify several supernatural types incorrectly. Werewolves can treat vampires as spiritually corrupted without understanding clans and sects. When creating a chronicle, record the primary game line, edition, city, and crossover level. This prevents a local vampire story from becoming an encyclopedia tour. Contradictions can remain in-world disagreement rather than being flattened into one master cosmology."
+    },
+    {
+      "id": "vampire-condition",
+      "title": "The Vampiric Condition",
+      "tags": [
+        "vampires",
+        "Kindred",
+        "Hunger",
+        "Blood Potency",
+        "Humanity"
+      ],
+      "era": "Contemporary nights",
+      "editionScope": "Vampire: The Masquerade fifth edition",
+      "text": "Vampires, who commonly call themselves Kindred, are dead predators sustained by blood. They awaken each night, heal through blood, possess supernatural Disciplines, and risk frenzy when hunger, fear, humiliation, or violence overwhelms control. Sunlight and fire are especially dangerous. Hunger is central. Feeding is not a neutral resource action. It creates questions of consent, exploitation, secrecy, habit, class, and self-deception. Some vampires hunt through violence, seduction, paid arrangements, herd relationships, medical theft, animals, or other methods. No method is automatically harmless. The Beast represents predatory compulsion and the part of vampiric existence that pushes toward domination and immediate survival. Humanity measures connection to moral and human identity through the chronicle's convictions and touchstones. It is not a claim that nonhuman beings lack moral worth. Blood Potency grows with age and activity, strengthening powers while narrowing feeding options. Torpor can allow ancient vampires to sleep through periods of history. Generation and lineage still matter, but current play emphasizes the immediate pressure of Hunger. The Embrace creates a new vampire through draining and feeding blood, usually without consent. Sires carry social and political responsibility in many sects. A fledgling enters a world of debts and rules they did not choose. Portray vampirism as power and loss together. A character can love, create, and protect while participating in predation. Horror emerges from choices, not from declaring every vampire instantly incapable of care."
+    },
+    {
+      "id": "clans-and-bloodlines",
+      "title": "The Fourteen Clans",
+      "tags": [
+        "clans",
+        "Banu Haqim",
+        "Brujah",
+        "Gangrel",
+        "Hecata",
+        "Lasombra",
+        "Salubri"
+      ],
+      "era": "Contemporary nights",
+      "editionScope": "Vampire: The Masquerade fifth edition",
+      "text": "Current Vampire: The Masquerade recognizes fourteen principal clans: Banu Haqim, Brujah, Gangrel, Hecata, Lasombra, Malkavian, Ministry, Nosferatu, Ravnos, Salubri, Toreador, Tremere, Tzimisce, and Ventrue. Caitiff lack a recognized clan, while thin-bloods possess weak or unusual vampiric traits tied to high generation. A clan represents shared blood, Disciplines, bane, history, and stereotype. It does not dictate personality, politics, ethnicity, profession, or morality. A Brujah can be methodical, a Ventrue can be poor, and a Nosferatu can reject information brokering. The Hecata combine several necromantic lineages through recent upheaval. The Ministry is the current principal name for the clan historically called Followers of Set. The Banu Haqim, Lasombra, Ravnos, Salubri, and Tzimisce have current presentations that should not be replaced with one paragraph from an older edition. Clan banes create practical and thematic pressure. They should complicate play rather than serve as excuses for caricature. Malkavian characters require particular care: supernatural insight and clan curse should not turn real mental illness into comedy or automatic prophecy. Clan culture varies by city and sect. A local lineage, sire, coterie, and domain can matter more than a global clan elder. Build a character from personal history first, then ask how clan inheritance changes it."
+    },
+    {
+      "id": "camarilla-and-masquerade",
+      "title": "The Camarilla and the Masquerade",
+      "tags": [
+        "Camarilla",
+        "Masquerade",
+        "Prince",
+        "Traditions",
+        "Elysium"
+      ],
+      "era": "Contemporary nights",
+      "editionScope": "Vampire: The Masquerade fifth edition",
+      "text": "The Camarilla is an elite vampiric sect dedicated to secrecy, hierarchy, domain, and preservation. It presents itself as the natural government of Kindred society while excluding or controlling vampires who reject its authority. Local cities are often ruled by a Prince supported or challenged by a council of Primogen, a Sheriff, Harpies, a Keeper of Elysium, and other offices. The Traditions regulate secrecy, domain, progeny, responsibility, hospitality, and destruction. Their interpretation depends on the local ruler. A Prince's authority is political, not mystical; it rests on alliances, violence, age, resources, and the ability to prevent outside intervention. The Masquerade conceals vampiric existence from humanity. Modern surveillance, biometric records, phones, social media, and data brokerage make concealment difficult. The Camarilla often responds by restricting technology, controlling evidence, sacrificing exposed vampires, and manipulating institutions. Elysium provides a protected social space where violence is forbidden by custom and enforcement. It can be a museum, club, theater, private estate, or other prestigious site. Safety is political rather than absolute. The Camarilla is not omniscient. Elders misunderstand technology, neonates conceal networks, and competing offices hoard information. Its claim to order can protect a city from chaos while preserving exploitation. In play, define the local court rather than importing every famous elder. Decide what the Prince fears, which neighborhoods are contested, and what breach would attract the Second Inquisition."
+    },
+    {
+      "id": "anarchs-and-sabbat",
+      "title": "Anarchs, Autarkis, and the Sabbat",
+      "tags": [
+        "Anarchs",
+        "Anarch Movement",
+        "Sabbat",
+        "autarkis",
+        "Baron"
+      ],
+      "era": "Contemporary nights",
+      "editionScope": "Vampire: The Masquerade fifth edition",
+      "text": "The Anarch Movement rejects Camarilla hierarchy but includes many political arrangements. Anarch domains can be governed by Barons, councils, gangs, cooperatives, charismatic leaders, or informal agreements. Opposition to elders does not guarantee democracy or justice. Anarchs range from ideological revolutionaries to vampires who simply refuse taxation and court etiquette. Local communities can provide mutual aid and experimentation while reproducing coercion, territorial violence, or cults of personality. Autarkis reject major sects or survive outside them. Their independence may depend on secrecy, geographic isolation, specialist value, or agreements with stronger neighbors. The Sabbat has changed in current presentation. It is a militant, apocalyptic sect that rejects Humanity and wages war against ancient vampires, especially those it identifies as Antediluvians. Many Sabbat have left familiar domains for the Gehenna War. Packs, paths of inhuman conviction, ritual loyalty, and extreme violence define the sect more than ordinary city governance. Do not assume every former Sabbat-held city remains under the same control or that every Lasombra and Tzimisce belongs to the Sabbat. The sect's absence can leave abandoned assets, traumatized survivors, hidden loyalists, and disputed territory. Political labels should produce questions. Who controls feeding, resolves conflict, protects secrecy, and punishes abuse? A coterie may prefer Anarch freedom until a powerful neighbor ignores their consent."
+    },
+    {
+      "id": "second-inquisition-and-hunters",
+      "title": "The Second Inquisition",
+      "tags": [
+        "Second Inquisition",
+        "FIRSTLIGHT",
+        "hunters",
+        "surveillance",
+        "SI"
+      ],
+      "era": "Contemporary nights",
+      "editionScope": "Vampire and Hunter fifth editions",
+      "text": "The Second Inquisition is a vampiric label for modern state, intelligence, police, military, religious, and private operations targeting supernatural threats. It is not one public agency or unified command. Different groups possess different evidence, methods, jurisdictions, and beliefs. Modern surveillance, financial records, communications metadata, biometrics, and captured Kindred intelligence allowed hunters to identify patterns the Camarilla had hidden. Raids destroyed important vampire strongholds and forced changes in Kindred technology use and politics. Some operators understand vampires accurately. Others classify targets through religious language, counterterrorism models, epidemiology, or incomplete code words. Agencies conceal operations from the public and from one another. Political leaders may not know what a classified unit actually hunts. The Second Inquisition can include sincere protectors, zealots, careerists, torturers, analysts, survivors, and people manipulated by supernatural factions. Its existence does not make unrestricted state violence heroic. Hunters should find evidence through work. A blank spot in facial recognition, repeated night transactions, missing persons, contaminated blood, and compromised officials can form a case. Vampires can counter through false data, influence, relocation, and sacrificing expendable members. Avoid making surveillance omnipotent. Budgets, warrants, rival agencies, bad data, secrecy, and human error create limits. The threat is credible because modern systems connect clues, not because every camera instantly recognizes a vampire."
+    },
+    {
+      "id": "werewolf-condition",
+      "title": "Garou and the Apocalypse",
+      "tags": [
+        "Garou",
+        "werewolves",
+        "Rage",
+        "Harano",
+        "Hauglosk",
+        "Apocalypse"
+      ],
+      "era": "Contemporary era",
+      "editionScope": "Werewolf: The Apocalypse fifth edition",
+      "text": "Garou are werewolves caught in a spiritual and ecological crisis commonly called the Apocalypse. They can move among human, wolf, and hybrid forms, possess intense Rage, interact with spirits, and organize around packs and septs. They are neither humans with a curse nor ordinary wolves with magic. Rage gives strength and urgency while threatening relationships and judgment. It should create difficult choices rather than justify abuse. Harano describes despair and paralysis in the face of overwhelming loss. Hauglosk describes fanatic certainty that destroys nuance and compassion. Both are spiritual and emotional dangers within the setting, not casual diagnoses for real people. The Garou inherit a history of failed stewardship, internal violence, pride, and impossible war. Current fifth-edition play emphasizes that the old nation did not prevent ecological catastrophe. Characters decide what remains worth defending and what traditions must change. Packs are central units of trust and action. A pack can include different tribes, human backgrounds, and approaches. Septs gather around caerns, spiritually important places whose protection involves local ecology and community. The Apocalypse is already visible through climate disruption, extinction, pollution, extractive industry, spiritual damage, and social collapse. It is not only a future final battle. Do not make every Garou an eco-terrorist caricature or infallible voice of nature. They are dangerous, wounded protagonists whose power does not grant moral certainty."
+    },
+    {
+      "id": "garou-tribes-and-packs",
+      "title": "Garou Tribes, Packs, and Caerns",
+      "tags": [
+        "tribes",
+        "packs",
+        "caerns",
+        "Galestalkers",
+        "Ghost Council",
+        "Red Talons"
+      ],
+      "era": "Contemporary era",
+      "editionScope": "Werewolf: The Apocalypse fifth edition",
+      "text": "Current Werewolf presents eleven playable tribes with distinct patron spirits, histories, and responses to the Apocalypse. Names and concepts have changed from legacy editions. Use the current tribe list rather than automatically importing older stereotypes or political structures. Tribes include approaches emphasizing storms and pursuit, spirits and forgotten places, urban systems, kinship and protection, direct action, wilderness, occult knowledge, and other responses. No tribe is a nationality or personality. A character's pack, upbringing, territory, and personal choices matter more than a slogan. Packs form around a shared purpose and relationships, often connected to a patron spirit. Pack dynamics should include trust, conflict, ritual, practical roles, and obligations beyond combat. A pack is not automatically subordinate to a global werewolf command. Caerns are spiritually potent places where the material and spirit worlds connect. They can be wilderness sites, urban places, reclaimed industrial land, sacred buildings, waterways, or locations whose significance is hidden. Protecting a caern requires relationships with human communities and spirits as well as physical defense. Legacy Werewolf lore includes extensive tribal nations, breeds, and cosmological structures. Some material remains inspiration, but current fifth edition revises the premise. Do not assume every older tribe, camp, war, or social law remains canonical. Build a pack by deciding what territory it knows, which community can call on it, which spirit demands something, and what compromise members refuse to make."
+    },
+    {
+      "id": "umbra-and-spirits",
+      "title": "The Umbra and Spirits",
+      "tags": [
+        "Umbra",
+        "spirits",
+        "Gaia",
+        "Wyrm",
+        "Weaver",
+        "Wyld"
+      ],
+      "era": "Contemporary era",
+      "editionScope": "Werewolf: The Apocalypse fifth edition",
+      "text": "The Umbra is the spirit world adjacent to and interwoven with physical reality. Places, species, concepts, emotions, institutions, and repeated human activity can possess spiritual reflections. Garou cross the Gauntlet to enter it, though difficulty varies by location and circumstance. Spirits are persons and forces with needs, bans, alliances, memories, and limited perspectives. A river spirit, data spirit, ancestor, predator, building spirit, and pollution spirit behave differently. Gifts and pack patronage arise through relationships rather than automatic spell lists. Gaia is the living world and central spiritual reality for many Garou. Legacy cosmology often described the Triat of Wyld, Weaver, and Wyrm as cosmic forces of creation, order, and destruction driven out of balance. Current play can use these concepts without requiring every spirit or character to agree on one literal model. The Umbra reflects ecological and social damage. A bright commercial district can cast a predatory spiritual shadow. A restored wetland can become spiritually vibrant while remaining politically vulnerable. Spirit negotiations require offerings, respect, leverage, and understanding of bans. Coercing a spirit can solve an immediate problem and poison a relationship. Spirits are not automatically benevolent because they are natural. Do not turn the Umbra into a second combat map containing transparent clues. It should reveal relationships and consequences that physical investigation alone cannot show, while retaining its own dangers and ambiguity."
+    },
+    {
+      "id": "hunter-cells-and-creeds",
+      "title": "Hunters, Cells, and Creeds",
+      "tags": [
+        "Hunter",
+        "cells",
+        "creeds",
+        "Drives",
+        "Edges"
+      ],
+      "era": "Contemporary era",
+      "editionScope": "Hunter: The Reckoning fifth edition",
+      "text": "Hunters are people who recognize that monsters exist and choose to act without dependable support from ordinary institutions. They form cells built from trust, shared evidence, trauma, ideology, profession, family, faith, or necessity. Most lack complete supernatural knowledge. Current Hunter emphasizes Drives, Creeds, and Edges as frameworks for motivation and approach. A hunter may be driven by vengeance, curiosity, protection, duty, or another need. Creeds describe broad methods rather than rigid organizations. Edges are practical advantages gained through preparation, contacts, technology, training, faith, or unusual experience. Cells conduct surveillance, research, interviews, infiltration, rescue, sabotage, exposure, and violence. The quarry may be genuinely monstrous, misunderstood, protected by victims, or only one part of a human system. Desperation is central. Hunters risk obsession, isolation, legal consequences, manipulation, and becoming what they oppose. A cell's members can disagree over proof, collateral harm, and whether a supernatural being can change. Orgs are larger institutions with resources and agendas. They can provide intelligence and equipment while turning hunters into assets. Some overlap with state or religious operations; others have private motives. Do not make every hunter morally correct. Their courage can coexist with prejudice, false accusation, and escalation. Require evidence, preserve uncertainty, and give hunted people agency."
+    },
+    {
+      "id": "secrecy-media-and-technology",
+      "title": "Secrecy, Media, and Technology",
+      "tags": [
+        "internet",
+        "surveillance",
+        "social media",
+        "Masquerade",
+        "cover-up"
+      ],
+      "era": "Contemporary nights",
+      "editionScope": "World of Darkness fifth edition",
+      "text": "Modern secrecy is difficult but possible. Phones, cameras, DNA, financial data, location histories, social media, facial recognition, and private databases create evidence. The same systems also create overwhelming noise, misinformation, manipulated footage, inaccessible proprietary data, and institutions motivated to deny the impossible. Vampires use influence, data control, front companies, mortal servants, and selective violence to maintain the Masquerade. Werewolves protect sacred places through community ties, sabotage, spiritual effects, and isolation. Hunters share evidence through encrypted channels while risking infiltration. A supernatural event does not become public truth merely because a video exists. Viewers can call it effects, performance, fraud, or propaganda. Repeated connected evidence, credible witnesses, and institutional confirmation are more dangerous. Technology should not become either omnipotent or useless. Cameras have owners. Data requires storage and review. Algorithms reproduce bias. Corporate platforms can remove content while copies survive. Police may ignore evidence involving marginalized victims and aggressively pursue a politically useful suspect. Supernatural powers interact with technology unevenly. Use the selected game's rules rather than assuming folklore. A vampire's image, a spirit's effect, and a werewolf transformation create different traces. Build cover-ups as operations: identify witnesses, records, narratives, authorities, and costs. Concealment creates debts and future vulnerabilities."
+    },
+    {
+      "id": "cities-and-local-chronicles",
+      "title": "Cities and Local Chronicles",
+      "tags": [
+        "city",
+        "domain",
+        "territory",
+        "neighborhoods",
+        "chronicle"
+      ],
+      "era": "Contemporary nights",
+      "editionScope": "All current World of Darkness games",
+      "text": "World of Darkness chronicles benefit from a defined city or region. Use real geography respectfully or create a fictional city with coherent history, economy, demographics, politics, and infrastructure. Supernatural territory should overlay rather than replace human life. For Vampire, identify feeding patterns, court or Anarch authority, contested neighborhoods, major institutions, and the local threat of hunters. For Werewolf, identify watersheds, industrial sites, caerns, spirit conditions, development pressure, and communities tied to the land. For Hunter, identify missing-person patterns, law enforcement, hospitals, faith groups, media, and the institutions that fail victims. A city should contain several forms of power. Government, landlords, police, corporations, unions, gangs, nonprofits, churches, universities, and neighborhood groups can cooperate or conflict without supernatural direction. Avoid assigning a real neighborhood to an offensive stereotype or casually fictionalizing recent tragedy. Change names and details when necessary. Research living cultures rather than using them as occult decoration. Supernatural domains are rarely perfectly mapped. A Prince's claim can exceed actual feeding control. A pack's territory can overlap municipal boundaries and spirit geography. A hunter cell can protect people who never know it exists. Begin with relationships: who has disappeared, who benefits, who keeps records, who is believed, and what place the characters cannot afford to lose."
+    },
+    {
+      "id": "other-legacy-supernaturals",
+      "title": "Other Legacy Supernatural Lines",
+      "tags": [
+        "Mage",
+        "Wraith",
+        "Changeling",
+        "Demon",
+        "Mummy"
+      ],
+      "era": "Legacy overlay only",
+      "editionScope": "Classic World of Darkness unless updated",
+      "text": "Classic World of Darkness includes additional game lines with distinct themes. Mage: The Ascension concerns reality, belief, magic, and conflict among paradigms. Wraith: The Oblivion concerns the dead, unfinished attachments, the Shadow, and societies beyond death. Changeling: The Dreaming concerns fae souls, imagination, Banality, identity, and a hidden chimerical world. Demon: The Fallen, Mummy: The Resurrection, Orpheus, and other lines add fallen angels, immortals, projected spirits, conspiracies, and alternate accounts of cosmic history. Their metaphysics often conflict when read as literal universal fact. These lines do not yet share one simple current fifth-edition implementation. Use them as explicit overlays with a chosen edition rather than casually importing a Tradition, kith, guild, or demon court into a V5 chronicle. Characters from other lines should remain mysterious from the primary game's point of view. A vampire may mistake a mage for a blood sorcerer. A hunter may not distinguish a wraith from a demon. Cross-line terminology is specialized knowledge. Avoid using crossover to rank supernatural species by combat power. Themes and information boundaries matter more. A mage can reshape reality and still be vulnerable to social evidence; a wraith can know secrets and be unable to act physically. When a campaign needs a broad World of Darkness, establish which cosmological claims are true, which remain beliefs, and which systems are unavailable. Mark that synthesis as campaign canon."
+    },
+    {
+      "id": "humanity-and-moral-pressure",
+      "title": "Humanity, Convictions, and Moral Pressure",
+      "tags": [
+        "Humanity",
+        "convictions",
+        "touchstones",
+        "personal horror",
+        "morality"
+      ],
+      "era": "Contemporary nights",
+      "editionScope": "World of Darkness fifth edition",
+      "text": "Personal horror asks what characters do under supernatural pressure and how they explain it afterward. Vampire uses Humanity, Convictions, Touchstones, Hunger, and Stains to make moral erosion part of play. Werewolf uses Rage, Harano, Hauglosk, pack obligation, and ecological crisis. Hunter uses Desperation, Drives, danger, and the risk of obsession. These mechanics should support characterization rather than police one correct morality. Establish chronicle tenets and boundaries with the players. Convictions can protect a character from some guilt while revealing hypocrisy elsewhere. Touchstones and communities are not hostages inserted only to be killed. They represent relationships, values, and living contexts. Threatening them constantly makes attachment irrational and weakens the game. Monsters can retain love, humor, craftsmanship, and loyalty. That does not erase predation or harm. A vampire who feeds carefully still benefits from unequal power. A werewolf defending a forest can terrorize residents. A hunter protecting victims can destroy an innocent life through certainty. Consequences should follow choices at several scales: internal guilt, damaged trust, legal exposure, faction judgment, and harm to communities. Do not reduce morality to whether a victim dies. Allow repair when characters take responsibility. Confession, restitution, changing a hunting practice, protecting someone without reward, or opposing one's own faction can matter. Horror becomes sharper when characters could choose differently."
+    },
+    {
+      "id": "common-world-of-darkness-traps",
+      "title": "Common World of Darkness Canon Traps",
+      "tags": [
+        "canon",
+        "continuity",
+        "Chronicles of Darkness",
+        "crossover",
+        "errors"
+      ],
+      "era": "All publication eras",
+      "editionScope": "World of Darkness",
+      "text": "Do not confuse World of Darkness with Chronicles of Darkness. Vampire: The Masquerade is not Vampire: The Requiem, and their clans, cosmology, politics, and mechanics differ. Current fifth-edition Vampire, Werewolf, and Hunter revise legacy lore. Do not copy old sect status, tribe names, technology assumptions, metaplot, or cultural depictions forward without checking. One game line's creation story is not automatically objective truth for all others. Keep crossover knowledge limited and choose a primary game. Clans, tribes, and creeds are not personalities or ethnicities. Avoid accents and stereotypes. Do not make every institution secretly supernatural; human systems cause harm on their own. The Masquerade is strained, not nonexistent. Surveillance is powerful, not omniscient. Hunters need evidence. Supernatural beings do not all know one another's categories. Personal horror does not excuse sexual coercion, identity-based harm, or loss of player agency. Use safety tools and establish themes. Do not import exact real-world current events casually. A fictional city or altered institution may provide necessary distance. When legacy lore remains unrevised, label it as an optional overlay. A focused chronicle with uncertain monsters is more faithful than a crossover encyclopedia in which every secret is already cataloged."
+    }
+  ]
+}

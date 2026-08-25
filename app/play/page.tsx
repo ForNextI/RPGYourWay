@@ -1,29 +1,29 @@
+import { AuthPanel } from '@/components/AuthPanel'
 import { PageShell } from '@/components/PageShell'
+import { RpgywPlayEntry } from '@/components/aigm/rpgyw-play-entry'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata = { title: 'Play' }
+export const dynamic = 'force-dynamic'
 
-export default function PlayPage() {
-  return (
-    <PageShell variant="play">
-      <main id="main-content" tabIndex={-1} className="inner-main">
-        <div className="shell narrow-shell">
-          <p className="kicker">Play</p>
-          <h1 className="page-title">The game comes here next.</h1>
-          <p className="page-lede">This route is reserved for the full RPG Your Way gameplay experience. The next build will begin bringing over the proven WardensPC gameplay systems without dragging the rest of the old site along with them.</p>
-          <div className="placeholder-panel">
-            <span className="placeholder-number">01</span>
-            <div><strong>Campaign dashboard</strong><p>Choose, continue, import, or start a campaign.</p></div>
+export default async function PlayPage() {
+  const supabase = await createClient()
+  const { data } = await supabase.auth.getUser()
+
+  if (!data.user) {
+    return (
+      <PageShell variant="play">
+        <main id="main-content" tabIndex={-1} className="inner-main">
+          <div className="shell narrow-shell play-signin-shell">
+            <p className="kicker">Play</p>
+            <h1 className="page-title">Sign in to play.</h1>
+            <p className="page-lede">Existing WardensPC adventures can be imported after you sign in. Campaign files stay in your browser; your RPG Your Way account supplies the shared usage balance.</p>
+            <AuthPanel returnTo="/play" />
           </div>
-          <div className="placeholder-panel">
-            <span className="placeholder-number">02</span>
-            <div><strong>Account-backed play</strong><p>Campaigns and paid usage will belong to the signed-in player instead of a single browser.</p></div>
-          </div>
-          <div className="placeholder-panel">
-            <span className="placeholder-number">03</span>
-            <div><strong>Mobile-first interface</strong><p>Typing remains primary, with dictation and read-aloud available without crowding the screen.</p></div>
-          </div>
-        </div>
-      </main>
-    </PageShell>
-  )
+        </main>
+      </PageShell>
+    )
+  }
+
+  return <RpgywPlayEntry />
 }
