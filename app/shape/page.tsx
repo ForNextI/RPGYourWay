@@ -31,12 +31,12 @@ export default async function ShapePage() {
             </div>
 
             <details className="shape-pricing-details">
-              <summary>How Shape pricing will work</summary>
+              <summary>How Shape uses your RPG Your Way balance</summary>
               <div className="shape-pricing-copy">
-                <p><strong>Private testing is running now, and no payment is collected during these tests.</strong> We are recording real input, cached-input, and output token usage so the paid pricing formula can be based on actual Shape jobs rather than guesses.</p>
-                <p>Before a paid Shape request begins, Shape will show a <strong>maximum estimated price</strong>. That estimate is the most you will pay for that request.</p>
-                <p>Shape will be priced separately from Play Packs. Transcript size, continuity work, writing sections, and the actual AI processing required can affect the price. There will be no surprise overage charge, and a failed processing step will not become a customer charge.</p>
-                <p>Stripe is deliberately not connected to Shape yet. First we test the conversion, reconcile its usage records against the provider, and let the feasibility study turn those real numbers into the quote formula.</p>
+                <p><strong>Private testing is running now, and no payment is collected during these tests.</strong> We are recording real input, cached-input, and output token usage so the final deduction formula is based on actual Shape jobs rather than guesses.</p>
+                <p>Shape will use the <strong>same prepaid RPG Your Way usage balance as Play</strong>. There is no separate Shape wallet and no separate Shape Pack to buy.</p>
+                <p>Before a paid Shape request begins, Shape will show a <strong>maximum estimated balance deduction</strong>. The finished request can cost less, but it will never deduct more than that maximum.</p>
+                <p>Transcript size, continuity work, writing sections, description level, and the actual AI processing required can affect the deduction. A failed processing step will not become a customer charge. Stripe funding is the next payment step; the shared balance is being built first.</p>
               </div>
             </details>
           </section>

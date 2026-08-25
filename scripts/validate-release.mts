@@ -13,8 +13,8 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.5.400')
-assert.equal(pkg.rpgywVersion, '1.5.400')
+assert.equal(pkg.version, '1.5.402')
+assert.equal(pkg.rpgywVersion, '1.5.402')
 assert.equal(pkg.dependencies?.next, '16.2.6')
 assert.equal(pkg.dependencies?.['@supabase/ssr'], '^0.12.4')
 assert.equal(pkg.dependencies?.['@supabase/supabase-js'], '^2.112.3')
@@ -42,12 +42,16 @@ for (const file of [
   'lib/shape/access.ts',
   'lib/shape/config.ts',
   'lib/shape/transcript.ts',
+  'lib/usage/money.ts',
+  'app/api/usage/balance/route.ts',
   'lib/supabase/client.ts',
   'lib/supabase/server.ts',
   'lib/supabase/proxy.ts',
   'supabase/migrations/20260824163000_shape_jobs.sql',
   'supabase/migrations/20260824194500_shape_beta_instrumentation.sql',
+  'supabase/migrations/20260825003000_shared_usage_balance.sql',
   'scripts/test-shape-runtime.mts',
+  'scripts/test-usage-money.mts',
   'proxy.ts',
   'public/rpgyw-logo-bordered.png',
   'public/rpgyw-compass.png',
@@ -83,8 +87,8 @@ assert.match(shapePage, /1,000,000 characters/)
 assert.match(shapePage, /ShapeSignInGate/)
 assert.match(shapePage, /ShapeWorkspace/)
 assert.match(shapePage, /shapeEmailAllowed/)
-assert.match(shapePage, /How Shape pricing will work/)
-assert.match(shapePage, /maximum estimated price/)
+assert.match(shapePage, /How Shape uses your RPG Your Way balance/)
+assert.match(shapePage, /maximum estimated balance deduction/)
 assert.match(shapePage, /no payment is collected during these tests/)
 
 const jobs = read('app/api/shape/jobs/route.ts')
@@ -143,8 +147,42 @@ assert.match(css, /\.shape-usage-grid/)
 assert.match(css, /\.nested-accordion-copy/)
 assert.match(css, /url\('\/rpgyw-map-tan\.png'\)/)
 
+const balanceMigration = read('supabase/migrations/20260825003000_shared_usage_balance.sql')
+assert.match(balanceMigration, /create table if not exists public\.usage_wallets/)
+assert.match(balanceMigration, /create table if not exists public\.usage_ledger/)
+assert.match(balanceMigration, /create table if not exists public\.usage_holds/)
+assert.match(balanceMigration, /rpgyw_release_expired_usage/)
+assert.match(balanceMigration, /rpgyw_reserve_usage/)
+assert.match(balanceMigration, /rpgyw_capture_usage/)
+assert.match(balanceMigration, /rpgyw_credit_usage/)
+assert.match(balanceMigration, /service_role/)
+assert.match(balanceMigration, /usage_wallets_select_own/)
+
+const account = read('app/account/page.tsx')
+assert.match(account, /Shared usage balance/)
+assert.match(account, /Play and Shape use the same balance/)
+assert.match(account, /usage_ledger/)
+assert.match(account, /formatUsageDollars/)
+
+const balanceRoute = read('app/api/usage/balance/route.ts')
+assert.match(balanceRoute, /usage_wallets/)
+assert.match(balanceRoute, /available_microusd/)
+assert.match(balanceRoute, /Cache-Control/)
+
+const money = read('lib/usage/money.ts')
+assert.match(money, /MICRO_USD_PER_DOLLAR = 1_000_000/)
+assert.match(money, /formatUsageDollars/)
+
+const pricing = read('app/pricing/page.tsx')
+assert.match(pricing, /One balance\. Play or Shape\./)
+assert.match(pricing, /same RPG Your Way usage balance/)
+
+assert.match(shapePage, /same prepaid RPG Your Way usage balance as Play/)
+assert.match(shapePage, /maximum estimated balance deduction/)
+assert.doesNotMatch(shapePage, /Shape will be priced separately from Play Packs/)
+
 const footer = read('components/SiteFooter.tsx')
 assert.match(footer, /© 2026 dodo ink\. Independent creative projects\./)
 assert.match(footer, /APP_VERSION/)
 
-console.log('RPG Your Way 1.5.400 Shape private beta, instrumentation, projects, pricing copy, and landing continuity passed validation.')
+console.log('RPG Your Way 1.5.402 shared usage balance, Shape private beta, and account foundation passed validation.')
