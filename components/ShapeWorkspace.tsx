@@ -36,8 +36,12 @@ type ShapeJob = {
   error_message: string | null
   input_tokens: number
   cached_input_tokens: number
+  cache_write_tokens: number
   output_tokens: number
   request_count: number
+  maximum_deduction_microusd: number
+  provider_cost_microusd: number
+  billed_microusd: number
   result_text?: string | null
   partial_result_text?: string | null
   created_at: string
@@ -56,6 +60,11 @@ function safeFilename(title: string, suffix = '.txt') {
   return `${base}${suffix}`
 }
 
+function formatMicrousd(value: number | null | undefined) {
+  const amount = Number(value || 0) / 1_000_000
+  return `$${amount.toFixed(2)}`
+}
+
 function progressLabel(job: ShapeJob) {
   if (job.status === 'completed') return 'Story complete'
   if (job.phase === 'analysis') return `Preparing continuity ${Math.min(job.next_analysis_chunk_index + 1, job.analysis_total)} of ${job.analysis_total}`
@@ -63,7 +72,7 @@ function progressLabel(job: ShapeJob) {
   return 'Preparing Script job'
 }
 
-export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllowed: boolean; accessConfigured: boolean }) {
+export function ShapeWorkspace() {
   const [title, setTitle] = useState('')
   const [transcript, setTranscript] = useState('')
   const [descriptionLevel, setDescriptionLevel] = useState<DescriptionLevel>('light')
@@ -75,10 +84,11 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
   const [running, setRunning] = useState(false)
   const [loadingResume, setLoadingResume] = useState(true)
   const [error, setError] = useState('')
-  const [diagnostic, setDiagnostic] = useState('')
   const [fileName, setFileName] = useState('')
   const [dragging, setDragging] = useState(false)
   const [duplicateBlocked, setDuplicateBlocked] = useState(false)
+  const [quoteMicrousd, setQuoteMicrousd] = useState<number | null>(null)
+  const [quoting, setQuoting] = useState(false)
   const cancelled = useRef(false)
 
   const assessment = useMemo(() => assessShapeTranscript(transcript.trim().length), [transcript])
@@ -96,11 +106,6 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
   useEffect(() => {
     cancelled.current = false
     loadProjects()
-    if (!accessAllowed) {
-      setLoadingResume(false)
-      return () => { cancelled.current = true }
-    }
-
     fetch('/api/shape/jobs', { cache: 'no-store' })
       .then(async (response) => {
         if (!response.ok) return null
@@ -113,11 +118,11 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
       .finally(() => { if (!cancelled.current) setLoadingResume(false) })
 
     return () => { cancelled.current = true }
-  }, [accessAllowed])
+  }, [])
 
   function acceptRawFile(file: File) {
     setError('')
-    setDiagnostic('')
+    setQuoteMicrousd(null)
     setDuplicateBlocked(false)
     setFileName(file.name)
     file.text()
@@ -145,15 +150,32 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
     if (file) acceptRawFile(file)
   }
 
-  async function createJob(confirmDuplicate = false) {
+  async function requestQuote() {
     setError('')
-    setDiagnostic('')
     setDuplicateBlocked(false)
     const clean = transcript.trim()
-    if (!accessAllowed) {
-      setError('Script processing is still in private testing. The workbench is open to look around, but paid/public conversion is not switched on yet.')
-      return
+    if (clean.length < 250 || !assessment.ready) return
+    setQuoting(true)
+    try {
+      const response = await fetch('/api/shape/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ transcript: clean, project_mode: projectMode }),
+      })
+      const payload = await response.json() as { maximum_microusd?: number; error?: string }
+      if (!response.ok || !payload.maximum_microusd) throw new Error(payload.error || 'Script could not estimate this request.')
+      setQuoteMicrousd(payload.maximum_microusd)
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : 'Script could not estimate this request.')
+    } finally {
+      setQuoting(false)
     }
+  }
+
+  async function createJob(confirmDuplicate = false) {
+    setError('')
+    setDuplicateBlocked(false)
+    const clean = transcript.trim()
     if (clean.length < 250) {
       setError('Give Script at least 250 characters of gameplay transcript to work with.')
       return
@@ -164,6 +186,11 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
     }
     if (projectMode && !selectedProjectId && !(projectTitle.trim() || title.trim())) {
       setError('Give the new campaign project a name.')
+      return
+    }
+
+    if (quoteMicrousd === null) {
+      setError('See the maximum estimated deduction before beginning this Script request.')
       return
     }
 
@@ -199,7 +226,6 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
   async function runJob(jobId: string) {
     setRunning(true)
     setError('')
-    setDiagnostic('')
     try {
       for (let step = 0; step < 64; step += 1) {
         const response = await fetch('/api/shape/transform', {
@@ -207,10 +233,9 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ job_id: jobId }),
         })
-        const payload = await response.json() as { job?: ShapeJob; error?: string; diagnostic?: string }
+        const payload = await response.json() as { job?: ShapeJob; error?: string }
         if (payload.job) setJob(payload.job)
         if (!response.ok) {
-          if (payload.diagnostic) setDiagnostic(payload.diagnostic)
           throw new Error(payload.error || 'Script could not finish this processing step.')
         }
         if (!payload.job) throw new Error('Script returned an incomplete job update.')
@@ -230,9 +255,8 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
 
   async function discardJob() {
     if (!job || job.status === 'completed') return
-    if (!window.confirm('Discard this saved Script job? Its usage ledger will remain available in the database, but the job will no longer resume.')) return
+    if (!window.confirm('Discard this saved Script job? Successful AI processing already completed will be charged, and the unused reservation will be released.')) return
     setError('')
-    setDiagnostic('')
     try {
       const response = await fetch(`/api/shape/jobs?id=${encodeURIComponent(job.id)}`, { method: 'DELETE' })
       const payload = await response.json() as { error?: string }
@@ -253,8 +277,8 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
     setTitle('')
     setFileName('')
     setError('')
-    setDiagnostic('')
     setDuplicateBlocked(false)
+    setQuoteMicrousd(null)
     if (continuingProject) {
       setProjectMode(true)
       setSelectedProjectId(continuingProject)
@@ -303,31 +327,10 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
     }
   }
 
-  async function downloadUsageReport() {
-    if (!job) return
-    setError('')
-    try {
-      const response = await fetch(`/api/shape/usage?job_id=${encodeURIComponent(job.id)}`, { cache: 'no-store' })
-      const payload = await response.json()
-      if (!response.ok) throw new Error((payload as { error?: string }).error || 'Script could not build the usage report.')
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' })
-      const url = URL.createObjectURL(blob)
-      const anchor = document.createElement('a')
-      anchor.href = url
-      anchor.download = safeFilename(`${job.title}-Script-usage`, '.json')
-      document.body.appendChild(anchor)
-      anchor.click()
-      anchor.remove()
-      window.setTimeout(() => URL.revokeObjectURL(url), 1_000)
-    } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'Script could not build the usage report.')
-    }
-  }
 
   if (loadingResume) return <p className="shape-loading" role="status">Checking your Script workbench…</p>
 
   if (job) {
-    const totalTokens = (job.input_tokens || 0) + (job.output_tokens || 0)
     const persistedError = job.status === 'error' ? (job.error_message || '') : ''
     const visibleError = error || persistedError
     return (
@@ -341,31 +344,25 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
           <div className="shape-progress-pill">{job.transcript_characters.toLocaleString()} characters</div>
         </div>
 
-        <div className="shape-progress-grid shape-usage-grid" aria-label="Script processing and usage progress">
+        <div className="shape-progress-grid shape-commercial-progress" aria-label="Script processing and usage progress">
           <div><strong>{job.analysis_total ? `${job.next_analysis_chunk_index}/${job.analysis_total}` : '—'}</strong><span>continuity sections</span></div>
           <div><strong>{job.next_chunk_index}/{job.writing_total}</strong><span>writing sections</span></div>
-          <div><strong>{job.input_tokens.toLocaleString()}</strong><span>input tokens</span></div>
-          <div><strong>{job.cached_input_tokens.toLocaleString()}</strong><span>cached input</span></div>
-          <div><strong>{job.output_tokens.toLocaleString()}</strong><span>output tokens</span></div>
-          <div><strong>{job.request_count.toLocaleString()}</strong><span>successful AI calls</span></div>
+          <div><strong>{formatMicrousd(job.maximum_deduction_microusd)}</strong><span>approved maximum</span></div>
+          {job.status === 'completed' ? <div><strong>{formatMicrousd(job.billed_microusd)}</strong><span>final deduction</span></div> : null}
         </div>
-        <p className="shape-usage-note">Private-test meter: {totalTokens.toLocaleString()} total recorded input + output tokens{job.model ? ` · ${job.model}` : ''}. Cached input is shown separately because provider pricing may treat it differently.</p>
 
-        {visibleError ? <p className="shape-error" role="alert">{visibleError}</p> : null}
-        {diagnostic ? (
-          <details className="shape-diagnostic">
-            <summary>Private-test diagnostic</summary>
-            <code>{diagnostic}</code>
-          </details>
+        {visibleError ? (
+          <p className="shape-error" role="alert">
+            {visibleError}
+            {/balance|usage/i.test(visibleError) ? <> <a href="/account#add-usage">Add usage in Account.</a></> : null}
+          </p>
         ) : null}
-
         {job.status !== 'completed' ? (
           <div className="shape-actions">
             <button className="button button-primary" type="button" disabled={running} onClick={() => runJob(job.id)}>
               {running ? 'Script is working…' : job.status === 'error' ? 'Resume this Script job' : 'Continue Script job'}
             </button>
             {job.partial_result_text ? <button className="button button-secondary" type="button" disabled={running} onClick={downloadPartialResult}>Download work so far</button> : null}
-            {job.request_count > 0 ? <button className="button button-secondary" type="button" disabled={running} onClick={downloadUsageReport}>Download test usage report</button> : null}
             <button className="button button-secondary" type="button" disabled={running} onClick={discardJob}>Discard saved job</button>
             <p>Transcript, continuity, prose, and progress are checkpointed to your account after completed steps.</p>
           </div>
@@ -375,7 +372,6 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
             <div className="shape-actions">
               <button className="button button-primary" type="button" onClick={downloadResult}>Download story as text</button>
               <button className="button button-secondary" type="button" onClick={copyResult}>Copy story</button>
-              <button className="button button-secondary" type="button" onClick={downloadUsageReport}>Download test usage report</button>
               <button className="button button-secondary" type="button" onClick={startAnother}>{job.project_id ? 'Script the next project part' : 'Script another transcript'}</button>
             </div>
             <article className="shape-result" aria-label="Finished Script prose">
@@ -395,20 +391,13 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
           <h2 id="shape-workbench-title">Give Script the campaign you actually played.</h2>
           <p>Paste a transcript or upload a file. WardensPC campaign JSON exports are recognized automatically.</p>
         </div>
-        {!accessAllowed ? <span className="shape-beta-pill">Preview only</span> : <span className="shape-beta-pill active">Private test</span>}
+        <span className="shape-beta-pill active">Available now</span>
       </div>
 
-      {!accessAllowed ? (
-        <div className="shape-public-preview-note">
-          <strong>Script processing is not public yet.</strong>
-          <span>{accessConfigured ? 'This account is not on the private test list, but you can inspect the workbench while testing continues.' : 'The private test allowlist has not been configured in this deployment.'}</span>
-        </div>
-      ) : (
-        <div className="shape-public-preview-note testing">
-          <strong>No-charge private test.</strong>
-          <span>This run records detailed API usage for the pricing/feasibility study. Stripe is not connected.</span>
-        </div>
-      )}
+      <div className="shape-public-preview-note testing">
+        <strong>Your balance pays for successful AI processing.</strong>
+        <span>See and approve the maximum deduction before Script begins. The final deduction can be lower, never higher.</span>
+      </div>
 
       <div className="shape-form-grid">
         <label className="shape-field">
@@ -431,7 +420,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
 
       <label className="shape-field shape-transcript-field">
         <span>Gameplay transcript</span>
-        <textarea value={transcript} onChange={(event) => { setTranscript(event.target.value); setDuplicateBlocked(false) }} placeholder="Paste the campaign transcript here…" />
+        <textarea value={transcript} onChange={(event) => { setTranscript(event.target.value); setDuplicateBlocked(false); setQuoteMicrousd(null) }} placeholder="Paste the campaign transcript here…" />
       </label>
 
       <div className="shape-count-row">
@@ -443,12 +432,12 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
         <legend>Is this a one-off story or part of a larger campaign?</legend>
         <div className="shape-project-options">
           <label className={!projectMode ? 'selected' : ''}>
-            <input type="radio" name="shape-project-mode" checked={!projectMode} onChange={() => setProjectMode(false)} />
+            <input type="radio" name="shape-project-mode" checked={!projectMode} onChange={() => { setProjectMode(false); setQuoteMicrousd(null) }} />
             <strong>One transcript</strong>
             <span>Script this submission on its own.</span>
           </label>
           <label className={projectMode ? 'selected' : ''}>
-            <input type="radio" name="shape-project-mode" checked={projectMode} onChange={() => setProjectMode(true)} />
+            <input type="radio" name="shape-project-mode" checked={projectMode} onChange={() => { setProjectMode(true); setQuoteMicrousd(null) }} />
             <strong>Ongoing campaign project</strong>
             <span>Carry a compact continuity ledger into later transcript parts.</span>
           </label>
@@ -459,7 +448,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
             {projects.length ? (
               <label className="shape-field">
                 <span>Continue an existing project, or start a new one</span>
-                <select value={selectedProjectId} onChange={(event) => setSelectedProjectId(event.target.value)}>
+                <select value={selectedProjectId} onChange={(event) => { setSelectedProjectId(event.target.value); setQuoteMicrousd(null) }}>
                   <option value="">Start a new project</option>
                   {projects.map((project) => <option key={project.id} value={project.id}>{project.title} · {project.completed_parts} completed part{project.completed_parts === 1 ? '' : 's'}</option>)}
                 </select>
@@ -482,7 +471,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
         <div className="shape-description-grid">
           {descriptions.map((choice) => (
             <label key={choice.value} className={descriptionLevel === choice.value ? 'shape-description-card selected' : 'shape-description-card'}>
-              <input type="radio" name="description-level" value={choice.value} checked={descriptionLevel === choice.value} onChange={() => setDescriptionLevel(choice.value)} />
+              <input type="radio" name="description-level" value={choice.value} checked={descriptionLevel === choice.value} onChange={() => { setDescriptionLevel(choice.value); setQuoteMicrousd(null) }} />
               <strong>{choice.label}</strong>
               <span>{choice.detail}</span>
             </label>
@@ -499,14 +488,34 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
         </div>
       </details>
 
-      {error ? <p className="shape-error" role="alert">{error}</p> : null}
+      {error ? (
+        <p className="shape-error" role="alert">
+          {error}
+          {/balance|usage/i.test(error) ? <> <a href="/account#add-usage">Add usage in Account.</a></> : null}
+        </p>
+      ) : null}
+
+      {quoteMicrousd !== null ? (
+        <div className="shape-quote" role="status">
+          <span>Maximum estimated deduction</span>
+          <strong>{formatMicrousd(quoteMicrousd)}</strong>
+          <small>The final deduction may be lower. It will not exceed this amount.</small>
+        </div>
+      ) : null}
 
       <div className="shape-actions">
-        <button className="button button-primary" type="button" onClick={() => createJob(false)} disabled={running || !accessAllowed || transcript.trim().length < 250 || !assessment.ready}>
-          {running ? 'Creating Script job…' : accessAllowed ? 'Begin private Script test' : 'Script opens soon'}
-        </button>
+        {quoteMicrousd === null ? (
+          <button className="button button-primary" type="button" onClick={requestQuote} disabled={running || quoting || transcript.trim().length < 250 || !assessment.ready}>
+            {quoting ? 'Estimating…' : 'See maximum usage'}
+          </button>
+        ) : (
+          <button className="button button-primary" type="button" onClick={() => createJob(false)} disabled={running}>
+            {running ? 'Creating Script job…' : `Begin Script · max ${formatMicrousd(quoteMicrousd)}`}
+          </button>
+        )}
         {duplicateBlocked ? <button className="button button-secondary" type="button" disabled={running} onClick={() => createJob(true)}>I really need to Script this exact transcript again</button> : null}
-        <p>{accessAllowed ? 'No payment is collected. Detailed provider usage is recorded for this test.' : 'Public Script will show a maximum estimated cost before paid processing begins.'}</p>
+        {quoteMicrousd !== null ? <button className="button button-secondary" type="button" disabled={running} onClick={() => setQuoteMicrousd(null)}>Recalculate</button> : null}
+        <p>Only successful metered AI processing is deducted from your RPG Your Way balance.</p>
       </div>
     </section>
   )

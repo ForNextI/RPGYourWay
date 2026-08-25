@@ -1,7 +1,6 @@
 import { PageShell } from '@/components/PageShell'
 import { ShapeSignInGate } from '@/components/ShapeSignInGate'
 import { ShapeWorkspace } from '@/components/ShapeWorkspace'
-import { shapeAccessConfigured, shapeEmailAllowed } from '@/lib/shape/access'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata = {
@@ -26,27 +25,21 @@ export default async function ScriptPage() {
 
             <div className="shape-steps" aria-label="How Script works">
               <div><strong>1</strong><span>Add the transcript</span><small>Paste it, upload a text file, or use a WardensPC campaign export.</small></div>
-              <div><strong>2</strong><span>Choose the prose</span><small>Pick the amount of description and, for a long campaign, keep continuity across parts.</small></div>
-              <div><strong>3</strong><span>Script and download</span><small>Long jobs checkpoint to your account so a refresh or temporary failure does not start them over.</small></div>
+              <div><strong>2</strong><span>See the maximum</span><small>Script shows the most this request can deduct before you approve it.</small></div>
+              <div><strong>3</strong><span>Script and download</span><small>Only successful metered AI processing is charged, and long jobs checkpoint to your account.</small></div>
             </div>
 
             <details className="shape-pricing-details">
               <summary>How Script uses your RPG Your Way balance</summary>
               <div className="shape-pricing-copy">
-                <p><strong>Private testing is running now, and no payment is collected for Script during these tests.</strong> We are recording real input, cached-input, and output token usage so the final deduction formula is based on actual jobs rather than guesses.</p>
-                <p>Script will use the <strong>same prepaid RPG Your Way usage balance as Play</strong>. There is no separate Script wallet and no separate Script Pack to buy.</p>
-                <p>Before a paid Script request begins, Script will show a <strong>maximum estimated balance deduction</strong>. The finished request can cost less, but it will never deduct more than that maximum.</p>
-                <p>Transcript size, continuity work, writing sections, description level, and the actual AI processing required can affect the deduction. A failed processing step will not become a customer charge. Stripe can now fund the shared balance; automatic Script deductions are the next payment step.</p>
+                <p>Script uses the <strong>same prepaid RPG Your Way usage balance as Play</strong>.</p>
+                <p>Before processing begins, Script shows a <strong>maximum estimated balance deduction</strong>. The finished request can cost less, but it will never deduct more than that maximum.</p>
+                <p>Transcript size, continuity work, writing sections, description level, and the actual AI processing required can affect the deduction. Failed provider calls are not charged. If a completed request unexpectedly costs more than its estimate, RPG Your Way absorbs the difference rather than exceeding the approved maximum.</p>
               </div>
             </details>
           </section>
 
-          {!user ? <ShapeSignInGate /> : (
-            <ShapeWorkspace
-              accessAllowed={shapeEmailAllowed(user.email)}
-              accessConfigured={shapeAccessConfigured()}
-            />
-          )}
+          {!user ? <ShapeSignInGate /> : <ShapeWorkspace />}
         </div>
       </main>
     </PageShell>

@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
 
   const { data: job, error: jobError } = await supabase
     .from('shape_jobs')
-    .select('id,title,project_id,project_part_number,transcript_characters,status,prompt_version,model,input_tokens,cached_input_tokens,output_tokens,request_count,created_at,updated_at,completed_at')
+    .select('id,title,project_id,project_part_number,transcript_characters,status,prompt_version,model,input_tokens,cached_input_tokens,cache_write_tokens,output_tokens,request_count,maximum_deduction_microusd,provider_cost_microusd,billed_microusd,created_at,updated_at,completed_at')
     .eq('id', jobId)
     .eq('user_id', user.id)
     .single()
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
 
   const { data: events, error: eventError } = await supabase
     .from('shape_usage_events')
-    .select('phase,operation,model,provider_request_id,input_tokens,cached_input_tokens,output_tokens,total_tokens,input_characters,duration_ms,success,status_code,created_at')
+    .select('phase,operation,model,provider_request_id,input_tokens,cached_input_tokens,cache_write_tokens,output_tokens,total_tokens,input_characters,duration_ms,success,status_code,created_at')
     .eq('job_id', jobId)
     .eq('user_id', user.id)
     .order('created_at', { ascending: true })
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
 
   return Response.json({
     generated_at: new Date().toISOString(),
-    purpose: 'RPG Your Way Script private-test usage report. No transcript or finished prose is included.',
+    purpose: 'RPG Your Way Script usage report. No transcript or finished prose is included.',
     job,
     events: events || [],
   }, { headers: { 'Cache-Control': 'no-store' } })

@@ -6,6 +6,7 @@ const links = [
   { href: '/play', label: 'Play' },
   { href: '/script', label: 'Script' },
   { href: 'https://www.thereadingofthewardens.com', label: 'Read', external: true },
+  { href: '/account', label: 'Account' },
 ]
 
 function JeweledDivider() {
@@ -18,7 +19,7 @@ export function SiteHeader() {
       <div className="shell header-inner">
         <Link className="brand" href="/" aria-label="RPG Your Way home">
           <span className="brand-mark" aria-hidden="true">
-            <Image src="/rpgyw-compass.png" alt="" width={36} height={36} priority />
+            <Image src="/rpgyw-compass.png" alt="" width={32} height={32} priority />
           </span>
           <span className="brand-words">RPG Your Way</span>
         </Link>
@@ -33,8 +34,7 @@ export function SiteHeader() {
               )}
             </span>
           ))}
-          <JeweledDivider />
-          <FullscreenToggle />
+          <span className="fullscreen-nav-gap"><FullscreenToggle /></span>
         </nav>
       </div>
     </header>

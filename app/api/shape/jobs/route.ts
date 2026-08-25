@@ -1,7 +1,8 @@
-import { createHash } from 'node:crypto'
+import { createHash, randomUUID } from 'node:crypto'
 import { NextRequest } from 'next/server'
-import { shapeEmailAllowed } from '@/lib/shape/access'
+import { estimateShapeMaximumMicrousd } from '@/lib/shape/billing'
 import { selectedShapeModel } from '@/lib/shape/config'
+import { settleShapeJobUsage } from '@/lib/shape/settlement'
 import {
   SHAPE_MAX_INPUT_CHARACTERS,
   SHAPE_SINGLE_PASS_CHARACTERS,
@@ -10,11 +11,13 @@ import {
   normalizeShapeTranscriptForFingerprint,
 } from '@/lib/shape/transcript'
 import { createClient } from '@/lib/supabase/server'
+import { formatUsageDollars } from '@/lib/usage/money'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 const DESCRIPTION_LEVELS = new Set(['plain', 'light', 'rich', 'purple'])
+const SHAPE_HOLD_DAYS = 30
 
 function serializeJob(row: Record<string, unknown>, includeResult = false, includePartial = false) {
   return {
@@ -35,8 +38,12 @@ function serializeJob(row: Record<string, unknown>, includeResult = false, inclu
     error_message: row.error_message,
     input_tokens: row.input_tokens || 0,
     cached_input_tokens: row.cached_input_tokens || 0,
+    cache_write_tokens: row.cache_write_tokens || 0,
     output_tokens: row.output_tokens || 0,
     request_count: row.request_count || 0,
+    maximum_deduction_microusd: row.maximum_deduction_microusd || 0,
+    provider_cost_microusd: row.provider_cost_microusd || 0,
+    billed_microusd: row.billed_microusd || 0,
     result_text: includeResult ? row.result_text : undefined,
     partial_result_text: includePartial && typeof row.prose_text === 'string' && row.prose_text ? row.prose_text : undefined,
     created_at: row.created_at,
@@ -44,22 +51,23 @@ function serializeJob(row: Record<string, unknown>, includeResult = false, inclu
   }
 }
 
-async function authenticatedClient(requireBeta = true) {
+async function authenticatedClient() {
   const supabase = await createClient()
   const { data, error } = await supabase.auth.getUser()
   if (error || !data.user) return { error: Response.json({ error: 'Sign in before using Script.' }, { status: 401 }) }
-  if (requireBeta && !shapeEmailAllowed(data.user.email)) return { error: Response.json({ error: 'Script processing is still limited to the private test list.' }, { status: 403 }) }
   return { supabase, user: data.user }
 }
 
+const JOB_SELECT = 'id,title,description_level,transcript_characters,status,phase,analysis_total,writing_total,next_analysis_chunk_index,next_chunk_index,prompt_version,model,project_id,project_part_number,error_message,input_tokens,cached_input_tokens,cache_write_tokens,output_tokens,request_count,maximum_deduction_microusd,provider_cost_microusd,billed_microusd,result_text,prose_text,created_at,updated_at'
+
 export async function GET(request: NextRequest) {
-  const auth = await authenticatedClient(true)
+  const auth = await authenticatedClient()
   if ('error' in auth) return auth.error
   const activeOnly = request.nextUrl.searchParams.get('active') === '1'
 
   let query = auth.supabase
     .from('shape_jobs')
-    .select('id,title,description_level,transcript_characters,status,phase,analysis_total,writing_total,next_analysis_chunk_index,next_chunk_index,prompt_version,model,project_id,project_part_number,error_message,input_tokens,cached_input_tokens,output_tokens,request_count,result_text,prose_text,created_at,updated_at')
+    .select(JOB_SELECT)
     .eq('user_id', auth.user.id)
     .order('updated_at', { ascending: false })
     .limit(1)
@@ -73,7 +81,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: Request) {
-  const auth = await authenticatedClient(true)
+  const auth = await authenticatedClient()
   if ('error' in auth) return auth.error
 
   let body: {
@@ -121,48 +129,75 @@ export async function POST(request: Request) {
       .limit(1)
       .maybeSingle()
     if (duplicate) return Response.json({
-      error: 'This account has already Scripted this exact transcript. Running it again spends API usage and may introduce different inconsistencies.',
+      error: 'This account has already Scripted this exact transcript. Running it again spends usage and may introduce different inconsistencies.',
       duplicate: true,
       duplicate_job_id: duplicate.id,
     }, { status: 409 })
   }
 
-  let projectId: string | null = null
-  let projectPartNumber = 1
-  let priorContinuity = ''
-
-  if (projectMode) {
-    if (requestedProjectId) {
-      const { data: project, error: projectError } = await auth.supabase
-        .from('shape_projects')
-        .select('id,title,continuity,completed_parts')
-        .eq('id', requestedProjectId)
-        .eq('user_id', auth.user.id)
-        .single()
-      if (projectError || !project) return Response.json({ error: 'Script could not find that campaign project.' }, { status: 404 })
-      projectId = project.id
-      projectPartNumber = (project.completed_parts || 0) + 1
-      priorContinuity = project.continuity || ''
-    } else {
-      const { data: project, error: projectError } = await auth.supabase
-        .from('shape_projects')
-        .insert({ user_id: auth.user.id, title: requestedProjectTitle || title || 'My Script Project', continuity: '', completed_parts: 0 })
-        .select('id,title,continuity,completed_parts')
-        .single()
-      if (projectError || !project) return Response.json({ error: 'Script could not create the campaign project. Apply the Script database foundation first.' }, { status: 503 })
-      projectId = project.id
-    }
-  }
-
   let analysisTotal = 0
   let writingTotal = 1
+  let maximumDeductionMicrousd = 0
   try {
     if (projectMode || transcript.length > SHAPE_SINGLE_PASS_CHARACTERS) {
       analysisTotal = buildShapeAnalysisChunks(transcript).length
       writingTotal = buildShapeTranscriptChunks(transcript).length
     }
+    maximumDeductionMicrousd = estimateShapeMaximumMicrousd(transcript, projectMode)
   } catch (caught) {
-    return Response.json({ error: caught instanceof Error ? caught.message : 'Script could not safely divide this transcript.' }, { status: 400 })
+    return Response.json({ error: caught instanceof Error ? caught.message : 'Script could not safely divide or estimate this transcript.' }, { status: 400 })
+  }
+
+  let projectId: string | null = null
+  let projectPartNumber = 1
+  let priorContinuity = ''
+  if (projectMode && requestedProjectId) {
+    const { data: project, error: projectError } = await auth.supabase
+      .from('shape_projects')
+      .select('id,title,continuity,completed_parts')
+      .eq('id', requestedProjectId)
+      .eq('user_id', auth.user.id)
+      .single()
+    if (projectError || !project) return Response.json({ error: 'Script could not find that campaign project.' }, { status: 404 })
+    projectId = project.id
+    projectPartNumber = (project.completed_parts || 0) + 1
+    priorContinuity = project.continuity || ''
+  }
+
+  const jobId = randomUUID()
+  const holdExpiry = new Date(Date.now() + SHAPE_HOLD_DAYS * 24 * 60 * 60 * 1000).toISOString()
+  const { data: holdId, error: holdError } = await auth.supabase.rpc('rpgyw_reserve_usage', {
+    p_maximum_microusd: maximumDeductionMicrousd,
+    p_source: 'shape',
+    p_source_ref: jobId,
+    p_idempotency_key: `shape:job:${jobId}`,
+    p_expires_at: holdExpiry,
+  })
+  if (holdError || !holdId) {
+    const insufficient = /insufficient rpg your way usage balance/i.test(holdError?.message || '')
+    return Response.json({
+      error: insufficient
+        ? `This Script request can reserve up to ${formatUsageDollars(maximumDeductionMicrousd)}, but your available balance is lower. Add usage in Account and try again.`
+        : `Script could not reserve the maximum estimated deduction: ${holdError?.message || 'unknown balance error'}`,
+      insufficient_balance: insufficient,
+      maximum_microusd: maximumDeductionMicrousd,
+      maximum_display: formatUsageDollars(maximumDeductionMicrousd),
+    }, { status: insufficient ? 402 : 503 })
+  }
+
+  let createdProjectId: string | null = null
+  if (projectMode && !requestedProjectId) {
+    const { data: project, error: projectError } = await auth.supabase
+      .from('shape_projects')
+      .insert({ user_id: auth.user.id, title: requestedProjectTitle || title || 'My Script Project', continuity: '', completed_parts: 0 })
+      .select('id,title,continuity,completed_parts')
+      .single()
+    if (projectError || !project) {
+      await auth.supabase.rpc('rpgyw_release_usage', { p_hold_id: holdId })
+      return Response.json({ error: 'Script could not create the campaign project. Apply the Script database foundation first.' }, { status: 503 })
+    }
+    projectId = project.id
+    createdProjectId = project.id
   }
 
   const now = new Date().toISOString()
@@ -170,6 +205,7 @@ export async function POST(request: Request) {
   const { data, error } = await auth.supabase
     .from('shape_jobs')
     .insert({
+      id: jobId,
       user_id: auth.user.id,
       title,
       description_level: descriptionLevel,
@@ -187,27 +223,50 @@ export async function POST(request: Request) {
       prose_text: '',
       input_tokens: 0,
       cached_input_tokens: 0,
+      cache_write_tokens: 0,
       output_tokens: 0,
       request_count: 0,
       model,
       project_id: projectId,
       project_part_number: projectPartNumber,
+      usage_hold_id: holdId,
+      maximum_deduction_microusd: maximumDeductionMicrousd,
+      provider_cost_microusd: 0,
+      billed_microusd: 0,
       error_message: null,
       updated_at: now,
     })
-    .select('id,title,description_level,transcript_characters,status,phase,analysis_total,writing_total,next_analysis_chunk_index,next_chunk_index,prompt_version,model,project_id,project_part_number,error_message,input_tokens,cached_input_tokens,output_tokens,request_count,created_at,updated_at')
+    .select(JOB_SELECT)
     .single()
 
-  if (error || !data) return Response.json({ error: 'Script could not save the job. Confirm the Script database foundation has been applied.' }, { status: 503 })
+  if (error || !data) {
+    await auth.supabase.rpc('rpgyw_release_usage', { p_hold_id: holdId })
+    if (createdProjectId) await auth.supabase.from('shape_projects').delete().eq('id', createdProjectId).eq('user_id', auth.user.id)
+    return Response.json({ error: 'Script could not save the job. Confirm the Script commercial-billing database migration has been applied.' }, { status: 503 })
+  }
   return Response.json({ job: serializeJob(data as Record<string, unknown>) }, { status: 201, headers: { 'Cache-Control': 'no-store' } })
 }
 
-
 export async function DELETE(request: NextRequest) {
-  const auth = await authenticatedClient(true)
+  const auth = await authenticatedClient()
   if ('error' in auth) return auth.error
   const id = request.nextUrl.searchParams.get('id')?.trim() || ''
   if (!id) return Response.json({ error: 'Choose a Script job to discard.' }, { status: 400 })
+
+  const { data: existing, error: findError } = await auth.supabase
+    .from('shape_jobs')
+    .select('id,status,usage_hold_id,maximum_deduction_microusd,provider_cost_microusd,billed_microusd')
+    .eq('id', id)
+    .eq('user_id', auth.user.id)
+    .maybeSingle()
+  if (findError) return Response.json({ error: 'Script could not read that saved job.' }, { status: 500 })
+  if (!existing || existing.status === 'completed') return Response.json({ error: 'That Script job is already complete or could not be found.' }, { status: 409 })
+
+  try {
+    await settleShapeJobUsage(auth.supabase, existing)
+  } catch (caught) {
+    return Response.json({ error: caught instanceof Error ? caught.message : 'Script could not settle completed usage before discarding the job.' }, { status: 500 })
+  }
 
   const { data, error } = await auth.supabase
     .from('shape_jobs')

@@ -14,8 +14,12 @@ export type StripeCheckoutSession = {
   url?: string | null
 }
 
-export function stripeCheckoutCreditIdempotencyKey(sessionId: string) {
-  return `stripe:checkout:${sessionId}`
+export function stripeCheckoutUsageCreditIdempotencyKey(sessionId: string) {
+  return `stripe:checkout:${sessionId}:usage`
+}
+
+export function stripeCheckoutSurplusCreditIdempotencyKey(sessionId: string) {
+  return `stripe:checkout:${sessionId}:processing-surplus`
 }
 
 export function validatePaidCheckoutSession(session: StripeCheckoutSession, expectedUserId?: string) {

@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { PageShell } from '@/components/PageShell'
 
 const features = [
@@ -221,7 +222,7 @@ export default function HomePage() {
                 <p className="campaign-label">Continue campaign</p>
                 <h2>Your adventure</h2>
                 <p>Last played recently</p>
-                <div className="fake-button">Continue playing</div>
+                <Link className="fake-button" href="/play">Continue playing</Link>
               </div>
               <div className="preview-row">
                 <div><strong>Usage</strong><span>Prepaid access</span></div>

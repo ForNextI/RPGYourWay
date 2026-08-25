@@ -1,9 +1,33 @@
 import { verifyStripeWebhookSignatureWithSecret } from '@/lib/stripe/signature'
-import type { PlayPack } from '@/lib/billing/play-packs'
-import { stripeCheckoutCreditIdempotencyKey, validatePaidCheckoutSession, type StripeCheckoutSession } from '@/lib/stripe/checkout'
+import {
+  includedProcessingCents,
+  nominalUsageMicrousd,
+  type PlayPack,
+} from '@/lib/billing/play-packs'
+import {
+  stripeCheckoutSurplusCreditIdempotencyKey,
+  stripeCheckoutUsageCreditIdempotencyKey,
+  validatePaidCheckoutSession,
+  type StripeCheckoutSession,
+} from '@/lib/stripe/checkout'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 const STRIPE_API_BASE = 'https://api.stripe.com/v1'
+
+type StripeBalanceTransaction = {
+  id?: string
+  fee?: number | null
+}
+
+type StripeCharge = {
+  id?: string
+  balance_transaction?: string | StripeBalanceTransaction | null
+}
+
+type StripePaymentIntent = {
+  id?: string
+  latest_charge?: string | StripeCharge | null
+}
 
 type StripeEvent = {
   id: string
@@ -51,15 +75,15 @@ export async function createPlayPackCheckoutSession(args: {
   const { userId, email, pack } = args
   const body = new URLSearchParams()
   body.set('mode', 'payment')
-  body.set('success_url', `${siteUrl()}/account?status=payment-success&session_id={CHECKOUT_SESSION_ID}`)
-  body.set('cancel_url', `${siteUrl()}/pricing?status=checkout-cancelled`)
+  body.set('success_url', `${siteUrl()}/account?status=payment-success&session_id={CHECKOUT_SESSION_ID}#usage-balance`)
+  body.set('cancel_url', `${siteUrl()}/account?status=checkout-cancelled#add-usage`)
   body.set('client_reference_id', userId)
   if (email) body.set('customer_email', email)
   body.set('line_items[0][quantity]', '1')
   body.set('line_items[0][price_data][currency]', 'usd')
   body.set('line_items[0][price_data][unit_amount]', String(pack.priceCents))
   body.set('line_items[0][price_data][product_data][name]', pack.name)
-  body.set('line_items[0][price_data][product_data][description]', 'Prepaid RPG Your Way usage balance')
+  body.set('line_items[0][price_data][product_data][description]', `$${(pack.usageCents / 100).toFixed(2)} in prepaid RPG Your Way usage`)
   body.set('metadata[play_pack_id]', pack.id)
   body.set('metadata[user_id]', userId)
   body.set('payment_intent_data[metadata][play_pack_id]', pack.id)
@@ -76,31 +100,103 @@ export async function retrieveCheckoutSession(sessionId: string) {
   return await stripeRequest(`/checkout/sessions/${encodeURIComponent(sessionId)}`) as unknown as StripeCheckoutSession
 }
 
+async function balanceTransactionFee(balanceTransaction: string | StripeBalanceTransaction | null | undefined) {
+  if (!balanceTransaction) return null
+  if (typeof balanceTransaction === 'object') {
+    return Number.isInteger(balanceTransaction.fee) && Number(balanceTransaction.fee) >= 0 ? Number(balanceTransaction.fee) : null
+  }
+  if (!/^txn_[A-Za-z0-9_]+$/.test(balanceTransaction)) return null
+  const payload = await stripeRequest(`/balance_transactions/${encodeURIComponent(balanceTransaction)}`) as unknown as StripeBalanceTransaction
+  return Number.isInteger(payload.fee) && Number(payload.fee) >= 0 ? Number(payload.fee) : null
+}
+
+async function chargeFee(charge: string | StripeCharge | null | undefined) {
+  if (!charge) return null
+  if (typeof charge === 'object') return balanceTransactionFee(charge.balance_transaction)
+  if (!/^ch_[A-Za-z0-9_]+$/.test(charge)) return null
+  const payload = await stripeRequest(`/charges/${encodeURIComponent(charge)}?expand[]=balance_transaction`) as unknown as StripeCharge
+  return balanceTransactionFee(payload.balance_transaction)
+}
+
+export async function retrieveActualStripeFeeCents(paymentIntentId: string | null | undefined) {
+  if (!paymentIntentId || !/^pi_[A-Za-z0-9_]+$/.test(paymentIntentId)) return null
+  const payload = await stripeRequest(`/payment_intents/${encodeURIComponent(paymentIntentId)}?expand[]=latest_charge.balance_transaction`) as unknown as StripePaymentIntent
+  return chargeFee(payload.latest_charge)
+}
 
 export async function creditPaidCheckoutSession(session: StripeCheckoutSession, expectedUserId?: string) {
   const validated = validatePaidCheckoutSession(session, expectedUserId)
   if (!validated.paid) return { credited: false as const, pending: true as const }
 
   const admin = createAdminClient()
-  const { data, error } = await admin.rpc('rpgyw_credit_usage', {
+  const nominalMicrousd = nominalUsageMicrousd(validated.pack)
+  const processingIncludedCents = includedProcessingCents(validated.pack)
+  let actualProcessingFeeCents: number | null = null
+
+  try {
+    actualProcessingFeeCents = await retrieveActualStripeFeeCents(session.payment_intent)
+  } catch (caught) {
+    console.error('RPG Your Way could not read the settled Stripe fee yet.', caught instanceof Error ? caught.message : caught)
+  }
+
+  const { data: nominalBalance, error: nominalError } = await admin.rpc('rpgyw_credit_usage', {
     p_user_id: validated.userId,
-    p_amount_microusd: validated.pack.allowanceMicrousd,
+    p_amount_microusd: nominalMicrousd,
     p_source: 'stripe',
     p_source_ref: session.id,
-    p_idempotency_key: stripeCheckoutCreditIdempotencyKey(session.id),
+    p_idempotency_key: stripeCheckoutUsageCreditIdempotencyKey(session.id),
     p_metadata: {
       play_pack_id: validated.pack.id,
       play_pack_name: validated.pack.name,
       purchase_price_cents: validated.pack.priceCents,
-      allowance_microusd: validated.pack.allowanceMicrousd,
+      usage_value_cents: validated.pack.usageCents,
+      site_operating_cents: validated.pack.siteOperatingCents,
+      included_processing_cents: processingIncludedCents,
+      actual_processing_fee_cents: actualProcessingFeeCents,
       stripe_checkout_session_id: session.id,
       stripe_payment_intent_id: session.payment_intent || null,
       stripe_customer_id: session.customer || null,
     },
   })
 
-  if (error) throw new Error(`RPG Your Way could not credit the paid Play Pack: ${error.message}`)
-  return { credited: true as const, pending: false as const, balanceMicrousd: data, pack: validated.pack }
+  if (nominalError) throw new Error(`RPG Your Way could not credit the paid Play Pack: ${nominalError.message}`)
+
+  const surplusCents = actualProcessingFeeCents === null
+    ? 0
+    : Math.max(0, processingIncludedCents - actualProcessingFeeCents)
+  let balanceMicrousd = nominalBalance
+
+  if (surplusCents > 0) {
+    const { data: surplusBalance, error: surplusError } = await admin.rpc('rpgyw_credit_usage', {
+      p_user_id: validated.userId,
+      p_amount_microusd: surplusCents * 10_000,
+      p_source: 'stripe-surplus',
+      p_source_ref: session.id,
+      p_idempotency_key: stripeCheckoutSurplusCreditIdempotencyKey(session.id),
+      p_metadata: {
+        play_pack_id: validated.pack.id,
+        play_pack_name: validated.pack.name,
+        included_processing_cents: processingIncludedCents,
+        actual_processing_fee_cents: actualProcessingFeeCents,
+        processing_surplus_cents: surplusCents,
+        stripe_checkout_session_id: session.id,
+        stripe_payment_intent_id: session.payment_intent || null,
+      },
+    })
+    if (surplusError) throw new Error(`RPG Your Way could not credit the processing-cost difference: ${surplusError.message}`)
+    balanceMicrousd = surplusBalance
+  }
+
+  return {
+    credited: true as const,
+    pending: false as const,
+    balanceMicrousd,
+    pack: validated.pack,
+    nominalMicrousd,
+    actualProcessingFeeCents,
+    processingSurplusCents: surplusCents,
+    processingFeePending: actualProcessingFeeCents === null,
+  }
 }
 
 export async function finalizeCheckoutSessionById(sessionId: string, expectedUserId?: string) {

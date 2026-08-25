@@ -7,11 +7,11 @@ import { createPlayPackCheckoutSession } from '@/lib/stripe/server'
 
 export async function beginPlayPackCheckout(formData: FormData) {
   const pack = playPackById(formData.get('pack'))
-  if (!pack) redirect('/pricing?error=Unknown+Play+Pack')
+  if (!pack) redirect('/account?error=Unknown+Play+Pack#add-usage')
 
   const supabase = await createClient()
   const { data, error } = await supabase.auth.getUser()
-  if (error || !data.user) redirect('/account?error=Sign+in+before+buying+a+Play+Pack.')
+  if (error || !data.user) redirect('/account?error=Sign+in+before+buying+a+Play+Pack.#sign-in')
 
   let checkoutUrl = ''
   try {
@@ -23,9 +23,9 @@ export async function beginPlayPackCheckout(formData: FormData) {
     checkoutUrl = session.url || ''
   } catch (caught) {
     const message = caught instanceof Error ? caught.message : 'Stripe checkout could not start.'
-    redirect(`/pricing?error=${encodeURIComponent(message)}`)
+    redirect(`/account?error=${encodeURIComponent(message)}#add-usage`)
   }
 
-  if (!checkoutUrl) redirect('/pricing?error=Stripe+checkout+did+not+return+a+payment+page.')
+  if (!checkoutUrl) redirect('/account?error=Stripe+checkout+did+not+return+a+payment+page.#add-usage')
   redirect(checkoutUrl)
 }

@@ -1,5 +1,5 @@
-import { shapeEmailAllowed } from '@/lib/shape/access'
 import { SHAPE_PROMPT_VERSION, selectedShapeModel } from '@/lib/shape/config'
+import { settleShapeJobUsage } from '@/lib/shape/settlement'
 import {
   SHAPE_PROVISIONAL_PROSE_CHARACTERS,
   SHAPE_SINGLE_PASS_CHARACTERS,
@@ -100,8 +100,13 @@ type ShapeJobRow = {
   project_part_number: number
   input_tokens: number
   cached_input_tokens: number
+  cache_write_tokens: number
   output_tokens: number
   request_count: number
+  usage_hold_id: string | null
+  maximum_deduction_microusd: number
+  provider_cost_microusd: number
+  billed_microusd: number
   error_message: string | null
   created_at: string
   updated_at: string
@@ -111,7 +116,7 @@ type OpenAiUsage = {
   input_tokens?: number
   output_tokens?: number
   total_tokens?: number
-  input_tokens_details?: { cached_tokens?: number }
+  input_tokens_details?: { cached_tokens?: number; cache_write_tokens?: number }
 }
 
 type OpenAiPayload = {
@@ -124,6 +129,7 @@ type OpenAiPayload = {
 type UsageSummary = {
   inputTokens: number
   cachedInputTokens: number
+  cacheWriteTokens: number
   outputTokens: number
   totalTokens: number
 }
@@ -149,8 +155,12 @@ function serializeJob(row: ShapeJobRow, includeResult = false, includePartial = 
     error_message: row.error_message,
     input_tokens: row.input_tokens || 0,
     cached_input_tokens: row.cached_input_tokens || 0,
+    cache_write_tokens: row.cache_write_tokens || 0,
     output_tokens: row.output_tokens || 0,
     request_count: row.request_count || 0,
+    maximum_deduction_microusd: row.maximum_deduction_microusd || 0,
+    provider_cost_microusd: row.provider_cost_microusd || 0,
+    billed_microusd: row.billed_microusd || 0,
     result_text: includeResult ? row.result_text : undefined,
     partial_result_text: includePartial && row.prose_text ? row.prose_text : undefined,
     created_at: row.created_at,
@@ -172,10 +182,12 @@ function usageSummary(payload: OpenAiPayload): UsageSummary {
   const usage = payload.usage || {}
   const inputTokens = Math.max(0, Math.floor(usage.input_tokens || 0))
   const cachedInputTokens = Math.max(0, Math.floor(usage.input_tokens_details?.cached_tokens || 0))
+  const cacheWriteTokens = Math.max(0, Math.floor(usage.input_tokens_details?.cache_write_tokens || 0))
   const outputTokens = Math.max(0, Math.floor(usage.output_tokens || 0))
   return {
     inputTokens,
     cachedInputTokens,
+    cacheWriteTokens,
     outputTokens,
     totalTokens: Math.max(0, Math.floor(usage.total_tokens || inputTokens + outputTokens)),
   }
@@ -207,6 +219,7 @@ async function recordUsageEvent(
     provider_request_id: details.providerRequestId,
     input_tokens: details.usage.inputTokens,
     cached_input_tokens: details.usage.cachedInputTokens,
+    cache_write_tokens: details.usage.cacheWriteTokens,
     output_tokens: details.usage.outputTokens,
     total_tokens: details.usage.totalTokens,
     input_characters: details.inputCharacters,
@@ -285,7 +298,7 @@ async function openAiStep(
         durationMs: Date.now() - startedAt,
         success: false,
         statusCode,
-        usage: { inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, totalTokens: 0 },
+        usage: { inputTokens: 0, cachedInputTokens: 0, cacheWriteTokens: 0, outputTokens: 0, totalTokens: 0 },
       })
       throw new Error(`Provider returned HTTP ${response.status} during ${details.operation}.`)
     }
@@ -316,7 +329,7 @@ async function openAiStep(
       durationMs: Date.now() - startedAt,
       success: false,
       statusCode,
-      usage: { inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, totalTokens: 0 },
+      usage: { inputTokens: 0, cachedInputTokens: 0, cacheWriteTokens: 0, outputTokens: 0, totalTokens: 0 },
     })
     const reason = caught instanceof Error ? caught.message : String(caught)
     const timeout = caught instanceof Error && (caught.name === 'TimeoutError' || caught.name === 'AbortError')
@@ -379,7 +392,7 @@ async function updateProjectAfterCompletion(supabase: ServerSupabase, userId: st
 async function usageTotalsFromLedger(supabase: ServerSupabase, job: ShapeJobRow) {
   const { data, error } = await supabase
     .from('shape_usage_events')
-    .select('input_tokens,cached_input_tokens,output_tokens,success')
+    .select('input_tokens,cached_input_tokens,cache_write_tokens,output_tokens,success')
     .eq('job_id', job.id)
 
   if (error || !data) {
@@ -387,20 +400,28 @@ async function usageTotalsFromLedger(supabase: ServerSupabase, job: ShapeJobRow)
     return {
       input_tokens: job.input_tokens || 0,
       cached_input_tokens: job.cached_input_tokens || 0,
+      cache_write_tokens: job.cache_write_tokens || 0,
       output_tokens: job.output_tokens || 0,
       request_count: job.request_count || 0,
     }
   }
 
-  const totals = { input_tokens: 0, cached_input_tokens: 0, output_tokens: 0, request_count: 0 }
-  for (const event of data as Array<{ input_tokens?: number | null; cached_input_tokens?: number | null; output_tokens?: number | null; success?: boolean | null }>) {
+  const totals = { input_tokens: 0, cached_input_tokens: 0, cache_write_tokens: 0, output_tokens: 0, request_count: 0 }
+  for (const event of data as Array<{ input_tokens?: number | null; cached_input_tokens?: number | null; cache_write_tokens?: number | null; output_tokens?: number | null; success?: boolean | null }>) {
     if (!event.success) continue
     totals.input_tokens += Number(event.input_tokens || 0)
     totals.cached_input_tokens += Number(event.cached_input_tokens || 0)
+    totals.cache_write_tokens += Number(event.cache_write_tokens || 0)
     totals.output_tokens += Number(event.output_tokens || 0)
     totals.request_count += 1
   }
   return totals
+}
+
+async function settleCompletedJob(supabase: ServerSupabase, userId: string, job: ShapeJobRow) {
+  await settleShapeJobUsage(supabase, job)
+  const { data } = await supabase.from('shape_jobs').select('*').eq('id', job.id).eq('user_id', userId).single()
+  return (data || job) as ShapeJobRow
 }
 
 export async function POST(request: Request) {
@@ -408,7 +429,6 @@ export async function POST(request: Request) {
   const { data: userData, error: userError } = await supabase.auth.getUser()
   const user = userData.user
   if (userError || !user) return Response.json({ error: 'Sign in before using Script.' }, { status: 401 })
-  if (!shapeEmailAllowed(user.email)) return Response.json({ error: 'Script processing is still limited to the private test list.' }, { status: 403 })
 
   let body: { job_id?: unknown }
   try { body = await request.json() } catch { return Response.json({ error: 'Script could not read that processing request.' }, { status: 400 }) }
@@ -418,7 +438,14 @@ export async function POST(request: Request) {
   const { data, error } = await supabase.from('shape_jobs').select('*').eq('id', jobId).eq('user_id', user.id).single()
   if (error || !data) return Response.json({ error: 'Script could not find that saved job.' }, { status: 404 })
   const job = data as ShapeJobRow
-  if (job.status === 'completed') return Response.json({ job: serializeJob(job, true) }, { headers: { 'Cache-Control': 'no-store' } })
+  if (job.status === 'completed') {
+    try {
+      const settled = await settleCompletedJob(supabase, user.id, job)
+      return Response.json({ job: serializeJob(settled, true) }, { headers: { 'Cache-Control': 'no-store' } })
+    } catch (caught) {
+      return Response.json({ error: caught instanceof Error ? caught.message : 'Script could not settle this completed job.' }, { status: 500 })
+    }
+  }
   if (job.status === 'cancelled') return Response.json({ error: 'This Script job was discarded.' }, { status: 409 })
 
   const now = new Date().toISOString()
@@ -454,7 +481,8 @@ export async function POST(request: Request) {
       }
       const { data: saved, error: saveError } = await supabase.from('shape_jobs').update(update).eq('id', job.id).eq('user_id', user.id).select('*').single()
       if (saveError || !saved) throw new Error('Script finished the story but could not save it.')
-      return Response.json({ job: serializeJob(saved as ShapeJobRow, true) }, { headers: { 'Cache-Control': 'no-store' } })
+      const settled = await settleCompletedJob(supabase, user.id, saved as ShapeJobRow)
+      return Response.json({ job: serializeJob(settled, true) }, { headers: { 'Cache-Control': 'no-store' } })
     }
 
     const analysisChunks = buildShapeAnalysisChunks(job.transcript)
@@ -640,14 +668,20 @@ export async function POST(request: Request) {
       }
       const { data: saved, error: saveError } = await supabase.from('shape_jobs').update(update).eq('id', job.id).eq('user_id', user.id).select('*').single()
       if (saveError || !saved) throw new Error('Script completed a writing step but could not save the checkpoint.')
-      if (complete) await updateProjectAfterCompletion(supabase, user.id, saved as ShapeJobRow, now)
-      return Response.json({ job: serializeJob(saved as ShapeJobRow, complete) }, { headers: { 'Cache-Control': 'no-store' } })
+      if (complete) {
+        await updateProjectAfterCompletion(supabase, user.id, saved as ShapeJobRow, now)
+        const settled = await settleCompletedJob(supabase, user.id, saved as ShapeJobRow)
+        return Response.json({ job: serializeJob(settled, true) }, { headers: { 'Cache-Control': 'no-store' } })
+      }
+      return Response.json({ job: serializeJob(saved as ShapeJobRow, false) }, { headers: { 'Cache-Control': 'no-store' } })
     }
 
     if (job.project_id) await updateProjectAfterCompletion(supabase, user.id, job, now)
     const fallbackUpdate = { status: 'completed', phase: 'completed', result_text: job.prose_text, completed_at: now, updated_at: now, error_message: null }
     const { data: saved } = await supabase.from('shape_jobs').update(fallbackUpdate).eq('id', job.id).eq('user_id', user.id).select('*').single()
-    return Response.json({ job: serializeJob((saved || job) as ShapeJobRow, true) }, { headers: { 'Cache-Control': 'no-store' } })
+    const completedJob = (saved || job) as ShapeJobRow
+    const settled = await settleCompletedJob(supabase, user.id, completedJob)
+    return Response.json({ job: serializeJob(settled, true) }, { headers: { 'Cache-Control': 'no-store' } })
   } catch (caught) {
     const message = caught instanceof Error ? caught.message : 'Script could not finish this processing step.'
     console.error('RPG Your Way Shape step failed', message)
@@ -658,7 +692,6 @@ export async function POST(request: Request) {
     const failedJob = refreshed ? refreshed as ShapeJobRow : { ...job, status: 'error', error_message: publicMessage, ...usageTotals } as ShapeJobRow
     return Response.json({
       error: publicMessage,
-      diagnostic: message,
       job: serializeJob(failedJob, false, true),
     }, { status: 502, headers: { 'Cache-Control': 'no-store' } })
   }
