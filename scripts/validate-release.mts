@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.3')
-assert.equal(pkg.rpgywVersion, '1.7.3')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.3'/)
+assert.equal(pkg.version, '1.7.4')
+assert.equal(pkg.rpgywVersion, '1.7.4')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.4'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -134,6 +134,8 @@ assert.match(migration, /billed_microusd/)
 
 const playPage = read('app/play/page.tsx')
 assert.match(playPage, /<AigmGameplayShell \/>/)
+assert.match(playPage, /MotionPreferenceProvider/)
+assert.match(playPage, /<MotionPreferenceProvider>/)
 assert.match(playPage, /redirect\('\/start'\)/)
 assert.doesNotMatch(playPage, /Import Existing Adventure|RpgywPlayEntry/)
 
@@ -211,4 +213,4 @@ for (const productionFile of ['lib/stripe/checkout.ts', 'lib/shape/billing.ts', 
   assert.doesNotMatch(read(productionFile), /from ['"][^'"]+\.ts['"]/, `${productionFile} must not import .ts extensions.`)
 }
 
-console.log('RPG Your Way 1.7.3 Start/Play separation validator hotfix checks passed.')
+console.log('RPG Your Way 1.7.4 Play motion-provider runtime fix checks passed.')
