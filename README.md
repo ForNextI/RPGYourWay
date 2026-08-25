@@ -1,5 +1,5 @@
 # RPG Your Way
 
-Current QA line: **1.7A**, the import-only Play migration toward RPG Your Way 1.7.000.
+Current QA line: **1.7.2**, with Start owning campaign import/selection and Play reserved for the gameplay interface.
 
-See `README-1.7A.md` for deployment, migration, and QA instructions. Earlier release notes remain in their versioned README files.
+See `README-1.7.2.md` for this separation pass. Earlier release notes remain in their versioned README files.

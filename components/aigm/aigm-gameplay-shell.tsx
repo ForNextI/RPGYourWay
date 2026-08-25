@@ -1992,8 +1992,8 @@ export function AigmGameplayShell() {
         <div className="max-w-xl rounded-3xl border border-primary/30 bg-primary/10 p-8 text-center">
           <Shield className="mx-auto size-10 text-primary" aria-hidden="true" />
           <h1 className="mt-4 font-display text-3xl font-bold">No saved adventure found</h1>
-          <p className="mt-3 text-muted-foreground">No current adventure is selected in this browser. Return to Play to choose or import one.</p>
-          <Link href="/play" className="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-5 py-2 font-bold text-primary-foreground">Return to Play</Link>
+          <p className="mt-3 text-muted-foreground">No current adventure is selected in this browser. Go to Start to choose or import one.</p>
+          <Link href="/start" className="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-5 py-2 font-bold text-primary-foreground">Go to Start</Link>
         </div>
       </main>
     )

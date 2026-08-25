@@ -1,28 +1,29 @@
-import Link from 'next/link'
+import { AuthPanel } from '@/components/AuthPanel'
 import { PageShell } from '@/components/PageShell'
+import { RpgywStartEntry } from '@/components/aigm/rpgyw-start-entry'
+import { createClient } from '@/lib/supabase/server'
 
-export const metadata = { title: 'New Player' }
+export const metadata = { title: 'Start' }
+export const dynamic = 'force-dynamic'
 
-export default function StartPage() {
-  return (
-    <PageShell variant="play">
-      <main id="main-content" tabIndex={-1} className="inner-main start-main">
-        <div className="shell narrow-shell">
-          <p className="kicker">New Player</p>
-          <h1 className="page-title">Start your adventure.</h1>
-          <p className="page-lede">This is the permanent front door to RPG Your Way onboarding. Guided character and campaign setup will be built into this page next.</p>
+export default async function StartPage() {
+  const supabase = await createClient()
+  const { data } = await supabase.auth.getUser()
 
-          <section className="start-placeholder" aria-labelledby="start-onboarding-heading">
-            <span className="placeholder-number" aria-hidden="true">01</span>
-            <div>
-              <h2 id="start-onboarding-heading">Onboarding</h2>
-              <p>Character setup, campaign choices, imports, and launch controls will appear here as the Play migration comes online.</p>
-            </div>
-          </section>
+  if (!data.user) {
+    return (
+      <PageShell variant="play">
+        <main id="main-content" tabIndex={-1} className="inner-main">
+          <div className="shell narrow-shell play-signin-shell">
+            <p className="kicker">Start</p>
+            <h1 className="page-title">Sign in to start or import an adventure.</h1>
+            <p className="page-lede">Existing WardensPC adventures can be imported here. New-adventure onboarding will also live on Start as it is rebuilt.</p>
+            <AuthPanel returnTo="/start" />
+          </div>
+        </main>
+      </PageShell>
+    )
+  }
 
-          <p className="microcopy">Already have a campaign waiting? <Link href="/play">Go to Play.</Link></p>
-        </div>
-      </main>
-    </PageShell>
-  )
+  return <RpgywStartEntry />
 }

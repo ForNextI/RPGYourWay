@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.0')
-assert.equal(pkg.rpgywVersion, '1.7.000')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.000'/)
+assert.equal(pkg.version, '1.7.3')
+assert.equal(pkg.rpgywVersion, '1.7.3')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.3'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -27,7 +27,7 @@ for (const file of [
   'app/api/aigm/gameplay-chat/route.ts',
   'app/api/aigm/speech/route.ts',
   'app/api/aigm/transcribe/route.ts',
-  'components/aigm/rpgyw-play-entry.tsx',
+  'components/aigm/rpgyw-start-entry.tsx',
   'components/aigm/aigm-gameplay-shell.tsx',
   'lib/aigm/campaign-storage.ts',
   'lib/aigm/campaign-persistence.ts',
@@ -77,7 +77,7 @@ assert.match(footer, /kofi-cup/)
 const home = read('app/page.tsx')
 assert.match(home, /href="\/start">New Player<\/Link>/)
 assert.match(home, /href="\/play">Continue playing<\/Link>/)
-assert.match(read('app/start/page.tsx'), /permanent front door to RPG Your Way onboarding/)
+assert.match(read('app/start/page.tsx'), /<RpgywStartEntry \/>/)
 
 const pricing = read('app/pricing/page.tsx')
 assert.match(pricing, /permanentRedirect\('\/account#add-usage'\)/)
@@ -133,15 +133,23 @@ assert.match(migration, /billed_microusd/)
 
 
 const playPage = read('app/play/page.tsx')
-assert.match(playPage, /Existing WardensPC adventures can be imported/)
-assert.match(playPage, /<RpgywPlayEntry \/>/)
+assert.match(playPage, /<AigmGameplayShell \/>/)
+assert.match(playPage, /redirect\('\/start'\)/)
+assert.doesNotMatch(playPage, /Import Existing Adventure|RpgywPlayEntry/)
 
-const playEntry = read('components/aigm/rpgyw-play-entry.tsx')
-assert.match(playEntry, /Import Existing Adventure/)
-assert.match(playEntry, /parseAdventureState/)
-assert.match(playEntry, /imported\.stage !== 'complete'/)
-assert.match(playEntry, /Campaigns stay in this browser/)
-assert.match(playEntry, /There is no cloud campaign synchronization/)
+const startPage = read('app/start/page.tsx')
+assert.match(startPage, /<RpgywStartEntry \/>/)
+assert.match(startPage, /Existing WardensPC adventures can be imported here/)
+const startEntry = read('components/aigm/rpgyw-start-entry.tsx')
+assert.match(startEntry, /Import Existing Adventure/)
+assert.match(startEntry, /parseAdventureState/)
+assert.match(startEntry, /imported\.stage !== 'complete'/)
+assert.match(startEntry, /window\.location\.assign\('\/play'\)/)
+assert.match(startEntry, /There is no cloud campaign synchronization/)
+assert.doesNotMatch(startEntry, /setPlaying|AigmGameplayShell/)
+const gameplayShell = read('components/aigm/aigm-gameplay-shell.tsx')
+assert.match(gameplayShell, /Go to Start/)
+assert.match(gameplayShell, /href="\/start"/)
 
 const campaignPersistence = read('lib/aigm/campaign-persistence.ts')
 assert.match(campaignPersistence, /rpgyw-aigm-campaigns/)
@@ -203,4 +211,4 @@ for (const productionFile of ['lib/stripe/checkout.ts', 'lib/shape/billing.ts', 
   assert.doesNotMatch(read(productionFile), /from ['"][^'"]+\.ts['"]/, `${productionFile} must not import .ts extensions.`)
 }
 
-console.log('RPG Your Way 1.7.000A import-only Play foundation checks passed.')
+console.log('RPG Your Way 1.7.3 Start/Play separation validator hotfix checks passed.')

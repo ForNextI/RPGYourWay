@@ -1,9 +1,8 @@
 'use client'
 
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { type ChangeEvent, useEffect, useRef, useState } from 'react'
 import { FileUp, LoaderCircle, Play, Shield, Smartphone } from 'lucide-react'
-import { AigmGameplayShell } from '@/components/aigm/aigm-gameplay-shell'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { AuthPrompt } from '@/components/AuthPrompt'
@@ -16,9 +15,9 @@ import {
 } from '@/lib/aigm/campaign-storage'
 import { readAdventureIndexWithDatabase, saveAdventureState } from '@/lib/aigm/campaign-persistence'
 
-export function RpgywPlayEntry() {
+export function RpgywStartEntry() {
+  const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [playing, setPlaying] = useState(false)
   const [adventures, setAdventures] = useState<AdventureSummary[]>([])
   const [notice, setNotice] = useState('')
   const [error, setError] = useState('')
@@ -27,11 +26,9 @@ export function RpgywPlayEntry() {
   useEffect(() => {
     let cancelled = false
     async function restore() {
-      const currentId = window.localStorage.getItem(CURRENT_ADVENTURE_KEY)
       const summaries = await readAdventureIndexWithDatabase(window.localStorage)
       if (cancelled) return
       setAdventures(summaries)
-      setPlaying(Boolean(currentId && summaries.some((entry) => entry.adventure_id === currentId)))
       setLoading(false)
     }
     void restore().catch(() => {
@@ -43,9 +40,10 @@ export function RpgywPlayEntry() {
     return () => { cancelled = true }
   }, [])
 
-  function continueAdventure(adventureId: string) {
+  function openAdventure(adventureId: string) {
     window.localStorage.setItem(CURRENT_ADVENTURE_KEY, adventureId)
-    setPlaying(true)
+    // A full navigation gives Play a clean boot with one job only: gameplay.
+    window.location.assign('/play')
   }
 
   async function importAdventure(event: ChangeEvent<HTMLInputElement>) {
@@ -62,7 +60,7 @@ export function RpgywPlayEntry() {
         return
       }
       if (imported.stage !== 'complete') {
-        setError('That exported file has not reached Play yet. Finish its setup in WardensPC before importing it here, or use Start when RPG Your Way onboarding is ready.')
+        setError('That exported file has not reached Play yet. Finish its setup in WardensPC before importing it here, or wait for the rebuilt RPG Your Way onboarding flow.')
         return
       }
 
@@ -78,16 +76,18 @@ export function RpgywPlayEntry() {
         created_at: now,
         updated_at: now,
       }
+
       await saveAdventureState(window.localStorage, importedState, null)
       setAdventures(await readAdventureIndexWithDatabase(window.localStorage))
-      setNotice(`Imported ${importedState.adventure_name}. Opening it now.`)
-      setPlaying(true)
+      setNotice(`Imported ${importedState.adventure_name}. Opening Play…`)
+
+      // Do not transform the Start component into the gameplay component in-place.
+      // Start owns import/selection; Play boots separately and owns gameplay.
+      window.location.assign('/play')
     } catch {
       setError('The exported game file could not be read.')
     }
   }
-
-  if (playing) return <AigmGameplayShell />
 
   return (
     <div className="site-frame site-frame-play">
@@ -95,9 +95,9 @@ export function RpgywPlayEntry() {
       <main id="main-content" tabIndex={-1} className="inner-main play-entry-main">
         <div className="shell play-entry-shell">
           <div className="play-entry-heading">
-            <p className="kicker">Play</p>
-            <h1 className="page-title">Continue an adventure.</h1>
-            <p className="page-lede">RPG Your Way 1.7 begins with existing adventures. Campaigns stay in this browser. Export a game when you want a backup or want to move it to another device.</p>
+            <p className="kicker">Start</p>
+            <h1 className="page-title">Choose or bring an adventure.</h1>
+            <p className="page-lede">Start is the doorway into Play. Existing campaigns stay in this browser. Export a game when you want a backup or want to move it to another device.</p>
           </div>
 
           {loading ? (
@@ -118,7 +118,7 @@ export function RpgywPlayEntry() {
                 {adventures.length ? (
                   <div className="play-entry-adventures">
                     {adventures.map((adventure) => (
-                      <button key={adventure.adventure_id} type="button" className="play-entry-adventure" onClick={() => continueAdventure(adventure.adventure_id)}>
+                      <button key={adventure.adventure_id} type="button" className="play-entry-adventure" onClick={() => openAdventure(adventure.adventure_id)}>
                         <span>
                           <strong>{adventure.adventure_name}</strong>
                           <small>{adventure.party_names.length ? adventure.party_names.join(', ') : 'Saved party'} · Updated {new Date(adventure.updated_at).toLocaleDateString()}</small>
@@ -145,7 +145,7 @@ export function RpgywPlayEntry() {
                 <button className="button button-primary" type="button" onClick={() => importRef.current?.click()}>Import Existing Adventure</button>
                 <div className="play-entry-device-note">
                   <Smartphone aria-hidden="true" />
-                  <p><strong>Changing devices?</strong> Export on the old device and import on the new one. There is no cloud campaign synchronization in this release.</p>
+                  <p><strong>Changing devices?</strong> Export on the old device and import here on the new one. There is no cloud campaign synchronization in this release.</p>
                 </div>
               </section>
             </div>
@@ -158,9 +158,8 @@ export function RpgywPlayEntry() {
             <div>
               <p className="account-state-label">New adventure</p>
               <h2>Starting fresh?</h2>
-              <p>The new Start experience is being rebuilt separately. Its permanent doorway is ready now.</p>
+              <p>The new onboarding experience will live here on Start. It is being rebuilt separately, so this release is for imported and already-saved adventures.</p>
             </div>
-            <Link className="button button-secondary" href="/start">Go to Start</Link>
           </div>
         </div>
       </main>
