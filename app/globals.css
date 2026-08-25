@@ -971,3 +971,45 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
   .usage-activity-heading > p,
   .usage-activity-amount { text-align: left; }
 }
+
+/* 1.6.100 Play Pack checkout */
+.play-pack-section { margin-top: 2rem; }
+.play-pack-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+.play-pack-heading h2 { margin: .15rem 0 0; color: var(--forest-deep); font-size: clamp(1.45rem, 3vw, 2rem); }
+.play-pack-heading > p { max-width: 520px; margin: 0; color: var(--muted); }
+.play-pack-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.play-pack-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid color-mix(in srgb, var(--forest) 42%, var(--cream-deep));
+  border-radius: 18px;
+  background: rgb(251 242 230 / .96);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+}
+.play-pack-card h3 { margin: 0; color: var(--forest-deep); font-size: 1.2rem; }
+.play-pack-card p { color: var(--muted); }
+.play-pack-price { margin: .25rem 0 .65rem !important; color: var(--forest-deep) !important; font-size: 1.8rem; font-weight: 900; }
+.play-pack-allowance {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--cream-deep);
+  padding-top: .85rem;
+  color: var(--muted);
+}
+.play-pack-allowance strong { color: var(--forest-deep); }
+.play-pack-card form { margin: 0; }
+.play-pack-card .button { width: 100%; }
+@media (max-width: 620px) {
+  .play-pack-heading { align-items: flex-start; flex-direction: column; }
+  .play-pack-grid { grid-template-columns: 1fr; }
+}

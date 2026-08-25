@@ -52,8 +52,8 @@ const whyCreated = [
   {
     title: 'Turn the campaign into a story',
     paragraphs: [
-      'Shape transforms the campaign you actually played into narrative prose.',
-      'Large campaigns can be divided into manageable sections, and before you begin a Shape request, you receive a maximum estimated cost.',
+      'Script transforms the campaign you actually played into narrative prose.',
+      'Large campaigns can be divided into manageable sections, and before you begin a Script request, you receive a maximum estimated cost.',
       'That estimate is the most you will pay.',
     ],
   },
@@ -176,14 +176,14 @@ export default function HomePage() {
                 RPG Your Way is being built in public. Accounts are open now, so feel free to look around while we bring the game online.
               </p>
               <p className="welcome-lede welcome-lede-secondary">
-                Shape, Play, and native multiplayer are coming online as soon as possible.
+                Script, Play, and native multiplayer are coming online as soon as possible.
               </p>
 
               <details className="welcome-details">
                 <summary>What is coming, and when?</summary>
                 <div className="welcome-details-copy">
                   <p>
-                    <strong>Shape</strong> will turn campaign transcripts into narrative prose, with large campaigns divided into manageable sections and a maximum estimated cost shown before a request begins.
+                    <strong>Script</strong> will turn campaign transcripts into narrative prose, with large campaigns divided into manageable sections and a maximum estimated cost shown before a request begins.
                   </p>
                   <p>
                     <strong>Play</strong> will bring the RPG Your Way AI Game Master online for persistent campaigns you can return to over the long haul.

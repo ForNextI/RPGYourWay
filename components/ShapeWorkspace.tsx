@@ -52,7 +52,7 @@ const descriptions: Array<{ value: DescriptionLevel; label: string; detail: stri
 ]
 
 function safeFilename(title: string, suffix = '.txt') {
-  const base = title.trim().replace(/[<>:"/\\|?*\u0000-\u001f]/g, '').replace(/\s+/g, ' ').slice(0, 80) || 'RPG-Your-Way-Shape'
+  const base = title.trim().replace(/[<>:"/\\|?*\u0000-\u001f]/g, '').replace(/\s+/g, ' ').slice(0, 80) || 'RPG-Your-Way-Script'
   return `${base}${suffix}`
 }
 
@@ -60,7 +60,7 @@ function progressLabel(job: ShapeJob) {
   if (job.status === 'completed') return 'Story complete'
   if (job.phase === 'analysis') return `Preparing continuity ${Math.min(job.next_analysis_chunk_index + 1, job.analysis_total)} of ${job.analysis_total}`
   if (job.phase === 'writing') return `Writing section ${Math.min(job.next_chunk_index + 1, job.writing_total)} of ${job.writing_total}`
-  return 'Preparing Shape job'
+  return 'Preparing Script job'
 }
 
 export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllowed: boolean; accessConfigured: boolean }) {
@@ -151,15 +151,15 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
     setDuplicateBlocked(false)
     const clean = transcript.trim()
     if (!accessAllowed) {
-      setError('Shape processing is still in private testing. The workbench is open to look around, but paid/public conversion is not switched on yet.')
+      setError('Script processing is still in private testing. The workbench is open to look around, but paid/public conversion is not switched on yet.')
       return
     }
     if (clean.length < 250) {
-      setError('Give Shape at least 250 characters of gameplay transcript to work with.')
+      setError('Give Script at least 250 characters of gameplay transcript to work with.')
       return
     }
     if (!assessment.ready) {
-      setError(`This submission is too large for one Shape request. Divide it into at least ${assessment.minimumParts} natural story sections and use campaign-project mode so continuity carries forward.`)
+      setError(`This submission is too large for one Script request. Divide it into at least ${assessment.minimumParts} natural story sections and use campaign-project mode so continuity carries forward.`)
       return
     }
     if (projectMode && !selectedProjectId && !(projectTitle.trim() || title.trim())) {
@@ -185,13 +185,13 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
       const payload = await response.json() as { job?: ShapeJob; error?: string; duplicate?: boolean }
       if (!response.ok || !payload.job) {
         if (payload.duplicate) setDuplicateBlocked(true)
-        throw new Error(payload.error || 'Shape could not create the job.')
+        throw new Error(payload.error || 'Script could not create the job.')
       }
       setJob(payload.job)
       await loadProjects()
       await runJob(payload.job.id)
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'Shape could not create the job.')
+      setError(caught instanceof Error ? caught.message : 'Script could not create the job.')
       setRunning(false)
     }
   }
@@ -211,18 +211,18 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
         if (payload.job) setJob(payload.job)
         if (!response.ok) {
           if (payload.diagnostic) setDiagnostic(payload.diagnostic)
-          throw new Error(payload.error || 'Shape could not finish this processing step.')
+          throw new Error(payload.error || 'Script could not finish this processing step.')
         }
-        if (!payload.job) throw new Error('Shape returned an incomplete job update.')
+        if (!payload.job) throw new Error('Script returned an incomplete job update.')
         if (payload.job.status === 'completed') {
           await loadProjects()
           setRunning(false)
           return
         }
       }
-      throw new Error('Shape reached its safety limit before the job was finished. Resume the job to continue.')
+      throw new Error('Script reached its safety limit before the job was finished. Resume the job to continue.')
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'Shape could not finish this processing step.')
+      setError(caught instanceof Error ? caught.message : 'Script could not finish this processing step.')
       setRunning(false)
     }
   }
@@ -230,19 +230,19 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
 
   async function discardJob() {
     if (!job || job.status === 'completed') return
-    if (!window.confirm('Discard this saved Shape job? Its usage ledger will remain available in the database, but the job will no longer resume.')) return
+    if (!window.confirm('Discard this saved Script job? Its usage ledger will remain available in the database, but the job will no longer resume.')) return
     setError('')
     setDiagnostic('')
     try {
       const response = await fetch(`/api/shape/jobs?id=${encodeURIComponent(job.id)}`, { method: 'DELETE' })
       const payload = await response.json() as { error?: string }
-      if (!response.ok) throw new Error(payload.error || 'Shape could not discard that saved job.')
+      if (!response.ok) throw new Error(payload.error || 'Script could not discard that saved job.')
       setJob(null)
       setTranscript('')
       setTitle('')
       setFileName('')
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'Shape could not discard that saved job.')
+      setError(caught instanceof Error ? caught.message : 'Script could not discard that saved job.')
     }
   }
 
@@ -277,9 +277,9 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
   function downloadPartialResult() {
     if (!job?.partial_result_text) return
     const notice = [
-      'INCOMPLETE SHAPE RESULT',
-      'This file contains only prose successfully checkpointed before Shape stopped.',
-      'Resume the saved Shape job to attempt the remaining material.',
+      'INCOMPLETE SCRIPT RESULT',
+      'This file contains only prose successfully checkpointed before Script stopped.',
+      'Resume the saved Script job to attempt the remaining material.',
       '',
       job.partial_result_text,
     ].join('\n')
@@ -299,7 +299,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
     try {
       await navigator.clipboard.writeText(job.result_text)
     } catch {
-      setError('Your browser would not allow Shape to copy the finished story. The download button still works.')
+      setError('Your browser would not allow Script to copy the finished story. The download button still works.')
     }
   }
 
@@ -309,22 +309,22 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
     try {
       const response = await fetch(`/api/shape/usage?job_id=${encodeURIComponent(job.id)}`, { cache: 'no-store' })
       const payload = await response.json()
-      if (!response.ok) throw new Error((payload as { error?: string }).error || 'Shape could not build the usage report.')
+      if (!response.ok) throw new Error((payload as { error?: string }).error || 'Script could not build the usage report.')
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' })
       const url = URL.createObjectURL(blob)
       const anchor = document.createElement('a')
       anchor.href = url
-      anchor.download = safeFilename(`${job.title}-Shape-usage`, '.json')
+      anchor.download = safeFilename(`${job.title}-Script-usage`, '.json')
       document.body.appendChild(anchor)
       anchor.click()
       anchor.remove()
       window.setTimeout(() => URL.revokeObjectURL(url), 1_000)
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'Shape could not build the usage report.')
+      setError(caught instanceof Error ? caught.message : 'Script could not build the usage report.')
     }
   }
 
-  if (loadingResume) return <p className="shape-loading" role="status">Checking your Shape workbench…</p>
+  if (loadingResume) return <p className="shape-loading" role="status">Checking your Script workbench…</p>
 
   if (job) {
     const totalTokens = (job.input_tokens || 0) + (job.output_tokens || 0)
@@ -334,14 +334,14 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
       <section className="shape-workbench" aria-labelledby="shape-job-title">
         <div className="shape-job-heading">
           <div>
-            <p className="kicker">{job.status === 'completed' ? 'Shape complete' : 'Saved Shape job'}</p>
+            <p className="kicker">{job.status === 'completed' ? 'Script complete' : 'Saved Script job'}</p>
             <h2 id="shape-job-title">{job.title}</h2>
             <p>{progressLabel(job)}{job.project_id ? ` · campaign-project part ${job.project_part_number}` : ''}</p>
           </div>
           <div className="shape-progress-pill">{job.transcript_characters.toLocaleString()} characters</div>
         </div>
 
-        <div className="shape-progress-grid shape-usage-grid" aria-label="Shape processing and usage progress">
+        <div className="shape-progress-grid shape-usage-grid" aria-label="Script processing and usage progress">
           <div><strong>{job.analysis_total ? `${job.next_analysis_chunk_index}/${job.analysis_total}` : '—'}</strong><span>continuity sections</span></div>
           <div><strong>{job.next_chunk_index}/{job.writing_total}</strong><span>writing sections</span></div>
           <div><strong>{job.input_tokens.toLocaleString()}</strong><span>input tokens</span></div>
@@ -362,7 +362,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
         {job.status !== 'completed' ? (
           <div className="shape-actions">
             <button className="button button-primary" type="button" disabled={running} onClick={() => runJob(job.id)}>
-              {running ? 'Shape is working…' : job.status === 'error' ? 'Resume this Shape job' : 'Continue Shape job'}
+              {running ? 'Script is working…' : job.status === 'error' ? 'Resume this Script job' : 'Continue Script job'}
             </button>
             {job.partial_result_text ? <button className="button button-secondary" type="button" disabled={running} onClick={downloadPartialResult}>Download work so far</button> : null}
             {job.request_count > 0 ? <button className="button button-secondary" type="button" disabled={running} onClick={downloadUsageReport}>Download test usage report</button> : null}
@@ -376,9 +376,9 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
               <button className="button button-primary" type="button" onClick={downloadResult}>Download story as text</button>
               <button className="button button-secondary" type="button" onClick={copyResult}>Copy story</button>
               <button className="button button-secondary" type="button" onClick={downloadUsageReport}>Download test usage report</button>
-              <button className="button button-secondary" type="button" onClick={startAnother}>{job.project_id ? 'Shape the next project part' : 'Shape another transcript'}</button>
+              <button className="button button-secondary" type="button" onClick={startAnother}>{job.project_id ? 'Script the next project part' : 'Script another transcript'}</button>
             </div>
-            <article className="shape-result" aria-label="Finished Shape prose">
+            <article className="shape-result" aria-label="Finished Script prose">
               {job.result_text?.split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => <p key={`${index}-${paragraph.slice(0, 24)}`}>{paragraph}</p>)}
             </article>
           </>
@@ -391,8 +391,8 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
     <section className="shape-workbench" aria-labelledby="shape-workbench-title">
       <div className="shape-job-heading">
         <div>
-          <p className="kicker">Shape workbench</p>
-          <h2 id="shape-workbench-title">Give Shape the campaign you actually played.</h2>
+          <p className="kicker">Script workbench</p>
+          <h2 id="shape-workbench-title">Give Script the campaign you actually played.</h2>
           <p>Paste a transcript or upload a file. WardensPC campaign JSON exports are recognized automatically.</p>
         </div>
         {!accessAllowed ? <span className="shape-beta-pill">Preview only</span> : <span className="shape-beta-pill active">Private test</span>}
@@ -400,7 +400,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
 
       {!accessAllowed ? (
         <div className="shape-public-preview-note">
-          <strong>Shape processing is not public yet.</strong>
+          <strong>Script processing is not public yet.</strong>
           <span>{accessConfigured ? 'This account is not on the private test list, but you can inspect the workbench while testing continues.' : 'The private test allowlist has not been configured in this deployment.'}</span>
         </div>
       ) : (
@@ -436,7 +436,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
 
       <div className="shape-count-row">
         <span>{transcript.trim().length.toLocaleString()} / {SHAPE_MAX_INPUT_CHARACTERS.toLocaleString()} characters</span>
-        {assessment.ready ? <span>Ready for one Shape request</span> : <span>Divide into at least {assessment.minimumParts} chronological parts</span>}
+        {assessment.ready ? <span>Ready for one Script request</span> : <span>Divide into at least {assessment.minimumParts} chronological parts</span>}
       </div>
 
       <fieldset className="shape-project-mode">
@@ -445,7 +445,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
           <label className={!projectMode ? 'selected' : ''}>
             <input type="radio" name="shape-project-mode" checked={!projectMode} onChange={() => setProjectMode(false)} />
             <strong>One transcript</strong>
-            <span>Shape this submission on its own.</span>
+            <span>Script this submission on its own.</span>
           </label>
           <label className={projectMode ? 'selected' : ''}>
             <input type="radio" name="shape-project-mode" checked={projectMode} onChange={() => setProjectMode(true)} />
@@ -468,7 +468,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
             {!selectedProject ? (
               <label className="shape-field">
                 <span>Campaign project name</span>
-                <input value={projectTitle} maxLength={120} onChange={(event) => setProjectTitle(event.target.value)} placeholder={title.trim() || 'My Shape Project'} />
+                <input value={projectTitle} maxLength={120} onChange={(event) => setProjectTitle(event.target.value)} placeholder={title.trim() || 'My Script Project'} />
               </label>
             ) : (
               <p className="shape-project-context"><strong>{selectedProject.title}</strong> has {selectedProject.completed_parts} completed part{selectedProject.completed_parts === 1 ? '' : 's'}. This submission will become part {selectedProject.completed_parts + 1}.</p>
@@ -478,7 +478,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
       </fieldset>
 
       <fieldset className="shape-description">
-        <legend>How much description should Shape add?</legend>
+        <legend>How much description should Script add?</legend>
         <div className="shape-description-grid">
           {descriptions.map((choice) => (
             <label key={choice.value} className={descriptionLevel === choice.value ? 'shape-description-card selected' : 'shape-description-card'}>
@@ -491,11 +491,11 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
       </fieldset>
 
       <details className="shape-source-help">
-        <summary>What should I give Shape?</summary>
+        <summary>What should I give Script?</summary>
         <div>
-          <p>Use the raw gameplay transcript. Shape is meant to tell the same adventure as prose, not redesign the campaign.</p>
+          <p>Use the raw gameplay transcript. Script is meant to tell the same adventure as prose, not redesign the campaign.</p>
           <p>For campaigns larger than one million characters, divide the transcript at natural story breaks such as a session, chapter, adventure, or major location. Process the parts in chronological order using an ongoing campaign project.</p>
-          <p>Shape automatically handles smaller internal chunks, continuity analysis, and prose seams. You do not need to prepare those yourself.</p>
+          <p>Script automatically handles smaller internal chunks, continuity analysis, and prose seams. You do not need to prepare those yourself.</p>
         </div>
       </details>
 
@@ -503,10 +503,10 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
 
       <div className="shape-actions">
         <button className="button button-primary" type="button" onClick={() => createJob(false)} disabled={running || !accessAllowed || transcript.trim().length < 250 || !assessment.ready}>
-          {running ? 'Creating Shape job…' : accessAllowed ? 'Begin private Shape test' : 'Shape opens soon'}
+          {running ? 'Creating Script job…' : accessAllowed ? 'Begin private Script test' : 'Script opens soon'}
         </button>
-        {duplicateBlocked ? <button className="button button-secondary" type="button" disabled={running} onClick={() => createJob(true)}>I really need to Shape this exact transcript again</button> : null}
-        <p>{accessAllowed ? 'No payment is collected. Detailed provider usage is recorded for this test.' : 'Public Shape will show a maximum estimated cost before paid processing begins.'}</p>
+        {duplicateBlocked ? <button className="button button-secondary" type="button" disabled={running} onClick={() => createJob(true)}>I really need to Script this exact transcript again</button> : null}
+        <p>{accessAllowed ? 'No payment is collected. Detailed provider usage is recorded for this test.' : 'Public Script will show a maximum estimated cost before paid processing begins.'}</p>
       </div>
     </section>
   )

@@ -2,6 +2,7 @@ import { AuthPanel } from '@/components/AuthPanel'
 import { PageShell } from '@/components/PageShell'
 import { createClient } from '@/lib/supabase/server'
 import { formatUsageDollars, signedUsageDollars, usageMicrousd } from '@/lib/usage/money'
+import { finalizeCheckoutSessionById } from '@/lib/stripe/server'
 import { signOut } from './actions'
 
 export const metadata = { title: 'Account' }
@@ -16,7 +17,7 @@ const statusMessages: Record<string, string> = {
 }
 
 function activityLabel(source: unknown) {
-  if (source === 'shape') return 'Shape'
+  if (source === 'shape') return 'Script'
   if (source === 'play') return 'Play'
   if (source === 'stripe') return 'Play Pack purchase'
   if (source === 'refund') return 'Refund'
@@ -27,11 +28,25 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
   const params = await searchParams
   const status = typeof params.status === 'string' ? params.status : ''
   const error = typeof params.error === 'string' ? params.error : ''
+  const checkoutSessionId = typeof params.session_id === 'string' ? params.session_id : ''
 
   const supabase = await createClient()
   const { data: authData } = await supabase.auth.getUser()
   const user = authData.user
   const email = user?.email ?? null
+  let paymentNotice = ''
+  let paymentError = ''
+
+  if (user && checkoutSessionId) {
+    try {
+      const finalized = await finalizeCheckoutSessionById(checkoutSessionId, user.id)
+      paymentNotice = finalized.credited
+        ? `${finalized.pack.name} was added to your shared usage balance.`
+        : 'Stripe has not marked that checkout paid yet. Your balance will update automatically when payment clears.'
+    } catch (caught) {
+      paymentError = caught instanceof Error ? caught.message : 'RPG Your Way could not verify that Stripe checkout yet.'
+    }
+  }
 
   let wallet: Record<string, unknown> | null = null
   let ledger: Record<string, unknown>[] = []
@@ -68,9 +83,11 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
         <div className="shell narrow-shell">
           <p className="kicker">Account</p>
           <h1 className="page-title">Your campaigns. Your account.</h1>
-          <p className="page-lede">Your RPG Your Way account keeps your campaigns, Shape work, purchases, and one shared prepaid usage balance together.</p>
+          <p className="page-lede">Your RPG Your Way account keeps your campaigns, Script work, purchases, and one shared prepaid usage balance together.</p>
 
           {statusMessages[status] ? <p className="auth-message auth-message-success" role="status">{statusMessages[status]}</p> : null}
+          {paymentNotice ? <p className="auth-message auth-message-success" role="status">{paymentNotice}</p> : null}
+          {paymentError ? <p className="auth-message auth-message-error" role="alert">{paymentError}</p> : null}
 
           {user ? (
             <>
@@ -90,7 +107,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                 <div className="usage-balance-heading-row">
                   <div>
                     <p className="account-state-label">Shared usage balance</p>
-                    <h2 id="usage-balance-heading">Play and Shape use the same balance.</h2>
+                    <h2 id="usage-balance-heading">Play and Script use the same balance.</h2>
                   </div>
                   {!walletUnavailable ? <p className="usage-balance-amount" aria-label={`${formatUsageDollars(available)} available`}>{formatUsageDollars(available)}</p> : null}
                 </div>
@@ -99,7 +116,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                   <p className="auth-message auth-message-error">The shared usage balance is not available yet. Apply the 1.5.402 balance migration, then reload this page.</p>
                 ) : (
                   <>
-                    <p className="usage-balance-copy">Play Packs will add prepaid usage here. Play and Shape will deduct successful AI usage from this same pool. No separate Shape wallet or Shape purchase is needed.</p>
+                    <p className="usage-balance-copy">Play Packs add prepaid usage here. Play and Script draw successful AI usage from this same pool. No separate Script wallet or Script purchase is needed.</p>
                     {reserved > 0 ? <p className="usage-balance-reserved"><strong>{formatUsageDollars(reserved)}</strong> is temporarily reserved for work already in progress. Total balance: {formatUsageDollars(balance)}.</p> : null}
                     <div className="usage-balance-stats" aria-label="Usage balance totals">
                       <div><span>Available now</span><strong>{formatUsageDollars(available)}</strong></div>
@@ -117,7 +134,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                       <p className="account-state-label">Balance history</p>
                       <h2 id="usage-activity-heading">Recent activity</h2>
                     </div>
-                    <p>Purchases, Play, Shape, refunds, and adjustments will appear here.</p>
+                    <p>Purchases, Play, Script, refunds, and adjustments will appear here.</p>
                   </div>
                   {ledger.length ? (
                     <div className="usage-activity-list">
@@ -146,7 +163,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
             <AuthPanel returnTo="/account" status={status} error={error} />
           )}
 
-          <p className="note-box">The shared balance foundation is live in this build. Stripe funding and automatic Play/Shape deductions are the next wiring steps.</p>
+          <p className="note-box">Stripe funding is live in this build. Automatic Script deductions are the next wiring step, followed by Play metering when Play is migrated.</p>
         </div>
       </main>
     </PageShell>

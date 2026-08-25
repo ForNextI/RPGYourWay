@@ -13,8 +13,8 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.6.0')
-assert.equal(pkg.rpgywVersion, '1.6.000')
+assert.equal(pkg.version, '1.6.1')
+assert.equal(pkg.rpgywVersion, '1.6.102')
 assert.equal(pkg.dependencies?.next, '16.2.6')
 assert.equal(pkg.dependencies?.['@supabase/ssr'], '^0.12.4')
 assert.equal(pkg.dependencies?.['@supabase/supabase-js'], '^2.112.3')
@@ -23,12 +23,15 @@ for (const file of [
   'app/page.tsx',
   'app/play/page.tsx',
   'app/shape/page.tsx',
+  'app/script/page.tsx',
   'app/api/shape/jobs/route.ts',
   'app/api/shape/transform/route.ts',
   'app/api/shape/projects/route.ts',
   'app/api/shape/usage/route.ts',
   'app/read/page.tsx',
   'app/pricing/page.tsx',
+  'app/pricing/actions.ts',
+  'app/api/stripe/webhook/route.ts',
   'app/account/page.tsx',
   'app/account/actions.ts',
   'app/auth/confirm/route.ts',
@@ -43,6 +46,11 @@ for (const file of [
   'lib/shape/config.ts',
   'lib/shape/transcript.ts',
   'lib/usage/money.ts',
+  'lib/billing/play-packs.ts',
+  'lib/stripe/server.ts',
+  'lib/stripe/checkout.ts',
+  'lib/stripe/signature.ts',
+  'lib/supabase/admin.ts',
   'app/api/usage/balance/route.ts',
   'lib/supabase/client.ts',
   'lib/supabase/server.ts',
@@ -52,6 +60,7 @@ for (const file of [
   'supabase/migrations/20260825003000_shared_usage_balance.sql',
   'scripts/test-shape-runtime.mts',
   'scripts/test-usage-money.mts',
+  'scripts/test-stripe-funding.mts',
   'proxy.ts',
   'public/rpgyw-logo-bordered.png',
   'public/rpgyw-compass.png',
@@ -83,13 +92,15 @@ assert.match(home, /Campaign dashboard/)
 assert.match(home, /feature-grid/)
 
 const shapePage = read('app/shape/page.tsx')
-assert.match(shapePage, /1,000,000 characters/)
-assert.match(shapePage, /ShapeSignInGate/)
-assert.match(shapePage, /ShapeWorkspace/)
-assert.match(shapePage, /shapeEmailAllowed/)
-assert.match(shapePage, /How Shape uses your RPG Your Way balance/)
-assert.match(shapePage, /maximum estimated balance deduction/)
-assert.match(shapePage, /no payment is collected during these tests/)
+assert.match(shapePage, /permanentRedirect\('\/script'\)/)
+const scriptPage = read('app/script/page.tsx')
+assert.match(scriptPage, /1,000,000 characters/)
+assert.match(scriptPage, /ShapeSignInGate/)
+assert.match(scriptPage, /ShapeWorkspace/)
+assert.match(scriptPage, /shapeEmailAllowed/)
+assert.match(scriptPage, /How Script uses your RPG Your Way balance/)
+assert.match(scriptPage, /maximum estimated balance deduction/)
+assert.match(scriptPage, /no payment is collected for Script during these tests/)
 
 const jobs = read('app/api/shape/jobs/route.ts')
 assert.match(jobs, /shape_jobs/)
@@ -152,6 +163,9 @@ const env = read('.env.example')
 assert.match(env, /OPENAI_API_KEY=/)
 assert.match(env, /OPENAI_SHAPE_MODEL=/)
 assert.match(env, /RPGYW_SHAPE_BETA_EMAILS=/)
+assert.match(env, /STRIPE_SECRET_KEY=/)
+assert.match(env, /STRIPE_WEBHOOK_SECRET=/)
+assert.match(env, /SUPABASE_SERVICE_ROLE_KEY=/)
 
 const css = read('app/globals.css')
 assert.match(css, /\.shape-workbench/)
@@ -165,7 +179,7 @@ assert.match(css, /url\('\/rpgyw-map-tan\.png'\)/)
 
 const shapeWorkspace = read('components/ShapeWorkspace.tsx')
 assert.match(shapeWorkspace, /Download work so far/)
-assert.match(shapeWorkspace, /INCOMPLETE SHAPE RESULT/)
+assert.match(shapeWorkspace, /INCOMPLETE SCRIPT RESULT/)
 assert.match(shapeWorkspace, /Private-test diagnostic/)
 assert.match(shapeWorkspace, /visibleError/)
 assert.doesNotMatch(shapeWorkspace, /job\.error_message && job\.status === 'error'.*error \?/s)
@@ -183,7 +197,8 @@ assert.match(balanceMigration, /usage_wallets_select_own/)
 
 const account = read('app/account/page.tsx')
 assert.match(account, /Shared usage balance/)
-assert.match(account, /Play and Shape use the same balance/)
+assert.match(account, /Play and Script use the same balance/)
+assert.match(account, /finalizeCheckoutSessionById/)
 assert.match(account, /usage_ledger/)
 assert.match(account, /formatUsageDollars/)
 
@@ -197,15 +212,43 @@ assert.match(money, /MICRO_USD_PER_DOLLAR = 1_000_000/)
 assert.match(money, /formatUsageDollars/)
 
 const pricing = read('app/pricing/page.tsx')
-assert.match(pricing, /One balance\. Play or Shape\./)
-assert.match(pricing, /same RPG Your Way usage balance/)
+assert.match(pricing, /One balance\. Play or Script\./)
+assert.match(pricing, /PLAY_PACKS/)
+assert.match(pricing, /beginPlayPackCheckout/)
+assert.match(pricing, /Stripe Checkout now funds the shared balance/)
 
-assert.match(shapePage, /same prepaid RPG Your Way usage balance as Play/)
-assert.match(shapePage, /maximum estimated balance deduction/)
-assert.doesNotMatch(shapePage, /Shape will be priced separately from Play Packs/)
+assert.match(scriptPage, /same prepaid RPG Your Way usage balance as Play/)
+assert.match(scriptPage, /maximum estimated balance deduction/)
+assert.doesNotMatch(scriptPage, /Script will be priced separately from Play Packs/)
+
+const header = read('components/SiteHeader.tsx')
+assert.match(header, /href: '\/script', label: 'Script'/)
+assert.match(header, /thereadingofthewardens\.com/)
+assert.match(header, /target="_blank"/)
+
+const authPanel = read('components/AuthPanel.tsx')
+assert.match(authPanel, /Confirm your email address/)
+const accountActions = read('app/account/actions.ts')
+assert.match(accountActions, /confirmEmail/)
+assert.match(accountActions, /Those email addresses do not match/)
+
+const packs = read('lib/billing/play-packs.ts')
+for (const amount of ['4_250_000', '13_500_000', '27_000_000', '40_500_000', '58_500_000', '81_000_000']) assert.match(packs, new RegExp(amount))
+const stripeServer = read('lib/stripe/server.ts')
+assert.match(stripeServer, /checkout\/sessions/)
+const stripeCheckout = read('lib/stripe/checkout.ts')
+assert.match(stripeCheckout, /stripe:checkout:/)
+assert.match(stripeCheckout, /amount_total !== pack\.priceCents/)
+assert.match(stripeServer, /rpgyw_credit_usage/)
+assert.match(stripeCheckout, /payment_status !== 'paid'/)
+assert.doesNotMatch(stripeCheckout, /from ['"][^'"]+\.ts['"]/, 'Production TypeScript must not import .ts extensions.')
+const stripeWebhook = read('app/api/stripe/webhook/route.ts')
+assert.match(stripeWebhook, /stripe-signature/)
+assert.match(stripeWebhook, /verifyStripeWebhookSignature/)
+assert.match(stripeWebhook, /handleStripeEvent/)
 
 const footer = read('components/SiteFooter.tsx')
 assert.match(footer, /© 2026 dodo ink\. Independent creative projects\./)
 assert.match(footer, /APP_VERSION/)
 
-console.log('RPG Your Way 1.6.000 Shape narrative-disposition upgrade, recovery hardening, shared usage balance, and account foundation passed validation.')
+console.log('RPG Your Way 1.6.102 Stripe funding hotfix passed validation.')

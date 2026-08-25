@@ -85,7 +85,7 @@ export function buildShapeTranscriptChunks(transcript: string): ShapeTranscriptC
       source: transcript.slice(writeStart, writeEnd),
       contextAfter: transcript.slice(writeEnd, contextEnd),
     })
-    if (writeEnd <= writeStart) throw new Error('Shape could not divide this transcript safely.')
+    if (writeEnd <= writeStart) throw new Error('Script could not divide this transcript safely.')
     writeStart = writeEnd
   }
   if (chunks.length > SHAPE_MAX_CHUNKS) throw new Error('This transcript needs to be divided into smaller parts at a natural story break.')
@@ -97,7 +97,7 @@ export function buildShapeAnalysisChunks(transcript: string) {
   let start = 0
   while (start < transcript.length) {
     const end = findLogicalBreakForTarget(transcript, start, SHAPE_ANALYSIS_TARGET_CHARACTERS, 10_000)
-    if (end <= start) throw new Error('Shape could not divide the continuity pass safely.')
+    if (end <= start) throw new Error('Script could not divide the continuity pass safely.')
     chunks.push(transcript.slice(start, end))
     start = end
   }
@@ -111,7 +111,7 @@ export function buildShapeRecoverySubchunks(source: string) {
   let start = 0
   while (start < source.length) {
     const end = findLogicalBreakForTarget(source, start, 14_000, 2_000)
-    if (end <= start) throw new Error('Shape could not divide the troublesome section for recovery.')
+    if (end <= start) throw new Error('Script could not divide the troublesome section for recovery.')
     chunks.push(source.slice(start, end))
     start = end
   }
@@ -129,16 +129,16 @@ export function reconcileShapeWritingSection(
 ) {
   const cleanNewProse = newProse.trim()
   if (disposition === 'prose' && !cleanNewProse) {
-    throw new Error('Shape writing response declared prose but returned empty new_prose.')
+    throw new Error('Script writing response declared prose but returned empty new_prose.')
   }
   if (disposition === 'no_new_prose' && cleanNewProse) {
-    throw new Error('Shape writing response declared no_new_prose but returned new prose.')
+    throw new Error('Script writing response declared no_new_prose but returned new prose.')
   }
 
   const cleanOriginalTail = originalTail.trim()
   const cleanRevisedTail = revisedTail.trim()
   if (!cleanOriginalTail) {
-    if (cleanRevisedTail) throw new Error('Shape unexpectedly returned prose before the first section.')
+    if (cleanRevisedTail) throw new Error('Script unexpectedly returned prose before the first section.')
     return [existingProse.trim(), cleanNewProse].filter(Boolean).join('\n\n').trim()
   }
 
@@ -208,7 +208,7 @@ export function provisionalProseTail(text: string) {
 export function replaceProvisionalProseTail(text: string, originalTail: string, revisedTail: string) {
   const clean = text.trim()
   if (!originalTail) return clean
-  if (!clean.endsWith(originalTail)) throw new Error('Shape could not safely locate the provisional prose seam.')
+  if (!clean.endsWith(originalTail)) throw new Error('Script could not safely locate the provisional prose seam.')
   const prefix = clean.slice(0, clean.length - originalTail.length).trimEnd()
   return [prefix, revisedTail.trim()].filter(Boolean).join('\n\n')
 }

@@ -42,10 +42,12 @@ export async function signIn(formData: FormData) {
 
 export async function signUp(formData: FormData) {
   const email = requiredText(formData, 'email')
+  const confirmEmail = requiredText(formData, 'confirmEmail')
   const password = requiredText(formData, 'password')
   const returnTo = safeReturnTo(formData)
 
-  if (!email || !password) redirectError(returnTo, 'Enter an email and password.')
+  if (!email || !confirmEmail || !password) redirectError(returnTo, 'Enter your email twice and choose a password.')
+  if (email.toLowerCase() !== confirmEmail.toLowerCase()) redirectError(returnTo, 'Those email addresses do not match.')
   if (password.length < 8) redirectError(returnTo, 'Use at least 8 characters for your password.')
 
   const supabase = await createClient()

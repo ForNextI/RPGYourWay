@@ -4,8 +4,8 @@ import { FullscreenToggle } from '@/components/FullscreenToggle'
 
 const links = [
   { href: '/play', label: 'Play' },
-  { href: '/shape', label: 'Shape' },
-  { href: '/read', label: 'Read' },
+  { href: '/script', label: 'Script' },
+  { href: 'https://www.thereadingofthewardens.com', label: 'Read', external: true },
 ]
 
 function JeweledDivider() {
@@ -26,7 +26,11 @@ export function SiteHeader() {
           {links.map((link, index) => (
             <span className="nav-item-group" key={link.href}>
               {index > 0 ? <JeweledDivider /> : null}
-              <Link href={link.href}>{link.label}</Link>
+              {link.external ? (
+                <a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>
+              ) : (
+                <Link href={link.href}>{link.label}</Link>
+              )}
             </span>
           ))}
           <JeweledDivider />

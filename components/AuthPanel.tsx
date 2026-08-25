@@ -55,6 +55,10 @@ export function AuthPanel({ returnTo = '/account', status = '', error = '', comp
               <input name="email" type="email" autoComplete="email" required />
             </label>
             <label>
+              <span>Confirm your email address</span>
+              <input name="confirmEmail" type="email" autoComplete="email" required />
+            </label>
+            <label>
               <span>Password</span>
               <input name="password" type="password" autoComplete="new-password" minLength={8} required />
             </label>

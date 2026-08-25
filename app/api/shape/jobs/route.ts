@@ -47,8 +47,8 @@ function serializeJob(row: Record<string, unknown>, includeResult = false, inclu
 async function authenticatedClient(requireBeta = true) {
   const supabase = await createClient()
   const { data, error } = await supabase.auth.getUser()
-  if (error || !data.user) return { error: Response.json({ error: 'Sign in before using Shape.' }, { status: 401 }) }
-  if (requireBeta && !shapeEmailAllowed(data.user.email)) return { error: Response.json({ error: 'Shape processing is still limited to the private test list.' }, { status: 403 }) }
+  if (error || !data.user) return { error: Response.json({ error: 'Sign in before using Script.' }, { status: 401 }) }
+  if (requireBeta && !shapeEmailAllowed(data.user.email)) return { error: Response.json({ error: 'Script processing is still limited to the private test list.' }, { status: 403 }) }
   return { supabase, user: data.user }
 }
 
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
     ? query.in('status', ['processing', 'error'])
     : query.in('status', ['processing', 'error', 'completed'])
   const { data, error } = await query.maybeSingle()
-  if (error) return Response.json({ error: 'Shape could not read your saved jobs. Confirm both Shape database migrations have been applied.' }, { status: 503 })
+  if (error) return Response.json({ error: 'Script could not read your saved jobs. Confirm the Script database foundation has been applied.' }, { status: 503 })
   return Response.json({ job: data ? serializeJob(data as Record<string, unknown>, data.status === 'completed', data.status === 'error') : null }, { headers: { 'Cache-Control': 'no-store' } })
 }
 
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
     project_title?: unknown
     confirm_duplicate?: unknown
   }
-  try { body = await request.json() } catch { return Response.json({ error: 'Shape could not read that job request.' }, { status: 400 }) }
+  try { body = await request.json() } catch { return Response.json({ error: 'Script could not read that job request.' }, { status: 400 }) }
 
   const transcript = typeof body.transcript === 'string' ? normalizeShapeTranscriptForFingerprint(body.transcript) : ''
   const title = typeof body.title === 'string' && body.title.trim() ? body.title.trim().slice(0, 120) : 'Untitled adventure'
@@ -95,9 +95,9 @@ export async function POST(request: Request) {
   const requestedProjectTitle = typeof body.project_title === 'string' ? body.project_title.trim().slice(0, 120) : ''
   const confirmDuplicate = body.confirm_duplicate === true
 
-  if (!descriptionLevel) return Response.json({ error: 'Choose how much description Shape should add.' }, { status: 400 })
-  if (transcript.length < 250) return Response.json({ error: 'Give Shape at least 250 characters of gameplay transcript.' }, { status: 400 })
-  if (transcript.length > SHAPE_MAX_INPUT_CHARACTERS) return Response.json({ error: 'This transcript is too large for one Shape request. Divide it at a natural story break and use campaign-project mode to carry continuity forward.' }, { status: 400 })
+  if (!descriptionLevel) return Response.json({ error: 'Choose how much description Script should add.' }, { status: 400 })
+  if (transcript.length < 250) return Response.json({ error: 'Give Script at least 250 characters of gameplay transcript.' }, { status: 400 })
+  if (transcript.length > SHAPE_MAX_INPUT_CHARACTERS) return Response.json({ error: 'This transcript is too large for one Script request. Divide it at a natural story break and use campaign-project mode to carry continuity forward.' }, { status: 400 })
 
   const { data: active } = await auth.supabase
     .from('shape_jobs')
@@ -107,7 +107,7 @@ export async function POST(request: Request) {
     .order('updated_at', { ascending: false })
     .limit(1)
     .maybeSingle()
-  if (active) return Response.json({ error: `Finish or resume “${active.title}” before starting another Shape job.`, active_job_id: active.id }, { status: 409 })
+  if (active) return Response.json({ error: `Finish or resume “${active.title}” before starting another Script job.`, active_job_id: active.id }, { status: 409 })
 
   const fingerprint = createHash('sha256').update(transcript).digest('hex')
   if (!confirmDuplicate) {
@@ -121,7 +121,7 @@ export async function POST(request: Request) {
       .limit(1)
       .maybeSingle()
     if (duplicate) return Response.json({
-      error: 'This account has already Shaped this exact transcript. Running it again spends API usage and may introduce different inconsistencies.',
+      error: 'This account has already Scripted this exact transcript. Running it again spends API usage and may introduce different inconsistencies.',
       duplicate: true,
       duplicate_job_id: duplicate.id,
     }, { status: 409 })
@@ -139,17 +139,17 @@ export async function POST(request: Request) {
         .eq('id', requestedProjectId)
         .eq('user_id', auth.user.id)
         .single()
-      if (projectError || !project) return Response.json({ error: 'Shape could not find that campaign project.' }, { status: 404 })
+      if (projectError || !project) return Response.json({ error: 'Script could not find that campaign project.' }, { status: 404 })
       projectId = project.id
       projectPartNumber = (project.completed_parts || 0) + 1
       priorContinuity = project.continuity || ''
     } else {
       const { data: project, error: projectError } = await auth.supabase
         .from('shape_projects')
-        .insert({ user_id: auth.user.id, title: requestedProjectTitle || title || 'My Shape Project', continuity: '', completed_parts: 0 })
+        .insert({ user_id: auth.user.id, title: requestedProjectTitle || title || 'My Script Project', continuity: '', completed_parts: 0 })
         .select('id,title,continuity,completed_parts')
         .single()
-      if (projectError || !project) return Response.json({ error: 'Shape could not create the campaign project. Apply the Shape beta instrumentation migration first.' }, { status: 503 })
+      if (projectError || !project) return Response.json({ error: 'Script could not create the campaign project. Apply the Script database foundation first.' }, { status: 503 })
       projectId = project.id
     }
   }
@@ -162,7 +162,7 @@ export async function POST(request: Request) {
       writingTotal = buildShapeTranscriptChunks(transcript).length
     }
   } catch (caught) {
-    return Response.json({ error: caught instanceof Error ? caught.message : 'Shape could not safely divide this transcript.' }, { status: 400 })
+    return Response.json({ error: caught instanceof Error ? caught.message : 'Script could not safely divide this transcript.' }, { status: 400 })
   }
 
   const now = new Date().toISOString()
@@ -198,7 +198,7 @@ export async function POST(request: Request) {
     .select('id,title,description_level,transcript_characters,status,phase,analysis_total,writing_total,next_analysis_chunk_index,next_chunk_index,prompt_version,model,project_id,project_part_number,error_message,input_tokens,cached_input_tokens,output_tokens,request_count,created_at,updated_at')
     .single()
 
-  if (error || !data) return Response.json({ error: 'Shape could not save the job. Confirm both Shape database migrations have been applied.' }, { status: 503 })
+  if (error || !data) return Response.json({ error: 'Script could not save the job. Confirm the Script database foundation has been applied.' }, { status: 503 })
   return Response.json({ job: serializeJob(data as Record<string, unknown>) }, { status: 201, headers: { 'Cache-Control': 'no-store' } })
 }
 
@@ -207,7 +207,7 @@ export async function DELETE(request: NextRequest) {
   const auth = await authenticatedClient(true)
   if ('error' in auth) return auth.error
   const id = request.nextUrl.searchParams.get('id')?.trim() || ''
-  if (!id) return Response.json({ error: 'Choose a Shape job to discard.' }, { status: 400 })
+  if (!id) return Response.json({ error: 'Choose a Script job to discard.' }, { status: 400 })
 
   const { data, error } = await auth.supabase
     .from('shape_jobs')
@@ -218,7 +218,7 @@ export async function DELETE(request: NextRequest) {
     .select('id')
     .maybeSingle()
 
-  if (error) return Response.json({ error: 'Shape could not discard that saved job.' }, { status: 500 })
-  if (!data) return Response.json({ error: 'That Shape job is already complete or could not be found.' }, { status: 409 })
+  if (error) return Response.json({ error: 'Script could not discard that saved job.' }, { status: 500 })
+  if (!data) return Response.json({ error: 'That Script job is already complete or could not be found.' }, { status: 409 })
   return Response.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } })
 }

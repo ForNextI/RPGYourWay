@@ -234,7 +234,7 @@ async function openAiStep(
   },
 ) {
   const apiKey = process.env.OPENAI_API_KEY
-  if (!apiKey) throw new Error('Shape is not connected to OPENAI_API_KEY.')
+  if (!apiKey) throw new Error('Script is not connected to OPENAI_API_KEY.')
   const model = selectedShapeModel()
   const startedAt = Date.now()
   let statusCode: number | null = null
@@ -337,16 +337,16 @@ function parseRolling(raw: string): { section_disposition: ShapeWritingDispositi
   const unfenced = raw.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '')
   const parsed = JSON.parse(unfenced) as { section_disposition?: unknown; revised_previous_tail?: unknown; new_prose?: unknown }
   if (parsed.section_disposition !== 'prose' && parsed.section_disposition !== 'no_new_prose') {
-    throw new Error('Shape returned a writing response without a valid section_disposition.')
+    throw new Error('Script returned a writing response without a valid section_disposition.')
   }
   if (typeof parsed.revised_previous_tail !== 'string' || typeof parsed.new_prose !== 'string') {
-    throw new Error('Shape returned malformed rolling prose fields.')
+    throw new Error('Script returned malformed rolling prose fields.')
   }
   if (parsed.section_disposition === 'prose' && !parsed.new_prose.trim()) {
-    throw new Error('Shape writing response declared prose but returned empty new_prose.')
+    throw new Error('Script writing response declared prose but returned empty new_prose.')
   }
   if (parsed.section_disposition === 'no_new_prose' && parsed.new_prose.trim()) {
-    throw new Error('Shape writing response declared no_new_prose but returned new prose.')
+    throw new Error('Script writing response declared no_new_prose but returned new prose.')
   }
   return {
     section_disposition: parsed.section_disposition,
@@ -373,7 +373,7 @@ async function updateProjectAfterCompletion(supabase: ServerSupabase, userId: st
     .update({ continuity: job.continuity, completed_parts: job.project_part_number, updated_at: now })
     .eq('id', job.project_id)
     .eq('user_id', userId)
-  if (error) throw new Error('Shape finished this part but could not update the campaign project continuity.')
+  if (error) throw new Error('Script finished this part but could not update the campaign project continuity.')
 }
 
 async function usageTotalsFromLedger(supabase: ServerSupabase, job: ShapeJobRow) {
@@ -407,19 +407,19 @@ export async function POST(request: Request) {
   const supabase = await createClient()
   const { data: userData, error: userError } = await supabase.auth.getUser()
   const user = userData.user
-  if (userError || !user) return Response.json({ error: 'Sign in before using Shape.' }, { status: 401 })
-  if (!shapeEmailAllowed(user.email)) return Response.json({ error: 'Shape processing is still limited to the private test list.' }, { status: 403 })
+  if (userError || !user) return Response.json({ error: 'Sign in before using Script.' }, { status: 401 })
+  if (!shapeEmailAllowed(user.email)) return Response.json({ error: 'Script processing is still limited to the private test list.' }, { status: 403 })
 
   let body: { job_id?: unknown }
-  try { body = await request.json() } catch { return Response.json({ error: 'Shape could not read that processing request.' }, { status: 400 }) }
+  try { body = await request.json() } catch { return Response.json({ error: 'Script could not read that processing request.' }, { status: 400 }) }
   const jobId = typeof body.job_id === 'string' ? body.job_id.trim() : ''
-  if (!jobId) return Response.json({ error: 'This Shape request is missing its job identifier.' }, { status: 400 })
+  if (!jobId) return Response.json({ error: 'This Script request is missing its job identifier.' }, { status: 400 })
 
   const { data, error } = await supabase.from('shape_jobs').select('*').eq('id', jobId).eq('user_id', user.id).single()
-  if (error || !data) return Response.json({ error: 'Shape could not find that saved job.' }, { status: 404 })
+  if (error || !data) return Response.json({ error: 'Script could not find that saved job.' }, { status: 404 })
   const job = data as ShapeJobRow
   if (job.status === 'completed') return Response.json({ job: serializeJob(job, true) }, { headers: { 'Cache-Control': 'no-store' } })
-  if (job.status === 'cancelled') return Response.json({ error: 'This Shape job was discarded.' }, { status: 409 })
+  if (job.status === 'cancelled') return Response.json({ error: 'This Script job was discarded.' }, { status: 409 })
 
   const now = new Date().toISOString()
 
@@ -437,7 +437,7 @@ export async function POST(request: Request) {
         idempotencyKey: `shape-${job.id}-single-${job.fingerprint}`,
       })
       const prose = outputText(step.payload)
-      if (!prose) throw new Error('Shape returned an empty story.')
+      if (!prose) throw new Error('Script returned an empty story.')
       const usageTotals = await usageTotalsFromLedger(supabase, job)
       const update = {
         status: 'completed',
@@ -453,7 +453,7 @@ export async function POST(request: Request) {
         completed_at: now,
       }
       const { data: saved, error: saveError } = await supabase.from('shape_jobs').update(update).eq('id', job.id).eq('user_id', user.id).select('*').single()
-      if (saveError || !saved) throw new Error('Shape finished the story but could not save it.')
+      if (saveError || !saved) throw new Error('Script finished the story but could not save it.')
       return Response.json({ job: serializeJob(saved as ShapeJobRow, true) }, { headers: { 'Cache-Control': 'no-store' } })
     }
 
@@ -494,7 +494,7 @@ export async function POST(request: Request) {
         updated_at: now,
       }
       const { data: saved, error: saveError } = await supabase.from('shape_jobs').update(update).eq('id', job.id).eq('user_id', user.id).select('*').single()
-      if (saveError || !saved) throw new Error('Shape completed a continuity step but could not save the checkpoint.')
+      if (saveError || !saved) throw new Error('Script completed a continuity step but could not save the checkpoint.')
       return Response.json({ job: serializeJob(saved as ShapeJobRow) }, { headers: { 'Cache-Control': 'no-store' } })
     }
 
@@ -505,7 +505,7 @@ export async function POST(request: Request) {
 
       const applyWritingResponse = (raw: string, existingProse: string, previousTail: string) => {
         const section = parseRolling(raw)
-        if (section.revised_previous_tail.length > MAX_REVISED_PREVIOUS_PROSE_CHARACTERS) throw new Error('Shape returned an oversized seam revision.')
+        if (section.revised_previous_tail.length > MAX_REVISED_PREVIOUS_PROSE_CHARACTERS) throw new Error('Script returned an oversized seam revision.')
         return reconcileShapeWritingSection(existingProse, previousTail, section.revised_previous_tail, section.new_prose, section.section_disposition)
       }
 
@@ -639,7 +639,7 @@ export async function POST(request: Request) {
         completed_at: complete ? now : null,
       }
       const { data: saved, error: saveError } = await supabase.from('shape_jobs').update(update).eq('id', job.id).eq('user_id', user.id).select('*').single()
-      if (saveError || !saved) throw new Error('Shape completed a writing step but could not save the checkpoint.')
+      if (saveError || !saved) throw new Error('Script completed a writing step but could not save the checkpoint.')
       if (complete) await updateProjectAfterCompletion(supabase, user.id, saved as ShapeJobRow, now)
       return Response.json({ job: serializeJob(saved as ShapeJobRow, complete) }, { headers: { 'Cache-Control': 'no-store' } })
     }
@@ -649,9 +649,9 @@ export async function POST(request: Request) {
     const { data: saved } = await supabase.from('shape_jobs').update(fallbackUpdate).eq('id', job.id).eq('user_id', user.id).select('*').single()
     return Response.json({ job: serializeJob((saved || job) as ShapeJobRow, true) }, { headers: { 'Cache-Control': 'no-store' } })
   } catch (caught) {
-    const message = caught instanceof Error ? caught.message : 'Shape could not finish this processing step.'
+    const message = caught instanceof Error ? caught.message : 'Script could not finish this processing step.'
     console.error('RPG Your Way Shape step failed', message)
-    const publicMessage = message.startsWith('Shape is not connected') ? message : 'Shape could not finish this step. Your completed checkpoints are safe, and you can resume without starting over.'
+    const publicMessage = message.startsWith('Script is not connected') ? message : 'Script could not finish this step. Your completed checkpoints are safe, and you can resume without starting over.'
     const usageTotals = await usageTotalsFromLedger(supabase, job)
     await supabase.from('shape_jobs').update({ status: 'error', error_message: publicMessage, ...usageTotals, updated_at: now }).eq('id', job.id).eq('user_id', user.id)
     const { data: refreshed } = await supabase.from('shape_jobs').select('*').eq('id', job.id).eq('user_id', user.id).single()

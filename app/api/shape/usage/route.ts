@@ -8,10 +8,10 @@ export async function GET(request: NextRequest) {
   const supabase = await createClient()
   const { data: userData, error: userError } = await supabase.auth.getUser()
   const user = userData.user
-  if (userError || !user) return Response.json({ error: 'Sign in before using Shape.' }, { status: 401 })
+  if (userError || !user) return Response.json({ error: 'Sign in before using Script.' }, { status: 401 })
 
   const jobId = request.nextUrl.searchParams.get('job_id')?.trim() || ''
-  if (!jobId) return Response.json({ error: 'Choose a Shape job first.' }, { status: 400 })
+  if (!jobId) return Response.json({ error: 'Choose a Script job first.' }, { status: 400 })
 
   const { data: job, error: jobError } = await supabase
     .from('shape_jobs')
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     .eq('user_id', user.id)
     .single()
 
-  if (jobError || !job) return Response.json({ error: 'Shape could not find that job.' }, { status: 404 })
+  if (jobError || !job) return Response.json({ error: 'Script could not find that job.' }, { status: 404 })
 
   const { data: events, error: eventError } = await supabase
     .from('shape_usage_events')
@@ -29,11 +29,11 @@ export async function GET(request: NextRequest) {
     .eq('user_id', user.id)
     .order('created_at', { ascending: true })
 
-  if (eventError) return Response.json({ error: 'Shape could not read the usage ledger.' }, { status: 503 })
+  if (eventError) return Response.json({ error: 'Script could not read the usage ledger.' }, { status: 503 })
 
   return Response.json({
     generated_at: new Date().toISOString(),
-    purpose: 'RPG Your Way Shape private-test usage report. No transcript or finished prose is included.',
+    purpose: 'RPG Your Way Script private-test usage report. No transcript or finished prose is included.',
     job,
     events: events || [],
   }, { headers: { 'Cache-Control': 'no-store' } })

@@ -10,7 +10,7 @@ export default function ReadPage() {
           <p className="kicker">Read</p>
           <h1 className="page-title">The novel.</h1>
           <p className="page-lede">If you&apos;re looking for the novel, it&apos;s over here at the free site.</p>
-          <a className="button button-primary" href="https://www.thereadingofthewardens.com">
+          <a className="button button-primary" href="https://www.thereadingofthewardens.com" target="_blank" rel="noreferrer">
             TheReadingOfTheWardens.com
           </a>
         </div>
