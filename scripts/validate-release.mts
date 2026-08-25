@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.5')
-assert.equal(pkg.rpgywVersion, '1.7.5')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.5'/)
+assert.equal(pkg.version, '1.7.9')
+assert.equal(pkg.rpgywVersion, '1.7.9')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.9'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -177,11 +177,11 @@ assert.match(billing, /ownerQa/)
 assert.match(billing, /provider_usage_events/)
 
 const playAccess = read('app/api/play/access/route.ts')
-assert.match(playAccess, /voice_available: account\.ownerQa/)
+assert.match(playAccess, /voice_available:\s*true/)
 const speech = read('app/api/aigm/speech/route.ts')
 const transcribe = read('app/api/aigm/transcribe/route.ts')
-assert.match(speech, /if \(!account\.ownerQa\)/)
-assert.match(transcribe, /if \(!account\.ownerQa\)/)
+assert.doesNotMatch(speech, /if \(!account\.ownerQa\)/)
+assert.doesNotMatch(transcribe, /if \(!account\.ownerQa\)/)
 
 const shapeJobs = read('app/api/shape/jobs/route.ts')
 assert.match(shapeJobs, /isOwnerQaEmail/)
@@ -239,3 +239,19 @@ assert.match(css175, /\.aigm-character-reorder/)
 assert.match(css175, /\.character-sheet-dialog/)
 
 console.log('RPG Your Way 1.7.5 Play UI and voice cleanup checks passed.')
+
+
+const gameplay179 = read('components/aigm/aigm-gameplay-shell.tsx')
+assert.match(gameplay179, /aigm-conversation-column/)
+assert.match(gameplay179, /aigm-message-wrap/)
+assert.match(gameplay179, /Initiative <span className="inline-block whitespace-nowrap">&amp; Dice<\/span>/)
+assert.doesNotMatch(gameplay179, /\b(?:bg|text|border)-accent(?:-foreground)?(?:\/[\w.-]+)?\b/)
+const css179 = read('app/globals.css')
+assert.match(css179, /RPG Your Way 1\.7\.9 recovered Play layout and color cleanup/)
+assert.match(css179, /grid-template-columns:\s*minmax\(260px, \.78fr\) minmax\(0, 2\.4fr\) minmax\(250px, \.86fr\)/)
+assert.match(css179, /\.aigm-assistant-message\s*\{\s*max-width:\s*calc\(100% - 3rem\)/)
+const access179 = read('app/api/play/access/route.ts')
+assert.match(access179, /voice_available:\s*true/)
+assert.doesNotMatch(access179, /voice_available:\s*account\.ownerQa/)
+
+console.log('RPG Your Way 1.7.9 recovery, voice-validator, and Play presentation checks passed.')

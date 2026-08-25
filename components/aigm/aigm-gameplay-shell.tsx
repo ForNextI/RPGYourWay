@@ -827,7 +827,7 @@ function CharacterSheetOverlay({
                   </button>
                 </div>
                 {showSmartLevelingHelp && (
-                  <div className="mt-3 max-w-2xl rounded-2xl border border-accent/35 bg-background/90 p-4 text-sm leading-relaxed shadow-sm" role="dialog" aria-label="Smart way to level your character">
+                  <div className="mt-3 max-w-2xl rounded-2xl border border-primary/35 bg-background/90 p-4 text-sm leading-relaxed shadow-sm" role="dialog" aria-label="Smart way to level your character">
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="font-display text-lg font-bold text-foreground">Smart way to level your character</p>
@@ -972,7 +972,7 @@ Properties: finesse, light`}
               <div className="grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
                 <div className="rounded-xl bg-secondary px-3 py-3"><p className="text-xs text-muted-foreground">Hit Points</p><p className="mt-1 text-xl font-bold">{live.current_hit_points}/{live.maximum_hit_points}{live.temporary_hit_points > 0 ? ` +${live.temporary_hit_points} temp` : ''}</p></div>
                 <div className="rounded-xl bg-secondary px-3 py-3"><p className="text-xs text-muted-foreground">Armor Class</p><p className="mt-1 text-xl font-bold">{live.armor_class || '—'}</p></div>
-                <div className="rounded-xl bg-secondary px-3 py-3"><p className="text-xs text-muted-foreground">Initiative</p><p className="mt-1 text-xl font-bold text-accent">{signedNumber(getInitiativeModifier(result))}</p></div>
+                <div className="rounded-xl bg-secondary px-3 py-3"><p className="text-xs text-muted-foreground">Initiative</p><p className="mt-1 text-xl font-bold text-primary">{signedNumber(getInitiativeModifier(result))}</p></div>
                 <div className="rounded-xl bg-secondary px-3 py-3"><p className="text-xs text-muted-foreground">Death Saves</p><p className="mt-1 text-sm font-bold">{live.death_saves.successes} successes<br />{live.death_saves.failures} failures</p></div>
               </div>
               <div className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
@@ -2010,7 +2010,7 @@ export function AigmGameplayShell() {
               <div className="flex items-center gap-2"><Dices className="size-5 shrink-0 text-primary" aria-hidden="true" /><h2 className="font-display text-xl font-bold leading-tight">Roll Your Dice Here</h2></div>
               <div className="inline-flex rounded-xl border border-border bg-background p-1" aria-label="Dice mode">
                 <button type="button" onClick={() => setDiceMode('purist')} aria-pressed={gameplay.dice_mode === 'purist'} className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-bold ${gameplay.dice_mode === 'purist' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}><LockKeyhole className="size-3.5" aria-hidden="true" />Purist</button>
-                <button type="button" onClick={() => setDiceMode('cheat')} aria-pressed={gameplay.dice_mode === 'cheat'} className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-bold ${gameplay.dice_mode === 'cheat' ? 'bg-accent text-accent-foreground' : 'text-muted-foreground'}`}><UnlockKeyhole className="size-3.5" aria-hidden="true" />Story first</button>
+                <button type="button" onClick={() => setDiceMode('cheat')} aria-pressed={gameplay.dice_mode === 'cheat'} className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-bold ${gameplay.dice_mode === 'cheat' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}><UnlockKeyhole className="size-3.5" aria-hidden="true" />Story first</button>
               </div>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{gameplay.dice_mode === 'purist' ? 'See what fate gives you, then send that roll before trying again.' : 'No shame. Some players care more about the adventure than strict dice luck. Roll again when the story needs a kinder turn.'}</p>
@@ -2025,10 +2025,10 @@ export function AigmGameplayShell() {
               {DICE.map((sides) => <button key={sides} type="button" onClick={() => rollDice(sides)} disabled={sending || (gameplay.dice_mode === 'purist' && Boolean(lastRoll))} className="min-h-11 w-[calc(33.333%-0.4rem)] whitespace-nowrap rounded-xl border border-primary/35 bg-primary/10 px-2 py-2 text-base font-bold text-primary hover:bg-primary/20 disabled:cursor-not-allowed disabled:opacity-40">d{sides}</button>)}
             </div>
             {lastRoll && (
-              <div className="mt-3 rounded-xl border border-accent/35 bg-accent/10 p-3 text-sm">
-                <p className="font-semibold text-accent">{lastRoll}</p>
+              <div className="mt-3 rounded-xl border border-primary/35 bg-primary/10 p-3 text-sm">
+                <p className="font-semibold text-primary">{lastRoll}</p>
                 <p className="mt-1 text-xs text-muted-foreground">Send fate to the AIGM now, or include it with your next message.</p>
-                <button type="button" onClick={sendLatestRoll} disabled={sending || gameplay.messages.length === 0} className="mt-3 inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg bg-accent px-3 text-xs font-bold text-accent-foreground disabled:opacity-45"><Send className="size-3.5" aria-hidden="true" />Send this roll</button>
+                <button type="button" onClick={sendLatestRoll} disabled={sending || gameplay.messages.length === 0} className="mt-3 inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg bg-primary px-3 text-xs font-bold text-primary-foreground disabled:opacity-45"><Send className="size-3.5" aria-hidden="true" />Send this roll</button>
                 {gameplay.dice_mode === 'cheat' && <button type="button" onClick={() => { setPendingDice(null); setLastRoll(null) }} className="mt-2 text-xs font-semibold text-muted-foreground underline">Leave this roll behind</button>}
               </div>
             )}
@@ -2040,16 +2040,16 @@ export function AigmGameplayShell() {
                 <span className="min-w-0"><span className="block font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-primary">Turn order</span><span className="block truncate font-display text-lg font-bold">Initiative</span></span>
                 <ChevronDown className={`size-5 shrink-0 transition-transform ${initiativeOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
               </button>
-              <button type="button" onClick={rollPartyInitiative} disabled={readyCharacters.length === 0 || sending} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-accent px-3 text-sm font-bold text-accent-foreground disabled:opacity-40"><Swords className="size-4" aria-hidden="true" />Roll Party Initiative</button>
+              <button type="button" onClick={rollPartyInitiative} disabled={readyCharacters.length === 0 || sending} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary px-3 text-sm font-bold text-primary-foreground disabled:opacity-40"><Swords className="size-4" aria-hidden="true" />Roll Party Initiative</button>
             </div>
             {initiativeOpen && (
               <div className="mt-3">
-                {gameplay.combat_active && <span className="mb-2 inline-flex rounded-full bg-accent/15 px-2 py-1 text-[10px] font-bold text-accent">Combat order active</span>}
+                {gameplay.combat_active && <span className="mb-2 inline-flex rounded-full bg-primary/15 px-2 py-1 text-[10px] font-bold text-primary">Combat order active</span>}
                 <div className="space-y-2">
                   {gameplay.initiative.length > 0 ? gameplay.initiative.map((entry, index) => (
                     <div key={entry.character_id} className="rounded-xl border border-border bg-background/65 px-3 py-2">
                       <div className="flex items-center gap-2"><span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-bold">{index + 1}</span><span className="min-w-0 flex-1 truncate text-sm font-semibold">{entry.name}</span>{entry.entity_type === 'npc' && <span className="rounded-full bg-secondary px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-muted-foreground">NPC</span>}</div>
-                      <p className="mt-1 pl-8 text-xs text-muted-foreground">Total <strong className="text-accent">{entry.total}</strong> · roll {entry.roll} · mod {signedNumber(entry.modifier)}</p>
+                      <p className="mt-1 pl-8 text-xs text-muted-foreground">Total <strong className="text-primary">{entry.total}</strong> · roll {entry.roll} · mod {signedNumber(entry.modifier)}</p>
                     </div>
                   )) : readyCharacters.map((character) => (
                     <div key={character.id} className="rounded-xl bg-secondary/60 px-3 py-2"><p className="truncate text-sm font-semibold">{playNameFor(character)}</p><p className="mt-0.5 text-xs text-muted-foreground">Modifier {signedNumber(character.result ? getInitiativeModifier(character.result) : 0)}</p></div>
@@ -2083,15 +2083,15 @@ export function AigmGameplayShell() {
           </div>
 
           <div ref={conversationRef} onScroll={handleConversationScroll} className="aigm-conversation-scroll min-h-0 flex-1 overflow-y-auto px-5 py-6 sm:px-7">
-            <div className="mx-auto flex max-w-4xl flex-col gap-5">
+            <div className="aigm-conversation-column mx-auto flex w-full max-w-5xl flex-col gap-5">
               {gameplay.pending_level_ups.length > 0 && (
-                <div className="rounded-2xl border border-accent/45 bg-accent/10 px-4 py-4 sm:px-5">
+                <div className="rounded-2xl border border-primary/45 bg-primary/10 px-4 py-4 sm:px-5">
                   <p className="font-display text-lg font-bold">Level Up ready</p>
                   <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{gameplay.pending_level_ups.map((id) => readyCharacters.find((character) => character.id === id)).filter(Boolean).map((character) => playNameFor(character!)).join(', ')} {gameplay.pending_level_ups.length === 1 ? 'has' : 'have'} earned a level. Use the guided Level Up interface to review advancement and update the permanent character record.</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {gameplay.pending_level_ups.map((id) => {
                       const character = readyCharacters.find((entry) => entry.id === id)
-                      return character ? <button key={id} type="button" onClick={() => openLevelUp(id)} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-accent px-4 text-sm font-bold text-accent-foreground"><Sparkles className="size-4" aria-hidden="true" />Level Up {playNameFor(character)}</button> : null
+                      return character ? <button key={id} type="button" onClick={() => openLevelUp(id)} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground"><Sparkles className="size-4" aria-hidden="true" />Level Up {playNameFor(character)}</button> : null
                     })}
                   </div>
                 </div>
@@ -2110,10 +2110,10 @@ export function AigmGameplayShell() {
                   </div>
                 </div>
               ) : gameplay.messages.map((entry) => (
-                <div key={entry.id} className={`flex items-start gap-3 ${entry.role === 'user' ? 'justify-end' : ''}`} aria-label={entry.role === 'assistant' ? `${partyState.game_master_name || 'Game Master'} message` : 'Player message'}>
-                  {entry.role === 'assistant' && <span className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground"><MessageSquareText className="size-4" aria-hidden="true" /></span>}
-                  <div className={`max-w-[88%] ${entry.role === 'user' ? '' : 'group'}`}>
-                    <div className={`whitespace-pre-wrap rounded-2xl px-5 py-4 leading-relaxed ${entry.role === 'user' ? 'rounded-tr-sm bg-accent text-accent-foreground' : 'rounded-tl-sm bg-secondary'}`}>{entry.text}</div>
+                <div key={entry.id} className={`aigm-message-row flex items-start gap-3 ${entry.role === 'user' ? 'justify-end' : ''}`} aria-label={entry.role === 'assistant' ? `${partyState.game_master_name || 'Game Master'} message` : 'Player message'}>
+                  {entry.role === 'assistant' && <span className="aigm-assistant-message-icon mt-1 flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground"><MessageSquareText className="size-4" aria-hidden="true" /></span>}
+                  <div className={`aigm-message-wrap ${entry.role === 'user' ? 'aigm-user-message' : 'aigm-assistant-message group'}`}>
+                    <div className={`aigm-message-bubble whitespace-pre-wrap rounded-2xl px-5 py-4 leading-relaxed ${entry.role === 'user' ? 'rounded-tr-sm bg-primary text-primary-foreground' : 'rounded-tl-sm bg-secondary'}`}>{entry.text}</div>
                     {entry.role === 'assistant' && (
                       <button type="button" data-aigm-manual-listen="true" onClick={() => voiceControlsRef.current?.replay(entry.text)} className="mt-1.5 inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-[11px] font-semibold text-muted-foreground opacity-80 transition hover:bg-secondary hover:text-foreground" aria-label="Read this AIGM reply aloud">
                         <Volume2 className="size-3.5" aria-hidden="true" />Listen
@@ -2137,7 +2137,7 @@ export function AigmGameplayShell() {
           {showJumpButton && <button type="button" onClick={() => { userScrolledAwayRef.current = false; setShowJumpButton(false); scrollToLatest(true) }} className="absolute bottom-28 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-xs font-bold shadow-xl"><ArrowDown className="size-4" aria-hidden="true" />Latest turn</button>}
 
           <div className="aigm-gameplay-composer border-t border-border bg-background/80 px-3 py-2.5 sm:px-4 sm:py-3">
-            {billingNotice && <div className="mx-auto mb-2.5 flex max-w-4xl items-center justify-between gap-3 rounded-xl border border-accent/45 bg-accent/10 px-4 py-3 text-sm" role="status"><p><strong>{billingNotice}</strong></p>{billingActionUrl ? <Link href={billingActionUrl} className="shrink-0 font-bold text-primary underline underline-offset-2">Add usage</Link> : null}</div>}
+            {billingNotice && <div className="mx-auto mb-2.5 flex max-w-4xl items-center justify-between gap-3 rounded-xl border border-primary/45 bg-primary/10 px-4 py-3 text-sm" role="status"><p><strong>{billingNotice}</strong></p>{billingActionUrl ? <Link href={billingActionUrl} className="shrink-0 font-bold text-primary underline underline-offset-2">Add usage</Link> : null}</div>}
             {error && <div className="mx-auto mb-2.5 flex max-w-4xl items-start justify-between gap-3 rounded-xl border border-destructive/35 bg-destructive/10 px-4 py-3 text-sm" role="alert"><div className="flex items-start gap-2"><AlertTriangle className="mt-0.5 size-4 shrink-0 text-destructive" aria-hidden="true" /><p>{error}</p></div>{billingActionUrl ? <Link href={billingActionUrl} className="shrink-0 font-bold underline underline-offset-2">Add usage</Link> : null}</div>}
             <div className="mx-auto max-w-5xl">
               <label htmlFor="aigm-gameplay-message" className="sr-only">What does the party do?</label>
@@ -2170,13 +2170,13 @@ export function AigmGameplayShell() {
                   <ChevronDown className={`size-4 shrink-0 transition-transform ${sessionToolsOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                 </button>
                 <button type="button" onClick={() => setExportGameHelpDialogOpen(true)} className="inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><FileDown className="size-3.5 shrink-0" aria-hidden="true" />When and how to export</button>
-                <button type="button" onClick={openStoryDirectionHelp} className="inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-accent/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><BookOpen className="size-3.5 shrink-0" aria-hidden="true" />How much can I direct my game?</button>
+                <button type="button" onClick={openStoryDirectionHelp} className="inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><BookOpen className="size-3.5 shrink-0" aria-hidden="true" />How much can I direct my game?</button>
                 {sessionToolsOpen && (
                   <div id="aigm-session-tools-panel" className="flex flex-wrap items-center gap-2 pt-0.5 sm:col-span-3">
                     <button type="button" onClick={downloadAdventure} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground"><FileDown className="size-3.5" aria-hidden="true" />Export Your Game</button>
                     <button type="button" onClick={downloadTranscript} disabled={transcript.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-40"><Download className="size-3.5" aria-hidden="true" />Download transcript</button>
                     <button type="button" onClick={printTranscript} disabled={transcript.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-40"><Printer className="size-3.5" aria-hidden="true" />Print</button>
-                    <button type="button" onClick={() => openLevelUp()} disabled={gameplay.pending_level_ups.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-accent/55 hover:text-foreground disabled:opacity-40"><Sparkles className="size-3.5" aria-hidden="true" />Level Up a character</button>
+                    <button type="button" onClick={() => openLevelUp()} disabled={gameplay.pending_level_ups.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-40"><Sparkles className="size-3.5" aria-hidden="true" />Level Up a character</button>
                     <button type="button" onClick={() => setCharacterAssistanceDialogOpen(true)} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground"><BookOpen className="size-3.5" aria-hidden="true" />Character help: {characterAssistanceLevel} out of 10</button>
                     <Link href="/play" className="rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground">Back to Play</Link>
                   </div>
@@ -2262,7 +2262,7 @@ export function AigmGameplayShell() {
         <nav className="aigm-mobile-nav fixed inset-x-3 bottom-3 z-40 rounded-2xl border border-border bg-card/95 p-2 shadow-2xl backdrop-blur lg:hidden" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }} aria-label="Mobile gameplay panels">
           {mobilePanel === 'gameplay' ? (
             <div className="grid grid-cols-2 gap-2">
-              <button type="button" onClick={() => setMobilePanel('tools')} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-accent px-3 text-sm font-bold text-accent-foreground"><Dices className="size-4" aria-hidden="true" />Initiative &amp; Dice</button>
+              <button type="button" onClick={() => setMobilePanel('tools')} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-3 text-sm font-bold text-primary-foreground"><Dices className="size-4" aria-hidden="true" /><span className="text-center leading-tight">Initiative <span className="inline-block whitespace-nowrap">&amp; Dice</span></span></button>
               <button type="button" onClick={() => setMobilePanel('characters')} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-3 text-sm font-bold text-primary-foreground"><UserRound className="size-4" aria-hidden="true" />Characters</button>
             </div>
           ) : mobilePanel === 'tools' ? (
