@@ -6,10 +6,12 @@ import {
   SHAPE_SINGLE_PASS_CHARACTERS,
   assessShapeTranscript,
   buildShapeAnalysisChunks,
+  buildShapeRecoverySubchunks,
   buildShapeTranscriptChunks,
   extractWardensCampaignTranscript,
   normalizeShapeTranscriptForFingerprint,
   provisionalProseTail,
+  reconcileShapeWritingSection,
   replaceProvisionalProseTail,
 } from '../lib/shape/transcript.ts'
 
@@ -59,6 +61,29 @@ requireCondition(playerBoundaryChunks.length >= 2, 'The player-boundary fixture 
 requireCondition(playerBoundaryChunks[1].source.startsWith('PLAYER\n'), 'A WardensPC writing seam should prefer the start of a PLAYER turn near the target boundary.')
 requireCondition(playerBoundaryChunks.map((chunk) => chunk.source).join('') === playerBoundaryFixture, 'PLAYER-boundary preference must preserve every source character exactly once.')
 
+
+const unchangedSeam = reconcileShapeWritingSection(
+  seamFixture,
+  provisionalTail,
+  '',
+  'The next section begins without requiring any change to the already-written seam.',
+)
+requireCondition(unchangedSeam.includes(provisionalTail), 'An empty revised seam must preserve the already-checkpointed provisional prose tail.')
+requireCondition(unchangedSeam.endsWith('The next section begins without requiring any change to the already-written seam.'), 'No-change seam recovery must still append the new prose.')
+
+const troublesomeSource = [
+  'PLAYER\nI correct what happened earlier.\n\nGAME MASTER\nUnderstood; the earlier description is superseded.\n\n',
+  'A'.repeat(11_000),
+  '\n\nPLAYER\nActually, that correction begins from the previous scene.\n\nGAME MASTER\nLocked in.\n\n',
+  'B'.repeat(11_000),
+  '\n\nPLAYER\nWe move on.\n\nGAME MASTER\nThe next event begins.\n\n',
+  'C'.repeat(10_000),
+].join('')
+const recoverySubchunks = buildShapeRecoverySubchunks(troublesomeSource)
+requireCondition(recoverySubchunks.length >= 2, 'A troublesome full writing section must be divisible into smaller recovery subsections.')
+requireCondition(recoverySubchunks.join('') === troublesomeSource, 'Recovery subsections must preserve every source character exactly once.')
+requireCondition(recoverySubchunks.every((part) => part.length <= 16_000), 'Recovery subsections must stay materially smaller than a normal writing section.')
+
 const campaignJson = JSON.stringify({
   storage_schema: 2,
   adventure_name: 'Test Adventure',
@@ -79,4 +104,4 @@ const windows = normalizeShapeTranscriptForFingerprint('One  \r\n\r\n\r\nTwo\t\r
 const unix = normalizeShapeTranscriptForFingerprint('One\n\nTwo\n')
 requireCondition(windows === unix, 'Harmless line-ending and blank-line differences must normalize identically.')
 
-console.log('RPG Your Way Shape runtime sanity checks passed: limits, chunk coverage, temporal seams, WardensPC import, and fingerprint normalization.')
+console.log('RPG Your Way Shape runtime sanity checks passed: limits, chunk coverage, resilient seams, recovery subdivision, WardensPC import, and fingerprint normalization.')

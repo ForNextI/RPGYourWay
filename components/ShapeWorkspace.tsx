@@ -39,6 +39,7 @@ type ShapeJob = {
   output_tokens: number
   request_count: number
   result_text?: string | null
+  partial_result_text?: string | null
   created_at: string
   updated_at: string
 }
@@ -74,6 +75,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
   const [running, setRunning] = useState(false)
   const [loadingResume, setLoadingResume] = useState(true)
   const [error, setError] = useState('')
+  const [diagnostic, setDiagnostic] = useState('')
   const [fileName, setFileName] = useState('')
   const [dragging, setDragging] = useState(false)
   const [duplicateBlocked, setDuplicateBlocked] = useState(false)
@@ -115,6 +117,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
 
   function acceptRawFile(file: File) {
     setError('')
+    setDiagnostic('')
     setDuplicateBlocked(false)
     setFileName(file.name)
     file.text()
@@ -144,6 +147,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
 
   async function createJob(confirmDuplicate = false) {
     setError('')
+    setDiagnostic('')
     setDuplicateBlocked(false)
     const clean = transcript.trim()
     if (!accessAllowed) {
@@ -195,6 +199,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
   async function runJob(jobId: string) {
     setRunning(true)
     setError('')
+    setDiagnostic('')
     try {
       for (let step = 0; step < 64; step += 1) {
         const response = await fetch('/api/shape/transform', {
@@ -202,9 +207,12 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ job_id: jobId }),
         })
-        const payload = await response.json() as { job?: ShapeJob; error?: string }
+        const payload = await response.json() as { job?: ShapeJob; error?: string; diagnostic?: string }
         if (payload.job) setJob(payload.job)
-        if (!response.ok) throw new Error(payload.error || 'Shape could not finish this processing step.')
+        if (!response.ok) {
+          if (payload.diagnostic) setDiagnostic(payload.diagnostic)
+          throw new Error(payload.error || 'Shape could not finish this processing step.')
+        }
         if (!payload.job) throw new Error('Shape returned an incomplete job update.')
         if (payload.job.status === 'completed') {
           await loadProjects()
@@ -224,6 +232,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
     if (!job || job.status === 'completed') return
     if (!window.confirm('Discard this saved Shape job? Its usage ledger will remain available in the database, but the job will no longer resume.')) return
     setError('')
+    setDiagnostic('')
     try {
       const response = await fetch(`/api/shape/jobs?id=${encodeURIComponent(job.id)}`, { method: 'DELETE' })
       const payload = await response.json() as { error?: string }
@@ -244,6 +253,7 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
     setTitle('')
     setFileName('')
     setError('')
+    setDiagnostic('')
     setDuplicateBlocked(false)
     if (continuingProject) {
       setProjectMode(true)
@@ -258,6 +268,26 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
     const anchor = document.createElement('a')
     anchor.href = url
     anchor.download = safeFilename(job.title)
+    document.body.appendChild(anchor)
+    anchor.click()
+    anchor.remove()
+    window.setTimeout(() => URL.revokeObjectURL(url), 1_000)
+  }
+
+  function downloadPartialResult() {
+    if (!job?.partial_result_text) return
+    const notice = [
+      'INCOMPLETE SHAPE RESULT',
+      'This file contains only prose successfully checkpointed before Shape stopped.',
+      'Resume the saved Shape job to attempt the remaining material.',
+      '',
+      job.partial_result_text,
+    ].join('\n')
+    const blob = new Blob([notice], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const anchor = document.createElement('a')
+    anchor.href = url
+    anchor.download = safeFilename(`${job.title}-INCOMPLETE`)
     document.body.appendChild(anchor)
     anchor.click()
     anchor.remove()
@@ -298,6 +328,8 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
 
   if (job) {
     const totalTokens = (job.input_tokens || 0) + (job.output_tokens || 0)
+    const persistedError = job.status === 'error' ? (job.error_message || '') : ''
+    const visibleError = error || persistedError
     return (
       <section className="shape-workbench" aria-labelledby="shape-job-title">
         <div className="shape-job-heading">
@@ -319,14 +351,20 @@ export function ShapeWorkspace({ accessAllowed, accessConfigured }: { accessAllo
         </div>
         <p className="shape-usage-note">Private-test meter: {totalTokens.toLocaleString()} total recorded input + output tokens{job.model ? ` · ${job.model}` : ''}. Cached input is shown separately because provider pricing may treat it differently.</p>
 
-        {job.error_message && job.status === 'error' ? <p className="shape-error" role="alert">{job.error_message}</p> : null}
-        {error ? <p className="shape-error" role="alert">{error}</p> : null}
+        {visibleError ? <p className="shape-error" role="alert">{visibleError}</p> : null}
+        {diagnostic ? (
+          <details className="shape-diagnostic">
+            <summary>Private-test diagnostic</summary>
+            <code>{diagnostic}</code>
+          </details>
+        ) : null}
 
         {job.status !== 'completed' ? (
           <div className="shape-actions">
             <button className="button button-primary" type="button" disabled={running} onClick={() => runJob(job.id)}>
               {running ? 'Shape is working…' : job.status === 'error' ? 'Resume this Shape job' : 'Continue Shape job'}
             </button>
+            {job.partial_result_text ? <button className="button button-secondary" type="button" disabled={running} onClick={downloadPartialResult}>Download work so far</button> : null}
             {job.request_count > 0 ? <button className="button button-secondary" type="button" disabled={running} onClick={downloadUsageReport}>Download test usage report</button> : null}
             <button className="button button-secondary" type="button" disabled={running} onClick={discardJob}>Discard saved job</button>
             <p>Transcript, continuity, prose, and progress are checkpointed to your account after completed steps.</p>

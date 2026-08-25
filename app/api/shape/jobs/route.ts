@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic'
 
 const DESCRIPTION_LEVELS = new Set(['plain', 'light', 'rich', 'purple'])
 
-function serializeJob(row: Record<string, unknown>, includeResult = false) {
+function serializeJob(row: Record<string, unknown>, includeResult = false, includePartial = false) {
   return {
     id: row.id,
     title: row.title,
@@ -38,6 +38,7 @@ function serializeJob(row: Record<string, unknown>, includeResult = false) {
     output_tokens: row.output_tokens || 0,
     request_count: row.request_count || 0,
     result_text: includeResult ? row.result_text : undefined,
+    partial_result_text: includePartial && typeof row.prose_text === 'string' && row.prose_text ? row.prose_text : undefined,
     created_at: row.created_at,
     updated_at: row.updated_at,
   }
@@ -58,7 +59,7 @@ export async function GET(request: NextRequest) {
 
   let query = auth.supabase
     .from('shape_jobs')
-    .select('id,title,description_level,transcript_characters,status,phase,analysis_total,writing_total,next_analysis_chunk_index,next_chunk_index,prompt_version,model,project_id,project_part_number,error_message,input_tokens,cached_input_tokens,output_tokens,request_count,result_text,created_at,updated_at')
+    .select('id,title,description_level,transcript_characters,status,phase,analysis_total,writing_total,next_analysis_chunk_index,next_chunk_index,prompt_version,model,project_id,project_part_number,error_message,input_tokens,cached_input_tokens,output_tokens,request_count,result_text,prose_text,created_at,updated_at')
     .eq('user_id', auth.user.id)
     .order('updated_at', { ascending: false })
     .limit(1)
@@ -68,7 +69,7 @@ export async function GET(request: NextRequest) {
     : query.in('status', ['processing', 'error', 'completed'])
   const { data, error } = await query.maybeSingle()
   if (error) return Response.json({ error: 'Shape could not read your saved jobs. Confirm both Shape database migrations have been applied.' }, { status: 503 })
-  return Response.json({ job: data ? serializeJob(data as Record<string, unknown>, data.status === 'completed') : null }, { headers: { 'Cache-Control': 'no-store' } })
+  return Response.json({ job: data ? serializeJob(data as Record<string, unknown>, data.status === 'completed', data.status === 'error') : null }, { headers: { 'Cache-Control': 'no-store' } })
 }
 
 export async function POST(request: Request) {

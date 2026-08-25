@@ -4,9 +4,10 @@ import {
   SHAPE_PROVISIONAL_PROSE_CHARACTERS,
   SHAPE_SINGLE_PASS_CHARACTERS,
   buildShapeAnalysisChunks,
+  buildShapeRecoverySubchunks,
   buildShapeTranscriptChunks,
   provisionalProseTail,
-  replaceProvisionalProseTail,
+  reconcileShapeWritingSection,
 } from '@/lib/shape/transcript'
 import { createClient } from '@/lib/supabase/server'
 
@@ -128,7 +129,7 @@ type UsageSummary = {
 
 type ServerSupabase = Awaited<ReturnType<typeof createClient>>
 
-function serializeJob(row: ShapeJobRow, includeResult = false) {
+function serializeJob(row: ShapeJobRow, includeResult = false, includePartial = false) {
   return {
     id: row.id,
     title: row.title,
@@ -150,6 +151,7 @@ function serializeJob(row: ShapeJobRow, includeResult = false) {
     output_tokens: row.output_tokens || 0,
     request_count: row.request_count || 0,
     result_text: includeResult ? row.result_text : undefined,
+    partial_result_text: includePartial && row.prose_text ? row.prose_text : undefined,
     created_at: row.created_at,
     updated_at: row.updated_at,
   }
@@ -284,7 +286,7 @@ async function openAiStep(
         statusCode,
         usage: { inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, totalTokens: 0 },
       })
-      throw new Error('The AI service did not complete this Shape step.')
+      throw new Error(`Provider returned HTTP ${response.status} during ${details.operation}.`)
     }
 
     const payload = await response.json() as OpenAiPayload
@@ -303,7 +305,7 @@ async function openAiStep(
     })
     return { payload, usage, model }
   } catch (caught) {
-    if (caught instanceof Error && caught.message === 'The AI service did not complete this Shape step.') throw caught
+    if (caught instanceof Error && caught.message.startsWith('Provider returned HTTP ')) throw caught
     await recordUsageEvent(supabase, userId, job, {
       phase: details.phase,
       operation: details.operation,
@@ -315,7 +317,9 @@ async function openAiStep(
       statusCode,
       usage: { inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, totalTokens: 0 },
     })
-    throw caught
+    const reason = caught instanceof Error ? caught.message : String(caught)
+    const timeout = caught instanceof Error && (caught.name === 'TimeoutError' || caught.name === 'AbortError')
+    throw new Error(timeout ? `Provider timeout during ${details.operation}.` : `Provider request failed during ${details.operation}: ${reason}`)
   }
 }
 
@@ -355,13 +359,31 @@ async function updateProjectAfterCompletion(supabase: ServerSupabase, userId: st
   if (error) throw new Error('Shape finished this part but could not update the campaign project continuity.')
 }
 
-function addUsage(job: ShapeJobRow, usage: UsageSummary) {
-  return {
-    input_tokens: (job.input_tokens || 0) + usage.inputTokens,
-    cached_input_tokens: (job.cached_input_tokens || 0) + usage.cachedInputTokens,
-    output_tokens: (job.output_tokens || 0) + usage.outputTokens,
-    request_count: (job.request_count || 0) + 1,
+async function usageTotalsFromLedger(supabase: ServerSupabase, job: ShapeJobRow) {
+  const { data, error } = await supabase
+    .from('shape_usage_events')
+    .select('input_tokens,cached_input_tokens,output_tokens,success')
+    .eq('job_id', job.id)
+
+  if (error || !data) {
+    console.error('Shape could not refresh aggregate usage from the ledger', error?.message || 'unknown error')
+    return {
+      input_tokens: job.input_tokens || 0,
+      cached_input_tokens: job.cached_input_tokens || 0,
+      output_tokens: job.output_tokens || 0,
+      request_count: job.request_count || 0,
+    }
   }
+
+  const totals = { input_tokens: 0, cached_input_tokens: 0, output_tokens: 0, request_count: 0 }
+  for (const event of data as Array<{ input_tokens?: number | null; cached_input_tokens?: number | null; output_tokens?: number | null; success?: boolean | null }>) {
+    if (!event.success) continue
+    totals.input_tokens += Number(event.input_tokens || 0)
+    totals.cached_input_tokens += Number(event.cached_input_tokens || 0)
+    totals.output_tokens += Number(event.output_tokens || 0)
+    totals.request_count += 1
+  }
+  return totals
 }
 
 export async function POST(request: Request) {
@@ -399,6 +421,7 @@ export async function POST(request: Request) {
       })
       const prose = outputText(step.payload)
       if (!prose) throw new Error('Shape returned an empty story.')
+      const usageTotals = await usageTotalsFromLedger(supabase, job)
       const update = {
         status: 'completed',
         phase: 'completed',
@@ -407,7 +430,7 @@ export async function POST(request: Request) {
         result_text: prose,
         prompt_version: SHAPE_PROMPT_VERSION,
         model: step.model,
-        ...addUsage(job, step.usage),
+        ...usageTotals,
         error_message: null,
         updated_at: now,
         completed_at: now,
@@ -441,6 +464,7 @@ export async function POST(request: Request) {
       })
       const continuity = parseContinuity(outputText(step.payload))
       const nextIndex = index + 1
+      const usageTotals = await usageTotalsFromLedger(supabase, job)
       const update = {
         status: 'processing',
         phase: nextIndex >= analysisChunks.length ? 'writing' : 'analysis',
@@ -448,7 +472,7 @@ export async function POST(request: Request) {
         next_analysis_chunk_index: nextIndex,
         prompt_version: SHAPE_PROMPT_VERSION,
         model: step.model,
-        ...addUsage(job, step.usage),
+        ...usageTotals,
         error_message: null,
         updated_at: now,
       }
@@ -461,37 +485,129 @@ export async function POST(request: Request) {
     if (job.next_chunk_index < chunks.length) {
       const index = job.next_chunk_index
       const chunk = chunks[index]
-      const previousTail = index > 0 ? provisionalProseTail(job.prose_text) : ''
-      const userPrompt = [
+
+      const applyWritingResponse = (raw: string, existingProse: string, previousTail: string) => {
+        const section = parseRolling(raw)
+        if (section.revised_previous_tail.length > MAX_REVISED_PREVIOUS_PROSE_CHARACTERS) throw new Error('Shape returned an oversized seam revision.')
+        return reconcileShapeWritingSection(existingProse, previousTail, section.revised_previous_tail, section.new_prose)
+      }
+
+      const writingPrompt = (source: string, contextBefore: string, contextAfter: string, previousTail: string, label: string, isFinalSection: boolean) => [
         `DOCUMENT TITLE: ${job.title}`,
-        `SECTION: ${index + 1} OF ${chunks.length}`,
-        `THIS IS THE FINAL SECTION: ${index === chunks.length - 1 ? 'YES' : 'NO'}`,
+        label,
+        `THIS IS THE FINAL SECTION: ${isFinalSection ? 'YES' : 'NO'}`,
         `CONTINUITY LEDGER:\n${job.continuity}`,
         `PREVIOUS PROSE TAIL (provisional; return a complete revised replacement):\n${previousTail || '[No previous prose. Return an empty revised_previous_tail.]'}`,
-        `CONTEXT BEFORE (source overlap; use only to understand and repair the seam):\n${chunk.contextBefore || '[Beginning of transcript.]'}`,
-        `NEW TRANSCRIPT MATERIAL (write this section):\n${chunk.source}`,
-        `CONTEXT AFTER (lookahead only; understand consequences and corrections but do not write these events yet):\n${chunk.contextAfter || '[End of transcript.]'}`,
+        `CONTEXT BEFORE (source overlap; use only to understand and repair the seam):\n${contextBefore || '[Beginning of transcript.]'}`,
+        `NEW TRANSCRIPT MATERIAL (write this section):\n${source}`,
+        `CONTEXT AFTER (lookahead only; understand consequences and corrections but do not write these events yet):\n${contextAfter || '[End of transcript.]'}`,
       ].join('\n\n')
-      const inputCharacters = chunk.source.length + chunk.contextBefore.length + chunk.contextAfter.length + job.continuity.length + previousTail.length
-      const step = await openAiStep(supabase, user.id, job, {
-        phase: 'writing',
-        operation: `writing:${index + 1}/${chunks.length}`,
-        inputCharacters,
-        system: `${WRITING_PROMPT}\n\n${DESCRIPTION_PROMPTS[job.description_level]}`,
-        user: userPrompt,
-        maxOutputTokens: 16_000,
-        idempotencyKey: `shape-${job.id}-writing-${index}-${job.fingerprint}`,
-        jsonSchema: { name: 'prosemaker_rolling_section', schema: ROLLING_SCHEMA as unknown as Record<string, unknown> },
-      })
-      const section = parseRolling(outputText(step.payload))
-      if (section.revised_previous_tail.length > MAX_REVISED_PREVIOUS_PROSE_CHARACTERS) throw new Error('Shape returned an oversized seam revision.')
-      if (previousTail && !section.revised_previous_tail) throw new Error('Shape did not return the previous prose seam revision.')
-      if (!previousTail && section.revised_previous_tail) throw new Error('Shape unexpectedly returned prose before the first section.')
 
-      const revisedExisting = previousTail ? replaceProvisionalProseTail(job.prose_text, previousTail, section.revised_previous_tail) : job.prose_text.trim()
-      const proseText = [revisedExisting, section.new_prose].filter(Boolean).join('\n\n').trim()
+      const runWritingCall = async (details: {
+        source: string
+        contextBefore: string
+        contextAfter: string
+        existingProse: string
+        operation: string
+        idempotencyKey: string
+        label: string
+        isFinalSection: boolean
+        recoveryInstruction?: string
+      }) => {
+        const previousTail = details.existingProse ? provisionalProseTail(details.existingProse) : ''
+        const userPrompt = writingPrompt(details.source, details.contextBefore, details.contextAfter, previousTail, details.label, details.isFinalSection)
+        const inputCharacters = details.source.length + details.contextBefore.length + details.contextAfter.length + job.continuity.length + previousTail.length
+        const step = await openAiStep(supabase, user.id, job, {
+          phase: 'writing',
+          operation: details.operation,
+          inputCharacters,
+          system: `${WRITING_PROMPT}\n\n${DESCRIPTION_PROMPTS[job.description_level]}${details.recoveryInstruction ? `\n\n${details.recoveryInstruction}` : ''}`,
+          user: userPrompt,
+          maxOutputTokens: 16_000,
+          idempotencyKey: details.idempotencyKey,
+          jsonSchema: { name: 'prosemaker_rolling_section', schema: ROLLING_SCHEMA as unknown as Record<string, unknown> },
+        })
+        return { proseText: applyWritingResponse(outputText(step.payload), details.existingProse, previousTail), model: step.model }
+      }
+
+      let proseText = job.prose_text.trim()
+      let model = job.model || selectedShapeModel()
+      let primaryFailure: Error | null = null
+
+      try {
+        const primary = await runWritingCall({
+          source: chunk.source,
+          contextBefore: chunk.contextBefore,
+          contextAfter: chunk.contextAfter,
+          existingProse: proseText,
+          operation: `writing:${index + 1}/${chunks.length}`,
+          idempotencyKey: `shape-${job.id}-writing-${index}-${job.fingerprint}`,
+          label: `SECTION: ${index + 1} OF ${chunks.length}`,
+          isFinalSection: index === chunks.length - 1,
+        })
+        proseText = primary.proseText
+        model = primary.model
+      } catch (caught) {
+        primaryFailure = caught instanceof Error ? caught : new Error(String(caught))
+        if (primaryFailure.message.startsWith('Provider ')) throw primaryFailure
+        console.error('Shape primary writing reconciliation failed', primaryFailure.message)
+      }
+
+      if (primaryFailure) {
+        try {
+          const repaired = await runWritingCall({
+            source: chunk.source,
+            contextBefore: chunk.contextBefore,
+            contextAfter: chunk.contextAfter,
+            existingProse: proseText,
+            operation: `writing-repair:${index + 1}/${chunks.length}`,
+            idempotencyKey: `shape-${job.id}-writing-repair-v1-${index}-${job.fingerprint}`,
+            label: `RECOVERY PASS FOR SECTION: ${index + 1} OF ${chunks.length}`,
+            isFinalSection: index === chunks.length - 1,
+            recoveryInstruction: 'RECOVERY PASS: The previous attempt could not be incorporated safely. Return valid structured output. If the supplied previous prose tail needs no change, copy it back verbatim rather than omitting story material. Resolve explicit corrections and retcons from the continuity ledger, but never skip source events merely to make the seam easier.',
+          })
+          proseText = repaired.proseText
+          model = repaired.model
+          primaryFailure = null
+        } catch (caught) {
+          const repairFailure = caught instanceof Error ? caught : new Error(String(caught))
+          if (repairFailure.message.startsWith('Provider ')) throw repairFailure
+          console.error('Shape full-section repair failed', repairFailure.message)
+          const recoveryParts = buildShapeRecoverySubchunks(chunk.source)
+          if (recoveryParts.length <= 1) throw new Error(`Writing recovery failed: ${repairFailure.message}`)
+
+          let consumed = 0
+          for (let partIndex = 0; partIndex < recoveryParts.length; partIndex += 1) {
+            const source = recoveryParts[partIndex]
+            const beforeInsideChunk = chunk.source.slice(Math.max(0, consumed - 5_000), consumed)
+            const afterStart = consumed + source.length
+            const afterInsideChunk = chunk.source.slice(afterStart, Math.min(chunk.source.length, afterStart + 2_500))
+            const contextBefore = [partIndex === 0 ? chunk.contextBefore : '', beforeInsideChunk].filter(Boolean).join('\n\n')
+            const contextAfter = [afterInsideChunk, partIndex === recoveryParts.length - 1 ? chunk.contextAfter : ''].filter(Boolean).join('\n\n')
+            const recovered = await runWritingCall({
+              source,
+              contextBefore,
+              contextAfter,
+              existingProse: proseText,
+              operation: `writing-recovery:${index + 1}/${chunks.length}:${partIndex + 1}/${recoveryParts.length}`,
+              idempotencyKey: `shape-${job.id}-writing-recovery-v1-${index}-${partIndex}-${job.fingerprint}`,
+              label: `RECOVERY SUBSECTION ${partIndex + 1} OF ${recoveryParts.length} FOR ORIGINAL SECTION ${index + 1} OF ${chunks.length}`,
+              isFinalSection: index === chunks.length - 1 && partIndex === recoveryParts.length - 1,
+              recoveryInstruction: 'RECOVERY SUBSECTION: This troublesome source section has been divided at natural boundaries. Write every event in NEW TRANSCRIPT MATERIAL exactly once. If the supplied previous prose tail needs no change, copy it back verbatim. Do not omit confusing or corrected material; use the continuity ledger to choose the final canon.',
+            })
+            proseText = recovered.proseText
+            model = recovered.model
+            consumed += source.length
+          }
+          primaryFailure = null
+        }
+      }
+
+      if (primaryFailure) throw primaryFailure
+
       const nextIndex = index + 1
       const complete = nextIndex >= chunks.length
+      const usageTotals = await usageTotalsFromLedger(supabase, job)
       const update = {
         status: complete ? 'completed' : 'processing',
         phase: complete ? 'completed' : 'writing',
@@ -499,8 +615,8 @@ export async function POST(request: Request) {
         result_text: complete ? proseText : null,
         next_chunk_index: nextIndex,
         prompt_version: SHAPE_PROMPT_VERSION,
-        model: step.model,
-        ...addUsage(job, step.usage),
+        model,
+        ...usageTotals,
         error_message: null,
         updated_at: now,
         completed_at: complete ? now : null,
@@ -518,9 +634,15 @@ export async function POST(request: Request) {
   } catch (caught) {
     const message = caught instanceof Error ? caught.message : 'Shape could not finish this processing step.'
     console.error('RPG Your Way Shape step failed', message)
-    const publicMessage = message.startsWith('Shape is not connected') ? message : 'Shape could not finish this step. The saved job can be resumed without starting over.'
-    await supabase.from('shape_jobs').update({ status: 'error', error_message: publicMessage, updated_at: now }).eq('id', job.id).eq('user_id', user.id)
+    const publicMessage = message.startsWith('Shape is not connected') ? message : 'Shape could not finish this step. Your completed checkpoints are safe, and you can resume without starting over.'
+    const usageTotals = await usageTotalsFromLedger(supabase, job)
+    await supabase.from('shape_jobs').update({ status: 'error', error_message: publicMessage, ...usageTotals, updated_at: now }).eq('id', job.id).eq('user_id', user.id)
     const { data: refreshed } = await supabase.from('shape_jobs').select('*').eq('id', job.id).eq('user_id', user.id).single()
-    return Response.json({ error: publicMessage, job: refreshed ? serializeJob(refreshed as ShapeJobRow) : serializeJob({ ...job, status: 'error', error_message: publicMessage } as ShapeJobRow) }, { status: 502, headers: { 'Cache-Control': 'no-store' } })
+    const failedJob = refreshed ? refreshed as ShapeJobRow : { ...job, status: 'error', error_message: publicMessage, ...usageTotals } as ShapeJobRow
+    return Response.json({
+      error: publicMessage,
+      diagnostic: message,
+      job: serializeJob(failedJob, false, true),
+    }, { status: 502, headers: { 'Cache-Control': 'no-store' } })
   }
 }

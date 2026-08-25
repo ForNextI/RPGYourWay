@@ -784,6 +784,9 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 .shape-actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-top: 1.3rem; }
 .shape-actions p { flex: 1 1 360px; margin: 0; color: var(--muted); font-size: .88rem; }
 .shape-error { margin: 1rem 0 0; border: 1px solid color-mix(in srgb, var(--danger) 65%, var(--cream)); border-radius: 12px; background: rgb(157 60 49 / .08); padding: .85rem 1rem; color: var(--danger); font-weight: 700; }
+.shape-diagnostic { margin-top: .65rem; border: 1px dashed color-mix(in srgb, var(--forest) 45%, var(--cream)); border-radius: 10px; padding: .65rem .8rem; color: var(--muted); font-size: .82rem; }
+.shape-diagnostic summary { cursor: pointer; color: var(--forest-deep); font-weight: 700; }
+.shape-diagnostic code { display: block; margin-top: .55rem; white-space: pre-wrap; overflow-wrap: anywhere; }
 .shape-project-success { margin: 1rem 0 0; border: 1px solid var(--border-green); border-radius: 12px; background: rgb(117 134 90 / .08); padding: .85rem 1rem; color: var(--muted); }
 .shape-project-success strong { color: var(--forest-deep); }
 .shape-progress-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin-top: 1.2rem; }

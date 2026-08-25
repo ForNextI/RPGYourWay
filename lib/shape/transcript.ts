@@ -105,6 +105,37 @@ export function buildShapeAnalysisChunks(transcript: string) {
   return chunks
 }
 
+
+export function buildShapeRecoverySubchunks(source: string) {
+  const chunks: string[] = []
+  let start = 0
+  while (start < source.length) {
+    const end = findLogicalBreakForTarget(source, start, 14_000, 2_000)
+    if (end <= start) throw new Error('Shape could not divide the troublesome section for recovery.')
+    chunks.push(source.slice(start, end))
+    start = end
+  }
+  return chunks
+}
+
+export function reconcileShapeWritingSection(existingProse: string, originalTail: string, revisedTail: string, newProse: string) {
+  const cleanNewProse = newProse.trim()
+  if (!cleanNewProse) throw new Error('Shape returned an incomplete writing section.')
+
+  const cleanOriginalTail = originalTail.trim()
+  const cleanRevisedTail = revisedTail.trim()
+  if (!cleanOriginalTail) {
+    if (cleanRevisedTail) throw new Error('Shape unexpectedly returned prose before the first section.')
+    return [existingProse.trim(), cleanNewProse].filter(Boolean).join('\n\n').trim()
+  }
+
+  // An empty revised tail means the model found no seam change worth making.
+  // Keep the already-checkpointed tail instead of turning a valid writing step into a dead end.
+  const replacementTail = cleanRevisedTail || cleanOriginalTail
+  const revisedExisting = replaceProvisionalProseTail(existingProse, cleanOriginalTail, replacementTail)
+  return [revisedExisting, cleanNewProse].filter(Boolean).join('\n\n').trim()
+}
+
 export function extractWardensCampaignTranscript(rawJson: string): WardensCampaignTranscriptExtraction | null {
   let parsed: unknown
   try { parsed = JSON.parse(rawJson) } catch { return null }
