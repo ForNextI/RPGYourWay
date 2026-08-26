@@ -2008,3 +2008,327 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
     width: 100%;
   }
 }
+
+
+/* RPG Your Way 1.7.18 dimensional flat landing system
+   Flat geometry, shallow depth: no ornamental sci-fi chrome. */
+
+:root {
+  --landing-mint: #d9e2cf;
+  --landing-mint-light: #e8eddf;
+  --landing-olive: #7c874d;
+  --landing-olive-deep: #65713e;
+  --landing-parchment: #f2dfb8;
+  --landing-brass: #9a7a42;
+  --landing-brass-light: #d2b36f;
+  --landing-depth: #42503f;
+}
+
+/* Warning / Open Now now alternate forest and pale in the same language. */
+.landing-ai-warning .landing-notice-card,
+.landing-open-now .landing-notice-card {
+  overflow: hidden;
+  border: 1px solid var(--forest-deep);
+  background: color-mix(in srgb, var(--cream-bright) 94%, var(--landing-mint) 6%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .62),
+    0 3px 0 color-mix(in srgb, var(--landing-depth) 55%, transparent),
+    0 8px 16px rgb(45 57 43 / .08);
+}
+
+.landing-ai-warning .landing-notice-card h1,
+.landing-open-now .landing-notice-card h2 {
+  margin: -.8rem -1rem .55rem;
+  padding: .48rem .75rem;
+  background: var(--forest-deep);
+  color: var(--cream-bright);
+  text-shadow: 0 1px 0 rgb(0 0 0 / .22);
+}
+
+.landing-open-now .landing-notice-card p,
+.landing-open-now .landing-notice-card strong {
+  color: var(--forest-ink);
+}
+
+/* The premise is the third forest band: green / white / green / white / green. */
+.landing-thesis-strip p {
+  border-color: var(--forest-deep);
+  background: var(--forest-deep);
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .12),
+    0 3px 0 color-mix(in srgb, var(--landing-depth) 62%, transparent),
+    0 7px 14px rgb(45 57 43 / .08);
+  text-shadow: 0 1px 0 rgb(0 0 0 / .2);
+}
+.landing-thesis-strip p strong,
+.landing-thesis-strip p em {
+  color: inherit;
+}
+
+/* The two purpose accordions must occupy the same two-column geometry as
+   the console/logo row, with both controls visibly present. */
+.landing-reasons-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: stretch;
+}
+.landing-reason-card {
+  position: static !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+.landing-reason-card > * {
+  position: static !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+.landing-reason-card details {
+  display: block !important;
+  width: 100% !important;
+}
+.landing-reason-card summary {
+  width: 100% !important;
+  min-height: 64px;
+  border: 1px solid var(--landing-brass);
+  border-radius: 17px;
+  background: var(--cream-bright);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .86),
+    inset 0 -2px 0 color-mix(in srgb, var(--landing-brass-light) 42%, transparent),
+    0 3px 0 var(--landing-brass),
+    0 8px 15px rgb(54 58 42 / .09);
+}
+
+/* Establish the dimensional-flat treatment on the landing cards below. */
+.feature-card {
+  border-color: var(--landing-brass);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .66),
+    inset 0 -2px 0 color-mix(in srgb, var(--landing-brass-light) 35%, transparent),
+    0 3px 0 color-mix(in srgb, var(--landing-brass) 72%, var(--forest-deep)),
+    0 8px 16px rgb(48 55 39 / .09);
+}
+
+/* Console: ONLY the chassis is forest green. */
+.landing-player-stack {
+  gap: .48rem;
+  border: 2px solid var(--forest-deep);
+  background: var(--forest-deep);
+  box-shadow:
+    inset 0 0 0 2px rgb(255 255 255 / .08),
+    0 4px 0 color-mix(in srgb, var(--forest-deep) 76%, black),
+    0 12px 24px rgb(39 51 39 / .15);
+}
+
+/* Start and Return are matching olive controls. Keep their existing physical
+   footprint; increase the typography, not the button height. */
+.landing-new-player.button,
+.landing-return-button.button {
+  border: 1px solid var(--landing-brass);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-olive) 88%, white),
+      var(--landing-olive)
+    );
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .3),
+    inset 0 -2px 0 color-mix(in srgb, var(--landing-olive-deep) 72%, black),
+    0 3px 0 var(--landing-brass),
+    0 7px 12px rgb(30 42 29 / .14);
+  text-shadow: 0 1px 0 rgb(0 0 0 / .28);
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(1.25rem, 2.15vw, 1.72rem);
+  font-weight: 800;
+  letter-spacing: .01em;
+}
+.landing-new-player.button:hover,
+.landing-new-player.button:focus-visible,
+.landing-return-button.button:hover,
+.landing-return-button.button:focus-visible {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-olive) 80%, white),
+      color-mix(in srgb, var(--landing-olive) 92%, var(--landing-olive-deep))
+    );
+}
+.landing-new-player.button:active,
+.landing-return-button.button:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 2px 3px rgb(0 0 0 / .14),
+    0 1px 0 var(--landing-brass);
+}
+
+/* The panel itself becomes transparent so the forest chassis shows between
+   four discrete rectangles. */
+.landing-campaign-panel {
+  gap: .48rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+/* Raised mint campaign metadata control. */
+.landing-campaign-summary-card {
+  border: 1px solid var(--landing-brass);
+  border-radius: 16px;
+  background:
+    linear-gradient(
+      180deg,
+      var(--landing-mint-light),
+      var(--landing-mint)
+    );
+  padding: .72rem .8rem;
+  color: #243329;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    inset 0 -2px 0 rgb(74 91 66 / .12),
+    0 3px 0 var(--landing-brass),
+    0 7px 12px rgb(32 48 34 / .12);
+}
+.landing-campaign-summary-card .campaign-label {
+  color: #30382d;
+}
+.landing-campaign-summary-card .landing-campaign-heading h2 {
+  color: var(--forest-deep);
+}
+.landing-campaign-summary-card .landing-campaign-scene {
+  margin-bottom: 0;
+  color: #4e5b4c;
+}
+.landing-campaign-summary-card .landing-campaign-turns {
+  border-color: color-mix(in srgb, var(--landing-brass) 68%, var(--landing-mint));
+  background: color-mix(in srgb, var(--landing-mint-light) 72%, var(--landing-parchment));
+}
+
+/* Inset parchment "screen". It fills all flexible space and shows the tail
+   of the latest Game Master turn at the bottom, where play actually stopped. */
+.landing-campaign-snippet {
+  display: flex;
+  min-height: 10.5rem;
+  flex: 1 1 auto;
+  align-items: flex-end;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--landing-brass);
+  border-radius: 14px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-parchment) 94%, white),
+      var(--landing-parchment)
+    );
+  padding: .85rem .9rem;
+  box-shadow:
+    inset 0 4px 8px rgb(67 51 29 / .18),
+    inset 0 0 0 2px rgb(255 255 255 / .32),
+    0 1px 0 rgb(255 255 255 / .18);
+}
+.landing-campaign-snippet > span {
+  display: -webkit-box;
+  width: 100%;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7;
+  color: var(--forest-deep);
+  line-height: 1.45;
+}
+
+/* Bottom is one outlined status/action bar with two matching-height controls. */
+.landing-campaign-actions {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.45fr);
+  align-items: stretch;
+  gap: .48rem;
+  margin-top: 0;
+  border: 1px solid var(--landing-brass);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--forest-deep) 90%, black);
+  padding: .4rem;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .1),
+    0 3px 0 color-mix(in srgb, var(--forest-deep) 74%, black);
+}
+
+.landing-balance-control {
+  display: flex;
+  min-width: 0;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  gap: .55rem;
+  border: 1px solid var(--landing-brass);
+  border-radius: 12px;
+  background:
+    linear-gradient(
+      180deg,
+      var(--landing-mint-light),
+      var(--landing-mint)
+    );
+  padding: .5rem .7rem;
+  color: #2e392f;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    inset 0 -2px 0 rgb(66 84 61 / .1),
+    0 2px 0 var(--landing-brass);
+}
+.landing-balance-control span {
+  font-size: .78rem;
+  font-weight: 750;
+}
+.landing-balance-control strong {
+  color: var(--forest-deep);
+  font-size: clamp(1.02rem, 1.55vw, 1.2rem);
+}
+
+.landing-return-button.button {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  font-size: clamp(1.12rem, 1.9vw, 1.48rem);
+}
+
+@media (max-width: 860px) {
+  .landing-reasons-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .landing-ai-warning .landing-notice-card h1,
+  .landing-open-now .landing-notice-card h2 {
+    margin: -.65rem -.7rem .5rem;
+  }
+
+  .landing-campaign-snippet {
+    min-height: 9.25rem;
+  }
+
+  .landing-campaign-actions {
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.35fr);
+  }
+
+  .landing-new-player.button {
+    font-size: 1.3rem;
+  }
+
+  .landing-return-button.button {
+    font-size: 1.08rem;
+  }
+}

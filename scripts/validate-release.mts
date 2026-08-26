@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.17')
-assert.equal(pkg.rpgywVersion, '1.7.17')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.17'/)
+assert.equal(pkg.version, '1.7.18')
+assert.equal(pkg.rpgywVersion, '1.7.18')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.18'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -345,3 +345,33 @@ assert.match(css1717, /\.landing-new-player\.button/)
 assert.match(css1717, /\.landing-return-button\.button/)
 
 console.log('RPG Your Way 1.7.17 landing console and repository cleanup checks passed.')
+
+
+const landing1718 = read('app/page.tsx')
+assert.match(landing1718, /landing-reason-created/)
+assert.match(landing1718, /landing-reason-audience/)
+assert.match(landing1718, />Start New Campaign<\/Link>/)
+assert.match(landing1718, /Why I created RPG Your Way\./)
+assert.match(landing1718, /Who benefits from this site\?/)
+
+const campaign1718 = read('components/LandingCampaignPanel.tsx')
+assert.match(campaign1718, /const limit = 720/)
+assert.match(campaign1718, /clean\.slice\(-limit\)/)
+assert.match(campaign1718, /landing-campaign-summary-card/)
+assert.match(campaign1718, /landing-balance-control/)
+assert.match(campaign1718, /Return to Adventure/)
+assert.match(campaign1718, /<span>\{campaign\.snippet/)
+
+const css1718 = read('app/globals.css')
+assert.match(css1718, /RPG Your Way 1\.7\.18 dimensional flat landing system/)
+assert.match(css1718, /--landing-mint:/)
+assert.match(css1718, /--landing-olive:/)
+assert.match(css1718, /\.landing-open-now \.landing-notice-card h2/)
+assert.match(css1718, /\.landing-thesis-strip p/)
+assert.match(css1718, /\.landing-reason-card summary/)
+assert.match(css1718, /\.landing-campaign-summary-card/)
+assert.match(css1718, /\.landing-campaign-snippet > span/)
+assert.match(css1718, /\.landing-balance-control/)
+assert.match(css1718, /grid-template-columns: minmax\(0, \.85fr\) minmax\(0, 1\.45fr\)/)
+
+console.log('RPG Your Way 1.7.18 dimensional landing console checks passed.')

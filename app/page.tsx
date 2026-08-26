@@ -197,10 +197,10 @@ export default function HomePage() {
 
         <section className="landing-reasons-section" aria-label="Why RPG Your Way exists and who it benefits">
           <div className="shell landing-reasons-grid">
-            <div className="hero-unique" aria-label="Why I created RPG Your Way">
+            <div className="hero-unique landing-reason-card landing-reason-created" aria-label="Why I created RPG Your Way">
               <WhyCreatedAccordion />
             </div>
-            <div className="hero-audience" aria-label="Who benefits from this site?">
+            <div className="hero-audience landing-reason-card landing-reason-audience" aria-label="Who benefits from this site?">
               <AudienceAccordion />
             </div>
           </div>

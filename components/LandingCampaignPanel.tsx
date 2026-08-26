@@ -27,7 +27,11 @@ function cleanSnippet(value: string) {
     .replace(/\s+/g, ' ')
     .trim()
   if (!clean) return ''
-  return clean.length > 420 ? `${clean.slice(0, 417).trimEnd()}…` : clean
+  const limit = 720
+  if (clean.length <= limit) return clean
+  const tail = clean.slice(-limit)
+  const firstSpace = tail.indexOf(' ')
+  return `…${(firstSpace >= 0 ? tail.slice(firstSpace + 1) : tail).trimStart()}`
 }
 
 function campaignView(state: SavedAdventureState): LandingCampaignView {
@@ -107,24 +111,29 @@ export function LandingCampaignPanel() {
 
   return (
     <div className="landing-campaign-panel">
-      <div className="landing-campaign-heading">
-        <div>
-          <p className="campaign-label">Current campaign</p>
-          <h2>{campaign.name}</h2>
+      <div className="landing-campaign-summary-card">
+        <div className="landing-campaign-heading">
+          <div>
+            <p className="campaign-label">Current campaign</p>
+            <h2>{campaign.name}</h2>
+          </div>
+          <p className="landing-campaign-turns">{campaign.turns.toLocaleString()} turn{campaign.turns === 1 ? '' : 's'}</p>
         </div>
-        <p className="landing-campaign-turns">{campaign.turns.toLocaleString()} turn{campaign.turns === 1 ? '' : 's'}</p>
+
+        <p className="landing-campaign-scene">
+          {[campaign.gameMaster, campaign.scene].filter(Boolean).join(' · ')}
+        </p>
       </div>
 
-      <p className="landing-campaign-scene">
-        {[campaign.gameMaster, campaign.scene].filter(Boolean).join(' · ')}
-      </p>
-
       <blockquote className="landing-campaign-snippet">
-        {campaign.snippet || 'Your adventure is ready to continue.'}
+        <span>{campaign.snippet || 'Your adventure is ready to continue.'}</span>
       </blockquote>
 
       <div className="landing-campaign-actions">
-        {balance ? <p className="landing-campaign-balance"><span>Balance</span><strong>{balance}</strong></p> : <span />}
+        <div className="landing-balance-control">
+          <span>Balance</span>
+          <strong>{balance || '—'}</strong>
+        </div>
         <button type="button" className="button button-primary landing-return-button" onClick={returnToPlaying}>
           Return to Adventure
         </button>
