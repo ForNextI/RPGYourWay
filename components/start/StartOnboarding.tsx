@@ -21,7 +21,6 @@ const RULESETS = [
   { id: 'dnd-3.5e-srd', label: 'D&D 3.5e', detail: 'Built-in SRD', ready: false },
   { id: 'pathfinder-2e-remaster', label: 'Pathfinder 2e', detail: 'Remaster rules', ready: false },
   { id: 'pathfinder-1e', label: 'Pathfinder 1e', detail: 'Built-in SRD', ready: false },
-  { id: 'other-best-effort', label: 'Another system', detail: 'Best-effort play', ready: false },
 ] as const
 
 type RulesetId = (typeof RULESETS)[number]['id']
@@ -66,7 +65,7 @@ const DEFAULT_STARTER_IDS = [
 
 const FAQ_ITEMS = [
   ['Do I need to know D&D or Pathfinder before I start?', 'No. You can learn while you play. The Game Master can explain rules when they matter, suggest possible actions, and offer choices when that helps.'],
-  ['What are the game rules choices?', 'They tell RPG Your Way which rules framework to use. Every new campaign begins in the Uncharted Realm; there is no separate setting choice.'],
+  ['What are the game rules choices?', 'They tell RPG Your Way which rules framework to use. Every new campaign begins in The Uncharted Realms; there is no separate setting choice.'],
   ['What are ready-to-play characters?', 'They are complete D&D 5.5e characters that can begin immediately. The default party is Fighter, Wizard, Cleric, and Rogue, and you can replace any of them.'],
   ['What does importing a character do?', 'Importing gives RPG Your Way the source record. It has the file or pasted information, but it has not interpreted it yet.'],
   ['What does standardizing a character do?', 'Standardizing interprets the supplied record and puts the information into the consistent character structure RPG Your Way uses during play. Your original file is not changed.'],
@@ -83,7 +82,7 @@ const QUESTION_HELP = [
   'These settings control how strongly personal history matters, whether player-character romance is welcome, and how carefully marked secrets should be protected.',
   'This controls how dangerous combat should feel when combat happens. It does not control how often combat occurs.',
   'Use this for material you do not want in the campaign or want handled carefully. Site-wide safety rules still apply whether or not you add anything here.',
-  'These ratings shape how quickly the opening moves, how strongly a long-term story develops, and how large or strange the campaign may eventually become. The setting is always the Uncharted Realm.',
+  'These ratings shape how quickly the opening moves, how strongly a long-term story develops, and how large or strange the campaign may eventually become. The setting is always The Uncharted Realms.',
 ] as const
 
 function defaultParty() {
@@ -146,8 +145,8 @@ export function StartOnboarding() {
   const [ageReady, setAgeReady] = useState(false)
   const [ageModalOpen, setAgeModalOpen] = useState(false)
   const [modal, setModal] = useState<'faq' | 'ai-help' | 'starters' | 'starter-help' | 'import-help' | 'leader' | 'question-help' | null>(null)
-  const [ruleset, setRuleset] = useState<RulesetId | ''>('')
-  const [otherRules, setOtherRules] = useState('')
+  const [ruleset, setRuleset] = useState<RulesetId>('dnd-5.5e-srd-5.2.1')
+  const [rulesOpen, setRulesOpen] = useState(false)
   const [party, setParty] = useState<PartyMember[]>([])
   const [pasteOpen, setPasteOpen] = useState(false)
   const [pasteText, setPasteText] = useState('')
@@ -197,7 +196,7 @@ export function StartOnboarding() {
   const partyReady = party.length > 0 && party.every((member) => member.status === 'ready')
   const questionsDone = questionMode === 'skip' || questionMode === 'complete'
   const namesReady = Boolean(campaignName.trim() && gmName.trim())
-  const playReadyForEngine = ageBand !== 'under-13' && Boolean(ruleset) && (ruleset !== 'other-best-effort' || Boolean(otherRules.trim())) && partyReady && questionsDone && namesReady
+  const playReadyForEngine = ageBand !== 'under-13' && Boolean(ruleset) && partyReady && questionsDone && namesReady
 
   function chooseAge(next: AiAgeBand) {
     window.localStorage.setItem(AI_AGE_BAND_STORAGE_KEY, next)
@@ -276,51 +275,57 @@ export function StartOnboarding() {
   if (!ageReady) return null
 
   return (
-    <section className="start-onboarding" aria-labelledby="start-onboarding-title">
-      <div className="start-onboarding-intro">
-        <p className="kicker">New campaign</p>
-        <h1 id="start-onboarding-title" className="page-title">Start your adventure.</h1>
-        <p className="page-lede">Choose only what the game needs. Everything else can wait until it matters.</p>
-        <div className="start-help-row" aria-label="Onboarding help">
-          <button type="button" className="start-secondary-plaque" onClick={() => setModal('faq')}><CircleHelp aria-hidden="true" />I need help with all of this</button>
-          <button type="button" className="start-secondary-plaque" onClick={() => setAgeModalOpen(true)}><ShieldCheck aria-hidden="true" />Change age / content settings</button>
-        </div>
-      </div>
-
+    <section className="start-onboarding" aria-label="Start a new campaign">
       {ageBand === 'under-13' ? (
-        <section className="start-step start-under13" aria-labelledby="under13-heading">
-          <div className="start-step-nameplate"><span>Age / Content Settings</span></div>
-          <h2 id="under13-heading">AI gameplay is not available to users under 13.</h2>
-          <p>You can change the age selection above if it was entered incorrectly.</p>
-        </section>
+        <>
+          <div className="start-top-controls start-top-controls--under13">
+            <button type="button" className="start-top-help" onClick={() => setModal('faq')}><CircleHelp aria-hidden="true" />I need help with all of this</button>
+            <button type="button" className="start-top-help" onClick={() => setAgeModalOpen(true)}><ShieldCheck aria-hidden="true" />Change age settings</button>
+          </div>
+          <section className="start-step start-under13" aria-labelledby="under13-heading">
+            <div className="start-step-nameplate"><span>Age</span>Age settings</div>
+            <h2 id="under13-heading">AI gameplay is not available to users under 13.</h2>
+            <p>You can change the age selection above if it was entered incorrectly.</p>
+          </section>
+        </>
       ) : (
         <>
-          <section className="start-step" aria-labelledby="rules-heading">
-            <div className="start-step-nameplate"><span>1</span>Choose the game rules</div>
-            <div className="start-rules-grid" id="rules-heading">
-              {RULESETS.map((option) => (
-                <button
-                  key={option.id}
-                  type="button"
-                  className={`start-choice${ruleset === option.id ? ' start-choice--selected' : ''}`}
-                  aria-pressed={ruleset === option.id}
-                  onClick={() => setRuleset(option.id)}
-                >
-                  <strong>{option.label}</strong>
-                  <span>{option.detail}</span>
-                </button>
-              ))}
-            </div>
-            {ruleset === 'other-best-effort' ? (
-              <label className="start-field start-other-system">
-                <span>What system are you using?</span>
-                <input value={otherRules} onChange={(event) => setOtherRules(event.target.value)} placeholder="Name the game system" />
-              </label>
-            ) : null}
-            <p className="start-fixed-setting"><strong>Setting:</strong> Uncharted Realm</p>
-          </section>
+          <div className="start-top-controls" aria-label="Start page controls">
+            <button
+              type="button"
+              className="start-rules-toggle"
+              aria-expanded={rulesOpen}
+              aria-controls="start-rules-panel"
+              onClick={() => setRulesOpen((open) => !open)}
+            >
+              <span>Choose the game rules</span>
+              <small>{RULESETS.find((option) => option.id === ruleset)?.label ?? 'D&D 5.5e'}{ruleset === 'dnd-5.5e-srd-5.2.1' ? ' · Default' : ''}</small>
+            </button>
+            <button type="button" className="start-top-help" onClick={() => setModal('faq')}><CircleHelp aria-hidden="true" />I need help with all of this</button>
+            <button type="button" className="start-top-help" onClick={() => setAgeModalOpen(true)}><ShieldCheck aria-hidden="true" />Change age settings</button>
+          </div>
 
-          {ruleset && (ruleset !== 'other-best-effort' || otherRules.trim()) ? (
+          {rulesOpen ? (
+            <section className="start-rules-panel" id="start-rules-panel" aria-label="Choose the game rules">
+              <div className="start-rules-grid">
+                {RULESETS.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    className={`start-choice${ruleset === option.id ? ' start-choice--selected' : ''}`}
+                    aria-pressed={ruleset === option.id}
+                    onClick={() => setRuleset(option.id)}
+                  >
+                    <strong>{option.label}</strong>
+                    <span>{option.detail}</span>
+                  </button>
+                ))}
+              </div>
+              <p className="start-fixed-setting"><strong>Setting:</strong> The Uncharted Realms</p>
+            </section>
+          ) : null}
+
+          {ruleset ? (
             <section className="start-step" aria-labelledby="party-heading">
               <div className="start-step-nameplate"><span>2</span>Choose your party</div>
               <div className="start-step-heading-row">
@@ -455,7 +460,7 @@ export function StartOnboarding() {
                         <RatingControl label="Long-term story" value={storyDirection} onChange={setStoryDirection} low="Mostly open" high="Strong story arc" />
                         <RatingControl label="Eventual scale" value={campaignScale} onChange={setCampaignScale} low="Grounded" high="Cosmic" />
                       </div>
-                      <p className="start-fixed-setting"><strong>Setting:</strong> Uncharted Realm</p>
+                      <p className="start-fixed-setting"><strong>Setting:</strong> The Uncharted Realms</p>
                     </>
                   ) : null}
                   <div className="start-question-footer">

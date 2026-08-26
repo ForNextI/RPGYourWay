@@ -988,6 +988,9 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 .usage-activity-amount { text-align: right; }
 .usage-activity-empty { margin: 1rem 0 0; }
 @media (max-width: 640px) {
+  .start-top-controls,
+  .start-top-controls--under13 { grid-template-columns: 1fr; }
+  .start-rules-panel .start-rules-grid { grid-template-columns: 1fr; }
   .usage-balance-heading-row,
   .usage-activity-heading,
   .usage-activity-row { align-items: stretch; flex-direction: column; }
@@ -4556,11 +4559,7 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
 
 /* RPG Your Way 1.8.0 — simplified Start onboarding shell.
    Start inherits the landing-page brass / parchment / forest language, keeps
-   explanatory material in modals, and uses #00ff00 only as the hot state. */
-:root {
-  --lime: #00ff00;
-}
-
+   explanatory material in modals and inherits the established RPG Your Way hover color. */
 .start-page-main {
   padding: clamp(1.25rem, 3vw, 2.4rem) 0 clamp(2.5rem, 6vw, 5rem);
 }
@@ -4568,7 +4567,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   width: min(1120px, calc(100% - 2rem));
 }
 .start-onboarding {
-  --start-hot: #00ff00;
   display: grid;
   gap: 1rem;
 }
@@ -4724,7 +4722,7 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   border: 2px solid var(--rpgyw-brass-edge);
   border-radius: 13px;
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--landing-mint-19) 90%, white), var(--landing-mint-19));
+    linear-gradient(180deg, color-mix(in srgb, var(--landing-olive-19) 72%, var(--cream-bright)), color-mix(in srgb, var(--landing-olive-19) 88%, var(--cream-bright)));
   color: var(--forest-deep);
   padding: .8rem 1rem;
   box-shadow:
@@ -4761,7 +4759,7 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   margin: .9rem 0 0;
   border: 1px solid var(--rpgyw-brass-edge);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--landing-mint-19) 84%, white);
+  background: color-mix(in srgb, var(--landing-olive-19) 58%, var(--cream-bright));
   padding: .3rem .7rem;
   color: var(--forest-ink);
   font-size: .82rem;
@@ -4827,7 +4825,7 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   border: 2px solid var(--rpgyw-brass-edge);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--landing-mint-19) 88%, white), var(--landing-mint-19));
+    linear-gradient(180deg, color-mix(in srgb, var(--landing-olive-19) 62%, var(--cream-bright)), color-mix(in srgb, var(--landing-olive-19) 78%, var(--cream-bright)));
   padding: .62rem;
   box-shadow: inset 0 1px 0 rgb(255 255 255 / .74), 0 2px 0 var(--rpgyw-brass-shadow);
 }
@@ -4918,7 +4916,7 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   justify-content: space-between;
   gap: 1rem;
   padding: .8rem;
-  background: color-mix(in srgb, var(--landing-mint-19) 82%, white);
+  background: color-mix(in srgb, var(--landing-olive-19) 62%, var(--cream-bright));
 }
 .start-standardize-bar > div { display: grid; gap: .12rem; }
 .start-standardize-bar strong { color: var(--forest-deep); }
@@ -4969,7 +4967,7 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   gap: .7rem;
   margin-top: 0;
   padding: .75rem .85rem;
-  background: color-mix(in srgb, var(--landing-mint-19) 88%, white);
+  background: color-mix(in srgb, var(--landing-olive-19) 58%, var(--cream-bright));
 }
 .start-complete-plaque svg { color: var(--forest-deep); }
 .start-complete-plaque > div { display: grid; }
@@ -4999,7 +4997,7 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
 .start-rating-stack { display: grid; gap: 1rem; }
 .start-mini-ratings { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
 .start-mini-ratings--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.start-mini-ratings label { display: flex; align-items: center; justify-content: space-between; gap: .55rem; border: 1px solid var(--rpgyw-brass-edge); border-radius: 9px; background: color-mix(in srgb, var(--landing-mint-19) 84%, white); padding: .48rem .6rem; color: var(--forest-deep); font-size: .78rem; font-weight: 800; }
+.start-mini-ratings label { display: flex; align-items: center; justify-content: space-between; gap: .55rem; border: 1px solid var(--rpgyw-brass-edge); border-radius: 9px; background: color-mix(in srgb, var(--landing-olive-19) 58%, var(--cream-bright)); padding: .48rem .6rem; color: var(--forest-deep); font-size: .78rem; font-weight: 800; }
 .start-mini-ratings select { border: 1px solid var(--rpgyw-brass-edge); border-radius: 7px; background: var(--cream-bright); padding: .3rem; color: var(--forest-deep); font-weight: 900; }
 .start-question-note { margin: .55rem 0 0; color: var(--muted); font-size: .76rem; }
 .start-question-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1rem; padding-top: .75rem; border-top: 1px solid color-mix(in srgb, var(--rpgyw-brass-edge) 52%, transparent); }
@@ -5089,7 +5087,7 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
 .start-faq-list summary:hover,
 .start-faq-list summary:focus-visible { background: var(--forest-deep); color: var(--lime); }
 .start-faq-list details p { margin: 0; border-top: 1px solid color-mix(in srgb, var(--rpgyw-brass-edge) 54%, transparent); padding: .7rem .75rem; line-height: 1.55; }
-.start-faq-more { margin-top: 1rem; border: 2px solid var(--rpgyw-brass-edge); border-radius: 12px; background: color-mix(in srgb, var(--landing-mint-19) 86%, white); padding: .85rem; }
+.start-faq-more { margin-top: 1rem; border: 2px solid var(--rpgyw-brass-edge); border-radius: 12px; background: color-mix(in srgb, var(--landing-olive-19) 58%, var(--cream-bright)); padding: .85rem; }
 .start-faq-more strong { color: var(--forest-deep); font-size: 1.05rem; }
 .start-faq-more p { margin: .22rem 0 .6rem; color: var(--muted); }
 .start-ai-preview { display: grid; gap: .65rem; }
@@ -5120,6 +5118,103 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
 .start-existing-body { border-top: 1px solid var(--rpgyw-brass-edge); padding: 1rem; }
 .start-existing-lede { color: var(--muted); font-size: .84rem; }
 .start-existing-body .play-entry-grid { margin-top: .75rem; }
+
+
+/* RPG Your Way 1.8.1 — compact Start controls, olive onboarding surfaces, and restored house lime. */
+.start-top-controls {
+  display: grid;
+  grid-template-columns: minmax(260px, 1.35fr) minmax(220px, .95fr) minmax(170px, .72fr);
+  gap: .65rem;
+  align-items: stretch;
+}
+.start-top-controls--under13 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.start-rules-toggle,
+.start-top-help {
+  min-height: 58px;
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 12px;
+  padding: .62rem .82rem;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 68%, white),
+    inset 0 1px 0 rgb(255 255 255 / .30),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 6px 11px rgb(43 47 38 / .10);
+  cursor: pointer;
+  font-weight: 900;
+}
+.start-rules-toggle {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: .04rem;
+  border-color: var(--rpgyw-brass-highlight);
+  background: var(--forest-deep);
+  color: var(--cream-bright);
+  text-align: left;
+}
+.start-rules-toggle span { font-size: 1rem; }
+.start-rules-toggle small { color: var(--cream-bright); font-size: .76rem; font-weight: 800; }
+.start-rules-toggle:hover,
+.start-rules-toggle:focus-visible,
+.start-rules-toggle:hover small,
+.start-rules-toggle:focus-visible small {
+  background: var(--forest-deep);
+  color: var(--lime) !important;
+}
+.start-top-help {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 95%, white), var(--landing-pale));
+  color: var(--forest-deep);
+}
+.start-top-help svg { width: 17px; height: 17px; flex: 0 0 auto; }
+.start-top-help:hover,
+.start-top-help:focus-visible {
+  background: var(--forest-deep);
+  color: var(--lime) !important;
+}
+.start-rules-panel {
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--landing-olive-19) 52%, var(--cream-bright));
+  padding: .85rem;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 62%, white),
+    inset 0 1px 0 rgb(255 255 255 / .48),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 8px 14px rgb(43 47 38 / .10);
+}
+.start-rules-panel .start-rules-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.start-rules-panel .start-choice {
+  min-height: 82px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--landing-olive-19) 88%, white), var(--landing-olive-19));
+  color: var(--cream-bright);
+}
+.start-rules-panel .start-choice span {
+  color: color-mix(in srgb, var(--cream-bright) 82%, transparent);
+}
+.start-rules-panel .start-choice:hover,
+.start-rules-panel .start-choice:focus-visible {
+  background: var(--landing-olive-19-deep);
+  color: var(--lime);
+}
+.start-rules-panel .start-choice--selected {
+  background: var(--forest-deep);
+  color: var(--cream-bright);
+}
+.start-rules-panel .start-choice--selected span { color: var(--cream-bright); }
+.start-rules-panel .start-fixed-setting {
+  margin-top: .75rem;
+  background: var(--forest-deep);
+  color: var(--cream-bright);
+  border-color: var(--rpgyw-brass-highlight);
+}
 
 /* Account deletion is intentionally quiet until invoked. */
 .account-danger-zone {
@@ -5167,6 +5262,11 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
 .footer-contact-link:hover,
 .footer-contact-link:focus-visible { background: var(--forest-deep); color: var(--lime); }
 
+
+@media (max-width: 980px) {
+  .start-top-controls { grid-template-columns: minmax(240px, 1.2fr) minmax(190px, 1fr) minmax(150px, .75fr); }
+  .start-rules-panel .start-rules-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 @media (max-width: 860px) {
   .start-rules-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .start-party-grid { grid-template-columns: 1fr; }
@@ -5174,6 +5274,9 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   .start-starter-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 640px) {
+  .start-top-controls,
+  .start-top-controls--under13 { grid-template-columns: 1fr; }
+  .start-rules-panel .start-rules-grid { grid-template-columns: 1fr; }
   .start-page-shell { width: min(100% - 1rem, 1120px); }
   .start-step { padding-inline: .8rem; }
   .start-step-nameplate { left: .65rem; max-width: calc(100% - 1.3rem); }
