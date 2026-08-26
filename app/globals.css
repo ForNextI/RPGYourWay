@@ -3772,3 +3772,154 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     font-size: 1.18rem;
   }
 }
+
+
+/* RPG Your Way 1.7.25 Play rail repair + landing bezel
+   The narrow Play rails get deliberate full-width controls instead of cramped
+   inline clusters. The landing campaign preview now uses the same stepped
+   forest -> olive -> brass -> parchment bezel as the live gameplay screen. */
+
+/* Dice mode belongs below the title plaque as a matched two-button row. */
+.aigm-dice-heading {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+}
+.aigm-dice-heading h2 {
+  min-width: 0;
+}
+.aigm-dice-heading > svg {
+  color: var(--lime) !important;
+}
+.aigm-dice-mode-toggle {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .35rem;
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 13px;
+  background: var(--forest-deep);
+  padding: .35rem;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 56%, white),
+    inset 0 1px 0 rgb(255 255 255 / .11),
+    0 1px 0 color-mix(in srgb, var(--rpgyw-brass-shadow) 62%, transparent);
+}
+.aigm-dice-mode-button {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.55rem;
+  justify-content: center;
+  white-space: nowrap;
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 9px;
+  padding-inline: .42rem;
+  font-size: .72rem;
+  line-height: 1;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 66%, white),
+    inset 0 1px 0 rgb(255 255 255 / .68),
+    0 1px 0 color-mix(in srgb, var(--rpgyw-brass-shadow) 60%, transparent) !important;
+}
+.aigm-dice-mode-button--active {
+  border-color: var(--rpgyw-brass-highlight) !important;
+  background: var(--forest-deep) !important;
+  color: var(--lime) !important;
+}
+
+/* Characters is one uninterrupted title plaque. Capacity information lives
+   with the Add control at the bottom, where it describes the party rather
+   than looking like a six-character requirement. */
+.aigm-characters-heading {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.aigm-characters-heading h2 {
+  width: 100%;
+  font-size: clamp(1.32rem, 1.5vw, 1.7rem);
+  line-height: 1.05;
+}
+.aigm-character-footer {
+  display: grid;
+  flex: 0 0 auto;
+  gap: .45rem;
+}
+.aigm-party-capacity {
+  display: grid;
+  gap: .08rem;
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 11px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-mint-19) 88%, white),
+      var(--landing-mint-19)
+    );
+  padding: .45rem .65rem;
+  color: var(--forest-deep);
+  font-size: .72rem;
+  line-height: 1.25;
+  text-align: center;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 68%, white),
+    inset 0 1px 0 rgb(255 255 255 / .68),
+    0 1px 0 color-mix(in srgb, var(--rpgyw-brass-shadow) 62%, transparent);
+}
+.aigm-party-capacity span,
+.aigm-party-capacity strong {
+  color: inherit;
+}
+
+/* Landing console preview: same physical descent as Play. */
+.landing-campaign-screen-stage {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--forest-deep);
+  padding: .42rem;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-edge) 72%, var(--forest-deep)),
+    inset 0 2px 5px rgb(0 0 0 / .12);
+}
+.landing-campaign-screen-olive-frame {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 12px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-olive-19) 90%, white),
+      var(--landing-olive-19-deep)
+    );
+  padding: .42rem;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 64%, white),
+    inset 0 3px 6px rgb(0 0 0 / .10);
+}
+.landing-campaign-screen-olive-frame .landing-campaign-snippet {
+  width: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  border: 2px solid var(--landing-brass-dark);
+  border-radius: 9px;
+  box-shadow:
+    inset 0 5px 9px rgb(82 60 28 / .14),
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 54%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 38%, transparent);
+}
+
+@media (max-width: 639px) {
+  .landing-campaign-screen-stage,
+  .landing-campaign-screen-olive-frame {
+    padding: .3rem;
+  }
+  .aigm-dice-mode-button {
+    font-size: .7rem;
+  }
+}

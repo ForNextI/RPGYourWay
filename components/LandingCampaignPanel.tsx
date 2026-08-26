@@ -125,9 +125,13 @@ export function LandingCampaignPanel() {
         </p>
       </div>
 
-      <blockquote className="landing-campaign-snippet">
-        <span>{campaign.snippet || 'Your adventure is ready to continue.'}</span>
-      </blockquote>
+      <div className="landing-campaign-screen-stage">
+        <div className="landing-campaign-screen-olive-frame">
+          <blockquote className="landing-campaign-snippet">
+            <span>{campaign.snippet || 'Your adventure is ready to continue.'}</span>
+          </blockquote>
+        </div>
+      </div>
 
       <div className="landing-campaign-actions">
         <div className="landing-balance-control">

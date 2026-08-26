@@ -2124,12 +2124,12 @@ export function AigmGameplayShell() {
         <aside className={`${mobilePanel === 'tools' ? 'flex' : 'hidden'} aigm-tools-panel order-1 min-h-0 min-w-0 flex-col gap-3 overflow-y-auto rounded-2xl border border-border bg-card p-4 lg:order-1 lg:flex`} aria-label="Dice and initiative controls">
           <button type="button" onClick={() => setMobilePanel('gameplay')} className="mb-1 inline-flex min-h-10 items-center justify-center rounded-xl border border-primary/45 bg-primary/10 px-4 text-sm font-bold text-primary lg:hidden">Back to gameplay</button>
           <section>
-            <div className="aigm-dice-heading flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-2"><Dices className="size-5 shrink-0 text-primary" aria-hidden="true" /><h2 className="font-display text-xl font-bold leading-tight">Roll Your Dice Here</h2></div>
-              <div className="aigm-dice-mode-toggle inline-flex rounded-xl p-1" aria-label="Dice mode">
-                <button type="button" onClick={() => setDiceMode('purist')} aria-pressed={gameplay.dice_mode === 'purist'} className={`aigm-dice-mode-button inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-bold ${gameplay.dice_mode === 'purist' ? 'aigm-dice-mode-button--active' : ''}`}><LockKeyhole className="size-3.5" aria-hidden="true" />Purist</button>
-                <button type="button" onClick={() => setDiceMode('cheat')} aria-pressed={gameplay.dice_mode === 'cheat'} className={`aigm-dice-mode-button inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-bold ${gameplay.dice_mode === 'cheat' ? 'aigm-dice-mode-button--active' : ''}`}><UnlockKeyhole className="size-3.5" aria-hidden="true" />Story first</button>
-              </div>
+            <div className="aigm-dice-heading flex items-center gap-2">
+              <Dices className="size-5 shrink-0 text-primary" aria-hidden="true" /><h2 className="font-display text-xl font-bold leading-tight">Roll Your Dice Here</h2>
+            </div>
+            <div className="aigm-dice-mode-toggle mt-2 grid w-full grid-cols-2 rounded-xl p-1" aria-label="Dice mode">
+              <button type="button" onClick={() => setDiceMode('purist')} aria-pressed={gameplay.dice_mode === 'purist'} className={`aigm-dice-mode-button inline-flex min-w-0 items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold whitespace-nowrap ${gameplay.dice_mode === 'purist' ? 'aigm-dice-mode-button--active' : ''}`}><LockKeyhole className="size-3.5 shrink-0" aria-hidden="true" />Purist</button>
+              <button type="button" onClick={() => setDiceMode('cheat')} aria-pressed={gameplay.dice_mode === 'cheat'} className={`aigm-dice-mode-button inline-flex min-w-0 items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold whitespace-nowrap ${gameplay.dice_mode === 'cheat' ? 'aigm-dice-mode-button--active' : ''}`}><UnlockKeyhole className="size-3.5 shrink-0" aria-hidden="true" />Story first</button>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{gameplay.dice_mode === 'purist' ? 'Accept what fate sends your way. The game is more fun when failure is possible.' : 'Fate is a fickle mistress. Take matters a little more under your control.'}</p>
             <label className="mt-4 block text-sm font-semibold text-foreground" htmlFor="dice-quantity">How many dice?</label>
@@ -2309,9 +2309,8 @@ export function AigmGameplayShell() {
 
         <aside className={`${mobilePanel === 'characters' ? 'flex' : 'hidden'} aigm-characters-panel order-3 min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-4 lg:flex`} aria-label="Current characters">
           <button type="button" onClick={() => setMobilePanel('gameplay')} className="mb-3 inline-flex min-h-10 items-center justify-center rounded-xl border border-primary/45 bg-primary/10 px-4 text-sm font-bold text-primary lg:hidden">Back to gameplay</button>
-          <div className="aigm-characters-heading flex items-center justify-between gap-2">
+          <div className="aigm-characters-heading">
             <h2 className="font-display text-xl font-bold leading-tight">Characters</h2>
-            <span className="shrink-0 rounded-full border border-border bg-secondary px-2 py-0.5 text-[11px] font-bold text-muted-foreground">{readyCharacters.length} · Max 6</span>
           </div>
           <p className="aigm-characters-help mt-1 text-xs leading-snug text-muted-foreground">HP, AC, conditions, currency, and tracked resources update as the Game Master returns structured state changes.</p>
 
@@ -2330,8 +2329,15 @@ export function AigmGameplayShell() {
                 onDragTarget={setDragTargetCharacterId}
               />
             )) : <div className="rounded-2xl border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground">No ready characters yet.</div>}
-            <button type="button" onClick={addAnotherCharacter} disabled={readyCharacters.length >= 6 || sending} className="aigm-add-character inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40" title={readyCharacters.length >= 6 ? 'This party already has the maximum of six characters.' : 'Character additions return with the rebuilt Start experience.'}><Plus className="size-4" aria-hidden="true" />Add another character</button>
             <div className="flex items-start gap-2 rounded-2xl border border-primary/25 bg-primary/5 px-3 py-3 text-xs leading-relaxed text-muted-foreground"><HeartPulse className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /><p>Your AIGM is built for long-running campaigns and can remember earlier gameplay, but not every fact stays in immediate attention all the time. If it overlooks something it already knows, remind it or ask it to check the character or campaign record and keep playing.</p></div>
+          </div>
+
+          <div className="aigm-character-footer mt-2">
+            <div className="aigm-party-capacity" aria-label={`Current party: ${readyCharacters.length}. Max party size: 6.`}>
+              <span><strong>Current party:</strong> {readyCharacters.length}</span>
+              <span><strong>Max party size:</strong> 6</span>
+            </div>
+            <button type="button" onClick={addAnotherCharacter} disabled={readyCharacters.length >= 6 || sending} className="aigm-add-character inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40" title={readyCharacters.length >= 6 ? 'This party already has the maximum of six characters.' : 'Character additions return with the rebuilt Start experience.'}><Plus className="size-4" aria-hidden="true" />Add another character</button>
           </div>
 
         </aside>

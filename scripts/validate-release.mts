@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.24')
-assert.equal(pkg.rpgywVersion, '1.7.24')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.24'/)
+assert.equal(pkg.version, '1.7.25')
+assert.equal(pkg.rpgywVersion, '1.7.25')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.25'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -479,3 +479,19 @@ assert.match(gameplay1724, /aigm-conversation-stage/)
 assert.match(gameplay1724, /aigm-conversation-olive-frame/)
 
 console.log('RPG Your Way 1.7.24 Play visual-correction checks passed.')
+
+
+const css1725 = read('app/globals.css')
+assert.match(css1725, /RPG Your Way 1\.7\.25 Play rail repair \+ landing bezel/)
+assert.match(css1725, /\.aigm-dice-mode-toggle[\s\S]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/)
+assert.match(css1725, /\.aigm-party-capacity[\s\S]*text-align: center/)
+assert.match(css1725, /\.landing-campaign-screen-stage[\s\S]*background: var\(--forest-deep\)/)
+assert.match(css1725, /\.landing-campaign-screen-olive-frame[\s\S]*var\(--landing-olive-19-deep\)/)
+const gameplay1725 = read('components/aigm/aigm-gameplay-shell.tsx')
+assert.match(gameplay1725, /Current party:/)
+assert.match(gameplay1725, /Max party size:/)
+assert.doesNotMatch(gameplay1725, /\{readyCharacters\.length\} · Max 6/)
+assert.match(read('components/LandingCampaignPanel.tsx'), /landing-campaign-screen-stage/)
+assert.match(read('components/LandingCampaignPanel.tsx'), /landing-campaign-screen-olive-frame/)
+
+console.log('RPG Your Way 1.7.25 Play rail and landing-bezel checks passed.')
