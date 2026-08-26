@@ -51,12 +51,8 @@ export function AuthPanel({ returnTo = '/account', status = '', error = '', comp
           <form action={signUp} className="auth-form">
             <input type="hidden" name="returnTo" value={returnTo} />
             <label>
-              <span>Email</span>
+              <span>Email address</span>
               <input name="email" type="email" autoComplete="email" required />
-            </label>
-            <label>
-              <span>Confirm your email address</span>
-              <input name="confirmEmail" type="email" autoComplete="email" required />
             </label>
             <label>
               <span>Password</span>

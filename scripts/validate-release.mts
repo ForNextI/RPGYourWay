@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.25')
-assert.equal(pkg.rpgywVersion, '1.7.25')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.25'/)
+assert.equal(pkg.version, '1.7.26')
+assert.equal(pkg.rpgywVersion, '1.7.26')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.26'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -495,3 +495,22 @@ assert.match(read('components/LandingCampaignPanel.tsx'), /landing-campaign-scre
 assert.match(read('components/LandingCampaignPanel.tsx'), /landing-campaign-screen-olive-frame/)
 
 console.log('RPG Your Way 1.7.25 Play rail and landing-bezel checks passed.')
+
+const authPanel1726 = read('components/AuthPanel.tsx')
+assert.match(authPanel1726, /<span>Email address<\/span>/)
+assert.match(authPanel1726, /name="email"/)
+assert.match(authPanel1726, /name="confirmPassword"/)
+assert.doesNotMatch(authPanel1726, /confirmEmail/)
+assert.doesNotMatch(authPanel1726, /Confirm your email address/)
+const authActions1726 = read('app/account/actions.ts')
+assert.doesNotMatch(authActions1726, /confirmEmail/)
+assert.doesNotMatch(authActions1726, /email addresses do not match/)
+assert.match(authActions1726, /Enter your email address and choose a password\./)
+assert.match(authActions1726, /password !== confirmPassword/)
+const authPrompt1726 = read('components/AuthPrompt.tsx')
+assert.ok(authPrompt1726.indexOf('Not now. I just want to look around.') < authPrompt1726.indexOf('<AuthPanel'), 'Not-now control must appear above the sign-in/create-account cards.')
+const css1726 = read('app/globals.css')
+assert.match(css1726, /RPG Your Way 1\.7\.26 account-entry cleanup/)
+assert.match(css1726, /\.auth-dialog-footer \{ display: block; margin: 0 0 \.8rem; \}/)
+
+console.log('RPG Your Way 1.7.26 account-entry cleanup checks passed.')

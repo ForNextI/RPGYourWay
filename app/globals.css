@@ -1676,7 +1676,7 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 .aigm-characters-help { margin-bottom: 0; }
 .aigm-character-list { padding-top: 0; }
 
-.auth-dialog-footer { display: block; margin-top: .65rem; }
+.auth-dialog-footer { display: block; margin: 0 0 .8rem; }
 .auth-not-now {
   width: 100%;
   min-height: 44px;
@@ -3923,3 +3923,9 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     font-size: .7rem;
   }
 }
+
+
+/* RPG Your Way 1.7.26 account-entry cleanup: the optional dismissal sits
+   above authentication choices, and account creation asks for one email
+   address plus password confirmation. */
+.auth-panel-compact .auth-grid { margin-top: 0; }
