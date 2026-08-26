@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.12')
-assert.equal(pkg.rpgywVersion, '1.7.12')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.12'/)
+assert.equal(pkg.version, '1.7.16')
+assert.equal(pkg.rpgywVersion, '1.7.16')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.16'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -76,7 +76,7 @@ assert.match(footer, /kofi-cup/)
 
 const home = read('app/page.tsx')
 assert.match(home, /href="\/start">New Player<\/Link>/)
-assert.match(home, /href="\/play">Continue playing<\/Link>/)
+assert.match(home, /<LandingCampaignPanel \/>/)
 assert.match(read('app/start/page.tsx'), /<RpgywStartEntry \/>/)
 
 const pricing = read('app/pricing/page.tsx')
@@ -279,3 +279,50 @@ assert.match(css1710, /aigm-session-tools\[data-open="true"\]/)
 assert.match(css1710, /\.auth-not-now \{[\s\S]*width: 100%/)
 
 console.log('RPG Your Way 1.7.12 Play space and account-entry checks passed.')
+
+
+const gameplay1714 = read('components/aigm/aigm-gameplay-shell.tsx')
+assert.match(gameplay1714, /Accept what fate sends your way/)
+assert.match(gameplay1714, /Fate is a fickle mistress/)
+assert.match(gameplay1714, />How many dice\?<\/label>/)
+assert.match(gameplay1714, />Of which kind\?<\/p>/)
+assert.match(gameplay1714, /Can I direct my game\?/)
+assert.match(gameplay1714, /Drag to reorder/)
+assert.match(gameplay1714, /const \[dragging, setDragging\] = useState\(false\)/)
+
+const siteHeader1714 = read('components/SiteHeader.tsx')
+assert.match(siteHeader1714, /\{ href: '\/start', label: 'Start' \}/)
+assert.match(siteHeader1714, /\{ href: '\/account', label: 'Account' \}/)
+
+const playPage1714 = read('app/play/page.tsx')
+assert.match(playPage1714, /play-page-frame/)
+assert.match(playPage1714, /<SiteHeader \/>/)
+assert.match(playPage1714, /<MotionPreferenceProvider>/)
+assert.match(playPage1714, /<AigmGameplayShell \/>/)
+
+const landing1714 = read('app/page.tsx')
+assert.match(landing1714, /~~ Warning: AI GM ahead ~~/)
+assert.match(landing1714, /Open Now/)
+assert.match(landing1714, /Tabletop gaming is best in person\. No question\./)
+assert.match(landing1714, /Why I created RPG Your Way\./)
+assert.match(landing1714, /Who benefits from this site\?/)
+assert.match(landing1714, /<LandingCampaignPanel \/>/)
+assert.match(landing1714, />New Player<\/Link>/)
+
+const campaignPanel1714 = read('components/LandingCampaignPanel.tsx')
+assert.match(campaignPanel1714, /Return to Playing/)
+assert.match(campaignPanel1714, /available_display/)
+assert.match(campaignPanel1714, /loadAdventureState/)
+assert.match(campaignPanel1714, /CURRENT_ADVENTURE_KEY/)
+
+const css1714 = read('app/globals.css')
+assert.match(css1714, /RPG Your Way 1\.7\.14 Play \+ landing return pass/)
+assert.match(css1714, /translateY\(calc\(-100% \+ 4px\)\)/)
+assert.match(css1714, /\.landing-return-grid/)
+assert.match(css1714, /\.landing-campaign-snippet/)
+assert.match(css1714, /\.fullscreen-nav-gap\s*\{\s*margin-left:\s*\.25rem/)
+
+console.log('RPG Your Way 1.7.16 landing-validator hotfix checks passed.')
+
+const landingCampaignCurrent = read('components/LandingCampaignPanel.tsx')
+assert.match(landingCampaignCurrent, /Return to Playing/)

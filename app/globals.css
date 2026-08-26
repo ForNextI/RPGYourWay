@@ -1736,3 +1736,147 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
   .aigm-mobile-nav { inset-inline: .35rem; bottom: .35rem; padding: .35rem; }
   .aigm-mobile-nav button { min-height: 2.75rem; }
 }
+
+
+/* RPG Your Way 1.7.14 Play + landing return pass */
+.aigm-gameplay-topbar { padding-top: .3rem; padding-bottom: .22rem; }
+.aigm-gameplay-meta { margin-top: .08rem; line-height: 1.18; }
+.aigm-tools-panel > section:first-of-type > div:first-child { gap: .3rem; }
+.aigm-tools-panel > section:first-of-type > p.mt-2 { margin-top: .3rem; }
+.aigm-tools-panel > section:first-of-type > label { margin-top: .45rem; }
+.aigm-tools-panel > section:first-of-type > p.mt-2.font-semibold { margin-top: .4rem; }
+.aigm-tools-panel > section:first-of-type > div.mt-3 { margin-top: .4rem; }
+.aigm-gameplay-message-input { min-height: 3.2rem !important; height: 3.2rem; max-height: 7rem; }
+.aigm-session-help { min-height: 2.4rem; padding-top: .3rem; padding-bottom: .3rem; }
+.aigm-character-drag-cue { backdrop-filter: blur(4px); }
+.fullscreen-nav-gap { margin-left: .25rem; }
+
+.play-page-frame { display: flex; height: 100dvh; min-height: 100dvh; flex-direction: column; overflow: hidden; }
+.play-page-frame > .site-header { flex: 0 0 auto; }
+.play-page-frame > .aigm-gameplay-main { min-height: 0; height: auto !important; flex: 1 1 auto; }
+:fullscreen .play-page-frame > .site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  transform: translateY(calc(-100% + 4px));
+  transition: transform 160ms ease;
+}
+:fullscreen .play-page-frame > .site-header:hover,
+:fullscreen .play-page-frame > .site-header:focus-within { transform: translateY(0); }
+:fullscreen .play-page-frame > .aigm-gameplay-main { height: 100dvh !important; flex-basis: 100dvh; }
+
+.landing-notice-section { padding-top: .8rem; }
+.landing-notice-section + .landing-notice-section { padding-top: .55rem; }
+.landing-notice-card {
+  border: 1px solid color-mix(in srgb, var(--forest) 45%, var(--cream-deep));
+  border-radius: 18px;
+  background: rgb(251 242 230 / .94);
+  padding: .8rem 1rem;
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+}
+.landing-notice-card h1, .landing-notice-card h2 {
+  margin: 0;
+  color: var(--forest-deep);
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(1.05rem, 2.1vw, 1.35rem);
+  line-height: 1.15;
+}
+.landing-notice-card p { margin: .28rem auto 0; max-width: 980px; color: var(--forest-ink); line-height: 1.4; }
+.landing-ai-warning .landing-notice-card { border-width: 2px; }
+.landing-open-now .landing-notice-card { background: color-mix(in srgb, var(--cream-bright) 92%, white); }
+
+.landing-thesis-strip { padding-top: .65rem; }
+.landing-thesis-strip p {
+  margin: 0;
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--forest) 42%, var(--cream-deep));
+  border-radius: 16px;
+  background: rgb(244 228 198 / .88);
+  padding: .7rem 1rem;
+  color: var(--forest-deep);
+  text-align: center;
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(1.05rem, 2.1vw, 1.35rem);
+  line-height: 1.25;
+}
+.landing-reasons-section { padding-top: .65rem; }
+.landing-reasons-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
+.landing-reasons-grid .hero-unique, .landing-reasons-grid .hero-audience { width: auto; min-width: 0; }
+
+.landing-return-section { padding-top: .75rem; }
+.landing-return-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: .75rem; }
+.landing-player-stack { display: flex; min-width: 0; flex-direction: column; gap: .55rem; }
+.landing-new-player { width: 100%; min-height: 42px; }
+.landing-campaign-panel {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  border: 1px solid color-mix(in srgb, var(--forest) 52%, var(--cream-deep));
+  border-radius: 22px;
+  background: rgb(251 242 230 / .96);
+  padding: clamp(.8rem, 1.6vw, 1.15rem);
+  box-shadow: var(--shadow-soft);
+}
+.landing-campaign-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; }
+.landing-campaign-heading h2 { margin: .15rem 0 0; color: var(--forest-deep); font-size: clamp(1.15rem, 2.2vw, 1.55rem); line-height: 1.1; }
+.landing-campaign-turns {
+  margin: 0;
+  flex: 0 0 auto;
+  border: 1px solid var(--cream-deep);
+  border-radius: 999px;
+  background: var(--cream);
+  padding: .25rem .55rem;
+  color: var(--forest-ink);
+  font-size: .78rem;
+  font-weight: 800;
+}
+.landing-campaign-scene {
+  margin: .35rem 0 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.landing-campaign-snippet {
+  display: -webkit-box;
+  margin: .7rem 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  color: var(--forest-deep);
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(1rem, 1.7vw, 1.18rem);
+  font-style: normal;
+  line-height: 1.45;
+}
+.landing-campaign-actions { display: flex; align-items: end; justify-content: space-between; gap: .75rem; margin-top: auto; }
+.landing-campaign-balance { display: grid; gap: .05rem; margin: 0; color: var(--muted); font-size: .72rem; }
+.landing-campaign-balance strong { color: var(--forest-deep); font-size: 1rem; }
+.landing-return-button { min-width: min(230px, 55%); }
+.landing-return-logo { width: 100%; height: 100%; min-height: 0; align-self: stretch; }
+.landing-return-logo .brand-logo-image { width: 100%; height: 100%; object-fit: contain; }
+
+@media (min-width: 640px) {
+  .aigm-session-help { white-space: nowrap !important; line-height: 1.1; }
+}
+@media (max-width: 860px) {
+  .landing-reasons-grid, .landing-return-grid { grid-template-columns: 1fr; }
+  .landing-return-logo { width: min(100%, 620px); justify-self: center; }
+}
+@media (max-width: 639px) {
+  .aigm-gameplay-topbar { padding-top: .25rem; padding-bottom: .18rem; }
+  .aigm-gameplay-meta { margin-top: .05rem; line-height: 1.16; }
+  .aigm-gameplay-message-input { min-height: 3.15rem !important; height: 3.15rem; }
+  .landing-notice-section { padding-top: .5rem; }
+  .landing-notice-card, .landing-thesis-strip p { padding: .65rem .7rem; }
+  .landing-campaign-actions { align-items: stretch; flex-direction: column; }
+  .landing-return-button { width: 100%; min-width: 0; }
+  .landing-campaign-balance { grid-template-columns: auto auto; justify-content: space-between; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :fullscreen .play-page-frame > .site-header { transition: none; }
+}

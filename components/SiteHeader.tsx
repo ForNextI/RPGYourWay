@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { FullscreenToggle } from '@/components/FullscreenToggle'
 
 const links = [
+  { href: '/start', label: 'Start' },
   { href: '/play', label: 'Play' },
   { href: '/script', label: 'Script' },
   { href: 'https://www.thereadingofthewardens.com', label: 'Read', external: true },

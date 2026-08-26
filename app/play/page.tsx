@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { AigmGameplayShell } from '@/components/aigm/aigm-gameplay-shell'
+import { SiteHeader } from '@/components/SiteHeader'
 import { MotionPreferenceProvider } from '@/components/accessibility/motion-preference'
 import { createClient } from '@/lib/supabase/server'
 
@@ -13,8 +14,11 @@ export default async function PlayPage() {
   if (!data.user) redirect('/start')
 
   return (
-    <MotionPreferenceProvider>
-      <AigmGameplayShell />
-    </MotionPreferenceProvider>
+    <div className="site-frame site-frame-play play-page-frame">
+      <SiteHeader />
+      <MotionPreferenceProvider>
+        <AigmGameplayShell />
+      </MotionPreferenceProvider>
+    </div>
   )
 }

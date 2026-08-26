@@ -364,6 +364,7 @@ function CharacterCard({
   const result = character.result
   const holdTimerRef = useRef<number | null>(null)
   const pointerDraggingRef = useRef(false)
+  const [dragging, setDragging] = useState(false)
   const pointerStartRef = useRef<{ x: number; y: number; pointerId: number; pointerType: string } | null>(null)
   const pointerTargetRef = useRef(character.id)
   const suppressClickRef = useRef(false)
@@ -381,6 +382,7 @@ function CharacterCard({
 
   function beginPointerDrag(target: HTMLButtonElement, pointerId: number) {
     pointerDraggingRef.current = true
+    setDragging(true)
     suppressClickRef.current = true
     try { target.setPointerCapture(pointerId) } catch { /* capture is best-effort */ }
     onDragTarget(character.id)
@@ -394,6 +396,7 @@ function CharacterCard({
       onReorder(character.id, pointerTargetRef.current)
     }
     pointerDraggingRef.current = false
+    setDragging(false)
     pointerStartRef.current = null
     onDragTarget(null)
     if (start) {
@@ -486,7 +489,15 @@ function CharacterCard({
         </p>
       </button>
 
-      <div className="aigm-character-reorder aigm-character-reorder-accessible absolute bottom-1.5 right-1.5 z-20 flex items-center gap-1 rounded-lg border border-border/80 bg-card/95 p-0.5 shadow-sm" aria-label={`Reorder ${name} in the party`}>
+            {dragging ? (
+        <div className="aigm-character-drag-cue pointer-events-none absolute inset-x-2 bottom-2 z-30 flex items-center justify-center gap-1.5 rounded-lg border border-primary/55 bg-card/95 px-2 py-1.5 text-[11px] font-black text-primary shadow-md" aria-hidden="true">
+          <ArrowUp className="size-3.5" />
+          <ArrowDown className="size-3.5" />
+          <span>Drag to reorder</span>
+        </div>
+      ) : null}
+
+<div className="aigm-character-reorder aigm-character-reorder-accessible absolute bottom-1.5 right-1.5 z-20 flex items-center gap-1 rounded-lg border border-border/80 bg-card/95 p-0.5 shadow-sm" aria-label={`Reorder ${name} in the party`}>
         <button type="button" onClick={() => onMoveUp(character.id)} disabled={!canMoveUp} className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition hover:bg-secondary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30" aria-label={`Move ${name} up in party order`} title={`Move ${name} up`}><ArrowUp className="size-3.5" aria-hidden="true" /></button>
         <button type="button" onClick={() => onMoveDown(character.id)} disabled={!canMoveDown} className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition hover:bg-secondary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30" aria-label={`Move ${name} down in party order`} title={`Move ${name} down`}><ArrowDown className="size-3.5" aria-hidden="true" /></button>
       </div>
@@ -2120,14 +2131,14 @@ export function AigmGameplayShell() {
                 <button type="button" onClick={() => setDiceMode('cheat')} aria-pressed={gameplay.dice_mode === 'cheat'} className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-bold ${gameplay.dice_mode === 'cheat' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}><UnlockKeyhole className="size-3.5" aria-hidden="true" />Story first</button>
               </div>
             </div>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{gameplay.dice_mode === 'purist' ? 'See what fate gives you, then send that roll before trying again.' : 'No shame. Some players care more about the adventure than strict dice luck. Roll again when the story needs a kinder turn.'}</p>
-            <label className="mt-4 block text-sm font-semibold text-foreground" htmlFor="dice-quantity">How many dice do you need?</label>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{gameplay.dice_mode === 'purist' ? 'Accept what fate sends your way. The game is more fun when failure is possible.' : 'Fate is a fickle mistress. Take matters a little more under your control.'}</p>
+            <label className="mt-4 block text-sm font-semibold text-foreground" htmlFor="dice-quantity">How many dice?</label>
             <div className="mt-2 grid grid-cols-[3rem_minmax(0,1fr)_3rem] overflow-hidden rounded-xl border border-input bg-background">
               <button type="button" onClick={() => setDiceQuantity((value) => Math.max(1, value - 1))} disabled={gameplay.dice_mode === 'purist' && Boolean(lastRoll)} className="flex min-h-11 items-center justify-center border-r border-border text-primary transition hover:bg-primary/10 disabled:opacity-40" aria-label="Use one fewer die"><Minus className="size-4" aria-hidden="true" /></button>
               <input id="dice-quantity" type="number" min={1} max={MAX_DICE_QUANTITY} value={diceQuantity} disabled={gameplay.dice_mode === 'purist' && Boolean(lastRoll)} onChange={(event) => setDiceQuantity(Math.max(1, Math.min(MAX_DICE_QUANTITY, Number(event.target.value) || 1)))} className="w-full bg-transparent px-3 py-2 text-center text-lg font-bold outline-none disabled:opacity-50" />
               <button type="button" onClick={() => setDiceQuantity((value) => Math.min(MAX_DICE_QUANTITY, value + 1))} disabled={gameplay.dice_mode === 'purist' && Boolean(lastRoll)} className="flex min-h-11 items-center justify-center border-l border-border text-primary transition hover:bg-primary/10 disabled:opacity-40" aria-label="Use one more die"><Plus className="size-4" aria-hidden="true" /></button>
             </div>
-            <p className="mt-3 text-sm text-muted-foreground">Choose your number, then pick the die you want to roll.</p>
+            <p className="mt-2 text-sm font-semibold text-foreground">Of which kind?</p>
             <div className="mt-3 flex flex-wrap justify-center gap-2">
               {DICE.map((sides) => <button key={sides} type="button" onClick={() => rollDice(sides)} disabled={sending || (gameplay.dice_mode === 'purist' && Boolean(lastRoll))} className="min-h-11 w-[calc(33.333%-0.4rem)] whitespace-nowrap rounded-xl border border-primary/35 bg-primary/10 px-2 py-2 text-base font-bold text-primary hover:bg-primary/20 disabled:cursor-not-allowed disabled:opacity-40">d{sides}</button>)}
             </div>
@@ -2275,7 +2286,7 @@ export function AigmGameplayShell() {
                   <ChevronDown className={`size-4 shrink-0 transition-transform ${sessionToolsOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                 </button>
                 <button type="button" onClick={() => setExportGameHelpDialogOpen(true)} className="aigm-session-help inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><FileDown className="size-3.5 shrink-0" aria-hidden="true" />When and how to export</button>
-                <button type="button" onClick={openStoryDirectionHelp} className="aigm-session-help inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><BookOpen className="size-3.5 shrink-0" aria-hidden="true" />How much can I direct my game?</button>
+                <button type="button" onClick={openStoryDirectionHelp} className="aigm-session-help inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><BookOpen className="size-3.5 shrink-0" aria-hidden="true" />Can I direct my game?</button>
                 {sessionToolsOpen && (
                   <div id="aigm-session-tools-panel" className="aigm-session-tools-panel flex flex-wrap items-center gap-2 pt-0.5 sm:col-span-3">
                     <button type="button" onClick={downloadAdventure} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground"><FileDown className="size-3.5" aria-hidden="true" />Export Your Game</button>
