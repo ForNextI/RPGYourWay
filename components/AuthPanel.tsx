@@ -62,7 +62,11 @@ export function AuthPanel({ returnTo = '/account', status = '', error = '', comp
               <span>Password</span>
               <input name="password" type="password" autoComplete="new-password" minLength={8} required />
             </label>
-            <p className="auth-hint">Use at least 8 characters. We’ll ask you to confirm your email address.</p>
+            <label>
+              <span>Confirm password</span>
+              <input name="confirmPassword" type="password" autoComplete="new-password" minLength={8} required />
+            </label>
+            <p className="auth-hint">Use at least 8 characters and enter the same password twice.</p>
             <button className="button button-secondary auth-submit" type="submit">Create account</button>
           </form>
         </section>

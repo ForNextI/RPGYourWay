@@ -347,6 +347,9 @@ function CharacterCard({
   canMoveDown,
   onMoveUp,
   onMoveDown,
+  onReorder,
+  isDragTarget,
+  onDragTarget,
 }: {
   character: StoredPartyCharacter
   onOpen: (characterId: string) => void
@@ -354,8 +357,16 @@ function CharacterCard({
   canMoveDown: boolean
   onMoveUp: (characterId: string) => void
   onMoveDown: (characterId: string) => void
+  onReorder: (characterId: string, targetCharacterId: string) => void
+  isDragTarget: boolean
+  onDragTarget: (characterId: string | null) => void
 }) {
   const result = character.result
+  const holdTimerRef = useRef<number | null>(null)
+  const pointerDraggingRef = useRef(false)
+  const pointerStartRef = useRef<{ x: number; y: number; pointerId: number; pointerType: string } | null>(null)
+  const pointerTargetRef = useRef(character.id)
+  const suppressClickRef = useRef(false)
   if (!result) return null
   const live = liveStateFor(character) ?? initialLiveState(result)
   const name = playNameFor(character)
@@ -363,40 +374,119 @@ function CharacterCard({
   const classes = classLevelSummary(result)
   const subclasses = subclassSummary(result)
 
+  function clearHoldTimer() {
+    if (holdTimerRef.current !== null) window.clearTimeout(holdTimerRef.current)
+    holdTimerRef.current = null
+  }
+
+  function beginPointerDrag(target: HTMLButtonElement, pointerId: number) {
+    pointerDraggingRef.current = true
+    suppressClickRef.current = true
+    try { target.setPointerCapture(pointerId) } catch { /* capture is best-effort */ }
+    onDragTarget(character.id)
+  }
+
+  function finishPointerDrag(target: HTMLButtonElement, commit: boolean) {
+    clearHoldTimer()
+    const start = pointerStartRef.current
+    const wasDragging = pointerDraggingRef.current
+    if (wasDragging && commit && pointerTargetRef.current !== character.id) {
+      onReorder(character.id, pointerTargetRef.current)
+    }
+    pointerDraggingRef.current = false
+    pointerStartRef.current = null
+    onDragTarget(null)
+    if (start) {
+      try { target.releasePointerCapture(start.pointerId) } catch { /* release is best-effort */ }
+    }
+    if (wasDragging) window.setTimeout(() => { suppressClickRef.current = false }, 120)
+  }
+
   return (
-    <article className={`aigm-character-card group/card relative overflow-hidden rounded-2xl border bg-card transition focus-within:ring-2 focus-within:ring-ring ${isLeader ? 'border-[#6d28d9] ring-2 ring-[#6d28d9]/25 hover:border-[#7c3aed]' : 'border-border hover:border-primary/60'}`}>
+    <article
+      data-character-id={character.id}
+      data-drag-target={isDragTarget ? 'true' : 'false'}
+      className={`aigm-character-card group/card relative overflow-hidden rounded-2xl border bg-card transition focus-within:ring-2 focus-within:ring-ring ${isLeader ? 'border-[#6d28d9] ring-2 ring-[#6d28d9]/25 hover:border-[#7c3aed]' : 'border-border hover:border-primary/60'}`}
+    >
       <button
         type="button"
-        onClick={() => onOpen(character.id)}
+        onClick={(event) => {
+          if (suppressClickRef.current) {
+            event.preventDefault()
+            return
+          }
+          onOpen(character.id)
+        }}
+        onPointerDown={(event) => {
+          if (event.button !== 0) return
+          clearHoldTimer()
+          const target = event.currentTarget
+          const start = { x: event.clientX, y: event.clientY, pointerId: event.pointerId, pointerType: event.pointerType }
+          pointerStartRef.current = start
+          pointerTargetRef.current = character.id
+          if (event.pointerType === 'mouse') {
+            try { target.setPointerCapture(start.pointerId) } catch { /* capture is best-effort */ }
+            return
+          }
+          holdTimerRef.current = window.setTimeout(() => beginPointerDrag(target, start.pointerId), 450)
+        }}
+        onPointerMove={(event) => {
+          const start = pointerStartRef.current
+          if (!start) return
+          const distance = Math.hypot(event.clientX - start.x, event.clientY - start.y)
+          if (!pointerDraggingRef.current) {
+            if (start.pointerType === 'mouse') {
+              if (event.buttons === 1 && distance > 6) beginPointerDrag(event.currentTarget, start.pointerId)
+            } else if (distance > 9) {
+              clearHoldTimer()
+              pointerStartRef.current = null
+              return
+            }
+          }
+          if (!pointerDraggingRef.current) return
+          event.preventDefault()
+          const hit = document.elementFromPoint(event.clientX, event.clientY)?.closest<HTMLElement>('[data-character-id]')
+          const targetId = hit?.dataset.characterId
+          if (targetId) {
+            pointerTargetRef.current = targetId
+            onDragTarget(targetId)
+          }
+        }}
+        onPointerUp={(event) => {
+          if (pointerDraggingRef.current) event.preventDefault()
+          finishPointerDrag(event.currentTarget, true)
+        }}
+        onPointerCancel={(event) => finishPointerDrag(event.currentTarget, false)}
+        onContextMenu={(event) => { if (pointerDraggingRef.current) event.preventDefault() }}
         className="w-full p-3 text-left transition hover:bg-secondary/65 focus-visible:outline-none"
-        aria-label={`Open ${name} character record`}
+        aria-label={`Open ${name} character record. Drag to reorder the party.`}
       >
         <div className="grid grid-cols-[3.5rem_minmax(0,1fr)] grid-rows-3 gap-x-3 gap-y-0.5">
           <div className="relative row-span-3 flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-background/70">
             {character.portraitUrl ? <img src={character.portraitUrl} alt="" className="size-full object-contain" /> : <HeartPulse className="size-6 text-muted-foreground" aria-hidden="true" />}
           </div>
-          <div className="flex min-w-0 items-center justify-between gap-x-3 text-[11px] leading-tight">
+          <div className="flex min-w-0 items-center justify-between gap-x-2 text-[10px] leading-tight">
             <span className="shrink-0 whitespace-nowrap"><strong className="text-foreground">HP</strong> {live.current_hit_points}/{live.maximum_hit_points}{live.temporary_hit_points > 0 ? ` +${live.temporary_hit_points}` : ''}</span>
             <span className="shrink-0 whitespace-nowrap"><strong className="text-foreground">AC</strong> {live.armor_class || '—'}</span>
           </div>
-          <div className="flex min-w-0 items-center justify-between gap-x-3 text-[11px] leading-tight text-muted-foreground">
+          <div className="flex min-w-0 items-center justify-between gap-x-2 text-[10px] leading-tight text-muted-foreground">
             <span className="shrink-0 whitespace-nowrap">{result.character.age ? `Age ${result.character.age}` : 'Age —'}</span>
             <span className="shrink-0 whitespace-nowrap text-right font-semibold text-foreground/85" title={result.character.alignment || 'Alignment not recorded'}>{abbreviatedAlignment(result.character.alignment)}</span>
           </div>
-          <div className="flex min-w-0 items-center gap-x-3 text-[11px] leading-tight text-muted-foreground">
+          <div className="flex min-w-0 items-center gap-x-2 text-[10px] leading-tight text-muted-foreground">
             <span className="min-w-0 flex-1 truncate" title={result.character.sex || undefined}>{result.character.sex || 'Sex —'}</span>
             <span className="shrink-0 whitespace-nowrap text-right" title={result.character.pronouns || undefined}>{result.character.pronouns || 'Pronouns —'}</span>
           </div>
         </div>
 
-        <p className="mt-2 break-words font-display text-sm font-bold leading-snug text-foreground">
+        <p className="aigm-character-summary mt-1.5 break-words font-display text-sm font-bold leading-snug text-foreground">
           {isLeader && <span className="mr-1.5 inline-flex rounded-full bg-[#6d28d9] px-2 py-0.5 align-middle text-[9px] font-black uppercase tracking-[0.14em] text-white">Leader</span>}
           <span>{name}</span>
           <span className="font-sans font-semibold text-foreground/85"> · {classes}{subclasses ? ` · ${subclasses}` : ''}</span>
         </p>
       </button>
 
-      <div className="aigm-character-reorder absolute left-3 top-[2.55rem] z-10 flex items-center gap-1 rounded-lg border border-border/80 bg-card/95 p-0.5 shadow-sm transition md:opacity-0 md:group-hover/card:opacity-100 md:group-focus-within/card:opacity-100" aria-label={`Reorder ${name} in the party`}>
+      <div className="aigm-character-reorder aigm-character-reorder-accessible absolute bottom-1.5 right-1.5 z-20 flex items-center gap-1 rounded-lg border border-border/80 bg-card/95 p-0.5 shadow-sm" aria-label={`Reorder ${name} in the party`}>
         <button type="button" onClick={() => onMoveUp(character.id)} disabled={!canMoveUp} className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition hover:bg-secondary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30" aria-label={`Move ${name} up in party order`} title={`Move ${name} up`}><ArrowUp className="size-3.5" aria-hidden="true" /></button>
         <button type="button" onClick={() => onMoveDown(character.id)} disabled={!canMoveDown} className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition hover:bg-secondary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30" aria-label={`Move ${name} down in party order`} title={`Move ${name} down`}><ArrowDown className="size-3.5" aria-hidden="true" /></button>
       </div>
@@ -1176,6 +1266,7 @@ export function AigmGameplayShell() {
   const [billingNotice, setBillingNotice] = useState<string | null>(null)
   const [billingActionUrl, setBillingActionUrl] = useState<string | null>(null)
   const [mobilePanel, setMobilePanel] = useState<'gameplay' | 'tools' | 'characters'>('gameplay')
+  const [dragTargetCharacterId, setDragTargetCharacterId] = useState<string | null>(null)
   const [initiativeOpen, setInitiativeOpen] = useState(false)
   const [sessionToolsOpen, setSessionToolsOpen] = useState(false)
   const [voiceGuidedDialogOpen, setVoiceGuidedDialogOpen] = useState(false)
@@ -1316,6 +1407,22 @@ export function AigmGameplayShell() {
     const swapIndex = characters.findIndex((character) => character.id === targetId)
     if (characterIndex < 0 || swapIndex < 0) return
     ;[characters[characterIndex], characters[swapIndex]] = [characters[swapIndex], characters[characterIndex]]
+    persist({ ...partyState, characters, updated_at: new Date().toISOString() })
+  }
+
+  function reorderPartyCharacter(characterId: string, targetCharacterId: string) {
+    if (!partyState || characterId === targetCharacterId) return
+    const sourceIndex = readyCharacters.findIndex((character) => character.id === characterId)
+    const targetIndex = readyCharacters.findIndex((character) => character.id === targetCharacterId)
+    if (sourceIndex < 0 || targetIndex < 0) return
+    const reorderedReady = [...readyCharacters]
+    const [moved] = reorderedReady.splice(sourceIndex, 1)
+    reorderedReady.splice(targetIndex, 0, moved)
+    let readyIndex = 0
+    const characters = partyState.characters.map((character) => {
+      if (character.status !== 'ready' || !character.result) return character
+      return reorderedReady[readyIndex++] ?? character
+    })
     persist({ ...partyState, characters, updated_at: new Date().toISOString() })
   }
 
@@ -2067,18 +2174,16 @@ export function AigmGameplayShell() {
 
         <section className={`${mobilePanel === 'gameplay' ? 'flex' : 'hidden'} aigm-gameplay-conversation relative order-1 min-h-0 min-w-0 flex-col overflow-hidden rounded-3xl border border-border bg-card lg:order-2 lg:flex`} aria-label="AIGM conversation">
           <div className="aigm-gameplay-topbar border-b border-border bg-secondary/45 px-4 py-3 sm:px-5">
-            <div className="aigm-gameplay-summary flex min-w-0 items-center justify-between gap-3">
-              <div className="flex min-w-0 items-center gap-3">
+            <div className="aigm-gameplay-summary min-w-0">
+              <div className="aigm-gameplay-title-row flex min-w-0 items-center gap-2">
                 <span className="aigm-gameplay-summary-icon flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground"><Sparkles className="size-5" aria-hidden="true" /></span>
-                <div className="min-w-0">
-                  <p className="font-display text-lg font-bold leading-tight">{partyState.adventure_name}</p>
-                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{partyState.game_master_name ? `${partyState.game_master_name} · ` : ''}{gameplay.scene || 'Adventure ready'} · {gameplay.turn_count} player turn{gameplay.turn_count === 1 ? '' : 's'} saved</p>
+                <p className="aigm-gameplay-title min-w-0 flex-1 break-words font-display text-lg font-bold leading-tight">{partyState.adventure_name}</p>
+                <div className="aigm-gameplay-title-controls flex shrink-0 items-center gap-1.5">
+                  {voiceAvailable ? <button type="button" onClick={() => setVoiceGuidedDialogOpen(true)} className={`inline-flex size-9 items-center justify-center rounded-xl border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${voiceGuidedPlay.enabled ? 'border-primary/55 bg-primary/10 text-primary' : 'border-border bg-background text-muted-foreground hover:border-primary/55 hover:text-foreground'}`} aria-label="Open voice-guided play settings for blind players, screen-reader users, and those assisting them" title="Voice-guided play settings"><Headphones className="size-4" aria-hidden="true" /></button> : null}
+                  <FullscreenToggle className="inline-flex size-9 items-center justify-center rounded-xl border border-border bg-background text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
                 </div>
               </div>
-              <div className="flex shrink-0 items-center gap-2">
-                {voiceAvailable ? <button type="button" onClick={() => setVoiceGuidedDialogOpen(true)} className={`inline-flex size-9 items-center justify-center rounded-xl border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${voiceGuidedPlay.enabled ? 'border-primary/55 bg-primary/10 text-primary' : 'border-border bg-background text-muted-foreground hover:border-primary/55 hover:text-foreground'}`} aria-label="Open voice-guided play settings for blind players, screen-reader users, and those assisting them" title="Voice-guided play settings"><Headphones className="size-4" aria-hidden="true" /></button> : null}
-                <FullscreenToggle className="inline-flex size-9 items-center justify-center rounded-xl border border-border bg-background text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
-              </div>
+              <p className="aigm-gameplay-meta mt-1 text-xs leading-relaxed text-muted-foreground">{partyState.game_master_name ? `${partyState.game_master_name} · ` : ''}{gameplay.scene || 'Adventure ready'} · {gameplay.turn_count} player turn{gameplay.turn_count === 1 ? '' : 's'} saved</p>
             </div>
           </div>
 
@@ -2142,7 +2247,7 @@ export function AigmGameplayShell() {
             <div className="mx-auto max-w-5xl">
               <label htmlFor="aigm-gameplay-message" className="sr-only">What does the party do?</label>
               <form onSubmit={submitTurn} className="flex items-end gap-2 rounded-2xl border border-input bg-card p-2">
-                <textarea id="aigm-gameplay-message" ref={textareaRef} rows={1} value={message} onChange={(event) => setMessage(event.target.value)} onKeyDown={handleGameplayKeyDown} disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0} placeholder={gameplay.messages.length === 0 ? 'Begin your adventure before sending an action.' : 'What do you do? Talk to me just like you would a person.'} className="aigm-gameplay-message-input min-h-11 max-h-32 min-w-0 flex-1 resize-y bg-transparent px-3 py-2 text-sm leading-relaxed outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:text-base" />
+                <textarea id="aigm-gameplay-message" ref={textareaRef} rows={2} value={message} onChange={(event) => setMessage(event.target.value)} onKeyDown={handleGameplayKeyDown} disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0} placeholder={gameplay.messages.length === 0 ? 'Begin your adventure before sending an action.' : 'What do you do? Talk to me just like you would a person.'} className="aigm-gameplay-message-input min-h-16 max-h-32 min-w-0 flex-1 resize-y bg-transparent px-3 py-2 text-sm leading-relaxed outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:text-base" />
                 {voiceAvailable ? <AigmVoiceControls
                   ref={voiceControlsRef}
                   disabled={gameplay.messages.length === 0 || (!voiceGuidedPlay.enabled && sending)}
@@ -2158,7 +2263,7 @@ export function AigmGameplayShell() {
                 <button type="submit" disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0 || !message.trim()} className="aigm-gameplay-send flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground disabled:opacity-45" aria-label="Send gameplay turn">{sending ? <LoaderCircle className="size-5 animate-spin" aria-hidden="true" /> : <Send className="size-5" aria-hidden="true" />}</button>
               </form>
 
-              <div className="aigm-session-tools mt-2 grid gap-2 border-t border-border/70 pt-2 sm:grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)]" aria-label="Session tools and export guidance">
+              <div className="aigm-session-tools mt-2 grid gap-2 border-t border-border/70 pt-2 sm:grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)]" data-open={sessionToolsOpen ? 'true' : 'false'} aria-label="Session tools and export guidance">
                 <button
                   type="button"
                   onClick={() => setSessionToolsOpen((open) => !open)}
@@ -2169,10 +2274,10 @@ export function AigmGameplayShell() {
                   <span className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-primary">Session tools</span>
                   <ChevronDown className={`size-4 shrink-0 transition-transform ${sessionToolsOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                 </button>
-                <button type="button" onClick={() => setExportGameHelpDialogOpen(true)} className="inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><FileDown className="size-3.5 shrink-0" aria-hidden="true" />When and how to export</button>
-                <button type="button" onClick={openStoryDirectionHelp} className="inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><BookOpen className="size-3.5 shrink-0" aria-hidden="true" />How much can I direct my game?</button>
+                <button type="button" onClick={() => setExportGameHelpDialogOpen(true)} className="aigm-session-help inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><FileDown className="size-3.5 shrink-0" aria-hidden="true" />When and how to export</button>
+                <button type="button" onClick={openStoryDirectionHelp} className="aigm-session-help inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><BookOpen className="size-3.5 shrink-0" aria-hidden="true" />How much can I direct my game?</button>
                 {sessionToolsOpen && (
-                  <div id="aigm-session-tools-panel" className="flex flex-wrap items-center gap-2 pt-0.5 sm:col-span-3">
+                  <div id="aigm-session-tools-panel" className="aigm-session-tools-panel flex flex-wrap items-center gap-2 pt-0.5 sm:col-span-3">
                     <button type="button" onClick={downloadAdventure} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground"><FileDown className="size-3.5" aria-hidden="true" />Export Your Game</button>
                     <button type="button" onClick={downloadTranscript} disabled={transcript.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-40"><Download className="size-3.5" aria-hidden="true" />Download transcript</button>
                     <button type="button" onClick={printTranscript} disabled={transcript.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-40"><Printer className="size-3.5" aria-hidden="true" />Print</button>
@@ -2189,13 +2294,13 @@ export function AigmGameplayShell() {
 
         <aside className={`${mobilePanel === 'characters' ? 'flex' : 'hidden'} aigm-characters-panel order-3 min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-4 lg:flex`} aria-label="Current characters">
           <button type="button" onClick={() => setMobilePanel('gameplay')} className="mb-3 inline-flex min-h-10 items-center justify-center rounded-xl border border-primary/45 bg-primary/10 px-4 text-sm font-bold text-primary lg:hidden">Back to gameplay</button>
-          <div className="flex items-start justify-between gap-3">
-            <div><p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Current party</p><h2 className="mt-1 font-display text-xl font-bold">Characters</h2></div>
-            <span className="rounded-full border border-border bg-secondary px-2.5 py-1 text-xs font-bold text-muted-foreground">{readyCharacters.length === 1 ? 'Character' : 'Characters'}: {readyCharacters.length} · Max: 6</span>
+          <div className="aigm-characters-heading flex items-center justify-between gap-2">
+            <h2 className="font-display text-xl font-bold leading-tight">Characters</h2>
+            <span className="shrink-0 rounded-full border border-border bg-secondary px-2 py-0.5 text-[11px] font-bold text-muted-foreground">{readyCharacters.length} · Max 6</span>
           </div>
-          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">HP, AC, conditions, currency, and tracked resources update as the Game Master returns structured state changes.</p>
+          <p className="aigm-characters-help mt-1 text-xs leading-snug text-muted-foreground">HP, AC, conditions, currency, and tracked resources update as the Game Master returns structured state changes.</p>
 
-          <div className="aigm-character-list mt-4 min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+          <div className="aigm-character-list mt-2 min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
             {orderedCharacters.length > 0 ? orderedCharacters.map((character, index) => (
               <CharacterCard
                 key={character.id}
@@ -2205,6 +2310,9 @@ export function AigmGameplayShell() {
                 canMoveDown={index < orderedCharacters.length - 1}
                 onMoveUp={(characterId) => movePartyCharacter(characterId, -1)}
                 onMoveDown={(characterId) => movePartyCharacter(characterId, 1)}
+                onReorder={reorderPartyCharacter}
+                isDragTarget={dragTargetCharacterId === character.id}
+                onDragTarget={setDragTargetCharacterId}
               />
             )) : <div className="rounded-2xl border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground">No ready characters yet.</div>}
             <button type="button" onClick={addAnotherCharacter} disabled={readyCharacters.length >= 6 || sending} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/5 px-4 py-2 text-sm font-bold text-primary transition hover:bg-primary/10 disabled:cursor-not-allowed disabled:opacity-40" title={readyCharacters.length >= 6 ? 'This party already has the maximum of six characters.' : 'Character additions return with the rebuilt Start experience.'}><Plus className="size-4" aria-hidden="true" />Add another character</button>

@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.9')
-assert.equal(pkg.rpgywVersion, '1.7.9')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.9'/)
+assert.equal(pkg.version, '1.7.12')
+assert.equal(pkg.rpgywVersion, '1.7.12')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.12'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -255,3 +255,27 @@ assert.match(access179, /voice_available:\s*true/)
 assert.doesNotMatch(access179, /voice_available:\s*account\.ownerQa/)
 
 console.log('RPG Your Way 1.7.9 recovery, voice-validator, and Play presentation checks passed.')
+
+
+const gameplay1710 = read('components/aigm/aigm-gameplay-shell.tsx')
+assert.match(gameplay1710, /aigm-gameplay-title-row/)
+assert.match(gameplay1710, /rows=\{2\}/)
+assert.match(gameplay1710, /onReorder=\{reorderPartyCharacter\}/)
+assert.match(gameplay1710, /pointerDraggingRef/)
+assert.match(gameplay1710, /aigm-session-help/)
+assert.match(gameplay1710, /data-open=\{sessionToolsOpen/)
+assert.doesNotMatch(gameplay1710, /Current party<\/p>/)
+const authPanel1710 = read('components/AuthPanel.tsx')
+assert.match(authPanel1710, /Confirm password/)
+assert.match(authPanel1710, /name="confirmPassword"/)
+const authActions1710 = read('app/account/actions.ts')
+assert.match(authActions1710, /password !== confirmPassword/)
+const authPrompt1710 = read('components/AuthPrompt.tsx')
+assert.match(authPrompt1710, /Not now\. I just want to look around\./)
+const css1710 = read('app/globals.css')
+assert.match(css1710, /RPG Your Way 1\.7\.12 Play space-reclamation and account-entry cleanup/)
+assert.match(css1710, /minmax\(230px, \.68fr\) minmax\(0, 2\.85fr\) minmax\(240px, \.72fr\)/)
+assert.match(css1710, /aigm-session-tools\[data-open="true"\]/)
+assert.match(css1710, /\.auth-not-now \{[\s\S]*width: 100%/)
+
+console.log('RPG Your Way 1.7.12 Play space and account-entry checks passed.')

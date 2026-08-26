@@ -1642,3 +1642,97 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
     line-height: 1.15;
   }
 }
+
+
+/* RPG Your Way 1.7.12 Play space-reclamation and account-entry cleanup */
+/* Target: preserve the readable 80% scale with the denser geometry seen around 67%. */
+.aigm-character-card { cursor: grab; }
+.aigm-character-card:active { cursor: grabbing; }
+.aigm-character-card[data-drag-target="true"] { outline: 2px solid var(--primary); outline-offset: 2px; }
+.aigm-character-card > button { touch-action: pan-y; padding: .5rem .55rem .4rem; }
+.aigm-character-reorder-accessible { opacity: 0; pointer-events: none; }
+.aigm-character-reorder-accessible:focus-within { opacity: 1; pointer-events: auto; }
+.aigm-character-summary { margin-bottom: 0; }
+
+.aigm-gameplay-topbar { padding: .45rem .6rem; }
+.aigm-gameplay-title-row { min-height: 2rem; }
+.aigm-gameplay-title { font-size: 1rem; }
+.aigm-gameplay-summary-icon { width: 2rem; height: 2rem; border-radius: .65rem; }
+.aigm-gameplay-title-controls > * { width: 2rem !important; height: 2rem !important; border-radius: .65rem !important; }
+.aigm-gameplay-meta { margin-top: .2rem; line-height: 1.25; }
+.aigm-conversation-scroll { padding-top: .75rem; padding-bottom: .75rem; }
+.aigm-conversation-column { gap: .75rem; }
+.aigm-message-bubble { padding-top: .7rem; padding-bottom: .7rem; }
+.aigm-message-wrap > button[data-aigm-manual-listen="true"] { margin-top: .15rem; }
+.aigm-gameplay-composer { padding-top: .4rem; padding-bottom: .4rem; }
+.aigm-session-tools { margin-top: .35rem; padding-top: .35rem; gap: .4rem; }
+
+.aigm-tools-panel, .aigm-characters-panel { padding: .6rem; }
+.aigm-tools-panel { gap: .55rem; }
+.aigm-tools-panel > section + section { padding-top: .65rem; }
+.aigm-tools-panel > section p { line-height: 1.35; }
+.aigm-tools-panel > section label { margin-top: .65rem; }
+.aigm-tools-panel > section > div.mt-3, .aigm-tools-panel > section > p.mt-3 { margin-top: .5rem; }
+.aigm-characters-help { margin-bottom: 0; }
+.aigm-character-list { padding-top: 0; }
+
+.auth-dialog-footer { display: block; margin-top: .65rem; }
+.auth-not-now {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid color-mix(in srgb, var(--forest) 45%, var(--cream-deep));
+  border-radius: 10px;
+  background: var(--cream-bright);
+  padding: .65rem .85rem;
+  text-align: center;
+  text-decoration: none;
+}
+.auth-not-now:hover { background: color-mix(in srgb, var(--forest) 7%, var(--cream-bright)); }
+
+@media (min-width: 1024px) {
+  .aigm-gameplay-main { padding: .5rem; }
+  .aigm-gameplay-grid {
+    grid-template-columns: minmax(230px, .68fr) minmax(0, 2.85fr) minmax(240px, .72fr);
+    gap: .5rem;
+  }
+  .aigm-tools-panel, .aigm-characters-panel { padding: .55rem; }
+}
+
+@media (max-width: 1023px) {
+  .aigm-gameplay-main {
+    padding: .35rem;
+    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom));
+  }
+  .aigm-gameplay-grid { gap: .35rem; }
+}
+
+@media (max-width: 639px) {
+  .aigm-gameplay-topbar { padding: .4rem .5rem; }
+  .aigm-gameplay-summary-icon { width: 1.85rem; height: 1.85rem; }
+  .aigm-gameplay-title { font-size: .98rem; line-height: 1.1; }
+  .aigm-gameplay-title-controls > * { width: 1.85rem !important; height: 1.85rem !important; }
+  .aigm-gameplay-meta { font-size: .69rem; line-height: 1.22; }
+  .aigm-conversation-scroll { padding: .45rem .4rem; }
+  .aigm-conversation-column { gap: .6rem; }
+  .aigm-message-row { gap: .35rem; }
+  .aigm-assistant-message-icon { width: 1.85rem; height: 1.85rem; }
+  .aigm-assistant-message { max-width: calc(100% - 2.2rem); }
+  .aigm-user-message { max-width: 98%; }
+  .aigm-message-bubble { padding: .65rem .75rem; }
+  .aigm-gameplay-composer { padding: .35rem .4rem; }
+  .aigm-gameplay-composer form { padding: .4rem; gap: .35rem; }
+  .aigm-gameplay-message-input { padding: .5rem .6rem; }
+
+  .aigm-session-help { display: none; }
+  .aigm-session-tools[data-open="true"] .aigm-session-help { display: inline-flex; }
+  .aigm-session-tools-panel { display: grid; grid-template-columns: 1fr; width: 100%; }
+  .aigm-session-tools-panel > * { width: 100%; justify-content: center; }
+
+  .aigm-tools-panel, .aigm-characters-panel { padding: .5rem; }
+  .aigm-tools-panel > button:first-child, .aigm-characters-panel > button:first-child { margin-bottom: .3rem; min-height: 2.5rem; }
+  .aigm-character-list { margin-right: -.45rem; padding-right: .45rem; }
+  .aigm-character-card > button { padding: .45rem .5rem .35rem; }
+
+  .aigm-mobile-nav { inset-inline: .35rem; bottom: .35rem; padding: .35rem; }
+  .aigm-mobile-nav button { min-height: 2.75rem; }
+}

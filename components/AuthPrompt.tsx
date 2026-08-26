@@ -114,7 +114,7 @@ export function AuthPrompt() {
         <AuthPanel returnTo={returnTo} status={status} error={error} compact />
 
         <div className="auth-dialog-footer">
-          <button className="auth-not-now" type="button" onClick={dismiss}>Not now</button>
+          <button className="auth-not-now" type="button" onClick={dismiss}>Not now. I just want to look around.</button>
         </div>
       </div>
     </dialog>
