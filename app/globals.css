@@ -4059,21 +4059,21 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     0 9px 16px rgb(43 47 38 / .11);
 }
 
-/* Undo the old dark middle-card body. All three cards now share one plaque face. */
+/* Counterchange the center feature: pale nameplate over a forest-green card. */
 .feature-card:nth-child(2) {
   background:
     linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--landing-pale) 88%, white),
-      var(--landing-pale)
+      145deg,
+      color-mix(in srgb, var(--forest-deep) 88%, white),
+      var(--forest-deep)
     );
-  color: var(--forest-deep);
+  color: var(--cream-bright);
 }
 .feature-card:nth-child(2) h3 {
-  color: var(--forest-deep);
+  color: var(--cream-bright);
 }
 .feature-card:nth-child(2) > p:last-child {
-  color: var(--muted);
+  color: var(--cream-bright);
 }
 
 /* The eyebrow is now a physical nameplate resting on the card. */
