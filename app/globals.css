@@ -2913,3 +2913,107 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     transform: none;
   }
 }
+
+
+/* RPG Your Way 1.7.22 header hover + dimensional utility controls
+   Header geometry stays quiet at rest. Forest + lime appears on hover/focus,
+   while the compass mark and fullscreen control get the dimensional brass cue. */
+
+/* Start / Play / Script / Read / Account:
+   flat at rest, unmistakably RPGYW on hover. */
+.site-header .main-nav a:hover,
+.site-header .main-nav a:focus-visible {
+  border-color: var(--forest-deep);
+  background: var(--forest-deep);
+  color: var(--lime) !important;
+  box-shadow: none !important;
+}
+
+/* Home link behaves the same way without turning the entire header into
+   a row of permanent raised buttons. */
+.site-header .brand {
+  border-radius: 10px;
+  padding: .18rem .34rem .18rem .18rem;
+}
+.site-header .brand:hover,
+.site-header .brand:focus-visible {
+  background: var(--forest-deep);
+  color: var(--lime) !important;
+  box-shadow: none !important;
+}
+.site-header .brand:hover .brand-words,
+.site-header .brand:focus-visible .brand-words {
+  color: var(--lime) !important;
+}
+
+/* The compass rose itself is the dimensional home button cue. */
+.site-header .brand-mark {
+  border: 2px solid var(--landing-brass-mid);
+  border-radius: 10px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--cream-bright) 92%, white),
+      color-mix(in srgb, var(--cream) 94%, var(--landing-brass-light))
+    );
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--landing-brass-light) 72%, white),
+    inset 0 1px 0 rgb(255 255 255 / .78),
+    inset 0 -2px 0 rgb(88 67 35 / .10),
+    0 2px 0 var(--landing-brass-dark),
+    0 5px 9px rgb(39 46 36 / .11);
+}
+.site-header .brand:hover .brand-mark,
+.site-header .brand:focus-visible .brand-mark {
+  border-color: var(--landing-brass-light);
+}
+
+/* Fullscreen: a small dimensional utility button at rest, then the same
+   forest + hot-lime interaction language as the navigation. */
+.site-header .fullscreen-toggle {
+  border: 2px solid var(--landing-brass-mid);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--cream-bright) 92%, white),
+      color-mix(in srgb, var(--cream) 94%, var(--landing-brass-light))
+    );
+  color: var(--forest-deep);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--landing-brass-light) 72%, white),
+    inset 0 1px 0 rgb(255 255 255 / .78),
+    inset 0 -2px 0 rgb(88 67 35 / .10),
+    0 2px 0 var(--landing-brass-dark),
+    0 5px 9px rgb(39 46 36 / .11) !important;
+}
+.site-header .fullscreen-toggle:hover,
+.site-header .fullscreen-toggle:focus-visible {
+  border-color: var(--landing-brass-light);
+  background: var(--forest-deep);
+  color: var(--lime) !important;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--landing-brass-light) 72%, white),
+    inset 0 1px 0 rgb(255 255 255 / .12),
+    0 2px 0 var(--landing-brass-dark),
+    0 5px 9px rgb(31 40 31 / .14) !important;
+}
+
+/* Explicitly preserve the lime-text hover on the two major landing questions.
+   Their pale dimensional face stays pale. */
+.landing-reason-card summary:hover .landing-accordion-prompt,
+.landing-reason-card summary:focus-visible .landing-accordion-prompt,
+.landing-reason-card summary:hover .audience-prompt,
+.landing-reason-card summary:focus-visible .audience-prompt {
+  color: var(--lime) !important;
+}
+.landing-reason-card summary:hover .accordion-plus,
+.landing-reason-card summary:focus-visible .accordion-plus {
+  color: var(--lime) !important;
+}
+
+/* Keep the header compact on narrower screens despite the added trim. */
+@media (max-width: 760px) {
+  .site-header .brand {
+    padding-right: .18rem;
+  }
+}

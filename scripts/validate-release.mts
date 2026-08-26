@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.21')
-assert.equal(pkg.rpgywVersion, '1.7.21')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.21'/)
+assert.equal(pkg.version, '1.7.22')
+assert.equal(pkg.rpgywVersion, '1.7.22')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.22'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -438,3 +438,16 @@ assert.match(css1721, /color: var\(--rpgyw-control-hover\) !important/)
 assert.match(css1721, /body :where\(button, \.button, \.fake-button, summary, \[role="button"\]\)/)
 
 console.log('RPG Your Way 1.7.21 dimensional controls and language checks passed.')
+
+
+const css1722 = read('app/globals.css')
+assert.match(css1722, /RPG Your Way 1\.7\.22 header hover \+ dimensional utility controls/)
+assert.match(css1722, /\.site-header \.main-nav a:hover,[\s\S]*background: var\(--forest-deep\);[\s\S]*color: var\(--lime\) !important/)
+assert.match(css1722, /\.site-header \.brand-mark[\s\S]*border: 2px solid var\(--landing-brass-mid\)/)
+assert.match(css1722, /\.site-header \.fullscreen-toggle[\s\S]*border: 2px solid var\(--landing-brass-mid\)/)
+assert.match(css1722, /\.site-header \.fullscreen-toggle:hover,[\s\S]*background: var\(--forest-deep\);[\s\S]*color: var\(--lime\) !important/)
+assert.match(css1722, /\.landing-reason-card summary:hover \.landing-accordion-prompt/)
+assert.match(read('components/SiteHeader.tsx'), /className="brand-mark"/)
+assert.match(read('components/FullscreenToggle.tsx'), /className="fullscreen-toggle"/)
+
+console.log('RPG Your Way 1.7.22 header hover and dimensional utility-control checks passed.')
