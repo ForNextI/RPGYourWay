@@ -126,7 +126,7 @@ export function LandingCampaignPanel() {
       <div className="landing-campaign-actions">
         {balance ? <p className="landing-campaign-balance"><span>Balance</span><strong>{balance}</strong></p> : <span />}
         <button type="button" className="button button-primary landing-return-button" onClick={returnToPlaying}>
-          Return to Playing
+          Return to Adventure
         </button>
       </div>
     </div>

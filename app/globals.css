@@ -1880,3 +1880,131 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 @media (prefers-reduced-motion: reduce) {
   :fullscreen .play-page-frame > .site-header { transition: none; }
 }
+
+
+/* RPG Your Way 1.7.17 landing console + repository cleanup */
+
+/* Give the two opening notices distinct jobs instead of beige twins. */
+.landing-ai-warning .landing-notice-card {
+  overflow: hidden;
+  border-color: var(--forest-deep);
+  background: color-mix(in srgb, var(--forest) 11%, var(--cream-bright));
+}
+.landing-ai-warning .landing-notice-card h1 {
+  margin: -.8rem -1rem .55rem;
+  padding: .48rem .75rem;
+  background: var(--forest-deep);
+  color: var(--cream-bright);
+  letter-spacing: .025em;
+}
+.landing-ai-warning .landing-notice-card p {
+  color: var(--forest-ink);
+}
+
+.landing-open-now .landing-notice-card {
+  border-color: color-mix(in srgb, var(--forest-deep) 72%, var(--cream-deep));
+  background: color-mix(in srgb, var(--forest) 23%, var(--cream-bright));
+}
+.landing-open-now .landing-notice-card h2,
+.landing-open-now .landing-notice-card strong {
+  color: var(--forest-deep);
+}
+
+/* Old landing rules must not be allowed to hide either half of this pair. */
+.landing-reasons-grid > .hero-unique,
+.landing-reasons-grid > .hero-audience {
+  position: static !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+.landing-reasons-grid > .hero-unique > *,
+.landing-reasons-grid > .hero-audience > * {
+  width: 100%;
+  height: 100%;
+}
+
+/* The campaign entry area is one framed control station. */
+.landing-player-stack {
+  gap: .5rem;
+  border: 2px solid var(--forest-deep);
+  border-radius: 26px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--forest) 24%, var(--cream-deep)),
+      color-mix(in srgb, var(--forest) 13%, var(--cream-bright))
+    );
+  padding: .55rem;
+  box-shadow:
+    inset 0 0 0 3px rgb(255 248 235 / .48),
+    0 12px 28px rgb(40 56 43 / .15);
+}
+
+.landing-new-player.button {
+  min-height: 52px;
+  border: 2px solid var(--forest-deep);
+  border-radius: 17px;
+  background: var(--cream-bright);
+  color: var(--forest-deep);
+  box-shadow:
+    inset 0 -3px 0 color-mix(in srgb, var(--forest) 16%, transparent),
+    0 3px 0 color-mix(in srgb, var(--forest-deep) 80%, black);
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: .015em;
+}
+
+.landing-new-player.button:hover,
+.landing-new-player.button:focus-visible {
+  background: color-mix(in srgb, var(--forest) 10%, var(--cream-bright));
+}
+
+.landing-campaign-panel {
+  border: 2px solid var(--forest-deep);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--cream-bright) 94%, var(--forest) 6%);
+  box-shadow:
+    inset 0 0 0 3px rgb(255 255 255 / .34),
+    inset 0 0 28px rgb(65 83 60 / .07);
+}
+
+.landing-campaign-snippet {
+  border: 1px solid color-mix(in srgb, var(--forest) 48%, var(--cream-deep));
+  border-radius: 14px;
+  background: rgb(255 249 237 / .58);
+  padding: .72rem .8rem;
+}
+
+.landing-return-button.button {
+  min-height: 48px;
+  border: 2px solid var(--forest-deep);
+  background: var(--forest-deep);
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 -3px 0 rgb(0 0 0 / .16),
+    0 3px 0 color-mix(in srgb, var(--forest-deep) 78%, black);
+  font-weight: 900;
+  letter-spacing: .01em;
+}
+
+.landing-return-button.button:hover,
+.landing-return-button.button:focus-visible {
+  background: color-mix(in srgb, var(--forest-deep) 86%, var(--cream-deep));
+}
+
+@media (max-width: 639px) {
+  .landing-player-stack {
+    border-radius: 22px;
+    padding: .45rem;
+  }
+  .landing-new-player.button,
+  .landing-return-button.button {
+    width: 100%;
+  }
+}

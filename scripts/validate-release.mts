@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.16')
-assert.equal(pkg.rpgywVersion, '1.7.16')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.16'/)
+assert.equal(pkg.version, '1.7.17')
+assert.equal(pkg.rpgywVersion, '1.7.17')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.17'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -75,7 +75,7 @@ assert.match(footer, /fill="#FF5E5B"/)
 assert.match(footer, /kofi-cup/)
 
 const home = read('app/page.tsx')
-assert.match(home, /href="\/start">New Player<\/Link>/)
+assert.match(home, /href="\/start">Start New Campaign<\/Link>/)
 assert.match(home, /<LandingCampaignPanel \/>/)
 assert.match(read('app/start/page.tsx'), /<RpgywStartEntry \/>/)
 
@@ -307,10 +307,10 @@ assert.match(landing1714, /Tabletop gaming is best in person\. No question\./)
 assert.match(landing1714, /Why I created RPG Your Way\./)
 assert.match(landing1714, /Who benefits from this site\?/)
 assert.match(landing1714, /<LandingCampaignPanel \/>/)
-assert.match(landing1714, />New Player<\/Link>/)
+assert.match(landing1714, />Start New Campaign<\/Link>/)
 
 const campaignPanel1714 = read('components/LandingCampaignPanel.tsx')
-assert.match(campaignPanel1714, /Return to Playing/)
+assert.match(campaignPanel1714, /Return to Adventure/)
 assert.match(campaignPanel1714, /available_display/)
 assert.match(campaignPanel1714, /loadAdventureState/)
 assert.match(campaignPanel1714, /CURRENT_ADVENTURE_KEY/)
@@ -325,4 +325,23 @@ assert.match(css1714, /\.fullscreen-nav-gap\s*\{\s*margin-left:\s*\.25rem/)
 console.log('RPG Your Way 1.7.16 landing-validator hotfix checks passed.')
 
 const landingCampaignCurrent = read('components/LandingCampaignPanel.tsx')
-assert.match(landingCampaignCurrent, /Return to Playing/)
+assert.match(landingCampaignCurrent, /Return to Adventure/)
+
+
+const landing1717 = read('app/page.tsx')
+assert.match(landing1717, />Start New Campaign<\/Link>/)
+assert.match(landing1717, /<WhyCreatedAccordion \/>/)
+assert.match(landing1717, /<AudienceAccordion \/>/)
+
+const campaign1717 = read('components/LandingCampaignPanel.tsx')
+assert.match(campaign1717, /Return to Adventure/)
+assert.doesNotMatch(campaign1717, /Return to Playing/)
+
+const css1717 = read('app/globals.css')
+assert.match(css1717, /RPG Your Way 1\.7\.17 landing console \+ repository cleanup/)
+assert.match(css1717, /\.landing-ai-warning \.landing-notice-card h1/)
+assert.match(css1717, /\.landing-player-stack\s*\{/)
+assert.match(css1717, /\.landing-new-player\.button/)
+assert.match(css1717, /\.landing-return-button\.button/)
+
+console.log('RPG Your Way 1.7.17 landing console and repository cleanup checks passed.')
