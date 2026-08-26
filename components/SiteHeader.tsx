@@ -29,7 +29,10 @@ export function SiteHeader() {
             <span className="nav-item-group" key={link.href}>
               {index > 0 ? <JeweledDivider /> : null}
               {link.external ? (
-                <a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>
+                <a href={link.href} target="_blank" rel="noreferrer" aria-label={`${link.label} (opens in a new tab)`}>
+                  <span>{link.label}</span>
+                  <span className="nav-external-arrow" aria-hidden="true">↗</span>
+                </a>
               ) : (
                 <Link href={link.href}>{link.label}</Link>
               )}

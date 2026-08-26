@@ -3929,3 +3929,111 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
    above authentication choices, and account creation asks for one email
    address plus password confirmation. */
 .auth-panel-compact .auth-grid { margin-top: 0; }
+
+
+/* RPG Your Way 1.7.27 account dimensional pass + quiet-at-rest accents.
+   Account now uses the same brass-rimmed raised planes as the landing page.
+   Lime remains an interaction/status color rather than a permanent trim color. */
+
+/* Account page: one coherent stack of raised brass-edged plaques. */
+.account-main .account-intro,
+.account-main .account-access-details,
+.account-main .usage-balance-card,
+.account-main .play-pack-section,
+.account-main .usage-activity {
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-pale) 90%, white),
+      var(--landing-pale)
+    ) !important;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 68%, white),
+    inset 0 1px 0 rgb(255 255 255 / .76),
+    inset 0 -2px 0 rgb(111 82 42 / .08),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 9px 18px rgb(43 47 38 / .11) !important;
+}
+
+/* Authentication choices and signed-in state sit one physical level above
+   their parent plaque, matching the landing page's smaller raised controls. */
+.account-main .auth-card,
+.account-main .account-signed-in,
+.account-main .play-pack-card {
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-mint-19) 90%, white),
+      var(--landing-mint-19)
+    ) !important;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 62%, white),
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    inset 0 -1px 0 rgb(68 84 63 / .08),
+    0 2px 0 var(--rpgyw-brass-shadow),
+    0 6px 10px rgb(34 45 34 / .09) !important;
+}
+
+.account-main .account-access-details > summary {
+  border-bottom: 0;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--cream-bright) 94%, white),
+      var(--landing-pale)
+    );
+}
+.account-main .account-access-details[open] > summary {
+  border-bottom: 2px solid var(--rpgyw-brass-edge);
+}
+.account-main .account-access-body {
+  border-top: 0;
+  background: color-mix(in srgb, var(--landing-screen) 40%, var(--cream-bright));
+}
+
+/* Smaller account readouts are inset/raised with brass rather than generic
+   gray rules, so the page keeps the same physical vocabulary throughout. */
+.account-main .usage-disclosure-copy,
+.account-main .usage-activity-row,
+.account-main .usage-balance-stats > div {
+  border: 1px solid var(--rpgyw-brass-edge);
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--landing-screen) 38%, var(--cream-bright));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .66),
+    0 1px 0 color-mix(in srgb, var(--rpgyw-brass-shadow) 54%, transparent);
+}
+.account-main .usage-activity-list {
+  gap: .55rem;
+  border-top: 0;
+}
+.account-main .usage-activity-row {
+  padding: .72rem .8rem;
+}
+
+/* The middle feature card is static content. Its eyebrow should not advertise
+   an interaction by glowing lime while idle. */
+.feature-card:nth-child(2) .feature-eyebrow {
+  color: var(--cream-bright);
+}
+
+/* Read leaves RPG Your Way in a new tab. Keep the cue tiny and literal. */
+.site-header .main-nav a .nav-external-arrow {
+  display: inline-block;
+  margin-left: .18rem;
+  font-size: .8em;
+  line-height: 1;
+  transform: translateY(-.08em);
+}
+
+@media (max-width: 639px) {
+  .account-main .account-intro,
+  .account-main .account-access-details,
+  .account-main .usage-balance-card,
+  .account-main .play-pack-section,
+  .account-main .usage-activity {
+    border-radius: 16px;
+  }
+}

@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.26')
-assert.equal(pkg.rpgywVersion, '1.7.26')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.26'/)
+assert.equal(pkg.version, '1.7.27')
+assert.equal(pkg.rpgywVersion, '1.7.27')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.27'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -514,3 +514,18 @@ assert.match(css1726, /RPG Your Way 1\.7\.26 account-entry cleanup/)
 assert.match(css1726, /\.auth-dialog-footer \{ display: block; margin: 0 0 \.8rem; \}/)
 
 console.log('RPG Your Way 1.7.26 account-entry cleanup checks passed.')
+
+
+const css1727 = read('app/globals.css')
+const header1727 = read('components/SiteHeader.tsx')
+assert.match(css1727, /RPG Your Way 1\.7\.27 account dimensional pass \+ quiet-at-rest accents/)
+assert.match(css1727, /\.account-main \.account-intro,[\s\S]*border: 2px solid var\(--rpgyw-brass-edge\) !important/)
+assert.match(css1727, /\.account-main \.auth-card,[\s\S]*var\(--landing-mint-19\)/)
+assert.match(css1727, /\.feature-card:nth-child\(2\) \.feature-eyebrow \{\s*color: var\(--cream-bright\);/)
+assert.match(css1727, /\.kofi-support-button \{[\s\S]*color: var\(--lime\);/)
+assert.match(css1727, /\.kofi-support-button:hover \{[\s\S]*color: var\(--lime\);/)
+assert.match(header1727, /className="nav-external-arrow"/)
+assert.match(header1727, />↗<\/span>/)
+assert.match(header1727, /opens in a new tab/)
+
+console.log('RPG Your Way 1.7.27 account styling, quiet accents, and Read external-link cue checks passed.')
