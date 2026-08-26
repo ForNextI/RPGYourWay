@@ -2714,3 +2714,202 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
     padding-inline: .45rem;
   }
 }
+
+
+/* RPG Your Way 1.7.21 dimensional controls + human-language pass
+   Down with ambiguous flat buttons. Clean geometry; obvious depth. */
+
+:root {
+  --rpgyw-control-hover: var(--lime);
+  --rpgyw-brass-edge: var(--landing-brass-mid);
+  --rpgyw-brass-highlight: var(--landing-brass-light);
+  --rpgyw-brass-shadow: var(--landing-brass-dark);
+}
+
+/* Universal pressable behavior. This is intentionally shallow enough to
+   work across Play, Script, Account, accordions, dialogs, and ordinary links
+   already styled as buttons. Page-specific colors remain in charge. */
+body :where(button, .button, .fake-button, summary, [role="button"]) {
+  transition:
+    color 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 120ms ease,
+    transform 90ms ease;
+}
+
+body :where(button, .button, .fake-button, summary, [role="button"]) {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .36),
+    0 2px 0 color-mix(in srgb, var(--forest-deep) 52%, transparent),
+    0 5px 10px rgb(38 47 37 / .09);
+}
+
+body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabled):hover,
+body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabled):focus-visible {
+  color: var(--rpgyw-control-hover) !important;
+}
+
+body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabled):active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 2px 4px rgb(29 40 31 / .16),
+    0 1px 0 color-mix(in srgb, var(--forest-deep) 55%, transparent);
+}
+
+/* The header stays thin and flat. Navigation keeps its existing behavior.
+   The only missing member of that family was the RPG Your Way home link. */
+.site-header :where(button, a) {
+  box-shadow: none !important;
+  transform: none !important;
+}
+.site-header .brand {
+  border-radius: 10px;
+  transition: color 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
+}
+.site-header .brand:hover,
+.site-header .brand:focus-visible {
+  background: rgb(255 255 255 / .36);
+  color: var(--forest-deep);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--forest) 42%, var(--cream)) !important;
+}
+
+/* Notice bodies sit in the middle of the pale panel rather than clinging
+   to the title plaque. */
+.landing-notice-body {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  gap: .28rem;
+  text-align: center;
+}
+.landing-notice-body p {
+  margin: 0 auto !important;
+}
+
+/* A true brass rim on all four sides. The darker lower shadow is separate,
+   so the trim reads as trim rather than as one thick line underneath. */
+.landing-notice-grid .landing-notice-card {
+  border: 2px solid var(--rpgyw-brass-edge);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 68%, white),
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 9px 18px rgb(45 48 39 / .13);
+}
+
+.landing-notice-grid .landing-notice-card h1,
+.landing-notice-grid .landing-notice-card h2,
+.landing-thesis-strip p {
+  border: 2px solid var(--rpgyw-brass-edge);
+  box-shadow:
+    inset 0 0 0 1px var(--rpgyw-brass-highlight),
+    inset 0 1px 0 rgb(255 255 255 / .16),
+    inset 0 -2px 0 rgb(0 0 0 / .12),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 7px 13px rgb(35 43 34 / .14);
+}
+
+/* The two big accordions are the pale siblings of the forest controls.
+   Same brass rim, same physical depth, different face color. */
+.landing-reason-card summary,
+.landing-reason-card button {
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 72%, white),
+    inset 0 1px 0 rgb(255 255 255 / .82),
+    inset 0 -2px 0 rgb(112 84 43 / .08),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 8px 14px rgb(43 47 37 / .12) !important;
+}
+.landing-reason-card summary:hover,
+.landing-reason-card summary:focus-visible {
+  color: var(--rpgyw-control-hover) !important;
+}
+
+/* The + control is a real miniature button now, not a flat symbol. */
+.landing-reason-card .accordion-plus,
+.audience-item .accordion-plus {
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  box-shadow:
+    inset 0 0 0 1px var(--rpgyw-brass-highlight),
+    inset 0 1px 0 rgb(255 255 255 / .58),
+    0 2px 0 var(--rpgyw-brass-shadow),
+    0 5px 9px rgb(42 48 37 / .13);
+}
+.landing-reason-card summary:hover .accordion-plus,
+.landing-reason-card summary:focus-visible .accordion-plus,
+.audience-item > summary:hover .accordion-plus,
+.audience-item > summary:focus-visible .accordion-plus {
+  color: var(--rpgyw-control-hover) !important;
+}
+
+/* Nested accordion rows are also pressable. Keep their treatment quieter
+   than the main pair so the hierarchy stays readable. */
+.audience-item > summary {
+  border: 1px solid var(--rpgyw-brass-edge);
+  border-radius: 11px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .66),
+    0 2px 0 color-mix(in srgb, var(--rpgyw-brass-shadow) 72%, transparent),
+    0 5px 9px rgb(43 47 37 / .08);
+}
+
+/* Console: same all-around brass logic for every raised plane. */
+.landing-player-stack,
+.landing-new-player.button,
+.landing-campaign-summary-card,
+.landing-balance-control,
+.landing-return-button.button,
+.landing-return-logo,
+.feature-card {
+  border: 2px solid var(--rpgyw-brass-edge);
+}
+
+.landing-new-player.button,
+.landing-campaign-summary-card,
+.landing-balance-control,
+.landing-return-button.button {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 72%, white),
+    inset 0 1px 0 rgb(255 255 255 / .36),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 7px 12px rgb(29 38 29 / .14);
+}
+
+.landing-campaign-snippet {
+  border: 2px solid var(--rpgyw-brass-shadow);
+  box-shadow:
+    inset 0 6px 10px rgb(82 60 28 / .22),
+    inset 0 0 0 2px color-mix(in srgb, var(--rpgyw-brass-highlight) 50%, transparent),
+    0 1px 0 var(--rpgyw-brass-highlight);
+}
+
+/* Static content cards stand off the map, but less aggressively than buttons. */
+.feature-card,
+.landing-return-logo {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 64%, white),
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 9px 16px rgb(43 47 38 / .11);
+}
+
+/* Preserve readable hover text for the olive hero controls. */
+.landing-new-player.button:not(:disabled):hover,
+.landing-new-player.button:not(:disabled):focus-visible,
+.landing-return-button.button:not(:disabled):hover,
+.landing-return-button.button:not(:disabled):focus-visible {
+  color: var(--rpgyw-control-hover) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body :where(button, .button, .fake-button, summary, [role="button"]) {
+    transition: color 140ms ease, background-color 140ms ease, border-color 140ms ease;
+  }
+  body :where(button, .button, .fake-button, summary, [role="button"]):active {
+    transform: none;
+  }
+}

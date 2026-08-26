@@ -7,17 +7,17 @@ const features = [
   {
     eyebrow: 'Your campaign',
     title: 'Play when you have time',
-    copy: 'Run an ongoing tabletop campaign without waiting for a whole group to be free at the same moment.',
+    copy: 'Play a long-running campaign without waiting for everybody to be free at the same time.',
   },
   {
     eyebrow: 'Your party',
     title: 'Bring the characters you want',
-    copy: 'Play one character or manage a full party. The commercial build will inherit the campaign tools already proven in WardensPC.',
+    copy: 'Play one character or run a party of up to six. Bring the characters you want and make the campaign yours.',
   },
   {
     eyebrow: 'Your pace',
     title: 'Type, speak, read, or listen',
-    copy: 'The interface is being built mobile-first, with text as the primary path and voice features available when they help.',
+    copy: 'Type or talk to your Game Master. Read the reply or have it read aloud. Play whichever way is easiest for you.',
   },
 ]
 
@@ -173,14 +173,18 @@ export default function HomePage() {
           <div className="shell landing-notice-grid">
             <div className="landing-notice-card landing-ai-warning" aria-labelledby="ai-warning-heading">
               <h1 id="ai-warning-heading">~~ Warning: AI GM ahead ~~</h1>
-              <p>RPG Your Way uses AI to run long-term, persistent adventures.</p>
-              <p>Everyone gets to play. If that’s a deal breaker, this site is probably not for you.</p>
+              <div className="landing-notice-body">
+                <p>RPG Your Way uses AI to run long-term, persistent adventures.</p>
+                <p>Everyone gets to play. If that’s a deal breaker, this site is probably not for you.</p>
+              </div>
             </div>
 
             <div className="landing-notice-card landing-open-now" aria-labelledby="open-now-heading">
               <h2 id="open-now-heading">Open Now</h2>
-              <p><strong>Play</strong> is open for players bringing existing games over from WardensPC by export. <strong>Script</strong> is open.</p>
-              <p><strong>Still to come:</strong> onboarding for new players and native multiplayer. VTT integration will follow later.</p>
+              <div className="landing-notice-body">
+                <p><strong>Play</strong> is open for WardensPC campaigns brought over by export. <strong>Script</strong> is open too.</p>
+                <p><strong>Still to come:</strong> onboarding for new players and native multiplayer. VTT comes later.</p>
+              </div>
             </div>
           </div>
         </section>

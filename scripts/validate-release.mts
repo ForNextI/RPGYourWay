@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.20')
-assert.equal(pkg.rpgywVersion, '1.7.20')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.20'/)
+assert.equal(pkg.version, '1.7.21')
+assert.equal(pkg.rpgywVersion, '1.7.21')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.21'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -414,3 +414,27 @@ assert.match(campaign1720, /const limit = 360/)
 assert.match(campaign1720, /clean\.slice\(-limit\)/)
 
 console.log('RPG Your Way 1.7.20 validator tail-limit hotfix checks passed.')
+
+
+const landing1721 = read('app/page.tsx')
+assert.match(landing1721, /className="landing-notice-body"/)
+assert.match(landing1721, /WardensPC campaigns brought over by export/)
+assert.match(landing1721, /Script<\/strong> is open too\./)
+assert.match(landing1721, /VTT comes later\./)
+if (landing1721.includes('const features')) {
+  assert.match(landing1721, /Play a long-running campaign without waiting for everybody to be free at the same time\.|Run an ongoing tabletop campaign without waiting for a whole group to be free at the same moment\./)
+  assert.match(landing1721, /Play one character or run a party of up to six\.|Play one character or manage a full party\./)
+  assert.match(landing1721, /Type or talk to your Game Master\.|The interface is being built mobile-first/)
+}
+
+const css1721 = read('app/globals.css')
+assert.match(css1721, /RPG Your Way 1\.7\.21 dimensional controls \+ human-language pass/)
+assert.match(css1721, /--rpgyw-control-hover: var\(--lime\)/)
+assert.match(css1721, /\.site-header \.brand:hover/)
+assert.match(css1721, /\.landing-notice-body/)
+assert.match(css1721, /\.landing-reason-card \.accordion-plus/)
+assert.match(css1721, /border: 2px solid var\(--rpgyw-brass-edge\)/)
+assert.match(css1721, /color: var\(--rpgyw-control-hover\) !important/)
+assert.match(css1721, /body :where\(button, \.button, \.fake-button, summary, \[role="button"\]\)/)
+
+console.log('RPG Your Way 1.7.21 dimensional controls and language checks passed.')
