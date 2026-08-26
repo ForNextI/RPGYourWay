@@ -2186,12 +2186,14 @@ export function AigmGameplayShell() {
           <div className="aigm-gameplay-topbar border-b border-border bg-secondary/45 px-4 py-3 sm:px-5">
             <div className="aigm-gameplay-summary min-w-0">
               <span className="aigm-gameplay-summary-icon aigm-topbar-nameplate flex shrink-0 items-center justify-center bg-primary text-primary-foreground"><Sparkles className="size-5" aria-hidden="true" /></span>
-              <p className="aigm-gameplay-title min-w-0 break-words font-display text-lg font-bold leading-tight">{partyState.adventure_name}</p>
+              <div className="aigm-gameplay-heading-copy min-w-0">
+                <p className="aigm-gameplay-title min-w-0 break-words font-display text-lg font-bold leading-tight">{partyState.adventure_name}</p>
+                <p className="aigm-gameplay-meta min-w-0 text-xs text-muted-foreground"><span className="aigm-gameplay-gm">{partyState.game_master_name || 'Game Master'}</span><span className="aigm-gameplay-meta-separator"> · </span><span className="aigm-gameplay-scene">{gameplay.scene || 'Adventure ready'}</span><span className="aigm-gameplay-meta-separator"> · </span><span className="aigm-gameplay-turns">{gameplay.turn_count} player turn{gameplay.turn_count === 1 ? '' : 's'} saved</span></p>
+              </div>
               <div className="aigm-gameplay-title-controls flex shrink-0 items-center gap-1.5">
                 {voiceAvailable ? <button type="button" onClick={() => setVoiceGuidedDialogOpen(true)} className={`aigm-topbar-nameplate inline-flex items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${voiceGuidedPlay.enabled ? 'aigm-topbar-nameplate--active' : ''}`} aria-label="Open voice-guided play settings for blind players, screen-reader users, and those assisting them" title="Voice-guided play settings"><Headphones className="size-4" aria-hidden="true" /></button> : null}
                 <FullscreenToggle className="aigm-topbar-nameplate inline-flex items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
               </div>
-              <p className="aigm-gameplay-meta min-w-0 text-xs text-muted-foreground"><span className="aigm-gameplay-gm">{partyState.game_master_name || 'Game Master'}</span><span className="aigm-gameplay-meta-separator"> · </span><span className="aigm-gameplay-scene">{gameplay.scene || 'Adventure ready'}</span><span className="aigm-gameplay-meta-separator"> · </span><span className="aigm-gameplay-turns">{gameplay.turn_count} player turn{gameplay.turn_count === 1 ? '' : 's'} saved</span></p>
             </div>
           </div>
 
@@ -2325,14 +2327,13 @@ export function AigmGameplayShell() {
               />
             )) : <div className="rounded-2xl border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground">No ready characters yet.</div>}
             <div className="flex items-start gap-2 rounded-2xl border border-primary/25 bg-primary/5 px-3 py-3 text-xs leading-relaxed text-muted-foreground"><HeartPulse className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /><p>Your AIGM is built for long-running campaigns and can remember earlier gameplay, but not every fact stays in immediate attention all the time. If it overlooks something it already knows, remind it or ask it to check the character or campaign record and keep playing.</p></div>
-          </div>
-
-          <div className="aigm-character-footer mt-2">
-            <div className="aigm-party-capacity" aria-label={`Current party: ${readyCharacters.length}. Max party size: 6.`}>
-              <span><strong>Current party:</strong> {readyCharacters.length}</span>
-              <span><strong>Max party size:</strong> 6</span>
+            <div className="aigm-character-footer">
+              <div className="aigm-party-capacity" aria-label={`Current party: ${readyCharacters.length}. Max party size: 6.`}>
+                <span><strong>Current party:</strong> {readyCharacters.length}</span>
+                <span><strong>Max party size:</strong> 6</span>
+              </div>
+              <button type="button" onClick={addAnotherCharacter} disabled={readyCharacters.length >= 6 || sending} className="aigm-add-character inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40" title={readyCharacters.length >= 6 ? 'This party already has the maximum of six characters.' : 'Character additions return with the rebuilt Start experience.'}><Plus className="size-4" aria-hidden="true" />Add another character</button>
             </div>
-            <button type="button" onClick={addAnotherCharacter} disabled={readyCharacters.length >= 6 || sending} className="aigm-add-character inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40" title={readyCharacters.length >= 6 ? 'This party already has the maximum of six characters.' : 'Character additions return with the rebuilt Start experience.'}><Plus className="size-4" aria-hidden="true" />Add another character</button>
           </div>
 
         </aside>

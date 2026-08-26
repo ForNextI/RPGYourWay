@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.31')
-assert.equal(pkg.rpgywVersion, '1.7.31')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.31'/)
+assert.equal(pkg.version, '1.7.32')
+assert.equal(pkg.rpgywVersion, '1.7.32')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.32'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -570,3 +570,13 @@ assert.doesNotMatch(gameplayShell, /Accept what fate sends your way/)
 assert.doesNotMatch(gameplayShell, /HP, AC, conditions, currency, and tracked resources update/)
 assert.match(css, /RPG Your Way 1\.7\.31/)
 console.log('RPG Your Way 1.7.31 compact Play header and rail-space checks passed.')
+
+
+assert.match(gameplayShell, /aigm-gameplay-heading-copy/)
+assert.match(gameplayShell, /keep playing\.<\/p><\/div>\s*<div className="aigm-character-footer">/)
+assert.match(css, /RPG Your Way 1\.7\.32/)
+assert.match(css, /\.aigm-dice-heading,[\s\S]*height: fit-content !important/)
+assert.match(css, /\.aigm-dice-mode-toggle,[\s\S]*margin-top: 0 !important/)
+assert.match(css, /\.aigm-gameplay-heading-copy \{[\s\S]*flex-direction: column/)
+assert.match(css, /\.aigm-gameplay-meta \{[\s\S]*white-space: normal/)
+console.log('RPG Your Way 1.7.32 Play rail-heading, campaign-header, and character-list flow checks passed.')

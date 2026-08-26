@@ -4398,3 +4398,83 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     font-size: .64rem !important;
   }
 }
+
+/* RPG Your Way 1.7.32: remove dead rail-heading space, let the campaign
+   heading size itself to its actual two-line content, and make character
+   capacity/add controls scroll naturally after the cards instead of floating. */
+.aigm-dice-heading,
+.aigm-characters-heading {
+  flex: 0 0 auto !important;
+  min-height: 0 !important;
+  height: fit-content !important;
+  margin: 0 !important;
+  padding-top: .24rem !important;
+  padding-bottom: .24rem !important;
+}
+.aigm-dice-heading h2,
+.aigm-characters-heading h2 {
+  margin: 0 !important;
+  line-height: 1.02 !important;
+}
+.aigm-characters-heading {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.aigm-dice-mode-toggle,
+.aigm-character-list {
+  margin-top: 0 !important;
+}
+
+.aigm-gameplay-summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-rows: none;
+  column-gap: .55rem;
+  row-gap: 0;
+  align-items: end;
+  align-content: start;
+  margin: 0 !important;
+}
+.aigm-gameplay-heading-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-self: start;
+}
+.aigm-gameplay-summary-icon,
+.aigm-gameplay-title,
+.aigm-gameplay-title-controls,
+.aigm-gameplay-meta {
+  grid-column: auto;
+  grid-row: auto;
+}
+.aigm-gameplay-summary-icon,
+.aigm-gameplay-title-controls {
+  align-self: end;
+}
+.aigm-gameplay-title {
+  margin: 0 !important;
+  align-self: auto;
+}
+.aigm-gameplay-meta {
+  margin: 0 !important;
+  align-self: auto;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.08 !important;
+}
+.aigm-character-footer {
+  flex: none;
+  margin: 0;
+  padding-bottom: .1rem;
+}
+
+@media (max-width: 639px) {
+  .aigm-gameplay-summary {
+    column-gap: .4rem;
+  }
+}
