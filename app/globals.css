@@ -3017,3 +3017,610 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     padding-right: .18rem;
   }
 }
+
+
+/* RPG Your Way 1.7.23 visual unification
+   Bring Play, Script, and Account into the dimensional landing-page language:
+   raised pale/mint plaques, inset parchment work areas, shallow brass rims,
+   and forest + lime interaction states. Start is intentionally untouched. */
+
+/* Shared raised and inset surfaces used by the working pages. */
+.shape-main > .shape-shell,
+.account-main > .account-shell {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.shape-intro,
+.shape-workbench,
+.shape-gate,
+.account-access-details,
+.usage-balance-card,
+.play-pack-section,
+.usage-activity {
+  border: 2px solid var(--rpgyw-brass-edge);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-pale) 90%, white),
+      var(--landing-pale)
+    );
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 68%, white),
+    inset 0 1px 0 rgb(255 255 255 / .76),
+    inset 0 -2px 0 rgb(111 82 42 / .08),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 9px 18px rgb(43 47 38 / .11);
+}
+
+.shape-main .kicker,
+.account-main .kicker {
+  color: var(--landing-olive-19-deep);
+}
+
+/* Script: the intro and workbench become a stack of distinct plaques rather
+   than one generic white application card. */
+.shape-intro {
+  border-radius: 22px;
+}
+.shape-workbench,
+.shape-gate {
+  border-radius: 20px;
+}
+
+.shape-steps > div,
+.shape-project-options > label,
+.shape-description-card,
+.shape-project-picker,
+.shape-progress-grid > div,
+.shape-quote,
+.shape-public-preview-note,
+.shape-live-progress {
+  border: 2px solid var(--rpgyw-brass-edge);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-mint-19) 88%, white),
+      var(--landing-mint-19)
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    inset 0 -2px 0 rgb(68 84 63 / .10),
+    0 2px 0 var(--rpgyw-brass-shadow),
+    0 6px 10px rgb(34 45 34 / .09);
+}
+
+.shape-steps > div {
+  border-radius: 15px;
+}
+.shape-steps strong {
+  border: 1px solid var(--rpgyw-brass-highlight);
+  background: var(--forest-deep);
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .14),
+    0 2px 0 var(--rpgyw-brass-shadow);
+}
+
+.shape-pricing-details,
+.shape-source-help,
+.account-access-details,
+.usage-note-details {
+  border-color: var(--rpgyw-brass-edge);
+}
+
+.shape-pricing-details > summary,
+.shape-source-help > summary,
+.account-access-details > summary {
+  border: 0;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--cream-bright) 94%, white),
+      var(--landing-pale)
+    );
+  color: var(--forest-deep);
+}
+.shape-pricing-details > summary:hover,
+.shape-pricing-details > summary:focus-visible,
+.shape-source-help > summary:hover,
+.shape-source-help > summary:focus-visible,
+.account-access-details > summary:hover,
+.account-access-details > summary:focus-visible {
+  background: var(--forest-deep);
+  color: var(--lime) !important;
+}
+.shape-pricing-details > summary:hover *,
+.shape-pricing-details > summary:focus-visible *,
+.shape-source-help > summary:hover *,
+.shape-source-help > summary:focus-visible *,
+.account-access-details > summary:hover *,
+.account-access-details > summary:focus-visible * {
+  color: var(--lime) !important;
+}
+
+.shape-field input,
+.shape-field textarea,
+.shape-field select,
+.shape-file-field input,
+.auth-form input,
+.shape-transcript-field textarea {
+  border: 2px solid var(--landing-brass-dark);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-screen) 92%, white),
+      var(--landing-screen)
+    );
+  box-shadow:
+    inset 0 4px 8px rgb(82 60 28 / .14),
+    inset 0 0 0 2px rgb(255 255 255 / .22),
+    0 1px 0 var(--rpgyw-brass-highlight);
+}
+
+.shape-file-field {
+  border: 2px dashed var(--rpgyw-brass-edge);
+  background: color-mix(in srgb, var(--landing-mint-19) 48%, var(--cream-bright));
+}
+
+.shape-project-options > label,
+.shape-description-card {
+  transition: color 140ms ease, background 140ms ease, border-color 140ms ease, transform 90ms ease;
+}
+.shape-project-options > label:hover,
+.shape-project-options > label:focus-within,
+.shape-description-card:hover,
+.shape-description-card:focus-within {
+  border-color: var(--rpgyw-brass-highlight);
+  background: var(--forest-deep);
+  color: var(--lime);
+}
+.shape-project-options > label:hover :where(strong, span),
+.shape-project-options > label:focus-within :where(strong, span),
+.shape-description-card:hover :where(strong, span),
+.shape-description-card:focus-within :where(strong, span) {
+  color: var(--lime) !important;
+}
+.shape-project-options > label.selected,
+.shape-description-card.selected {
+  border-color: var(--rpgyw-brass-highlight);
+  background: var(--landing-mint-19-deep);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--forest) 26%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / .62),
+    0 2px 0 var(--rpgyw-brass-shadow);
+}
+
+/* Working-page buttons inherit the landing-page depth. Light controls flip
+   to forest with lime text on hover; primary controls do the same. */
+.shape-main .button,
+.account-main .button {
+  border: 2px solid var(--rpgyw-brass-edge);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 66%, white),
+    inset 0 1px 0 rgb(255 255 255 / .42),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 7px 12px rgb(29 38 29 / .12);
+}
+.shape-main .button-primary,
+.account-main .button-primary {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-olive-19) 88%, white),
+      var(--landing-olive-19)
+    );
+  color: var(--cream-bright);
+}
+.shape-main .button-secondary,
+.account-main .button-secondary {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--cream-bright) 92%, white),
+      var(--landing-pale)
+    );
+  color: var(--forest-deep);
+}
+.shape-main .button:not(:disabled):hover,
+.shape-main .button:not(:disabled):focus-visible,
+.account-main .button:not(:disabled):hover,
+.account-main .button:not(:disabled):focus-visible {
+  border-color: var(--rpgyw-brass-highlight);
+  background: var(--forest-deep);
+  color: var(--lime) !important;
+}
+.shape-main .button:not(:disabled):hover *,
+.shape-main .button:not(:disabled):focus-visible *,
+.account-main .button:not(:disabled):hover *,
+.account-main .button:not(:disabled):focus-visible * {
+  color: var(--lime) !important;
+}
+
+/* Account: major information blocks are raised plaques; individual pack cards
+   sit one level above them as mint/parchment tiles. */
+.account-main .page-title,
+.shape-main .page-title {
+  color: var(--forest-deep);
+}
+
+.usage-balance-card,
+.play-pack-section,
+.usage-activity,
+.account-access-details {
+  border-radius: 20px;
+}
+
+.play-pack-card {
+  border: 2px solid var(--rpgyw-brass-edge);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-mint-19) 88%, white),
+      var(--landing-mint-19)
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    inset 0 -2px 0 rgb(68 84 63 / .10),
+    0 2px 0 var(--rpgyw-brass-shadow),
+    0 6px 10px rgb(34 45 34 / .09);
+}
+
+.usage-balance-amount,
+.play-pack-price {
+  color: var(--forest-deep) !important;
+  text-shadow: 0 1px 0 rgb(255 255 255 / .55);
+}
+
+.usage-disclosure-copy,
+.usage-activity-row,
+.usage-low-balance {
+  border-color: var(--rpgyw-brass-edge);
+}
+
+.usage-note-details {
+  border: 2px solid var(--rpgyw-brass-edge);
+  background: var(--forest-deep);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 62%, white),
+    inset 0 1px 0 rgb(255 255 255 / .12),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 7px 12px rgb(29 38 29 / .13);
+}
+.usage-note-details > summary:hover,
+.usage-note-details > summary:focus-visible {
+  background: var(--forest-deep);
+  color: var(--lime) !important;
+}
+
+/* Play: three large modules now use the same brass-edged shallow depth as the
+   landing console, while the actual conversation reads as an inset screen. */
+.medieval-page--play {
+  --border: var(--landing-brass-mid);
+}
+
+.aigm-tools-panel,
+.aigm-gameplay-conversation,
+.aigm-characters-panel {
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-pale) 90%, white),
+      var(--landing-pale)
+    ) !important;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 66%, white),
+    inset 0 1px 0 rgb(255 255 255 / .74),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 9px 17px rgb(37 44 36 / .12);
+}
+
+.aigm-gameplay-topbar {
+  border-bottom: 2px solid var(--rpgyw-brass-edge) !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-mint-19) 88%, white),
+      var(--landing-mint-19)
+    ) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .62),
+    0 2px 0 color-mix(in srgb, var(--rpgyw-brass-shadow) 82%, transparent);
+}
+
+.aigm-conversation-scroll {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-screen) 92%, white),
+      var(--landing-screen)
+    );
+  box-shadow:
+    inset 0 7px 12px rgb(82 60 28 / .14),
+    inset 0 -5px 10px rgb(82 60 28 / .08);
+}
+
+.aigm-gameplay-composer {
+  border-top: 2px solid var(--rpgyw-brass-edge) !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-pale) 94%, white),
+      var(--landing-pale)
+    ) !important;
+}
+
+.aigm-composer-plaque,
+.aigm-dice-quantity-control {
+  border: 2px solid var(--landing-brass-dark) !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-screen) 92%, white),
+      var(--landing-screen)
+    ) !important;
+  box-shadow:
+    inset 0 4px 8px rgb(82 60 28 / .15),
+    inset 0 0 0 2px rgb(255 255 255 / .20),
+    0 1px 0 var(--rpgyw-brass-highlight);
+}
+
+.aigm-die-button,
+.aigm-initiative-toggle,
+.aigm-add-character,
+.aigm-session-help,
+.aigm-session-tools-panel > button,
+.aigm-session-tools-panel > a,
+.aigm-leave-roll {
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--cream-bright) 92%, white),
+      var(--landing-pale)
+    ) !important;
+  color: var(--forest-deep) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .78),
+    inset 0 -2px 0 rgb(111 82 42 / .07),
+    0 2px 0 var(--rpgyw-brass-shadow),
+    0 5px 9px rgb(39 46 36 / .09);
+}
+
+.aigm-dice-stepper {
+  background: color-mix(in srgb, var(--landing-mint-19) 54%, var(--cream-bright));
+  color: var(--forest-deep) !important;
+}
+
+.aigm-roll-result {
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-mint-19) 88%, white),
+      var(--landing-mint-19)
+    ) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .68),
+    0 2px 0 var(--rpgyw-brass-shadow);
+}
+
+.aigm-send-roll,
+.aigm-roll-initiative,
+.aigm-gameplay-send {
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-olive-19) 88%, white),
+      var(--landing-olive-19)
+    ) !important;
+  color: var(--cream-bright) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .28),
+    inset 0 -2px 0 color-mix(in srgb, var(--landing-olive-19-deep) 72%, black),
+    0 2px 0 var(--rpgyw-brass-shadow),
+    0 5px 9px rgb(29 38 29 / .12);
+}
+
+.aigm-character-card {
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-mint-19) 84%, white),
+      var(--landing-mint-19)
+    ) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .65),
+    0 2px 0 var(--rpgyw-brass-shadow),
+    0 5px 9px rgb(36 45 35 / .08);
+}
+.aigm-character-card--leader {
+  border-color: var(--rpgyw-brass-highlight) !important;
+  box-shadow:
+    inset 0 0 0 2px color-mix(in srgb, var(--lime) 32%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / .68),
+    0 2px 0 var(--rpgyw-brass-shadow),
+    0 0 0 2px color-mix(in srgb, var(--forest) 18%, transparent),
+    0 6px 10px rgb(36 45 35 / .09);
+}
+.aigm-leader-badge {
+  border: 1px solid var(--rpgyw-brass-highlight);
+  background: var(--forest-deep);
+  color: var(--lime);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .12);
+}
+
+/* The Play page's promise: pale controls turn forest, and their words/icons
+   turn lime. This intentionally applies to the entire gameplay workspace. */
+.medieval-page--play button:not(:disabled):hover,
+.medieval-page--play button:not(:disabled):focus-visible,
+.medieval-page--play .aigm-session-tools-panel > a:hover,
+.medieval-page--play .aigm-session-tools-panel > a:focus-visible {
+  border-color: var(--rpgyw-brass-highlight) !important;
+  background: var(--forest-deep) !important;
+  color: var(--lime) !important;
+}
+.medieval-page--play button:not(:disabled):hover :where(svg, span, strong, p),
+.medieval-page--play button:not(:disabled):focus-visible :where(svg, span, strong, p),
+.medieval-page--play .aigm-session-tools-panel > a:hover :where(svg, span, strong, p),
+.medieval-page--play .aigm-session-tools-panel > a:focus-visible :where(svg, span, strong, p) {
+  color: var(--lime) !important;
+}
+
+/* Static message plaques keep the same family without pretending to be controls. */
+.aigm-assistant-message .aigm-message-bubble {
+  border: 1px solid color-mix(in srgb, var(--rpgyw-brass-edge) 76%, var(--landing-mint-19));
+  background: color-mix(in srgb, var(--landing-mint-19) 82%, var(--cream-bright)) !important;
+  color: var(--forest-ink);
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--rpgyw-brass-shadow) 62%, transparent);
+}
+.aigm-user-message .aigm-message-bubble {
+  border: 1px solid var(--rpgyw-brass-highlight);
+  background: var(--forest-deep) !important;
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .12),
+    0 2px 0 var(--rpgyw-brass-shadow);
+}
+
+@media (max-width: 639px) {
+  .shape-main,
+  .account-main {
+    padding-top: 1rem;
+  }
+  .shape-intro,
+  .shape-workbench,
+  .shape-gate,
+  .account-access-details,
+  .usage-balance-card,
+  .play-pack-section,
+  .usage-activity {
+    border-radius: 16px;
+  }
+}
+
+/* Account intro is its own top plaque, matching Script's intro card. */
+.account-intro {
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 22px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-pale) 90%, white),
+      var(--landing-pale)
+    );
+  padding: clamp(1.5rem, 4vw, 2.6rem);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 68%, white),
+    inset 0 1px 0 rgb(255 255 255 / .76),
+    inset 0 -2px 0 rgb(111 82 42 / .08),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 9px 18px rgb(43 47 38 / .11);
+}
+.account-intro .page-lede { margin-bottom: 0; }
+.account-intro .auth-message { margin-top: 1rem; margin-bottom: 0; }
+
+/* Smaller plaques within the working pages. */
+.account-main .auth-card,
+.account-main .account-signed-in {
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-mint-19) 88%, white),
+      var(--landing-mint-19)
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    0 2px 0 var(--rpgyw-brass-shadow),
+    0 6px 10px rgb(34 45 34 / .08) !important;
+}
+.account-access-body {
+  border-top-color: var(--rpgyw-brass-edge);
+  background: color-mix(in srgb, var(--landing-screen) 42%, var(--cream-bright));
+}
+.usage-activity-list {
+  display: grid;
+  gap: .55rem;
+  border-top: 0;
+}
+.usage-activity-row {
+  border: 1px solid var(--rpgyw-brass-edge);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--landing-mint-19) 56%, var(--cream-bright));
+  padding: .75rem .85rem;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .58), 0 1px 0 var(--rpgyw-brass-shadow);
+}
+
+.aigm-dice-heading,
+.aigm-characters-heading {
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 14px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--forest-deep) 90%, white),
+      var(--forest-deep)
+    );
+  padding: .48rem .58rem;
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .14),
+    inset 0 -2px 0 rgb(0 0 0 / .12),
+    0 2px 0 var(--rpgyw-brass-shadow);
+}
+.aigm-dice-heading h2,
+.aigm-characters-heading h2 {
+  color: var(--cream-bright) !important;
+}
+.aigm-dice-heading > div:first-child svg {
+  color: var(--lime) !important;
+}
+.aigm-characters-heading > span {
+  border-color: var(--rpgyw-brass-highlight) !important;
+  background: color-mix(in srgb, var(--landing-mint-19) 88%, white) !important;
+  color: var(--forest-deep) !important;
+}
+
+/* Script output is an inset reading surface, not another clickable control. */
+.shape-result {
+  border: 2px solid var(--landing-brass-dark);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-screen) 93%, white),
+      var(--landing-screen)
+    );
+  box-shadow:
+    inset 0 6px 10px rgb(82 60 28 / .16),
+    inset 0 0 0 2px rgb(255 255 255 / .23),
+    0 1px 0 var(--rpgyw-brass-highlight);
+}
+.shape-progress-pill,
+.shape-beta-pill {
+  border: 2px solid var(--rpgyw-brass-edge);
+  background: color-mix(in srgb, var(--landing-mint-19) 70%, var(--cream-bright));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .64), 0 2px 0 var(--rpgyw-brass-shadow);
+}
+.shape-beta-pill.active {
+  border-color: var(--rpgyw-brass-highlight);
+  background: var(--landing-mint-19-deep);
+}
+.aigm-leave-roll {
+  display: inline-flex;
+  width: 100%;
+  min-height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  padding: .35rem .55rem;
+  border-radius: .55rem;
+  text-decoration: none;
+}
+@media (max-width: 639px) {
+  .account-intro { border-radius: 16px; }
+}

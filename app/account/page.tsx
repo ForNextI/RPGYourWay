@@ -107,13 +107,15 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
     <PageShell>
       <main id="main-content" tabIndex={-1} className="inner-main account-main">
         <div className="shell account-shell">
-          <p className="kicker">Account</p>
-          <h1 className="page-title">Your account.</h1>
-          <p className="page-lede">Sign in, see your RPG Your Way balance, and add usage for Play or Script.</p>
+          <section className="account-intro" aria-labelledby="account-page-title">
+            <p className="kicker">Account</p>
+            <h1 id="account-page-title" className="page-title">Your account.</h1>
+            <p className="page-lede">Sign in, see your RPG Your Way balance, and add usage for Play or Script.</p>
 
-          {statusMessages[status] ? <p className="auth-message auth-message-success" role="status">{statusMessages[status]}</p> : null}
-          {paymentNotice ? <p className="auth-message auth-message-success" role="status">{paymentNotice}</p> : null}
-          {paymentError ? <p className="auth-message auth-message-error" role="alert">{paymentError}</p> : null}
+            {statusMessages[status] ? <p className="auth-message auth-message-success" role="status">{statusMessages[status]}</p> : null}
+            {paymentNotice ? <p className="auth-message auth-message-success" role="status">{paymentNotice}</p> : null}
+            {paymentError ? <p className="auth-message auth-message-error" role="alert">{paymentError}</p> : null}
+          </section>
 
           <details id="sign-in" className="account-access-details" open={!user}>
             <summary>

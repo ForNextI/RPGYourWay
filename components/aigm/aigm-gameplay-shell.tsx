@@ -409,7 +409,7 @@ function CharacterCard({
     <article
       data-character-id={character.id}
       data-drag-target={isDragTarget ? 'true' : 'false'}
-      className={`aigm-character-card group/card relative overflow-hidden rounded-2xl border bg-card transition focus-within:ring-2 focus-within:ring-ring ${isLeader ? 'border-[#6d28d9] ring-2 ring-[#6d28d9]/25 hover:border-[#7c3aed]' : 'border-border hover:border-primary/60'}`}
+      className={`aigm-character-card group/card relative overflow-hidden rounded-2xl border bg-card transition focus-within:ring-2 focus-within:ring-ring ${isLeader ? 'aigm-character-card--leader' : 'border-border hover:border-primary/60'}`}
     >
       <button
         type="button"
@@ -483,7 +483,7 @@ function CharacterCard({
         </div>
 
         <p className="aigm-character-summary mt-1.5 break-words font-display text-sm font-bold leading-snug text-foreground">
-          {isLeader && <span className="mr-1.5 inline-flex rounded-full bg-[#6d28d9] px-2 py-0.5 align-middle text-[9px] font-black uppercase tracking-[0.14em] text-white">Leader</span>}
+          {isLeader && <span className="aigm-leader-badge mr-1.5 inline-flex rounded-full px-2 py-0.5 align-middle text-[9px] font-black uppercase tracking-[0.14em]">Leader</span>}
           <span>{name}</span>
           <span className="font-sans font-semibold text-foreground/85"> · {classes}{subclasses ? ` · ${subclasses}` : ''}</span>
         </p>
@@ -2124,7 +2124,7 @@ export function AigmGameplayShell() {
         <aside className={`${mobilePanel === 'tools' ? 'flex' : 'hidden'} aigm-tools-panel order-1 min-h-0 min-w-0 flex-col gap-3 overflow-y-auto rounded-2xl border border-border bg-card p-4 lg:order-1 lg:flex`} aria-label="Dice and initiative controls">
           <button type="button" onClick={() => setMobilePanel('gameplay')} className="mb-1 inline-flex min-h-10 items-center justify-center rounded-xl border border-primary/45 bg-primary/10 px-4 text-sm font-bold text-primary lg:hidden">Back to gameplay</button>
           <section>
-            <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="aigm-dice-heading flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2"><Dices className="size-5 shrink-0 text-primary" aria-hidden="true" /><h2 className="font-display text-xl font-bold leading-tight">Roll Your Dice Here</h2></div>
               <div className="inline-flex rounded-xl border border-border bg-background p-1" aria-label="Dice mode">
                 <button type="button" onClick={() => setDiceMode('purist')} aria-pressed={gameplay.dice_mode === 'purist'} className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-bold ${gameplay.dice_mode === 'purist' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}><LockKeyhole className="size-3.5" aria-hidden="true" />Purist</button>
@@ -2133,32 +2133,32 @@ export function AigmGameplayShell() {
             </div>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{gameplay.dice_mode === 'purist' ? 'Accept what fate sends your way. The game is more fun when failure is possible.' : 'Fate is a fickle mistress. Take matters a little more under your control.'}</p>
             <label className="mt-4 block text-sm font-semibold text-foreground" htmlFor="dice-quantity">How many dice?</label>
-            <div className="mt-2 grid grid-cols-[3rem_minmax(0,1fr)_3rem] overflow-hidden rounded-xl border border-input bg-background">
-              <button type="button" onClick={() => setDiceQuantity((value) => Math.max(1, value - 1))} disabled={gameplay.dice_mode === 'purist' && Boolean(lastRoll)} className="flex min-h-11 items-center justify-center border-r border-border text-primary transition hover:bg-primary/10 disabled:opacity-40" aria-label="Use one fewer die"><Minus className="size-4" aria-hidden="true" /></button>
+            <div className="aigm-dice-quantity-control mt-2 grid grid-cols-[3rem_minmax(0,1fr)_3rem] overflow-hidden rounded-xl border border-input bg-background">
+              <button type="button" onClick={() => setDiceQuantity((value) => Math.max(1, value - 1))} disabled={gameplay.dice_mode === 'purist' && Boolean(lastRoll)} className="aigm-dice-stepper flex min-h-11 items-center justify-center border-r border-border text-primary transition disabled:opacity-40" aria-label="Use one fewer die"><Minus className="size-4" aria-hidden="true" /></button>
               <input id="dice-quantity" type="number" min={1} max={MAX_DICE_QUANTITY} value={diceQuantity} disabled={gameplay.dice_mode === 'purist' && Boolean(lastRoll)} onChange={(event) => setDiceQuantity(Math.max(1, Math.min(MAX_DICE_QUANTITY, Number(event.target.value) || 1)))} className="w-full bg-transparent px-3 py-2 text-center text-lg font-bold outline-none disabled:opacity-50" />
-              <button type="button" onClick={() => setDiceQuantity((value) => Math.min(MAX_DICE_QUANTITY, value + 1))} disabled={gameplay.dice_mode === 'purist' && Boolean(lastRoll)} className="flex min-h-11 items-center justify-center border-l border-border text-primary transition hover:bg-primary/10 disabled:opacity-40" aria-label="Use one more die"><Plus className="size-4" aria-hidden="true" /></button>
+              <button type="button" onClick={() => setDiceQuantity((value) => Math.min(MAX_DICE_QUANTITY, value + 1))} disabled={gameplay.dice_mode === 'purist' && Boolean(lastRoll)} className="aigm-dice-stepper flex min-h-11 items-center justify-center border-l border-border text-primary transition disabled:opacity-40" aria-label="Use one more die"><Plus className="size-4" aria-hidden="true" /></button>
             </div>
             <p className="mt-2 text-sm font-semibold text-foreground">Of which kind?</p>
             <div className="mt-3 flex flex-wrap justify-center gap-2">
-              {DICE.map((sides) => <button key={sides} type="button" onClick={() => rollDice(sides)} disabled={sending || (gameplay.dice_mode === 'purist' && Boolean(lastRoll))} className="min-h-11 w-[calc(33.333%-0.4rem)] whitespace-nowrap rounded-xl border border-primary/35 bg-primary/10 px-2 py-2 text-base font-bold text-primary hover:bg-primary/20 disabled:cursor-not-allowed disabled:opacity-40">d{sides}</button>)}
+              {DICE.map((sides) => <button key={sides} type="button" onClick={() => rollDice(sides)} disabled={sending || (gameplay.dice_mode === 'purist' && Boolean(lastRoll))} className="aigm-die-button min-h-11 w-[calc(33.333%-0.4rem)] whitespace-nowrap rounded-xl border px-2 py-2 text-base font-bold disabled:cursor-not-allowed disabled:opacity-40">d{sides}</button>)}
             </div>
             {lastRoll && (
-              <div className="mt-3 rounded-xl border border-primary/35 bg-primary/10 p-3 text-sm">
+              <div className="aigm-roll-result mt-3 rounded-xl border p-3 text-sm">
                 <p className="font-semibold text-primary">{lastRoll}</p>
                 <p className="mt-1 text-xs text-muted-foreground">Send fate to the AIGM now, or include it with your next message.</p>
-                <button type="button" onClick={sendLatestRoll} disabled={sending || gameplay.messages.length === 0} className="mt-3 inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg bg-primary px-3 text-xs font-bold text-primary-foreground disabled:opacity-45"><Send className="size-3.5" aria-hidden="true" />Send this roll</button>
-                {gameplay.dice_mode === 'cheat' && <button type="button" onClick={() => { setPendingDice(null); setLastRoll(null) }} className="mt-2 text-xs font-semibold text-muted-foreground underline">Leave this roll behind</button>}
+                <button type="button" onClick={sendLatestRoll} disabled={sending || gameplay.messages.length === 0} className="aigm-send-roll mt-3 inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg px-3 text-xs font-bold disabled:opacity-45"><Send className="size-3.5" aria-hidden="true" />Send this roll</button>
+                {gameplay.dice_mode === 'cheat' && <button type="button" onClick={() => { setPendingDice(null); setLastRoll(null) }} className="aigm-leave-roll mt-2 text-xs font-semibold underline">Leave this roll behind</button>}
               </div>
             )}
           </section>
 
           <section className="border-t border-border pt-4">
             <div className="grid gap-2">
-              <button type="button" onClick={() => setInitiativeOpen((open) => !open)} className="flex min-h-11 min-w-0 w-full items-center justify-between gap-3 rounded-xl border border-border bg-background px-3 text-left" aria-expanded={initiativeOpen}>
+              <button type="button" onClick={() => setInitiativeOpen((open) => !open)} className="aigm-initiative-toggle flex min-h-11 min-w-0 w-full items-center justify-between gap-3 rounded-xl border px-3 text-left" aria-expanded={initiativeOpen}>
                 <span className="min-w-0"><span className="block font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-primary">Turn order</span><span className="block truncate font-display text-lg font-bold">Initiative</span></span>
                 <ChevronDown className={`size-5 shrink-0 transition-transform ${initiativeOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
               </button>
-              <button type="button" onClick={rollPartyInitiative} disabled={readyCharacters.length === 0 || sending} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary px-3 text-sm font-bold text-primary-foreground disabled:opacity-40"><Swords className="size-4" aria-hidden="true" />Roll Party Initiative</button>
+              <button type="button" onClick={rollPartyInitiative} disabled={readyCharacters.length === 0 || sending} className="aigm-roll-initiative inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl px-3 text-sm font-bold disabled:opacity-40"><Swords className="size-4" aria-hidden="true" />Roll Party Initiative</button>
             </div>
             {initiativeOpen && (
               <div className="mt-3">
@@ -2257,7 +2257,7 @@ export function AigmGameplayShell() {
             {error && <div className="mx-auto mb-2.5 flex max-w-4xl items-start justify-between gap-3 rounded-xl border border-destructive/35 bg-destructive/10 px-4 py-3 text-sm" role="alert"><div className="flex items-start gap-2"><AlertTriangle className="mt-0.5 size-4 shrink-0 text-destructive" aria-hidden="true" /><p>{error}</p></div>{billingActionUrl ? <Link href={billingActionUrl} className="shrink-0 font-bold underline underline-offset-2">Add usage</Link> : null}</div>}
             <div className="mx-auto max-w-5xl">
               <label htmlFor="aigm-gameplay-message" className="sr-only">What does the party do?</label>
-              <form onSubmit={submitTurn} className="flex items-end gap-2 rounded-2xl border border-input bg-card p-2">
+              <form onSubmit={submitTurn} className="aigm-composer-plaque flex items-end gap-2 rounded-2xl border p-2">
                 <textarea id="aigm-gameplay-message" ref={textareaRef} rows={2} value={message} onChange={(event) => setMessage(event.target.value)} onKeyDown={handleGameplayKeyDown} disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0} placeholder={gameplay.messages.length === 0 ? 'Begin your adventure before sending an action.' : 'What do you do? Talk to me just like you would a person.'} className="aigm-gameplay-message-input min-h-16 max-h-32 min-w-0 flex-1 resize-y bg-transparent px-3 py-2 text-sm leading-relaxed outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:text-base" />
                 {voiceAvailable ? <AigmVoiceControls
                   ref={voiceControlsRef}
@@ -2326,7 +2326,7 @@ export function AigmGameplayShell() {
                 onDragTarget={setDragTargetCharacterId}
               />
             )) : <div className="rounded-2xl border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground">No ready characters yet.</div>}
-            <button type="button" onClick={addAnotherCharacter} disabled={readyCharacters.length >= 6 || sending} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/5 px-4 py-2 text-sm font-bold text-primary transition hover:bg-primary/10 disabled:cursor-not-allowed disabled:opacity-40" title={readyCharacters.length >= 6 ? 'This party already has the maximum of six characters.' : 'Character additions return with the rebuilt Start experience.'}><Plus className="size-4" aria-hidden="true" />Add another character</button>
+            <button type="button" onClick={addAnotherCharacter} disabled={readyCharacters.length >= 6 || sending} className="aigm-add-character inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40" title={readyCharacters.length >= 6 ? 'This party already has the maximum of six characters.' : 'Character additions return with the rebuilt Start experience.'}><Plus className="size-4" aria-hidden="true" />Add another character</button>
             <div className="flex items-start gap-2 rounded-2xl border border-primary/25 bg-primary/5 px-3 py-3 text-xs leading-relaxed text-muted-foreground"><HeartPulse className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /><p>Your AIGM is built for long-running campaigns and can remember earlier gameplay, but not every fact stays in immediate attention all the time. If it overlooks something it already knows, remind it or ask it to check the character or campaign record and keep playing.</p></div>
           </div>
 

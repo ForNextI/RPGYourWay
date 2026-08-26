@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.22')
-assert.equal(pkg.rpgywVersion, '1.7.22')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.22'/)
+assert.equal(pkg.version, '1.7.23')
+assert.equal(pkg.rpgywVersion, '1.7.23')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.23'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -451,3 +451,16 @@ assert.match(read('components/SiteHeader.tsx'), /className="brand-mark"/)
 assert.match(read('components/FullscreenToggle.tsx'), /className="fullscreen-toggle"/)
 
 console.log('RPG Your Way 1.7.22 header hover and dimensional utility-control checks passed.')
+
+const css1723 = read('app/globals.css')
+assert.match(css1723, /RPG Your Way 1\.7\.23 visual unification/)
+assert.match(css1723, /\.shape-main > \.shape-shell,[\s\S]*background: transparent/)
+assert.match(css1723, /\.account-intro[\s\S]*border: 2px solid var\(--rpgyw-brass-edge\)/)
+assert.match(css1723, /\.aigm-die-button,[\s\S]*background:/)
+assert.match(css1723, /\.aigm-send-roll,[\s\S]*var\(--landing-olive-19\)/)
+assert.match(css1723, /\.medieval-page--play button:not\(:disabled\):hover,[\s\S]*background: var\(--forest-deep\) !important;[\s\S]*color: var\(--lime\) !important/)
+assert.match(read('components/aigm/aigm-gameplay-shell.tsx'), /aigm-die-button/)
+assert.match(read('components/aigm/aigm-gameplay-shell.tsx'), /aigm-character-card--leader/)
+assert.match(read('app/account/page.tsx'), /className="account-intro"/)
+
+console.log('RPG Your Way 1.7.23 visual-unification checks passed.')
