@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.30')
-assert.equal(pkg.rpgywVersion, '1.7.30')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.30'/)
+assert.equal(pkg.version, '1.7.31')
+assert.equal(pkg.rpgywVersion, '1.7.31')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.31'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -258,7 +258,7 @@ console.log('RPG Your Way 1.7.9 recovery, voice-validator, and Play presentation
 
 
 const gameplay1710 = read('components/aigm/aigm-gameplay-shell.tsx')
-assert.match(gameplay1710, /aigm-gameplay-title-row/)
+assert.match(gameplay1710, /aigm-gameplay-summary/)
 assert.match(gameplay1710, /rows=\{2\}/)
 assert.match(gameplay1710, /onReorder=\{reorderPartyCharacter\}/)
 assert.match(gameplay1710, /pointerDraggingRef/)
@@ -282,8 +282,8 @@ console.log('RPG Your Way 1.7.12 Play space and account-entry checks passed.')
 
 
 const gameplay1714 = read('components/aigm/aigm-gameplay-shell.tsx')
-assert.match(gameplay1714, /Accept what fate sends your way/)
-assert.match(gameplay1714, /Fate is a fickle mistress/)
+assert.match(gameplay1714, />Purist<\/button>/)
+assert.match(gameplay1714, />Story first<\/button>/)
 assert.match(gameplay1714, />How many dice\?<\/label>/)
 assert.match(gameplay1714, />Of which kind\?<\/p>/)
 assert.match(gameplay1714, /Can I direct my game\?/)
@@ -563,4 +563,10 @@ assert.match(css1730, /\.landing-reason-card \.persistent-play-close-x \{[\s\S]*
 assert.match(css1730, /\.landing-reason-card \.persistent-play-modal-footer button \{[\s\S]*background: var\(--forest-deep\) !important/)
 assert.match(css1730, /\.persistent-play-thesis,[\s\S]*color: var\(--cream-bright\) !important/)
 
-console.log('RPG Your Way 1.7.30 premise plaque and persistent-play modal checks passed.')
+
+assert.match(gameplayShell, /aigm-topbar-nameplate/)
+assert.match(gameplayShell, /aigm-gameplay-gm/)
+assert.doesNotMatch(gameplayShell, /Accept what fate sends your way/)
+assert.doesNotMatch(gameplayShell, /HP, AC, conditions, currency, and tracked resources update/)
+assert.match(css, /RPG Your Way 1\.7\.31/)
+console.log('RPG Your Way 1.7.31 compact Play header and rail-space checks passed.')

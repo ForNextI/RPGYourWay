@@ -2127,11 +2127,10 @@ export function AigmGameplayShell() {
             <div className="aigm-dice-heading flex items-center gap-2">
               <Dices className="size-5 shrink-0 text-primary" aria-hidden="true" /><h2 className="font-display text-xl font-bold leading-tight">Roll Your Dice Here</h2>
             </div>
-            <div className="aigm-dice-mode-toggle mt-2 grid w-full grid-cols-2 rounded-xl p-1" aria-label="Dice mode">
+            <div className="aigm-dice-mode-toggle mt-1 grid w-full grid-cols-2 rounded-xl p-1" aria-label="Dice mode">
               <button type="button" onClick={() => setDiceMode('purist')} aria-pressed={gameplay.dice_mode === 'purist'} className={`aigm-dice-mode-button inline-flex min-w-0 items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold whitespace-nowrap ${gameplay.dice_mode === 'purist' ? 'aigm-dice-mode-button--active' : ''}`}><LockKeyhole className="size-3.5 shrink-0" aria-hidden="true" />Purist</button>
               <button type="button" onClick={() => setDiceMode('cheat')} aria-pressed={gameplay.dice_mode === 'cheat'} className={`aigm-dice-mode-button inline-flex min-w-0 items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold whitespace-nowrap ${gameplay.dice_mode === 'cheat' ? 'aigm-dice-mode-button--active' : ''}`}><UnlockKeyhole className="size-3.5 shrink-0" aria-hidden="true" />Story first</button>
             </div>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{gameplay.dice_mode === 'purist' ? 'Accept what fate sends your way. The game is more fun when failure is possible.' : 'Fate is a fickle mistress. Take matters a little more under your control.'}</p>
             <label className="mt-4 block text-sm font-semibold text-foreground" htmlFor="dice-quantity">How many dice?</label>
             <div className="aigm-dice-quantity-control mt-2 grid grid-cols-[3rem_minmax(0,1fr)_3rem] overflow-hidden rounded-xl border border-input bg-background">
               <button type="button" onClick={() => setDiceQuantity((value) => Math.max(1, value - 1))} disabled={gameplay.dice_mode === 'purist' && Boolean(lastRoll)} className="aigm-dice-stepper flex min-h-11 items-center justify-center border-r border-border text-primary transition disabled:opacity-40" aria-label="Use one fewer die"><Minus className="size-4" aria-hidden="true" /></button>
@@ -2186,15 +2185,13 @@ export function AigmGameplayShell() {
         <section className={`${mobilePanel === 'gameplay' ? 'flex' : 'hidden'} aigm-gameplay-conversation relative order-1 min-h-0 min-w-0 flex-col overflow-hidden rounded-3xl border border-border bg-card lg:order-2 lg:flex`} aria-label="AIGM conversation">
           <div className="aigm-gameplay-topbar border-b border-border bg-secondary/45 px-4 py-3 sm:px-5">
             <div className="aigm-gameplay-summary min-w-0">
-              <div className="aigm-gameplay-title-row flex min-w-0 items-center gap-2">
-                <span className="aigm-gameplay-summary-icon flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground"><Sparkles className="size-5" aria-hidden="true" /></span>
-                <p className="aigm-gameplay-title min-w-0 flex-1 break-words font-display text-lg font-bold leading-tight">{partyState.adventure_name}</p>
-                <div className="aigm-gameplay-title-controls flex shrink-0 items-center gap-1.5">
-                  {voiceAvailable ? <button type="button" onClick={() => setVoiceGuidedDialogOpen(true)} className={`inline-flex size-9 items-center justify-center rounded-xl border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${voiceGuidedPlay.enabled ? 'border-primary/55 bg-primary/10 text-primary' : 'border-border bg-background text-muted-foreground hover:border-primary/55 hover:text-foreground'}`} aria-label="Open voice-guided play settings for blind players, screen-reader users, and those assisting them" title="Voice-guided play settings"><Headphones className="size-4" aria-hidden="true" /></button> : null}
-                  <FullscreenToggle className="inline-flex size-9 items-center justify-center rounded-xl border border-border bg-background text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
-                </div>
+              <span className="aigm-gameplay-summary-icon aigm-topbar-nameplate flex shrink-0 items-center justify-center bg-primary text-primary-foreground"><Sparkles className="size-5" aria-hidden="true" /></span>
+              <p className="aigm-gameplay-title min-w-0 break-words font-display text-lg font-bold leading-tight">{partyState.adventure_name}</p>
+              <div className="aigm-gameplay-title-controls flex shrink-0 items-center gap-1.5">
+                {voiceAvailable ? <button type="button" onClick={() => setVoiceGuidedDialogOpen(true)} className={`aigm-topbar-nameplate inline-flex items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${voiceGuidedPlay.enabled ? 'aigm-topbar-nameplate--active' : ''}`} aria-label="Open voice-guided play settings for blind players, screen-reader users, and those assisting them" title="Voice-guided play settings"><Headphones className="size-4" aria-hidden="true" /></button> : null}
+                <FullscreenToggle className="aigm-topbar-nameplate inline-flex items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
               </div>
-              <p className="aigm-gameplay-meta mt-1 text-xs leading-relaxed text-muted-foreground">{partyState.game_master_name ? `${partyState.game_master_name} · ` : ''}{gameplay.scene || 'Adventure ready'} · {gameplay.turn_count} player turn{gameplay.turn_count === 1 ? '' : 's'} saved</p>
+              <p className="aigm-gameplay-meta min-w-0 text-xs text-muted-foreground"><span className="aigm-gameplay-gm">{partyState.game_master_name || 'Game Master'}</span><span className="aigm-gameplay-meta-separator"> · </span><span className="aigm-gameplay-scene">{gameplay.scene || 'Adventure ready'}</span><span className="aigm-gameplay-meta-separator"> · </span><span className="aigm-gameplay-turns">{gameplay.turn_count} player turn{gameplay.turn_count === 1 ? '' : 's'} saved</span></p>
             </div>
           </div>
 
@@ -2312,9 +2309,7 @@ export function AigmGameplayShell() {
           <div className="aigm-characters-heading">
             <h2 className="font-display text-xl font-bold leading-tight">Characters</h2>
           </div>
-          <p className="aigm-characters-help mt-1 text-xs leading-snug text-muted-foreground">HP, AC, conditions, currency, and tracked resources update as the Game Master returns structured state changes.</p>
-
-          <div className="aigm-character-list mt-2 min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
+          <div className="aigm-character-list mt-1 min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
             {orderedCharacters.length > 0 ? orderedCharacters.map((character, index) => (
               <CharacterCard
                 key={character.id}

@@ -4292,3 +4292,109 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     padding: 1rem;
   }
 }
+
+/* RPG Your Way 1.7.31: reclaim vertical space in Play and compress the
+   campaign header into a two-row brass-nameplate cluster. */
+.aigm-gameplay-topbar {
+  padding: .38rem .7rem !important;
+}
+.aigm-gameplay-summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  column-gap: .55rem;
+  row-gap: .04rem;
+  align-items: center;
+  margin-top: 0 !important;
+}
+.aigm-gameplay-summary-icon {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+.aigm-gameplay-title {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
+  font-size: clamp(1.12rem, 1.6vw, 1.72rem) !important;
+  line-height: 1.02 !important;
+}
+.aigm-gameplay-title-controls {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+.aigm-gameplay-meta {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: 0 !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: .72rem !important;
+  line-height: 1.08 !important;
+}
+.aigm-gameplay-gm {
+  color: var(--forest-deep);
+  font-weight: 700;
+}
+.aigm-topbar-nameplate {
+  width: 2.3rem;
+  height: 2.3rem;
+  flex: 0 0 2.3rem;
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  border-radius: 11px !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--cream-bright) 94%, white),
+      var(--landing-pale)
+    ) !important;
+  color: var(--forest-deep) !important;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 68%, white),
+    inset 0 1px 0 rgb(255 255 255 / .76),
+    0 1px 0 color-mix(in srgb, var(--rpgyw-brass-shadow) 72%, transparent),
+    0 3px 6px rgb(37 44 36 / .08) !important;
+}
+.aigm-gameplay-summary-icon.aigm-topbar-nameplate {
+  background: var(--forest-deep) !important;
+  color: var(--lime) !important;
+}
+.aigm-topbar-nameplate--active {
+  background: var(--forest-deep) !important;
+  color: var(--lime) !important;
+}
+.aigm-gameplay-title-controls .aigm-topbar-nameplate:not(:disabled):hover,
+.aigm-gameplay-title-controls .aigm-topbar-nameplate:not(:disabled):focus-visible {
+  background: var(--forest-deep) !important;
+  color: var(--lime) !important;
+}
+
+/* The explanatory copy under these two rail headings duplicated information
+   the controls/cards already communicate. Removing it gives both rails more
+   usable vertical room. */
+.aigm-dice-mode-toggle,
+.aigm-character-list {
+  margin-top: .28rem !important;
+}
+
+@media (max-width: 639px) {
+  .aigm-gameplay-topbar {
+    padding: .32rem .48rem !important;
+  }
+  .aigm-gameplay-summary {
+    column-gap: .4rem;
+  }
+  .aigm-topbar-nameplate {
+    width: 2.05rem;
+    height: 2.05rem;
+    flex-basis: 2.05rem;
+    border-radius: 9px !important;
+  }
+  .aigm-gameplay-title {
+    font-size: 1rem !important;
+  }
+  .aigm-gameplay-meta {
+    font-size: .64rem !important;
+  }
+}
