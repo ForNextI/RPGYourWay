@@ -195,7 +195,11 @@ export default function HomePage() {
 
         <section className="landing-thesis-strip" aria-label="RPG Your Way premise">
           <div className="shell">
-            <p>Tabletop gaming is best in person. No question. <strong><em>But sometimes...</em></strong></p>
+            <p>
+              <span className="landing-thesis-line"><strong>Tabletop gaming is best in person. No question. But sometimes...</strong></span>
+              <span className="landing-thesis-line">...you need to play online through a VTT. And other times...</span>
+              <span className="landing-thesis-line">...you can’t find a DM.</span>
+            </p>
           </div>
         </section>
 

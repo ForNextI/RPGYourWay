@@ -30,7 +30,12 @@ export function PersistentPlayModal() {
         <article className="persistent-play-modal-card">
           <header className="persistent-play-modal-header">
             <h2 id="persistent-play-title">Okay. So what the hell do we mean by persistent play?</h2>
-            <button className="persistent-play-close-x" type="button" onClick={closeDialog} aria-label="Close persistent play explanation">
+            <button
+              className="persistent-play-close-x"
+              type="button"
+              onClick={closeDialog}
+              aria-label="Close persistent play explanation"
+            >
               ×
             </button>
           </header>

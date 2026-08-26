@@ -4124,46 +4124,50 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   text-shadow: none;
 }
 
-/* RPG Your Way 1.7.29 persistent-play modal
-   A long explanation belongs in a focused modal rather than a third nested
-   accordion level that would stretch the landing-page column dramatically. */
-.persistent-play-trigger {
-  width: 100%;
-  min-height: 46px;
+/* RPG Your Way 1.7.30: three-line premise plaque + persistent-play explanation. */
+.landing-thesis-line {
+  display: block;
+}
+.landing-thesis-line + .landing-thesis-line {
+  margin-top: .22rem;
+}
+
+/* Persistent Campaign? remains part of the nested accordion, but the long
+   explanation opens in a modal so the accordion does not become a scroll-tower. */
+.landing-reason-card .persistent-play-trigger {
+  width: 100% !important;
+  min-height: 46px !important;
   margin-top: 1rem;
-  border: 2px solid var(--rpgyw-brass-edge);
-  border-radius: 11px;
-  background: var(--cream-bright);
-  color: var(--forest-deep);
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  border-radius: 11px !important;
+  padding: .6rem .9rem !important;
+  background: var(--cream-bright) !important;
+  color: var(--forest-deep) !important;
   font: inherit;
   font-weight: 900;
   cursor: pointer;
   box-shadow:
     inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 72%, white),
     inset 0 1px 0 rgb(255 255 255 / .82),
-    inset 0 -2px 0 rgb(112 84 43 / .08),
     0 3px 0 var(--rpgyw-brass-shadow),
-    0 8px 14px rgb(43 47 37 / .12);
-  transition: background 140ms ease, color 140ms ease, border-color 140ms ease, transform 140ms ease;
+    0 8px 14px rgb(43 47 37 / .12) !important;
 }
-.persistent-play-trigger:hover,
-.persistent-play-trigger:focus-visible {
-  border-color: var(--landing-brass-light);
-  background: var(--forest-deep);
-  color: var(--lime);
+.landing-reason-card .persistent-play-trigger:hover,
+.landing-reason-card .persistent-play-trigger:focus-visible {
+  background: var(--forest-deep) !important;
+  color: var(--lime) !important;
 }
-.persistent-play-trigger:active { transform: translateY(1px); }
 
 .persistent-play-dialog {
-  width: min(48rem, calc(100vw - 2rem));
-  max-width: none;
-  max-height: min(88vh, 56rem);
+  width: min(58rem, calc(100vw - 2rem));
+  max-width: min(58rem, calc(100vw - 2rem));
+  max-height: min(88dvh, 58rem);
   margin: auto;
   padding: 0;
   border: 0;
   border-radius: 20px;
   background: transparent;
-  color: var(--ink);
+  color: var(--forest-ink);
   overflow: visible;
 }
 .persistent-play-dialog::backdrop {
@@ -4171,7 +4175,7 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   backdrop-filter: blur(2px);
 }
 .persistent-play-modal-card {
-  max-height: min(88vh, 56rem);
+  max-height: min(88dvh, 58rem);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -4184,83 +4188,107 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     0 24px 58px rgb(0 0 0 / .34);
 }
 .persistent-play-modal-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
   gap: 1rem;
-  padding: 1.15rem 1.2rem;
+  padding: 1rem 1.1rem;
   border-bottom: 2px solid var(--rpgyw-brass-edge);
   background: var(--forest-deep);
   color: var(--cream-bright);
 }
 .persistent-play-modal-header h2 {
   margin: 0;
-  color: inherit;
+  color: var(--cream-bright) !important;
   font-family: Georgia, Cambria, "Times New Roman", serif;
-  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  font-size: clamp(1.2rem, 2.5vw, 1.55rem);
   line-height: 1.2;
 }
-.persistent-play-close-x {
-  flex: 0 0 auto;
-  width: 38px;
-  height: 38px;
-  border: 2px solid var(--rpgyw-brass-edge);
-  border-radius: 999px;
-  background: var(--cream-bright);
-  color: var(--forest-deep);
+/* These two selectors deliberately outrank the broad landing-reason button
+   rule. Without them, the modal X inherits a full-width accordion button. */
+.landing-reason-card .persistent-play-close-x {
+  width: 40px !important;
+  min-width: 40px !important;
+  max-width: 40px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  border-radius: 999px !important;
+  background: var(--cream-bright) !important;
+  color: var(--forest-deep) !important;
   font: inherit;
-  font-size: 1.55rem;
+  font-size: 1.45rem;
   font-weight: 900;
   line-height: 1;
   cursor: pointer;
-  box-shadow: 0 2px 0 var(--rpgyw-brass-shadow);
+  box-shadow: 0 2px 0 var(--rpgyw-brass-shadow) !important;
 }
-.persistent-play-close-x:hover,
-.persistent-play-close-x:focus-visible {
-  background: var(--forest-deep);
-  color: var(--lime);
+.landing-reason-card .persistent-play-close-x:hover,
+.landing-reason-card .persistent-play-close-x:focus-visible {
+  background: var(--forest-deep) !important;
+  color: var(--lime) !important;
 }
 .persistent-play-modal-copy {
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   padding: clamp(1rem, 3vw, 1.45rem);
   background: var(--cream-bright);
+  color: var(--forest-ink) !important;
   line-height: 1.62;
 }
-.persistent-play-modal-copy p { margin: 0; }
-.persistent-play-modal-copy p + p { margin-top: 1rem; }
+.persistent-play-modal-copy p {
+  margin: 0;
+  color: inherit;
+}
+.persistent-play-modal-copy p + p {
+  margin-top: 1rem;
+}
+.persistent-play-thesis,
+.persistent-play-thesis strong {
+  color: var(--cream-bright) !important;
+}
 .persistent-play-thesis {
   padding: .8rem 1rem;
   border: 2px solid var(--rpgyw-brass-edge);
   border-radius: 11px;
   background: var(--forest-deep);
-  color: var(--cream-bright);
   text-align: center;
   box-shadow:
     inset 0 0 0 1px var(--rpgyw-brass-highlight),
     0 3px 0 var(--rpgyw-brass-shadow);
 }
 .persistent-play-modal-footer {
-  padding: .8rem 1rem 1rem;
-  border-top: 1px solid var(--cream-deep);
+  padding: .75rem 1rem 1rem;
+  border-top: 2px solid var(--rpgyw-brass-edge);
   background: color-mix(in srgb, var(--cream) 82%, var(--landing-brass-light));
 }
-.persistent-play-modal-footer button {
-  width: 100%;
-  min-height: 44px;
-  border: 2px solid var(--rpgyw-brass-edge);
-  border-radius: 10px;
-  background: var(--forest-deep);
-  color: var(--cream-bright);
+.landing-reason-card .persistent-play-modal-footer button {
+  width: 100% !important;
+  min-height: 44px !important;
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  border-radius: 10px !important;
+  background: var(--forest-deep) !important;
+  color: var(--cream-bright) !important;
   font: inherit;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 3px 0 var(--rpgyw-brass-shadow);
+  box-shadow: 0 3px 0 var(--rpgyw-brass-shadow) !important;
 }
-.persistent-play-modal-footer button:hover,
-.persistent-play-modal-footer button:focus-visible { color: var(--lime); }
+.landing-reason-card .persistent-play-modal-footer button:hover,
+.landing-reason-card .persistent-play-modal-footer button:focus-visible {
+  color: var(--lime) !important;
+}
 
 @media (max-width: 560px) {
-  .persistent-play-dialog { width: calc(100vw - 1rem); }
-  .persistent-play-modal-header { padding: 1rem; }
-  .persistent-play-modal-copy { padding: 1rem; }
+  .persistent-play-dialog {
+    width: calc(100vw - 1rem);
+    max-width: calc(100vw - 1rem);
+  }
+  .persistent-play-modal-header,
+  .persistent-play-modal-copy {
+    padding: 1rem;
+  }
 }

@@ -8,16 +8,16 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.29')
-assert.equal(pkg.rpgywVersion, '1.7.29')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.29'/)
+assert.equal(pkg.version, '1.7.30')
+assert.equal(pkg.rpgywVersion, '1.7.30')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.30'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
   'app/account/page.tsx', 'app/pricing/page.tsx', 'app/pricing/actions.ts',
   'app/api/shape/jobs/route.ts', 'app/api/shape/quote/route.ts', 'app/api/shape/transform/route.ts',
   'app/api/shape/projects/route.ts', 'app/api/shape/usage/route.ts', 'app/api/stripe/webhook/route.ts',
-  'components/SiteHeader.tsx', 'components/SiteFooter.tsx', 'components/ShapeWorkspace.tsx',
+  'components/SiteHeader.tsx', 'components/SiteFooter.tsx', 'components/ShapeWorkspace.tsx', 'components/PersistentPlayModal.tsx',
   'lib/billing/play-packs.ts', 'lib/shape/billing.ts', 'lib/shape/settlement.ts', 'lib/shape/transcript.ts',
   'lib/stripe/server.ts', 'lib/stripe/checkout.ts', 'lib/usage/money.ts', 'lib/usage/openai-cost.ts',
   'supabase/migrations/20260825003000_shared_usage_balance.sql',
@@ -543,19 +543,24 @@ assert.match(css1728, /\.feature-card:nth-child\(2\) > p:last-child \{\s*color: 
 
 console.log('RPG Your Way 1.7.28 landing feature-nameplate checks passed.')
 
-const landing1729 = read('app/page.tsx')
-const persistent1729 = read('components/PersistentPlayModal.tsx')
-const css1729 = read('app/globals.css')
-assert.match(landing1729, /persistentPlay: true/)
-assert.match(landing1729, /<PersistentPlayModal \/>/)
-assert.match(persistent1729, /Persistent Campaign\?/)
-assert.match(persistent1729, /what the hell do we mean by persistent play\?/)
-assert.match(persistent1729, /three hundred turns later/)
-assert.match(persistent1729, /Tell it to look it up\./)
-assert.match(persistent1729, /Five\. The robot doesn’t eat\./)
-assert.match(persistent1729, /Work with your AI, not against it\./)
-assert.match(css1729, /RPG Your Way 1\.7\.29 persistent-play modal/)
-assert.match(css1729, /\.persistent-play-dialog::backdrop/)
-assert.match(css1729, /\.persistent-play-trigger:hover/)
 
-console.log('RPG Your Way 1.7.29 persistent-play modal checks passed.')
+const landing1730 = read('app/page.tsx')
+const persistent1730 = read('components/PersistentPlayModal.tsx')
+const css1730 = read('app/globals.css')
+assert.match(landing1730, /persistentPlay: true/)
+assert.match(landing1730, /<PersistentPlayModal \/>/)
+assert.match(landing1730, /Tabletop gaming is best in person\. No question\./)
+assert.match(landing1730, /\.\.\.you need to play online through a VTT\. And other times\.\.\./)
+assert.match(landing1730, /\.\.\.you can’t find a DM\./)
+assert.match(persistent1730, /Persistent Campaign\?/)
+assert.match(persistent1730, /what the hell do we mean by persistent play\?/)
+assert.match(persistent1730, /three hundred turns later/)
+assert.match(persistent1730, /Tell it to look it up\./)
+assert.match(persistent1730, /Five\. The robot doesn’t eat\./)
+assert.match(persistent1730, /Work with your AI, not against it\./)
+assert.match(css1730, /RPG Your Way 1\.7\.30: three-line premise plaque \+ persistent-play explanation/)
+assert.match(css1730, /\.landing-reason-card \.persistent-play-close-x \{[\s\S]*width: 40px !important/)
+assert.match(css1730, /\.landing-reason-card \.persistent-play-modal-footer button \{[\s\S]*background: var\(--forest-deep\) !important/)
+assert.match(css1730, /\.persistent-play-thesis,[\s\S]*color: var\(--cream-bright\) !important/)
+
+console.log('RPG Your Way 1.7.30 premise plaque and persistent-play modal checks passed.')
