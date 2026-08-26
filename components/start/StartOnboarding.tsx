@@ -156,7 +156,6 @@ export function StartOnboarding() {
   const [questionHelpIndex, setQuestionHelpIndex] = useState(0)
   const [campaignName, setCampaignName] = useState('')
   const [gmName, setGmName] = useState('')
-  const [voice, setVoice] = useState<'fable' | 'marin'>('fable')
   const [leaderChoice, setLeaderChoice] = useState<string | 'none' | 'auto'>('auto')
   const [initiative, setInitiative] = useState(5)
   const [danger, setDanger] = useState(6)
@@ -298,7 +297,7 @@ export function StartOnboarding() {
               aria-controls="start-rules-panel"
               onClick={() => setRulesOpen((open) => !open)}
             >
-              <span>Choose the game rules</span>
+              <span className="start-rules-title"><span className="start-rules-number">1</span><span>Choose the game rules</span></span>
               <small>{RULESETS.find((option) => option.id === ruleset)?.label ?? 'D&D 5.5e'}{ruleset === 'dnd-5.5e-srd-5.2.1' ? ' · Default' : ''}</small>
             </button>
             <button type="button" className="start-top-help" onClick={() => setModal('faq')}><CircleHelp aria-hidden="true" />I need help with all of this</button>
@@ -327,11 +326,11 @@ export function StartOnboarding() {
 
           {ruleset ? (
             <section className="start-step" aria-labelledby="party-heading">
-              <div className="start-step-nameplate"><span>2</span>Choose your party</div>
+              <div className="start-step-nameplate"><span>2</span>Default party</div>
               <div className="start-step-heading-row">
                 <div>
-                  <h2 id="party-heading">Your party</h2>
-                  <p>{ruleset === 'dnd-5.5e-srd-5.2.1' ? 'The traditional four-character party is loaded. Keep it, change it, or mix in your own characters.' : 'Add your own characters for this ruleset. The current ready-to-play library uses D&D 5.5e.'}</p>
+                  <h2 id="party-heading" className="sr-only">Default party</h2>
+                  <p>{ruleset === 'dnd-5.5e-srd-5.2.1' ? 'Fighter, Wizard, Cleric, and Rogue are loaded. Keep them, change them, or mix in your own characters.' : 'Add your own characters for this ruleset. The current ready-to-play library uses D&D 5.5e.'}</p>
                 </div>
                 <button type="button" className="start-text-help" onClick={() => setModal('starter-help')}>About ready-to-play characters</button>
               </div>
@@ -391,8 +390,6 @@ export function StartOnboarding() {
                   <button type="button" className="start-primary-control" onClick={standardizeAll}>Standardize {party.filter((member) => member.status === 'ready-to-standardize').length === 1 ? 'for RPG Your Way' : 'these characters for RPG Your Way'}</button>
                 </div>
               ) : null}
-              <p className="start-preview-note">UI review build: character standardization demonstrates the interface states locally. No character information is sent to AI from this Start page yet.</p>
-
               {partyReady ? (
                 <div className="start-leader-card">
                   <div className="start-leader-main">
@@ -418,7 +415,7 @@ export function StartOnboarding() {
 
           {partyReady ? (
             <section className="start-step" aria-labelledby="questions-heading">
-              <div className="start-step-nameplate"><span>3</span>Tell the Game Master what kind of campaign you want</div>
+              <div className="start-step-nameplate"><span>3</span>Customize or Default Settings</div>
               {questionMode === 'pending' ? (
                 <div className="start-question-choice" id="questions-heading">
                   <button type="button" className="start-primary-control start-big-control" onClick={() => { setQuestionMode('answer'); setQuestionIndex(0) }}>Answer the questions</button>
@@ -448,17 +445,17 @@ export function StartOnboarding() {
                   {questionIndex === 4 ? (
                     <>
                       <h2>What do you not want to appear in your game?</h2>
-                      <textarea value={exclusions} onChange={(event) => setExclusions(event.target.value)} rows={6} placeholder="Anything else you want left out, kept offscreen, or handled carefully." />
+                      <textarea className="start-question-textarea" value={exclusions} onChange={(event) => setExclusions(event.target.value)} rows={3} placeholder="Anything else you want left out, kept offscreen, or handled carefully." />
                       <p className="start-question-note">Sexual assault and sexual or romantic content involving anyone under 18 are always excluded.</p>
                     </>
                   ) : null}
                   {questionIndex === 5 ? (
                     <>
                       <h2>How should the campaign grow?</h2>
-                      <div className="start-rating-stack">
-                        <RatingControl label="Opening pace" value={openingPace} onChange={setOpeningPace} low="Calm opening" high="Immediate danger" />
-                        <RatingControl label="Long-term story" value={storyDirection} onChange={setStoryDirection} low="Mostly open" high="Strong story arc" />
-                        <RatingControl label="Eventual scale" value={campaignScale} onChange={setCampaignScale} low="Grounded" high="Cosmic" />
+                      <div className="start-mini-ratings start-mini-ratings--three">
+                        <CompactRating label="Opening pace" value={openingPace} onChange={setOpeningPace} />
+                        <CompactRating label="Long-term story" value={storyDirection} onChange={setStoryDirection} />
+                        <CompactRating label="Eventual scale" value={campaignScale} onChange={setCampaignScale} />
                       </div>
                       <p className="start-fixed-setting"><strong>Setting:</strong> The Uncharted Realms</p>
                     </>
@@ -477,15 +474,10 @@ export function StartOnboarding() {
 
           {questionsDone ? (
             <section className="start-step" aria-labelledby="names-heading">
-              <div className="start-step-nameplate"><span>4</span>Name the campaign and Game Master</div>
+              <div className="start-step-nameplate"><span>4</span>Name your campaign and Game Master</div>
               <div className="start-name-grid" id="names-heading">
-                <label className="start-field"><span>Campaign name</span><input value={campaignName} onChange={(event) => setCampaignName(event.target.value)} placeholder="The Sharn Chronicles" /></label>
-                <label className="start-field"><span>AI Game Master name</span><input value={gmName} onChange={(event) => setGmName(event.target.value)} placeholder="Malcolm" /></label>
-              </div>
-              <div className="start-voice-row" role="group" aria-label="Game Master voice">
-                <span>Game Master voice</span>
-                <button type="button" className={voice === 'fable' ? 'is-selected' : ''} onClick={() => setVoice('fable')}>Male · Fable</button>
-                <button type="button" className={voice === 'marin' ? 'is-selected' : ''} onClick={() => setVoice('marin')}>Female · Marin</button>
+                <label className="start-field"><span>Give your campaign a fun name</span><input value={campaignName} onChange={(event) => setCampaignName(event.target.value)} placeholder="Descriptive campaign name here — have fun" /></label>
+                <label className="start-field"><span>What do you want to call your Game Master?</span><input value={gmName} onChange={(event) => setGmName(event.target.value)} placeholder="Game Master name" /></label>
               </div>
             </section>
           ) : null}
@@ -605,6 +597,17 @@ function RatingControl({ value, onChange, low, high, label }: { value: number; o
       </div>
       <div className="start-rating-labels"><span>{low}</span><span>{high}</span></div>
     </div>
+  )
+}
+
+function CompactRating({ label, value, onChange }: { label: string; value: number; onChange: (value: number) => void }) {
+  return (
+    <label>
+      <span>{label}</span>
+      <select value={String(value)} onChange={(event) => onChange(Number(event.target.value))} aria-label={`${label} rating`}>
+        {Array.from({ length: 10 }, (_, index) => <option key={index + 1}>{index + 1}</option>)}
+      </select>
+    </label>
   )
 }
 
