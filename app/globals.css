@@ -4037,3 +4037,89 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     border-radius: 16px;
   }
 }
+
+
+/* RPG Your Way 1.7.28 landing feature nameplates
+   The three lower feature cards now use the same pale raised body as the
+   opening status cards. Their eyebrows become raised brass-rimmed nameplates:
+   forest / pale / forest, a small counterchanged rhythm across the row. */
+.feature-card {
+  border: 2px solid var(--rpgyw-brass-edge);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-pale) 88%, white),
+      var(--landing-pale)
+    );
+  color: var(--forest-deep);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 64%, white),
+    inset 0 1px 0 rgb(255 255 255 / .78),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 9px 16px rgb(43 47 38 / .11);
+}
+
+/* Undo the old dark middle-card body. All three cards now share one plaque face. */
+.feature-card:nth-child(2) {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-pale) 88%, white),
+      var(--landing-pale)
+    );
+  color: var(--forest-deep);
+}
+.feature-card:nth-child(2) h3 {
+  color: var(--forest-deep);
+}
+.feature-card:nth-child(2) > p:last-child {
+  color: var(--muted);
+}
+
+/* The eyebrow is now a physical nameplate resting on the card. */
+.feature-eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 1.25rem;
+  border: 2px solid var(--landing-brass-mid);
+  border-radius: 12px;
+  padding: .44rem .76rem;
+  font-size: .75rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--landing-brass-light) 76%, white),
+    inset 0 1px 0 rgb(255 255 255 / .18),
+    inset 0 -2px 0 rgb(0 0 0 / .12),
+    0 3px 0 var(--landing-brass-dark),
+    0 7px 12px rgb(35 43 34 / .13);
+}
+
+.feature-card:nth-child(1) .feature-eyebrow,
+.feature-card:nth-child(3) .feature-eyebrow {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--forest-deep) 90%, white),
+      var(--forest-deep)
+    );
+  color: var(--cream-bright);
+  text-shadow: 0 1px 0 rgb(0 0 0 / .24);
+}
+
+.feature-card:nth-child(2) .feature-eyebrow {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-pale) 88%, white),
+      var(--landing-pale)
+    );
+  color: var(--forest-deep);
+  text-shadow: none;
+}

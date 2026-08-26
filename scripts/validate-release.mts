@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.27')
-assert.equal(pkg.rpgywVersion, '1.7.27')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.27'/)
+assert.equal(pkg.version, '1.7.28')
+assert.equal(pkg.rpgywVersion, '1.7.28')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.28'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -529,3 +529,14 @@ assert.match(header1727, />↗<\/span>/)
 assert.match(header1727, /opens in a new tab/)
 
 console.log('RPG Your Way 1.7.27 account styling, quiet accents, and Read external-link cue checks passed.')
+
+
+const css1728 = read('app/globals.css')
+assert.match(css1728, /RPG Your Way 1\.7\.28 landing feature nameplates/)
+assert.match(css1728, /\.feature-card \{[\s\S]*var\(--landing-pale\)/)
+assert.match(css1728, /\.feature-eyebrow \{[\s\S]*border: 2px solid var\(--landing-brass-mid\)/)
+assert.match(css1728, /\.feature-card:nth-child\(1\) \.feature-eyebrow,[\s\S]*\.feature-card:nth-child\(3\) \.feature-eyebrow[\s\S]*background:[\s\S]*var\(--forest-deep\)/)
+assert.match(css1728, /\.feature-card:nth-child\(2\) \.feature-eyebrow \{[\s\S]*var\(--landing-pale\)[\s\S]*color: var\(--forest-deep\)/)
+assert.match(css1728, /\.feature-card:nth-child\(2\) h3 \{\s*color: var\(--forest-deep\);/)
+
+console.log('RPG Your Way 1.7.28 landing feature-nameplate checks passed.')
