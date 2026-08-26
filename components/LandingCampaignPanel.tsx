@@ -27,7 +27,7 @@ function cleanSnippet(value: string) {
     .replace(/\s+/g, ' ')
     .trim()
   if (!clean) return ''
-  const limit = 720
+  const limit = 360
   if (clean.length <= limit) return clean
   const tail = clean.slice(-limit)
   const firstSpace = tail.indexOf(' ')

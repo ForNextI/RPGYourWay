@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.18')
-assert.equal(pkg.rpgywVersion, '1.7.18')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.18'/)
+assert.equal(pkg.version, '1.7.20')
+assert.equal(pkg.rpgywVersion, '1.7.20')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.20'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -355,7 +355,7 @@ assert.match(landing1718, /Why I created RPG Your Way\./)
 assert.match(landing1718, /Who benefits from this site\?/)
 
 const campaign1718 = read('components/LandingCampaignPanel.tsx')
-assert.match(campaign1718, /const limit = 720/)
+assert.match(campaign1718, /const limit = 360/)
 assert.match(campaign1718, /clean\.slice\(-limit\)/)
 assert.match(campaign1718, /landing-campaign-summary-card/)
 assert.match(campaign1718, /landing-balance-control/)
@@ -375,3 +375,42 @@ assert.match(css1718, /\.landing-balance-control/)
 assert.match(css1718, /grid-template-columns: minmax\(0, \.85fr\) minmax\(0, 1\.45fr\)/)
 
 console.log('RPG Your Way 1.7.18 dimensional landing console checks passed.')
+
+
+const landing1719 = read('app/page.tsx')
+assert.match(landing1719, /landing-notice-pair-section/)
+assert.match(landing1719, /shell landing-notice-grid/)
+assert.match(landing1719, /landing-reason-created/)
+assert.match(landing1719, /landing-reason-audience/)
+assert.doesNotMatch(landing1719, /className="hero-unique landing-reason-card/)
+assert.doesNotMatch(landing1719, /className="hero-audience landing-reason-card/)
+
+const campaign1719 = read('components/LandingCampaignPanel.tsx')
+assert.match(campaign1719, /const limit = 360/)
+assert.match(campaign1719, /clean\.slice\(-limit\)/)
+assert.match(campaign1719, /landing-campaign-summary-card/)
+assert.match(campaign1719, /landing-balance-control/)
+assert.match(campaign1719, /Return to Adventure/)
+
+const css1719 = read('app/globals.css')
+assert.match(css1719, /RPG Your Way 1\.7\.19 dimensional landing language/)
+assert.match(css1719, /--landing-brass-light:/)
+assert.match(css1719, /\.landing-notice-grid/)
+assert.match(css1719, /\.landing-notice-grid \.landing-notice-card h1/)
+assert.match(css1719, /\.landing-reason-card summary/)
+assert.match(css1719, /\.landing-player-stack,\n\.landing-return-logo/)
+assert.match(css1719, /\.landing-campaign-summary-card/)
+assert.match(css1719, /\.landing-campaign-snippet > span\s*\{\s*-webkit-line-clamp: 5;/)
+assert.match(css1719, /\.landing-balance-control\s*\{/)
+assert.match(css1719, /\.landing-return-logo\s*\{/)
+assert.match(css1719, /aspect-ratio: 1 \/ 1;/)
+assert.match(css1719, /white-space: nowrap;/)
+
+console.log('RPG Your Way 1.7.19 dimensional landing language checks passed.')
+
+
+const campaign1720 = read('components/LandingCampaignPanel.tsx')
+assert.match(campaign1720, /const limit = 360/)
+assert.match(campaign1720, /clean\.slice\(-limit\)/)
+
+console.log('RPG Your Way 1.7.20 validator tail-limit hotfix checks passed.')

@@ -2332,3 +2332,385 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
     font-size: 1.08rem;
   }
 }
+
+
+/* RPG Your Way 1.7.19 dimensional landing language
+   Flat shapes with readable depth: raised controls, inset displays,
+   thin brass edges, and clear planes. */
+
+:root {
+  --landing-brass-dark: #7a6031;
+  --landing-brass-mid: #a88a4d;
+  --landing-brass-light: #d7bd7b;
+  --landing-pale: #f6ead4;
+  --landing-pale-deep: #e7d6b8;
+  --landing-screen: #efd9ad;
+  --landing-mint-19: #dce5d3;
+  --landing-mint-19-deep: #c7d4bc;
+  --landing-olive-19: #8b965b;
+  --landing-olive-19-deep: #6f7946;
+  --landing-shadow: #3f473d;
+}
+
+/* One shared two-column top row, matching the console/logo geometry. */
+.landing-notice-pair-section {
+  padding-top: .8rem;
+}
+.landing-notice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: .75rem;
+}
+
+/* Raised pale card. */
+.landing-notice-grid .landing-notice-card {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 1px solid var(--landing-brass-mid);
+  border-radius: 20px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-pale) 88%, white),
+      var(--landing-pale)
+    );
+  padding: .5rem .55rem .72rem;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .82),
+    inset 0 -2px 0 rgb(112 84 43 / .08),
+    0 3px 0 var(--landing-brass-dark),
+    0 9px 18px rgb(45 48 39 / .13);
+}
+
+/* Raised forest plaque sitting on the pale body. All four corners stay rounded. */
+.landing-notice-grid .landing-notice-card h1,
+.landing-notice-grid .landing-notice-card h2 {
+  margin: 0 0 .55rem;
+  border: 1px solid var(--landing-brass-light);
+  border-radius: 14px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--forest-deep) 90%, white),
+      var(--forest-deep)
+    );
+  padding: .45rem .7rem;
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .17),
+    inset 0 -2px 0 rgb(0 0 0 / .14),
+    0 3px 0 var(--landing-brass-dark),
+    0 6px 10px rgb(35 43 34 / .15);
+  text-align: center;
+  text-shadow: 0 1px 0 rgb(0 0 0 / .26);
+}
+.landing-notice-grid .landing-notice-card p {
+  margin: .18rem auto 0;
+}
+
+/* Tabletop premise: a full-width raised forest control with the same brass edge. */
+.landing-thesis-strip p {
+  border: 1px solid var(--landing-brass-light);
+  border-radius: 16px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--forest-deep) 90%, white),
+      var(--forest-deep)
+    );
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .16),
+    inset 0 -2px 0 rgb(0 0 0 / .14),
+    0 3px 0 var(--landing-brass-dark),
+    0 8px 14px rgb(40 46 37 / .13);
+}
+
+/* Purpose accordions: true matched pair, no legacy hero positioning. */
+.landing-reasons-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: .75rem !important;
+}
+.landing-reason-card {
+  display: block !important;
+  position: static !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+.landing-reason-card > * {
+  display: block !important;
+  position: static !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+.landing-reason-card details {
+  display: block !important;
+  width: 100% !important;
+}
+.landing-reason-card summary,
+.landing-reason-card button {
+  width: 100% !important;
+  min-height: 64px;
+  border: 1px solid var(--landing-brass-mid) !important;
+  border-radius: 17px !important;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-pale) 88%, white),
+      var(--landing-pale)
+    ) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .86),
+    inset 0 -2px 0 rgb(112 84 43 / .08),
+    0 3px 0 var(--landing-brass-dark),
+    0 8px 14px rgb(43 47 37 / .12) !important;
+}
+
+/* Console and logo are equal visual modules on desktop. */
+.landing-return-grid {
+  align-items: stretch;
+  gap: .75rem;
+}
+.landing-player-stack,
+.landing-return-logo {
+  min-width: 0;
+  height: 100%;
+}
+
+/* Forest chassis itself stands off the page. */
+.landing-player-stack {
+  border: 1px solid var(--landing-brass-mid);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--forest-deep) 92%, white),
+      var(--forest-deep)
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .14),
+    inset 0 0 0 3px color-mix(in srgb, var(--forest-deep) 82%, black),
+    0 4px 0 var(--landing-brass-dark),
+    0 12px 24px rgb(34 43 34 / .18);
+}
+
+/* Start and Return: same olive raised control, same brass edge. */
+.landing-new-player.button,
+.landing-return-button.button {
+  border: 1px solid var(--landing-brass-light);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-olive-19) 88%, white),
+      var(--landing-olive-19)
+    );
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .33),
+    inset 0 -2px 0 color-mix(in srgb, var(--landing-olive-19-deep) 80%, black),
+    0 3px 0 var(--landing-brass-dark),
+    0 7px 12px rgb(29 38 29 / .15);
+  text-shadow: 0 1px 0 rgb(0 0 0 / .28);
+}
+.landing-new-player.button {
+  font-size: clamp(1.35rem, 2.35vw, 1.82rem);
+}
+.landing-return-button.button {
+  white-space: nowrap;
+  font-size: clamp(.98rem, 1.65vw, 1.28rem);
+}
+
+/* Mint metadata tile: raised, clearly separate from the inset screen. */
+.landing-campaign-summary-card {
+  border: 1px solid var(--landing-brass-mid);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-mint-19) 88%, white),
+      var(--landing-mint-19)
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .75),
+    inset 0 -2px 0 rgb(68 84 63 / .1),
+    0 3px 0 var(--landing-brass-dark),
+    0 7px 12px rgb(30 43 31 / .13);
+}
+
+/* The screen is deliberately the opposite: pressed inward. */
+.landing-campaign-snippet {
+  min-height: 0;
+  border: 1px solid var(--landing-brass-dark);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-screen) 91%, white),
+      var(--landing-screen)
+    );
+  box-shadow:
+    inset 0 5px 9px rgb(82 60 28 / .2),
+    inset 0 0 0 3px rgb(255 255 255 / .25),
+    0 1px 0 var(--landing-brass-light);
+}
+.landing-campaign-snippet > span {
+  -webkit-line-clamp: 5;
+}
+
+/* Bottom status/action bar. Balance reads on one line and is itself raised. */
+.landing-campaign-actions {
+  grid-template-columns: minmax(0, .82fr) minmax(0, 1.48fr);
+  gap: .48rem;
+  border: 1px solid var(--landing-brass-mid);
+  background: color-mix(in srgb, var(--forest-deep) 92%, black);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .1),
+    0 3px 0 var(--landing-brass-dark);
+}
+.landing-balance-control {
+  flex-direction: row;
+  justify-content: center;
+  gap: .55rem;
+  white-space: nowrap;
+  border: 1px solid var(--landing-brass-light);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-mint-19) 88%, white),
+      var(--landing-mint-19)
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .76),
+    inset 0 -2px 0 rgb(67 83 62 / .1),
+    0 2px 0 var(--landing-brass-dark);
+}
+.landing-balance-control span,
+.landing-balance-control strong {
+  display: inline;
+}
+
+/* Logo module: trim the excess pale moat, keep its green image border,
+   and make the whole card stand off the page at the same level as the console. */
+.landing-return-logo {
+  align-self: stretch;
+  border: 1px solid var(--landing-brass-mid);
+  border-radius: 24px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--landing-pale) 92%, white),
+      var(--landing-pale-deep)
+    );
+  padding: .45rem;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .78),
+    inset 0 -2px 0 rgb(111 82 42 / .08),
+    0 4px 0 var(--landing-brass-dark),
+    0 12px 24px rgb(43 45 36 / .15);
+}
+.landing-return-logo .brand-logo-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 19px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 1px rgb(37 48 36 / .18));
+}
+
+/* Cards below inherit the same shallow brass-edged depth. */
+.feature-card {
+  border: 1px solid var(--landing-brass-mid);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--cream-bright) 92%, white),
+      var(--cream-bright)
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .78),
+    inset 0 -2px 0 rgb(109 80 40 / .07),
+    0 3px 0 var(--landing-brass-dark),
+    0 8px 15px rgb(43 47 38 / .1);
+}
+
+@media (min-width: 861px) {
+  .landing-return-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Equal-square modules create the balanced console/logo pair from the
+     approved visual direction. The screen flexes to whatever room remains. */
+  .landing-player-stack,
+  .landing-return-logo {
+    aspect-ratio: 1 / 1;
+  }
+
+  .landing-player-stack {
+    overflow: hidden;
+  }
+
+  .landing-campaign-panel {
+    min-height: 0;
+    flex: 1 1 auto;
+  }
+
+  .landing-campaign-snippet {
+    min-height: 0;
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 860px) {
+  .landing-notice-grid,
+  .landing-reasons-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .landing-return-logo {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+@media (max-width: 639px) {
+  .landing-notice-pair-section {
+    padding-top: .5rem;
+  }
+
+  .landing-notice-grid {
+    gap: .55rem;
+  }
+
+  .landing-notice-grid .landing-notice-card {
+    padding: .42rem .48rem .6rem;
+  }
+
+  .landing-new-player.button {
+    font-size: 1.28rem;
+  }
+
+  .landing-return-button.button {
+    font-size: .98rem;
+  }
+
+  .landing-campaign-actions {
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.4fr);
+  }
+
+  .landing-balance-control {
+    gap: .32rem;
+    padding-inline: .45rem;
+  }
+}

@@ -169,19 +169,15 @@ export default function HomePage() {
   return (
     <PageShell>
       <main id="main-content" tabIndex={-1}>
-        <section className="landing-notice-section landing-ai-warning" aria-labelledby="ai-warning-heading">
-          <div className="shell">
-            <div className="landing-notice-card">
+        <section className="landing-notice-pair-section" aria-label="RPG Your Way status">
+          <div className="shell landing-notice-grid">
+            <div className="landing-notice-card landing-ai-warning" aria-labelledby="ai-warning-heading">
               <h1 id="ai-warning-heading">~~ Warning: AI GM ahead ~~</h1>
               <p>RPG Your Way uses AI to run long-term, persistent adventures.</p>
               <p>Everyone gets to play. If that’s a deal breaker, this site is probably not for you.</p>
             </div>
-          </div>
-        </section>
 
-        <section className="landing-notice-section landing-open-now" aria-labelledby="open-now-heading">
-          <div className="shell">
-            <div className="landing-notice-card">
+            <div className="landing-notice-card landing-open-now" aria-labelledby="open-now-heading">
               <h2 id="open-now-heading">Open Now</h2>
               <p><strong>Play</strong> is open for players bringing existing games over from WardensPC by export. <strong>Script</strong> is open.</p>
               <p><strong>Still to come:</strong> onboarding for new players and native multiplayer. VTT integration will follow later.</p>
@@ -197,10 +193,10 @@ export default function HomePage() {
 
         <section className="landing-reasons-section" aria-label="Why RPG Your Way exists and who it benefits">
           <div className="shell landing-reasons-grid">
-            <div className="hero-unique landing-reason-card landing-reason-created" aria-label="Why I created RPG Your Way">
+            <div className="landing-reason-card landing-reason-created" aria-label="Why I created RPG Your Way">
               <WhyCreatedAccordion />
             </div>
-            <div className="hero-audience landing-reason-card landing-reason-audience" aria-label="Who benefits from this site?">
+            <div className="landing-reason-card landing-reason-audience" aria-label="Who benefits from this site?">
               <AudienceAccordion />
             </div>
           </div>
