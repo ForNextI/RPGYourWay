@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.33')
-assert.equal(pkg.rpgywVersion, '1.7.33')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.33'/)
+assert.equal(pkg.version, '1.7.34')
+assert.equal(pkg.rpgywVersion, '1.7.34')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.34'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -283,7 +283,7 @@ console.log('RPG Your Way 1.7.12 Play space and account-entry checks passed.')
 
 const gameplay1714 = read('components/aigm/aigm-gameplay-shell.tsx')
 assert.match(gameplay1714, />Purist<\/button>/)
-assert.match(gameplay1714, />Story first<\/button>/)
+assert.match(gameplay1714, /<span className="text-center leading-tight">Story<br \/>first<\/span><\/button>/)
 assert.match(gameplay1714, />How many dice\?<\/label>/)
 assert.match(gameplay1714, />Of which kind\?<\/p>/)
 assert.match(gameplay1714, /Can I direct my game\?/)
@@ -589,3 +589,6 @@ assert.match(css, /\.play-page-frame \.aigm-mobile-nav \{[\s\S]*display: none !i
 assert.match(css, /\.aigm-dice-mode-button:not\(\.aigm-dice-mode-button--active\):hover,[\s\S]*color: var\(--lime\) !important/)
 assert.match(css, /\.aigm-dice-mode-button--active,[\s\S]*color: var\(--cream-bright\) !important/)
 console.log('RPG Your Way 1.7.33 Play desktop-layout, header-width, and dice-mode-state checks passed.')
+
+assert.match(gameplay1714, /<span className="text-center leading-tight">Story<br \/>first<\/span>/)
+console.log('RPG Your Way 1.7.34 Story-first two-line centering check passed.')
