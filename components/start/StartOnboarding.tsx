@@ -290,7 +290,7 @@ export function StartOnboarding() {
       ) : (
         <>
           <section className="start-rules-step" aria-labelledby="rules-heading">
-            <div className="start-step-nameplate start-step-nameplate--rules"><span>1</span><span id="rules-heading">Choose the game rules</span></div>
+            <div className="start-step-nameplate start-step-nameplate--rules"><span>1</span><strong id="rules-heading">Choose the game rules</strong></div>
             <div className="start-rules-card">
               <div className="start-rules-actions" aria-label="Game rules and Start help">
                 <button
@@ -330,7 +330,7 @@ export function StartOnboarding() {
           </section>
 
           {ruleset ? (
-            <section className="start-step" aria-labelledby="party-heading">
+            <section className="start-step start-party-step" aria-labelledby="party-heading">
               <div className="start-step-nameplate"><span>2</span>Default party</div>
               <div className="start-step-heading-row">
                 <div>

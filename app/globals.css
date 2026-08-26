@@ -5411,3 +5411,82 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   .start-character-actions--secondary { grid-template-columns: 1fr; }
   .start-character-actions--primary .start-primary-control:first-child { grid-column: auto; }
 }
+
+/* RPG Your Way 1.8.4 — Start QA III: overlapping step furniture, pale secondary rules controls, party plaque, map field. */
+.site-frame-start {
+  background-color: transparent;
+  background-image: none;
+}
+.start-page-main > .start-page-shell {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+/* Step 1: the numbered forest nameplate sits substantially over the parchment plaque. */
+.start-rules-step {
+  position: relative;
+  padding-top: 0;
+}
+.start-rules-step .start-step-nameplate--rules {
+  left: 1.05rem;
+  top: 0;
+  z-index: 2;
+  width: auto;
+  max-width: calc(100% - 2.1rem);
+  white-space: nowrap;
+}
+.start-rules-step .start-step-nameplate--rules > strong {
+  width: auto;
+  min-width: 0;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+}
+.start-rules-card {
+  margin-top: 1.25rem;
+  padding-top: 2.7rem;
+}
+
+/* The current rules choice stays olive. Help and age settings are pale secondary controls. */
+.start-rules-secondary {
+  min-height: 54px;
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 11px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 96%, white), var(--landing-pale));
+  color: var(--forest-deep);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 64%, white), inset 0 1px 0 rgb(255 255 255 / .78), 0 3px 0 var(--rpgyw-brass-shadow), 0 6px 10px rgb(43 47 38 / .10);
+}
+.start-rules-secondary:hover,
+.start-rules-secondary:focus-visible {
+  background: var(--forest-deep);
+  color: var(--lime) !important;
+}
+
+/* Step 2 regains its parchment plaque, with Default party hanging over the upper edge. */
+.start-party-step {
+  position: relative;
+  margin-top: .35rem;
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 18px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--landing-pale) 92%, white), var(--landing-pale));
+  padding: 2.85rem .9rem 1rem;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 72%, white), inset 0 1px 0 rgb(255 255 255 / .76), 0 3px 0 var(--rpgyw-brass-shadow), 0 8px 14px rgb(43 47 38 / .10);
+}
+.start-party-step .start-step-nameplate {
+  left: 1.05rem;
+  top: -1.05rem;
+  z-index: 2;
+}
+
+@media (max-width: 640px) {
+  .start-rules-step .start-step-nameplate--rules,
+  .start-party-step .start-step-nameplate {
+    left: .65rem;
+    max-width: calc(100% - 1.3rem);
+  }
+  .start-rules-step .start-step-nameplate--rules {
+    white-space: normal;
+  }
+}

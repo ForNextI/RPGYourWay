@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.8.3')
-assert.equal(pkg.rpgywVersion, '1.8.3')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.8\.3'/)
+assert.equal(pkg.version, '1.8.4')
+assert.equal(pkg.rpgywVersion, '1.8.4')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.8\.4'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -671,3 +671,12 @@ assert.match(css180, /RPG Your Way 1\.8\.3/)
 assert.match(css180, /\.start-step \{[^}]*background: transparent;[^}]*box-shadow: none;/)
 assert.match(css180, /\.start-drop-zone \{[\s\S]*border: 7px solid var\(--landing-olive-19-deep\)/)
 console.log('RPG Your Way 1.8.3 Start QA II rules-plaque, action hierarchy, open hex field, and import-bezel checks passed.')
+
+assert.match(start180, /start-step-nameplate start-step-nameplate--rules"><span>1<\/span><strong id="rules-heading">Choose the game rules<\/strong>/)
+assert.match(start180, /className="start-step start-party-step"/)
+assert.match(startEntry180, /site-frame site-frame-play site-frame-start/)
+assert.match(css180, /RPG Your Way 1\.8\.4/)
+assert.match(css180, /\.start-page-main > \.start-page-shell \{[\s\S]*background: transparent/)
+assert.match(css180, /\.start-party-step \{[\s\S]*background: linear-gradient/)
+assert.match(css180, /\.start-rules-secondary \{[\s\S]*background: linear-gradient\(180deg, color-mix/)
+console.log('RPG Your Way 1.8.4 Start plaque-overlap, party-card, and map-field checks passed.')

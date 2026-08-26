@@ -89,7 +89,7 @@ export function RpgywStartEntry() {
   }
 
   return (
-    <div className="site-frame site-frame-play">
+    <div className="site-frame site-frame-play site-frame-start">
       <SiteHeader />
       <main id="main-content" tabIndex={-1} className="inner-main play-entry-main start-page-main">
         <div className="shell start-page-shell">
