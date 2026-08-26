@@ -4478,3 +4478,58 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     column-gap: .4rem;
   }
 }
+
+
+/* RPG Your Way 1.7.33: Play-only desktop header width, stable desktop layout,
+   and dice-mode interaction states. The global header keeps aligning to page
+   cards everywhere else; Play uses the full viewport because its three-rail
+   workspace is itself the alignment target. */
+.play-page-frame > .site-header .header-inner {
+  width: calc(100% - 1rem);
+  max-width: none;
+  margin-inline: .5rem;
+}
+
+/* The site header switches to its narrow layout below 861px. Match Play to
+   that breakpoint instead of Tailwind's 1024px lg breakpoint so ordinary
+   desktop zoom does not strand the gameplay shell in its phone layout while
+   the desktop header is still showing. */
+@media (min-width: 861px) {
+  .play-page-frame .aigm-gameplay-main {
+    padding: .5rem;
+    padding-bottom: .5rem;
+  }
+  .play-page-frame .aigm-gameplay-grid {
+    grid-template-columns: minmax(230px, .68fr) minmax(0, 2.85fr) minmax(240px, .72fr);
+    gap: .5rem;
+  }
+  .play-page-frame .aigm-tools-panel,
+  .play-page-frame .aigm-gameplay-conversation,
+  .play-page-frame .aigm-characters-panel {
+    display: flex !important;
+  }
+  .play-page-frame .aigm-tools-panel { order: 1 !important; }
+  .play-page-frame .aigm-gameplay-conversation { order: 2 !important; }
+  .play-page-frame .aigm-characters-panel { order: 3 !important; }
+  .play-page-frame .aigm-tools-panel > button:first-child,
+  .play-page-frame .aigm-characters-panel > button:first-child,
+  .play-page-frame .aigm-mobile-nav {
+    display: none !important;
+  }
+}
+
+/* Inactive = pale/forest. Hovering an inactive choice = forest/lime.
+   Selected = forest/cream and stays selected-looking even under the pointer. */
+.aigm-dice-mode-button:not(.aigm-dice-mode-button--active):hover,
+.aigm-dice-mode-button:not(.aigm-dice-mode-button--active):focus-visible {
+  background: var(--forest-deep) !important;
+  color: var(--lime) !important;
+  border-color: var(--rpgyw-brass-highlight) !important;
+}
+.aigm-dice-mode-button--active,
+.aigm-dice-mode-button--active:hover,
+.aigm-dice-mode-button--active:focus-visible {
+  background: var(--forest-deep) !important;
+  color: var(--cream-bright) !important;
+  border-color: var(--rpgyw-brass-highlight) !important;
+}

@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.32')
-assert.equal(pkg.rpgywVersion, '1.7.32')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.32'/)
+assert.equal(pkg.version, '1.7.33')
+assert.equal(pkg.rpgywVersion, '1.7.33')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.33'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -580,3 +580,12 @@ assert.match(css, /\.aigm-dice-mode-toggle,[\s\S]*margin-top: 0 !important/)
 assert.match(css, /\.aigm-gameplay-heading-copy \{[\s\S]*flex-direction: column/)
 assert.match(css, /\.aigm-gameplay-meta \{[\s\S]*white-space: normal/)
 console.log('RPG Your Way 1.7.32 Play rail-heading, campaign-header, and character-list flow checks passed.')
+
+
+assert.match(css, /RPG Your Way 1\.7\.33: Play-only desktop header width/)
+assert.match(css, /\.play-page-frame > \.site-header \.header-inner \{[\s\S]*width: calc\(100% - 1rem\)[\s\S]*max-width: none/)
+assert.match(css, /@media \(min-width: 861px\) \{[\s\S]*\.play-page-frame \.aigm-gameplay-grid \{[\s\S]*grid-template-columns: minmax\(230px, \.68fr\) minmax\(0, 2\.85fr\) minmax\(240px, \.72fr\)/)
+assert.match(css, /\.play-page-frame \.aigm-mobile-nav \{[\s\S]*display: none !important/)
+assert.match(css, /\.aigm-dice-mode-button:not\(\.aigm-dice-mode-button--active\):hover,[\s\S]*color: var\(--lime\) !important/)
+assert.match(css, /\.aigm-dice-mode-button--active,[\s\S]*color: var\(--cream-bright\) !important/)
+console.log('RPG Your Way 1.7.33 Play desktop-layout, header-width, and dice-mode-state checks passed.')
