@@ -1,11 +1,11 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { type ChangeEvent, useEffect, useRef, useState } from 'react'
 import { FileUp, LoaderCircle, Play, Shield, Smartphone } from 'lucide-react'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { AuthPrompt } from '@/components/AuthPrompt'
+import { StartOnboarding } from '@/components/start/StartOnboarding'
 import {
   CURRENT_ADVENTURE_KEY,
   canonicalAdventureName,
@@ -16,7 +16,6 @@ import {
 import { readAdventureIndexWithDatabase, saveAdventureState } from '@/lib/aigm/campaign-persistence'
 
 export function RpgywStartEntry() {
-  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [adventures, setAdventures] = useState<AdventureSummary[]>([])
   const [notice, setNotice] = useState('')
@@ -92,75 +91,69 @@ export function RpgywStartEntry() {
   return (
     <div className="site-frame site-frame-play">
       <SiteHeader />
-      <main id="main-content" tabIndex={-1} className="inner-main play-entry-main">
-        <div className="shell play-entry-shell">
-          <div className="play-entry-heading">
-            <p className="kicker">Start</p>
-            <h1 className="page-title">Choose or bring an adventure.</h1>
-            <p className="page-lede">Start is the doorway into Play. Existing campaigns stay in this browser. Export a game when you want a backup or want to move it to another device.</p>
-          </div>
+      <main id="main-content" tabIndex={-1} className="inner-main play-entry-main start-page-main">
+        <div className="shell start-page-shell">
+          <StartOnboarding />
 
-          {loading ? (
-            <div className="play-entry-loading" role="status">
-              <LoaderCircle className="play-entry-icon play-entry-spin" aria-hidden="true" />
-              <p>Checking this browser for saved adventures…</p>
-            </div>
-          ) : (
-            <div className="play-entry-grid">
-              <section className="play-entry-card" aria-labelledby="saved-adventures-heading">
-                <div className="play-entry-card-title">
-                  <Shield className="play-entry-icon" aria-hidden="true" />
-                  <div>
-                    <p className="account-state-label">This browser</p>
-                    <h2 id="saved-adventures-heading">Saved adventures</h2>
-                  </div>
+          <details className="start-existing-details">
+            <summary>Already have an RPG Your Way or WardensPC adventure?</summary>
+            <div className="start-existing-body">
+              <p className="start-existing-lede">Continue a campaign already stored in this browser, or import a full exported game JSON. This returning-player path stays separate from new-campaign onboarding.</p>
+              {loading ? (
+                <div className="play-entry-loading" role="status">
+                  <LoaderCircle className="play-entry-icon play-entry-spin" aria-hidden="true" />
+                  <p>Checking this browser for saved adventures…</p>
                 </div>
-                {adventures.length ? (
-                  <div className="play-entry-adventures">
-                    {adventures.map((adventure) => (
-                      <button key={adventure.adventure_id} type="button" className="play-entry-adventure" onClick={() => openAdventure(adventure.adventure_id)}>
-                        <span>
-                          <strong>{adventure.adventure_name}</strong>
-                          <small>{adventure.party_names.length ? adventure.party_names.join(', ') : 'Saved party'} · Updated {new Date(adventure.updated_at).toLocaleDateString()}</small>
-                        </span>
-                        <span className="play-entry-continue"><Play aria-hidden="true" /> Continue</span>
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="play-entry-empty">No RPG Your Way adventures are stored in this browser yet.</p>
-                )}
-              </section>
+              ) : (
+                <div className="play-entry-grid">
+                  <section className="play-entry-card" aria-labelledby="saved-adventures-heading">
+                    <div className="play-entry-card-title">
+                      <Shield className="play-entry-icon" aria-hidden="true" />
+                      <div>
+                        <p className="account-state-label">This browser</p>
+                        <h2 id="saved-adventures-heading">Saved adventures</h2>
+                      </div>
+                    </div>
+                    {adventures.length ? (
+                      <div className="play-entry-adventures">
+                        {adventures.map((adventure) => (
+                          <button key={adventure.adventure_id} type="button" className="play-entry-adventure" onClick={() => openAdventure(adventure.adventure_id)}>
+                            <span>
+                              <strong>{adventure.adventure_name}</strong>
+                              <small>{adventure.party_names.length ? adventure.party_names.join(', ') : 'Saved party'} · Updated {new Date(adventure.updated_at).toLocaleDateString()}</small>
+                            </span>
+                            <span className="play-entry-continue"><Play aria-hidden="true" /> Continue</span>
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="play-entry-empty">No RPG Your Way adventures are stored in this browser yet.</p>
+                    )}
+                  </section>
 
-              <section className="play-entry-card play-entry-import" aria-labelledby="import-adventure-heading">
-                <div className="play-entry-card-title">
-                  <FileUp className="play-entry-icon" aria-hidden="true" />
-                  <div>
-                    <p className="account-state-label">Bring your game</p>
-                    <h2 id="import-adventure-heading">Import an existing adventure</h2>
-                  </div>
+                  <section className="play-entry-card play-entry-import" aria-labelledby="import-adventure-heading">
+                    <div className="play-entry-card-title">
+                      <FileUp className="play-entry-icon" aria-hidden="true" />
+                      <div>
+                        <p className="account-state-label">Bring your game</p>
+                        <h2 id="import-adventure-heading">Import an existing adventure</h2>
+                      </div>
+                    </div>
+                    <p>Use a full exported game JSON from WardensPC or RPG Your Way. The imported copy gets a new local campaign ID, so the original export remains untouched.</p>
+                    <input ref={importRef} className="sr-only" type="file" accept="application/json,.json" onChange={importAdventure} />
+                    <button className="button button-primary" type="button" onClick={() => importRef.current?.click()}>Import Existing Adventure</button>
+                    <div className="play-entry-device-note">
+                      <Smartphone aria-hidden="true" />
+                      <p><strong>Changing devices?</strong> Export on the old device and import here on the new one. There is no cloud campaign synchronization in this release.</p>
+                    </div>
+                  </section>
                 </div>
-                <p>Use a full exported game JSON from WardensPC or RPG Your Way. The imported copy gets a new local campaign ID, so the original export remains untouched.</p>
-                <input ref={importRef} className="sr-only" type="file" accept="application/json,.json" onChange={importAdventure} />
-                <button className="button button-primary" type="button" onClick={() => importRef.current?.click()}>Import Existing Adventure</button>
-                <div className="play-entry-device-note">
-                  <Smartphone aria-hidden="true" />
-                  <p><strong>Changing devices?</strong> Export on the old device and import here on the new one. There is no cloud campaign synchronization in this release.</p>
-                </div>
-              </section>
-            </div>
-          )}
+              )}
 
-          {notice ? <p className="auth-message auth-message-success" role="status">{notice}</p> : null}
-          {error ? <p className="auth-message auth-message-error" role="alert">{error}</p> : null}
-
-          <div className="play-entry-start">
-            <div>
-              <p className="account-state-label">New adventure</p>
-              <h2>Starting fresh?</h2>
-              <p>The new onboarding experience will live here on Start. It is being rebuilt separately, so this release is for imported and already-saved adventures.</p>
+              {notice ? <p className="auth-message auth-message-success" role="status">{notice}</p> : null}
+              {error ? <p className="auth-message auth-message-error" role="alert">{error}</p> : null}
             </div>
-          </div>
+          </details>
         </div>
       </main>
       <SiteFooter />

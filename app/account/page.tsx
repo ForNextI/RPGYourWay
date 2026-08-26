@@ -7,6 +7,7 @@ import { formatUsageDollars, signedUsageDollars, usageMicrousd } from '@/lib/usa
 import { finalizeCheckoutSessionById } from '@/lib/stripe/server'
 import { signOut } from './actions'
 import { isOwnerQaEmail } from '@/lib/usage/owner-qa'
+import { DeleteAccountControl } from '@/components/account/DeleteAccountControl'
 
 export const metadata = { title: 'Account' }
 export const dynamic = 'force-dynamic'
@@ -18,6 +19,7 @@ type AccountPageProps = {
 const statusMessages: Record<string, string> = {
   'signed-out': 'You are signed out.',
   'checkout-cancelled': 'Checkout was cancelled. Nothing was charged.',
+  'account-deleted': 'Your RPG Your Way account was deleted.',
 }
 
 function activityLabel(source: unknown) {
@@ -230,6 +232,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                   ) : <p className="usage-activity-empty">No balance activity yet. Your first Play Pack purchase will start this history.</p>}
                 </section>
               ) : null}
+              <DeleteAccountControl />
             </>
           ) : null}
         </div>

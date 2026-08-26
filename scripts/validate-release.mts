@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.35')
-assert.equal(pkg.rpgywVersion, '1.7.35')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.35'/)
+assert.equal(pkg.version, '1.8.0')
+assert.equal(pkg.rpgywVersion, '1.8.0')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.8\.0'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -28,6 +28,8 @@ for (const file of [
   'app/api/aigm/speech/route.ts',
   'app/api/aigm/transcribe/route.ts',
   'components/aigm/rpgyw-start-entry.tsx',
+  'components/start/StartOnboarding.tsx',
+  'components/account/DeleteAccountControl.tsx',
   'components/aigm/aigm-gameplay-shell.tsx',
   'lib/aigm/campaign-storage.ts',
   'lib/aigm/campaign-persistence.ts',
@@ -597,3 +599,44 @@ assert.match(gameplayShell, /aigm-character-memory-note/)
 assert.match(css, /RPG Your Way 1\.7\.35/)
 assert.match(css, /\.aigm-character-memory-note > svg \{[\s\S]*float: left/)
 console.log('RPG Your Way 1.7.35 character-rail final-flow cleanup check passed.')
+
+
+const start180 = read('components/start/StartOnboarding.tsx')
+const startEntry180 = read('components/aigm/rpgyw-start-entry.tsx')
+const accountActions180 = read('app/account/actions.ts')
+const accountPage180 = read('app/account/page.tsx')
+const footer180 = read('components/SiteFooter.tsx')
+const css180 = read('app/globals.css')
+assert.match(start180, /I need help with all of this/)
+assert.match(start180, /My question wasn&apos;t above\. I still need help\./)
+assert.match(start180, /25 free questions per onboarding session/)
+assert.match(start180, /Choose the game rules/)
+assert.match(start180, /Uncharted Realm/)
+assert.match(start180, /D&D 5\.5e/)
+assert.match(start180, /Choose ready-to-play characters/)
+assert.match(start180, /Imported — ready to standardize/)
+assert.match(start180, /Standardize for RPG Your Way/)
+assert.match(start180, /'these characters for RPG Your Way'/)
+assert.match(start180, /How did we choose this leader\?/)
+assert.match(start180, /Strength override/)
+assert.match(start180, /Answer the questions/)
+assert.match(start180, /Skip the questions/)
+assert.match(start180, /AI Game Master name/)
+assert.match(start180, /Male · Fable/)
+assert.match(start180, /Female · Marin/)
+assert.match(start180, />PLAY</)
+assert.match(start180, /Importing your character is generally free/)
+assert.match(start180, /before using part of your available usage balance/)
+assert.match(startEntry180, /<StartOnboarding \/>/)
+assert.match(startEntry180, /Already have an RPG Your Way or WardensPC adventure\?/)
+assert.match(accountActions180, /admin\.auth\.admin\.deleteUser/)
+assert.match(accountActions180, /confirmation !== 'DELETE'/)
+assert.match(accountPage180, /<DeleteAccountControl \/>/)
+assert.match(footer180, /mailto:brett@rpgyourway\.com/)
+assert.match(footer180, />Contact</)
+assert.match(css180, /RPG Your Way 1\.8\.0 — simplified Start onboarding shell/)
+assert.match(css180, /--lime: #00ff00/)
+assert.match(css180, /\.start-step-nameplate/)
+assert.match(css180, /\.start-secondary-plaque:hover/)
+assert.match(css180, /\.start-leader-explain:hover/)
+console.log('RPG Your Way 1.8.0 simplified onboarding UI, account deletion, and Contact footer checks passed.')

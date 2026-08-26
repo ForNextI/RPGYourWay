@@ -2,6 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 function requiredText(formData: FormData, name: string) {
   const value = formData.get(name)
@@ -70,4 +71,25 @@ export async function signOut() {
   const supabase = await createClient()
   await supabase.auth.signOut()
   redirectWithQuery('/account', 'status', 'signed-out')
+}
+
+export async function deleteAccount(formData: FormData) {
+  const confirmation = requiredText(formData, 'confirmDelete')
+  if (confirmation !== 'DELETE') redirectWithQuery('/account', 'error', 'Account deletion was not confirmed.')
+
+  const supabase = await createClient()
+  const { data, error: userError } = await supabase.auth.getUser()
+  const userId = data.user?.id
+  if (userError || !userId) return redirectWithQuery('/account', 'error', 'Sign in before deleting your account.')
+
+  try {
+    const admin = createAdminClient()
+    const { error } = await admin.auth.admin.deleteUser(userId)
+    if (error) redirectWithQuery('/account', 'error', error.message)
+  } catch (error) {
+    redirectWithQuery('/account', 'error', error instanceof Error ? error.message : 'RPG Your Way could not delete the account.')
+  }
+
+  await supabase.auth.signOut()
+  redirectWithQuery('/account', 'status', 'account-deleted')
 }
