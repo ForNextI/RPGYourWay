@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { PageShell } from '@/components/PageShell'
 import { LandingCampaignPanel } from '@/components/LandingCampaignPanel'
+import { PersistentPlayModal } from '@/components/PersistentPlayModal'
 
 const features = [
   {
@@ -46,6 +47,7 @@ const whyCreated = [
   },
   {
     title: 'Campaigns should last',
+    persistentPlay: true,
     paragraphs: [
       'RPG Your Way is built for persistent campaigns that can grow with your characters over the long haul.',
       'Start at the beginning. Build relationships, history, and consequences. Keep the same campaign going all the way to level 20.',
@@ -116,6 +118,7 @@ type AccordionItem = {
   title: string
   paragraphs: string[]
   note?: string
+  persistentPlay?: boolean
 }
 
 function NestedAccordionList({ items }: { items: AccordionItem[] }) {
@@ -130,6 +133,7 @@ function NestedAccordionList({ items }: { items: AccordionItem[] }) {
           <div className="nested-accordion-copy">
             {item.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             {item.note ? <p className="builder-note"><em>{item.note}</em></p> : null}
+            {item.persistentPlay ? <PersistentPlayModal /> : null}
           </div>
         </details>
       ))}

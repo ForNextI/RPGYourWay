@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.28')
-assert.equal(pkg.rpgywVersion, '1.7.28')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.28'/)
+assert.equal(pkg.version, '1.7.29')
+assert.equal(pkg.rpgywVersion, '1.7.29')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.29'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -542,3 +542,20 @@ assert.match(css1728, /\.feature-card:nth-child\(2\) h3 \{\s*color: var\(--cream
 assert.match(css1728, /\.feature-card:nth-child\(2\) > p:last-child \{\s*color: var\(--cream-bright\);/)
 
 console.log('RPG Your Way 1.7.28 landing feature-nameplate checks passed.')
+
+const landing1729 = read('app/page.tsx')
+const persistent1729 = read('components/PersistentPlayModal.tsx')
+const css1729 = read('app/globals.css')
+assert.match(landing1729, /persistentPlay: true/)
+assert.match(landing1729, /<PersistentPlayModal \/>/)
+assert.match(persistent1729, /Persistent Campaign\?/)
+assert.match(persistent1729, /what the hell do we mean by persistent play\?/)
+assert.match(persistent1729, /three hundred turns later/)
+assert.match(persistent1729, /Tell it to look it up\./)
+assert.match(persistent1729, /Five\. The robot doesn’t eat\./)
+assert.match(persistent1729, /Work with your AI, not against it\./)
+assert.match(css1729, /RPG Your Way 1\.7\.29 persistent-play modal/)
+assert.match(css1729, /\.persistent-play-dialog::backdrop/)
+assert.match(css1729, /\.persistent-play-trigger:hover/)
+
+console.log('RPG Your Way 1.7.29 persistent-play modal checks passed.')
