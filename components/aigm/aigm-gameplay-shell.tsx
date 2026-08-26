@@ -2326,7 +2326,6 @@ export function AigmGameplayShell() {
                 onDragTarget={setDragTargetCharacterId}
               />
             )) : <div className="rounded-2xl border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground">No ready characters yet.</div>}
-            <div className="flex items-start gap-2 rounded-2xl border border-primary/25 bg-primary/5 px-3 py-3 text-xs leading-relaxed text-muted-foreground"><HeartPulse className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" /><p>Your AIGM is built for long-running campaigns and can remember earlier gameplay, but not every fact stays in immediate attention all the time. If it overlooks something it already knows, remind it or ask it to check the character or campaign record and keep playing.</p></div>
             <div className="aigm-character-footer">
               <div className="aigm-party-capacity" aria-label={`Current party: ${readyCharacters.length}. Max party size: 6.`}>
                 <span><strong>Current party:</strong> {readyCharacters.length}</span>
@@ -2334,6 +2333,7 @@ export function AigmGameplayShell() {
               </div>
               <button type="button" onClick={addAnotherCharacter} disabled={readyCharacters.length >= 6 || sending} className="aigm-add-character inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40" title={readyCharacters.length >= 6 ? 'This party already has the maximum of six characters.' : 'Character additions return with the rebuilt Start experience.'}><Plus className="size-4" aria-hidden="true" />Add another character</button>
             </div>
+            <div className="aigm-character-memory-note rounded-2xl border border-primary/25 bg-primary/5 text-xs leading-relaxed text-muted-foreground"><HeartPulse className="size-4 text-primary" aria-hidden="true" /><p>Your AIGM is built for long-running campaigns and can remember earlier gameplay, but not every fact stays in immediate attention all the time. If it overlooks something it already knows, remind it or ask it to check the character or campaign record and keep playing.</p></div>
           </div>
 
         </aside>

@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.34')
-assert.equal(pkg.rpgywVersion, '1.7.34')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.34'/)
+assert.equal(pkg.version, '1.7.35')
+assert.equal(pkg.rpgywVersion, '1.7.35')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.35'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -573,7 +573,7 @@ console.log('RPG Your Way 1.7.31 compact Play header and rail-space checks passe
 
 
 assert.match(gameplayShell, /aigm-gameplay-heading-copy/)
-assert.match(gameplayShell, /keep playing\.<\/p><\/div>\s*<div className="aigm-character-footer">/)
+assert.match(gameplayShell, /<div className="aigm-character-footer">[\s\S]*Add another character<\/button>[\s\S]*<div className="aigm-character-memory-note/ )
 assert.match(css, /RPG Your Way 1\.7\.32/)
 assert.match(css, /\.aigm-dice-heading,[\s\S]*height: fit-content !important/)
 assert.match(css, /\.aigm-dice-mode-toggle,[\s\S]*margin-top: 0 !important/)
@@ -592,3 +592,8 @@ console.log('RPG Your Way 1.7.33 Play desktop-layout, header-width, and dice-mod
 
 assert.match(gameplay1714, /<span className="text-center leading-tight">Story<br \/>first<\/span>/)
 console.log('RPG Your Way 1.7.34 Story-first two-line centering check passed.')
+
+assert.match(gameplayShell, /aigm-character-memory-note/)
+assert.match(css, /RPG Your Way 1\.7\.35/)
+assert.match(css, /\.aigm-character-memory-note > svg \{[\s\S]*float: left/)
+console.log('RPG Your Way 1.7.35 character-rail final-flow cleanup check passed.')

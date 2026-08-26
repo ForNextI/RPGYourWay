@@ -4533,3 +4533,23 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   color: var(--cream-bright) !important;
   border-color: var(--rpgyw-brass-highlight) !important;
 }
+
+
+/* RPG Your Way 1.7.35: finish the character rail by putting party controls
+   before the memory note and letting that final note use the rail width instead
+   of reserving a permanent icon column. */
+.aigm-character-memory-note {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: .55rem .6rem;
+  overflow: hidden;
+}
+.aigm-character-memory-note > svg {
+  float: left;
+  margin: .12rem .42rem .1rem 0;
+}
+.aigm-character-memory-note > p {
+  margin: 0;
+  padding: 0;
+}
