@@ -2126,9 +2126,9 @@ export function AigmGameplayShell() {
           <section>
             <div className="aigm-dice-heading flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2"><Dices className="size-5 shrink-0 text-primary" aria-hidden="true" /><h2 className="font-display text-xl font-bold leading-tight">Roll Your Dice Here</h2></div>
-              <div className="inline-flex rounded-xl border border-border bg-background p-1" aria-label="Dice mode">
-                <button type="button" onClick={() => setDiceMode('purist')} aria-pressed={gameplay.dice_mode === 'purist'} className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-bold ${gameplay.dice_mode === 'purist' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}><LockKeyhole className="size-3.5" aria-hidden="true" />Purist</button>
-                <button type="button" onClick={() => setDiceMode('cheat')} aria-pressed={gameplay.dice_mode === 'cheat'} className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-bold ${gameplay.dice_mode === 'cheat' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}><UnlockKeyhole className="size-3.5" aria-hidden="true" />Story first</button>
+              <div className="aigm-dice-mode-toggle inline-flex rounded-xl p-1" aria-label="Dice mode">
+                <button type="button" onClick={() => setDiceMode('purist')} aria-pressed={gameplay.dice_mode === 'purist'} className={`aigm-dice-mode-button inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-bold ${gameplay.dice_mode === 'purist' ? 'aigm-dice-mode-button--active' : ''}`}><LockKeyhole className="size-3.5" aria-hidden="true" />Purist</button>
+                <button type="button" onClick={() => setDiceMode('cheat')} aria-pressed={gameplay.dice_mode === 'cheat'} className={`aigm-dice-mode-button inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-bold ${gameplay.dice_mode === 'cheat' ? 'aigm-dice-mode-button--active' : ''}`}><UnlockKeyhole className="size-3.5" aria-hidden="true" />Story first</button>
               </div>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{gameplay.dice_mode === 'purist' ? 'Accept what fate sends your way. The game is more fun when failure is possible.' : 'Fate is a fickle mistress. Take matters a little more under your control.'}</p>
@@ -2198,8 +2198,10 @@ export function AigmGameplayShell() {
             </div>
           </div>
 
-          <div ref={conversationRef} onScroll={handleConversationScroll} className="aigm-conversation-scroll min-h-0 flex-1 overflow-y-auto px-5 py-6 sm:px-7">
-            <div className="aigm-conversation-column mx-auto flex w-full max-w-5xl flex-col gap-5">
+          <div className="aigm-conversation-stage min-h-0 flex-1">
+            <div className="aigm-conversation-olive-frame h-full min-h-0">
+              <div ref={conversationRef} onScroll={handleConversationScroll} className="aigm-conversation-scroll h-full min-h-0 overflow-y-auto px-5 py-6 sm:px-7">
+                <div className="aigm-conversation-column mx-auto flex w-full max-w-5xl flex-col gap-5">
               {gameplay.pending_level_ups.length > 0 && (
                 <div className="rounded-2xl border border-primary/45 bg-primary/10 px-4 py-4 sm:px-5">
                   <p className="font-display text-lg font-bold">Level Up ready</p>
@@ -2246,7 +2248,9 @@ export function AigmGameplayShell() {
                   </div>
                 </div>
               )}
-              <div ref={endRef} />
+                  <div ref={endRef} />
+                </div>
+              </div>
             </div>
           </div>
 

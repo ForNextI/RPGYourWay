@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.7.23')
-assert.equal(pkg.rpgywVersion, '1.7.23')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.23'/)
+assert.equal(pkg.version, '1.7.24')
+assert.equal(pkg.rpgywVersion, '1.7.24')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.7\.24'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -464,3 +464,18 @@ assert.match(read('components/aigm/aigm-gameplay-shell.tsx'), /aigm-character-ca
 assert.match(read('app/account/page.tsx'), /className="account-intro"/)
 
 console.log('RPG Your Way 1.7.23 visual-unification checks passed.')
+
+
+const css1724 = read('app/globals.css')
+assert.match(css1724, /RPG Your Way 1\.7\.24 Play visual correction/)
+assert.match(css1724, /\.aigm-dice-mode-button[\s\S]*border: 1px solid var\(--rpgyw-brass-edge\)/)
+assert.match(css1724, /\.aigm-characters-heading h2[\s\S]*font-size: clamp/)
+assert.match(css1724, /\.aigm-conversation-stage[\s\S]*background: var\(--forest-deep\)/)
+assert.match(css1724, /\.aigm-conversation-olive-frame[\s\S]*var\(--landing-olive-19-deep\)/)
+assert.match(css1724, /\.aigm-conversation-scroll[\s\S]*border: 2px solid var\(--landing-brass-dark\)/)
+const gameplay1724 = read('components/aigm/aigm-gameplay-shell.tsx')
+assert.match(gameplay1724, /aigm-dice-mode-toggle/)
+assert.match(gameplay1724, /aigm-conversation-stage/)
+assert.match(gameplay1724, /aigm-conversation-olive-frame/)
+
+console.log('RPG Your Way 1.7.24 Play visual-correction checks passed.')
