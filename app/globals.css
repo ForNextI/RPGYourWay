@@ -5333,3 +5333,81 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
 .start-question-footer { margin-top: .62rem; padding-top: .55rem; }
 .start-question-textarea { min-height: 78px; max-height: 120px; resize: vertical; }
 .start-name-grid { padding: .72rem .82rem; }
+
+/* RPG Your Way 1.8.3 — Start QA II: offset rules plaque, button hierarchy, open hex field, inset import bezel. */
+.start-rules-step { position: relative; padding-top: 2.35rem; }
+.start-rules-step .start-step-nameplate--rules { left: 1.05rem; top: -.7rem; }
+.start-rules-card {
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 18px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--landing-pale) 92%, white), var(--landing-pale));
+  padding: 1.1rem .9rem .85rem;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 72%, white), inset 0 1px 0 rgb(255 255 255 / .76), 0 3px 0 var(--rpgyw-brass-shadow), 0 8px 14px rgb(43 47 38 / .10);
+}
+.start-rules-actions { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) minmax(0, .8fr); gap: .65rem; }
+.start-rules-current,
+.start-rules-secondary,
+.start-olive-control {
+  min-height: 54px;
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 11px;
+  background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep));
+  color: var(--cream-bright);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 58%, white), inset 0 1px 0 rgb(255 255 255 / .20), 0 3px 0 var(--rpgyw-brass-shadow), 0 6px 10px rgb(43 47 38 / .10);
+  cursor: pointer;
+  font-weight: 900;
+  transition: color 120ms ease, border-color 120ms ease, transform 80ms ease;
+}
+.start-rules-current { display: grid; place-content: center; gap: .05rem; padding: .55rem .8rem; text-align: center; }
+.start-rules-current strong { font-size: .98rem; }
+.start-rules-current span { color: var(--cream-bright); font-size: .72rem; font-weight: 800; }
+.start-rules-secondary,
+.start-olive-control { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; padding: .55rem .78rem; text-align: center; }
+.start-rules-secondary svg { width: 17px; height: 17px; flex: 0 0 auto; }
+.start-rules-current:hover,
+.start-rules-current:focus-visible,
+.start-rules-current:hover span,
+.start-rules-current:focus-visible span,
+.start-rules-secondary:hover,
+.start-rules-secondary:focus-visible,
+.start-olive-control:hover,
+.start-olive-control:focus-visible { color: var(--lime) !important; }
+.start-rules-current:active,
+.start-rules-secondary:active,
+.start-olive-control:active { transform: translateY(1px); }
+.start-rules-card .start-rules-panel { margin-top: .8rem; border: 0; border-radius: 0; background: transparent; padding: 0; box-shadow: none; }
+.start-rules-card > .start-fixed-setting { margin-top: .75rem; }
+
+/* The onboarding field itself is the hex-map background. Individual controls carry the furniture. */
+.start-step { border: 0; border-radius: 0; background: transparent; box-shadow: none; padding-inline: 0; }
+.start-step .start-step-nameplate { left: 0; }
+.start-step-heading-row { padding-inline: .15rem; }
+.start-character-actions--primary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
+.start-character-actions--primary .start-primary-control { width: 100%; min-height: 50px; }
+.start-character-actions--secondary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; margin-top: .6rem; }
+.start-character-actions--secondary .start-olive-control { width: 100%; min-height: 44px; }
+.start-drop-zone {
+  min-height: 108px;
+  margin-top: .8rem;
+  border: 7px solid var(--landing-olive-19-deep);
+  outline: 2px solid var(--rpgyw-brass-edge);
+  outline-offset: 0;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--landing-pale) 93%, white);
+  box-shadow: inset 0 0 0 2px var(--rpgyw-brass-highlight), inset 0 9px 18px rgb(43 47 38 / .14), inset 0 -2px 0 rgb(255 255 255 / .58), 0 3px 0 var(--rpgyw-brass-shadow);
+}
+.start-drop-zone span { color: var(--forest-ink); }
+@media (max-width: 860px) {
+  .start-rules-actions { grid-template-columns: 1fr 1fr; }
+  .start-rules-current { grid-column: 1 / -1; }
+  .start-character-actions--primary { grid-template-columns: 1fr 1fr; }
+  .start-character-actions--primary .start-primary-control:first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 640px) {
+  .start-rules-step { padding-top: 2.5rem; }
+  .start-rules-step .start-step-nameplate--rules { left: .65rem; max-width: calc(100% - 1.3rem); }
+  .start-rules-actions,
+  .start-character-actions--primary,
+  .start-character-actions--secondary { grid-template-columns: 1fr; }
+  .start-character-actions--primary .start-primary-control:first-child { grid-column: auto; }
+}

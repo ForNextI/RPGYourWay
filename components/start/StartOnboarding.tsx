@@ -289,40 +289,45 @@ export function StartOnboarding() {
         </>
       ) : (
         <>
-          <div className="start-top-controls" aria-label="Start page controls">
-            <button
-              type="button"
-              className="start-rules-toggle"
-              aria-expanded={rulesOpen}
-              aria-controls="start-rules-panel"
-              onClick={() => setRulesOpen((open) => !open)}
-            >
-              <span className="start-rules-title"><span className="start-rules-number">1</span><span>Choose the game rules</span></span>
-              <small>{RULESETS.find((option) => option.id === ruleset)?.label ?? 'D&D 5.5e'}{ruleset === 'dnd-5.5e-srd-5.2.1' ? ' · Default' : ''}</small>
-            </button>
-            <button type="button" className="start-top-help" onClick={() => setModal('faq')}><CircleHelp aria-hidden="true" />I need help with all of this</button>
-            <button type="button" className="start-top-help" onClick={() => setAgeModalOpen(true)}><ShieldCheck aria-hidden="true" />Change age settings</button>
-          </div>
-
-          {rulesOpen ? (
-            <section className="start-rules-panel" id="start-rules-panel" aria-label="Choose the game rules">
-              <div className="start-rules-grid">
-                {RULESETS.map((option) => (
-                  <button
-                    key={option.id}
-                    type="button"
-                    className={`start-choice${ruleset === option.id ? ' start-choice--selected' : ''}`}
-                    aria-pressed={ruleset === option.id}
-                    onClick={() => setRuleset(option.id)}
-                  >
-                    <strong>{option.label}</strong>
-                    <span>{option.detail}</span>
-                  </button>
-                ))}
+          <section className="start-rules-step" aria-labelledby="rules-heading">
+            <div className="start-step-nameplate start-step-nameplate--rules"><span>1</span><span id="rules-heading">Choose the game rules</span></div>
+            <div className="start-rules-card">
+              <div className="start-rules-actions" aria-label="Game rules and Start help">
+                <button
+                  type="button"
+                  className="start-rules-current"
+                  aria-expanded={rulesOpen}
+                  aria-controls="start-rules-panel"
+                  onClick={() => setRulesOpen((open) => !open)}
+                >
+                  <strong>{RULESETS.find((option) => option.id === ruleset)?.label ?? 'D&D 5.5e'}</strong>
+                  <span>{ruleset === 'dnd-5.5e-srd-5.2.1' ? 'Current default' : 'Current selection'}</span>
+                </button>
+                <button type="button" className="start-rules-secondary" onClick={() => setModal('faq')}><CircleHelp aria-hidden="true" />I need help with all of this</button>
+                <button type="button" className="start-rules-secondary" onClick={() => setAgeModalOpen(true)}><ShieldCheck aria-hidden="true" />Change age settings</button>
               </div>
+
+              {rulesOpen ? (
+                <div className="start-rules-panel" id="start-rules-panel" aria-label="Choose the game rules">
+                  <div className="start-rules-grid">
+                    {RULESETS.map((option) => (
+                      <button
+                        key={option.id}
+                        type="button"
+                        className={`start-choice${ruleset === option.id ? ' start-choice--selected' : ''}`}
+                        aria-pressed={ruleset === option.id}
+                        onClick={() => setRuleset(option.id)}
+                      >
+                        <strong>{option.label}</strong>
+                        <span>{option.detail}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
               <p className="start-fixed-setting"><strong>Setting:</strong> The Uncharted Realms</p>
-            </section>
-          ) : null}
+            </div>
+          </section>
 
           {ruleset ? (
             <section className="start-step" aria-labelledby="party-heading">
@@ -332,7 +337,6 @@ export function StartOnboarding() {
                   <h2 id="party-heading" className="sr-only">Default party</h2>
                   <p>{ruleset === 'dnd-5.5e-srd-5.2.1' ? 'Fighter, Wizard, Cleric, and Rogue are loaded. Keep them, change them, or mix in your own characters.' : 'Add your own characters for this ruleset. The current ready-to-play library uses D&D 5.5e.'}</p>
                 </div>
-                <button type="button" className="start-text-help" onClick={() => setModal('starter-help')}>About ready-to-play characters</button>
               </div>
 
               <div className="start-party-grid">
@@ -352,11 +356,14 @@ export function StartOnboarding() {
                 ))}
               </div>
 
-              <div className="start-character-actions">
+              <div className="start-character-actions start-character-actions--primary">
                 {ruleset === 'dnd-5.5e-srd-5.2.1' ? <button type="button" className="start-primary-control" onClick={() => setModal('starters')}><UsersRound aria-hidden="true" />Choose ready-to-play characters</button> : null}
                 <button type="button" className="start-primary-control" onClick={() => fileRef.current?.click()} disabled={party.length >= 6}><Upload aria-hidden="true" />Browse for character files</button>
                 <button type="button" className="start-primary-control" onClick={() => setPasteOpen((value) => !value)} disabled={party.length >= 6}><FileText aria-hidden="true" />Paste character information</button>
-                <button type="button" className="start-text-help" onClick={() => setModal('import-help')}>Character import help</button>
+              </div>
+              <div className="start-character-actions start-character-actions--secondary">
+                <button type="button" className="start-olive-control" onClick={() => setModal('import-help')}>Character import help</button>
+                <button type="button" className="start-olive-control" onClick={() => setModal('starter-help')}>About ready-to-play characters</button>
               </div>
               <input ref={fileRef} className="sr-only" type="file" multiple accept=".pdf,.json,.xml,.txt,.md,text/plain,text/markdown,application/pdf,application/json,application/xml,text/xml" onChange={(event) => importFiles(Array.from(event.target.files ?? []))} />
 
