@@ -6074,3 +6074,68 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   .site-header .brand-mark img { width: 29px; height: 29px; }
   .start-party-edit-note { margin-left: 0; }
 }
+
+/* RPG Your Way 1.8.8 — Start becomes a one-step-at-a-time board, beginning with game rules. */
+.start-rules-card--single-step {
+  display: grid;
+  justify-items: center;
+  gap: .78rem;
+}
+.start-rules-card--single-step .start-rules-current--display {
+  width: min(440px, 100%);
+  min-height: 66px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--forest-deep) 96%, white), var(--forest-deep));
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 62%, white),
+    inset 0 1px 0 rgb(255 255 255 / .16),
+    0 4px 0 var(--rpgyw-brass-shadow),
+    0 8px 13px rgb(30 38 30 / .14);
+}
+.start-rules-card--single-step .start-rules-current--display strong {
+  font-size: 1.05rem;
+}
+.start-rules-card--single-step .start-rules-current--display span {
+  margin-top: .12rem;
+  font-size: .78rem;
+}
+.start-rules-card--single-step .start-rules-panel {
+  width: 100%;
+  margin-top: .15rem;
+}
+.start-rules-confirm {
+  display: grid;
+  justify-items: center;
+  gap: .42rem;
+  width: 100%;
+  margin-top: .25rem;
+  padding-top: .45rem;
+}
+.start-rules-confirm-button {
+  width: min(330px, 100%);
+  min-height: 48px;
+}
+.start-rules-confirm p {
+  margin: 0;
+  color: var(--forest-deep);
+  font-size: .82rem;
+  font-weight: 800;
+}
+.start-reset-link {
+  display: block;
+  width: fit-content;
+  margin: 1.15rem auto 0;
+  border: 0;
+  background: transparent;
+  padding: .2rem .35rem;
+  color: var(--landing-olive-19-deep);
+  cursor: pointer;
+  font-size: .72rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+.start-reset-link:hover,
+.start-reset-link:focus-visible {
+  color: var(--lime);
+  outline: none;
+}

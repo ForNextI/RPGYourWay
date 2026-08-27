@@ -88,7 +88,7 @@ const QUESTION_HELP = [
   'These settings control how strongly personal history matters, whether player-character romance is welcome, and how carefully marked secrets should be protected.',
   'This controls how dangerous combat should feel when combat happens. It does not control how often combat occurs.',
   'Use this for material you do not want in the campaign or want handled carefully. Site-wide safety rules still apply whether or not you add anything here.',
-  'These ratings shape the opening pace, how strongly a long-term story develops, and how weird or reality-bending the campaign is allowed to become. The setting is always The Uncharted Realms.',
+  'These ratings shape the opening pace, how strongly a long-term story develops, and how weird or reality-bending the campaign is allowed to become.',
 ] as const
 
 const CAMPAIGN_TOPICS = ['Humor', 'Serious drama', 'Exploration', 'Mystery', 'Social interaction', 'Combat', 'Tactical challenge', 'Politics and intrigue', 'Puzzles', 'NPC relationships'] as const
@@ -178,6 +178,7 @@ export function StartOnboarding() {
   const [modal, setModal] = useState<'faq' | 'ai-help' | 'starters' | 'import-help' | 'leader' | 'leader-change' | 'question-help' | 'character-questions' | 'character-review' | 'paid-import' | null>(null)
   const [ruleset, setRuleset] = useState<RulesetId>('dnd-5.5e-srd-5.2.1')
   const [rulesOpen, setRulesOpen] = useState(false)
+  const [activeStep, setActiveStep] = useState<1 | 2 | 3 | 4>(1)
   const [party, setParty] = useState<PartyMember[]>([])
   const [pasteOpen, setPasteOpen] = useState(false)
   const [pasteText, setPasteText] = useState('')
@@ -466,20 +467,19 @@ export function StartOnboarding() {
         </>
       ) : (
         <>
-          <section className="start-rules-step" aria-labelledby="rules-heading">
+          {activeStep === 1 ? <section className="start-rules-step" aria-labelledby="rules-heading">
             <div className="start-step-nameplate start-step-nameplate--rules"><span>1</span><strong id="rules-heading">Choose the game rules</strong></div>
-            <div className="start-rules-card">
-              <div className="start-rules-actions" aria-label="Game rules and Start help">
-                <button type="button" className="start-rules-current" aria-expanded={rulesOpen} aria-controls="start-rules-panel" onClick={() => setRulesOpen((open) => !open)}><strong>{publicRulesetLabel(ruleset)}</strong><span>{ruleset === 'dnd-5.5e-srd-5.2.1' ? 'Current default' : 'Current selection'}</span></button>
-                <button type="button" className="start-rules-secondary" onClick={() => setModal('faq')}><CircleHelp aria-hidden="true" />I need help with all of this</button>
-                <button type="button" className="start-rules-secondary" onClick={() => setAgeModalOpen(true)}><ShieldCheck aria-hidden="true" />Change age settings</button>
-              </div>
+            <div className="start-rules-card start-rules-card--single-step">
+              <button type="button" className="start-rules-current start-rules-current--display" aria-expanded={rulesOpen} aria-controls="start-rules-panel" onClick={() => setRulesOpen((open) => !open)}><strong>{publicRulesetLabel(ruleset)}{ruleset === 'dnd-5.5e-srd-5.2.1' ? ' (default)' : ''}</strong><span>or choose a different one</span></button>
               {rulesOpen ? <div className="start-rules-panel" id="start-rules-panel"><div className="start-rules-grid">{RULESETS.map((option) => <button key={option.id} type="button" className={`start-choice${ruleset === option.id ? ' start-choice--selected' : ''}`} aria-pressed={ruleset === option.id} onClick={() => setRuleset(option.id)}><strong>{option.label}</strong><span>{option.detail}</span></button>)}</div></div> : null}
-              <p className="start-fixed-setting"><strong>Setting:</strong> The Uncharted Realms</p>
+              <div className="start-rules-confirm">
+                <button type="button" className="start-primary-control start-rules-confirm-button" onClick={() => { setRulesOpen(false); setActiveStep(2) }}>Use these game rules</button>
+                <p><strong>Selected:</strong> {publicRulesetLabel(ruleset)}</p>
+              </div>
             </div>
-          </section>
+          </section> : null}
 
-          <section className="start-step start-party-step" aria-labelledby="party-heading">
+          {activeStep === 2 ? <section className="start-step start-party-step" aria-labelledby="party-heading">
             <div className="start-step-nameplate"><span>2</span>Gather Your Party</div>
             <div className="start-step-heading-row"><div><h2 id="party-heading" className="sr-only">Gather Your Party</h2><p>{ruleset === 'dnd-5.5e-srd-5.2.1' ? 'Fighter, Wizard, Cleric, and Rogue are loaded. Keep them, change them, or mix in your own characters.' : 'Add your own characters for this ruleset. The current ready-to-play library uses D&D 5.5e.'}</p></div></div>
             <div className="start-character-actions start-character-actions--primary">
@@ -513,9 +513,10 @@ export function StartOnboarding() {
             </div>
 
             {partyReady && recommendation ? <div className="start-leader-card"><div className="start-leader-main"><span>Proposed party leader:</span><strong>{leader?.label ?? 'None'}</strong></div><div className="start-leader-controls"><button type="button" onClick={() => setModal('leader-change')}>Change</button><button type="button" className={leaderChoice === 'none' ? 'is-selected' : ''} onClick={() => setLeaderChoice('none')}>None</button></div><button type="button" className="start-leader-explain" onClick={() => setModal('leader')}>How did we choose this leader?</button></div> : null}
-          </section>
+            <button type="button" className="start-reset-link" onClick={() => { if (window.confirm('Reset this setup and start again?')) window.location.reload() }}>Or reset everything and start again</button>
+          </section> : null}
 
-          {partyReady ? <section className="start-step start-settings-step" aria-labelledby="questions-heading">
+          {activeStep === 3 && partyReady ? <section className="start-step start-settings-step" aria-labelledby="questions-heading">
             <div className="start-step-nameplate"><span>3</span>Adjustable gameplay settings</div>
             <div className={questionMode === 'answer' ? 'start-settings-bezel' : 'start-settings-body'}>
               {questionMode === 'pending' ? <div className="start-question-choice" id="questions-heading"><button type="button" className="start-primary-control start-big-control" onClick={() => { setQuestionMode('answer'); setQuestionIndex(0) }}>Customize</button><button type="button" className="start-info-control start-big-control" onClick={() => setQuestionMode('skip')}>Use default settings</button></div> : questionMode === 'skip' ? <div className="start-complete-plaque"><Sparkles aria-hidden="true" /><div><strong>Using the default gameplay settings.</strong><span>You can still change campaign guidance later.</span></div><button type="button" onClick={() => setQuestionMode('pending')}>Change</button></div> : questionMode === 'complete' ? <div className="start-complete-plaque"><Sparkles aria-hidden="true" /><div><strong>Your campaign guidance is set.</strong><span>Six short questions answered.</span></div><button type="button" onClick={() => { setQuestionMode('answer'); setQuestionIndex(0) }}>Review</button></div> : <div className="start-question-panel">
@@ -525,14 +526,14 @@ export function StartOnboarding() {
                 {questionIndex === 2 ? <CharacterPriorities values={characterRatings} onChange={(topic, value) => setCharacterRatings((current) => ({ ...current, [topic]: value }))} /> : null}
                 {questionIndex === 3 ? <><h2>How dangerous should combat be?</h2><RatingControl value={danger} onChange={setDanger} low="Forgiving" high="Deadly consequences" /></> : null}
                 {questionIndex === 4 ? <><h2>What do you not want to appear in your game?</h2><textarea className="start-question-textarea" value={exclusions} onChange={(event) => setExclusions(event.target.value)} rows={3} placeholder="Anything else you want left out, kept offscreen, or handled carefully." /><p className="start-question-note">Sexual assault and sexual or romantic content involving anyone under 18 are always excluded.</p></> : null}
-                {questionIndex === 5 ? <><h2>How should the campaign grow?</h2><div className="start-rating-stack"><RatingControl label="Opening pace" value={openingPace} onChange={setOpeningPace} low="Calm opening" high="Immediate danger" /><RatingControl label="Long-term story direction" value={storyDirection} onChange={setStoryDirection} low="Mostly open-ended" high="Strong escalating campaign arc" /><RatingControl label="How weird do you want your campaign to get?" value={campaignScale} onChange={setCampaignScale} low="Grounded and local" high="Reality-bending and cosmic" /></div><p className="start-fixed-setting"><strong>Setting:</strong> The Uncharted Realms</p></> : null}
+                {questionIndex === 5 ? <><h2>How should the campaign grow?</h2><div className="start-rating-stack"><RatingControl label="Opening pace" value={openingPace} onChange={setOpeningPace} low="Calm opening" high="Immediate danger" /><RatingControl label="Long-term story direction" value={storyDirection} onChange={setStoryDirection} low="Mostly open-ended" high="Strong escalating campaign arc" /><RatingControl label="How weird do you want your campaign to get?" value={campaignScale} onChange={setCampaignScale} low="Grounded and local" high="Reality-bending and cosmic" /></div></> : null}
                 <div className="start-question-footer"><button type="button" className="start-text-help" onClick={() => openQuestionHelp(questionIndex)}>Explain this question</button><div className="start-question-nav"><button type="button" className="start-secondary-control" disabled={questionIndex === 0} onClick={() => setQuestionIndex((index) => Math.max(0, index - 1))}><ChevronLeft aria-hidden="true" />Back</button><button type="button" className="start-primary-control" onClick={() => questionIndex === 5 ? setQuestionMode('complete') : setQuestionIndex((index) => Math.min(5, index + 1))}>{questionIndex === 5 ? 'Continue' : <>Next<ChevronRight aria-hidden="true" /></>}</button></div></div>
               </div>}
             </div>
           </section> : null}
 
-          {questionsDone ? <section className="start-step" aria-labelledby="names-heading"><div className="start-step-nameplate"><span>4</span>Name your campaign and Game Master</div><div className="start-name-grid" id="names-heading"><label className="start-field"><span>Give your campaign a fun name</span><span className="start-field-bezel"><input value={campaignName} onChange={(event) => setCampaignName(event.target.value)} placeholder="Descriptive campaign name here — have fun" /></span></label><label className="start-field"><span>What do you want to call your Game Master?</span><span className="start-field-bezel"><input value={gmName} onChange={(event) => setGmName(event.target.value)} placeholder="Game Master name" /></span></label></div></section> : null}
-          {namesReady && questionsDone ? <section className="start-play-step" aria-label="Continue to Play"><button type="button" className="start-play-button" disabled={!playReadyForEngine || creatingCampaign} onClick={() => void continueToPlay()}>{creatingCampaign ? 'Creating campaign…' : 'Onward'}</button>{createError ? <p className="auth-message auth-message-error" role="alert">{createError}</p> : null}</section> : null}
+          {activeStep === 4 && questionsDone ? <section className="start-step" aria-labelledby="names-heading"><div className="start-step-nameplate"><span>4</span>Name your campaign and Game Master</div><div className="start-name-grid" id="names-heading"><label className="start-field"><span>Give your campaign a fun name</span><span className="start-field-bezel"><input value={campaignName} onChange={(event) => setCampaignName(event.target.value)} placeholder="Descriptive campaign name here — have fun" /></span></label><label className="start-field"><span>What do you want to call your Game Master?</span><span className="start-field-bezel"><input value={gmName} onChange={(event) => setGmName(event.target.value)} placeholder="Game Master name" /></span></label></div></section> : null}
+          {activeStep === 4 && namesReady && questionsDone ? <section className="start-play-step" aria-label="Continue to Play"><button type="button" className="start-play-button" disabled={!playReadyForEngine || creatingCampaign} onClick={() => void continueToPlay()}>{creatingCampaign ? 'Creating campaign…' : 'Onward'}</button>{createError ? <p className="auth-message auth-message-error" role="alert">{createError}</p> : null}</section> : null}
         </>
       )}
 
