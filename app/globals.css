@@ -2017,8 +2017,12 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
    Flat geometry, shallow depth: no ornamental sci-fi chrome. */
 
 :root {
-  --landing-mint: #d9e2cf;
-  --landing-mint-light: #e8eddf;
+  --landing-pale-olive: #dde2b9;
+  --landing-pale-olive-light: #edf0d4;
+  --landing-pale-olive-deep: #c8d09b;
+  /* Legacy variable names remain as aliases so older component rules inherit the new palette. */
+  --landing-mint: var(--landing-pale-olive);
+  --landing-mint-light: var(--landing-pale-olive-light);
   --landing-olive: #7c874d;
   --landing-olive-deep: #65713e;
   --landing-parchment: #f2dfb8;
@@ -2348,8 +2352,8 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
   --landing-pale: #f6ead4;
   --landing-pale-deep: #e7d6b8;
   --landing-screen: #efd9ad;
-  --landing-mint-19: #dce5d3;
-  --landing-mint-19-deep: #c7d4bc;
+  --landing-mint-19: var(--landing-pale-olive);
+  --landing-mint-19-deep: var(--landing-pale-olive-deep);
   --landing-olive-19: #8b965b;
   --landing-olive-19-deep: #6f7946;
   --landing-shadow: #3f473d;
@@ -6230,4 +6234,386 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   .start-ai-turn { width: 94%; }
   .start-ai-dialogue { max-height: 46dvh; }
   .start-ai-composer-actions { align-items: stretch; }
+}
+
+/* RPG Your Way 1.8.11 — sitewide pale-olive palette + dimensional furniture contract.
+   The only intentionally flat structural bands are the site header ribbon and footer.
+   Pressable controls, plaques, nameplates, popup furniture, and inset work areas use
+   the same physical vocabulary everywhere: inner contrast line -> brass rim -> depth. */
+
+:root {
+  --rpgyw-pale-olive: #dde2b9;
+  --rpgyw-pale-olive-light: #edf0d4;
+  --rpgyw-pale-olive-deep: #c8d09b;
+  --rpgyw-control-inner-light: color-mix(in srgb, var(--cream-bright) 88%, white);
+  --rpgyw-control-inner-dark: var(--forest-deep);
+  --rpgyw-rim-spread: 2px;
+
+  /* Canonical aliases. Anything historically called mint now renders pale olive. */
+  --landing-pale-olive: var(--rpgyw-pale-olive);
+  --landing-pale-olive-light: var(--rpgyw-pale-olive-light);
+  --landing-pale-olive-deep: var(--rpgyw-pale-olive-deep);
+  --landing-mint: var(--rpgyw-pale-olive);
+  --landing-mint-light: var(--rpgyw-pale-olive-light);
+  --landing-mint-19: var(--rpgyw-pale-olive);
+  --landing-mint-19-deep: var(--rpgyw-pale-olive-deep);
+}
+
+/* Default pressable object: pale olive face, forest inner line, brass outside it.
+   Page-specific primary/selected colors remain in charge because those selectors are
+   more specific; the physical rim and depth are standardized here. */
+body :where(button, .button, .fake-button, summary, [role="button"]) {
+  border: 1px solid var(--rpgyw-control-inner-dark) !important;
+  background-color: var(--rpgyw-pale-olive);
+  box-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-edge),
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    inset 0 -2px 0 rgb(63 74 49 / .09),
+    0 3px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-shadow),
+    0 8px 13px rgb(37 45 35 / .12) !important;
+}
+
+/* Unclassified buttons no longer default to transparent/flat furniture. */
+body :where(button, summary, [role="button"]):not(:disabled) {
+  background-image: linear-gradient(180deg, var(--rpgyw-pale-olive-light), var(--rpgyw-pale-olive));
+  color: var(--forest-deep);
+}
+
+/* Dark/active/action faces use the inverse single-pixel inner line before the brass. */
+body :where(
+  .button-primary,
+  .fake-button:not(.fake-button-secondary),
+  .landing-new-player.button,
+  .landing-return-button.button,
+  .start-primary-control,
+  .start-rules-current,
+  .start-olive-control,
+  .start-age-choices button,
+  .start-choice,
+  .start-rating-scale button,
+  .start-leader-controls button,
+  .aigm-send-roll,
+  .aigm-roll-initiative,
+  .aigm-gameplay-send,
+  .aigm-dice-mode-button--active,
+  .account-delete-submit
+) {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  box-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-edge),
+    inset 0 1px 0 rgb(255 255 255 / .22),
+    inset 0 -2px 0 rgb(0 0 0 / .13),
+    0 3px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-shadow),
+    0 8px 13px rgb(29 38 29 / .15) !important;
+}
+
+/* One hover language across the application: forest face, house lime words/icons. */
+body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabled):hover,
+body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabled):focus-visible {
+  background: var(--forest-deep) !important;
+  color: var(--lime) !important;
+  border-color: var(--rpgyw-control-inner-light) !important;
+}
+body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabled):hover :where(svg, span, strong, p),
+body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabled):focus-visible :where(svg, span, strong, p) {
+  color: var(--lime) !important;
+}
+body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabled):active {
+  transform: translateY(2px);
+  box-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-edge),
+    inset 0 2px 4px rgb(29 40 31 / .18),
+    0 1px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-shadow),
+    0 4px 7px rgb(29 38 29 / .11) !important;
+}
+
+/* The header ribbon keeps its intentionally quiet navigation behavior. Its existing
+   compass and fullscreen utility furniture retain their own small brass treatment. */
+.site-header .main-nav a,
+.site-header .brand {
+  box-shadow: none !important;
+}
+
+/* Raised light plaques: dark-green hairline around the face, then the standardized
+   brass rim and brass lower edge. This is the light-panel version of the same trick. */
+:where(
+  .landing-notice-card,
+  .landing-reason-card,
+  .feature-card,
+  .landing-campaign-summary-card,
+  .shape-intro,
+  .shape-workbench,
+  .shape-gate,
+  .shape-steps > div,
+  .shape-project-options > label,
+  .shape-description-card,
+  .shape-project-picker,
+  .shape-progress-grid > div,
+  .shape-quote,
+  .shape-public-preview-note,
+  .shape-live-progress,
+  .account-intro,
+  .account-access-details,
+  .usage-balance-card,
+  .play-pack-section,
+  .usage-activity,
+  .account-main .auth-card,
+  .account-main .account-signed-in,
+  .account-main .play-pack-card,
+  .aigm-tools-panel,
+  .aigm-gameplay-conversation,
+  .aigm-characters-panel,
+  .aigm-character-card,
+  .aigm-roll-result,
+  .aigm-party-capacity,
+  .start-rules-card,
+  .start-step,
+  .start-party-card,
+  .start-paste-panel,
+  .start-standardize-bar,
+  .start-leader-card,
+  .start-complete-plaque,
+  .start-question-panel,
+  .start-rating-control,
+  .start-question-card,
+  .start-ai-turn--assistant,
+  .start-name-grid,
+  .start-review-notices
+) {
+  border: 1px solid var(--forest-deep) !important;
+  box-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-edge),
+    inset 0 1px 0 rgb(255 255 255 / .76),
+    inset 0 -2px 0 rgb(72 76 48 / .07),
+    0 3px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-shadow),
+    0 9px 16px rgb(43 47 38 / .11) !important;
+}
+
+/* Forest/olive plaques get the pale inner line instead of the forest one. */
+:where(
+  .landing-player-stack,
+  .landing-notice-grid .landing-notice-card h1,
+  .landing-notice-grid .landing-notice-card h2,
+  .landing-thesis-strip p,
+  .feature-card:nth-child(2),
+  .feature-card:nth-child(1) .feature-eyebrow,
+  .feature-card:nth-child(3) .feature-eyebrow,
+  .start-step-nameplate,
+  .start-rules-step .start-step-nameplate--rules,
+  .aigm-dice-heading,
+  .aigm-characters-heading,
+  .usage-note-details
+) {
+  border: 1px solid var(--rpgyw-control-inner-light) !important;
+  box-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-edge),
+    inset 0 1px 0 rgb(255 255 255 / .18),
+    inset 0 -2px 0 rgb(0 0 0 / .12),
+    0 3px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-shadow),
+    0 9px 15px rgb(32 40 31 / .15) !important;
+}
+
+/* Pale feature/name plates use the light-panel ring sequence. */
+.feature-card:nth-child(2) .feature-eyebrow,
+.landing-return-logo {
+  border: 1px solid var(--forest-deep) !important;
+  box-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-edge),
+    inset 0 1px 0 rgb(255 255 255 / .76),
+    0 3px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-shadow),
+    0 8px 13px rgb(43 47 38 / .11) !important;
+}
+
+/* Popup/dialog furniture. Native and React overlays both get a physical plaque;
+   the full-screen character-sheet overlay itself remains an overlay, while its
+   internal editor/help surfaces are dimensionalized below. */
+:where(
+  .auth-dialog,
+  .persistent-play-modal-card,
+  section[role="dialog"],
+  .aigm-voice-controls [role="dialog"],
+  div[role="dialog"]:not(.fixed)
+) {
+  border: 1px solid var(--forest-deep) !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--landing-pale) 92%, white), var(--landing-pale)) !important;
+  box-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-edge),
+    inset 0 1px 0 rgb(255 255 255 / .78),
+    inset 0 -2px 0 rgb(72 76 48 / .07),
+    0 4px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-shadow),
+    0 16px 32px rgb(24 30 23 / .24) !important;
+}
+
+/* Common nested popup cards/fieldsets should read as plaques rather than flat utility boxes. */
+section[role="dialog"] :where(fieldset, details),
+.character-record-edit-workspace,
+.character-sheet-heading-row,
+.aigm-voice-controls [role="dialog"] > div {
+  border: 1px solid var(--forest-deep) !important;
+  background: linear-gradient(180deg, var(--rpgyw-pale-olive-light), var(--rpgyw-pale-olive)) !important;
+  box-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-edge),
+    inset 0 1px 0 rgb(255 255 255 / .68),
+    0 2px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-shadow),
+    0 6px 10px rgb(37 45 35 / .09) !important;
+}
+
+/* Generic editable fields that do not already live inside a purpose-built bezel
+   get the site's recessed olive -> brass -> parchment treatment. */
+body :where(
+  input:not([type="hidden"]):not([type="file"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select
+):not(.start-field-bezel *):not(.start-ai-composer *):not(.start-clarification-answer *):not(.aigm-composer-plaque *):not(.shape-file-field *) {
+  border: 5px solid var(--landing-olive-19-deep) !important;
+  outline: 2px solid var(--rpgyw-brass-edge);
+  outline-offset: 0;
+  background: color-mix(in srgb, var(--landing-pale) 97%, white) !important;
+  color: var(--ink);
+  box-shadow:
+    inset 0 0 0 1px var(--rpgyw-brass-highlight),
+    inset 0 4px 8px rgb(43 47 38 / .12),
+    0 2px 0 var(--rpgyw-brass-shadow) !important;
+}
+
+/* Existing dedicated inset wells keep their deeper seven-pixel olive bezel. */
+:where(
+  .start-settings-bezel,
+  .start-field-bezel,
+  .start-ai-composer,
+  .start-clarification-tier,
+  .start-ai-answer,
+  .start-question-textarea,
+  .aigm-conversation-stage,
+  .landing-campaign-screen-stage
+) {
+  box-shadow:
+    inset 0 0 0 2px var(--rpgyw-brass-highlight),
+    inset 0 8px 16px rgb(43 47 38 / .14),
+    0 0 0 2px var(--rpgyw-brass-edge),
+    0 3px 0 2px var(--rpgyw-brass-shadow) !important;
+}
+
+/* Small previously-flat text controls become miniature tertiary plaques too. */
+:where(
+  .auth-not-now,
+  .start-text-help,
+  .start-listen-link,
+  .start-reset-link,
+  .start-leader-explain,
+  .account-delete-link,
+  .persistent-play-close-x,
+  .start-modal-x
+) {
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--rpgyw-pale-olive-light), var(--rpgyw-pale-olive)) !important;
+  color: var(--forest-deep) !important;
+  padding: .28rem .5rem !important;
+  text-decoration: none !important;
+}
+
+/* Footer remains a flat forest band, but Ko-fi is intentionally a real button and
+   keeps its permanent lime exception. */
+.site-footer .kofi-support-button {
+  border: 1px solid var(--rpgyw-control-inner-light) !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--forest-deep) 92%, white), var(--forest-deep)) !important;
+  color: var(--lime) !important;
+  box-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-edge),
+    inset 0 1px 0 rgb(255 255 255 / .18),
+    inset 0 -2px 0 rgb(0 0 0 / .14),
+    0 3px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-shadow),
+    0 8px 13px rgb(20 28 21 / .20) !important;
+}
+.site-footer .kofi-support-button:hover,
+.site-footer .kofi-support-button:focus-visible {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: color-mix(in srgb, var(--forest-deep) 84%, black) !important;
+  color: var(--lime) !important;
+}
+.site-footer .kofi-support-button :where(svg, span) { color: var(--lime) !important; }
+
+/* Keep ordinary footer text/navigation flat by design. */
+.site-footer :where(.footer-links a, .footer-srd-attribution a, .footer-contact-link) {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+@media (max-width: 620px) {
+  :root { --rpgyw-rim-spread: 1.5px; }
+}
+
+/* The two opening landing-page title nameplates remain the heaviest reference furniture.
+   Ordinary buttons use the 2px brass spread above; these retain a 3px outer brass rim. */
+.landing-notice-grid .landing-notice-card h1,
+.landing-notice-grid .landing-notice-card h2 {
+  box-shadow:
+    0 0 0 3px var(--rpgyw-brass-edge),
+    inset 0 1px 0 rgb(255 255 255 / .18),
+    inset 0 -2px 0 rgb(0 0 0 / .12),
+    0 4px 0 3px var(--rpgyw-brass-shadow),
+    0 10px 16px rgb(32 40 31 / .16) !important;
+}
+
+.usage-note-details > summary {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--forest-deep) !important;
+  color: var(--cream-bright) !important;
+}
+
+/* Radio/checkbox choice cards are controls too. Give them the same physical face,
+   and use forest + white for the current selection. */
+body label:has(> input[type="radio"]),
+body label:has(> input[type="checkbox"]) {
+  border: 1px solid var(--forest-deep) !important;
+  border-radius: 11px;
+  background: linear-gradient(180deg, var(--rpgyw-pale-olive-light), var(--rpgyw-pale-olive)) !important;
+  box-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-edge),
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    0 2px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-shadow),
+    0 6px 10px rgb(37 45 35 / .09) !important;
+}
+body label:has(> input[type="radio"]:checked),
+body label:has(> input[type="checkbox"]:checked) {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--forest-deep) !important;
+  color: var(--cream-bright) !important;
+}
+body label:has(> input[type="radio"]:checked) :where(span, strong, p),
+body label:has(> input[type="checkbox"]:checked) :where(span, strong, p) {
+  color: var(--cream-bright) !important;
+}
+
+/* Utility-class links in the Play workspace are visually buttons even when they are
+   anchors. Bring those stragglers into the same brass furniture contract. */
+body a[class*="rounded"][class*="border"],
+body a[class*="rounded"][class*="bg-"] {
+  border: 1px solid var(--forest-deep) !important;
+  box-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-edge),
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    0 3px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-shadow),
+    0 8px 13px rgb(37 45 35 / .12) !important;
+  text-decoration: none;
+}
+body a[class*="rounded"][class*="border"]:hover,
+body a[class*="rounded"][class*="border"]:focus-visible,
+body a[class*="rounded"][class*="bg-"]:hover,
+body a[class*="rounded"][class*="bg-"]:focus-visible {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--forest-deep) !important;
+  color: var(--lime) !important;
+}
+
+/* Header/footer navigation links remain the deliberate flat-band exceptions. */
+.site-header a,
+.site-footer a:not(.kofi-support-button) {
+  box-shadow: none !important;
 }

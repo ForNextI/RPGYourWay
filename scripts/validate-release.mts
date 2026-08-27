@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.8.10')
-assert.equal(pkg.rpgywVersion, '1.8.10')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.8\.10'/)
+assert.equal(pkg.version, '1.8.11')
+assert.equal(pkg.rpgywVersion, '1.8.11')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.8\.11'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -786,3 +786,20 @@ assert.match(css, /RPG Your Way 1\.8\.10/)
 assert.match(css, /\.start-ai-turn--assistant/)
 assert.match(css, /\.start-ai-composer/)
 console.log('RPG Your Way 1.8.10 Start dialogue, default-readback controls, and naming-step cleanup checks passed.')
+
+const css1811 = read('app/globals.css')
+assert.match(css1811, /RPG Your Way 1\.8\.11/)
+assert.match(css1811, /--rpgyw-pale-olive: #dde2b9/)
+assert.match(css1811, /--rpgyw-pale-olive-light: #edf0d4/)
+assert.match(css1811, /--rpgyw-pale-olive-deep: #c8d09b/)
+assert.match(css1811, /--landing-mint: var\(--rpgyw-pale-olive\)/)
+assert.match(css1811, /--landing-mint-19: var\(--rpgyw-pale-olive\)/)
+assert.doesNotMatch(css1811, /#d9e2cf|#e8eddf|#dce5d3|#c7d4bc/i)
+assert.match(css1811, /body :where\(button, \.button, \.fake-button, summary, \[role="button"\]\)/)
+assert.match(css1811, /0 0 0 var\(--rpgyw-rim-spread\) var\(--rpgyw-brass-edge\)/)
+assert.match(css1811, /section\[role="dialog"\]/)
+assert.match(css1811, /border: 5px solid var\(--landing-olive-19-deep\) !important/)
+assert.match(css1811, /\.site-footer \.kofi-support-button/)
+assert.match(css1811, /body a\[class\*=\"rounded\"\]\[class\*=\"border\"\]/)
+assert.match(css1811, /\.landing-notice-grid \.landing-notice-card h1,[\s\S]*0 0 0 3px var\(--rpgyw-brass-edge\)/)
+console.log('RPG Your Way 1.8.11 pale-olive palette, standardized brass furniture, inset bezels, popup, and Ko-fi checks passed.')
