@@ -1,0 +1,538 @@
+{
+  "id": "wardens-pc-starter-bard",
+  "playName": "Bard",
+  "sourceFileName": "Bard 1 Mark II.txt",
+  "sourceMimeType": "text/plain",
+  "portraitUrl": "/images/starter-characters/bard.webp",
+  "sourceText": "WARDENSPC PLAIN-TEXT CHARACTER RECORD\n\n\nRECORD INFORMATION\n\nRecord Version: Bard 1 Mark III\nLast Updated: 2026-08-11\nRules Version: 2024 D&D rules / SRD 5.2.1\nSource Character Sheet: Mistinarperadnacles_169279668.pdf\nDevelopment Status: Complete\n\n\nCHECKBOX KEY\n\nEquipment:\n[X] = actively worn, wielded, held, or otherwise ready for immediate use\n[ ] = carried, packed, stored, or not currently in use\n\nHit Dice, Limited-Use Resources, and Spell Slots:\n[ ] = available\n[X] = expended or used\n\nHeroic Inspiration:\n[X] = currently possessed\n[ ] = not currently possessed\n\nConcentration:\n[X] = currently concentrating on the named spell or effect\n[ ] = not currently concentrating\n\nSpells:\nCantrips do not need checkboxes.\n[X] = prepared or always prepared\n[ ] = known, recorded, or in a spellbook but not currently prepared\n\nAttuned Items:\n[X] = currently attuned\n[ ] = carried but not currently attuned\n\n\nIDENTITY AND ORIGIN\n\nPlayer Name: Mistinarperadnacles\nCharacter Name: Bard 1\nName Used During Play: Bard 1\nSex: Female\nPronouns: She/Her\nSpecies: High Elf\nLineage, Ancestry, or Heritage: High Elf lineage\nClass and Level: Bard 1\nSubclass: None at level 1\nSubclass Gained at Level: Bard level 3\nBackground: Acolyte\nOrigin Feat: Magic Initiate (Cleric)\nExperience Points or Milestone: Milestone\nAlignment: Neutral Good\n\nFaith or Deity:\nThe Common Table, a widely traveled religious tradition devoted to\nhospitality, mutual aid, safe passage, and the preservation of names so that\ndisplaced or vulnerable people are not erased.\n\nReligious Office or Former Role:\nWayfarer Cantor at the House of Shared Bread. Bard 1 preserved names,\njourneys, warnings, and local history through recitation, music, and public\nteaching.\n\nHome Region or Place of Origin: Not specified\nCurrent Residence or Base:\nFormerly the House of Shared Bread; no permanent base established\n\nSize: Medium\nAge: 72\nHeight: 5 ft. 4 in.\nWeight: 111 lb.\n\nSkin, Scales, Fur, or Other Coloration:\nDeep copper-brown skin.\n\nHair, Crest, Horns, or Other Distinguishing Features:\nDense dark-auburn curls worn loose around the shoulders; long pointed ears;\nnarrow face and high cheekbones.\n\nEyes: Leaf green\n\nGeneral Appearance:\nA slight High Elf with an earthy complexion, quiet footing, and restless\nenergy visible in her hands and eyes. Her appearance is natural and\nunadorned, but there is something electrically vivid about her attention.\n\nShe wears leather armor beneath an acolyte robe adapted for travel. Her\nbagpipes are well maintained and carried in a weatherproof wrap. Three\ncostumes, a small mirror, calligrapher's tools, and a bullseye lantern reflect\nher combined work as religious performer, oral historian, and traveler.\n\n\nCAMPAIGN AND TOKEN INFORMATION\n\nCampaign: WardensPC starter character\nIs Current Party's Active Leader: No\n\nAssociated Token Background Color: Green\n\nCharacter Token or Portrait Notes:\nUse a green token background. Show a slight 5 ft. 4 in. High Elf woman with\ndeep copper-brown skin, dense dark-auburn curls worn loose to the shoulders,\nleaf-green eyes, long pointed ears, a narrow face, high cheekbones, leather\narmor beneath a travel-worn acolyte robe, a dagger, and carefully wrapped\nbagpipes.\n\nHer appearance should feel natural, alert, and electrically vivid rather than\nornate or courtly.\n\n\nCOMBAT AND TRACKING\n\nArmor Class: 13\nArmor Class Calculation:\nLeather armor 11 + Dexterity modifier 2\n\nCurrent Hit Points: 9\nMaximum Hit Points: 9\nTemporary Hit Points: None\n\nHit Dice:\n1d8 total\n[ ] 1d8 available\n\nDeath Saves:\nSuccesses: [ ][ ][ ]\nFailures: [ ][ ][ ]\n\nHeroic Inspiration: [ ]\nConcentration: [ ]\nConcentrating On:\n\nSpeed and Movement Types: Walking 30 ft.\nInitiative: +2\nProficiency Bonus: +2\nSpell Save DC: 13\nSpell Attack Bonus: +5\nAbility Save DC: 9 for Strength-based Grapple or Shove effects\nPassive Perception: 12\nPassive Insight: 12\nPassive Investigation: 12\nCurrent Conditions: None\n\nOther Combat Notes:\nVicious Mockery is her principal at-will offensive spell.\nDissonant Whispers provides stronger single-target magical pressure.\nColor Spray can interfere with several nearby creatures.\nHealing Word provides emergency healing at range.\nBless strengthens several allies but requires Concentration.\nBardic Inspiration can turn a failed D20 Test into a success.\nHer daggers are backup weapons rather than preferred attacks.\n\n\nABILITY SCORES\n\nStrength: 8 (-1)\nDexterity: 14 (+2)\nConstitution: 12 (+1)\nIntelligence: 14 (+2)\nWisdom: 10 (+0)\nCharisma: 17 (+3)\n\n\nSAVING THROWS\n\nStrength: -1\nDexterity: +4, proficient\nConstitution: +1\nIntelligence: +2\nWisdom: +0\nCharisma: +5, proficient\n\nSaving Throw Proficiencies: Dexterity and Charisma\n\nSaving Throw Modifiers or Special Advantages:\nAdvantage on saving throws to avoid or end the Charmed condition through\nFey Ancestry.\n\nMagic cannot put Bard 1 to sleep through Trance.\n\n\nSKILLS\n\nAcrobatics: +4, proficient\nAnimal Handling: +0\nArcana: +2\nAthletics: -1\nDeception: +3\nHistory: +2\nInsight: +2, proficient\nIntimidation: +3\nInvestigation: +2\nMedicine: +0\nNature: +2\nPerception: +2, proficient\nPerformance: +5, proficient\nPersuasion: +5, proficient\nReligion: +4, proficient\nSleight of Hand: +2\nStealth: +2\nSurvival: +0\n\nExpertise or Other Skill Notes: None at Bard level 1.\n\n\nSENSES AND DEFENSES\n\nDarkvision or Other Senses: Darkvision 60 ft.\nDamage Resistances: None\nDamage Vulnerabilities: None\nDamage Immunities: None\nCondition Immunities:\nMagic cannot put Bard 1 to sleep.\n\nDefensive Advantages, Disadvantages, or Special Notes:\nFey Ancestry grants Advantage on saving throws made to avoid or end the\nCharmed condition.\n\nTrance allows Bard 1 to complete a Long Rest in 4 hours of trancelike\nmeditation while retaining consciousness.\n\n\nTRAINING AND PROFICIENCIES\n\nArmor Training: Light armor\nShield Training: None\nWeapon Proficiencies: Simple weapons\n\nTool Proficiencies:\nBagpipes\nCalligrapher's supplies\nLute\nPan flute\n\nVehicle Proficiencies: None recorded\n\nOther Training:\nPublic recitation\nOral history and memorized genealogies\nReligious music\nGuest-name and journey records\nCopying and illuminating devotional texts\nPerformance costuming\nCeremonial announcements and warning signals\n\n\nLANGUAGES\n\nLanguages Known:\nCommon\nDraconic\nGoblin\n\nSecret or Class Languages: None\n\nCommunication Notes:\nMessage allows quiet magical communication at range under the spell's normal\nrules.\n\nThe source sheet records no Elvish language proficiency. This record preserves\nthe source rather than adding one automatically.\n\n\nATTACKS, WEAPONS, AND OFFENSIVE OPTIONS\n\nName: Vicious Mockery\nAttack Bonus or Save DC: Wisdom save DC 13\nDamage or Effect:\n1d6 Psychic damage on a failed save. The target has Disadvantage on its next\nattack roll before the end of Bard 1's next turn.\n\nDamage Type: Psychic\nRange or Reach: 60 ft.\nAction Type: Action\nProperties: Bard cantrip; Verbal component\nWeapon Mastery: None\nAmmunition or Uses: At will\n\n\nName: Dissonant Whispers\nAttack Bonus or Save DC: Wisdom save DC 13\nDamage or Effect:\n3d6 Psychic damage on a failed save, or half as much on a successful save.\nOn a failed save, the target must immediately use its Reaction, if available,\nto move away from Bard 1 by the safest route allowed by the spell.\n\nDamage Type: Psychic\nRange or Reach: 60 ft.\nAction Type: Action\nProperties: 1st-level Bard spell; Verbal component\nWeapon Mastery: None\nAmmunition or Uses: Requires one level-1 spell slot\n\n\nName: Color Spray\nAttack Bonus or Save DC: Constitution save DC 13\nDamage or Effect:\nCreatures in the cone that fail the spell's saving throw receive its Blinded\neffect under the normal spell rules.\n\nDamage Type: None\nRange or Reach: Self; 15-ft. cone\nAction Type: Action\nProperties: 1st-level Bard spell\nWeapon Mastery: None\nAmmunition or Uses: Requires one level-1 spell slot\n\n\nName: Dagger\nAttack Bonus or Save DC: +4\nDamage or Effect:\n1d4+2 Piercing normally\nTwo-Weapon Fighting / Light-property extra attack: 1d4 Piercing\nDamage Type: Piercing\nRange or Reach: 5 ft. melee; thrown range 20/60 ft.\nAction Type: Action or Light-property additional attack\nProperties: Finesse, light, thrown, simple\nWeapon Mastery:\nNick is the weapon's mastery property, but Bard 1 has no Weapon Mastery feature\n\nAmmunition or Uses: Two daggers total\nNotes:\nOne dagger is immediately accessible and one is packed as reserve.\n\n\nName: Unarmed Strike\nAttack Bonus or Save DC: +1 attack or DC 9 save\nDamage or Effect: 0 Bludgeoning damage, Grapple, or Shove\nDamage Type: Bludgeoning\nRange or Reach: 5 ft.\nAction Type: Attack\nProperties: Unarmed\nWeapon Mastery: None\nAmmunition or Uses: None\n\n\nSELECTED WEAPON MASTERIES\n\nNone. Bard 1 does not have the Weapon Mastery feature.\n\n\nARMOR AND SHIELDS\n\nArmor: Leather armor\nCurrently Worn: [X]\nArmor Class: 13\nStrength Requirement: None\nStealth Effect: None\nNotes: Base AC 11 plus Dexterity modifier 2.\n\nShield: None\nCurrently Wielded: [ ]\nArmor Class Bonus: None\nNotes: Bard 1 is not trained to use shields.\n\n\nEQUIPMENT\n\n[X] Item: Leather armor | Quantity: 1 | Weight: 10 lb. | Worn, Held, or Stored Where: Worn beneath robe | Notes: Primary armor.\n[X] Item: Acolyte robe | Quantity: 1 | Weight: 4 lb. | Worn, Held, or Stored Where: Worn | Notes: Adapted and reinforced for travel.\n[X] Item: Bagpipes | Quantity: 1 | Weight: 6 lb. | Worn, Held, or Stored Where: Slung in weatherproof wrap | Notes: Musical instrument, religious performance instrument, and Bard spellcasting focus.\n[X] Item: Dagger | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Belt sheath | Notes: Immediately accessible.\n[ ] Item: Dagger | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Reserve weapon.\n[X] Item: Holy symbol | Quantity: 1 | Weight: Negligible | Worn, Held, or Stored Where: Worn | Notes: A small round table engraved with seven empty places.\n[X] Item: Backpack | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Worn | Notes: Main equipment container.\n[X] Item: Ordinary pouch | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Belt | Notes: Coins, chalk, bell, and small items.\n[X] Item: Component pouch | Quantity: 1 | Weight: 2 lb. | Worn, Held, or Stored Where: Belt | Notes: Noncostly material components when an instrument or holy symbol is unsuitable.\n[ ] Item: Calligrapher's supplies | Quantity: 1 set | Weight: 5 lb. | Worn, Held, or Stored Where: Backpack | Notes: Pens, brushes, ink, and preparation tools.\n[ ] Item: Parchment | Quantity: 10 sheets | Weight: Negligible | Worn, Held, or Stored Where: Document case | Notes: Names, route notes, copied testimony, and performance text.\n[ ] Item: Devotional and performance book | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Backpack | Notes: Common Table liturgy, names, recitations, and musical notation.\n[ ] Item: Oil | Quantity: 8 flasks | Weight: 8 lb. total | Worn, Held, or Stored Where: Padded backpack compartment | Notes: Lantern fuel and general use.\n[ ] Item: Rations | Quantity: 9 days | Weight: 18 lb. total | Worn, Held, or Stored Where: External provision bundle secured to pack frame | Notes: Durable traveling food; carried outside the backpack interior to respect its capacity.\n[ ] Item: Waterskin | Quantity: 1 | Weight: 5 lb. full | Worn, Held, or Stored Where: Backpack exterior | Notes: Filled at the start of play.\n[ ] Item: Bedroll | Quantity: 1 | Weight: 7 lb. | Worn, Held, or Stored Where: Strapped to backpack | Notes: Standard traveling bedroll.\n[ ] Item: Wool blanket | Quantity: 1 | Weight: 3 lb. | Worn, Held, or Stored Where: Strapped to backpack | Notes: Camp and cold-weather use.\n[ ] Item: Mess kit | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Wooden bowl, small plate, spoon, and eating knife.\n[ ] Item: Wooden mug | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Personal drinking vessel.\n[X] Item: Tinderbox | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Belt pouch | Notes: Flint, fire steel, and dry tinder.\n[ ] Item: Dry kindling | Quantity: 3 small bundles | Weight: 1 lb. total | Worn, Held, or Stored Where: Backpack | Notes: Wrapped against damp.\n[ ] Item: Torches | Quantity: 10 | Weight: 10 lb. total | Worn, Held, or Stored Where: Side lashings on pack | Notes: Each burns for 1 hour.\n[ ] Item: Healing bandages | Quantity: 5 clean dressings | Weight: 1 lb. total | Worn, Held, or Stored Where: Backpack | Notes: Clean linen; no automatic magical healing.\n[ ] Item: Bell | Quantity: 1 | Weight: Negligible | Worn, Held, or Stored Where: Belt pouch | Notes: Ceremonial signal and practical alarm.\n[ ] Item: Small mirror | Quantity: 1 | Weight: 0.5 lb. | Worn, Held, or Stored Where: Padded backpack pocket | Notes: Costuming, signaling, and inspection.\n[ ] Item: Bullseye lantern | Quantity: 1 | Weight: 2 lb. | Worn, Held, or Stored Where: Backpack | Notes: Directional light.\n[ ] Item: Performance costumes | Quantity: 3 sets | Weight: 12 lb. total | Worn, Held, or Stored Where: External garment roll secured to pack | Notes: Religious pageants, public teaching, and disguises of role rather than identity.\n[ ] Item: Chalk | Quantity: Exactly 2 pieces | Weight: Negligible | Worn, Held, or Stored Where: Belt pouch | Notes: Emergency marking chalk.\n[ ] Item: Trinket | Quantity: 1 bag | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: d100 result 26; contains forty-seven teeth, one of which is rotten.\n\nCoins:\nCP: 0\nSP: 0\nEP: 0\nGP: 27\nPP: 0\n\nRecorded Total Weight: Approximately 111.5 lb.\nCarrying Capacity: 120 lb.\nEncumbrance Threshold, if Used: Not used\nPush, Drag, or Lift Capacity: 240 lb.\n\n\nATTUNED ITEMS\n\nAttunement Slots Used: 0\nAttuned Items: None\n\n\nLIMITED-USE RESOURCES\n\nResource: Bardic Inspiration\nMaximum Uses: 3\nDie Size: 1d6\nRecovery: Long Rest\n[ ] Use 1 available\n[ ] Use 2 available\n[ ] Use 3 available\n\nActivation:\nBonus Action. Choose another creature within 60 ft. that can see or hear\nBard 1.\n\nEffect:\nThe creature gains one Bardic Inspiration die for 1 hour. When it fails a\nD20 Test during that time, it can roll the die and add the result, potentially\nturning the failure into a success.\n\n\nResource: Magic Initiate free casting of Bless\nMaximum Uses: 1\nRecovery: Long Rest\n[ ] Free casting available\n\nEffect:\nCast Bless once without expending a spell slot. Bard 1 can also cast Bless\nusing Bard spell slots.\n\n\nSPELLCASTING\n\nSpellcasting Class, Feature, or Source: Bard\nSpellcasting Ability: Charisma\nSpell Save DC: 13\nSpell Attack Bonus: +5\nSpellcasting Focus:\nBagpipes or another musical instrument\n\nRitual Casting:\nBard 1 can cast a currently prepared spell as a Ritual if that spell has the\nRitual tag. None of Bard 1's current prepared Bard spells has the Ritual tag.\n\nPrepared Bard Spells:\nCharm Person\nColor Spray\nDissonant Whispers\nHealing Word\n\nConcentration Rules or Notes:\nBard 1 can maintain only one Concentration spell at a time.\nDancing Lights, Guidance, and Bless require Concentration.\n\nOther Spellcasting Notes:\nBard 1 has two level-1 spell slots.\n\n\nSpellcasting Class, Feature, or Source: Magic Initiate (Cleric)\nSpellcasting Ability: Charisma\nSpell Save DC: 13\nSpell Attack Bonus: +5\nSpellcasting Focus:\nHoly symbol or component pouch when required\n\nCantrips:\nGuidance\nLight\nAlways Prepared Spell:\nBless\n\nOther Spellcasting Notes:\nBless can be cast once without a spell slot per Long Rest and can also be cast\nusing Bard spell slots.\n\n\nSpellcasting Class, Feature, or Source: High Elf Lineage\nSpellcasting Ability: Charisma\nSpell Save DC: 13\nSpell Attack Bonus: +5\nSpell Known:\nMessage\n\nOther Spellcasting Notes:\nAfter a Long Rest, Bard 1 can replace Message with a different Wizard cantrip\nunder the High Elf lineage rules.\n\n\nSPELL SLOTS\n\n1st Level: 2 total, 0 used\n[ ][ ]\n\n\nSPELLS\n\nCantrip:\nName: Dancing Lights\nSource: Bard\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: 120 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nCreates and moves magical lights under the spell's normal rules.\nComponents: Verbal, Somatic, Material\nDuration: Concentration, up to 1 minute\nConcentration: Yes\nRitual: No\n\nCantrip:\nName: Vicious Mockery\nSource: Bard\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: 60 ft.\nAttack Bonus or Save DC: Wisdom save DC 13\nDamage or Effect:\n1d6 Psychic damage on a failed save. The target has Disadvantage on its next\nattack roll before the end of Bard 1's next turn.\nComponents: Verbal\nDuration: Instantaneous\nConcentration: No\nRitual: No\n\nCantrip:\nName: Guidance\nSource: Magic Initiate (Cleric)\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: Touch\nAttack Bonus or Save DC: None\nDamage or Effect:\nThe target can add 1d4 to one ability check of its choice before the spell\nends.\nComponents: Verbal, Somatic\nDuration: Concentration, up to 1 minute\nConcentration: Yes\nRitual: No\n\nCantrip:\nName: Light\nSource: Magic Initiate (Cleric)\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: Touch\nAttack Bonus or Save DC: None\nDamage or Effect:\nCauses an eligible object to shed magical light under the spell's normal\nrules.\nComponents: Verbal, Material\nDuration: 1 hour\nConcentration: No\nRitual: No\n\nCantrip:\nName: Message\nSource: High Elf Lineage\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: 120 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nSends a brief whispered message to a creature in range under the spell's\nnormal rules.\nComponents: Verbal, Somatic, Material\nDuration: 1 round\nConcentration: No\nRitual: No\n\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Charm Person\nLevel: 1\nSource: Bard\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: 30 ft.\nAttack Bonus or Save DC: Wisdom save DC 13\nDamage or Effect:\nAn eligible creature becomes Charmed on a failed save, subject to the spell's\nnormal limitations.\nComponents: Verbal, Somatic\nDuration: 1 hour\nConcentration: No\nRitual: No\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Color Spray\nLevel: 1\nSource: Bard\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: Self; 15-ft. cone\nAttack Bonus or Save DC: Constitution save DC 13\nDamage or Effect:\nCreatures failing the save receive the spell's Blinded effect under the normal\nspell rules.\nComponents: Verbal, Somatic, Material\nDuration: Instantaneous\nConcentration: No\nRitual: No\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Dissonant Whispers\nLevel: 1\nSource: Bard\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: 60 ft.\nAttack Bonus or Save DC: Wisdom save DC 13\nDamage or Effect:\n3d6 Psychic damage on a failed save, or half as much on a successful save.\nA creature failing the save must use its Reaction, if available, to move away\nby the safest route allowed by the spell.\nComponents: Verbal\nDuration: Instantaneous\nConcentration: No\nRitual: No\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Healing Word\nLevel: 1\nSource: Bard\nSpellcasting Ability: Charisma\nCasting Time: Bonus Action\nRange: 60 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nRestores 2d4+3 Hit Points to an eligible creature.\nComponents: Verbal\nDuration: Instantaneous\nConcentration: No\nRitual: No\n\n1st-Level or Higher Spell:\n[X] Always Prepared through Magic Initiate\nName: Bless\nLevel: 1\nSource: Magic Initiate (Cleric)\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: 30 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nUp to three eligible creatures add 1d4 to attack rolls and saving throws for\nthe duration under the spell's normal rules.\nComponents: Verbal, Somatic, Material\nDuration: Concentration, up to 1 minute\nConcentration: Yes\nRitual: No\nFree Uses or Special Casting Rules:\nOne free casting per Long Rest; can also be cast using Bard spell slots.\n\n\nFEATURES AND ABILITIES\n\nClass Features:\n\nBardic Inspiration\nAs a Bonus Action, Bard 1 can inspire another creature within 60 ft. that can\nsee or hear her. That creature gains a 1d6 Bardic Inspiration die for 1 hour.\nWhen it fails a D20 Test, it can add the die to the result, potentially turning\nfailure into success. Bard 1 has three uses per Long Rest.\n\nSpellcasting\nBard 1 casts Bard spells using Charisma. Her spell save DC is 13 and her spell\nattack bonus is +5. She can use a musical instrument as a spellcasting focus.\n\n\nSubclass Features:\n\nNone at level 1. Bard subclass is chosen at level 3.\n\n\nSpecies Traits:\n\nCreature Type\nHumanoid.\n\nSize\nMedium.\n\nSpeed\n30 ft.\n\nDarkvision\nBard 1 has Darkvision to 60 ft.\n\nHigh Elf Lineage\nBard 1 knows Message using Charisma. She can replace that cantrip with another\nWizard cantrip after a Long Rest under the lineage rules.\n\nFey Ancestry\nBard 1 has Advantage on saving throws made to avoid or end the Charmed\ncondition.\n\nKeen Senses\nBard 1 is proficient in Perception.\n\nTrance\nBard 1 does not need to sleep, magic cannot put her to sleep, and she can\ncomplete a Long Rest in 4 hours of trancelike meditation while retaining\nconsciousness.\n\n\nFeats:\n\nMagic Initiate (Cleric)\nBard 1 knows Guidance and Light and always has Bless prepared. Charisma is the\nspellcasting ability for these spells. Bless can be cast once without a spell\nslot per Long Rest and can also be cast using Bard spell slots.\n\n\nBackground Benefits:\n\nAcolyte\nAbility score increases have already been applied.\nProficiencies include Insight, Religion, and Calligrapher's Supplies.\nOrigin Feat: Magic Initiate (Cleric).\n\n\nPERSONALITY TRAITS\n\nBard 1 is highly charismatic and clever enough to make simple situations\ncomplicated.\n\nIn danger, her instincts are excellent. Her battle songs are lively, direct,\nwell timed, and exactly suited to keeping frightened people moving. When she\nuses Bardic Inspiration in a crisis, the performance feels immediate and\npractical rather than scholarly.\n\nOutside battle, she is an ethnographer of endangered vocal traditions. She\ncollects songs, chants, work rhythms, laments, ceremonial responses, and oral\nhistories from cultures whose music is being displaced, forgotten, or absorbed\ninto larger societies.\n\nHer collection includes far-northern sea chants, mountain antiphonies, songs\nfrom the dry interior, call-and-response traditions from the deep plains,\nriver-delta work music, court ballads from distant eastern kingdoms, island\npercussion chants, pastoral throat-singing, and fragmentary songs attributed\nto peoples from a lost continent several continents away.\n\nThis makes her tavern performances unpredictable. An audience expecting a\nfamiliar drinking song or romantic ballad may instead receive a funeral chant\nfrom an isolated plateau community or a rowing cadence from a vanished coastal\npeople.\n\nWhen she performs well, her Charisma and respect for the material allow the\nsong to reach people even when it is unfamiliar. The audience may not\nunderstand the original context, but the emotion survives the translation.\n\nWhen she performs poorly, the result can feel baffling, overly academic, or\ncompletely unsuited to the room. Listeners may wonder why they are hearing an\nobscure ritual clicking song when they ordered another round and wanted\nsomething cheerful.\n\nOf the two former acolytes, Bard 1 is the more active proselytizer for the\nCommon Table. In every new settlement, she looks for beggars, displaced\nfamilies, isolated travelers, hungry children, injured laborers, and people\nbeing ignored by local authority.\n\nShe will interrupt an urgent mission to help such people, even when the rest\nof the group insists that a larger threat must come first. She does not accept\nthat saving the world excuses walking past the person suffering directly in\nfront of her.\n\nBard 1 deeply distrusts people from large cities. She assumes that dense urban\nlife rewards indifference, deception, status-seeking, and the habit of treating\nstrangers as disposable. A city resident must prove trustworthy before she\ngrants them the benefit of the doubt.\n\nHer distrust is broad and unfair. It is a prejudice, not an accurate rule about\nurban people.\n\nIDEALS\n\nFaith.\n\nBard 1 trusts that the principles of the Common Table are larger and more\nenduring than any official who misuses them. Hospitality, the preservation of\nnames, mutual aid, and safe passage remain sacred even when a religious\ninstitution fails to practice them.\n\nHer faith is not confidence that every mystery will be explained. It is a\ndecision to continue carrying names, testimony, food, warning, and hope when\nthe people entrusted with those duties become corrupt.\n\nSource Roll: Acolyte Ideal d6 result 5.\n\nBONDS\n\nBard 1 intends to take revenge on the corrupt religious hierarchy that helped\nexpose the House of Shared Bread and the refuge network connected to it.\n\nHer revenge is not defined as assassination or indiscriminate destruction.\nShe wants the responsible officials identified publicly, stripped of authority,\ndeprived of the records and resources they controlled, and forced to hear the\nnames of every person harmed by their decisions.\n\nShe suspects that someone within the Common Table supplied the false pilgrims\nwith authentic phrases, seals, and sanctuary customs.\n\nSource Roll: Acolyte Bond d6 result 2.\n\nFLAWS\n\nBard 1 places too much trust in people who hold recognized authority within\nher religious tradition.\n\nA title, official robe, seal, or formal appointment carries more weight with\nher than it should. Even after the attack, her first instinct is to distinguish\none corrupt official from the institution rather than question whether the\ninstitution itself enabled the harm.\n\nThis flaw is particularly dangerous because her Bond directs her against a\nhierarchy she still instinctively respects.\n\nSource Roll: Acolyte Flaw d6 result 2.\n\nALLIES AND ORGANIZATIONS\n\nName or Group: The Common Table\nRelationship or Connection:\nBard 1's religious tradition and active missionary cause\n\nNotes:\nThe Common Table operates kitchens, guest halls, shrines, road refuges, and\nnetworks for food, letters, names, routes, and safe passage.\n\nBard 1 remains committed to its principles while investigating corruption in\nits upper administration. She also actively carries those principles into new\nplaces by seeking out people excluded from ordinary aid and helping them\ndirectly.\n\nName or Group: The House of Shared Bread\nRelationship or Connection:\nFormer sanctuary and spiritual home\n\nFalse pilgrims attacked the sanctuary and stole the Wayfarer Ledger after\nsomeone silenced its alarm bell.\n\nName or Group: The Chorus of Returning Names\nRelationship or Connection:\nLoose network of singers, reciters, messengers, mourners, and oral historians\n\nNotes:\nThe Chorus preserves testimony independently of official archives. Members\nmemorize names, routes, losses, debts, and acts of aid so that destroying one\nledger cannot erase an event.\n\nThe Chorus is not formally controlled by the Common Table hierarchy. Some\nmembers believe official centralization of refuge records directly caused the\nattack on the House of Shared Bread.\n\nSupporting Organization Roll: d20 result 18.\n\nName or Group: Senior Cantor Maelis Thorn\nRelationship or Connection:\nFormer teacher, institutional sponsor, and unresolved suspect\n\nNotes:\nMaelis trained Bard 1 in oral registers, ceremonial performance, and the\ndiscipline of repeating a name exactly as given.\n\nMaelis personally vouched for the distant charitable order whose supposed\npilgrims later attacked the sanctuary. Bard 1 does not know whether Maelis was\ndeceived, coerced, careless, or complicit.\n\nBard 1's instinctive respect for Maelis's office makes the question harder to\ninvestigate honestly.\n\nSupporting Relationship Roll: d20 result 3.\n\nCHARACTER NOTES, GOALS, FEARS, AND RELATIONSHIPS\n\nGoals:\n\nBard 1 wants to identify the official or officials who supplied the false\npilgrims with authentic seals, phrases, and sanctuary customs.\n\nShe wants to find Senior Cantor Maelis Thorn and determine whether her former\nteacher was deceived or participated knowingly.\n\nShe also wants to build the Many-Mouth Register, a distributed oral record in\nwhich no single captured courier, stolen ledger, destroyed shrine, or corrupt\nadministrator can expose or erase the entire refuge network.\n\nSupporting Goal Roll: d20 result 8.\n\nFears:\n\nBard 1 fears that one of her own public recitations helped the attackers.\n\nBefore the assault, she performed a formal journey litany at a regional\ngathering. The litany contained names, repeated phrases, route metaphors, and\ntraditional responses used by legitimate travelers.\n\nShe does not know whether someone extracted practical information from the\nperformance or whether that fear is guilt searching for a shape.\n\nMore deeply, she fears discovering that Maelis knowingly used her voice to\nauthenticate a betrayal.\n\nSupporting Fear Roll: d20 result 5.\n\nHabits or Mannerisms:\n\nShe records songs phonetically before translating them, then writes separate\nnotes for rhythm, breathing, gesture, social setting, and who is permitted to\nperform them.\n\nShe becomes irritated when another performer “improves” a traditional song by\nmaking it smoother, more fashionable, or easier for outsiders to enjoy.\n\nBefore a battle, she instinctively chooses simple, forceful music with a clear\npulse. In a tavern, she is much more likely to select something historically\nimportant and socially baffling.\n\nAfter a successful unusual performance, she explains the song's origin only\nif asked. After an unsuccessful one, she is prone to explaining it at length\nto an audience that has already stopped listening.\n\nUpon entering a new settlement, she scans alleys, market edges, shrine steps,\nwork yards, and roadside shelters for people who have been excluded from the\ncommunity's ordinary support.\n\nShe carries small portions of food separately so they can be given away\nwithout opening the group's entire ration supply. This does not create extra\nrations or override the recorded inventory.\n\nWhen someone says, “We do not have time to help everyone,” she usually replies\nwith some version of, “We have time to help this one.”\n\nShe asks where a stranger is from early in conversation. Mention of a major\ncity makes her noticeably more guarded, skeptical, and formal.\n\nShe tends to interpret urban polish, fashionable clothing, official confidence,\nand quick salesmanship as warning signs until shown otherwise.\n\nImportant Relationships:\n\nSenior Cantor Maelis Thorn:\nFormer teacher whose possible connection to the false pilgrims threatens\nBard 1's faith in religious authority.\n\nThe House of Shared Bread:\nFormer home and center of the attack that began the pair's journey.\n\nThe Chorus of Returning Names:\nIndependent oral-history network that may offer a safer future for sanctuary\nrecords.\n\nThe Common Table:\nHer faith tradition, whose principles she still serves while opposing parts\nof its hierarchy.\n\nOther Character Notes:\n\nHer ethnographic work is intended to preserve endangered vocal traditions\nrespectfully. She records where a song comes from, who may perform it, what\noccasion it belongs to, and what should not be altered merely to please an\noutside audience.\n\nHer distrust of large-city residents is a character flaw and prejudice. It\ngrants no automatic Insight, social advantage, immunity to deception, or\nspecial knowledge of urban people.\n\nHer charitable interventions use her actual equipment, money, spell slots,\ntime, and judgment. They do not create unlimited food, shelter, healing, or\nfunds.\n\nHer bagpipes are both a musical instrument and her normal Bard spellcasting\nfocus.\n\nHer proficiency with lute and pan flute does not mean those instruments are\npresent in her starting equipment.\n\nThe bag of forty-seven teeth is a mundane trinket. The teeth have not been\nidentified by creature or origin. One is rotten. The AI Game Master may use\nthe bag as a future mystery, but it grants no automatic magical or forensic\ninformation.\n\nThe Wayfarer Ledger, Maelis Thorn, corruption within the Common Table, the\nMany-Mouth Register, and Bard 1's potentially compromised recital are future\nAI Game Master story hooks.\n\nFormative Event Roll: d20 result 15.\nThe formative event is the regional journey litany that may have revealed\ninformation later used against the sanctuary.\n\n\nBACKSTORY\n\nBard 1 was born in a High Elf community whose long memory was maintained less\nthrough monuments than through repeated names, seasonal songs, and carefully\npreserved accounts of who traveled where and why.\n\nShe entered the Common Table after hearing one of its traveling cantors recite\nthe names of people who had vanished during a winter migration. The list did\nnot transform them into heroes. It simply refused to let absence become\nerasure.\n\nAt the House of Shared Bread, Bard 1 became a Wayfarer Cantor.\n\nShe announced meals, welcomed travelers, taught children road songs, performed\nat memorials, copied letters, carried warnings between guest houses, and\nmaintained oral versions of important records.\n\nAnother acolyte served at the same sanctuary, maintaining stores, written\nledgers, ritual texts, and practical guest records. Bard 1 preserved names,\njourneys, and testimony in forms that could survive the loss of paper.\n\nSenior Cantor Maelis Thorn trained and sponsored her. Maelis taught that a\ncantor's first obligation was exactness: never improve a person's name for\nrhythm, never replace an unfamiliar place with a familiar one, and never turn\nsomeone's suffering into a prettier story.\n\nBard 1 trusted her.\n\nAt a regional gathering, Bard 1 performed a formal journey litany before\nofficials, pilgrims, traders, and representatives of distant charitable\norders. Maelis approved the program and vouched for several visiting guests.\n\nWeeks later, travelers wearing the symbols of one of those orders arrived at\nthe House of Shared Bread during bad weather. A fellow acolyte argued that\nthey should be admitted. Bard 1 recognized the phrases and ceremonial\nresponses they used. The House opened its doors.\n\nThe visitors were not pilgrims.\n\nThey silenced the alarm bell, wounded Mother Orra Vale, searched the archive,\nand stole the Wayfarer Ledger. Bard 1 used magic, voice, and remembered\npassages through the sanctuary to help move survivors out.\n\nAfterward, she found details that troubled her. The attackers had used\nauthentic formulas rarely known outside trained staff. One had repeated a\nline from her regional journey litany with the same unusual phrasing she had\nused in performance.\n\nBard 1 left to follow the stolen ledger. It remains missing, her former\nteacher's role remains unresolved, and she fears that her own performance may\nhave helped teach the attackers how to enter.\n\n\nOPTIONAL BACKSTORY\n\nThis is optional story material only. It does not establish current party membership, leadership, or party role.\n\nBard 1 and Warlock 1 served together at the House of Shared Bread. After the sanctuary was attacked and the Wayfarer Ledger stolen, they left together to follow it. Their search led toward an illegal trapping and labor camp. Druid 1 had independently tracked damaged land, poisoned water, and abnormal animal movement to the same location. Barbarian 1 entered by another route seeking contracts, keys, and payroll records. When the camp's alarms sounded, the four investigations collided. Druid 1 found a safe route through the surrounding wetland, Barbarian 1 opened a barred service gate, and Warlock 1 and Bard 1 used magic, memory, and coordination to move captives through the confusion. The four escaped together and continued traveling as the Wild party.\n\n\nHOMEBREW OR UNUSUAL RULES\n\nRule, Feature, Item, or Spell:\nThe Common Table, House of Shared Bread, and Chorus of Returning Names\n\nFull Effect:\nThese are widely traveled narrative institutions and story hooks. They grant\nno automatic shelter, legal authority, information, supplies, income, or\nfavors.\n\nSource or Rules Reference:\nWardensPC starter-character narrative material.\n\n\nRule, Feature, Item, or Spell:\nWayfarer Cantor and Many-Mouth Register\n\nFull Effect:\nThese are narrative roles and projects. They grant no automatic perfect\nmemory, Expertise, language proficiency, immunity to misinformation, or\nability to transmit information without ordinary communication.\n\nSource or Rules Reference:\nWardensPC starter-character narrative material.\n\n\nRule, Feature, Item, or Spell:\nEndangered Vocal-Tradition Archive\n\nFull Effect:\nBard 1 collects and preserves songs, chants, oral histories, work rhythms, and\nceremonial forms from coastal peoples, inland communities, mountain societies,\nriver cultures, island traditions, distant kingdoms, and peoples known only\nthrough fragmentary records from a lost continent.\n\nThis grants no automatic language proficiency, perfect recall, Expertise,\ncultural authority, performance success, or right to perform restricted\nmaterial. What may be shared depends on the tradition, the people who taught\nit to her, and the circumstances of the performance.\n\nSource or Rules Reference:\nWardensPC character material.\n\n\nRule, Feature, Item, or Spell:\nDirect Charity\n\nFull Effect:\nBard 1 actively seeks out and assists disadvantaged people. Aid must use\navailable resources, time, spells, equipment, contacts, and ordinary actions.\nThis trait does not generate additional money, food, spell slots, shelter, or\ninstitutional cooperation.\n\nSource or Rules Reference:\nWardensPC character material.\n\n\nRule, Feature, Item, or Spell:\nBag of Forty-Seven Teeth\n\nFull Effect:\nThe teeth are mundane and unidentified. The bag grants no automatic magical\neffect, creature identification, tracking benefit, spell component value, or\nforensic conclusion.\n\nSource or Rules Reference:\nTrinket d100 result 26; WardensPC clarification.\n",
+  "result": {
+    "document_assessment": {
+      "kind": "other_character_sheet",
+      "is_usable": true,
+      "reason": "Readable, detailed WardensPC plain-text D&D 2024 character record with complete identity, mechanics, spells, equipment, resources, and narrative material."
+    },
+    "assistant_message": "Bard 1, the High Elf Wayfarer Cantor of the Common Table, is ready to join a new campaign fully rested. Her resources, spell slots, equipment, and the House of Shared Bread story hooks are recorded.",
+    "confidence": "high",
+    "intake_settings": {
+      "campaign_start_mode": "new_fully_rested",
+      "dont_sweat_small_stuff": true,
+      "ruleset": "D&D 5.5e (2024 rules)"
+    },
+    "opening_state": {
+      "campaign_start_mode": "new_fully_rested",
+      "fully_rested_defaults_applied": true,
+      "current_hit_points": 9,
+      "temporary_hit_points": 0,
+      "condition_notes": [],
+      "resource_state": "Fully rested: 1 Hit Die available, 3 Bardic Inspiration uses available, Magic Initiate Bless free casting available, and 2 level-1 spell slots available. Death saves are clear; Heroic Inspiration is not possessed.",
+      "standard_adventuring_setup": "",
+      "setup_confirmed": false
+    },
+    "applied_assumptions": [
+      "New-campaign fully rested defaults applied: current HP set to maximum, temporary HP set to 0, death saves clear, and rest-based resources restored.",
+      "Ordinary noncostly spell material components are covered by the listed component pouch and spellcasting focuses where applicable.",
+      "Listed portable equipment is treated as carried; no moment-to-moment hand or readiness choices are needed for intake."
+    ],
+    "player_corrections": [],
+    "character": {
+      "name": "Bard 1",
+      "sex": "Female",
+      "pronouns": "She/Her",
+      "age": "72",
+      "alignment": "Neutral Good",
+      "species": "High Elf",
+      "background": "Acolyte",
+      "classes": [
+        {
+          "name": "Bard",
+          "level": 1,
+          "subclass": ""
+        }
+      ],
+      "total_level": 1,
+      "armor_class": 13,
+      "initiative_modifier": 2,
+      "hit_points": {
+        "maximum": 9,
+        "current_shown_on_sheet": 9,
+        "temporary_shown_on_sheet": 0
+      },
+      "speed": "Walking 30 ft.",
+      "proficiency_bonus": "+2",
+      "ability_scores": {
+        "strength": 8,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 14,
+        "wisdom": 10,
+        "charisma": 17
+      },
+      "saving_throws": [
+        "Strength +1",
+        "Dexterity +4 (proficient)",
+        "Constitution +1",
+        "Intelligence +2",
+        "Wisdom +0",
+        "Charisma +5 (proficient)"
+      ],
+      "skills": [
+        "Acrobatics +4 (proficient)",
+        "Animal Handling +0",
+        "Arcana +2",
+        "Athletics -1",
+        "Deception +3",
+        "History +2",
+        "Insight +2 (proficient)",
+        "Intimidation +3",
+        "Investigation +2",
+        "Medicine +0",
+        "Nature +2",
+        "Perception +2 (proficient)",
+        "Performance +5 (proficient)",
+        "Persuasion +5 (proficient)",
+        "Religion +4 (proficient)",
+        "Sleight of Hand +2",
+        "Stealth +2",
+        "Survival +0"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 12",
+        "Passive Insight 12",
+        "Passive Investigation 12"
+      ],
+      "languages": [
+        "Common",
+        "Draconic",
+        "Goblin"
+      ],
+      "attacks": [
+        {
+          "name": "Vicious Mockery",
+          "attack_bonus": "Wisdom save DC 13",
+          "damage": "1d6 Psychic damage on a failed save; target has Disadvantage on its next attack roll before the end of Bard 1's next turn.",
+          "properties": [
+            "Bard cantrip",
+            "Action",
+            "Range 60 ft.",
+            "Verbal",
+            "At will"
+          ]
+        },
+        {
+          "name": "Dissonant Whispers",
+          "attack_bonus": "Wisdom save DC 13",
+          "damage": "3d6 Psychic damage on a failed save, half on a success; on a failed save target uses its Reaction, if available, to move away by the safest allowed route.",
+          "properties": [
+            "1st-level Bard spell",
+            "Action",
+            "Range 60 ft.",
+            "Verbal",
+            "Requires one level-1 spell slot"
+          ]
+        },
+        {
+          "name": "Color Spray",
+          "attack_bonus": "Constitution save DC 13",
+          "damage": "Creatures in the 15-foot cone that fail receive the spell's Blinded effect.",
+          "properties": [
+            "1st-level Bard spell",
+            "Action",
+            "Self; 15-ft. cone",
+            "Requires one level-1 spell slot"
+          ]
+        },
+        {
+          "name": "Dagger",
+          "attack_bonus": "+4",
+          "damage": "1d4+2 Piercing; Light-property additional attack: 1d4 Piercing.",
+          "properties": [
+            "Finesse",
+            "Light",
+            "Thrown 20/60 ft.",
+            "Simple",
+            "Nick mastery property; Bard 1 has no Weapon Mastery feature",
+            "Two daggers total"
+          ]
+        },
+        {
+          "name": "Unarmed Strike",
+          "attack_bonus": "+1 attack or DC 9 save",
+          "damage": "0 Bludgeoning damage, Grapple, or Shove.",
+          "properties": [
+            "Unarmed",
+            "5-ft. reach",
+            "Attack action"
+          ]
+        }
+      ],
+      "armor_and_shields": [
+        {
+          "name": "Leather armor",
+          "quantity": "1",
+          "sheet_status": "Worn; AC 13 from base AC 11 + Dexterity modifier 2"
+        }
+      ],
+      "equipment_highlights": [
+        {
+          "name": "Leather armor",
+          "quantity": "1",
+          "sheet_status": "Worn beneath robe; 10 lb.; primary armor"
+        },
+        {
+          "name": "Acolyte robe",
+          "quantity": "1",
+          "sheet_status": "Worn; adapted and reinforced for travel; 4 lb."
+        },
+        {
+          "name": "Bagpipes",
+          "quantity": "1",
+          "sheet_status": "Slung in weatherproof wrap; Bard spellcasting focus; 6 lb."
+        },
+        {
+          "name": "Dagger",
+          "quantity": "1",
+          "sheet_status": "Belt sheath; immediately accessible; 1 lb."
+        },
+        {
+          "name": "Dagger",
+          "quantity": "1",
+          "sheet_status": "Backpack; reserve weapon; 1 lb."
+        },
+        {
+          "name": "Holy symbol",
+          "quantity": "1",
+          "sheet_status": "Worn; small round table engraved with seven empty places"
+        },
+        {
+          "name": "Backpack",
+          "quantity": "1",
+          "sheet_status": "Worn; main equipment container; 5 lb."
+        },
+        {
+          "name": "Ordinary pouch",
+          "quantity": "1",
+          "sheet_status": "Belt; contains coins, chalk, bell, and small items; 1 lb."
+        },
+        {
+          "name": "Component pouch",
+          "quantity": "1",
+          "sheet_status": "Belt; covers noncostly material components when other focuses are unsuitable; 2 lb."
+        },
+        {
+          "name": "Calligrapher's supplies",
+          "quantity": "1 set",
+          "sheet_status": "Backpack; pens, brushes, ink, and preparation tools; 5 lb."
+        },
+        {
+          "name": "Parchment",
+          "quantity": "10 sheets",
+          "sheet_status": "Document case; for names, route notes, copied testimony, and performance text"
+        },
+        {
+          "name": "Devotional and performance book",
+          "quantity": "1",
+          "sheet_status": "Backpack; Common Table liturgy, names, recitations, and musical notation; 5 lb."
+        },
+        {
+          "name": "Oil",
+          "quantity": "8 flasks",
+          "sheet_status": "Padded backpack compartment; lantern fuel and general use; 8 lb. total"
+        },
+        {
+          "name": "Rations",
+          "quantity": "9 days",
+          "sheet_status": "External provision bundle on pack frame; durable traveling food; 18 lb. total"
+        },
+        {
+          "name": "Waterskin",
+          "quantity": "1",
+          "sheet_status": "Filled; attached to backpack exterior; 5 lb. full"
+        },
+        {
+          "name": "Bedroll",
+          "quantity": "1",
+          "sheet_status": "Strapped to backpack; 7 lb."
+        },
+        {
+          "name": "Wool blanket",
+          "quantity": "1",
+          "sheet_status": "Strapped to backpack; camp and cold-weather use; 3 lb."
+        },
+        {
+          "name": "Mess kit",
+          "quantity": "1",
+          "sheet_status": "Backpack; bowl, plate, spoon, and eating knife; 1 lb."
+        },
+        {
+          "name": "Wooden mug",
+          "quantity": "1",
+          "sheet_status": "Backpack; personal drinking vessel; 1 lb."
+        },
+        {
+          "name": "Tinderbox",
+          "quantity": "1",
+          "sheet_status": "Belt pouch; flint, fire steel, and dry tinder; 1 lb."
+        },
+        {
+          "name": "Dry kindling",
+          "quantity": "3 small bundles",
+          "sheet_status": "Backpack; wrapped against damp; 1 lb. total"
+        },
+        {
+          "name": "Torches",
+          "quantity": "10",
+          "sheet_status": "Side lashings on pack; each burns for 1 hour; 10 lb. total"
+        },
+        {
+          "name": "Healing bandages",
+          "quantity": "5 clean dressings",
+          "sheet_status": "Backpack; clean linen with no automatic magical healing; 1 lb. total"
+        },
+        {
+          "name": "Bell",
+          "quantity": "1",
+          "sheet_status": "Belt pouch; ceremonial signal and practical alarm"
+        },
+        {
+          "name": "Small mirror",
+          "quantity": "1",
+          "sheet_status": "Padded backpack pocket; costuming, signaling, and inspection; 0.5 lb."
+        },
+        {
+          "name": "Bullseye lantern",
+          "quantity": "1",
+          "sheet_status": "Backpack; directional light; 2 lb."
+        },
+        {
+          "name": "Performance costumes",
+          "quantity": "3 sets",
+          "sheet_status": "External garment roll; religious pageants, public teaching, and role disguises; 12 lb. total"
+        },
+        {
+          "name": "Chalk",
+          "quantity": "2 pieces",
+          "sheet_status": "Belt pouch; emergency marking chalk"
+        },
+        {
+          "name": "Trinket: bag of forty-seven teeth",
+          "quantity": "1 bag",
+          "sheet_status": "Backpack; mundane unidentified teeth, one rotten; 1 lb."
+        }
+      ],
+      "currency": {
+        "cp": 0,
+        "sp": 0,
+        "ep": 0,
+        "gp": 27,
+        "pp": 0,
+        "total_gp_value": 27
+      },
+      "valuables": [],
+      "resources": [
+        {
+          "name": "Hit Dice",
+          "maximum_or_frequency": "1d8 per Long Rest",
+          "current_shown_on_sheet": "1 available"
+        },
+        {
+          "name": "Bardic Inspiration",
+          "maximum_or_frequency": "3 uses; 1d6; Long Rest recovery",
+          "current_shown_on_sheet": "3 available"
+        },
+        {
+          "name": "Magic Initiate free casting of Bless",
+          "maximum_or_frequency": "1 use per Long Rest",
+          "current_shown_on_sheet": "1 available"
+        },
+        {
+          "name": "Level-1 spell slots",
+          "maximum_or_frequency": "2 total",
+          "current_shown_on_sheet": "2 available; 0 used"
+        },
+        {
+          "name": "Oil",
+          "maximum_or_frequency": "8 flasks",
+          "current_shown_on_sheet": "8 remaining"
+        },
+        {
+          "name": "Rations",
+          "maximum_or_frequency": "9 days",
+          "current_shown_on_sheet": "9 remaining"
+        },
+        {
+          "name": "Waterskin",
+          "maximum_or_frequency": "1 filled waterskin",
+          "current_shown_on_sheet": "1 filled"
+        },
+        {
+          "name": "Dry kindling",
+          "maximum_or_frequency": "3 small bundles",
+          "current_shown_on_sheet": "3 remaining"
+        },
+        {
+          "name": "Torches",
+          "maximum_or_frequency": "10; 1 hour each",
+          "current_shown_on_sheet": "10 remaining"
+        },
+        {
+          "name": "Healing bandages",
+          "maximum_or_frequency": "5 clean dressings",
+          "current_shown_on_sheet": "5 remaining"
+        },
+        {
+          "name": "Chalk",
+          "maximum_or_frequency": "2 pieces",
+          "current_shown_on_sheet": "2 remaining"
+        }
+      ],
+      "spellcasting": {
+        "ability": "Charisma",
+        "save_dc": "13",
+        "attack_bonus": "+5",
+        "slots": [
+          {
+            "level": "1st",
+            "total_shown": "2",
+            "used_shown": "0"
+          }
+        ],
+        "cantrips": [
+          "Dancing Lights (Bard)",
+          "Vicious Mockery (Bard)",
+          "Guidance (Magic Initiate: Cleric)",
+          "Light (Magic Initiate: Cleric)",
+          "Message (High Elf Lineage)"
+        ],
+        "prepared_or_known_spells": [
+          "Charm Person (prepared)",
+          "Color Spray (prepared)",
+          "Dissonant Whispers (prepared)",
+          "Healing Word (prepared)",
+          "Bless (always prepared through Magic Initiate; one free casting per Long Rest and may also use Bard spell slots)"
+        ],
+        "spellbook_or_other_spells": []
+      },
+      "feats_and_features": [
+        "Bardic Inspiration: Bonus Action; a creature within 60 ft. that can see or hear Bard 1 gains a 1d6 die for 1 hour, usable after failing a D20 Test. SRD rules: You can supernaturally inspire others through words, music, or dance. This inspiration is represented by your Bardic Inspiration die, which is a d6. Using Bardic Inspiration. As a Bonus Action, you can inspire another creature within 60 feet of yourself who can see or hear you. That creature gains",
+        "Bard Spellcasting: Charisma-based; bagpipes or another musical instrument can serve as focus.",
+        "High Elf Lineage: knows Message using Charisma and can replace it with a Wizard cantrip after a Long Rest.",
+        "Darkvision 60 ft.",
+        "Fey Ancestry: Advantage on saves to avoid or end Charmed. SRD rules: You have Advantage on saving throws you make to avoid or end the Charmed condition.",
+        "Keen Senses: Perception proficiency. SRD rules: You have proficiency in the Insight, Perception, or Survival skill.",
+        "Trance: does not need sleep, magic cannot put her to sleep, and she may Long Rest in 4 conscious trancelike hours. SRD rules: You don’t need to sleep, and magic can’t put you to sleep. You can finish a Long Rest in 4 hours if you spend those hours in a trancelike meditation, during which you retain consciousness.",
+        "Magic Initiate (Cleric): Guidance, Light, and Bless; Charisma casting; Bless is always prepared and free once per Long Rest. SRD rules: Origin Feat. You gain the following benefits. Two Cantrips. You learn two cantrips of your choice from the Cleric, Druid, or Wizard spell list. Intelligence, Wisdom, or Charisma is your spellcasting ability for this feat’s spells (choose when you select this feat). Level 1 Spell. Choose a level 1 spell from the same list you selected for this feat’s cantrips. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have. Spell Change. Whenever you gain a new level, you can replace one of the spells you chose for this feat with a different spell of the same level from the chosen spell list. Repeatable. You can take this feat more than once, but you must choose a different spell list each time.",
+        "Acolyte background: Insight, Religion, and Calligrapher's Supplies proficiencies.",
+        "Tool proficiencies: Bagpipes, Calligrapher's supplies, Lute, Pan flute.",
+        "Armor training: Light armor.",
+        "Weapon proficiency: Simple weapons.",
+        "Spellcasting — You have learned to cast spells through your bardic arts. See “Spells” for the rules on spellcasting. The information below details how you use those rules with Bard spells, which appear in the Bard spell list later in the class’s description. Cantrips. You know two cantrips of your choice from the Bard spell list. Dancing Lights and Vicious Mockery are recommended. Whenever you gain a Bard level, you can replace one of your cantrips with another cantrip of your choice from the Bard spell list. When you reach Bard levels 4 and 10, you learn another cantrip of your choice from the Bard spell list, as shown in the Cantrips column of the Bard Features table. Spell Slots. The Bard Features table shows how many spell slots you have to cast your level 1+ spells. You regain all expended slots when you finish a Long Rest. Prepared Spells of Level 1+. You prepare the list of level 1+ spells that are available for you to cast with this feature. To start, choose four level 1 spells from the Bard spell list. Charm Person, Color Spray, Dissonant Whispers, and Healing Word are recommended. The number of spells on your list increases as you gain Bard levels, as shown in the Prepared Spells column of the Bard Features table. Whenever that number increases, choose additional spells from the Bard spell list until the number of spells on your list matches the number on the table. The chosen spells must be of a level for which you have spell slots. For example, if you’re a level 3 Bard, your list of prepared spells can include six spells of levels 1 and 2 in any combination. If another Bard feature gives you spells that you always have prepared, those spells don’t count against the number of spells you can prepare with this feature, but those spells otherwise count as Bard spells for you. Changing Your Prepared Spells. Whenever you gain a Bard level, you can replace one spell on your list with another Bard spell for which you have spell slots. Spellcasting Ability. Charisma is your spellcasting ability for your Bard spells. Spellcasting Focus. You can use a Musical Instrument as a Spellcasting Focus for your Bard spells."
+      ],
+      "aliases_and_nicknames": [],
+      "story_facts": [
+        {
+          "fact": "Bard 1 is a Wayfarer Cantor of the Common Table, devoted to hospitality, mutual aid, safe passage, and preserving names so vulnerable people are not erased.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "She formerly served at the House of Shared Bread, where she preserved names, journeys, warnings, local history, and testimony through recitation and music.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "False pilgrims attacked the House of Shared Bread, wounded Mother Orra Vale, silenced its alarm bell, and stole the Wayfarer Ledger.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "The attackers used authentic sanctuary formulas and one repeated unusual wording from Bard 1's journey litany; she fears her public recital helped enable the assault.",
+          "likely_visibility": "probably_private"
+        },
+        {
+          "fact": "Senior Cantor Maelis Thorn, Bard 1's former teacher and sponsor, vouched for the supposed charitable order; Bard 1 does not know whether Maelis was deceived, coerced, careless, or complicit.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "Bard 1 seeks the stolen Wayfarer Ledger, evidence of institutional corruption, and the truth of Maelis Thorn's role.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "She intends to create the Many-Mouth Register, a distributed oral record that cannot be erased through one stolen ledger, courier, shrine, or administrator.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "The Chorus of Returning Names is an independent network of singers, reciters, messengers, mourners, and oral historians preserving names, routes, losses, debts, and acts of aid.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "She is an ethnographer of endangered vocal traditions and tries to preserve songs respectfully, including restrictions on who may perform them and what should not be altered.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "Her broad distrust of large-city residents is explicitly a prejudice and grants no mechanical insight, advantage, or special knowledge.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "The bag of forty-seven teeth is mundane, unidentified, and grants no automatic magical, tracking, forensic, or creature-identification benefit.",
+          "likely_visibility": "unknown"
+        }
+      ],
+      "personality_goals_and_fears": [
+        "Highly charismatic and clever enough to make simple situations complicated.",
+        "In danger, uses lively, direct, practical battle songs to keep frightened people moving.",
+        "Outside combat, collects endangered songs, chants, work rhythms, laments, ceremonial responses, and oral histories.",
+        "Tavern performances can be historically important but socially baffling; after a poor performance she tends to overexplain it.",
+        "Actively seeks excluded, hungry, displaced, injured, or ignored people in every settlement and may interrupt urgent missions to help them.",
+        "Faith: hospitality, preservation of names, mutual aid, and safe passage remain sacred even when institutions fail.",
+        "Goal: identify officials who supplied false pilgrims with authentic seals, phrases, and sanctuary customs.",
+        "Goal: find Maelis Thorn and determine her involvement.",
+        "Goal: build the Many-Mouth Register.",
+        "Fear: her public journey litany supplied information used in the House of Shared Bread attack.",
+        "Fear: Maelis knowingly used Bard 1's voice to authenticate a betrayal.",
+        "Flaw: places excessive trust in recognized Common Table authority, titles, robes, seals, and appointments.",
+        "Habit: records songs phonetically, then separately documents rhythm, breathing, gesture, social setting, and authorized performers.",
+        "Habit: scans new settlements for people excluded from normal support and keeps food portions separate for direct charity.",
+        "Habit: becomes guarded and formal when a stranger is from a major city."
+      ],
+      "relationships_and_organizations": [
+        "The Common Table: Bard 1's religious tradition and active missionary cause; it operates kitchens, guest halls, shrines, road refuges, and networks for food, letters, names, routes, and safe passage.",
+        "The House of Shared Bread: former sanctuary and spiritual home; attacked by false pilgrims who stole the Wayfarer Ledger.",
+        "The Chorus of Returning Names: independent oral-history network, not formally controlled by the Common Table hierarchy.",
+        "Senior Cantor Maelis Thorn: former teacher, institutional sponsor, and unresolved suspect; taught Bard 1 exactness in preserving names and stories.",
+        "Mother Orra Vale: wounded during the attack on the House of Shared Bread.",
+        "Warlock 1: former fellow acolyte, sanctuary-attack survivor, closest established companion, and original traveling partner; Bard 1 supports her insecurity about appearance and social presence.",
+        "Barbarian 1: useful but openly conditional ally whose loyalty depends on perceived benefit."
+      ],
+      "is_current_party_active_leader": false
+    },
+    "sheet_summary": [
+      "Level 1 High Elf Bard (Acolyte), Neutral Good, AC 13, 9 maximum HP, 30-ft. speed, Charisma 17.",
+      "Charisma spellcaster with DC 13 and +5 spell attacks; has two available level-1 slots plus one free Bless casting.",
+      "Primary options are Vicious Mockery, Dissonant Whispers, Color Spray, Healing Word, Bless, and Bardic Inspiration.",
+      "Carries leather armor, bagpipes as a Bard focus, holy symbol, component pouch, two daggers, full travel gear, and 27 gp.",
+      "Recorded total carried weight is approximately 111.5 lb. against 120 lb. carrying capacity."
+    ],
+    "detected_issues": [],
+    "clarification_questions": [],
+    "details_not_found": [
+      "No Elvish language proficiency is recorded; the supplied record explicitly preserves this rather than adding it.",
+      "No vehicle proficiencies recorded.",
+      "No attuned magic items, damage resistances, damage vulnerabilities, or damage immunities recorded.",
+      "No stable default adventuring setup is stated."
+    ],
+    "additional_details": [
+      "Record metadata: WardensPC Plain-Text Character Record; Record Version Bard 1 Mark III; last updated 2026-08-11; rules version 2024 D&D rules / SRD 5.2.1; development status Complete. Source filename says 'Bard 1 Mark II.txt,' while the internal record version is Mark III",
+      "Player name: Mistinarperadnacles. Name used during play: Bard 1. Campaign: WardensPC starter character.",
+      "Medium High Elf, 5 ft. 4 in., 111 lb.; deep copper-brown skin, dense dark-auburn shoulder-length curls, leaf-green eyes, long pointed ears, narrow face, and high cheekbones. Her appearance is natural, alert, and electrically vivid rather than ornate or courtly",
+      "Token guidance: green background; show leather armor beneath a travel-worn acolyte robe, dagger, and carefully wrapped bagpipes",
+      "Faith: The Common Table. Former religious office: Wayfarer Cantor at the House of Shared Bread. Current residence: formerly the House of Shared Bread; no permanent base established",
+      "Other training includes public recitation, oral history and memorized genealogies, religious music, guest-name and journey records, copying and illuminating devotional texts, performance costuming, ceremonial announcements, and warning signals",
+      "Current combat state on the supplied sheet was clear: no conditions, no temporary HP, no concentration, clear death saves, no Heroic Inspiration, and all listed rest-based resources unspent",
+      "Armor calculation is leather armor 11 + Dexterity modifier 2. Bard 1 has no shield training and no Weapon Mastery feature",
+      "Her bagpipes are both a musical instrument and normal Bard spellcasting focus. Her holy symbol is a small round table engraved with seven empty places. Lute and pan flute proficiency does not mean she owns either instrument",
+      "Bard ritual casting is available for currently prepared Bard rituals; none of her present prepared Bard spells has the Ritual tag",
+      "Dancing Lights, Guidance, and Bless require Concentration. Only one Concentration effect may be maintained at a time",
+      "The bag of teeth was generated as trinket d100 result 26. It contains forty-seven teeth, one rotten; it is mundane and unidentified",
+      "Homebrew narrative institutions and projects—The Common Table, House of Shared Bread, Chorus of Returning Names, Wayfarer Cantor, Many-Mouth Register, Endangered Vocal-Tradition Archive, and Direct Charity—grant no automatic shelter, legal authority, information, supplies, income, favors, perfect memory, Expertise, languages, magical benefits, or institutional cooperation",
+      "Rules text includes material from the System Reference Document 5.2.1 (SRD 5.2.1) by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd, licensed under the Creative Commons Attribution 4.0 International License at https://creativecommons.org/licenses/by/4.0/legalcode."
+    ]
+  }
+}

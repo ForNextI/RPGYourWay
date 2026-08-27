@@ -219,6 +219,9 @@ export interface CharacterIntakeApiError {
   error: string
   details?: string
   request_id?: string
+  code?: string
+  maximum_deduction_microusd?: number
+  add_usage_url?: string
 }
 
 export interface CharacterEditProposal {

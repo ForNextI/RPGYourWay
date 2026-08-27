@@ -38,7 +38,7 @@ export function SiteFooter() {
               <span>Buy Brett a Coffee</span>
             </a>
             <nav aria-label="Footer navigation" className="footer-links">
-              <a className="footer-contact-link" href="mailto:brett@rpgyourway.com">Contact</a>
+              <a href="mailto:brett@rpgyourway.com">Contact</a>
               <Link href="/account">Account</Link>
               <Link href="/legal/privacy">Privacy</Link>
               <Link href="/legal/terms">Terms</Link>

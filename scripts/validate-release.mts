@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.8.6')
-assert.equal(pkg.rpgywVersion, '1.8.6')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.8\.6'/)
+assert.equal(pkg.version, '1.8.7')
+assert.equal(pkg.rpgywVersion, '1.8.7')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.8\.7'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -29,6 +29,11 @@ for (const file of [
   'app/api/aigm/transcribe/route.ts',
   'components/aigm/rpgyw-start-entry.tsx',
   'components/start/StartOnboarding.tsx',
+  'app/api/aigm/character-intake/route.ts',
+  'app/api/aigm/character-clarify/route.ts',
+  'app/api/start/help/route.ts',
+  'lib/aigm/character-intake-prompt.ts',
+  'lib/start/help-knowledge.ts',
   'components/account/DeleteAccountControl.tsx',
   'components/aigm/aigm-gameplay-shell.tsx',
   'lib/aigm/campaign-storage.ts',
@@ -143,7 +148,7 @@ assert.doesNotMatch(playPage, /Import Existing Adventure|RpgywPlayEntry/)
 
 const startPage = read('app/start/page.tsx')
 assert.match(startPage, /<RpgywStartEntry \/>/)
-assert.match(startPage, /Existing WardensPC adventures can be imported here/)
+assert.match(startPage, /Build a new campaign here, or import an existing WardensPC or RPG Your Way adventure/)
 const startEntry = read('components/aigm/rpgyw-start-entry.tsx')
 assert.match(startEntry, /Import Existing Adventure/)
 assert.match(startEntry, /parseAdventureState/)
@@ -611,7 +616,7 @@ const css180 = read('app/globals.css')
 // 1.8 current Start onboarding contract.
 assert.match(start180, /I need help with all of this/)
 assert.match(start180, /My question wasn&apos;t above\. I still need help\./)
-assert.match(start180, /25 free questions per onboarding session/)
+assert.match(start180, /25 free questions remaining in this onboarding session/)
 assert.match(start180, /Choose the game rules/)
 assert.match(start180, /The Uncharted Realms/)
 assert.match(start180, /D&D 5\.5e/)
@@ -621,9 +626,12 @@ assert.match(start180, /And\/or browse for<br \/>your character files/)
 assert.match(start180, /And\/or paste your<br \/>character&apos;s information/)
 assert.match(start180, /Character import help/)
 assert.doesNotMatch(start180, /About ready-to-play characters/)
-assert.match(start180, /Imported — ready to standardize/)
-assert.match(start180, /Standardize for RPG Your Way/)
-assert.match(start180, /'these characters for RPG Your Way'/)
+assert.match(start180, /File added/)
+assert.match(start180, /Import into RPG Your Way/)
+assert.match(start180, /Required before this character can be used/)
+assert.match(start180, /Recommended before play/)
+assert.match(start180, /Names and portraits can be changed later on the Play page through the Characters sidebar/)
+assert.match(start180, /or drag files here/)
 assert.match(start180, /Proposed party leader:/)
 assert.doesNotMatch(start180, />Keep<\/button>/)
 assert.match(start180, /How did we choose this leader\?/)
@@ -644,9 +652,9 @@ assert.doesNotMatch(start180, /Malcolm/)
 assert.doesNotMatch(start180, /UI review build: character standardization/)
 assert.doesNotMatch(start180, /Male · Fable/)
 assert.doesNotMatch(start180, /Female · Marin/)
-assert.match(start180, />Onward<\/button>/)
-assert.match(start180, /Importing your character is generally free/)
-assert.match(start180, /before using part of your available usage balance/)
+assert.match(start180, /'Onward'/)
+assert.match(start180, /Importing a normal character is generally free/)
+assert.match(start180, /before additional AI processing uses part of your available usage balance/)
 
 assert.match(startEntry180, /<StartOnboarding \/>/)
 assert.match(startEntry180, /Already have an RPG Your Way or WardensPC adventure\?/)
@@ -668,3 +676,35 @@ assert.match(css180, /\.start-rating-scale button\.is-selected \{[\s\S]*var\(--f
 assert.match(css180, /\.start-mini-ratings label \{[\s\S]*border: 2px solid var\(--rpgyw-brass-highlight\)/)
 assert.match(css180, /\.start-field-bezel \{[\s\S]*border: 7px solid var\(--landing-olive-19-deep\)/)
 console.log('RPG Your Way 1.8.6 Start open-map, dimensional-controls, question-scale, and naming-bezel checks passed.')
+
+
+const start187 = read('components/start/StartOnboarding.tsx')
+const intake187 = read('app/api/aigm/character-intake/route.ts')
+const clarify187 = read('app/api/aigm/character-clarify/route.ts')
+const help187 = read('app/api/start/help/route.ts')
+const prompt187 = read('lib/aigm/character-intake-prompt.ts')
+assert.match(start187, /Import into RPG Your Way/)
+assert.match(start187, /Required before this character can be used/)
+assert.match(start187, /Recommended before play/)
+assert.match(start187, /Continue without these answers/)
+assert.match(start187, /Names and portraits can be changed later on the Play page through the Characters sidebar\. Click on whoever you want to edit\./)
+assert.match(start187, /window\.location\.assign\('\/play'\)/)
+assert.match(start187, /saveAdventureState/)
+assert.match(start187, /or drag files here/)
+assert.doesNotMatch(start187, /start-drop-zone/)
+assert.match(intake187, /paid_intake_confirmation_required/)
+assert.match(intake187, /allow_paid/)
+assert.match(intake187, /reserveUsage/)
+assert.match(intake187, /settleUsage/)
+assert.match(clarify187, /bill_usage/)
+assert.match(help187, /START_HELP_KNOWLEDGE/)
+assert.match(help187, /max_output_tokens: 500/)
+assert.match(help187, /MAX_QUESTIONS_PER_HOUR = 25/)
+assert.match(start187, /activeImportWorkflow/)
+assert.match(start187, /Finish importing .* before starting another character/)
+assert.match(prompt187, /Separate clarification questions into two tiers/)
+assert.match(css, /RPG Your Way 1\.8\.7/)
+assert.match(css, /start-file-drop-control/)
+assert.match(css, /start-clarification-tier/)
+assert.match(css, /site-header \.brand-mark \{ width: 44px; height: 44px;/)
+console.log('RPG Your Way 1.8.7 functional Start import, clarification, help, campaign creation, footer, and compass checks passed.')

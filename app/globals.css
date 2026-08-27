@@ -5944,3 +5944,133 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   background: var(--forest-deep);
   color: var(--lime);
 }
+
+/* RPG Your Way 1.8.7 — functional Start import flow, one-character clarification, dual file control, footer cleanup. */
+
+/* Browse is now one physical control with two input methods: click or drop. */
+.start-file-drop-control {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  border: 7px solid var(--landing-olive-19-deep) !important;
+  outline: 2px solid var(--rpgyw-brass-edge);
+  outline-offset: 0;
+  background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep)) !important;
+  box-shadow:
+    inset 0 0 0 2px var(--rpgyw-brass-highlight),
+    inset 0 7px 14px rgb(43 47 38 / .16),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 7px 12px rgb(43 47 38 / .10) !important;
+}
+.start-file-drop-control > span { display: grid; gap: .12rem; }
+.start-file-drop-control small { color: color-mix(in srgb, var(--cream-bright) 78%, transparent); font-size: .68rem; font-weight: 800; }
+.start-file-drop-control.is-drag-active,
+.start-file-drop-control:hover,
+.start-file-drop-control:focus-visible { color: var(--lime) !important; }
+.start-file-drop-control.is-drag-active small,
+.start-file-drop-control:hover small,
+.start-file-drop-control:focus-visible small { color: var(--lime); }
+
+/* One concise instruction applies to ready-to-play and imported characters alike. */
+.start-party-edit-note {
+  width: fit-content;
+  max-width: 100%;
+  margin: .8rem 0 .9rem auto;
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 10px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 98%, white), var(--landing-pale));
+  color: var(--forest-deep);
+  padding: .5rem .7rem;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 58%, white), 0 2px 0 var(--rpgyw-brass-shadow);
+  font-size: .76rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.start-status--file-added { background: var(--landing-olive-19); color: var(--cream-bright); }
+.start-status--importing { background: var(--forest-deep); color: var(--lime); }
+.start-status--needs-required { background: #7c2d24; color: white; }
+.start-status--needs-recommended { background: var(--landing-olive-19-deep); color: var(--cream-bright); }
+.start-status--error { background: #7c2d24; color: white; }
+.start-card-error { display: block; margin-top: .24rem; color: #7c2d24; font-size: .68rem; line-height: 1.25; }
+.start-party-card-actions button:disabled { cursor: not-allowed; opacity: .48; }
+
+/* Clarification is character-by-character: blockers first, then recommended cleanup. */
+.start-clarification-tier {
+  display: grid;
+  gap: .55rem;
+  margin-top: .85rem;
+  border: 7px solid var(--landing-olive-19-deep);
+  outline: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--landing-pale) 95%, white);
+  padding: .75rem;
+  box-shadow: inset 0 0 0 2px var(--rpgyw-brass-highlight), inset 0 8px 16px rgb(43 47 38 / .13), 0 3px 0 var(--rpgyw-brass-shadow);
+}
+.start-clarification-tier--required { border-color: color-mix(in srgb, #7c2d24 70%, var(--landing-olive-19-deep)); }
+.start-clarification-tier h3 { margin: 0; color: var(--forest-deep); font-size: 1.05rem; }
+.start-clarification-tier > p { margin: 0; color: var(--muted); font-size: .8rem; }
+.start-question-card {
+  display: grid;
+  gap: .22rem;
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 11px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 98%, white), var(--landing-pale));
+  padding: .65rem .72rem;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 54%, white), 0 2px 0 var(--rpgyw-brass-shadow);
+}
+.start-question-card strong { color: var(--forest-deep); }
+.start-question-card p { margin: 0; }
+.start-question-card small { color: var(--muted); line-height: 1.35; }
+.start-clarification-answer { display: grid; gap: .35rem; margin-top: .9rem; color: var(--forest-deep); font-weight: 900; }
+.start-clarification-answer .start-field-bezel textarea {
+  width: 100%;
+  min-height: 94px;
+  border: 0;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--cream-bright) 98%, white);
+  padding: .65rem .7rem;
+  color: var(--ink);
+  resize: vertical;
+  box-shadow: inset 0 2px 6px rgb(43 47 38 / .08);
+}
+.start-review-summary { display: grid; gap: .35rem; }
+.start-review-summary p { margin: 0; }
+.start-review-notices { display: grid; gap: .55rem; margin-top: .9rem; }
+.start-review-notices h3 { margin: 0; }
+.start-ai-answer {
+  border: 7px solid var(--landing-olive-19-deep);
+  outline: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--landing-pale) 96%, white);
+  padding: .72rem;
+  color: var(--ink);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  box-shadow: inset 0 0 0 2px var(--rpgyw-brass-highlight), inset 0 7px 14px rgb(43 47 38 / .12);
+}
+
+/* Contact is ordinary footer navigation, not a pale button floating in the footer. */
+.footer-contact-link { all: unset; }
+.footer-links a[href^="mailto:"] { color: var(--cream); font-size: .82rem; font-weight: 800; text-decoration: none; cursor: pointer; }
+.footer-links a[href^="mailto:"]:hover,
+.footer-links a[href^="mailto:"]:focus-visible { color: var(--lime); }
+
+/* Give the compass rose enough quiet space and center its visible mass inside the brass square. */
+.site-header .brand-mark { width: 44px; height: 44px; }
+.site-header .brand-mark img {
+  display: block;
+  width: 32px;
+  height: 32px;
+  margin: auto;
+  object-fit: contain;
+  object-position: center;
+  transform: translate(-.35px, .25px);
+}
+@media (max-width: 620px) {
+  .site-header .brand-mark { width: 38px; height: 38px; }
+  .site-header .brand-mark img { width: 29px; height: 29px; }
+  .start-party-edit-note { margin-left: 0; }
+}

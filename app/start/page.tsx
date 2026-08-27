@@ -17,7 +17,7 @@ export default async function StartPage() {
           <div className="shell narrow-shell play-signin-shell">
             <p className="kicker">Start</p>
             <h1 className="page-title">Sign in to start or import an adventure.</h1>
-            <p className="page-lede">Existing WardensPC adventures can be imported here. New-adventure onboarding will also live on Start as it is rebuilt.</p>
+            <p className="page-lede">Build a new campaign here, or import an existing WardensPC or RPG Your Way adventure after you sign in.</p>
             <AuthPanel returnTo="/start" />
           </div>
         </main>

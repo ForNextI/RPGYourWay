@@ -1,0 +1,526 @@
+{
+  "id": "wardens-pc-starter-barbarian",
+  "playName": "Barbarian",
+  "sourceFileName": "Barbarian 1 Mark II.txt",
+  "sourceMimeType": "text/plain",
+  "portraitUrl": "/images/starter-characters/barbarian.webp",
+  "sourceText": "WARDENSPC PLAIN-TEXT CHARACTER RECORD\n\n\nRECORD INFORMATION\n\nRecord Version: Barbarian 1 Mark III\nLast Updated: 2026-08-11\nRules Version: 2024 D&D rules / SRD 5.2.1\nSource Character Sheet: Barb 1.pdf\nDevelopment Status: Complete\n\n\nCHECKBOX KEY\n\nEquipment:\n[X] = actively worn, wielded, held, or otherwise ready for immediate use\n[ ] = carried, packed, stored, or not currently in use\n\nHit Dice, Limited-Use Resources, and Spell Slots:\n[ ] = available\n[X] = expended or used\n\nHeroic Inspiration:\n[X] = currently possessed\n[ ] = not currently possessed\n\nConcentration:\n[X] = currently concentrating on the named spell or effect\n[ ] = not currently concentrating\n\nSpells:\nCantrips do not need checkboxes.\n[X] = prepared or always prepared\n[ ] = known, recorded, or in a spellbook but not currently prepared\n\nAttuned Items:\n[X] = currently attuned\n[ ] = carried but not currently attuned\n\n\nIDENTITY AND ORIGIN\n\nPlayer Name: Mistinarperadnacles\nCharacter Name: Barbarian 1\nName Used During Play: Barbarian 1\nSex: Male\nPronouns: He/Him\nSpecies: Red Dragonborn\nLineage, Ancestry, or Heritage: Red Dragon ancestry\nClass and Level: Barbarian 1\nSubclass: None at level 1\nSubclass Gained at Level: Barbarian level 3\nBackground: Criminal\nCriminal Specialty: Burglar\nOrigin Feat: Alert\nExperience Points or Milestone: Milestone\nAlignment: Chaotic Neutral\nFaith or Deity: None declared\nHome Region or Place of Origin: Not specified\nCurrent Residence or Base: No permanent base established\nSize: Medium\nAge: 19\nHeight: 6 ft. 7 in.\nWeight: 272 lb.\n\nSkin, Scales, Fur, or Other Coloration:\nStrong scarlet-red scales, darkening to wine-red along the spine, elbows,\nand tail.\n\nHair, Crest, Horns, or Other Distinguishing Features:\nNo hair. Two heavy black horns sweep backward from the crown, with smaller\nhorn ridges along the jaw and brow.\n\nEyes: Burnished amber\n\nGeneral Appearance:\nA powerfully built Red Dragonborn with a broad muzzle, heavy claws, and a\nthick tail. His saturated red coloration and smoke-dark horns make his\ndraconic ancestry immediately obvious.\n\n\nCAMPAIGN AND TOKEN INFORMATION\n\nCampaign: WardensPC starter character\nIs Current Party's Active Leader: No\n\nAssociated Token Background Color: Green\n\nCharacter Token or Portrait Notes:\nUse a green token background. Show a very large, unmistakably red Dragonborn\nwith scarlet scales, wine-red shading along the spine and joints, heavy\nbackward-sweeping black horns, smaller jaw and brow ridges, burnished amber\neyes, a thick tail, a greataxe, and several handaxes.\n\nHe wears no armor. His traveling equipment should suggest both wilderness\ntravel and an unusual familiarity with costumes, tools, locks, and hidden\naccess rather than a generic fur-clad barbarian.\n\n\nCOMBAT AND TRACKING\n\nArmor Class: 15\nArmor Class Calculation:\nUnarmored Defense 10 + Dexterity modifier 2 + Constitution modifier 3\n\nCurrent Hit Points: 15\nMaximum Hit Points: 15\nTemporary Hit Points: None\n\nHit Dice:\n1d12 total\n[ ] 1d12 available\n\nDeath Saves:\nSuccesses: [ ][ ][ ]\nFailures: [ ][ ][ ]\n\nHeroic Inspiration: [ ]\nConcentration: Not applicable\n\nSpeed and Movement Types: Walking 30 ft.\nInitiative: +4\nInitiative Calculation: Dexterity +2 + Alert proficiency bonus +2\nProficiency Bonus: +2\nBreath Weapon Save DC: 13\nAbility Save DC: 12 for Strength-based Grapple or Shove effects\nPassive Perception: 11\nPassive Insight: 11\nPassive Investigation: 10\nCurrent Conditions: None\n\nOther Combat Notes:\nGreataxe is the normal primary weapon.\nHandaxes provide light melee and thrown options.\nOne dagger is kept immediately accessible, with another packed as reserve.\nRage improves his close combat and durability.\nHis fire Breath Weapon can affect a group in either a cone or a line.\nAlert allows him to exchange Initiative with one willing ally immediately\nafter Initiative is rolled.\n\n\nABILITY SCORES\n\nStrength: 15 (+2)\nDexterity: 14 (+2)\nConstitution: 16 (+3)\nIntelligence: 10 (+0)\nWisdom: 12 (+1)\nCharisma: 8 (-1)\n\n\nSAVING THROWS\n\nStrength: +4, proficient\nDexterity: +2\nConstitution: +5, proficient\nIntelligence: +0\nWisdom: +1\nCharisma: -1\n\nSaving Throw Proficiencies: Strength and Constitution\nSaving Throw Modifiers or Special Advantages:\nWhile raging, Barbarian 1 has Advantage on Strength saving throws.\n\n\nSKILLS\n\nAcrobatics: +2\nAnimal Handling: +1\nArcana: +0\nAthletics: +4, proficient\nDeception: -1\nHistory: +0\nInsight: +1\nIntimidation: -1\nInvestigation: +0\nMedicine: +1\nNature: +0\nPerception: +1\nPerformance: -1\nPersuasion: -1\nReligion: +0\nSleight of Hand: +4, proficient\nStealth: +4, proficient\nSurvival: +3, proficient\n\nExpertise or Other Skill Notes: None\n\n\nSENSES AND DEFENSES\n\nDarkvision or Other Senses: Darkvision 60 ft.\nDamage Resistances:\nFire at all times\nBludgeoning, Piercing, and Slashing while raging\n\nDamage Vulnerabilities: None\nDamage Immunities: None\nCondition Immunities: None\n\nDefensive Advantages, Disadvantages, or Special Notes:\nUnarmored Defense produces AC 15 while Barbarian 1 wears no armor.\nHe can use a shield with Unarmored Defense, although no shield is included\nin his starting equipment.\n\n\nTRAINING AND PROFICIENCIES\n\nArmor Training: Light armor and medium armor\nShield Training: Shields\nWeapon Proficiencies: Simple weapons and martial weapons\nTool Proficiencies: Thieves' tools\nVehicle Proficiencies: None recorded\nGaming Set or Musical Instrument Proficiencies: None\n\nOther Training:\nBreaking and entering\nLock and access work\nStage rigging and trapdoor mechanisms\nCostume handling and basic disguise preparation\nWilderness travel and route finding\n\n\nLANGUAGES\n\nLanguages Known:\nCommon\nDraconic\nOrc\n\nSecret or Class Languages: None\nCommunication Notes: None\n\n\nATTACKS, WEAPONS, AND OFFENSIVE OPTIONS\n\nName: Greataxe, “Betty”\nAttack Bonus or Save DC: +4\nDamage or Effect:\n1d12+2 Slashing normally\n1d12+4 Slashing while raging and using Strength\n\nDamage Type: Slashing\nRange or Reach: 5 ft.\nAction Type: Action; one attack at level 1\nProperties: Heavy, two-handed, martial\nWeapon Mastery: Cleave, selected\nAmmunition or Uses: None\n\nNotes:\nPrimary weapon.\n\nOnce per turn after Barbarian 1 hits a creature with a melee Greataxe attack,\nCleave allows one additional Greataxe attack against a second creature within\n5 ft. of the first and within his reach. On a hit, the second target takes the\nweapon's damage without the ability modifier unless that modifier is negative. If\nBarbarian 1 is raging and the Cleave attack uses Strength, the separate +2 Rage\ndamage still applies, for 1d12+2 Slashing on the second target at level 1.\n\n\nName: Handaxes, “Agnes,” “Pearl,” “Mabel,” and “June”\nAttack Bonus or Save DC: +4\nDamage or Effect:\n1d6+2 Slashing normally\n1d6+4 Slashing for an eligible Strength attack while raging\nTwo-Weapon Fighting / Light-property extra attack: 1d6 Slashing, or 1d6+2\nSlashing while raging with an eligible Strength attack\n\nDamage Type: Slashing\nRange or Reach: 5 ft. melee; thrown range 20/60 ft.\nAction Type: Action or Light-property additional attack\nProperties: Light, thrown, simple\nWeapon Mastery: Vex, selected\nAmmunition or Uses: Four handaxes total\n\nNotes:\nTwo are immediately accessible and two are packed.\n\nAfter a hit that deals damage, Vex grants Advantage on Barbarian 1's next\nattack roll against that creature before the end of his next turn.\n\n\nName: Daggers, “Daisy” and “Vera”\nAttack Bonus or Save DC: +4 using Strength\nDamage or Effect:\n1d4+2 Piercing normally\n1d4+4 Piercing for an eligible Strength attack while raging\nTwo-Weapon Fighting / Light-property extra attack: 1d4 Piercing, or 1d4+2\nPiercing while raging with an eligible Strength attack\n\nDamage Type: Piercing\nRange or Reach: 5 ft. melee; thrown range 20/60 ft.\nAction Type: Action or Light-property additional attack\nProperties: Finesse, light, thrown, simple\nWeapon Mastery: Nick is the weapon's property but is not selected\nAmmunition or Uses: Two daggers total\nNotes:\nOne is at his belt and one is packed.\n\n\nName: Breath Weapon, Fire\nAttack Bonus or Save DC: Dexterity save DC 13\nDamage or Effect:\n1d10 Fire damage on a failed save, or half as much on a successful save\n\nDamage Type: Fire\nRange or Reach:\nChoose each time:\n15-ft. cone\n30-ft. line that is 5 ft. wide\n\nAction Type:\nReplaces one attack when Barbarian 1 takes the Attack action\n\nProperties: Red Dragonborn species trait\nWeapon Mastery: None\nAmmunition or Uses: 2 uses per Long Rest\nNotes: Magical fire.\n\n\nName: Unarmed Strike\nAttack Bonus or Save DC: +4 attack or DC 12 save\nDamage or Effect:\n3 Bludgeoning damage normally\n5 Bludgeoning damage for an eligible Strength attack while raging\nGrapple\nShove\n\nDamage Type: Bludgeoning\nRange or Reach: 5 ft.\nAction Type: Attack\nProperties: Unarmed\nWeapon Mastery: None\nAmmunition or Uses: None\n\n\nSELECTED WEAPON MASTERIES\n\nWeapon: Greataxe\nMastery: Cleave\n\nEffect:\nOnce per turn after hitting a creature with a melee Greataxe attack,\nBarbarian 1 can make another Greataxe attack against a second creature within\n5 ft. of the first and within his reach. The second hit deals weapon damage\nwithout the ability modifier unless the modifier is negative.\n\n\nWeapon: Handaxe\nMastery: Vex\n\nEffect:\nAfter a Handaxe hit deals damage, Barbarian 1 has Advantage on his next attack\nroll against that creature before the end of his next turn.\n\n\nARMOR AND SHIELDS\n\nArmor: None\nCurrently Worn: [ ]\nArmor Class: 15 through Unarmored Defense\nStrength Requirement: None\nStealth Effect: None\n\nNotes:\nUnarmored Defense uses Dexterity and Constitution. Wearing armor replaces this\ncalculation rather than combining with it.\n\n\nShield: None carried\nCurrently Wielded: [ ]\nArmor Class Bonus: None\n\nNotes:\nBarbarian 1 is trained to use shields, but his primary Greataxe requires two\nhands.\n\n\nEQUIPMENT\n\n[X] Item: Greataxe, “Betty” | Quantity: 1 | Weight: 7 lb. | Worn, Held, or Stored Where: Wielded in both hands or carried across the back | Notes: Primary weapon; Barbarian 1 speaks to Betty as though she were a beloved and temperamental partner.\n[X] Item: Handaxes, “Agnes” and “Pearl” | Quantity: 2 | Weight: 4 lb. total | Worn, Held, or Stored Where: Belt loops | Notes: Immediately accessible and individually named.\n[ ] Item: Handaxes, “Mabel” and “June” | Quantity: 2 | Weight: 4 lb. total | Worn, Held, or Stored Where: Exterior pack straps | Notes: Reserve weapons and full members of the collection.\n[X] Item: Dagger, “Daisy” | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Belt sheath | Notes: Immediately accessible.\n[ ] Item: Dagger, “Vera” | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Reserve weapon.\n[X] Item: Traveler's clothes | Quantity: 1 set | Weight: 4 lb. | Worn, Held, or Stored Where: Worn | Notes: Durable travel clothing.\n[X] Item: Backpack | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Worn | Notes: Main equipment container.\n[X] Item: Ordinary pouches | Quantity: 2 | Weight: 2 lb. total | Worn, Held, or Stored Where: Belt | Notes: Both pouches from the Criminal starting package are retained; used for coins, chalk, candles, and small items.\n[X] Item: Thieves' tools | Quantity: 1 set | Weight: 1 lb. | Worn, Held, or Stored Where: Inner belt case | Notes: Picks, files, small mirror, scissors, and pliers.\n[ ] Item: Crowbar | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Backpack exterior | Notes: Breaching and leverage.\n[ ] Item: Disguise kit | Quantity: 1 | Weight: 3 lb. | Worn, Held, or Stored Where: Backpack | Notes: Cosmetics, dyes, small props, and disguise materials.\n[ ] Item: Costume clothes | Quantity: 2 sets | Weight: 8 lb. total | Worn, Held, or Stored Where: Backpack | Notes: Former stage and burglary disguises.\n[ ] Item: Rations | Quantity: 15 days | Weight: 30 lb. total | Worn, Held, or Stored Where: External provision bundle secured to pack frame | Notes: Consolidated from two source entries; carried outside the backpack interior to respect its capacity.\n[ ] Item: Waterskin | Quantity: 1 | Weight: 5 lb. full | Worn, Held, or Stored Where: Backpack exterior | Notes: One duplicate source entry removed.\n[ ] Item: Bedroll | Quantity: 1 | Weight: 7 lb. | Worn, Held, or Stored Where: Strapped to backpack | Notes: One duplicate source entry removed.\n[ ] Item: Wool blanket | Quantity: 1 | Weight: 3 lb. | Worn, Held, or Stored Where: Strapped to backpack | Notes: Camp and cold-weather use.\n[ ] Item: Mess kit | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Wooden bowl, small plate, spoon, and eating knife.\n[ ] Item: Wooden mug | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Personal drinking vessel.\n[X] Item: Tinderbox | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Belt pouch | Notes: Flint, fire steel, and dry tinder.\n[ ] Item: Dry kindling | Quantity: 3 small bundles | Weight: 1 lb. total | Worn, Held, or Stored Where: Backpack | Notes: Wrapped against damp.\n[ ] Item: Torches | Quantity: 10 | Weight: 10 lb. total | Worn, Held, or Stored Where: Side lashings on pack | Notes: Each burns for 1 hour.\n[ ] Item: Candles | Quantity: 5 | Weight: Negligible | Worn, Held, or Stored Where: Belt pouch | Notes: Small light sources and airflow tests.\n[ ] Item: Oil | Quantity: 2 flasks | Weight: 2 lb. total | Worn, Held, or Stored Where: Backpack | Notes: General-purpose lamp and fire oil.\n[ ] Item: Hemp rope | Quantity: 50 ft. | Weight: 5 lb. | Worn, Held, or Stored Where: Exterior coil on pack frame | Notes: Climbing, hauling, and restraint use.\n[ ] Item: Healing bandages | Quantity: 5 clean dressings | Weight: 1 lb. total | Worn, Held, or Stored Where: Backpack | Notes: Clean linen; no automatic magical healing.\n[ ] Item: Chalk | Quantity: Exactly 2 pieces | Weight: Negligible | Worn, Held, or Stored Where: Belt pouch | Notes: Emergency marking chalk.\n[ ] Item: Trinket | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: d100 result 36; a vest with one hundred tiny pockets.\n[ ] Item: Blunt ceremonial court sword, “Gwendolyn” | Quantity: 1 | Weight: 3 lb. | Worn, Held, or Stored Where: Exterior wrapped side lashing | Notes: Beautiful, unsharpened, and unsuitable for combat.\n[ ] Item: Warped antique crossbow, “Constance” | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Strapped to the pack | Notes: The stock is twisted and the mechanism cannot safely hold tension; a collectible, not a usable weapon.\n[ ] Item: Ornamental polearm head, “Beatrice” | Quantity: 1 | Weight: 3 lb. | Worn, Held, or Stored Where: Backpack | Notes: No shaft; kept because Barbarian 1 insists that Beatrice is waiting for the right body.\n\nSource-Entry Consolidations:\nThe two Criminal starting pouches are both retained.\nDuplicate source representations of the same bedroll and waterskin are consolidated.\n\nCoins:\nCP: 0\nSP: 0\nEP: 0\nGP: 31\nPP: 0\n\nRecorded Total Weight: Approximately 124 lb.\nCarrying Capacity: 225 lb.\nEncumbrance Threshold, if Used: Not used\nPush, Drag, or Lift Capacity: 450 lb.\n\n\nATTUNED ITEMS\n\nAttunement Slots Used: 0\nAttuned Items: None\n\n\nLIMITED-USE RESOURCES\n\nResource: Rage\nMaximum Uses: 2\nRecovery:\nAll uses return after a Long Rest. One expended use returns after a Short Rest.\n[ ] Use 1 available\n[ ] Use 2 available\n\nActivation:\nBonus Action while Barbarian 1 is not wearing Heavy armor.\n\nCore Effects:\nAdvantage on Strength checks and Strength saving throws.\n+2 damage when an eligible attack uses Strength.\nResistance to Bludgeoning, Piercing, and Slashing damage.\nBarbarian 1 cannot maintain Concentration or cast spells while raging.\n\nDuration and Continuation:\nRage lasts up to 10 minutes and is subject to the normal 2024 Rage continuation\nand ending conditions.\n\n\nResource: Breath Weapon, Fire\nMaximum Uses: 2\nRecovery: All uses return after a Long Rest\n[ ] Use 1 available\n[ ] Use 2 available\n\nActivation:\nReplace one attack during the Attack action.\n\nEffect:\nChoose a 15-ft. cone or a 30-ft. line that is 5 ft. wide. Creatures in the\narea make a Dexterity saving throw against DC 13. A creature takes 1d10 Fire\ndamage on a failed save or half as much on a successful save.\n\n\nResource: Alert Initiative Swap\nMaximum Uses: Once each time Initiative is rolled\nRecovery: Available at the beginning of each combat\nEffect:\nImmediately after Initiative is rolled, Barbarian 1 can exchange his\nInitiative with one willing ally in the same combat if neither is\nIncapacitated.\n\n\nSPELLCASTING\n\nNone.\n\n\nFEATURES AND ABILITIES\n\nClass Features:\n\nRage\nBarbarian 1 can enter Rage as a Bonus Action while not wearing Heavy armor.\nHe has two uses and regains one expended use after a Short Rest or all uses\nafter a Long Rest.\n\nUnarmored Defense\nWhile not wearing armor, Barbarian 1's base Armor Class is 10 plus his\nDexterity modifier plus his Constitution modifier. His current AC is 15.\n\nWeapon Mastery\nBarbarian 1 currently has mastery with Greataxes and Handaxes. He can change\none selected weapon after a Long Rest under the normal feature rules.\n\n\nSubclass Features:\n\nNone at level 1. Barbarian subclass is chosen at level 3.\n\n\nSpecies Traits:\n\nCreature Type\nHumanoid.\n\nSize\nMedium.\n\nSpeed\n30 ft.\n\nDraconic Ancestry: Red Dragon\nBarbarian 1's Breath Weapon deals Fire damage, and he has Resistance to Fire.\n\nBreath Weapon\nTwice per Long Rest, Barbarian 1 can replace one attack with a 15-ft. cone or\n30-ft. line of magical fire. The saving throw DC is 13.\n\nDamage Resistance\nBarbarian 1 has Resistance to Fire damage.\n\nDarkvision\nBarbarian 1 has Darkvision to 60 ft.\n\nDraconic Flight\nNot yet available. Beginning at character level 5, Barbarian 1 can manifest\nspectral wings as a Bonus Action once per Long Rest. The wings last up to\n10 minutes and grant a Fly Speed equal to his Speed.\n\n\nFeats:\n\nAlert\nBarbarian 1 adds his Proficiency Bonus to Initiative. Immediately after\nInitiative is rolled, he can exchange his Initiative with one willing ally\nin the same combat if neither is Incapacitated.\n\n\nBackground Benefits:\n\nCriminal\nAbility score increases have already been applied.\nProficiencies include Sleight of Hand, Stealth, and Thieves' Tools.\nOrigin Feat: Alert.\n\nCriminal Specialty: Burglar\nNarrative background material only. It grants no automatic criminal contacts,\nincome, building access, or mechanical bonus.\n\nSource Roll: Legacy Criminal Specialty d8 result 2.\n\n\nPERSONALITY TRAITS\n\nBarbarian 1 is extraordinarily selfish and habitually chooses whatever appears\nbest for him. He does not think of this as a moral failing. He assumes that\neveryone else should also be pursuing their own advantage and genuinely does\nnot understand why they sometimes expect him to sacrifice his interests for\ntheirs.\n\nThis makes him unreliable. He will cooperate while cooperation is producing\nsomething he wants, and he is perfectly candid about that limitation.\n\nHe is not troubled by the implied threat in that answer. From his perspective,\nhe has merely stated the obvious terms of the situation.\n\nQuietly, Barbarian 1 believes he is destined for greatness. He expects to\nbecome someone of enormous importance in the wider world. This private destiny\nhelps him excuse his present behavior, because he assumes that when his\ngreatness finally arrives, everything he has done will somehow prove justified\nor become a minor footnote in a much larger story.\n\nHe has an intense passion for weapons. He collects them whether he needs them\nor not, including damaged, ceremonial, incomplete, or otherwise unusable\npieces. Every weapon receives a personal name, usually an embarrassingly\nordinary feminine name.\n\nIDEALS\n\nFreedom.\n\nBarbarian 1 believes that no person should be owned by a contract, debt,\ninstitution, employer, jailer, or inherited obligation. Rules that protect\nchoice deserve respect. Rules designed to turn people into property deserve\nto be broken.\n\nHe is willing to commit burglary, destroy records, or force open a locked\ndoor when the lock exists primarily to keep another person from choosing\ntheir own life.\n\nSource Roll: Criminal Ideal d6 result 2.\n\nBONDS\n\nBarbarian 1 owes an old and serious debt to Mara Quill, the retired costume\nmistress and locksmith who bought out his contract with the Emberwake Company,\nhid him after his first burglary, and taught him how to open a lock without\ndestroying what lay behind it.\n\nHe intends to repay her, although Mara has never demanded money or service.\nWhat she gave him was freedom, and he has not yet decided what could possibly\nequal it.\n\nSource Roll: Criminal Bond d6 result 1.\n\nFLAWS\n\nWhen danger abruptly turns against him and a plan collapses, Barbarian 1's\nfirst instinct is to run.\n\nHis size and willingness to fight can make this flaw difficult to predict.\nHe may hold a doorway against obvious danger, then bolt when he realizes the\nroute is closing or the group is about to be trapped.\n\nThis instinct once saved his life and left another person behind.\n\nSource Roll: Criminal Flaw d6 result 5.\n\nALLIES AND ORGANIZATIONS\n\nName or Group: Mara Quill\nRelationship or Connection:\nBenefactor, retired costume mistress, locksmith, and moral anchor.\n\nNotes:\nMara worked for the Emberwake Company and understood its hidden debt contracts.\nShe used her savings to purchase Barbarian 1's release after his first failed\nattempt to expose the company. She later taught him locks, access work, and\nthe difference between opening a door and destroying everything around it.\n\nName or Group: The Unlatched Door\nRelationship or Connection:\nLoose illegal network of guides, locksmiths, document thieves, wagoners,\nand safe-house keepers.\n\nNotes:\nThe Unlatched Door helps people escape private jails, fraudulent contracts,\ncoerced labor, and predatory debt arrangements. Its members also steal or\ndestroy the records used to recapture those people.\n\nThe network's work is illegal even when its purpose is humane. Some members\nare careful rescuers. Others use the name to justify ordinary theft.\n\nSupporting Organization Roll: d20 result 12.\n\nName or Group: Kesh Arlo\nRelationship or Connection:\nFormer partner, fellow stagehand, and captured member of the Unlatched Door.\n\nNotes:\nKesh joined Barbarian 1 during a burglary intended to recover debt ledgers.\nWhen the route began closing, Barbarian 1 fled through a trapdoor and believed\nKesh was immediately behind him.\n\nKesh was captured. Whether he remains imprisoned, was transferred elsewhere,\nor has begun working for their enemies is unknown.\n\nSupporting Relationship Roll: d20 result 16.\n\nName or Group: The Emberwake Company\nRelationship or Connection:\nFormer employer and traveling spectacle company.\n\nNotes:\nThe Emberwake Company presented elaborate pageants, staged battles, fire\neffects, and heroic dramas. It also trapped young workers and performers in\ncontracts inflated by food, travel, costume, and equipment charges.\n\nBarbarian 1 joined voluntarily and was not raised in poverty. He remained\nafter discovering that leaving was much harder than joining.\n\nCHARACTER NOTES, GOALS, FEARS, AND RELATIONSHIPS\n\nGoals:\n\nBarbarian 1 wants to locate and free Kesh Arlo.\n\nHe also wants to steal the Emberwake Company's master contract register and\nthe corresponding seals used to validate its debt claims. Destroying one copy\nwould not be enough. He wants the records exposed, copied, and rendered\nuseless throughout every region in which the company operates.\n\nHis larger goal is to establish permanent hidden routes and safe houses\nthrough the wilderness so that people escaping coercive institutions do not depend\non one heroic rescue or one easily destroyed refuge.\n\nSupporting Goal Roll: d20 result 1.\n\nFears:\n\nBarbarian 1 fears enclosed routes, barred exits, closing gates, and any plan\nthat depends upon a single way out.\n\nMore deeply, he fears that freedom has become an excuse he uses to abandon\npeople before they can abandon him. He does not know whether his instinct to\nrun is a survival skill he must preserve or a failure he must overcome.\n\nHe also fears finding Kesh and learning that Kesh no longer wants to be\nrescued by him.\n\nSupporting Fear Roll: d20 result 19.\n\nHabits or Mannerisms:\n\nHis primary greataxe is named Betty.\n\nHe talks to Betty with the tenderness, irritation, reassurance, and private\nfamiliarity of someone in a long and slightly theatrical relationship.\nExamples include, “Betty takes care of me,” “Don’t worry, Betty, you’ll get\nyour turn,” and “She’s upset because nobody here respects proper edge care.”\n\nHis four handaxes are Agnes, Pearl, Mabel, and June. His daggers are Daisy and\nVera. He remembers every name and becomes offended when another person mixes\nthem up.\n\nHe also carries several unusable weapon curios:\nGwendolyn, a blunt ceremonial court sword;\nConstance, a warped antique crossbow that cannot safely fire;\nand Beatrice, an ornamental polearm head without a shaft.\n\nHe speaks about these objects as members of an expanding household rather than\nas equipment. He may introduce a newly acquired weapon to the others before\nintroducing an actual person.\n\nWhen judging a proposal, his first questions concern what he receives, what he\nrisks, and whether he can leave. He is often baffled when the group begins with\nquestions about who else might be harmed.\n\nHe rarely announces his belief in his future greatness. It appears in small\nassumptions: that important people will eventually know his name, that current\nrules are temporary obstacles, and that later success will retroactively make\nhis present choices look inevitable.\n\nImportant Relationships:\n\nMara Quill:\nThe benefactor who purchased his release, sheltered him, and taught him the\nskills of a burglar.\n\nKesh Arlo:\nFormer partner left behind during a failed burglary. Finding him is Barbarian\n1's immediate personal goal.\n\nThe Unlatched Door:\nA network whose purpose he supports but whose methods and members he does not\ntrust automatically.\n\nThe Emberwake Company:\nFormer employer, source of his criminal career, and continuing adversary.\n\nOther Character Notes:\n\nBarbarian 1 is nineteen years old. His criminal career is recent rather than\nthe product of decades in an underworld.\n\nHe was not driven into burglary by poverty. He joined a traveling spectacle\nbecause he wanted movement, work, and adventure. He became a burglar after\ndiscovering that contracts and locked records were being used to prevent\nother people from leaving.\n\nHis costume clothes and disguise kit come from his time with the Emberwake\nCompany. His Performance and Charisma remain poor. He worked backstage with\nrigging, trapdoors, scenery, fire precautions, and access routes rather than\nas a skilled actor.\n\nHis vest with one hundred tiny pockets is a mundane trinket. It may be useful\nfor comic storage disputes, but it grants no mechanical carrying benefit.\n\nHis belief in freedom begins with his own freedom. He may oppose coercive\ncontracts and private imprisonment while still behaving selfishly toward the\npeople beside him. The contradiction is intentional.\n\nHis weapon names and conversations with them have no magical effect. The\nweapons do not answer him unless some later story event explicitly changes\nthat.\n\nKesh Arlo, Mara Quill, the master contract register, and the corrupted parts\nof the Unlatched Door are future AI Game Master story hooks.\n\n\nBACKSTORY\n\nBarbarian 1 grew up in a stable Dragonborn household whose work centered on\nkilns, fired brick, and heat-resistant construction. He was not wealthy, but\nhe was fed, educated in practical work, and free to leave when a traveling\nspectacle called the Emberwake Company offered him employment.\n\nHe joined because the company moved constantly.\n\nIts productions used painted cities, collapsing towers, staged battles,\ncostume monsters, controlled fire, smoke, music, and mechanical scenery.\nBarbarian 1's strength made him useful for hauling scenery and operating\ncounterweights. His Red Dragon ancestry made him useful around heat and fire.\nHe worked backstage rather than performing. He learned the routes beneath a\nstage, the sound of a strained rope, the location of every trapdoor, and the\ndifference between a decorative lock and one intended to keep people inside.\n\nThe company charged workers for travel, meals, costumes, repairs, missed\nperformances, medical care, and damaged equipment. Those charges accumulated\ninside private ledgers. Workers who tried to leave were told they owed more\nthan they could pay.\n\nBarbarian 1 initially assumed they had agreed to bad terms and should have\nread more carefully. Then he learned that signatures had been altered, charges\ninvented, and replacement pages inserted after contracts were signed.\n\nMara Quill, the company's aging costume mistress, showed him the hidden files.\nShe had spent years helping people slip away in borrowed clothes, but every\nescape risked exposing the people who remained.\n\nBarbarian 1 attempted to break into the company office and steal the contract\nregister. The attempt failed. Mara used nearly all her savings to purchase his\nrelease before the company could turn him over to a private work gang.\n\nShe then hid him and taught him how to work with locks.\n\nThrough Mara, he joined the Unlatched Door, an illegal network that moved\npeople through safe houses and stole the documents used to claim ownership\nover them. He proved good at reaching upper windows, forcing warped doors,\nmoving quietly despite his size, and carrying other people out when a route\nremained open.\n\nDuring a later burglary, he and Kesh Arlo entered an office to recover debt\nledgers. Guards arrived earlier than expected. Barbarian 1 found a trapdoor\nand fled, believing Kesh was behind him.\n\nKesh was not.\n\nBarbarian 1 escaped with one ledger and no certainty about what happened after\nthe trapdoor closed. That failure did not end his instinct to run when a route\nbegan disappearing.\n\nOPTIONAL BACKSTORY\n\nThis is optional story material only. It does not establish current party membership, leadership, or party role.\n\nBarbarian 1's path crossed the other three characters at an illegal trapping and labor camp deep in the Wild. Druid 1 had followed signs of captured animals and damaged land. Barbarian 1 entered by another route to steal contracts, keys, and payroll records. Warlock 1 and Bard 1, already traveling together because of their shared Acolyte history, arrived while pursuing a concern of their own. The camp's alarms, cages, records, prisoners, animals, and escape routes made separate plans impossible. Druid 1 found a safe route through the surrounding wilds, Barbarian 1 opened the barred service gate, and Warlock 1 and Bard 1 helped turn the confusion into a coordinated escape. The four left together and continued traveling as the Wild party.\n\n\nHOMEBREW OR UNUSUAL RULES\n\nRule, Feature, Item, or Spell:\nCriminal Specialty: Burglar\n\nFull Effect:\nNarrative background only. It grants no additional Expertise, automatic\nbuilding access, criminal contacts, income, or mechanical bonus.\n\nSource or Rules Reference:\nLegacy Criminal specialty table used as a narrative generator.\n\n\nRule, Feature, Item, or Spell:\nNamed Weapon Collection\n\nFull Effect:\nBarbarian 1 gives personal names and personalities to his weapons. Betty,\nAgnes, Pearl, Mabel, June, Daisy, Vera, Gwendolyn, Constance, and Beatrice are\nmundane objects unless a later story explicitly changes one of them.\n\nGwendolyn, Constance, and Beatrice are nonfunctional collection pieces and are\nnot available as combat weapons.\n\nSource or Rules Reference:\nWardensPC character material.\n\nRule, Feature, Item, or Spell:\nThe Unlatched Door, Emberwake Company, and Contract Register\n\nFull Effect:\nThese are setting-neutral narrative organizations and story hooks. They grant\nno automatic safe-house access, legal authority, money, equipment, or favors.\n\nSource or Rules Reference:\nWardensPC starter-character narrative material.\n\n\nRule, Feature, Item, or Spell:\nDraconic Flight\n\nFull Effect:\nListed on the species record but unavailable until character level 5.\n\nSource or Rules Reference:\n2024 Dragonborn species trait.\n",
+  "result": {
+    "document_assessment": {
+      "kind": "other_character_sheet",
+      "is_usable": true,
+      "reason": "Readable and highly complete plain-text D&D 2024 / SRD 5.2.1 character record with sufficient mechanical, inventory, resource, and narrative detail to run the character."
+    },
+    "assistant_message": "Barbarian 1, a Red Dragonborn Criminal Barbarian, is ready for a new fully rested campaign. Betty and the rest of his weapon household are accounted for; no clarification is needed.",
+    "confidence": "high",
+    "intake_settings": {
+      "campaign_start_mode": "new_fully_rested",
+      "dont_sweat_small_stuff": true,
+      "ruleset": "D&D 5.5e (2024 rules)"
+    },
+    "opening_state": {
+      "campaign_start_mode": "new_fully_rested",
+      "fully_rested_defaults_applied": true,
+      "current_hit_points": 15,
+      "temporary_hit_points": 0,
+      "condition_notes": [],
+      "resource_state": "Fully rested: 1d12 Hit Die available; 2/2 Rage uses available; 2/2 Fire Breath Weapon uses available; Alert Initiative Swap available when initiative is rolled; no Heroic Inspiration.",
+      "standard_adventuring_setup": "",
+      "setup_confirmed": false
+    },
+    "applied_assumptions": [
+      "New-campaign fully rested defaults applied: HP set to maximum, temporary HP set to 0, death saves clear, and rest-based resources available.",
+      "No conditions, injuries, exhaustion, or ongoing effects are active.",
+      "Listed portable equipment is carried as recorded; moment-to-moment hand state is not fixed for play.",
+      "No spellcasting equipment is needed because Barbarian 1 has no spells."
+    ],
+    "player_corrections": [],
+    "character": {
+      "name": "Barbarian 1",
+      "sex": "Male",
+      "pronouns": "He/Him",
+      "age": "19",
+      "alignment": "Chaotic Neutral",
+      "species": "Red Dragonborn",
+      "background": "Criminal (Burglar)",
+      "classes": [
+        {
+          "name": "Barbarian",
+          "level": 1,
+          "subclass": ""
+        }
+      ],
+      "total_level": 1,
+      "armor_class": 15,
+      "initiative_modifier": 4,
+      "hit_points": {
+        "maximum": 15,
+        "current_shown_on_sheet": 15,
+        "temporary_shown_on_sheet": 0
+      },
+      "speed": "Walking 30 ft.",
+      "proficiency_bonus": "+2",
+      "ability_scores": {
+        "strength": 15,
+        "dexterity": 14,
+        "constitution": 16,
+        "intelligence": 10,
+        "wisdom": 12,
+        "charisma": 8
+      },
+      "saving_throws": [
+        "Strength +4 (proficient)",
+        "Dexterity +2",
+        "Constitution +5 (proficient)",
+        "Intelligence +0",
+        "Wisdom +1",
+        "Charisma -1",
+        "Advantage on Strength saving throws while raging"
+      ],
+      "skills": [
+        "Acrobatics +2",
+        "Animal Handling +1",
+        "Arcana +0",
+        "Athletics +4 (proficient)",
+        "Deception -1",
+        "History +0",
+        "Insight +1",
+        "Intimidation -1",
+        "Investigation +0",
+        "Medicine +1",
+        "Nature +0",
+        "Perception +1",
+        "Performance -1",
+        "Persuasion -1",
+        "Religion +0",
+        "Sleight of Hand +4 (proficient)",
+        "Stealth +4 (proficient)",
+        "Survival +3 (proficient)"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 11",
+        "Passive Insight 11",
+        "Passive Investigation 10"
+      ],
+      "languages": [
+        "Common",
+        "Draconic",
+        "Orc"
+      ],
+      "attacks": [
+        {
+          "name": "Greataxe, “Betty”",
+          "attack_bonus": "+4",
+          "damage": "1d12+2 Slashing normally; 1d12+4 Slashing on eligible Strength attacks while raging. Cleave follow-up hit: 1d12 Slashing plus 2 Rage damage while raging.",
+          "properties": [
+            "Heavy",
+            "Two-handed",
+            "Martial",
+            "Cleave mastery selected",
+            "Reach 5 ft.",
+            "Action; one attack at level 1"
+          ]
+        },
+        {
+          "name": "Handaxes, “Agnes,” “Pearl,” “Mabel,” and “June”",
+          "attack_bonus": "+4",
+          "damage": "1d6+2 Slashing normally; 1d6+4 Slashing on eligible Strength attacks while raging. Light-property extra attack: 1d6 Slashing, or 1d6+2 while raging with an eligible Strength attack.",
+          "properties": [
+            "Light",
+            "Thrown (20/60 ft.)",
+            "Simple",
+            "Vex mastery selected",
+            "Melee reach 5 ft.",
+            "Four handaxes total"
+          ]
+        },
+        {
+          "name": "Daggers, “Daisy” and “Vera”",
+          "attack_bonus": "+4 using Strength",
+          "damage": "1d4+2 Piercing normally; 1d4+4 Piercing on eligible Strength attacks while raging. Light-property extra attack: 1d4 Piercing, or 1d4+2 while raging with an eligible Strength attack.",
+          "properties": [
+            "Finesse",
+            "Light",
+            "Thrown (20/60 ft.)",
+            "Simple",
+            "Nick is a weapon property but not selected",
+            "Melee reach 5 ft.",
+            "Two daggers total"
+          ]
+        },
+        {
+          "name": "Breath Weapon, Fire",
+          "attack_bonus": "Dexterity save DC 13",
+          "damage": "1d10 Fire damage on a failed save, or half damage on a successful save.",
+          "properties": [
+            "Red Dragonborn species trait",
+            "Magical fire",
+            "Replace one attack during the Attack action",
+            "Choose a 15-foot cone or a 30-foot-long, 5-foot-wide line",
+            "2 uses per Long Rest"
+          ]
+        },
+        {
+          "name": "Unarmed Strike",
+          "attack_bonus": "+4 attack; Strength-based Grapple or Shove DC 12",
+          "damage": "3 Bludgeoning normally; 5 Bludgeoning on an eligible Strength attack while raging; may Grapple or Shove.",
+          "properties": [
+            "Unarmed",
+            "Reach 5 ft.",
+            "Attack"
+          ]
+        }
+      ],
+      "armor_and_shields": [],
+      "equipment_highlights": [
+        {
+          "name": "Greataxe, “Betty”",
+          "quantity": "1",
+          "sheet_status": "Listed as wielded in both hands or carried across the back; primary weapon."
+        },
+        {
+          "name": "Handaxes, “Agnes” and “Pearl”",
+          "quantity": "2",
+          "sheet_status": "Immediately accessible in belt loops."
+        },
+        {
+          "name": "Handaxes, “Mabel” and “June”",
+          "quantity": "2",
+          "sheet_status": "Packed on exterior pack straps; reserve weapons."
+        },
+        {
+          "name": "Dagger, “Daisy”",
+          "quantity": "1",
+          "sheet_status": "Immediately accessible in a belt sheath."
+        },
+        {
+          "name": "Dagger, “Vera”",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack; reserve weapon."
+        },
+        {
+          "name": "Traveler's clothes",
+          "quantity": "1 set",
+          "sheet_status": "Worn."
+        },
+        {
+          "name": "Backpack",
+          "quantity": "1",
+          "sheet_status": "Worn; main equipment container."
+        },
+        {
+          "name": "Ordinary pouches",
+          "quantity": "2",
+          "sheet_status": "Worn on belt; retained from Criminal starting package."
+        },
+        {
+          "name": "Thieves' tools",
+          "quantity": "1 set",
+          "sheet_status": "Carried in inner belt case; includes picks, files, small mirror, scissors, and pliers."
+        },
+        {
+          "name": "Crowbar",
+          "quantity": "1",
+          "sheet_status": "Carried on backpack exterior."
+        },
+        {
+          "name": "Disguise kit",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack; cosmetics, dyes, small props, and disguise materials."
+        },
+        {
+          "name": "Costume clothes",
+          "quantity": "2 sets",
+          "sheet_status": "Packed in backpack; former stage and burglary disguises."
+        },
+        {
+          "name": "Rations",
+          "quantity": "15 days",
+          "sheet_status": "Carried in an external provision bundle secured to pack frame."
+        },
+        {
+          "name": "Waterskin",
+          "quantity": "1",
+          "sheet_status": "Carried on backpack exterior; full weight shown as 5 lb."
+        },
+        {
+          "name": "Bedroll",
+          "quantity": "1",
+          "sheet_status": "Strapped to backpack."
+        },
+        {
+          "name": "Wool blanket",
+          "quantity": "1",
+          "sheet_status": "Strapped to backpack."
+        },
+        {
+          "name": "Mess kit",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack; wooden bowl, small plate, spoon, and eating knife."
+        },
+        {
+          "name": "Wooden mug",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack."
+        },
+        {
+          "name": "Tinderbox",
+          "quantity": "1",
+          "sheet_status": "Carried in belt pouch; includes flint, fire steel, and dry tinder."
+        },
+        {
+          "name": "Dry kindling",
+          "quantity": "3 small bundles",
+          "sheet_status": "Packed in backpack and wrapped against damp."
+        },
+        {
+          "name": "Torches",
+          "quantity": "10",
+          "sheet_status": "Carried in side lashings on pack; each burns for 1 hour."
+        },
+        {
+          "name": "Candles",
+          "quantity": "5",
+          "sheet_status": "Carried in belt pouch; small light sources and airflow tests."
+        },
+        {
+          "name": "Oil",
+          "quantity": "2 flasks",
+          "sheet_status": "Packed in backpack; general-purpose lamp and fire oil."
+        },
+        {
+          "name": "Hemp rope",
+          "quantity": "50 ft.",
+          "sheet_status": "Carried as an exterior coil on pack frame."
+        },
+        {
+          "name": "Healing bandages",
+          "quantity": "5 clean dressings",
+          "sheet_status": "Packed in backpack; mundane clean linen, not magical healing."
+        },
+        {
+          "name": "Chalk",
+          "quantity": "Exactly 2 pieces",
+          "sheet_status": "Carried in belt pouch."
+        },
+        {
+          "name": "Trinket: vest with one hundred tiny pockets",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack; mundane and grants no mechanical carrying benefit."
+        },
+        {
+          "name": "Blunt ceremonial court sword, “Gwendolyn”",
+          "quantity": "1",
+          "sheet_status": "Carried in an exterior wrapped side lashing; beautiful, unsharpened, and unsuitable for combat."
+        },
+        {
+          "name": "Warped antique crossbow, “Constance”",
+          "quantity": "1",
+          "sheet_status": "Strapped to pack; collectible only, as its mechanism cannot safely hold tension."
+        },
+        {
+          "name": "Ornamental polearm head, “Beatrice”",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack; has no shaft and is not a combat weapon."
+        }
+      ],
+      "currency": {
+        "cp": 0,
+        "sp": 0,
+        "ep": 0,
+        "gp": 31,
+        "pp": 0,
+        "total_gp_value": 31
+      },
+      "valuables": [],
+      "resources": [
+        {
+          "name": "Hit Dice",
+          "maximum_or_frequency": "1d12 per Long Rest",
+          "current_shown_on_sheet": "1d12 available"
+        },
+        {
+          "name": "Rage",
+          "maximum_or_frequency": "2 uses; one expended use returns after a Short Rest and all uses return after a Long Rest",
+          "current_shown_on_sheet": "2 of 2 available"
+        },
+        {
+          "name": "Breath Weapon, Fire",
+          "maximum_or_frequency": "2 uses per Long Rest",
+          "current_shown_on_sheet": "2 of 2 available"
+        },
+        {
+          "name": "Alert Initiative Swap",
+          "maximum_or_frequency": "Once each time initiative is rolled",
+          "current_shown_on_sheet": "Available at the beginning of combat"
+        },
+        {
+          "name": "Heroic Inspiration",
+          "maximum_or_frequency": "0 or 1",
+          "current_shown_on_sheet": "0 of 1 possessed"
+        },
+        {
+          "name": "Rations",
+          "maximum_or_frequency": "Consumable food supply",
+          "current_shown_on_sheet": "15 days remaining of 15"
+        },
+        {
+          "name": "Waterskin",
+          "maximum_or_frequency": "Portable water container",
+          "current_shown_on_sheet": "1 waterskin carried"
+        },
+        {
+          "name": "Torches",
+          "maximum_or_frequency": "1 hour of burning each",
+          "current_shown_on_sheet": "10 remaining of 10"
+        },
+        {
+          "name": "Candles",
+          "maximum_or_frequency": "Consumable small light sources",
+          "current_shown_on_sheet": "5 remaining of 5"
+        },
+        {
+          "name": "Oil",
+          "maximum_or_frequency": "Consumable flasks",
+          "current_shown_on_sheet": "2 remaining of 2"
+        },
+        {
+          "name": "Dry kindling",
+          "maximum_or_frequency": "Consumable fire-starting bundles",
+          "current_shown_on_sheet": "3 bundles remaining of 3"
+        },
+        {
+          "name": "Healing bandages",
+          "maximum_or_frequency": "Mundane clean dressings",
+          "current_shown_on_sheet": "5 remaining of 5"
+        },
+        {
+          "name": "Chalk",
+          "maximum_or_frequency": "Consumable marking pieces",
+          "current_shown_on_sheet": "2 pieces remaining of 2"
+        }
+      ],
+      "spellcasting": {
+        "ability": "",
+        "save_dc": "",
+        "attack_bonus": "",
+        "slots": [],
+        "cantrips": [],
+        "prepared_or_known_spells": [],
+        "spellbook_or_other_spells": []
+      },
+      "feats_and_features": [
+        "Rage: Bonus Action while not wearing Heavy armor; grants Advantage on Strength checks and Strength saving throws, +2 damage on eligible Strength attacks, and resistance to Bludgeoning, Piercing, and Slashing damage. Cannot maintain Concentration or cast spells while raging. Lasts up to 10 minutes subject to normal continuation and ending conditions. SRD rules: You can imbue yourself with a primal power called Rage, a force that grants you extraordinary might and resilience. You can enter it as a Bonus Action if you aren’t wearing Heavy armor. You can enter your Rage the number of times shown for your Barbarian level in the Rages column of the Barbarian Features table. You regain one expended use when you finish a Short Rest, and you regain all expended uses when you finish a Long Rest.",
+        "Unarmored Defense: While not wearing armor, AC equals 10 + Dexterity modifier + Constitution modifier; current AC 15. SRD rules: While you aren’t wearing any armor, your base Armor Class equals 10 plus your Dexterity and Constitution modifiers. You can use a Shield and still gain this benefit.",
+        "Weapon Mastery: Mastery selected for Greataxes (Cleave) and Handaxes (Vex); may change one selected weapon after a Long Rest under the feature's normal rules. SRD rules: Your training with weapons allows you to use the mastery properties of two kinds of Simple or Martial Melee weapons of your choice, such as Greataxes and Handaxes. Whenever you finish a Long Rest, you can practice weapon drills and change one of those weapon choices. When you reach certain Barbarian levels, you gain the ability to use the mastery properties of more kinds of weapons, as shown in the Weapon Mastery column of the Barbarian Features table.",
+        "Cleave: Once per turn after hitting with a melee Greataxe attack, may make another Greataxe attack against a second creature within 5 feet of the first and within reach. The second hit excludes the ability modifier unless it is negative.",
+        "Vex: After a Handaxe hit deals damage, gain Advantage on the next attack roll against that creature before the end of the next turn.",
+        "Red Dragonborn: Humanoid, Medium, Speed 30 ft., Darkvision 60 ft., Fire resistance, and Fire Breath Weapon.",
+        "Draconic Flight: Not available until character level 5; then spectral wings may be manifested as a Bonus Action once per Long Rest for up to 10 minutes, granting a Fly Speed equal to Speed. SRD rules: When you reach character level 5, you can channel draconic magic to give yourself temporary flight. As a Bonus Action, you sprout spectral wings on your back that last for 10 minutes or until you retract the wings (no action required) or have the Incapacitated condition. During that time, you have a Fly Speed equal to your Speed. Your wings appear to be made of the same energy as your",
+        "Alert: Add Proficiency Bonus to Initiative; immediately after initiative is rolled, may exchange initiative with one willing, non-Incapacitated ally in the same combat. SRD rules: Origin Feat. You gain the following benefits. Initiative Proficiency. When you roll Initiative, you can add your Proficiency Bonus to the roll. Initiative Swap. Immediately after you roll Initiative, you can swap your Initiative with the Initiative of one willing ally in the same combat. You can’t make this swap if you or the ally has the Incapacitated condition.",
+        "Criminal background: Proficiencies include Sleight of Hand, Stealth, and Thieves' Tools; Origin Feat Alert.",
+        "Criminal Specialty: Burglar: narrative only; grants no automatic contacts, access, income, or mechanical bonus.",
+        "Named Weapon Collection: Betty, Agnes, Pearl, Mabel, June, Daisy, Vera, Gwendolyn, Constance, and Beatrice are mundane objects unless a later story explicitly changes this. Gwendolyn, Constance, and Beatrice are nonfunctional collection pieces.",
+        "The Unlatched Door, Emberwake Company, and Contract Register are narrative story hooks only and grant no automatic safe-house access, authority, money, gear, or favors."
+      ],
+      "aliases_and_nicknames": [
+        "Name Used During Play: Barbarian 1",
+        "Greataxe: Betty",
+        "Handaxes: Agnes, Pearl, Mabel, and June",
+        "Daggers: Daisy and Vera",
+        "Ceremonial sword: Gwendolyn",
+        "Antique crossbow: Constance",
+        "Ornamental polearm head: Beatrice"
+      ],
+      "story_facts": [
+        {
+          "fact": "Barbarian 1 grew up in a stable Dragonborn household working with kilns, fired brick, and heat-resistant construction; he was fed, practically educated, and free to leave.",
+          "likely_visibility": "probably_private"
+        },
+        {
+          "fact": "He joined the traveling Emberwake Company because he wanted movement, work, and adventure, becoming a backstage stagehand rather than a performer.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "His backstage experience includes rigging, trapdoors, scenery, fire precautions, controlled fire effects, access routes, counterweights, locks, and the routes beneath a stage.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "The Emberwake Company trapped workers in inflated debt contracts through charges for travel, food, costumes, repairs, medical care, and damaged equipment; signatures and contract pages were also falsified.",
+          "likely_visibility": "probably_private"
+        },
+        {
+          "fact": "Mara Quill bought out his Emberwake contract, hid him after his failed burglary, and taught him lock and access work.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "The Unlatched Door is an illegal network helping people escape private jails, coerced labor, fraudulent contracts, and predatory debts, while targeting records used to reclaim them. Some members may use its name to justify ordinary theft.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "Barbarian 1 fled through a trapdoor during a burglary for debt ledgers, believing Kesh Arlo was behind him; Kesh was captured and their current fate is unknown.",
+          "likely_visibility": "probably_private"
+        },
+        {
+          "fact": "He escaped that burglary with one ledger.",
+          "likely_visibility": "probably_private"
+        },
+        {
+          "fact": "He has no permanent base and is from a region identified as the wilderness.",
+          "likely_visibility": "public"
+        }
+      ],
+      "personality_goals_and_fears": [
+        "Extraordinarily selfish and candid that he cooperates only while cooperation benefits him; he assumes everyone else should pursue their own advantage.",
+        "Quietly believes he is destined for greatness and expects later importance to justify his current behavior.",
+        "Passionately collects weapons, including damaged, ceremonial, incomplete, and unusable pieces; gives every weapon an ordinary feminine name and speaks of them as household members.",
+        "Ideal—Freedom: opposes contracts, debts, institutions, employers, jailers, and inherited obligations that make people property; will commit burglary or break locks to oppose such coercion.",
+        "Goal: locate and free Kesh Arlo.",
+        "Goal: steal, expose, copy, and neutralize the Emberwake Company's master contract register and its validating seals across all regions where it operates.",
+        "Goal: establish durable hidden routes and safe houses through the wilderness for people escaping coercive institutions.",
+        "Flaw: when a plan collapses or danger abruptly turns, his first instinct is to run; this previously saved him but left another person behind.",
+        "Fear: enclosed routes, barred exits, closing gates, and plans dependent on a single exit.",
+        "Fear: freedom may be an excuse to abandon people before they can abandon him.",
+        "Fear: Kesh may no longer want to be rescued.",
+        "He evaluates proposals in terms of personal reward, risk, and escape; he is baffled when others prioritize possible harm to others.",
+        "His apparent belief in future greatness appears through assumptions that important people will know his name and that current rules are temporary obstacles."
+      ],
+      "relationships_and_organizations": [
+        "Mara Quill — benefactor, retired costume mistress, locksmith, and moral anchor. She bought Barbarian 1's release from Emberwake, sheltered him, and taught him locks and access work.",
+        "Kesh Arlo — former partner, fellow stagehand, and captured Unlatched Door member. Their status may be imprisonment, transfer, or collaboration with enemies.",
+        "The Unlatched Door — loose illegal network of guides, locksmiths, document thieves, wagoners, and safe-house keepers focused on escaping coercion and destroying recapture records.",
+        "The Emberwake Company — former employer and traveling spectacle company that used corrupt debt contracts to trap workers; continuing adversary."
+      ],
+      "is_current_party_active_leader": false
+    },
+    "sheet_summary": [
+      "Level 1 Red Dragonborn Barbarian using 2024 D&D rules, with the Criminal background and Alert Origin Feat.",
+      "Unarmored AC 15; 15 maximum HP; +4 Initiative from Dexterity and Alert; Speed 30 ft.; Fire resistance and Darkvision 60 ft.",
+      "Primary offense is Betty the greataxe (+4 to hit, 1d12+2; +2 Rage damage on eligible attacks), backed by four handaxes, two daggers, unarmed attacks, and Fire Breath Weapon (DC 13).",
+      "Fully rested opening resources: 2 Rage uses, 2 Breath Weapon uses, 1d12 Hit Die, no Heroic Inspiration, and no active conditions.",
+      "Carries 31 gp and approximately 124 lb. of equipment against a carrying capacity of 225 lb.",
+      "A former Emberwake stagehand and burglar tied to Mara Quill, the Unlatched Door, the missing Kesh Arlo, and the Emberwake contract register."
+    ],
+    "detected_issues": [],
+    "clarification_questions": [],
+    "details_not_found": [],
+    "additional_details": [
+      "Player Name: Mistinarperadnacles",
+      "Record metadata: Record Version “Barbarian 1 Mark III”; last updated 2026-08-11; source sheet “Barb 1.pdf”; development status Complete. The supplied filename says “Barbarian 1 Mark II.txt.”",
+      "Faith or deity: None declared. Size: Medium. Height: 6 ft. 7 in. Weight: 272 lb",
+      "Appearance: Strong scarlet-red scales darkening to wine-red along the spine, elbows, and tail; no hair; two heavy backward-sweeping black horns plus smaller jaw and brow ridges; burnished amber eyes; broad muzzle, heavy claws, and thick tail",
+      "Token notes: green background; depict a very large unmistakably red Dragonborn with a greataxe and several handaxes. He wears no armor, and his kit should evoke wilderness travel plus costumes, tools, locks, and hidden access",
+      "Armor and shield: no armor or shield carried. Unarmored Defense produces AC 15; he is trained in light armor, medium armor, and shields, but Betty requires two hands",
+      "Training: simple and martial weapons; Thieves' Tools; breaking and entering; lock and access work; stage rigging and trapdoor mechanisms; costume handling and basic disguise preparation; wilderness travel and route finding. No vehicles, gaming sets, or instrument proficiency recorded",
+      "Damage defenses: Fire resistance at all times; Bludgeoning, Piercing, and Slashing resistance while raging. No vulnerabilities, immunities, or condition immunities recorded",
+      "The source identifies Betty as the normal primary weapon; two handaxes and Daisy are immediately accessible, while the other named weapons are packed as reserves or curios",
+      "Recorded equipment weight is approximately 124 lb.; carrying capacity 225 lb.; push, drag, or lift capacity 450 lb.; encumbrance threshold is not used",
+      "The two Criminal starting pouches are both retained. Duplicate source representations of the bedroll and waterskin were consolidated",
+      "The vest with one hundred tiny pockets is a mundane trinket with no mechanical carrying benefit",
+      "Gwendolyn is blunt and unsuitable for combat; Constance cannot safely fire; Beatrice has no shaft. None is available as a combat weapon",
+      "The named weapons do not speak or have magical effects unless a later story event explicitly changes that",
+      "Rules text includes material from the System Reference Document 5.2.1 (SRD 5.2.1) by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd, licensed under the Creative Commons Attribution 4.0 International License at https://creativecommons.org/licenses/by/4.0/legalcode."
+    ]
+  }
+}
