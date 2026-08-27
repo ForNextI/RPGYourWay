@@ -5490,3 +5490,182 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     white-space: normal;
   }
 }
+
+/* RPG Your Way 1.8.5 — Start QA III: consistent plaque furniture, action hierarchy, leader controls, and settings bezels. */
+
+/* Every numbered onboarding step is a raised parchment plaque floating directly on the map. */
+.start-step {
+  position: relative;
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 18px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--landing-pale) 92%, white), var(--landing-pale));
+  padding: 2.85rem .9rem 1rem;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 72%, white),
+    inset 0 1px 0 rgb(255 255 255 / .76),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 8px 14px rgb(43 47 38 / .10);
+}
+.start-step .start-step-nameplate {
+  left: 1.05rem;
+  top: -1.05rem;
+  z-index: 2;
+}
+
+/* Forest + cream is reserved for the numbered nameplates. Olive + cream is the active/action layer. */
+.start-primary-control,
+.start-leader-controls button {
+  border-color: var(--rpgyw-brass-highlight);
+  background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep));
+  color: var(--cream-bright);
+}
+.start-primary-control:hover:not(:disabled),
+.start-primary-control:focus-visible:not(:disabled),
+.start-leader-controls button:hover,
+.start-leader-controls button:focus-visible {
+  background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep));
+  color: var(--lime) !important;
+}
+.start-leader-controls .is-selected {
+  background: var(--landing-olive-19-deep);
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 0 0 2px color-mix(in srgb, var(--rpgyw-brass-highlight) 74%, white),
+    0 2px 0 var(--rpgyw-brass-shadow);
+}
+
+/* Tertiary information controls are pale with forest lettering. */
+.start-info-control {
+  width: 100%;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 11px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 97%, white), var(--landing-pale));
+  color: var(--forest-deep);
+  padding: .55rem .78rem;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 64%, white),
+    inset 0 1px 0 rgb(255 255 255 / .80),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 6px 10px rgb(43 47 38 / .10);
+  cursor: pointer;
+  font-weight: 900;
+  text-align: center;
+  transition: background 120ms ease, color 120ms ease, transform 80ms ease;
+}
+.start-info-control:hover,
+.start-info-control:focus-visible {
+  background: var(--forest-deep);
+  color: var(--lime);
+}
+.start-info-control:active { transform: translateY(1px); }
+
+/* Proposed leader is kept automatically. Only Change and None need visible controls. */
+.start-leader-main strong { font-size: 1.05rem; }
+.start-leader-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.start-leader-controls button { min-width: 84px; }
+.start-leader-choice-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .55rem;
+}
+.start-leader-choice-list .start-primary-control { width: 100%; }
+
+/* Step 3 receives the same recessed olive/brass bezel language as character drag/drop. */
+.start-settings-bezel {
+  border: 7px solid var(--landing-olive-19-deep);
+  outline: 2px solid var(--rpgyw-brass-edge);
+  outline-offset: 0;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--landing-pale) 93%, white);
+  padding: .8rem;
+  box-shadow:
+    inset 0 0 0 2px var(--rpgyw-brass-highlight),
+    inset 0 9px 18px rgb(43 47 38 / .14),
+    inset 0 -2px 0 rgb(255 255 255 / .58),
+    0 3px 0 var(--rpgyw-brass-shadow);
+}
+.start-settings-bezel .start-question-panel,
+.start-settings-bezel .start-complete-plaque {
+  margin-top: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.start-settings-bezel .start-question-choice { margin: 0; }
+
+/* The open-ended exclusions answer is itself a recessed entry well. */
+.start-question-textarea {
+  border: 7px solid var(--landing-olive-19-deep) !important;
+  outline: 2px solid var(--rpgyw-brass-edge);
+  outline-offset: 0;
+  border-radius: 14px !important;
+  background: color-mix(in srgb, var(--landing-pale) 96%, white) !important;
+  box-shadow:
+    inset 0 0 0 2px var(--rpgyw-brass-highlight),
+    inset 0 7px 14px rgb(43 47 38 / .12) !important;
+}
+.start-question-textarea:focus {
+  outline: 2px solid var(--rpgyw-brass-highlight) !important;
+  border-color: var(--landing-olive-19-deep) !important;
+}
+
+/* Question-entry controls follow the same olive action hierarchy. */
+.start-rating-scale button:hover,
+.start-rating-scale button:focus-visible {
+  background: var(--landing-olive-19-deep);
+  color: var(--lime);
+}
+.start-rating-scale button.is-selected {
+  background: var(--landing-olive-19-deep);
+  color: var(--cream-bright);
+}
+.start-mini-ratings select {
+  border-color: var(--rpgyw-brass-highlight);
+  background: var(--landing-olive-19-deep);
+  color: var(--cream-bright);
+}
+.start-mini-ratings select:hover,
+.start-mini-ratings select:focus-visible { color: var(--lime); }
+
+@media (max-width: 640px) {
+  .start-step .start-step-nameplate {
+    left: .65rem;
+    max-width: calc(100% - 1.3rem);
+  }
+  .start-leader-choice-list { grid-template-columns: 1fr; }
+}
+
+/* Required onboarding choices use the olive action layer; informational choices stay pale. */
+.start-age-choices button,
+.start-choice,
+.start-rating-scale button {
+  border-color: var(--rpgyw-brass-highlight);
+  background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep));
+  color: var(--cream-bright);
+}
+.start-choice span { color: var(--cream-bright); }
+.start-age-choices button:hover,
+.start-age-choices button:focus-visible,
+.start-choice:hover,
+.start-choice:focus-visible,
+.start-choice:hover span,
+.start-choice:focus-visible span,
+.start-rating-scale button:hover,
+.start-rating-scale button:focus-visible {
+  background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep));
+  color: var(--lime) !important;
+}
+.start-choice--selected,
+.start-rating-scale button.is-selected {
+  background: var(--landing-olive-19-deep);
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 0 0 2px color-mix(in srgb, var(--rpgyw-brass-highlight) 74%, white),
+    0 2px 0 var(--rpgyw-brass-shadow);
+}
+.start-choice--selected span { color: var(--cream-bright); }

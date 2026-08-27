@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.8.4')
-assert.equal(pkg.rpgywVersion, '1.8.4')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.8\.4'/)
+assert.equal(pkg.version, '1.8.5')
+assert.equal(pkg.rpgywVersion, '1.8.5')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.8\.5'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -665,8 +665,8 @@ assert.match(start180, /start-rules-current/)
 assert.match(start180, /start-rules-secondary/)
 assert.match(start180, /start-character-actions start-character-actions--primary/)
 assert.match(start180, /start-character-actions start-character-actions--secondary/)
-assert.match(start180, /className="start-olive-control" onClick=\{\(\) => setModal\('import-help'\)\}/)
-assert.match(start180, /className="start-olive-control" onClick=\{\(\) => setModal\('starter-help'\)\}/)
+assert.match(start180, /className="start-info-control" onClick=\{\(\) => setModal\('import-help'\)\}/)
+assert.match(start180, /className="start-info-control" onClick=\{\(\) => setModal\('starter-help'\)\}/)
 assert.match(css180, /RPG Your Way 1\.8\.3/)
 assert.match(css180, /\.start-step \{[^}]*background: transparent;[^}]*box-shadow: none;/)
 assert.match(css180, /\.start-drop-zone \{[\s\S]*border: 7px solid var\(--landing-olive-19-deep\)/)
@@ -680,3 +680,17 @@ assert.match(css180, /\.start-page-main > \.start-page-shell \{[\s\S]*background
 assert.match(css180, /\.start-party-step \{[\s\S]*background: linear-gradient/)
 assert.match(css180, /\.start-rules-secondary \{[\s\S]*background: linear-gradient\(180deg, color-mix/)
 console.log('RPG Your Way 1.8.4 Start plaque-overlap, party-card, and map-field checks passed.')
+
+
+assert.match(start180, /Proposed party leader:/)
+assert.doesNotMatch(start180, />Keep<\/button>/)
+assert.match(start180, /setModal\('leader-change'\)/)
+assert.match(start180, /className="start-info-control" onClick=\{\(\) => setModal\('import-help'\)\}/)
+assert.match(start180, /className="start-info-control" onClick=\{\(\) => setModal\('starter-help'\)\}/)
+assert.match(start180, /start-step start-settings-step/)
+assert.match(start180, /start-settings-bezel/)
+assert.match(css180, /RPG Your Way 1\.8\.5/)
+assert.match(css180, /\.start-info-control \{[\s\S]*background: linear-gradient/)
+assert.match(css180, /\.start-settings-bezel \{[\s\S]*border: 7px solid var\(--landing-olive-19-deep\)/)
+assert.match(css180, /\.start-question-textarea \{[\s\S]*border: 7px solid var\(--landing-olive-19-deep\)/)
+console.log('RPG Your Way 1.8.5 Start action hierarchy, leader, plaque, and settings-bezel checks passed.')

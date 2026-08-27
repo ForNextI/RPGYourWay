@@ -144,7 +144,7 @@ export function StartOnboarding() {
   const [ageBand, setAgeBand] = useState<AiAgeBand | null>(null)
   const [ageReady, setAgeReady] = useState(false)
   const [ageModalOpen, setAgeModalOpen] = useState(false)
-  const [modal, setModal] = useState<'faq' | 'ai-help' | 'starters' | 'starter-help' | 'import-help' | 'leader' | 'question-help' | null>(null)
+  const [modal, setModal] = useState<'faq' | 'ai-help' | 'starters' | 'starter-help' | 'import-help' | 'leader' | 'leader-change' | 'question-help' | null>(null)
   const [ruleset, setRuleset] = useState<RulesetId>('dnd-5.5e-srd-5.2.1')
   const [rulesOpen, setRulesOpen] = useState(false)
   const [party, setParty] = useState<PartyMember[]>([])
@@ -362,8 +362,8 @@ export function StartOnboarding() {
                 <button type="button" className="start-primary-control" onClick={() => setPasteOpen((value) => !value)} disabled={party.length >= 6}><FileText aria-hidden="true" />Paste character information</button>
               </div>
               <div className="start-character-actions start-character-actions--secondary">
-                <button type="button" className="start-olive-control" onClick={() => setModal('import-help')}>Character import help</button>
-                <button type="button" className="start-olive-control" onClick={() => setModal('starter-help')}>About ready-to-play characters</button>
+                <button type="button" className="start-info-control" onClick={() => setModal('import-help')}>Character import help</button>
+                <button type="button" className="start-info-control" onClick={() => setModal('starter-help')}>About ready-to-play characters</button>
               </div>
               <input ref={fileRef} className="sr-only" type="file" multiple accept=".pdf,.json,.xml,.txt,.md,text/plain,text/markdown,application/pdf,application/json,application/xml,text/xml" onChange={(event) => importFiles(Array.from(event.target.files ?? []))} />
 
@@ -400,18 +400,16 @@ export function StartOnboarding() {
               {partyReady ? (
                 <div className="start-leader-card">
                   <div className="start-leader-main">
-                    <span>This is your leader</span>
-                    <strong>{leader ? leader.label : leaderChoice === 'none' ? 'No active leader' : 'Recommendation pending'}</strong>
+                    <strong>
+                      {leaderChoice === 'auto'
+                        ? `Proposed party leader: ${recommendation?.label ?? 'Recommendation pending'}`
+                        : leaderChoice === 'none'
+                          ? 'Party leader: None'
+                          : `Party leader: ${leader?.label ?? 'Recommendation pending'}`}
+                    </strong>
                   </div>
                   <div className="start-leader-controls">
-                    <button type="button" className={leaderChoice === 'auto' ? 'is-selected' : ''} onClick={() => setLeaderChoice('auto')}>Keep</button>
-                    <label>
-                      <span className="sr-only">Change party leader</span>
-                      <select value={leaderChoice !== 'auto' && leaderChoice !== 'none' ? leaderChoice : ''} onChange={(event) => event.target.value && setLeaderChoice(event.target.value)}>
-                        <option value="">Change</option>
-                        {party.map((member) => <option value={member.id} key={member.id}>{member.label}</option>)}
-                      </select>
-                    </label>
+                    <button type="button" onClick={() => setModal('leader-change')}>Change</button>
                     <button type="button" className={leaderChoice === 'none' ? 'is-selected' : ''} onClick={() => setLeaderChoice('none')}>None</button>
                   </div>
                   <button type="button" className="start-leader-explain" onClick={() => setModal('leader')}>How did we choose this leader?</button>
@@ -421,12 +419,13 @@ export function StartOnboarding() {
           ) : null}
 
           {partyReady ? (
-            <section className="start-step" aria-labelledby="questions-heading">
+            <section className="start-step start-settings-step" aria-labelledby="questions-heading">
               <div className="start-step-nameplate"><span>3</span>Customize or Default Settings</div>
+              <div className="start-settings-bezel">
               {questionMode === 'pending' ? (
                 <div className="start-question-choice" id="questions-heading">
                   <button type="button" className="start-primary-control start-big-control" onClick={() => { setQuestionMode('answer'); setQuestionIndex(0) }}>Answer the questions</button>
-                  <button type="button" className="start-secondary-control start-big-control" onClick={() => setQuestionMode('skip')}>Skip the questions</button>
+                  <button type="button" className="start-primary-control start-big-control" onClick={() => setQuestionMode('skip')}>Skip the questions</button>
                 </div>
               ) : questionMode === 'skip' ? (
                 <div className="start-complete-plaque"><Sparkles aria-hidden="true" /><div><strong>Using the standard campaign defaults.</strong><span>You can change campaign guidance later.</span></div><button type="button" onClick={() => setQuestionMode('pending')}>Change</button></div>
@@ -476,6 +475,7 @@ export function StartOnboarding() {
                   </div>
                 </div>
               )}
+              </div>
             </section>
           ) : null}
 
@@ -568,6 +568,26 @@ export function StartOnboarding() {
             })}
           </div>
           <p className="start-party-count">Current party: {party.length} · Max party size: 6</p>
+        </StartModal>
+      ) : null}
+
+      {modal === 'leader-change' ? (
+        <StartModal title="Change party leader" onClose={() => setModal(null)}>
+          <div className="start-leader-choice-list">
+            {party.map((member) => (
+              <button
+                type="button"
+                className="start-primary-control"
+                key={member.id}
+                onClick={() => {
+                  setLeaderChoice(member.id === recommendation?.id ? 'auto' : member.id)
+                  setModal(null)
+                }}
+              >
+                {member.label}{member.id === recommendation?.id ? ' — proposed' : ''}
+              </button>
+            ))}
+          </div>
         </StartModal>
       ) : null}
 
