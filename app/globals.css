@@ -5947,46 +5947,15 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
 
 /* RPG Your Way 1.8.7 — functional Start import flow, one-character clarification, dual file control, footer cleanup. */
 
-/* Browse is now one physical control with two input methods: click or drop. */
-.start-file-drop-control {
-  position: relative;
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  gap: .55rem;
-  border: 7px solid var(--landing-olive-19-deep) !important;
-  outline: 2px solid var(--rpgyw-brass-edge);
-  outline-offset: 0;
-  background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep)) !important;
-  box-shadow:
-    inset 0 0 0 2px var(--rpgyw-brass-highlight),
-    inset 0 7px 14px rgb(43 47 38 / .16),
-    0 3px 0 var(--rpgyw-brass-shadow),
-    0 7px 12px rgb(43 47 38 / .10) !important;
-}
-.start-file-drop-control > span { display: grid; gap: .12rem; }
-.start-file-drop-control small { color: color-mix(in srgb, var(--cream-bright) 78%, transparent); font-size: .68rem; font-weight: 800; }
-.start-file-drop-control.is-drag-active,
-.start-file-drop-control:hover,
-.start-file-drop-control:focus-visible { color: var(--lime) !important; }
-.start-file-drop-control.is-drag-active small,
-.start-file-drop-control:hover small,
-.start-file-drop-control:focus-visible small { color: var(--lime); }
+/* 1.8.9 removes drag/drop from Start. Browse is now a conventional file-picker action. */
 
-/* One concise instruction applies to ready-to-play and imported characters alike. */
-.start-party-edit-note {
-  width: fit-content;
-  max-width: 100%;
-  margin: .8rem 0 .9rem auto;
-  border: 2px solid var(--rpgyw-brass-highlight);
-  border-radius: 10px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 98%, white), var(--landing-pale));
-  color: var(--forest-deep);
-  padding: .5rem .7rem;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 58%, white), 0 2px 0 var(--rpgyw-brass-shadow);
-  font-size: .76rem;
-  font-weight: 800;
-  line-height: 1.35;
+/* This is intentionally plain explanatory copy, not another plaque or button. */
+.start-party-note {
+  margin-top: .45rem !important;
+  color: var(--muted) !important;
+  font-size: .8rem;
+  font-weight: 700;
+  line-height: 1.42;
 }
 
 .start-status--file-added { background: var(--landing-olive-19); color: var(--cream-bright); }
@@ -6072,7 +6041,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
 @media (max-width: 620px) {
   .site-header .brand-mark { width: 38px; height: 38px; }
   .site-header .brand-mark img { width: 29px; height: 29px; }
-  .start-party-edit-note { margin-left: 0; }
 }
 
 /* RPG Your Way 1.8.8 — Start becomes a one-step-at-a-time board, beginning with game rules. */
@@ -6138,4 +6106,40 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
 .start-reset-link:focus-visible {
   color: var(--lime);
   outline: none;
+}
+
+
+/* RPG Your Way 1.8.9 — Step 2 party workflow cleanup and deferred leader choice. */
+.start-party-count--main {
+  margin-top: .95rem;
+  font-weight: 850;
+}
+.start-party-confirm {
+  display: grid;
+  justify-items: center;
+  gap: .34rem;
+  margin-top: .8rem;
+}
+.start-party-confirm .start-primary-control {
+  width: min(300px, 100%);
+  min-height: 46px;
+}
+.start-party-confirm p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 800;
+}
+.start-settings-leader {
+  display: grid;
+  gap: .75rem;
+  margin-top: 1rem;
+}
+.start-settings-leader .start-leader-card {
+  margin-top: 0;
+}
+.start-step-continue {
+  width: min(260px, 100%);
+  justify-self: center;
+  min-height: 44px;
 }

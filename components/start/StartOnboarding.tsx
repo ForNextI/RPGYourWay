@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useMemo, useRef, useState, type DragEvent, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import {
   ChevronLeft,
   ChevronRight,
@@ -9,7 +9,6 @@ import {
   FileText,
   ShieldCheck,
   Sparkles,
-  Upload,
   X,
 } from 'lucide-react'
 import { START_FAQ } from '@/lib/start/help-knowledge'
@@ -54,6 +53,7 @@ type PartyMember = {
   sourceText?: string
   sourceFileName?: string
   sourceMimeType?: string
+  sourceFileKey?: string
   paidProcessing?: boolean
   error?: string
   strength?: number
@@ -183,7 +183,6 @@ export function StartOnboarding() {
   const [pasteOpen, setPasteOpen] = useState(false)
   const [pasteText, setPasteText] = useState('')
   const [importMessage, setImportMessage] = useState('')
-  const [dragActive, setDragActive] = useState(false)
   const [activeCharacterId, setActiveCharacterId] = useState<string | null>(null)
   const [clarificationText, setClarificationText] = useState('')
   const [clarificationBusy, setClarificationBusy] = useState(false)
@@ -234,6 +233,7 @@ export function StartOnboarding() {
   const playReadyForEngine = ageBand !== 'under-13' && partyReady && questionsDone && namesReady
   const importBusy = party.some((member) => member.status === 'importing') || clarificationBusy
   const activeImportWorkflow = party.find((member) => member.status === 'importing' || member.status === 'needs-required' || member.status === 'needs-recommended') ?? null
+  const remainingPartySlots = Math.max(0, 6 - party.length)
 
   function chooseAge(next: AiAgeBand) {
     window.localStorage.setItem(AI_AGE_BAND_STORAGE_KEY, next)
@@ -241,25 +241,26 @@ export function StartOnboarding() {
     setAgeModalOpen(false)
   }
 
+  function sourceFileKey(file: File) {
+    return `${file.name.toLowerCase()}::${file.size}::${file.lastModified}`
+  }
+
   function addFiles(files: File[]) {
     const acceptedExtensions = /\.(pdf|json|xml|txt|md|markdown)$/i
     const allowed = files.filter((file) => file.size > 0 && file.size <= 8 * 1024 * 1024 && acceptedExtensions.test(file.name))
     const rejected = files.length - allowed.length
+    const existingKeys = new Set(party.map((member) => member.sourceFileKey).filter((value): value is string => Boolean(value)))
+    const uniqueFiles = allowed.filter((file) => !existingKeys.has(sourceFileKey(file)))
+    const duplicates = allowed.length - uniqueFiles.length
     const room = Math.max(0, 6 - party.length)
-    const additions: PartyMember[] = allowed.slice(0, room).map((file) => ({
-      id: crypto.randomUUID(), label: file.name.replace(/\.[^.]+$/, '') || 'Character file', className: file.name, imported: true, status: 'file-added', file, sourceFileName: file.name, sourceMimeType: file.type || 'application/octet-stream',
+    const additions: PartyMember[] = uniqueFiles.slice(0, room).map((file) => ({
+      id: crypto.randomUUID(), label: file.name.replace(/\.[^.]+$/, '') || 'Character file', className: file.name, imported: true, status: 'file-added', file, sourceFileName: file.name, sourceMimeType: file.type || 'application/octet-stream', sourceFileKey: sourceFileKey(file),
     }))
     setParty((current) => [...current, ...additions].slice(0, 6))
     if (rejected) setImportMessage(`${rejected} file${rejected === 1 ? '' : 's'} skipped. Use PDF, JSON, XML, TXT, or Markdown files no larger than 8 MB each.`)
-    else if (allowed.length > room) setImportMessage(`Only ${room} more character${room === 1 ? '' : 's'} can be added. Maximum party size is 6.`)
+    else if (duplicates) setImportMessage(`${duplicates} duplicate character file${duplicates === 1 ? ' was' : 's were'} already in the party and ${duplicates === 1 ? 'was' : 'were'} not added again.`)
+    else if (uniqueFiles.length > room) setImportMessage(`Only ${room} more character${room === 1 ? '' : 's'} can be added. Maximum party size is 6.`)
     else setImportMessage('')
-  }
-
-  function onBrowseDrop(event: DragEvent<HTMLButtonElement>) {
-    event.preventDefault()
-    event.stopPropagation()
-    setDragActive(false)
-    addFiles(Array.from(event.dataTransfer.files))
   }
 
   function addPastedCharacter() {
@@ -357,6 +358,7 @@ export function StartOnboarding() {
   }
 
   function toggleStarter(id: string) {
+    setImportMessage('')
     setParty((current) => {
       const exists = current.some((member) => member.id === id)
       if (exists) return current.filter((member) => member.id !== id)
@@ -367,6 +369,7 @@ export function StartOnboarding() {
   }
 
   function removeMember(id: string) {
+    setImportMessage('')
     setParty((current) => current.filter((member) => member.id !== id))
     if (activeCharacterId === id) { setActiveCharacterId(null); setModal(null) }
   }
@@ -481,15 +484,14 @@ export function StartOnboarding() {
 
           {activeStep === 2 ? <section className="start-step start-party-step" aria-labelledby="party-heading">
             <div className="start-step-nameplate"><span>2</span>Gather Your Party</div>
-            <div className="start-step-heading-row"><div><h2 id="party-heading" className="sr-only">Gather Your Party</h2><p>{ruleset === 'dnd-5.5e-srd-5.2.1' ? 'Fighter, Wizard, Cleric, and Rogue are loaded. Keep them, change them, or mix in your own characters.' : 'Add your own characters for this ruleset. The current ready-to-play library uses D&D 5.5e.'}</p></div></div>
+            <div className="start-step-heading-row"><div><h2 id="party-heading" className="sr-only">Gather Your Party</h2><p>{ruleset === 'dnd-5.5e-srd-5.2.1' ? 'Fighter, Wizard, Cleric, and Rogue are loaded. Keep them, change them, or mix in your own characters.' : 'Add your own characters for this ruleset. The current ready-to-play library uses D&D 5.5e.'}</p><p className="start-party-note">Names and portraits can be changed later on the Play page through the Characters sidebar.</p></div></div>
             <div className="start-character-actions start-character-actions--primary">
               <button type="button" className="start-primary-control" onClick={() => setModal('starters')} disabled={ruleset !== 'dnd-5.5e-srd-5.2.1'}>Choose from<br />ready-to-play characters</button>
-              <button type="button" className={`start-primary-control start-file-drop-control${dragActive ? ' is-drag-active' : ''}`} onClick={() => fileRef.current?.click()} onDragEnter={(e) => { e.preventDefault(); setDragActive(true) }} onDragOver={(e) => e.preventDefault()} onDragLeave={() => setDragActive(false)} onDrop={onBrowseDrop}><Upload aria-hidden="true" /><span>And/or browse for<br />your character files<small>or drag files here</small></span></button>
+              <button type="button" className="start-primary-control" onClick={() => fileRef.current?.click()}>And/or browse for<br />your character files</button>
               <button type="button" className="start-primary-control" onClick={() => setPasteOpen((open) => !open)}>And/or paste your<br />character&apos;s information</button>
             </div>
             <input ref={fileRef} className="sr-only" type="file" multiple accept=".pdf,.json,.xml,.txt,.md,.markdown,application/pdf,application/json,text/plain,text/markdown,application/xml,text/xml" onChange={(event) => { addFiles(Array.from(event.target.files ?? [])); event.target.value = '' }} />
             <div className="start-character-actions start-character-actions--secondary"><button type="button" className="start-info-control" onClick={() => setModal('import-help')}>Character import help</button></div>
-            <div className="start-party-edit-note">Names and portraits can be changed later on the Play page through the Characters sidebar. Click on whoever you want to edit.</div>
             {pasteOpen ? <div className="start-paste-panel"><label><span>Paste one character&apos;s information</span><textarea rows={7} value={pasteText} onChange={(event) => setPasteText(event.target.value)} placeholder="Paste the character record here." /></label><div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={addPastedCharacter} disabled={!pasteText.trim() || party.length >= 6}>Add this character</button><button type="button" className="start-info-control" onClick={() => setPasteOpen(false)}>Cancel</button></div></div> : null}
             {importMessage ? <p className="auth-message" role="status">{importMessage}</p> : null}
 
@@ -512,7 +514,8 @@ export function StartOnboarding() {
               ))}
             </div>
 
-            {partyReady && recommendation ? <div className="start-leader-card"><div className="start-leader-main"><span>Proposed party leader:</span><strong>{leader?.label ?? 'None'}</strong></div><div className="start-leader-controls"><button type="button" onClick={() => setModal('leader-change')}>Change</button><button type="button" className={leaderChoice === 'none' ? 'is-selected' : ''} onClick={() => setLeaderChoice('none')}>None</button></div><button type="button" className="start-leader-explain" onClick={() => setModal('leader')}>How did we choose this leader?</button></div> : null}
+            <p className="start-party-count start-party-count--main">Current party: {party.length} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p>
+            {partyReady ? <div className="start-party-confirm"><button type="button" className="start-primary-control" onClick={() => { setImportMessage(''); setActiveStep(3) }}>Use this party</button><p>{party.length} {party.length === 1 ? 'character is' : 'characters are'} ready.</p></div> : null}
             <button type="button" className="start-reset-link" onClick={() => { if (window.confirm('Reset this setup and start again?')) window.location.reload() }}>Or reset everything and start again</button>
           </section> : null}
 
@@ -530,21 +533,24 @@ export function StartOnboarding() {
                 <div className="start-question-footer"><button type="button" className="start-text-help" onClick={() => openQuestionHelp(questionIndex)}>Explain this question</button><div className="start-question-nav"><button type="button" className="start-secondary-control" disabled={questionIndex === 0} onClick={() => setQuestionIndex((index) => Math.max(0, index - 1))}><ChevronLeft aria-hidden="true" />Back</button><button type="button" className="start-primary-control" onClick={() => questionIndex === 5 ? setQuestionMode('complete') : setQuestionIndex((index) => Math.min(5, index + 1))}>{questionIndex === 5 ? 'Continue' : <>Next<ChevronRight aria-hidden="true" /></>}</button></div></div>
               </div>}
             </div>
+            {questionsDone ? <div className="start-settings-leader"><div className="start-leader-card"><div className="start-leader-main"><span>Proposed party leader:</span><strong>{leader?.label ?? 'None'}</strong></div><div className="start-leader-controls"><button type="button" onClick={() => setModal('leader-change')}>Change</button><button type="button" className={leaderChoice === 'none' ? 'is-selected' : ''} onClick={() => setLeaderChoice('none')}>None</button></div><button type="button" className="start-leader-explain" onClick={() => setModal('leader')}>How did we choose this leader?</button></div><button type="button" className="start-primary-control start-step-continue" onClick={() => setActiveStep(4)}>Continue</button></div> : null}
+            <button type="button" className="start-reset-link" onClick={() => { if (window.confirm('Reset this setup and start again?')) window.location.reload() }}>Or reset everything and start again</button>
           </section> : null}
 
           {activeStep === 4 && questionsDone ? <section className="start-step" aria-labelledby="names-heading"><div className="start-step-nameplate"><span>4</span>Name your campaign and Game Master</div><div className="start-name-grid" id="names-heading"><label className="start-field"><span>Give your campaign a fun name</span><span className="start-field-bezel"><input value={campaignName} onChange={(event) => setCampaignName(event.target.value)} placeholder="Descriptive campaign name here — have fun" /></span></label><label className="start-field"><span>What do you want to call your Game Master?</span><span className="start-field-bezel"><input value={gmName} onChange={(event) => setGmName(event.target.value)} placeholder="Game Master name" /></span></label></div></section> : null}
           {activeStep === 4 && namesReady && questionsDone ? <section className="start-play-step" aria-label="Continue to Play"><button type="button" className="start-play-button" disabled={!playReadyForEngine || creatingCampaign} onClick={() => void continueToPlay()}>{creatingCampaign ? 'Creating campaign…' : 'Onward'}</button>{createError ? <p className="auth-message auth-message-error" role="alert">{createError}</p> : null}</section> : null}
+          {activeStep === 4 && questionsDone ? <button type="button" className="start-reset-link" onClick={() => { if (window.confirm('Reset this setup and start again?')) window.location.reload() }}>Or reset everything and start again</button> : null}
         </>
       )}
 
       {ageModalOpen ? <StartModal title="Before you begin, which applies to you?" onClose={() => { if (ageBand) setAgeModalOpen(false) }}><div className="start-age-choices"><button type="button" onClick={() => chooseAge('adult')}>I am 18 or older</button><button type="button" onClick={() => chooseAge('teen')}>I am 13–17 and have permission from a parent or guardian</button><button type="button" onClick={() => chooseAge('under-13')}>I am under 13</button></div></StartModal> : null}
       {modal === 'faq' ? <StartModal title="I need help with all of this" onClose={() => setModal(null)} wide><div className="start-faq-list">{START_FAQ.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div><div className="start-faq-more"><strong>Still need help?</strong><p>Start Page Help can answer questions about setting up your campaign.</p><button type="button" className="start-primary-control" onClick={() => setModal('ai-help')}>My question wasn&apos;t above. I still need help.</button></div></StartModal> : null}
       {modal === 'ai-help' ? <StartModal title="Start Page Help" onClose={() => setModal(null)}><p className="start-modal-lede">Ask about the choices on this page or about getting a campaign started. You have {Math.max(0, 25 - helpCount)} of 25 free questions remaining in this onboarding session.</p><div className="start-ai-preview"><label><span>Your question</span><textarea rows={4} value={helpQuestion} onChange={(event) => setHelpQuestion(event.target.value)} placeholder="What do you want help with?" /></label><button type="button" className="start-primary-control" disabled={!helpQuestion.trim() || helpBusy || helpCount >= 25} onClick={() => void askStartHelp()}>{helpBusy ? 'Checking…' : 'Ask Start Page Help'}</button>{helpAnswer ? <div className="start-ai-answer">{helpAnswer}</div> : null}{helpError ? <p className="auth-message auth-message-error" role="alert">{helpError}</p> : null}<small>{Math.max(0, 25 - helpCount)} questions remaining.</small></div></StartModal> : null}
-      {modal === 'import-help' ? <StartModal title="Character import help" onClose={() => setModal(null)} wide><p>Add PDF, JSON, XML, TXT, or Markdown character records by browsing or dragging them onto the Browse control, or paste the character information directly. Files may be up to 8 MB.</p><p>After the file is added, choose <strong>Import into RPG Your Way</strong>. RPG Your Way will read the record, convert it into the character structure used during play, and ask only the clarifications that are worth resolving.</p><p><strong>New campaign</strong> and <strong>Don&apos;t sweat the small stuff</strong> are applied automatically. New campaign starts the character fully rested. Don&apos;t sweat the small stuff assumes ordinary inexpensive class necessities while still tracking consequential equipment and priced or consumed components.</p><p>Importing a normal character is generally free. If a character is unusually large or complex, RPG Your Way will tell you before additional AI processing uses part of your available usage balance.</p><p>Names and portraits can be changed later on the Play page through the Characters sidebar. Click on whoever you want to edit.</p><p>Character information is sent to the AI service when RPG Your Way imports or uses the character. Campaign records remain in the browser unless the campaign is exported.</p><a className="start-inline-link" href="/downloads/rpgyourway-character-update-template-v2.txt" download>Download the blank plain-text character template</a><a className="start-inline-link" href="/legal/privacy">Read the full Privacy information</a></StartModal> : null}
-      {modal === 'starters' ? <StartModal title="Choose ready-to-play characters" onClose={() => setModal(null)} wide><p className="start-modal-lede">Choose up to six. The current library uses D&amp;D 5.5e.</p><div className="start-starter-grid">{STARTERS.map((starter) => { const selected = party.some((member) => member.id === starter.id); return <button type="button" key={starter.id} className={`start-starter-choice${selected ? ' is-selected' : ''}`} onClick={() => toggleStarter(starter.id)} aria-pressed={selected}><Image src={starter.portraitUrl!} alt="" width={100} height={100} /><strong>{starter.className}</strong><span>{selected ? 'In party' : 'Add'}</span></button> })}</div><p className="start-party-count">Current party: {party.length} · Max party size: 6</p></StartModal> : null}
+      {modal === 'import-help' ? <StartModal title="Character import help" onClose={() => setModal(null)} wide><p>Add PDF, JSON, XML, TXT, or Markdown character records by browsing for the files, or paste the character information directly. Files may be up to 8 MB.</p><p>After the file is added, choose <strong>Import into RPG Your Way</strong>. RPG Your Way will read the record, convert it into the character structure used during play, and ask only the clarifications that are worth resolving.</p><p><strong>New campaign</strong> and <strong>Don&apos;t sweat the small stuff</strong> are applied automatically. New campaign starts the character fully rested. Don&apos;t sweat the small stuff assumes ordinary inexpensive class necessities while still tracking consequential equipment and priced or consumed components.</p><p>Importing a normal character is generally free. If a character is unusually large or complex, RPG Your Way will tell you before additional AI processing uses part of your available usage balance.</p><p>Names and portraits can be changed later on the Play page through the Characters sidebar.</p><p>Character information is sent to the AI service when RPG Your Way imports or uses the character. Campaign records remain in the browser unless the campaign is exported.</p><a className="start-inline-link" href="/downloads/rpgyourway-character-update-template-v2.txt" download>Download the blank plain-text character template</a><a className="start-inline-link" href="/legal/privacy">Read the full Privacy information</a></StartModal> : null}
+      {modal === 'starters' ? <StartModal title="Choose ready-to-play characters" onClose={() => setModal(null)} wide><p className="start-modal-lede">Choose up to six. The current library uses D&amp;D 5.5e.</p><div className="start-starter-grid">{STARTERS.map((starter) => { const selected = party.some((member) => member.id === starter.id); return <button type="button" key={starter.id} className={`start-starter-choice${selected ? ' is-selected' : ''}`} onClick={() => toggleStarter(starter.id)} aria-pressed={selected}><Image src={starter.portraitUrl!} alt="" width={100} height={100} /><strong>{starter.className}</strong><span>{selected ? 'In party' : 'Add'}</span></button> })}</div><p className="start-party-count">Current party: {party.length} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p></StartModal> : null}
       {modal === 'paid-import' && activeCharacter ? <StartModal title="Additional AI processing" onClose={() => setModal(null)}><p>This character is unusually large or complex. Importing it requires additional AI processing and will use part of your available usage balance.</p><p>No usage will be deducted unless you continue.</p><div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={() => { setModal(null); void importCharacter(activeCharacter.id, true) }}>Continue and use my balance</button><button type="button" className="start-info-control" onClick={() => setModal(null)}>Cancel</button></div></StartModal> : null}
       {modal === 'character-questions' && activeCharacter?.result ? <CharacterQuestionsModal member={activeCharacter} clarificationText={clarificationText} setClarificationText={setClarificationText} busy={clarificationBusy} onSend={() => void sendCharacterClarification()} onSkip={() => skipRecommended(activeCharacter.id)} onClose={() => setModal(null)} /> : null}
-      {modal === 'character-review' && activeCharacter?.result ? <StartModal title={`Review ${activeCharacter.result.character.name}`} onClose={() => setModal(null)} wide><div className="start-review-summary">{activeCharacter.result.sheet_summary.map((line) => <p key={line}>{line}</p>)}</div>{activeCharacter.result.detected_issues.length ? <div className="start-review-notices"><h3>Notices</h3>{activeCharacter.result.detected_issues.map((issue, index) => <div className="start-question-card" key={`${issue.category}-${index}`}><strong>{issue.category}</strong><p>{issue.issue}</p><small>{issue.why_it_matters}</small></div>)}</div> : <p>No unresolved notices were recorded.</p>}<p className="start-modal-lede">Names and portraits can be changed later on the Play page through the Characters sidebar. Click on whoever you want to edit.</p></StartModal> : null}
+      {modal === 'character-review' && activeCharacter?.result ? <StartModal title={`Review ${activeCharacter.result.character.name}`} onClose={() => setModal(null)} wide><div className="start-review-summary">{activeCharacter.result.sheet_summary.map((line) => <p key={line}>{line}</p>)}</div>{activeCharacter.result.detected_issues.length ? <div className="start-review-notices"><h3>Notices</h3>{activeCharacter.result.detected_issues.map((issue, index) => <div className="start-question-card" key={`${issue.category}-${index}`}><strong>{issue.category}</strong><p>{issue.issue}</p><small>{issue.why_it_matters}</small></div>)}</div> : <p>No unresolved notices were recorded.</p>}<p className="start-modal-lede">Names and portraits can be changed later on the Play page through the Characters sidebar.</p></StartModal> : null}
       {modal === 'leader-change' ? <StartModal title="Change party leader" onClose={() => setModal(null)}><div className="start-leader-choice-list">{party.map((member) => <button type="button" className="start-primary-control" key={member.id} onClick={() => { setLeaderChoice(member.id === recommendation?.id ? 'auto' : member.id); setModal(null) }}>{member.label}{member.id === recommendation?.id ? ' — proposed' : ''}</button>)}</div></StartModal> : null}
       {modal === 'leader' ? <StartModal title="How did we choose this leader?" onClose={() => setModal(null)} wide><p>RPG Your Way uses Brett&apos;s homebrew leadership rule. Each numbered step starts again with the entire party.</p><ol className="start-leader-rule"><li><strong>Charisma.</strong> If one character has the highest Charisma outright, that character leads. If the highest Charisma is tied, continue.</li><li><strong>Intelligence or Wisdom.</strong> Start over with the whole party and compare each character&apos;s higher Intelligence or Wisdom score. If tied, Charisma breaks the tie.</li><li><strong>Strength.</strong> Start over with the whole party again. Highest Strength wins. If tied, Charisma breaks the tie. If that still does not settle it, the tied characters fight for leadership.</li></ol><p><strong>Strength override:</strong> if one character&apos;s Strength is at least 5 points higher than the party&apos;s highest Charisma, Intelligence, or Wisdom score, that character leads instead.</p><p>Leadership is a recommendation, not a requirement. You can choose another character or use no active leader.</p></StartModal> : null}
       {modal === 'question-help' ? <StartModal title={`Explain question ${questionHelpIndex + 1}`} onClose={() => setModal(null)}><p>{QUESTION_HELP[questionHelpIndex]}</p></StartModal> : null}
