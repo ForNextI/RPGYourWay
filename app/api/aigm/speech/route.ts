@@ -12,8 +12,10 @@ const WINDOW_MS = 10 * 60 * 1000
 const DEFAULT_MODEL = 'gpt-4o-mini-tts'
 
 type NarrationVoice = 'fable' | 'marin'
+type NarrationProfile = 'gameplay' | 'onboarding'
 
-function speakingInstructions(voice: NarrationVoice) {
+function speakingInstructions(voice: NarrationVoice, profile: NarrationProfile) {
+  if (profile === 'onboarding') return 'Read this RPG Your Way onboarding or setup-help reply clearly and naturally. Use warm, conversational pacing and clear diction. Do not perform it as an in-world character or announce stage directions.'
   const shared = 'Speak as a warm, intelligent tabletop fantasy Game Master. Use natural conversational pacing, clear diction, restrained theatricality, and brief pauses that suit narration and dialogue. Do not announce stage directions or describe the voice.'
   return voice === 'marin'
     ? `${shared} Use a natural, educated British English accent. Keep it consistent and understated, never exaggerated.`
@@ -33,15 +35,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'This connection has requested too much narration in a short period. Wait a few minutes and try again.' }, { status: 429 })
   }
 
-  let body: { text?: unknown; voice?: unknown }
+  let body: { text?: unknown; voice?: unknown; profile?: unknown }
   try {
-    body = await request.json() as { text?: unknown; voice?: unknown }
+    body = await request.json() as { text?: unknown; voice?: unknown; profile?: unknown }
   } catch {
     return NextResponse.json({ error: 'The narration request could not be read.' }, { status: 400 })
   }
 
   const text = typeof body.text === 'string' ? body.text.replace(/\s+/g, ' ').trim() : ''
   const voice: NarrationVoice = body.voice === 'marin' ? 'marin' : 'fable'
+  const profile: NarrationProfile = body.profile === 'onboarding' ? 'onboarding' : 'gameplay'
   if (!text) return NextResponse.json({ error: 'There is nothing to narrate.' }, { status: 400 })
   if (text.length > MAX_TEXT_LENGTH) return NextResponse.json({ error: 'That narration passage is too long.' }, { status: 413 })
 
@@ -58,7 +61,7 @@ export async function POST(request: Request) {
         model,
         voice,
         input: text,
-        instructions: speakingInstructions(voice),
+        instructions: speakingInstructions(voice, profile),
         response_format: 'mp3',
         stream_format: 'audio',
       }),

@@ -9,9 +9,11 @@ import {
   FileText,
   ShieldCheck,
   Sparkles,
+  Volume2,
   X,
 } from 'lucide-react'
 import { START_FAQ } from '@/lib/start/help-knowledge'
+import { AigmVoiceControls, type AigmVoiceControlsHandle } from '@/components/aigm/aigm-voice-controls'
 import { AI_AGE_BAND_STORAGE_KEY, contentModeForAgeBand, type AiAgeBand } from '@/lib/site/ai-content-mode'
 import {
   ADVENTURE_STORAGE_SCHEMA,
@@ -38,6 +40,14 @@ const RULESETS = [
 type RulesetId = (typeof RULESETS)[number]['id']
 type ImportStatus = 'ready' | 'file-added' | 'importing' | 'needs-required' | 'needs-recommended' | 'error'
 
+type StartDialogueTurn = {
+  id: string
+  role: 'user' | 'assistant'
+  text: string
+  required?: Array<{ question: string; reason: string }>
+  recommended?: Array<{ question: string; reason: string }>
+}
+
 type PartyMember = {
   id: string
   label: string
@@ -56,6 +66,7 @@ type PartyMember = {
   sourceFileKey?: string
   paidProcessing?: boolean
   error?: string
+  clarificationConversation?: StartDialogueTurn[]
   strength?: number
   intelligence?: number
   wisdom?: number
@@ -131,6 +142,26 @@ function classSummary(result: CharacterIntakeResult) {
   return result.character.classes.map((entry) => `${entry.name} ${entry.level}`).join(' / ') || 'Character'
 }
 
+function assistantTurnFromCharacterResult(result: CharacterIntakeResult): StartDialogueTurn {
+  const required = result.clarification_questions
+    .filter((question) => question.priority === 'required')
+    .map((question) => ({ question: question.question, reason: question.reason }))
+  const recommended = result.clarification_questions
+    .filter((question) => question.priority !== 'required')
+    .map((question) => ({ question: question.question, reason: question.reason }))
+  const fallback = required.length || recommended.length
+    ? 'I found a few details worth resolving before this character is ready.'
+    : 'That resolves the remaining questions. This character is ready.'
+  return { id: crypto.randomUUID(), role: 'assistant', text: result.assistant_message?.trim() || fallback, required, recommended }
+}
+
+function narrationForTurn(turn: StartDialogueTurn) {
+  const pieces = [turn.text]
+  if (turn.required?.length) pieces.push(`Required before this character can be used. ${turn.required.map((question) => question.question).join(' ')}`)
+  if (turn.recommended?.length) pieces.push(`Recommended before play. ${turn.recommended.map((question) => question.question).join(' ')}`)
+  return pieces.filter(Boolean).join(' ')
+}
+
 function memberFromResult(member: PartyMember, payload: CharacterIntakeApiResponse & { paid_processing?: boolean }) : PartyMember {
   const result = payload.result
   const required = result.clarification_questions.some((question) => question.priority === 'required')
@@ -201,13 +232,16 @@ export function StartOnboarding() {
   const [campaignRatings, setCampaignRatings] = useState<Record<string, number>>(() => Object.fromEntries(CAMPAIGN_TOPICS.map((topic) => [topic, 5])))
   const [characterRatings, setCharacterRatings] = useState<Record<string, number>>({ 'Backstory influence': 7, 'Player-character romance': 1, 'Secret privacy': 10 })
   const [helpQuestion, setHelpQuestion] = useState('')
-  const [helpAnswer, setHelpAnswer] = useState('')
+  const [helpConversation, setHelpConversation] = useState<StartDialogueTurn[]>([])
   const [helpError, setHelpError] = useState('')
   const [helpBusy, setHelpBusy] = useState(false)
   const [helpCount, setHelpCount] = useState(0)
   const [creatingCampaign, setCreatingCampaign] = useState(false)
   const [createError, setCreateError] = useState('')
   const fileRef = useRef<HTMLInputElement | null>(null)
+  const helpVoiceRef = useRef<AigmVoiceControlsHandle | null>(null)
+  const helpInputRef = useRef<HTMLTextAreaElement | null>(null)
+  const helpEndRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const stored = window.localStorage.getItem(AI_AGE_BAND_STORAGE_KEY)
@@ -313,15 +347,16 @@ export function StartOnboarding() {
         updateMember(memberId, (entry) => ({ ...entry, status: 'error', error: (payload as CharacterIntakeApiError).error || 'RPG Your Way could not import this character.' }))
         return
       }
-      let nextMember: PartyMember | null = null
+      const hasQuestions = payload.result.clarification_questions.length > 0
       setParty((current) => current.map((entry) => {
         if (entry.id !== memberId) return entry
-        nextMember = memberFromResult(entry, payload)
-        return nextMember
+        const updated = memberFromResult(entry, payload)
+        return hasQuestions
+          ? { ...updated, clarificationConversation: [assistantTurnFromCharacterResult(payload.result)] }
+          : updated
       }))
       setActiveCharacterId(memberId)
       setClarificationText('')
-      const hasQuestions = payload.result.clarification_questions.length > 0
       if (hasQuestions) setModal('character-questions')
     } catch {
       updateMember(memberId, (entry) => ({ ...entry, status: 'error', error: 'The browser could not reach the character import service.' }))
@@ -329,24 +364,32 @@ export function StartOnboarding() {
   }
 
   async function sendCharacterClarification() {
-    if (!activeCharacter?.result || !clarificationText.trim() || clarificationBusy) return
+    const answer = clarificationText.trim()
+    if (!activeCharacter?.result || !answer || clarificationBusy) return
+    const characterId = activeCharacter.id
+    const intake = activeCharacter.result
+    const settings = activeCharacter.result.intake_settings
+    const paidProcessing = Boolean(activeCharacter.paidProcessing)
+    const userTurn: StartDialogueTurn = { id: crypto.randomUUID(), role: 'user', text: answer }
+    updateMember(characterId, (entry) => ({ ...entry, clarificationConversation: [...(entry.clarificationConversation ?? []), userTurn], error: undefined }))
+    setClarificationText('')
     setClarificationBusy(true)
     try {
       const response = await fetch('/api/aigm/character-clarify', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ intake: activeCharacter.result, settings: activeCharacter.result.intake_settings, message: clarificationText.trim(), content_mode: contentModeForAgeBand(ageBand ?? 'adult'), bill_usage: Boolean(activeCharacter.paidProcessing) }),
+        body: JSON.stringify({ intake, settings, message: answer, content_mode: contentModeForAgeBand(ageBand ?? 'adult'), bill_usage: paidProcessing }),
       })
       const payload = await response.json() as CharacterIntakeApiResponse | CharacterIntakeApiError
       if (!response.ok || !('result' in payload)) {
-        updateMember(activeCharacter.id, (entry) => ({ ...entry, error: (payload as CharacterIntakeApiError).error || 'RPG Your Way could not process that answer.' }))
+        updateMember(characterId, (entry) => ({ ...entry, error: (payload as CharacterIntakeApiError).error || 'RPG Your Way could not process that answer.' }))
         return
       }
-      const updated = memberFromResult(activeCharacter, payload)
-      updateMember(activeCharacter.id, () => updated)
-      setClarificationText('')
-      if (!payload.result.clarification_questions.length) setModal(null)
+      updateMember(characterId, (entry) => {
+        const updated = memberFromResult(entry, payload)
+        return { ...updated, clarificationConversation: [...(entry.clarificationConversation ?? []), assistantTurnFromCharacterResult(payload.result)] }
+      })
     } catch {
-      updateMember(activeCharacter.id, (entry) => ({ ...entry, error: 'The browser could not reach the character clarification service.' }))
+      updateMember(characterId, (entry) => ({ ...entry, error: 'The browser could not reach the character clarification service.' }))
     } finally {
       setClarificationBusy(false)
     }
@@ -379,13 +422,27 @@ export function StartOnboarding() {
   async function askStartHelp() {
     const question = helpQuestion.trim()
     if (!question || helpBusy || helpCount >= 25) return
-    setHelpBusy(true); setHelpError('')
+    const userTurn: StartDialogueTurn = { id: crypto.randomUUID(), role: 'user', text: question }
+    setHelpConversation((current) => [...current, userTurn])
+    setHelpQuestion('')
+    setHelpBusy(true)
+    setHelpError('')
+    helpVoiceRef.current?.prepareNarration()
     try {
       const response = await fetch('/api/start/help', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question }) })
       const payload = await response.json() as { answer?: string; error?: string }
       if (!response.ok || !payload.answer) { setHelpError(payload.error || 'Start Page Help could not answer right now.'); return }
+      const answer = payload.answer.trim()
       const next = Math.min(25, helpCount + 1)
-      setHelpCount(next); window.sessionStorage.setItem('rpgyw-start-help-count:v1', String(next)); setHelpAnswer(payload.answer)
+      setHelpCount(next)
+      window.sessionStorage.setItem('rpgyw-start-help-count:v1', String(next))
+      setHelpConversation((current) => [...current, { id: crypto.randomUUID(), role: 'assistant', text: answer }])
+      helpVoiceRef.current?.beginNarration()
+      helpVoiceRef.current?.finishNarration(answer)
+      window.requestAnimationFrame(() => {
+        helpEndRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+        helpInputRef.current?.focus()
+      })
     } catch { setHelpError('The browser could not reach Start Page Help.') }
     finally { setHelpBusy(false) }
   }
@@ -537,7 +594,7 @@ export function StartOnboarding() {
             <button type="button" className="start-reset-link" onClick={() => { if (window.confirm('Reset this setup and start again?')) window.location.reload() }}>Or reset everything and start again</button>
           </section> : null}
 
-          {activeStep === 4 && questionsDone ? <section className="start-step" aria-labelledby="names-heading"><div className="start-step-nameplate"><span>4</span>Name your campaign and Game Master</div><div className="start-name-grid" id="names-heading"><label className="start-field"><span>Give your campaign a fun name</span><span className="start-field-bezel"><input value={campaignName} onChange={(event) => setCampaignName(event.target.value)} placeholder="Descriptive campaign name here — have fun" /></span></label><label className="start-field"><span>What do you want to call your Game Master?</span><span className="start-field-bezel"><input value={gmName} onChange={(event) => setGmName(event.target.value)} placeholder="Game Master name" /></span></label></div></section> : null}
+          {activeStep === 4 && questionsDone ? <section className="start-step" aria-labelledby="names-heading"><div className="start-step-nameplate"><span>4</span><strong id="names-heading">The naming of the names</strong></div><div className="start-name-grid"><label className="start-field"><span className="sr-only">Campaign name</span><span className="start-field-bezel"><input value={campaignName} onChange={(event) => setCampaignName(event.target.value)} placeholder="Descriptive campaign name here — have fun" /></span></label><label className="start-field"><span className="sr-only">Game Master name</span><span className="start-field-bezel"><input value={gmName} onChange={(event) => setGmName(event.target.value)} placeholder="Game Master name" /></span></label></div></section> : null}
           {activeStep === 4 && namesReady && questionsDone ? <section className="start-play-step" aria-label="Continue to Play"><button type="button" className="start-play-button" disabled={!playReadyForEngine || creatingCampaign} onClick={() => void continueToPlay()}>{creatingCampaign ? 'Creating campaign…' : 'Onward'}</button>{createError ? <p className="auth-message auth-message-error" role="alert">{createError}</p> : null}</section> : null}
           {activeStep === 4 && questionsDone ? <button type="button" className="start-reset-link" onClick={() => { if (window.confirm('Reset this setup and start again?')) window.location.reload() }}>Or reset everything and start again</button> : null}
         </>
@@ -545,7 +602,7 @@ export function StartOnboarding() {
 
       {ageModalOpen ? <StartModal title="Before you begin, which applies to you?" onClose={() => { if (ageBand) setAgeModalOpen(false) }}><div className="start-age-choices"><button type="button" onClick={() => chooseAge('adult')}>I am 18 or older</button><button type="button" onClick={() => chooseAge('teen')}>I am 13–17 and have permission from a parent or guardian</button><button type="button" onClick={() => chooseAge('under-13')}>I am under 13</button></div></StartModal> : null}
       {modal === 'faq' ? <StartModal title="I need help with all of this" onClose={() => setModal(null)} wide><div className="start-faq-list">{START_FAQ.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div><div className="start-faq-more"><strong>Still need help?</strong><p>Start Page Help can answer questions about setting up your campaign.</p><button type="button" className="start-primary-control" onClick={() => setModal('ai-help')}>My question wasn&apos;t above. I still need help.</button></div></StartModal> : null}
-      {modal === 'ai-help' ? <StartModal title="Start Page Help" onClose={() => setModal(null)}><p className="start-modal-lede">Ask about the choices on this page or about getting a campaign started. You have {Math.max(0, 25 - helpCount)} of 25 free questions remaining in this onboarding session.</p><div className="start-ai-preview"><label><span>Your question</span><textarea rows={4} value={helpQuestion} onChange={(event) => setHelpQuestion(event.target.value)} placeholder="What do you want help with?" /></label><button type="button" className="start-primary-control" disabled={!helpQuestion.trim() || helpBusy || helpCount >= 25} onClick={() => void askStartHelp()}>{helpBusy ? 'Checking…' : 'Ask Start Page Help'}</button>{helpAnswer ? <div className="start-ai-answer">{helpAnswer}</div> : null}{helpError ? <p className="auth-message auth-message-error" role="alert">{helpError}</p> : null}<small>{Math.max(0, 25 - helpCount)} questions remaining.</small></div></StartModal> : null}
+      {modal === 'ai-help' ? <StartModal title="Start Page Help" onClose={() => setModal(null)} wide><p className="start-modal-lede">Ask about the choices on this page or about getting a campaign started. You have {Math.max(0, 25 - helpCount)} of 25 free questions remaining in this onboarding session.</p><div className="start-ai-dialogue" aria-live="polite">{helpConversation.map((turn) => <div key={turn.id} className={`start-ai-turn start-ai-turn--${turn.role}`}><strong>{turn.role === 'assistant' ? 'Start Page Help' : 'You'}</strong><p>{turn.text}</p>{turn.role === 'assistant' ? <button type="button" data-aigm-manual-listen="true" className="start-listen-link" onClick={() => helpVoiceRef.current?.replay(turn.text)}><Volume2 aria-hidden="true" />Listen</button> : null}</div>)}{helpBusy ? <div className="start-ai-turn start-ai-turn--assistant"><strong>Start Page Help</strong><p>Thinking…</p></div> : null}<div ref={helpEndRef} /></div><div className="start-ai-composer"><label><span>Your question</span><span className="start-field-bezel"><textarea ref={helpInputRef} rows={4} value={helpQuestion} onChange={(event) => setHelpQuestion(event.target.value)} placeholder="What do you want help with?" /></span></label><div className="start-ai-composer-actions"><AigmVoiceControls ref={helpVoiceRef} profile="onboarding" assistantName="Start Page Help" currentMessage={helpQuestion} onTranscriptUpdate={setHelpQuestion} onError={setHelpError} disabled={helpBusy || helpCount >= 25} /><button type="button" className="start-primary-control" disabled={!helpQuestion.trim() || helpBusy || helpCount >= 25} onClick={() => void askStartHelp()}>{helpBusy ? 'Checking…' : 'Ask Start Page Help'}</button></div>{helpError ? <p className="auth-message auth-message-error" role="alert">{helpError}</p> : null}<small>{Math.max(0, 25 - helpCount)} questions remaining.</small></div></StartModal> : null}
       {modal === 'import-help' ? <StartModal title="Character import help" onClose={() => setModal(null)} wide><p>Add PDF, JSON, XML, TXT, or Markdown character records by browsing for the files, or paste the character information directly. Files may be up to 8 MB.</p><p>After the file is added, choose <strong>Import into RPG Your Way</strong>. RPG Your Way will read the record, convert it into the character structure used during play, and ask only the clarifications that are worth resolving.</p><p><strong>New campaign</strong> and <strong>Don&apos;t sweat the small stuff</strong> are applied automatically. New campaign starts the character fully rested. Don&apos;t sweat the small stuff assumes ordinary inexpensive class necessities while still tracking consequential equipment and priced or consumed components.</p><p>Importing a normal character is generally free. If a character is unusually large or complex, RPG Your Way will tell you before additional AI processing uses part of your available usage balance.</p><p>Names and portraits can be changed later on the Play page through the Characters sidebar.</p><p>Character information is sent to the AI service when RPG Your Way imports or uses the character. Campaign records remain in the browser unless the campaign is exported.</p><a className="start-inline-link" href="/downloads/rpgyourway-character-update-template-v2.txt" download>Download the blank plain-text character template</a><a className="start-inline-link" href="/legal/privacy">Read the full Privacy information</a></StartModal> : null}
       {modal === 'starters' ? <StartModal title="Choose ready-to-play characters" onClose={() => setModal(null)} wide><p className="start-modal-lede">Choose up to six. The current library uses D&amp;D 5.5e.</p><div className="start-starter-grid">{STARTERS.map((starter) => { const selected = party.some((member) => member.id === starter.id); return <button type="button" key={starter.id} className={`start-starter-choice${selected ? ' is-selected' : ''}`} onClick={() => toggleStarter(starter.id)} aria-pressed={selected}><Image src={starter.portraitUrl!} alt="" width={100} height={100} /><strong>{starter.className}</strong><span>{selected ? 'In party' : 'Add'}</span></button> })}</div><p className="start-party-count">Current party: {party.length} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p></StartModal> : null}
       {modal === 'paid-import' && activeCharacter ? <StartModal title="Additional AI processing" onClose={() => setModal(null)}><p>This character is unusually large or complex. Importing it requires additional AI processing and will use part of your available usage balance.</p><p>No usage will be deducted unless you continue.</p><div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={() => { setModal(null); void importCharacter(activeCharacter.id, true) }}>Continue and use my balance</button><button type="button" className="start-info-control" onClick={() => setModal(null)}>Cancel</button></div></StartModal> : null}
@@ -562,13 +619,43 @@ function CharacterQuestionsModal({ member, clarificationText, setClarificationTe
   const questions = member.result?.clarification_questions ?? []
   const required = questions.filter((question) => question.priority === 'required')
   const recommended = questions.filter((question) => question.priority !== 'required')
+  const fallbackTurn = useMemo(() => member.result ? assistantTurnFromCharacterResult(member.result) : null, [member.result])
+  const conversation = member.clarificationConversation?.length ? member.clarificationConversation : fallbackTurn ? [fallbackTurn] : []
+  const voiceRef = useRef<AigmVoiceControlsHandle | null>(null)
+  const answerRef = useRef<HTMLTextAreaElement | null>(null)
+  const endRef = useRef<HTMLDivElement | null>(null)
+  const lastSpokenIdRef = useRef<string | null>(null)
+  const [voiceError, setVoiceError] = useState('')
+  const lastAssistant = [...conversation].reverse().find((turn) => turn.role === 'assistant') ?? null
+
+  useEffect(() => {
+    if (!lastAssistant || lastSpokenIdRef.current === lastAssistant.id) return
+    lastSpokenIdRef.current = lastAssistant.id
+    const frame = window.requestAnimationFrame(() => {
+      voiceRef.current?.prepareNarration()
+      voiceRef.current?.beginNarration()
+      voiceRef.current?.finishNarration(narrationForTurn(lastAssistant))
+      endRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+      if (questions.length) answerRef.current?.focus()
+    })
+    return () => window.cancelAnimationFrame(frame)
+  }, [lastAssistant?.id, questions.length])
+
   return <StartModal title={`Finish importing ${member.result?.character.name || member.label}`} onClose={onClose} wide>
-    {member.result?.assistant_message ? <p className="start-modal-lede">{member.result.assistant_message}</p> : null}
-    {required.length ? <section className="start-clarification-tier start-clarification-tier--required"><h3>Required before this character can be used</h3><p>RPG Your Way needs these answers before it can use this character correctly.</p>{required.map((question, index) => <div className="start-question-card" key={`required-${index}`}><strong>{question.question}</strong><small>{question.reason}</small></div>)}</section> : null}
-    {recommended.length ? <section className="start-clarification-tier"><h3>Recommended before play</h3><p>You can play without these answers, but resolving them now can prevent guesses or interruptions later during play.</p>{recommended.map((question, index) => <div className="start-question-card" key={`recommended-${index}`}><strong>{question.question}</strong><small>{question.reason}</small></div>)}</section> : null}
-    {questions.length ? <label className="start-clarification-answer"><span>Your answer</span><span className="start-field-bezel"><textarea rows={4} value={clarificationText} onChange={(event) => setClarificationText(event.target.value)} placeholder="Answer the questions for this character. You can answer more than one at once." /></span></label> : null}
+    <div className="start-ai-dialogue start-ai-dialogue--character" aria-live="polite">
+      {conversation.map((turn) => <div key={turn.id} className={`start-ai-turn start-ai-turn--${turn.role}`}>
+        <strong>{turn.role === 'assistant' ? 'RPG Your Way' : 'You'}</strong>
+        <p>{turn.text}</p>
+        {turn.role === 'assistant' && turn.required?.length ? <section className="start-clarification-tier start-clarification-tier--required"><h3>Required before this character can be used</h3><p>RPG Your Way needs these answers before it can use this character correctly.</p>{turn.required.map((question, index) => <div className="start-question-card" key={`${turn.id}-required-${index}`}><strong>{question.question}</strong><small>{question.reason}</small></div>)}</section> : null}
+        {turn.role === 'assistant' && turn.recommended?.length ? <section className="start-clarification-tier"><h3>Recommended before play</h3><p>You can play without these answers, but resolving them now can prevent guesses or interruptions later during play.</p>{turn.recommended.map((question, index) => <div className="start-question-card" key={`${turn.id}-recommended-${index}`}><strong>{question.question}</strong><small>{question.reason}</small></div>)}</section> : null}
+        {turn.role === 'assistant' ? <button type="button" data-aigm-manual-listen="true" className="start-listen-link" onClick={() => voiceRef.current?.replay(narrationForTurn(turn))}><Volume2 aria-hidden="true" />Listen</button> : null}
+      </div>)}
+      {busy ? <div className="start-ai-turn start-ai-turn--assistant"><strong>RPG Your Way</strong><p>Working through that answer…</p></div> : null}
+      <div ref={endRef} />
+    </div>
+    {questions.length ? <div className="start-ai-composer start-ai-composer--character"><label className="start-clarification-answer"><span>Your answer</span><span className="start-field-bezel"><textarea ref={answerRef} rows={4} value={clarificationText} onChange={(event) => setClarificationText(event.target.value)} placeholder="Answer the questions for this character. You can answer more than one at once." /></span></label><div className="start-ai-composer-actions"><AigmVoiceControls ref={voiceRef} profile="onboarding" assistantName="RPG Your Way" currentMessage={clarificationText} onTranscriptUpdate={setClarificationText} onError={setVoiceError} disabled={busy} /><button type="button" className="start-primary-control" disabled={!clarificationText.trim() || busy} onClick={onSend}>{busy ? 'Working…' : 'Send answers'}</button>{!required.length && recommended.length ? <button type="button" className="start-info-control" disabled={busy} onClick={onSkip}>Continue without these answers</button> : null}</div></div> : <div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={onClose}>Done</button></div>}
     {member.error ? <p className="auth-message auth-message-error" role="alert">{member.error}</p> : null}
-    <div className="start-inline-actions">{questions.length ? <button type="button" className="start-primary-control" disabled={!clarificationText.trim() || busy} onClick={onSend}>{busy ? 'Working…' : 'Send answers'}</button> : null}{!required.length && recommended.length ? <button type="button" className="start-info-control" disabled={busy} onClick={onSkip}>Continue without these answers</button> : null}</div>
+    {voiceError ? <p className="auth-message auth-message-error" role="alert">{voiceError}</p> : null}
   </StartModal>
 }
 

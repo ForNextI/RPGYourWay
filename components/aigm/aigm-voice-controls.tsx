@@ -105,12 +105,12 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
   onError,
 }, ref) {
   const onboardingProfile = profile === 'onboarding'
-  const spokenAssistantName = onboardingProfile ? 'Ithamir' : assistantName?.trim() || 'Game Master'
+  const spokenAssistantName = assistantName?.trim() || (onboardingProfile ? 'RPG Your Way' : 'Game Master')
   const settingsId = onboardingProfile ? 'ithamir-voice-settings' : 'aigm-voice-settings'
   const narrationEnabledKey = onboardingProfile ? ONBOARDING_NARRATION_ENABLED_KEY : NARRATION_ENABLED_KEY
   const spokenNoun = onboardingProfile ? 'message' : 'turn'
   const [narrationEnabled, setNarrationEnabled] = useState(true)
-  const [voice, setVoice] = useState<NarrationVoice>(onboardingProfile ? 'ballad' : 'fable')
+  const [voice, setVoice] = useState<NarrationVoice>('fable')
   const [showSettings, setShowSettings] = useState(false)
   const [openingMicrophone, setOpeningMicrophone] = useState(false)
   const [recording, setRecording] = useState(false)
@@ -159,7 +159,7 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
     const storedNarrationPreference = window.localStorage.getItem(narrationEnabledKey)
     setNarrationEnabled(storedNarrationPreference === null ? true : storedNarrationPreference === 'true')
     if (onboardingProfile) {
-      setVoice('ballad')
+      setVoice('fable')
     } else {
       const storedVoice = window.localStorage.getItem(NARRATION_VOICE_KEY)
       setVoice(storedVoice === 'marin' ? 'marin' : 'fable')
@@ -747,8 +747,8 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
           </button>
           {onboardingProfile ? (
             <div className="mt-4 rounded-xl border border-border bg-background px-3 py-3">
-              <span className="block text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">Ithamir’s voice</span>
-              <span className="mt-1 block font-bold">Warm and composed</span>
+              <span className="block text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">Readback voice</span>
+              <span className="mt-1 block font-bold">Standard RPG Your Way voice</span>
             </div>
           ) : (
             <fieldset className="mt-4" disabled={!narrationEnabled}>
@@ -763,7 +763,7 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
               </div>
             </fieldset>
           )}
-          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">Microphone recordings are sent to the AI service for transcription. Voices are AI-generated. {onboardingProfile ? 'Ithamir uses his own onboarding voice.' : 'The selected voice reads your Game Master’s replies.'}</p>
+          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">Microphone recordings are sent to the AI service for transcription. Voices are AI-generated. {onboardingProfile ? 'The standard readback voice reads these AI replies.' : 'The selected voice reads your Game Master’s replies.'}</p>
         </div>
       )}
 

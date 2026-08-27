@@ -37,6 +37,7 @@ export async function POST(request: Request) {
   }
 
   const audio = form.get('audio')
+  const context = form.get('context') === 'onboarding' ? 'onboarding' : 'gameplay'
   if (!(audio instanceof File) || audio.size === 0) return NextResponse.json({ error: 'No microphone recording was received.' }, { status: 400 })
   if (audio.size > MAX_AUDIO_BYTES) return NextResponse.json({ error: 'That recording is too long. Keep spoken turns under two minutes.' }, { status: 413 })
 
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
   upstreamForm.append('file', audio, audio.name || 'rpgyw-turn.webm')
   upstreamForm.append('model', model)
   upstreamForm.append('language', 'en')
-  upstreamForm.append('prompt', transcriptionPromptFor('gameplay'))
+  upstreamForm.append('prompt', transcriptionPromptFor(context))
   upstreamForm.append('stream', 'true')
 
   let upstream: Response

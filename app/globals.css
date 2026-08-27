@@ -6143,3 +6143,91 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   justify-self: center;
   min-height: 44px;
 }
+
+/* RPG Your Way 1.8.10 — dialogue-style Start AI, default readback, and cleaner naming step. */
+.start-ai-dialogue {
+  display: grid;
+  gap: .8rem;
+  max-height: 52dvh;
+  overflow-y: auto;
+  margin: .85rem 0 1rem;
+  padding: .3rem .2rem .65rem;
+  scroll-behavior: smooth;
+}
+.start-ai-dialogue--character { max-height: 48dvh; }
+.start-ai-turn {
+  width: min(88%, 720px);
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 14px;
+  padding: .7rem .78rem;
+  box-shadow: inset 0 0 0 2px var(--rpgyw-brass-highlight), 0 4px 0 var(--rpgyw-brass-shadow), 0 8px 14px rgb(43 47 38 / .13);
+}
+.start-ai-turn > strong { display: block; margin-bottom: .28rem; font-size: .78rem; letter-spacing: .035em; }
+.start-ai-turn > p { margin: 0; white-space: pre-wrap; line-height: 1.48; }
+.start-ai-turn--assistant {
+  justify-self: start;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--landing-pale) 97%, white), var(--landing-pale));
+  color: var(--ink);
+}
+.start-ai-turn--assistant > strong { color: var(--forest-deep); }
+.start-ai-turn--user {
+  justify-self: end;
+  border-color: color-mix(in srgb, var(--landing-olive-19-deep) 72%, var(--rpgyw-brass-edge));
+  background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep));
+  color: var(--cream-bright);
+}
+.start-ai-turn--user > strong { color: white; }
+.start-ai-turn .start-clarification-tier { margin-top: .7rem; }
+.start-listen-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .28rem;
+  margin-top: .5rem;
+  border: 0;
+  background: transparent;
+  color: var(--forest-deep);
+  font-size: .72rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+.start-listen-link:hover,
+.start-listen-link:focus-visible { color: var(--lime); outline: none; }
+.start-listen-link svg { width: 14px; height: 14px; }
+.start-ai-composer {
+  display: grid;
+  gap: .62rem;
+  border: 7px solid var(--landing-olive-19-deep);
+  outline: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--landing-pale) 96%, white);
+  padding: .75rem;
+  box-shadow: inset 0 0 0 2px var(--rpgyw-brass-highlight), inset 0 7px 14px rgb(43 47 38 / .12), 0 3px 0 var(--rpgyw-brass-shadow);
+}
+.start-ai-composer label { display: grid; gap: .35rem; color: var(--forest-deep); font-weight: 900; }
+.start-ai-composer textarea {
+  width: 100%;
+  min-height: 92px;
+  border: 0;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--cream-bright) 98%, white);
+  padding: .65rem .7rem;
+  color: var(--ink);
+  resize: vertical;
+  box-shadow: inset 0 2px 6px rgb(43 47 38 / .08);
+}
+.start-ai-composer-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; }
+.start-ai-composer .aigm-voice-controls > button {
+  border: 2px solid var(--rpgyw-brass-edge) !important;
+  background: color-mix(in srgb, var(--landing-pale) 95%, white) !important;
+  color: var(--forest-deep) !important;
+  box-shadow: inset 0 0 0 1px var(--rpgyw-brass-highlight), 0 3px 0 var(--rpgyw-brass-shadow);
+}
+.start-ai-composer .aigm-voice-controls > button:hover,
+.start-ai-composer .aigm-voice-controls > button:focus-visible { color: var(--lime) !important; background: var(--forest-deep) !important; }
+.start-ai-composer small { color: var(--muted); }
+.start-name-grid .start-field { gap: 0; }
+@media (max-width: 620px) {
+  .start-ai-turn { width: 94%; }
+  .start-ai-dialogue { max-height: 46dvh; }
+  .start-ai-composer-actions { align-items: stretch; }
+}

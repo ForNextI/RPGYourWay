@@ -1,7 +1,7 @@
 export type TranscriptionContext = 'gameplay' | 'onboarding'
 
 export const GAMEPLAY_TRANSCRIPTION_PROMPT = 'A tabletop roleplaying game turn. Preserve fantasy names, character names, place names, dice notation, D&D terminology, and natural punctuation.'
-export const ONBOARDING_TRANSCRIPTION_PROMPT = 'A RPG Your Way onboarding message for Ithamir. Preserve character names, fantasy names, game-system names, D&D terminology, file and interface terms, numbers, and natural punctuation.'
+export const ONBOARDING_TRANSCRIPTION_PROMPT = 'A RPG Your Way onboarding or setup-help message. Preserve character names, fantasy names, game-system names, D&D terminology, file and interface terms, numbers, and natural punctuation.'
 
 const KNOWN_SILENCE_HALLUCINATIONS = [
   'You are a brave adventurer, venturing into the dark and mysterious dungeon. Your goal is to retrieve the lost artifact that lies within. As you make your way through the eerie corridors, you hear the sound of clinking chains ahead. Suddenly, a group of goblins jumps out from the shadows, ready to attack! Roll for initiative!',
