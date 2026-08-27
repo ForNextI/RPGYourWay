@@ -82,7 +82,7 @@ const QUESTION_HELP = [
   'These settings control how strongly personal history matters, whether player-character romance is welcome, and how carefully marked secrets should be protected.',
   'This controls how dangerous combat should feel when combat happens. It does not control how often combat occurs.',
   'Use this for material you do not want in the campaign or want handled carefully. Site-wide safety rules still apply whether or not you add anything here.',
-  'These ratings shape how quickly the opening moves, how strongly a long-term story develops, and how large or strange the campaign may eventually become. The setting is always The Uncharted Realms.',
+  'These ratings shape the opening pace, how strongly a long-term story develops, and how weird or reality-bending the campaign is allowed to become. The setting is always The Uncharted Realms.',
 ] as const
 
 function defaultParty() {
@@ -144,7 +144,7 @@ export function StartOnboarding() {
   const [ageBand, setAgeBand] = useState<AiAgeBand | null>(null)
   const [ageReady, setAgeReady] = useState(false)
   const [ageModalOpen, setAgeModalOpen] = useState(false)
-  const [modal, setModal] = useState<'faq' | 'ai-help' | 'starters' | 'starter-help' | 'import-help' | 'leader' | 'leader-change' | 'question-help' | null>(null)
+  const [modal, setModal] = useState<'faq' | 'ai-help' | 'starters' | 'import-help' | 'leader' | 'leader-change' | 'question-help' | null>(null)
   const [ruleset, setRuleset] = useState<RulesetId>('dnd-5.5e-srd-5.2.1')
   const [rulesOpen, setRulesOpen] = useState(false)
   const [party, setParty] = useState<PartyMember[]>([])
@@ -331,10 +331,10 @@ export function StartOnboarding() {
 
           {ruleset ? (
             <section className="start-step start-party-step" aria-labelledby="party-heading">
-              <div className="start-step-nameplate"><span>2</span>Default party</div>
+              <div className="start-step-nameplate"><span>2</span>Gather Your Party</div>
               <div className="start-step-heading-row">
                 <div>
-                  <h2 id="party-heading" className="sr-only">Default party</h2>
+                  <h2 id="party-heading" className="sr-only">Gather Your Party</h2>
                   <p>{ruleset === 'dnd-5.5e-srd-5.2.1' ? 'Fighter, Wizard, Cleric, and Rogue are loaded. Keep them, change them, or mix in your own characters.' : 'Add your own characters for this ruleset. The current ready-to-play library uses D&D 5.5e.'}</p>
                 </div>
               </div>
@@ -357,13 +357,23 @@ export function StartOnboarding() {
               </div>
 
               <div className="start-character-actions start-character-actions--primary">
-                {ruleset === 'dnd-5.5e-srd-5.2.1' ? <button type="button" className="start-primary-control" onClick={() => setModal('starters')}><UsersRound aria-hidden="true" />Choose ready-to-play characters</button> : null}
-                <button type="button" className="start-primary-control" onClick={() => fileRef.current?.click()} disabled={party.length >= 6}><Upload aria-hidden="true" />Browse for character files</button>
-                <button type="button" className="start-primary-control" onClick={() => setPasteOpen((value) => !value)} disabled={party.length >= 6}><FileText aria-hidden="true" />Paste character information</button>
+                {ruleset === 'dnd-5.5e-srd-5.2.1' ? (
+                  <button type="button" className="start-primary-control" onClick={() => setModal('starters')}>
+                    <UsersRound aria-hidden="true" />
+                    <span>Choose from<br />ready-to-play characters</span>
+                  </button>
+                ) : null}
+                <button type="button" className="start-primary-control" onClick={() => fileRef.current?.click()} disabled={party.length >= 6}>
+                  <Upload aria-hidden="true" />
+                  <span>And/or browse for<br />your character files</span>
+                </button>
+                <button type="button" className="start-primary-control" onClick={() => setPasteOpen((value) => !value)} disabled={party.length >= 6}>
+                  <FileText aria-hidden="true" />
+                  <span>And/or paste your<br />character&apos;s information</span>
+                </button>
               </div>
               <div className="start-character-actions start-character-actions--secondary">
                 <button type="button" className="start-info-control" onClick={() => setModal('import-help')}>Character import help</button>
-                <button type="button" className="start-info-control" onClick={() => setModal('starter-help')}>About ready-to-play characters</button>
               </div>
               <input ref={fileRef} className="sr-only" type="file" multiple accept=".pdf,.json,.xml,.txt,.md,text/plain,text/markdown,application/pdf,application/json,application/xml,text/xml" onChange={(event) => importFiles(Array.from(event.target.files ?? []))} />
 
@@ -420,12 +430,12 @@ export function StartOnboarding() {
 
           {partyReady ? (
             <section className="start-step start-settings-step" aria-labelledby="questions-heading">
-              <div className="start-step-nameplate"><span>3</span>Customize or Default Settings</div>
-              <div className="start-settings-bezel">
+              <div className="start-step-nameplate"><span>3</span>Adjustable gameplay settings</div>
+              <div className={questionMode === 'answer' ? 'start-settings-bezel' : 'start-settings-body'}>
               {questionMode === 'pending' ? (
                 <div className="start-question-choice" id="questions-heading">
-                  <button type="button" className="start-primary-control start-big-control" onClick={() => { setQuestionMode('answer'); setQuestionIndex(0) }}>Answer the questions</button>
-                  <button type="button" className="start-primary-control start-big-control" onClick={() => setQuestionMode('skip')}>Skip the questions</button>
+                  <button type="button" className="start-primary-control start-big-control" onClick={() => { setQuestionMode('answer'); setQuestionIndex(0) }}>Customize</button>
+                  <button type="button" className="start-info-control start-big-control" onClick={() => setQuestionMode('skip')}>Use default settings</button>
                 </div>
               ) : questionMode === 'skip' ? (
                 <div className="start-complete-plaque"><Sparkles aria-hidden="true" /><div><strong>Using the standard campaign defaults.</strong><span>You can change campaign guidance later.</span></div><button type="button" onClick={() => setQuestionMode('pending')}>Change</button></div>
@@ -458,10 +468,10 @@ export function StartOnboarding() {
                   {questionIndex === 5 ? (
                     <>
                       <h2>How should the campaign grow?</h2>
-                      <div className="start-mini-ratings start-mini-ratings--three">
-                        <CompactRating label="Opening pace" value={openingPace} onChange={setOpeningPace} />
-                        <CompactRating label="Long-term story" value={storyDirection} onChange={setStoryDirection} />
-                        <CompactRating label="Eventual scale" value={campaignScale} onChange={setCampaignScale} />
+                      <div className="start-rating-stack">
+                        <RatingControl label="Opening pace" value={openingPace} onChange={setOpeningPace} low="Calm opening" high="Immediate danger" />
+                        <RatingControl label="Long-term story direction" value={storyDirection} onChange={setStoryDirection} low="Mostly open-ended" high="Strong escalating campaign arc" />
+                        <RatingControl label="How weird do you want your campaign to get?" value={campaignScale} onChange={setCampaignScale} low="Grounded and local" high="Reality-bending and cosmic" />
                       </div>
                       <p className="start-fixed-setting"><strong>Setting:</strong> The Uncharted Realms</p>
                     </>
@@ -483,16 +493,21 @@ export function StartOnboarding() {
             <section className="start-step" aria-labelledby="names-heading">
               <div className="start-step-nameplate"><span>4</span>Name your campaign and Game Master</div>
               <div className="start-name-grid" id="names-heading">
-                <label className="start-field"><span>Give your campaign a fun name</span><input value={campaignName} onChange={(event) => setCampaignName(event.target.value)} placeholder="Descriptive campaign name here — have fun" /></label>
-                <label className="start-field"><span>What do you want to call your Game Master?</span><input value={gmName} onChange={(event) => setGmName(event.target.value)} placeholder="Game Master name" /></label>
+                <label className="start-field">
+                  <span>Give your campaign a fun name</span>
+                  <span className="start-field-bezel"><input value={campaignName} onChange={(event) => setCampaignName(event.target.value)} placeholder="Descriptive campaign name here — have fun" /></span>
+                </label>
+                <label className="start-field">
+                  <span>What do you want to call your Game Master?</span>
+                  <span className="start-field-bezel"><input value={gmName} onChange={(event) => setGmName(event.target.value)} placeholder="Game Master name" /></span>
+                </label>
               </div>
             </section>
           ) : null}
 
           {namesReady && questionsDone ? (
-            <section className="start-play-step" aria-label="Start playing">
-              <button type="button" className="start-play-button" disabled aria-disabled="true">PLAY</button>
-              <p>{playReadyForEngine ? 'The 1.8 onboarding interface is ready for UI review. Campaign creation will be wired underneath it next.' : 'Finish the required choices above.'}</p>
+            <section className="start-play-step" aria-label="Continue onboarding">
+              <button type="button" className="start-play-button" disabled={!playReadyForEngine} aria-disabled={!playReadyForEngine}>Onward</button>
             </section>
           ) : null}
         </>
@@ -529,14 +544,6 @@ export function StartOnboarding() {
             <button type="button" className="start-primary-control" disabled>Ask Start Page Help</button>
             <small>AI help will be connected after the 1.8 UI review. 25 questions available.</small>
           </div>
-        </StartModal>
-      ) : null}
-
-      {modal === 'starter-help' ? (
-        <StartModal title="About ready-to-play characters" onClose={() => setModal(null)}>
-          <p>Ready-to-play characters are complete characters that can begin immediately.</p>
-          <p>RPG Your Way starts with a balanced Fighter, Wizard, Cleric, and Rogue party. Keep them, replace them, choose different ready-to-play characters, or mix them with your own.</p>
-          <p>The current ready-to-play library uses D&amp;D 5.5e rules.</p>
         </StartModal>
       ) : null}
 
@@ -624,17 +631,6 @@ function RatingControl({ value, onChange, low, high, label }: { value: number; o
       </div>
       <div className="start-rating-labels"><span>{low}</span><span>{high}</span></div>
     </div>
-  )
-}
-
-function CompactRating({ label, value, onChange }: { label: string; value: number; onChange: (value: number) => void }) {
-  return (
-    <label>
-      <span>{label}</span>
-      <select value={String(value)} onChange={(event) => onChange(Number(event.target.value))} aria-label={`${label} rating`}>
-        {Array.from({ length: 10 }, (_, index) => <option key={index + 1}>{index + 1}</option>)}
-      </select>
-    </label>
   )
 }
 

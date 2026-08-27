@@ -5669,3 +5669,278 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     0 2px 0 var(--rpgyw-brass-shadow);
 }
 .start-choice--selected span { color: var(--cream-bright); }
+
+/* RPG Your Way 1.8.6 — Start QA IV: open map field, stronger step furniture, dimensional question controls, and naming bezels. */
+
+/* Start floats directly on the global hex map. Override the Play shell's higher-specificity parchment field. */
+.site-frame-start .start-page-main > .start-page-shell {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+.start-onboarding {
+  gap: clamp(2.8rem, 5vw, 4.25rem);
+}
+
+/* Numbered step nameplates should read as substantial brass-edged furniture, not flat labels. */
+.start-step-nameplate,
+.start-rules-step .start-step-nameplate--rules {
+  border: 3px solid var(--rpgyw-brass-highlight);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--forest-deep) 96%, white), var(--forest-deep));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 68%, white),
+    inset 0 1px 0 rgb(255 255 255 / .16),
+    0 4px 0 var(--rpgyw-brass-shadow),
+    0 10px 16px rgb(30 38 30 / .18);
+}
+.start-step-nameplate > span {
+  border: 2px solid var(--rpgyw-brass-highlight);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 98%, white), var(--landing-pale));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 52%, white),
+    0 2px 0 var(--rpgyw-brass-shadow);
+}
+
+/* Give the numbered plaques enough breathing room that each step is unmistakably separate. */
+.start-rules-step,
+.start-step {
+  margin-top: 0;
+}
+.start-party-step,
+.start-settings-step {
+  margin-top: 0;
+}
+
+/* Step 2 primary choices are explicit mix-and-match actions. */
+.start-character-actions--primary .start-primary-control {
+  min-height: 70px;
+  line-height: 1.18;
+  text-align: center;
+}
+.start-character-actions--primary .start-primary-control > span {
+  display: inline-block;
+}
+.start-character-actions--secondary {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: .7rem;
+}
+.start-character-actions--secondary .start-info-control {
+  width: min(320px, 100%);
+}
+
+/* Step 3's landing choices sit on the plaque; the olive bezel appears once customization opens. */
+.start-settings-body {
+  margin-top: 0;
+}
+.start-settings-body .start-question-choice {
+  margin: 0;
+}
+.start-settings-body .start-complete-plaque {
+  margin-top: 0;
+}
+
+/* Every question lives on a dimensional parchment plaque inside the recessed settings well. */
+.start-settings-bezel .start-question-panel {
+  margin: 0;
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 14px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--landing-pale) 96%, white), var(--landing-pale));
+  padding: clamp(.8rem, 2vw, 1.05rem);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 58%, white),
+    inset 0 1px 0 rgb(255 255 255 / .76),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 7px 12px rgb(43 47 38 / .10);
+}
+.start-question-panel h2 {
+  color: var(--forest-deep);
+}
+
+/* Rating questions are plaques carrying brass-edged number buttons. */
+.start-rating-control {
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 13px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 95%, white), var(--landing-pale));
+  padding: .62rem .7rem .55rem;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 56%, white),
+    inset 0 1px 0 rgb(255 255 255 / .74),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 6px 10px rgb(43 47 38 / .09);
+}
+.start-rating-control > strong {
+  font-size: .86rem;
+  color: var(--forest-deep);
+}
+.start-rating-scale button {
+  min-height: 42px;
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 9px;
+  background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep));
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 48%, white),
+    inset 0 1px 0 rgb(255 255 255 / .16),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 5px 8px rgb(43 47 38 / .08);
+}
+.start-rating-scale button:hover,
+.start-rating-scale button:focus-visible {
+  background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep));
+  color: var(--lime) !important;
+}
+.start-rating-scale button.is-selected {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--forest-deep) 94%, white), var(--forest-deep));
+  color: var(--cream-bright) !important;
+  box-shadow:
+    inset 0 0 0 2px color-mix(in srgb, var(--rpgyw-brass-highlight) 76%, white),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 6px 10px rgb(30 38 30 / .14);
+}
+
+/* Questions 2 and 3: every category is dimensional, with the current selector planted on top. */
+.start-mini-ratings label {
+  min-height: 58px;
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 11px;
+  background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep));
+  color: var(--cream-bright);
+  padding: .48rem .55rem .48rem .72rem;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 48%, white),
+    inset 0 1px 0 rgb(255 255 255 / .16),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 6px 10px rgb(43 47 38 / .10);
+}
+.start-mini-ratings label > span {
+  color: var(--cream-bright);
+  line-height: 1.15;
+}
+.start-mini-ratings select {
+  min-width: 64px;
+  min-height: 40px;
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 9px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--forest-deep) 94%, white), var(--forest-deep));
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 62%, white),
+    inset 0 1px 0 rgb(255 255 255 / .14),
+    0 3px 0 var(--rpgyw-brass-shadow);
+  cursor: pointer;
+  font-weight: 900;
+  text-align: center;
+}
+.start-mini-ratings select:hover,
+.start-mini-ratings select:focus-visible {
+  color: var(--lime);
+}
+
+/* The question footer also uses actual furniture instead of flat links and divider lines. */
+.start-question-footer {
+  border-top: 0;
+}
+.start-text-help {
+  min-height: 38px;
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 9px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 97%, white), var(--landing-pale));
+  color: var(--forest-deep);
+  padding: .42rem .68rem;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 58%, white),
+    0 2px 0 var(--rpgyw-brass-shadow);
+  cursor: pointer;
+  font-weight: 900;
+  text-decoration: none;
+}
+.start-text-help:hover,
+.start-text-help:focus-visible {
+  border-color: var(--rpgyw-brass-highlight);
+  border-radius: 9px;
+  background: var(--forest-deep);
+  color: var(--lime);
+}
+
+/* Naming fields are recessed olive/brass wells with a full useful line of input space. */
+.start-field-bezel {
+  display: block;
+  border: 7px solid var(--landing-olive-19-deep);
+  outline: 2px solid var(--rpgyw-brass-edge);
+  outline-offset: 0;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--landing-pale) 96%, white);
+  padding: 3px;
+  box-shadow:
+    inset 0 0 0 2px var(--rpgyw-brass-highlight),
+    inset 0 7px 14px rgb(43 47 38 / .12),
+    0 3px 0 var(--rpgyw-brass-shadow);
+}
+.start-field-bezel > input {
+  width: 100%;
+  min-height: 48px;
+  border: 0 !important;
+  border-radius: 7px !important;
+  background: color-mix(in srgb, var(--cream-bright) 98%, white) !important;
+  box-shadow: inset 0 2px 6px rgb(43 47 38 / .08) !important;
+}
+.start-field-bezel:focus-within {
+  outline-color: var(--rpgyw-brass-highlight);
+}
+
+/* The final UI handoff is a single dimensional Onward control. */
+.start-play-step {
+  padding-top: .2rem;
+}
+.start-play-button {
+  border: 3px solid var(--rpgyw-brass-highlight);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 66%, white),
+    inset 0 1px 0 rgb(255 255 255 / .14),
+    0 4px 0 var(--rpgyw-brass-shadow),
+    0 9px 14px rgb(30 38 30 / .14);
+}
+.start-play-button:hover:not(:disabled),
+.start-play-button:focus-visible:not(:disabled) {
+  color: var(--lime);
+}
+
+@media (max-width: 640px) {
+  .start-onboarding { gap: 2.6rem; }
+  .start-character-actions--secondary .start-info-control { width: 100%; }
+  .start-rating-scale { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .start-mini-ratings label { min-height: 54px; }
+}
+
+/* Current selections are forest/cream; unselected choices remain olive/cream. */
+.start-choice--selected {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--forest-deep) 94%, white), var(--forest-deep));
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 0 0 2px color-mix(in srgb, var(--rpgyw-brass-highlight) 76%, white),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 6px 10px rgb(30 38 30 / .14);
+}
+.start-choice--selected span { color: var(--cream-bright); }
+
+/* Review/change actions on completed settings remain proper tertiary buttons. */
+.start-complete-plaque button {
+  min-height: 36px;
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 9px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 97%, white), var(--landing-pale));
+  color: var(--forest-deep);
+  padding: .38rem .62rem;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 56%, white), 0 2px 0 var(--rpgyw-brass-shadow);
+  cursor: pointer;
+  font-weight: 900;
+  text-decoration: none;
+}
+.start-complete-plaque button:hover,
+.start-complete-plaque button:focus-visible {
+  border-radius: 9px;
+  background: var(--forest-deep);
+  color: var(--lime);
+}
