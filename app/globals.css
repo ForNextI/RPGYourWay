@@ -7894,3 +7894,15 @@ html {
   outline: 3px solid var(--lime);
   outline-offset: 3px;
 }
+/* Multiplayer lobby must always remain reachable within the viewport. */
+.aigm-multiplayer-guest-shell .aigm-table-chat-panel {
+  min-height: 0 !important;
+  max-height: calc(100dvh - 1.5rem) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.aigm-multiplayer-guest-shell .aigm-multiplayer-lobby-details {
+  flex: 0 0 auto !important;
+}
