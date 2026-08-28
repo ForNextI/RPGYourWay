@@ -1,0 +1,24 @@
+git apply --check /path/to/RPGYourWay-multiplayer-lobby-scrollbar.patch
+git apply /path/to/RPGYourWay-multiplayer-lobby-scrollbar.patchdiff --git a/app/globals.css b/app/globals.css
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -7682,6 +7682,17 @@
+   scrollbar-gutter: stable;
+ }
+
++/* Desktop multiplayer lobby: keep the right-hand Table Chat panel inside the
++   viewport and give it its own vertical scroll. The lobby/setup block must not
++   be squeezed until its character controls are clipped. */
++@media (min-width: 861px) {
++  .aigm-multiplayer-guest-shell .aigm-table-chat-panel {
++    max-height: calc(100dvh - 2rem);
++    overflow-y: auto !important;
++    overscroll-behavior: contain;
++    scrollbar-gutter: stable;
++  }
++  .aigm-multiplayer-guest-shell .aigm-multiplayer-lobby-details { flex: 0 0 auto; }
++}
++
+ @media (max-width: 860px) {
+   .aigm-table-chat-panel.aigm-table-chat-panel--visible,
+   .aigm-tools-panel {
