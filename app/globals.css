@@ -7896,3 +7896,29 @@ html {
   outline: 3px solid var(--lime);
   outline-offset: 3px;
 }
+/* Solo / Multiplayer campaign-mode selection.
+   The chosen mode stays forest green with white lettering. */
+button.start-choice[aria-pressed="true"] {
+  background: var(--forest-deep) !important;
+  background-image: none !important;
+  color: var(--cream-bright) !important;
+  border-color: var(--rpgyw-brass-highlight) !important;
+}
+
+button.start-choice[aria-pressed="true"] strong,
+button.start-choice[aria-pressed="true"] span {
+  color: var(--cream-bright) !important;
+}
+
+button.start-choice[aria-pressed="true"]:hover,
+button.start-choice[aria-pressed="true"]:focus-visible {
+  background: var(--forest-deep) !important;
+  color: var(--cream-bright) !important;
+}
+
+button.start-choice[aria-pressed="true"]:hover strong,
+button.start-choice[aria-pressed="true"]:hover span,
+button.start-choice[aria-pressed="true"]:focus-visible strong,
+button.start-choice[aria-pressed="true"]:focus-visible span {
+  color: var(--cream-bright) !important;
+}
