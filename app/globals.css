@@ -6758,3 +6758,11 @@ body a[class*="rounded"][class*="bg-"]:focus-visible {
     ) !important;
   color: var(--forest-deep) !important;
 }
+
+/* RPG Your Way 1.9.1 character-card surface correction.
+   Match the visible card face to the gameplay textarea's exact off-white
+   surface (--background / #fbf2e6), including the full-card button layer. */
+.medieval-page--play .aigm-character-card,
+.medieval-page--play .aigm-character-card > button {
+  background: var(--background) !important;
+}

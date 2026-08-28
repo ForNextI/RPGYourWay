@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.9.0')
-assert.equal(pkg.rpgywVersion, '1.9.0')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.9\.0'/)
+assert.equal(pkg.version, '1.9.1')
+assert.equal(pkg.rpgywVersion, '1.9.1')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.9\.1'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -49,6 +49,7 @@ for (const file of [
   'scripts/test-audio-cost.mts',
   'README-1.8.12.md',
   'README-1.9.0.md',
+  'README-1.9.1.md',
   'postcss.config.mjs',
   'data/settings/eberron.json',
   'data/rules/corpora/dnd-5.5e-srd-5.2.1.json',
@@ -875,3 +876,8 @@ assert.match(gameplayShell, /aigm-latest-turn/)
 
 console.log('RPG Your Way 1.9.0 Play readability and landing-copy checks passed.')
 
+
+const css191 = read('app/globals.css')
+assert.match(css191, /RPG Your Way 1\.9\.1 character-card surface correction/)
+assert.match(css191, /\.medieval-page--play \.aigm-character-card > button \{[\s\S]*?background: var\(--background\) !important;/)
+console.log('RPG Your Way 1.9.1 character-card off-white surface checks passed.')
