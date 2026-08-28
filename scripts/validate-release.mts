@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.11.8')
-assert.equal(pkg.rpgywVersion, '1.11.8')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.8'/)
+assert.equal(pkg.version, '1.12.0')
+assert.equal(pkg.rpgywVersion, '1.12.0')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.12\.0'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -38,6 +38,11 @@ for (const file of [
   'components/aigm/aigm-gameplay-shell.tsx',
   'lib/aigm/campaign-storage.ts',
   'lib/aigm/campaign-persistence.ts',
+  'lib/aigm/cloud-campaigns.ts',
+  'lib/cloud-campaigns/server.ts',
+  'app/api/campaigns/route.ts',
+  'app/api/campaigns/[campaignId]/route.ts',
+  'supabase/migrations/20260828163000_cloud_campaigns.sql',
   'lib/aigm/character-display-rules.ts',
   'lib/usage/owner-qa.ts',
   'lib/usage/play-cost.ts',
@@ -195,7 +200,7 @@ assert.match(startEntry, /Import Existing Adventure/)
 assert.match(startEntry, /parseAdventureState/)
 assert.match(startEntry, /imported\.stage !== 'complete'/)
 assert.match(startEntry, /window\.location\.assign\('\/play'\)/)
-assert.match(startEntry, /There is no cloud campaign synchronization/)
+assert.match(startEntry, /Loading your campaigns/)
 assert.doesNotMatch(startEntry, /setPlaying|AigmGameplayShell/)
 const gameplayShell = read('components/aigm/aigm-gameplay-shell.tsx')
 assert.match(gameplayShell, /Go to Start/)
@@ -1154,3 +1159,32 @@ assert.match(release1118Css, /RPG Your Way 1\.11\.8 mini-rating focus-ring hotfi
 assert.match(release1118Css, /\.start-mini-rating-menu > summary:hover,[\s\S]*?outline: 3px solid var\(--lime\);[\s\S]*?outline-offset: 3px;/)
 assert.match(release1118Css, /background: linear-gradient\(180deg, color-mix\(in srgb, var\(--cream-bright\) 97%, white\), var\(--cream\)\) !important;/)
 console.log('RPG Your Way 1.11.8 mini-rating focus-ring hotfix checks passed.')
+
+const release1120Migration = read('supabase/migrations/20260828163000_cloud_campaigns.sql')
+const release1120CloudServer = read('lib/cloud-campaigns/server.ts')
+const release1120CloudClient = read('lib/aigm/cloud-campaigns.ts')
+const release1120Persistence = read('lib/aigm/campaign-persistence.ts')
+const release1120Start = read('components/start/StartOnboarding.tsx')
+const release1120StartEntry = read('components/aigm/rpgyw-start-entry.tsx')
+const release1120Gameplay = read('components/aigm/aigm-gameplay-shell.tsx')
+const release1120Storage = read('lib/aigm/campaign-storage.ts')
+assert.match(release1120Migration, /create table if not exists public\.campaigns/)
+assert.match(release1120Migration, /create table if not exists public\.campaign_members/)
+assert.match(release1120Migration, /revision bigint not null default 1/)
+assert.match(release1120Migration, /Intentionally no browser table policies/)
+assert.match(release1120CloudServer, /revision_conflict/)
+assert.match(release1120CloudServer, /campaign_members/)
+assert.match(release1120CloudClient, /expected_revision/)
+assert.match(release1120Persistence, /loadCloudCampaignState/)
+assert.match(release1120Persistence, /saveCloudCampaignState/)
+assert.match(release1120Start, /campaign_mode: campaignMode/)
+assert.match(release1120Start, />Solo</)
+assert.match(release1120Start, />Multiplayer</)
+assert.match(release1120StartEntry, /Your account/)
+assert.match(release1120StartEntry, /Legacy import/)
+assert.doesNotMatch(release1120StartEntry, /There is no cloud campaign synchronization/)
+assert.match(release1120Gameplay, /Download transcript/)
+assert.match(release1120Gameplay, /gameplay transcript\. Multiplayer table chat is separate and is not included\./)
+assert.doesNotMatch(release1120Gameplay, /Export Your Game|When and how to export|downloadAdventure|ExportGameHelpDialog/)
+assert.match(release1120Storage, /Multiplayer table chat is separate/)
+console.log('RPG Your Way 1.12.0 cloud campaign foundation checks passed.')

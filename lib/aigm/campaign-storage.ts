@@ -16,6 +16,7 @@ export type { DmMysteryCommitment, DmMysteryCommitmentStatus } from '@/lib/aigm/
 
 export type CharacterStatus = 'queued' | 'analyzing' | 'needs_answer' | 'ready' | 'error'
 export type OnboardingStage = 'party' | 'calibration' | 'complete'
+export type CampaignMode = 'solo' | 'multiplayer'
 
 export interface ConversationMessage {
   role: 'user' | 'assistant'
@@ -112,7 +113,7 @@ export interface DmSecretsState {
 export interface GameplayState {
   /** Rolling window rendered in play and supplied to the AI. */
   messages: GameplayMessage[]
-  /** Complete raw player/AIGM chat, retained for transcript export. */
+  /** Complete raw player/AIGM gameplay transcript. Multiplayer table chat is separate. */
   transcript: GameplayMessage[]
   campaign_summary: string
   scene: string
@@ -226,6 +227,8 @@ export interface SavedAdventureState {
   character_record_migration?: 'needs_srd_enrichment' | 'complete'
   adventure_id: string
   adventure_name: string
+  /** Solo campaigns belong to one account; multiplayer campaigns use persistent cloud membership. */
+  campaign_mode?: CampaignMode
   game_master_name: string
   campaign_direction: CampaignDirection
   campaign_scale: CampaignScale
@@ -258,6 +261,9 @@ export interface SavedAdventureState {
 export interface AdventureSummary {
   adventure_id: string
   adventure_name: string
+  campaign_mode?: CampaignMode
+  cloud_revision?: number
+  storage_source?: 'cloud' | 'legacy_local'
   updated_at: string
   stage: OnboardingStage
   party_names: string[]
@@ -278,16 +284,6 @@ export const CHARACTER_CACHE_PREFIX = `aigm-character-intake-cache:${CHARACTER_I
 export function canonicalAdventureName(value: string) {
   const clean = value.replace(/(?:\s*\(imported\))+\s*$/gi, '').replace(/\s+/g, ' ').trim()
   return clean || 'Untitled adventure'
-}
-
-export function campaignBackupFilename(adventureName: string, when = new Date()) {
-  const safeName = canonicalAdventureName(adventureName)
-    .replace(/[^a-z0-9_-]+/gi, '_')
-    .replace(/^_+|_+$/g, '')
-    .slice(0, 80) || 'Adventure'
-  const pad = (value: number) => String(value).padStart(2, '0')
-  const stamp = `${when.getFullYear()}-${pad(when.getMonth() + 1)}-${pad(when.getDate())}_${pad(when.getHours())}${pad(when.getMinutes())}${pad(when.getSeconds())}`
-  return `AIGM_${safeName}_Backup_${stamp}.json`
 }
 
 
@@ -1160,6 +1156,7 @@ export function normalizeAdventureState(value: unknown): SavedAdventureState | n
         : 'complete',
       adventure_id: parsed.adventure_id,
       adventure_name: canonicalAdventureName(parsed.adventure_name || ''),
+      campaign_mode: parsed.campaign_mode === 'multiplayer' ? 'multiplayer' : 'solo',
       game_master_name: typeof parsed.game_master_name === 'string' ? parsed.game_master_name.trim().slice(0, 40) : '',
       campaign_direction: parsed.campaign_direction === 'mostly_open' || parsed.campaign_direction === 'strong_arc' ? parsed.campaign_direction : 'gentle_story',
       campaign_scale: parsed.campaign_scale === 'grounded' || parsed.campaign_scale === 'occasionally_strange' || parsed.campaign_scale === 'cosmic' ? parsed.campaign_scale : 'epic',
@@ -1227,6 +1224,7 @@ export function saveAdventureStateToLocalStorage(storage: Storage, state: SavedA
   const summary: AdventureSummary = {
     adventure_id: state.adventure_id,
     adventure_name: canonicalAdventureName(state.adventure_name),
+    campaign_mode: state.campaign_mode ?? 'solo',
     updated_at: state.updated_at,
     stage: state.stage,
     party_names: state.characters

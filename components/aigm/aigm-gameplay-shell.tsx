@@ -11,7 +11,6 @@ import {
   ClipboardPaste,
   Dices,
   Download,
-  FileDown,
   HeartPulse,
   Headphones,
   HelpCircle,
@@ -38,7 +37,7 @@ import {
 import Link from 'next/link'
 import { type ChangeEvent, FormEvent, type KeyboardEvent, type ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { AigmVoiceControls, type AigmVoiceControlsHandle } from '@/components/aigm/aigm-voice-controls'
-import { ExportGameHelpDialog, StoryDirectionDialog, VoiceGuidedPlayDialog } from '@/components/aigm/aigm-play-guidance-dialogs'
+import { StoryDirectionDialog, VoiceGuidedPlayDialog } from '@/components/aigm/aigm-play-guidance-dialogs'
 import { CharacterAssistanceDialog } from '@/components/aigm/character-assistance-dialog'
 import { LevelUpDialog } from '@/components/aigm/level-up-dialog'
 import { MotionSettingsControl, useMotionPreference } from '@/components/accessibility/motion-preference'
@@ -58,7 +57,6 @@ import {
 import { dnd55ClassFeatureNamesThroughLevel, dnd55ClassMetadata, dnd55SubclassFeatureNamesThroughLevel } from '@/lib/aigm/multiclassing'
 import {
   CURRENT_ADVENTURE_KEY,
-  campaignBackupFilename,
   defaultVoiceGuidedPlaySettings,
   emptyGameplayState,
   playNameFor,
@@ -1319,7 +1317,6 @@ export function AigmGameplayShell() {
   const [levelUpCharacterId, setLevelUpCharacterId] = useState<string | null>(null)
   const [storyDirectionDialogOpen, setStoryDirectionDialogOpen] = useState(false)
   const [storyDirectionBeginsAdventure, setStoryDirectionBeginsAdventure] = useState(false)
-  const [exportGameHelpDialogOpen, setExportGameHelpDialogOpen] = useState(false)
   const [screenReaderAnnouncement, setScreenReaderAnnouncement] = useState('')
   const conversationRef = useRef<HTMLDivElement | null>(null)
   const endRef = useRef<HTMLDivElement | null>(null)
@@ -1431,8 +1428,11 @@ export function AigmGameplayShell() {
       setPartyState(saved)
       setHydratingAdventure(false)
     }
-    void restoreAdventure().catch(() => {
-      if (!cancelled) setHydratingAdventure(false)
+    void restoreAdventure().catch((restoreError) => {
+      if (!cancelled) {
+        setError(restoreError instanceof Error ? restoreError.message : 'RPG Your Way could not load the cloud campaign.')
+        setHydratingAdventure(false)
+      }
     })
     return () => { cancelled = true }
   }, [])
@@ -1525,7 +1525,7 @@ export function AigmGameplayShell() {
     const previousState = partyState
     setPartyState(nextState)
     void saveAdventureState(window.localStorage, nextState, previousState).catch(() => {
-      setError('The browser could not save this turn locally. Your adventure normally survives closing the browser, but clearing browser data, private browsing, or changing devices can remove local saves. Use Export Your Game in Session tools to download a portable game file now.')
+      setError('RPG Your Way could not confirm this turn in the cloud. The local cache still has the current state, but do not continue this campaign on another device until cloud saving reconnects. Reload the campaign if another device may have advanced it.')
     })
   }
 
@@ -2171,25 +2171,11 @@ export function AigmGameplayShell() {
       const timestamp = entry.created_at ? ` · ${new Date(entry.created_at).toLocaleString()}` : ''
       return [`${speaker}${timestamp}`, entry.text.trim(), '']
     })
-    return [`${title} · RAW GAMEPLAY TRANSCRIPT`, 'This is the unedited player and Game Master chat.', `Exported ${new Date().toLocaleString()}`, '', ...lines].join('\n')
+    return [`${title} · RAW GAMEPLAY TRANSCRIPT`, 'This is the unedited player and Game Master gameplay transcript. Multiplayer table chat is separate and is not included.', `Exported ${new Date().toLocaleString()}`, '', ...lines].join('\n')
   }
 
   function safeFilename(value: string) {
     return value.trim().replace(/[^a-z0-9_-]+/gi, '_').replace(/^_+|_+$/g, '').slice(0, 80) || 'Adventure'
-  }
-
-  function downloadAdventure() {
-    if (!partyState) return
-    const snapshot = { ...partyState, updated_at: new Date().toISOString() }
-    const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: 'application/json;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = campaignBackupFilename(partyState.adventure_name || 'Adventure')
-    document.body.appendChild(link)
-    link.click()
-    link.remove()
-    URL.revokeObjectURL(url)
   }
 
   function downloadTranscript() {
@@ -2533,7 +2519,7 @@ export function AigmGameplayShell() {
                 <button type="submit" disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0 || !message.trim()} className={`aigm-gameplay-send ${message.trim() && !sending && !voiceCaptureBusy && gameplay.messages.length > 0 ? 'aigm-gameplay-send--ready' : ''} flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground disabled:opacity-45`} aria-label="Send gameplay turn">{sending ? <LoaderCircle className="size-5 animate-spin" aria-hidden="true" /> : <Send className="size-5" aria-hidden="true" />}</button>
               </form>
 
-              <div className="aigm-session-tools mt-2 grid gap-2 border-t border-border/70 pt-2 sm:grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)]" data-open={sessionToolsOpen ? 'true' : 'false'} aria-label="Session tools and export guidance">
+              <div className="aigm-session-tools mt-2 grid gap-2 border-t border-border/70 pt-2 sm:grid-cols-[auto_minmax(0,1fr)]" data-open={sessionToolsOpen ? 'true' : 'false'} aria-label="Session tools">
                 <button
                   type="button"
                   onClick={() => setSessionToolsOpen((open) => !open)}
@@ -2544,11 +2530,9 @@ export function AigmGameplayShell() {
                   <span className="font-display font-bold">Session tools</span>
                   <ChevronDown className={`size-4 shrink-0 transition-transform ${sessionToolsOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                 </button>
-                <button type="button" onClick={() => setExportGameHelpDialogOpen(true)} className="aigm-session-help inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><FileDown className="size-3.5 shrink-0" aria-hidden="true" />When and how to export</button>
                 <button type="button" onClick={openStoryDirectionHelp} className="aigm-session-help inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><BookOpen className="size-3.5 shrink-0" aria-hidden="true" />Can I direct my game?</button>
                 {sessionToolsOpen && (
                   <div id="aigm-session-tools-panel" className="aigm-session-tools-panel flex flex-wrap items-center gap-2 pt-0.5 sm:col-span-3">
-                    <button type="button" onClick={downloadAdventure} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground"><FileDown className="size-3.5" aria-hidden="true" />Export Your Game</button>
                     <button type="button" onClick={downloadTranscript} disabled={transcript.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-40"><Download className="size-3.5" aria-hidden="true" />Download transcript</button>
                     <button type="button" onClick={printTranscript} disabled={transcript.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-40"><Printer className="size-3.5" aria-hidden="true" />Print</button>
                     <button type="button" onClick={() => openLevelUp()} disabled={gameplay.pending_level_ups.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-40"><Sparkles className="size-3.5" aria-hidden="true" />Level Up a character</button>
@@ -2661,12 +2645,6 @@ export function AigmGameplayShell() {
         onBegin={beginAdventureAfterDirectionHelp}
         onListen={(text) => voiceControlsRef.current?.replay(text)}
       />
-      <ExportGameHelpDialog
-        open={exportGameHelpDialogOpen}
-        onClose={() => setExportGameHelpDialogOpen(false)}
-        onExport={downloadAdventure}
-      />
-
       {!selectedCharacter && (
         <nav className="aigm-mobile-nav fixed inset-x-3 bottom-3 z-40 rounded-2xl border border-border bg-card/95 p-2 shadow-2xl backdrop-blur lg:hidden" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }} aria-label="Mobile gameplay panels">
           {mobilePanel === 'gameplay' ? (

@@ -20,7 +20,7 @@ export function DeleteAccountControl() {
   return (
     <section className="account-danger-zone" aria-labelledby="delete-account-heading">
       <h2 id="delete-account-heading">Delete my account</h2>
-      <p>Permanent account deletion is available here without affecting campaign files stored only in this browser.</p>
+      <p>Permanent account deletion also removes cloud campaigns that belong only to you. Shared campaigns remain available to their other members.</p>
       <div className="account-delete-arm-row">
         <button
           type="button"
@@ -49,7 +49,7 @@ export function DeleteAccountControl() {
             <form action={deleteAccount} className="start-modal-body account-delete-modal-copy">
               <p><strong>This permanently deletes your RPG Your Way account and the server-side RPG Your Way records tied to it.</strong></p>
               <p>Any remaining usage balance will be lost and cannot be restored.</p>
-              <p>Campaigns stored only in this browser are separate and will not be erased by account deletion. Export anything you want to keep before deleting the account.</p>
+              <p>Cloud campaigns with no other active members are deleted with your account. If a shared campaign has other active members, your membership is removed and the campaign remains available to them.</p>
               <label className="account-delete-confirm">
                 <span id="delete-account-confirm-help">Type <strong>DELETE</strong> to confirm.</span>
                 <input name="confirmDelete" value={confirmation} onChange={(event) => setConfirmation(event.target.value)} autoComplete="off" aria-describedby="delete-account-confirm-help" aria-invalid={Boolean(confirmation && confirmation !== 'DELETE')} />

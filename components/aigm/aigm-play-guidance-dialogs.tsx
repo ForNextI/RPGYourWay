@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, FileDown, Headphones, Mic, SlidersHorizontal, Sparkles, Volume2, X } from 'lucide-react'
+import { Check, Headphones, Mic, SlidersHorizontal, Sparkles, Volume2, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useAccessibleDialog } from '@/components/accessibility/use-accessible-dialog'
 import type { VoiceGuidedPlaySettings } from '@/lib/aigm/campaign-storage'
@@ -167,48 +167,6 @@ export function StoryDirectionDialog({ open, beginningAdventure, onClose, onBegi
         <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           {!beginningAdventure && <button type="button" onClick={onClose} className="min-h-11 rounded-xl border border-border px-5 font-bold text-muted-foreground">Close</button>}
           <button type="button" onClick={beginningAdventure ? onBegin : onClose} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-accent px-5 font-bold text-accent-foreground"><Mic className="size-4" aria-hidden="true" />{beginningAdventure ? 'Begin the adventure' : 'Return to the adventure'}</button>
-        </div>
-      </section>
-    </div>
-  )
-}
-
-interface ExportGameHelpDialogProps {
-  open: boolean
-  onClose: () => void
-  onExport: () => void
-}
-
-export function ExportGameHelpDialog({ open, onClose, onExport }: ExportGameHelpDialogProps) {
-  const headingRef = useRef<HTMLHeadingElement | null>(null)
-  const dialogRef = useAccessibleDialog<HTMLElement>({ open, onClose, initialFocusRef: headingRef })
-
-  if (!open) return null
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose() }}>
-      <section ref={dialogRef} tabIndex={-1} className="max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-primary/45 bg-card p-5 shadow-2xl outline-none sm:p-8" role="dialog" aria-modal="true" aria-labelledby="export-game-help-heading">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-start gap-4">
-            <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary"><FileDown className="size-6" aria-hidden="true" /></span>
-            <div>
-              <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.2em] text-primary">Browser-local saving</p>
-              <h2 ref={headingRef} tabIndex={-1} id="export-game-help-heading" className="mt-2 font-display text-3xl font-bold outline-none">When and how to export your game</h2>
-            </div>
-          </div>
-          <button type="button" onClick={onClose} className="rounded-xl p-2 text-muted-foreground transition hover:bg-secondary hover:text-foreground" aria-label="Close export-game help"><X className="size-5" aria-hidden="true" /></button>
-        </div>
-
-        <div className="mt-5 space-y-4 text-sm leading-7 text-muted-foreground sm:text-base">
-          <p>Your adventure is saved automatically in this browser. You can close RPG Your Way, close the browser, or shut down your device and return later. Your game should remain available as long as you use the same browser profile on the same device.</p>
-          <p><strong className="text-foreground">Use Export Your Game in Session tools</strong> to create a backup, continue in a different browser, or move the adventure to another device.</p>
-          <p>Private or incognito browsing is temporary and may delete the game when the private session closes. Clearing RPG Your Way site data or deleting the browser profile can also remove it.</p>
-          <p>RPG Your Way does not keep an online account or cloud copy of your campaign. Keep an exported copy of any adventure you would not want to lose.</p>
-        </div>
-
-        <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <button type="button" onClick={onClose} className="min-h-11 rounded-xl border border-border px-5 font-bold text-muted-foreground">Return to the adventure</button>
-          <button type="button" onClick={() => { onExport(); onClose() }} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 font-bold text-primary-foreground"><FileDown className="size-4" aria-hidden="true" />Export Now</button>
         </div>
       </section>
     </div>

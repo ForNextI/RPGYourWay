@@ -15,6 +15,7 @@ import {
   type GameplayState,
   type SavedAdventureState,
 } from '@/lib/aigm/campaign-storage'
+import { listCloudCampaigns, loadCloudCampaignState, saveCloudCampaignState, storedCloudRevision } from '@/lib/aigm/cloud-campaigns'
 
 const DATABASE_NAME = 'rpgyw-aigm-campaigns'
 const DATABASE_VERSION = 1
@@ -70,7 +71,7 @@ type StoredRetcon = SavedAdventureState['gameplay']['retcons'][number] & {
 export interface AdventureLoadResult {
   state: SavedAdventureState | null
   migrated: boolean
-  storage: 'indexeddb' | 'localStorage' | 'none'
+  storage: 'cloud' | 'indexeddb' | 'localStorage' | 'none'
 }
 
 const saveQueues = new Map<string, Promise<void>>()
@@ -412,6 +413,7 @@ function adventureSummary(state: SavedAdventureState): AdventureSummary {
   return {
     adventure_id: state.adventure_id,
     adventure_name: canonicalAdventureName(state.adventure_name),
+    campaign_mode: state.campaign_mode ?? 'solo',
     updated_at: state.updated_at,
     stage: state.stage,
     party_names: state.characters.filter((character) => character.result).map((character) => playNameFor(character)),
@@ -441,24 +443,35 @@ function enqueueSave(adventureId: string, operation: () => Promise<void>) {
 }
 
 /**
- * Save a campaign without rewriting the permanent transcript. IndexedDB is the
- * normal Build 4 path. A separate v2 localStorage fallback exists only for
- * browsers where IndexedDB is unavailable; it never overwrites a schema-1
- * rollback copy left by migration.
+ * Browser persistence is now a cache and legacy bridge. New campaigns are
+ * created in the cloud before the local cache is considered saved. Existing
+ * campaigns keep a local copy first, then revision-check the canonical cloud
+ * record so a network interruption cannot silently destroy the current turn.
  */
+async function saveAdventureStateLocally(storage: Storage, state: SavedAdventureState, previousState?: SavedAdventureState | null) {
+  try {
+    await putAdventureIndexedDb(state, previousState)
+    writeAdventureIndex(storage, state)
+    requestPersistentStorage()
+  } catch (indexedDbError) {
+    try {
+      saveAdventureStateToLocalStorage(storage, state, true)
+    } catch {
+      throw indexedDbError
+    }
+  }
+}
+
 export function saveAdventureState(storage: Storage, state: SavedAdventureState, previousState?: SavedAdventureState | null) {
   return enqueueSave(state.adventure_id, async () => {
-    try {
-      await putAdventureIndexedDb(state, previousState)
-      writeAdventureIndex(storage, state)
-      requestPersistentStorage()
-    } catch (indexedDbError) {
-      try {
-        saveAdventureStateToLocalStorage(storage, state, true)
-      } catch {
-        throw indexedDbError
-      }
+    const creatingCloudCampaign = !previousState && storedCloudRevision(storage, state.adventure_id) === 0
+    if (creatingCloudCampaign) {
+      await saveCloudCampaignState(storage, state)
+      await saveAdventureStateLocally(storage, state, previousState)
+      return
     }
+    await saveAdventureStateLocally(storage, state, previousState)
+    await saveCloudCampaignState(storage, state)
   })
 }
 
@@ -493,7 +506,7 @@ function newerState(...states: Array<SavedAdventureState | null>) {
     .sort((left, right) => compareAdventureFreshness(right, left))[0] ?? null
 }
 
-export async function loadAdventureState(storage: Storage, adventureId: string): Promise<AdventureLoadResult> {
+async function loadLocalAdventureState(storage: Storage, adventureId: string): Promise<AdventureLoadResult> {
   if (!adventureId) return { state: null, migrated: false, storage: 'none' }
 
   const fallback = parseAdventureState(storage.getItem(fallbackAdventureStorageKey(adventureId)))
@@ -536,6 +549,40 @@ export async function loadAdventureState(storage: Storage, adventureId: string):
   return { state: localCandidate, migrated: false, storage: 'localStorage' }
 }
 
+export async function loadAdventureState(storage: Storage, adventureId: string): Promise<AdventureLoadResult> {
+  if (!adventureId) return { state: null, migrated: false, storage: 'none' }
+
+  const knownCloudRevision = storedCloudRevision(storage, adventureId)
+  const cloud = await loadCloudCampaignState(storage, adventureId)
+  if (cloud.status === 'found' && cloud.state) {
+    const normalized = normalizeAdventureState(cloud.state)
+    if (!normalized) return { state: null, migrated: false, storage: 'none' }
+    await saveAdventureStateLocally(storage, normalized, null).catch(() => undefined)
+    return { state: normalized, migrated: false, storage: 'cloud' }
+  }
+
+  // A cache that has already been associated with a cloud campaign must never
+  // become visible to a different signed-in account merely because it remains
+  // in the same browser profile.
+  if (knownCloudRevision > 0) {
+    if (cloud.status === 'unavailable') throw new Error('RPG Your Way could not reach the cloud copy of this campaign. Try again before continuing on this device.')
+    return { state: null, migrated: false, storage: 'none' }
+  }
+
+  const local = await loadLocalAdventureState(storage, adventureId)
+  if (!local.state) return local
+
+  // Opening a legacy browser-only campaign is its migration moment. If cloud
+  // creation is temporarily unavailable, the intact local campaign remains
+  // playable and the next save will try again.
+  try {
+    await saveCloudCampaignState(storage, local.state)
+    return { state: local.state, migrated: true, storage: 'cloud' }
+  } catch {
+    return local
+  }
+}
+
 async function keysForAdventure(database: IDBDatabase, storeName: string, adventureId: string) {
   const transaction = database.transaction(storeName, 'readonly')
   const keys = await requestResult(transaction.objectStore(storeName).index('adventure_id').getAllKeys(adventureId))
@@ -571,7 +618,7 @@ export async function deleteAdventureState(storage: Storage, adventureId: string
 }
 
 export async function readAdventureIndexWithDatabase(storage: Storage) {
-  const summaries = new Map(readAdventureIndex(storage).map((entry) => [entry.adventure_id, entry]))
+  const summaries = new Map<string, AdventureSummary>(readAdventureIndex(storage).map((entry) => [entry.adventure_id, { ...entry, storage_source: 'legacy_local' as const }]))
   if (indexedDbAvailable()) {
     try {
       const database = await openCampaignDatabase()
@@ -582,15 +629,33 @@ export async function readAdventureIndexWithDatabase(storage: Storage) {
         summaries.set(core.adventure_id, {
           adventure_id: core.adventure_id,
           adventure_name: canonicalAdventureName(core.state.adventure_name),
+          campaign_mode: core.state.campaign_mode ?? 'solo',
           updated_at: core.updated_at,
           stage: core.state.stage,
           party_names: core.party_names ?? [],
+          storage_source: 'legacy_local' as const,
         })
       }
     } catch {
-      // The small local index remains a useful fallback.
+      // The small local index remains a useful fallback for true legacy saves.
     }
   }
+
+  try {
+    const cloud = await listCloudCampaigns(storage)
+    const cloudIds = new Set(cloud.map((campaign) => campaign.adventure_id))
+    for (const [id] of summaries) {
+      if (storedCloudRevision(storage, id) > 0 && !cloudIds.has(id)) summaries.delete(id)
+    }
+    for (const campaign of cloud) summaries.set(campaign.adventure_id, campaign)
+  } catch (error) {
+    // Do not expose cached cloud campaigns when membership cannot be verified.
+    for (const [id] of summaries) {
+      if (storedCloudRevision(storage, id) > 0) summaries.delete(id)
+    }
+    throw error
+  }
+
   return [...summaries.values()].sort((left, right) => right.updated_at.localeCompare(left.updated_at))
 }
 

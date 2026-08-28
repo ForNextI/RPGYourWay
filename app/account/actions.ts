@@ -84,6 +84,31 @@ export async function deleteAccount(formData: FormData) {
 
   try {
     const admin = createAdminClient()
+    const { data: memberships, error: membershipError } = await admin
+      .from('campaign_members')
+      .select('campaign_id')
+      .eq('user_id', userId)
+      .eq('membership_status', 'active')
+    if (membershipError) redirectWithQuery('/account', 'error', membershipError.message)
+
+    for (const membership of memberships ?? []) {
+      const campaignId = membership.campaign_id as string
+      const { count, error: countError } = await admin
+        .from('campaign_members')
+        .select('campaign_id', { count: 'exact', head: true })
+        .eq('campaign_id', campaignId)
+        .eq('membership_status', 'active')
+        .neq('user_id', userId)
+      if (countError) redirectWithQuery('/account', 'error', countError.message)
+      if ((count ?? 0) === 0) {
+        const { error: campaignError } = await admin.from('campaigns').delete().eq('id', campaignId)
+        if (campaignError) redirectWithQuery('/account', 'error', campaignError.message)
+      } else {
+        const { error: memberError } = await admin.from('campaign_members').delete().eq('campaign_id', campaignId).eq('user_id', userId)
+        if (memberError) redirectWithQuery('/account', 'error', memberError.message)
+      }
+    }
+
     const { error } = await admin.auth.admin.deleteUser(userId)
     if (error) redirectWithQuery('/account', 'error', error.message)
   } catch (error) {

@@ -1,7 +1,7 @@
 'use client'
 
 import { type ChangeEvent, useEffect, useRef, useState } from 'react'
-import { FileUp, LoaderCircle, Play, Shield, Smartphone } from 'lucide-react'
+import { Cloud, FileUp, LoaderCircle, Play, Shield } from 'lucide-react'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { AuthPrompt } from '@/components/AuthPrompt'
@@ -32,7 +32,7 @@ export function RpgywStartEntry({ addCharacterMode = false, multiplayerCode = ''
     }
     void restore().catch(() => {
       if (!cancelled) {
-        setError('RPG Your Way could not read the adventures stored in this browser.')
+        setError('RPG Your Way could not load your campaigns.')
         setLoading(false)
       }
     })
@@ -99,20 +99,20 @@ export function RpgywStartEntry({ addCharacterMode = false, multiplayerCode = ''
           {!addCharacterMode ? <details className="start-existing-details">
             <summary>Already have an RPG Your Way or WardensPC adventure?</summary>
             <div className="start-existing-body">
-              <p className="start-existing-lede">Continue a campaign already stored in this browser, or import a full exported game JSON. This returning-player path stays separate from new-campaign onboarding.</p>
+              <p className="start-existing-lede">Continue a campaign from your RPG Your Way account, or import a legacy RPG Your Way or WardensPC game file. Legacy imports become cloud campaigns when they are opened.</p>
               {loading ? (
                 <div className="play-entry-loading" role="status">
                   <LoaderCircle className="play-entry-icon play-entry-spin" aria-hidden="true" />
-                  <p>Checking this browser for saved adventures…</p>
+                  <p>Loading your campaigns…</p>
                 </div>
               ) : (
                 <div className="play-entry-grid">
                   <section className="play-entry-card" aria-labelledby="saved-adventures-heading">
                     <div className="play-entry-card-title">
-                      <Shield className="play-entry-icon" aria-hidden="true" />
+                      <Cloud className="play-entry-icon" aria-hidden="true" />
                       <div>
-                        <p className="account-state-label">This browser</p>
-                        <h2 id="saved-adventures-heading">Saved adventures</h2>
+                        <p className="account-state-label">Your account</p>
+                        <h2 id="saved-adventures-heading">Campaigns</h2>
                       </div>
                     </div>
                     {adventures.length ? (
@@ -121,14 +121,14 @@ export function RpgywStartEntry({ addCharacterMode = false, multiplayerCode = ''
                           <button key={adventure.adventure_id} type="button" className="play-entry-adventure" onClick={() => openAdventure(adventure.adventure_id)}>
                             <span>
                               <strong>{adventure.adventure_name}</strong>
-                              <small>{adventure.party_names.length ? adventure.party_names.join(', ') : 'Saved party'} · Updated {new Date(adventure.updated_at).toLocaleDateString()}</small>
+                              <small>{adventure.party_names.length ? adventure.party_names.join(', ') : 'Saved party'} · {adventure.storage_source === 'cloud' ? 'Cloud' : 'This browser · moves to cloud when opened'} · Updated {new Date(adventure.updated_at).toLocaleDateString()}</small>
                             </span>
                             <span className="play-entry-continue"><Play aria-hidden="true" /> Continue</span>
                           </button>
                         ))}
                       </div>
                     ) : (
-                      <p className="play-entry-empty">No RPG Your Way adventures are stored in this browser yet.</p>
+                      <p className="play-entry-empty">No campaigns yet.</p>
                     )}
                   </section>
 
@@ -136,16 +136,16 @@ export function RpgywStartEntry({ addCharacterMode = false, multiplayerCode = ''
                     <div className="play-entry-card-title">
                       <FileUp className="play-entry-icon" aria-hidden="true" />
                       <div>
-                        <p className="account-state-label">Bring your game</p>
+                        <p className="account-state-label">Legacy import</p>
                         <h2 id="import-adventure-heading">Import an existing adventure</h2>
                       </div>
                     </div>
-                    <p>Use a full exported game JSON from WardensPC or RPG Your Way. The imported copy gets a new local campaign ID, so the original export remains untouched.</p>
+                    <p>Use a full exported game JSON from WardensPC or an earlier RPG Your Way build. The imported copy gets a new cloud campaign ID, so the original file remains untouched.</p>
                     <input ref={importRef} className="sr-only" type="file" tabIndex={-1} aria-hidden="true" accept="application/json,.json" onChange={importAdventure} />
                     <button className="button button-primary" type="button" onClick={() => importRef.current?.click()}>Import Existing Adventure</button>
                     <div className="play-entry-device-note">
-                      <Smartphone aria-hidden="true" />
-                      <p><strong>Changing devices?</strong> Export on the old device and import here on the new one. There is no cloud campaign synchronization in this release.</p>
+                      <Shield aria-hidden="true" />
+                      <p><strong>Cloud migration.</strong> Once imported, the campaign is saved to your RPG Your Way account and can be opened from your other signed-in devices.</p>
                     </div>
                   </section>
                 </div>
