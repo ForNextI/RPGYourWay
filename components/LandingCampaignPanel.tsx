@@ -34,11 +34,7 @@ function cleanSnippet(value: string) {
     .replace(/\s+/g, ' ')
     .trim()
   if (!clean) return ''
-  const limit = 360
-  if (clean.length <= limit) return clean
-  const tail = clean.slice(-limit)
-  const firstSpace = tail.indexOf(' ')
-  return `…${(firstSpace >= 0 ? tail.slice(firstSpace + 1) : tail).trimStart()}`
+  return clean
 }
 
 function campaignView(state: SavedAdventureState): LandingCampaignView {

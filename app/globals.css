@@ -7487,3 +7487,130 @@ html {
 @media (max-width: 639px) {
   .start-add-character-header > .start-info-control { width: 100% !important; }
 }
+
+
+/* RPG Your Way 1.11.4 party management + landing news polish. */
+
+/* The working UI should stay dimensional without falling back to square faces. */
+:where(
+  .medieval-page--play,
+  .character-sheet-dialog,
+  .aigm-table-chat-panel,
+  .multiplayer-panel-switcher,
+  .start-add-character-mode
+) button {
+  border-radius: 13px !important;
+}
+.character-sheet-actions > button,
+.character-sheet-heading-row > button,
+.aigm-multiplayer-lobby-details > summary,
+.aigm-multiplayer-name-choice button,
+.aigm-multiplayer-character-checks label,
+.multiplayer-panel-switcher-button {
+  border-radius: 13px !important;
+}
+.character-remove-button:not(:disabled):hover,
+.character-remove-button:not(:disabled):focus-visible {
+  color: var(--destructive) !important;
+  background: color-mix(in srgb, var(--destructive) 10%, var(--background)) !important;
+}
+
+/* Landing news is deliberately terse: two headlines, first thing after the ribbon. */
+.landing-news-section {
+  padding: .8rem 0 0;
+}
+.landing-news-panel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: .8rem 1rem;
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 18px;
+  background: var(--forest-deep);
+  padding: .7rem .9rem;
+  color: var(--cream-bright);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .11),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 8px 15px rgb(29 38 29 / .10);
+}
+.landing-news-eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 38px;
+  align-items: center;
+  gap: .42rem;
+  margin: 0;
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 11px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--cream-bright) 96%, white),
+      color-mix(in srgb, var(--cream) 94%, var(--landing-brass-light))
+    );
+  padding: .38rem .62rem;
+  color: var(--forest-deep);
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 72%, white),
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    0 2px 0 var(--rpgyw-brass-shadow);
+}
+.landing-news-eyebrow svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  stroke-width: 2;
+}
+.landing-news-headlines {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .35rem 1.2rem;
+}
+.landing-news-headlines p {
+  position: relative;
+  margin: 0;
+  color: var(--cream-bright);
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(1rem, 1.65vw, 1.2rem);
+  font-weight: 800;
+}
+.landing-news-headlines p + p::before {
+  content: '◆';
+  margin-right: 1.2rem;
+  color: var(--landing-brass-light);
+  font-size: .62em;
+  vertical-align: .12em;
+}
+
+/* The current-campaign screen should look populated, not like a tiny excerpt
+   sitting at the bottom of a large empty monitor. */
+.landing-campaign-snippet {
+  align-items: flex-start;
+}
+.landing-campaign-snippet > span {
+  -webkit-line-clamp: 10;
+}
+
+@media (max-width: 700px) {
+  .landing-news-panel {
+    grid-template-columns: 1fr;
+    gap: .35rem;
+  }
+  .landing-news-headlines {
+    display: grid;
+    gap: .22rem;
+  }
+  .landing-news-headlines p + p::before {
+    content: none;
+  }
+  .landing-campaign-snippet > span {
+    -webkit-line-clamp: 12;
+  }
+}

@@ -26,6 +26,7 @@ import {
   RotateCcw,
   Send,
   Shield,
+  Trash2,
   Sparkles,
   Swords,
   UnlockKeyhole,
@@ -666,6 +667,8 @@ function CharacterSheetOverlay({
   onSaveRecord,
   canLevelUp,
   onLevelUp,
+  onRemove,
+  canRemove,
   ruleset,
   startInRecordEditor = false,
 }: {
@@ -675,6 +678,8 @@ function CharacterSheetOverlay({
   onSaveRecord: (characterId: string, proposedResult: CharacterIntakeResult, proposedPlayName: string) => void
   canLevelUp: boolean
   onLevelUp: (characterId: string) => void
+  onRemove: (characterId: string) => void
+  canRemove: boolean
   ruleset: string
   startInRecordEditor?: boolean
 }) {
@@ -916,8 +921,8 @@ function CharacterSheetOverlay({
               </div>
               <div className="min-w-0">
                 <p className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-primary">Character record</p>
-                <h2 ref={headingRef} tabIndex={-1} id="character-sheet-title" className="mt-1 font-display text-2xl font-bold sm:text-3xl">{result.character.name}</h2>
-                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">Name used in play: <span className="font-semibold text-foreground">{playNameFor(character)}</span><span aria-hidden="true"> · </span><span className="font-semibold text-foreground">{classSummary(result)}</span></p>
+                <h2 ref={headingRef} tabIndex={-1} id="character-sheet-title" className="mt-1 font-display text-2xl font-bold sm:text-3xl">{playNameFor(character)}</h2>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground"><span className="font-semibold text-foreground">{classSummary(result)}</span></p>
                 <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{[result.character.species, result.character.sex, result.character.pronouns, result.character.age ? `Age ${result.character.age}` : '', result.character.alignment, result.character.background].filter(Boolean).join(' · ')}</p>
                 <div className="character-sheet-actions mt-3 flex flex-wrap gap-2">
                   <button type="button" onClick={openRecordEditor} className="inline-flex min-h-9 items-center gap-2 rounded-lg bg-primary px-3 text-xs font-bold text-primary-foreground">
@@ -931,6 +936,9 @@ function CharacterSheetOverlay({
                   </button>
                   <button type="button" onClick={() => setShowSmartLevelingHelp((open) => !open)} aria-expanded={showSmartLevelingHelp} aria-controls="character-smart-level-help" className="character-smart-level-button inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/45 bg-primary/10 px-3 text-xs font-bold text-primary transition hover:bg-primary/15">
                     <HelpCircle className="size-4" aria-hidden="true" />Smart way to level
+                  </button>
+                  <button type="button" onClick={() => onRemove(character.id)} disabled={!canRemove} title={canRemove ? 'Remove this character from the current party. Campaign history is preserved.' : 'A campaign must keep at least one active character.'} className="character-remove-button inline-flex min-h-9 items-center gap-2 rounded-lg border border-destructive/45 bg-destructive/5 px-3 text-xs font-bold text-destructive disabled:cursor-not-allowed disabled:opacity-45">
+                    <Trash2 className="size-4" aria-hidden="true" />Remove from party
                   </button>
                 </div>
                 {showSmartLevelingHelp && (
@@ -1559,6 +1567,39 @@ export function AigmGameplayShell() {
       setError(exitError instanceof Error ? exitError.message : 'Could not leave multiplayer cleanly.')
       setExitingMultiplayer(false)
     }
+  }
+
+  function removePartyCharacter(characterId: string) {
+    if (!partyState) return
+    const target = partyState.characters.find((character) => character.id === characterId && character.status === 'ready' && character.result)
+    if (!target) return
+    if (readyCharacters.length <= 1) {
+      setError('A campaign must keep at least one active character. Add a replacement before removing the last character.')
+      return
+    }
+    const targetName = playNameFor(target)
+    if (!window.confirm(`Remove ${targetName} from the current party? The campaign history stays intact, but this character will no longer be an active party member.`)) return
+
+    const removedWasLeader = target.result?.character.is_current_party_active_leader === true
+    let characters = partyState.characters.filter((character) => character.id !== characterId)
+    if (removedWasLeader && !characters.some((character) => character.status === 'ready' && character.result?.character.is_current_party_active_leader === true)) {
+      const replacementIndex = characters.findIndex((character) => character.status === 'ready' && character.result)
+      if (replacementIndex >= 0) {
+        const replacement = characters[replacementIndex]
+        characters = characters.map((character, index) => index === replacementIndex && replacement.result
+          ? { ...replacement, result: { ...replacement.result, character: { ...replacement.result.character, is_current_party_active_leader: true } } }
+          : character)
+      }
+    }
+    const gameplay = {
+      ...partyState.gameplay,
+      initiative: partyState.gameplay.initiative.filter((entry) => entry.character_id !== characterId),
+      pending_level_ups: partyState.gameplay.pending_level_ups.filter((id) => id !== characterId),
+    }
+    persist({ ...partyState, characters, gameplay, updated_at: new Date().toISOString() })
+    setSelectedCharacterId(null)
+    setRecordEditorCharacterId(null)
+    setScreenReaderAnnouncement(`${targetName} removed from the current party.`)
   }
 
   function addAnotherCharacter() {
@@ -2569,7 +2610,7 @@ export function AigmGameplayShell() {
         </aside>
       </div>
 
-      {selectedCharacter && <CharacterSheetOverlay character={selectedCharacter} onClose={() => { setSelectedCharacterId(null); setRecordEditorCharacterId(null) }} onUpdate={updateCharacterIdentity} onSaveRecord={saveCharacterRecordEdit} canLevelUp={gameplay.pending_level_ups.includes(selectedCharacter.id)} onLevelUp={(characterId) => { setSelectedCharacterId(null); setRecordEditorCharacterId(null); openLevelUp(characterId) }} ruleset={partyState.settings.ruleset} startInRecordEditor={recordEditorCharacterId === selectedCharacter.id} />}
+      {selectedCharacter && <CharacterSheetOverlay character={selectedCharacter} onClose={() => { setSelectedCharacterId(null); setRecordEditorCharacterId(null) }} onUpdate={updateCharacterIdentity} onSaveRecord={saveCharacterRecordEdit} canLevelUp={gameplay.pending_level_ups.includes(selectedCharacter.id)} onLevelUp={(characterId) => { setSelectedCharacterId(null); setRecordEditorCharacterId(null); openLevelUp(characterId) }} onRemove={removePartyCharacter} canRemove={readyCharacters.length > 1} ruleset={partyState.settings.ruleset} startInRecordEditor={recordEditorCharacterId === selectedCharacter.id} />}
       {voiceAvailable ? <VoiceGuidedPlayDialog
         open={voiceGuidedDialogOpen}
         settings={voiceGuidedPlay}

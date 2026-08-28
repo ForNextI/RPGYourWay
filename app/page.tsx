@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { Megaphone } from 'lucide-react'
 import { PageShell } from '@/components/PageShell'
 import { LandingCampaignPanel } from '@/components/LandingCampaignPanel'
 import { PersistentPlayModal } from '@/components/PersistentPlayModal'
@@ -174,6 +175,16 @@ export default function HomePage() {
     <PageShell headerVariant="landing">
       <main id="main-content" tabIndex={-1}>
         <h1 className="sr-only">RPG Your Way: Your AI GM</h1>
+        <section className="landing-news-section" aria-labelledby="landing-news-heading">
+          <div className="shell landing-news-panel">
+            <p className="landing-news-eyebrow"><Megaphone aria-hidden="true" />News</p>
+            <h2 id="landing-news-heading" className="sr-only">RPG Your Way news</h2>
+            <div className="landing-news-headlines">
+              <p>Reduction in prices, yay!</p>
+              <p>Multiplayer is now live.</p>
+            </div>
+          </div>
+        </section>
         <section className="landing-return-section landing-return-section--hero" aria-label="Start or return to a campaign">
           <div className="shell landing-return-grid">
             <div className="brand-logo-card landing-return-logo">

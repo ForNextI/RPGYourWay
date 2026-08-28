@@ -348,15 +348,39 @@ export async function syncMultiplayerCharacters(userId: string, inviteCode: stri
   if (!characters.length) throw new MultiplayerError('The multiplayer campaign needs at least one character.', 400, 'characters_required')
 
   const admin = createAdminClient()
+  const { data: existingRows, error: existingError } = await admin
+    .from('multiplayer_session_characters')
+    .select('character_id')
+    .eq('session_id', lobby.id)
+  if (existingError) throw new MultiplayerError(existingError.message, 503, 'multiplayer_database_unavailable')
+
+  const incomingIds = new Set(characters.map((character) => character.character_id))
+  const removedIds = (existingRows ?? [])
+    .map((row) => typeof row.character_id === 'string' ? row.character_id : '')
+    .filter((characterId) => characterId && !incomingIds.has(characterId))
+
+  if (removedIds.length) {
+    const { error: claimDeleteError } = await admin
+      .from('multiplayer_character_claims')
+      .delete()
+      .eq('session_id', lobby.id)
+      .in('character_id', removedIds)
+    if (claimDeleteError) throw new MultiplayerError(claimDeleteError.message, 503, 'multiplayer_database_unavailable')
+
+    const { error: rosterDeleteError } = await admin
+      .from('multiplayer_session_characters')
+      .delete()
+      .eq('session_id', lobby.id)
+      .in('character_id', removedIds)
+    if (rosterDeleteError) throw new MultiplayerError(rosterDeleteError.message, 503, 'multiplayer_database_unavailable')
+  }
+
   const { error } = await admin.from('multiplayer_session_characters').upsert(
     characters.map((character) => ({ ...character, session_id: lobby.id })),
     { onConflict: 'session_id,character_id' },
   )
   if (error) throw new MultiplayerError(error.message, 503, 'multiplayer_database_unavailable')
 
-  // Character addition is the supported mutation in this release. Existing room
-  // entries are intentionally not deleted here because a connected player may
-  // still control one while the coordinator's local campaign is being edited.
   return loadSessionByInvite(inviteCode, userId)
 }
 

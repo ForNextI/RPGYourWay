@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.11.3')
-assert.equal(pkg.rpgywVersion, '1.11.3')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.3'/)
+assert.equal(pkg.version, '1.11.4')
+assert.equal(pkg.rpgywVersion, '1.11.4')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.4'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -57,7 +57,7 @@ for (const file of [
   'app/accessibility/page.tsx',
   'scripts/validate-accessibility.mts',
   'README-1.11.2.md',
-  'README-1.11.3.md',
+  'README-1.11.4.md',
   'lib/multiplayer/types.ts',
   'lib/multiplayer/errors.ts',
   'lib/multiplayer/server.ts',
@@ -421,8 +421,7 @@ assert.match(landing1718, /Why I created RPG Your Way\./)
 assert.match(landing1718, /Who benefits from this site\?/)
 
 const campaign1718 = read('components/LandingCampaignPanel.tsx')
-assert.match(campaign1718, /const limit = 360/)
-assert.match(campaign1718, /clean\.slice\(-limit\)/)
+assert.match(campaign1718, /return clean|const limit = (?:360|1100)/)
 assert.match(campaign1718, /landing-campaign-summary-card/)
 assert.match(campaign1718, /landing-balance-control/)
 assert.match(campaign1718, /Return to Adventure/)
@@ -453,8 +452,7 @@ assert.doesNotMatch(landing1719, /className="hero-unique landing-reason-card/)
 assert.doesNotMatch(landing1719, /className="hero-audience landing-reason-card/)
 
 const campaign1719 = read('components/LandingCampaignPanel.tsx')
-assert.match(campaign1719, /const limit = 360/)
-assert.match(campaign1719, /clean\.slice\(-limit\)/)
+assert.match(campaign1719, /return clean|const limit = (?:360|1100)/)
 assert.match(campaign1719, /landing-campaign-summary-card/)
 assert.match(campaign1719, /landing-balance-control/)
 assert.match(campaign1719, /Return to Adventure/)
@@ -477,8 +475,7 @@ console.log('RPG Your Way 1.7.19 dimensional landing language checks passed.')
 
 
 const campaign1720 = read('components/LandingCampaignPanel.tsx')
-assert.match(campaign1720, /const limit = 360/)
-assert.match(campaign1720, /clean\.slice\(-limit\)/)
+assert.match(campaign1720, /return clean|const limit = (?:360|1100)/)
 
 console.log('RPG Your Way 1.7.20 validator tail-limit hotfix checks passed.')
 
@@ -1087,3 +1084,24 @@ assert.match(css1113, /RPG Your Way 1\.11\.3 multiplayer QA hardening \+ Play po
 assert.match(css1113, /\.aigm-multiplayer-lobby-body \{[\s\S]*?overflow-y: auto/)
 assert.match(css1113, /\.start-add-character-header > \.start-info-control \{[\s\S]*?width: auto !important/)
 console.log('RPG Your Way 1.11.3 multiplayer QA hardening and Play polish checks passed.')
+
+
+const release1114Home = read('app/page.tsx')
+const release1114Landing = read('components/LandingCampaignPanel.tsx')
+const release1114Gameplay = read('components/aigm/aigm-gameplay-shell.tsx')
+const release1114Multiplayer = read('lib/multiplayer/server.ts')
+const release1114Css = read('app/globals.css')
+assert.match(release1114Home, /Reduction in prices, yay!/)
+assert.match(release1114Home, /Megaphone/)
+assert.match(release1114Home, /Multiplayer is now live\./)
+assert.match(release1114Landing, /return clean/)
+assert.doesNotMatch(release1114Landing, /const limit = 1100/)
+assert.match(release1114Gameplay, /Remove from party/)
+assert.match(release1114Gameplay, /function removePartyCharacter/)
+assert.match(release1114Gameplay, /character-sheet-title.*playNameFor\(character\)/)
+assert.match(release1114Multiplayer, /removedIds/)
+assert.match(release1114Multiplayer, /multiplayer_character_claims/)
+assert.match(release1114Css, /RPG Your Way 1\.11\.4 party management \+ landing news polish/)
+assert.match(release1114Css, /\.landing-news-eyebrow \{[\s\S]*?background:/)
+assert.match(release1114Css, /\.landing-campaign-snippet > span \{[\s\S]*?-webkit-line-clamp: 10;/)
+console.log('RPG Your Way 1.11.4 party-management and landing-news checks passed.')
