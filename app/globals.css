@@ -7894,15 +7894,26 @@ html {
   outline: 3px solid var(--lime);
   outline-offset: 3px;
 }
-/* Multiplayer lobby must always remain reachable within the viewport. */
+
+/* Multiplayer lobby: keep every section at its natural height
+   and scroll the whole right-hand panel when necessary. */
 .aigm-multiplayer-guest-shell .aigm-table-chat-panel {
+  height: calc(100dvh - 3rem) !important;
+  max-height: calc(100dvh - 3rem) !important;
   min-height: 0 !important;
-  max-height: calc(100dvh - 1.5rem) !important;
-  overflow-y: auto !important;
+  overflow-y: scroll !important;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
 }
 
-.aigm-multiplayer-guest-shell .aigm-multiplayer-lobby-details {
+.aigm-multiplayer-guest-shell .aigm-table-chat-heading,
+.aigm-multiplayer-guest-shell .aigm-multiplayer-lobby-details,
+.aigm-multiplayer-guest-shell .aigm-table-chat-error,
+.aigm-multiplayer-guest-shell .aigm-table-chat-composer {
   flex: 0 0 auto !important;
+}
+
+.aigm-multiplayer-guest-shell .aigm-table-chat-log {
+  flex: 0 0 14rem !important;
+  min-height: 14rem;
 }
