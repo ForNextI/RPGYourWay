@@ -171,35 +171,25 @@ function AudienceAccordion() {
 
 export default function HomePage() {
   return (
-    <PageShell>
+    <PageShell headerVariant="landing">
       <main id="main-content" tabIndex={-1}>
-        <section className="landing-notice-pair-section" aria-label="RPG Your Way status">
-          <div className="shell landing-notice-grid">
-            <div className="landing-notice-card landing-ai-warning" aria-labelledby="ai-warning-heading">
-              <h1 id="ai-warning-heading">~~ Warning: AI GM ahead ~~</h1>
-              <div className="landing-notice-body">
-                <p>RPG Your Way uses AI to run long-term, persistent adventures.</p>
-                <p>Everyone gets to play. If that’s a deal breaker, this site is probably not for you.</p>
-              </div>
+        <section className="landing-return-section landing-return-section--hero" aria-label="Start or return to a campaign">
+          <div className="shell landing-return-grid">
+            <div className="brand-logo-card landing-return-logo">
+              <Image
+                className="brand-logo-image"
+                src="/rpgyw-logo-bordered.png"
+                alt="RPG Your Way compass logo"
+                width={1254}
+                height={1254}
+                priority
+              />
             </div>
 
-            <div className="landing-notice-card landing-open-now" aria-labelledby="open-now-heading">
-              <h2 id="open-now-heading">Open Now</h2>
-              <div className="landing-notice-body">
-                <p><strong>Play</strong> is open for WardensPC campaigns brought over by export. <strong>Script</strong> is open too.</p>
-                <p><strong>Still to come:</strong> onboarding for new players and native multiplayer. VTT comes later.</p>
-              </div>
+            <div className="landing-player-stack">
+              <Link className="landing-new-player button button-secondary" href="/start">Start A New Campaign</Link>
+              <LandingCampaignPanel />
             </div>
-          </div>
-        </section>
-
-        <section className="landing-thesis-strip" aria-label="RPG Your Way premise">
-          <div className="shell">
-            <p>
-              <span className="landing-thesis-line"><strong>Tabletop gaming is best in person. No question. But sometimes...</strong></span>
-              <span className="landing-thesis-line">...you need to play online through a VTT. And other times...</span>
-              <span className="landing-thesis-line">...you can’t find a DM.</span>
-            </p>
           </div>
         </section>
 
@@ -210,26 +200,6 @@ export default function HomePage() {
             </div>
             <div className="landing-reason-card landing-reason-audience" aria-label="Who benefits from this site?">
               <AudienceAccordion />
-            </div>
-          </div>
-        </section>
-
-        <section className="landing-return-section" aria-label="Start or return to a campaign">
-          <div className="shell landing-return-grid">
-            <div className="landing-player-stack">
-              <Link className="landing-new-player button button-secondary" href="/start">Start A New Campaign</Link>
-              <LandingCampaignPanel />
-            </div>
-
-            <div className="brand-logo-card landing-return-logo">
-              <Image
-                className="brand-logo-image"
-                src="/rpgyw-logo-bordered.png"
-                alt="RPG Your Way compass logo"
-                width={1254}
-                height={1254}
-                priority
-              />
             </div>
           </div>
         </section>

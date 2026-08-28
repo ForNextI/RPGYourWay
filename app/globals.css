@@ -6766,3 +6766,103 @@ body a[class*="rounded"][class*="bg-"]:focus-visible {
 .medieval-page--play .aigm-character-card > button {
   background: var(--background) !important;
 }
+
+
+/* RPG Your Way 1.9.2 landing-page ribbon + hero reset.
+   Give the landing page its own ribbon subtitle, lead with the logo and
+   campaign console, move the explanatory accordions underneath, and replace
+   the empty-browser state with an inviting built-in campaign preview. */
+.site-brand-ribbon {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: .58rem;
+}
+.brand-jewel-divider {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  transform: rotate(45deg);
+  border: 1px solid var(--moss-deep);
+  background: var(--cream-deep);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--landing-brass-light) 52%, transparent);
+}
+.brand-words-secondary {
+  color: var(--forest-deep);
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: -.025em;
+  white-space: nowrap;
+}
+
+.landing-return-section--hero {
+  padding-top: .95rem;
+}
+.landing-reasons-section {
+  padding-top: 1.15rem;
+}
+.feature-section {
+  padding-top: 1.15rem;
+}
+
+.landing-player-stack {
+  gap: .8rem;
+}
+
+.landing-campaign-panel.landing-campaign-preview {
+  gap: .85rem;
+}
+.landing-campaign-snippet--preview {
+  display: block;
+  min-height: 0;
+  align-items: initial;
+  overflow: hidden;
+}
+.landing-campaign-preview-dateline {
+  margin: 0 0 .6rem;
+  color: var(--forest-deep);
+  font-size: .98rem;
+}
+.landing-campaign-snippet--preview p {
+  margin: 0;
+}
+.landing-campaign-snippet--preview p + p {
+  margin-top: .7rem;
+}
+
+@media (max-width: 860px) {
+  .landing-return-section--hero .landing-return-grid {
+    grid-template-columns: 1fr;
+  }
+  .landing-return-section--hero .landing-return-logo {
+    order: -1;
+    width: min(100%, 620px);
+    justify-self: center;
+  }
+}
+
+@media (max-width: 760px) {
+  .site-brand-ribbon {
+    flex-wrap: wrap;
+    row-gap: .22rem;
+  }
+  .brand-words-secondary {
+    font-size: .98rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .brand-words-secondary {
+    font-size: .86rem;
+  }
+  .brand-jewel-divider {
+    width: 9px;
+    height: 9px;
+  }
+  .landing-reasons-section,
+  .feature-section {
+    padding-top: .9rem;
+  }
+}

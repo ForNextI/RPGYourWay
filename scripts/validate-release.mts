@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.9.1')
-assert.equal(pkg.rpgywVersion, '1.9.1')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.9\.1'/)
+assert.equal(pkg.version, '1.9.2')
+assert.equal(pkg.rpgywVersion, '1.9.2')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.9\.2'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -49,7 +49,7 @@ for (const file of [
   'scripts/test-audio-cost.mts',
   'README-1.8.12.md',
   'README-1.9.0.md',
-  'README-1.9.1.md',
+  'README-1.9.2.md',
   'postcss.config.mjs',
   'data/settings/eberron.json',
   'data/rules/corpora/dnd-5.5e-srd-5.2.1.json',
@@ -80,6 +80,7 @@ assert.match(header, /href: '\/account', label: 'Account'/)
 assert.match(header, /thereadingofthewardens\.com/)
 assert.match(header, /target="_blank"/)
 assert.match(header, /fullscreen-nav-gap/)
+assert.match(header, /Your AI GM/)
 const css = read('app/globals.css')
 assert.match(css, /header-inner \{ min-height: 52px/)
 assert.match(css, /usage-disclosure-row/)
@@ -94,7 +95,14 @@ assert.match(footer, /kofi-cup/)
 
 const home = read('app/page.tsx')
 assert.match(home, /href="\/start">Start A New Campaign<\/Link>/)
+assert.match(home, /PageShell headerVariant="landing"/)
+assert.match(home, /Why I created RPG Your Way\./)
+assert.match(home, /Who benefits from this site\?/)
+assert.match(home, /Play when you have time/)
 assert.match(home, /<LandingCampaignPanel \/>/)
+assert.doesNotMatch(home, /Warning: AI GM ahead/)
+assert.doesNotMatch(home, /Open Now/)
+assert.doesNotMatch(home, /Tabletop gaming is best in person/)
 assert.match(read('app/start/page.tsx'), /<RpgywStartEntry \/>/)
 
 const pricing = read('app/pricing/page.tsx')
@@ -328,13 +336,14 @@ assert.match(playPage1714, /<MotionPreferenceProvider>/)
 assert.match(playPage1714, /<AigmGameplayShell \/>/)
 
 const landing1714 = read('app/page.tsx')
-assert.match(landing1714, /~~ Warning: AI GM ahead ~~/)
-assert.match(landing1714, /Open Now/)
-assert.match(landing1714, /Tabletop gaming is best in person\. No question\./)
+assert.match(landing1714, /PageShell headerVariant="landing"/)
 assert.match(landing1714, /Why I created RPG Your Way\./)
 assert.match(landing1714, /Who benefits from this site\?/)
 assert.match(landing1714, /<LandingCampaignPanel \/>/)
 assert.match(landing1714, />Start A New Campaign<\/Link>/)
+assert.doesNotMatch(landing1714, /~~ Warning: AI GM ahead ~~/)
+assert.doesNotMatch(landing1714, /Open Now/)
+assert.doesNotMatch(landing1714, /Tabletop gaming is best in person\. No question\./)
 
 const campaignPanel1714 = read('components/LandingCampaignPanel.tsx')
 assert.match(campaignPanel1714, /Return to Adventure/)
@@ -405,10 +414,11 @@ console.log('RPG Your Way 1.7.18 dimensional landing console checks passed.')
 
 
 const landing1719 = read('app/page.tsx')
-assert.match(landing1719, /landing-notice-pair-section/)
-assert.match(landing1719, /shell landing-notice-grid/)
+assert.match(landing1719, /landing-return-section--hero/)
 assert.match(landing1719, /landing-reason-created/)
 assert.match(landing1719, /landing-reason-audience/)
+assert.doesNotMatch(landing1719, /landing-notice-pair-section/)
+assert.doesNotMatch(landing1719, /landing-thesis-strip/)
 assert.doesNotMatch(landing1719, /className="hero-unique landing-reason-card/)
 assert.doesNotMatch(landing1719, /className="hero-audience landing-reason-card/)
 
@@ -444,15 +454,15 @@ console.log('RPG Your Way 1.7.20 validator tail-limit hotfix checks passed.')
 
 
 const landing1721 = read('app/page.tsx')
-assert.match(landing1721, /className="landing-notice-body"/)
-assert.match(landing1721, /WardensPC campaigns brought over by export/)
-assert.match(landing1721, /Script<\/strong> is open too\./)
-assert.match(landing1721, /VTT comes later\./)
+assert.match(landing1721, /PageShell headerVariant="landing"/)
+assert.match(landing1721, /Why I created RPG Your Way\./)
+assert.match(landing1721, /Who benefits from this site\?/ )
 if (landing1721.includes('const features')) {
   assert.match(landing1721, /Play a long-running campaign without waiting for everybody to be free at the same time\.|Run an ongoing tabletop campaign without waiting for a whole group to be free at the same moment\./)
   assert.match(landing1721, /Play one character or run a party of up to six\.|Play one character or manage a full party\./)
   assert.match(landing1721, /Type or talk to your Game Master\.|The interface is being built mobile-first/)
 }
+assert.doesNotMatch(landing1721, /className="landing-notice-body"/)
 
 const css1721 = read('app/globals.css')
 assert.match(css1721, /RPG Your Way 1\.7\.21 dimensional controls \+ human-language pass/)
@@ -576,9 +586,7 @@ const persistent1730 = read('components/PersistentPlayModal.tsx')
 const css1730 = read('app/globals.css')
 assert.match(landing1730, /persistentPlay: true/)
 assert.match(landing1730, /<PersistentPlayModal \/>/)
-assert.match(landing1730, /Tabletop gaming is best in person\. No question\./)
-assert.match(landing1730, /\.\.\.you need to play online through a VTT\. And other times\.\.\./)
-assert.match(landing1730, /\.\.\.you can’t find a DM\./)
+assert.match(landing1730, /Play when you have time/)
 assert.match(persistent1730, /Persistent Campaign\?/)
 assert.match(persistent1730, /what the hell do we mean by persistent play\?/)
 assert.match(persistent1730, /three hundred turns later/)
@@ -880,4 +888,7 @@ console.log('RPG Your Way 1.9.0 Play readability and landing-copy checks passed.
 const css191 = read('app/globals.css')
 assert.match(css191, /RPG Your Way 1\.9\.1 character-card surface correction/)
 assert.match(css191, /\.medieval-page--play \.aigm-character-card > button \{[\s\S]*?background: var\(--background\) !important;/)
-console.log('RPG Your Way 1.9.1 character-card off-white surface checks passed.')
+assert.match(css191, /RPG Your Way 1\.9\.2 landing-page ribbon \+ hero reset/)
+assert.match(css191, /\.site-brand-ribbon \{/)
+assert.match(css191, /\.landing-campaign-snippet--preview \{/)
+console.log('RPG Your Way 1.9.2 landing-page ribbon and hero checks passed.')

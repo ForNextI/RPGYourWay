@@ -1,9 +1,9 @@
 # RPG Your Way
 
-**Build 1.9.1 · Character-card surface correction**
+**Build 1.9.2 · Landing-page ribbon and hero reset**
 
-Build 1.9.1 makes the Play sidebar character cards use the same warm off-white surface as the gameplay message field.
+Build 1.9.2 gives the landing page its own header subtitle, reorders the hero stack, and replaces the empty first-visit campaign state with an inviting preview adventure.
 
-Current release: **1.9.1**.
+Current release: **1.9.2**.
 
-See `README-1.9.1.md` for release details. Earlier release notes remain in their versioned README files.
+See `README-1.9.2.md` for release details. Earlier release notes remain in their versioned README files.

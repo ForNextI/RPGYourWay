@@ -13,6 +13,14 @@ type LandingCampaignView = {
   snippet: string
 }
 
+const LANDING_PREVIEW = {
+  name: 'Your campaign name',
+  scene: 'Current location',
+  turnsLabel: 'Turn 01',
+  dateline: '16 Hammer 1501 DR',
+  snippet: 'The Wardens noticed at once that the scene ahead was trying very hard to look like an accident. Rain slicked the muddy road into a ribbon of black glass, and an overturned wagon blocked the way on the stone bridge, lantern light guttering inside the rain-dark canvas. At first glance, it offered a clean story: snapped axle, bad weather, missing horses, a traveler’s luck gone sour. But Perception was not sharper eyesight; it was the refusal to accept the obvious. The closer they came, the less the wreck agreed with itself. Why would this have happened here? Were those reins cut, not torn? Where were the horses? The driver? Then they saw a fresh scar marked roughly into the bridge stone: a crude circle diagonally bisected from upper right to lower left. That stopped the four of them, not because the mark was strange, but because it was almost theirs. They always left their sigil as notice that things had been righted, not as a warning.',
+} as const
+
 function compactScene(value: string) {
   const clean = value.replace(/\s+/g, ' ').trim()
   if (!clean) return 'Adventure ready'
@@ -49,7 +57,6 @@ function campaignView(state: SavedAdventureState): LandingCampaignView {
 
 export function LandingCampaignPanel() {
   const [campaign, setCampaign] = useState<LandingCampaignView | null>(null)
-  const [loading, setLoading] = useState(true)
   const [balance, setBalance] = useState('')
 
   useEffect(() => {
@@ -74,12 +81,10 @@ export function LandingCampaignPanel() {
       } catch {
         // Balance is useful when available, but it must never block the return-to-play shortcut.
       }
-
-      if (!cancelled) setLoading(false)
     }
 
     void restore().catch(() => {
-      if (!cancelled) setLoading(false)
+      // Leave the inviting landing preview in place when the browser has no saved campaign.
     })
     return () => { cancelled = true }
   }, [])
@@ -90,21 +95,29 @@ export function LandingCampaignPanel() {
     window.location.assign('/play')
   }
 
-  if (loading) {
-    return (
-      <div className="landing-campaign-panel landing-campaign-loading" aria-live="polite">
-        <p className="campaign-label">Current campaign</p>
-        <p>Checking this browser for your adventure…</p>
-      </div>
-    )
-  }
-
   if (!campaign) {
     return (
-      <div className="landing-campaign-panel landing-campaign-empty">
-        <p className="campaign-label">Current campaign</p>
-        <h2>No campaign in this browser yet</h2>
-        <p>Bring an existing WardensPC export to Start, or use the New Player doorway when onboarding opens.</p>
+      <div className="landing-campaign-panel landing-campaign-preview" aria-label="Campaign preview">
+        <div className="landing-campaign-summary-card">
+          <div className="landing-campaign-heading">
+            <div>
+              <p className="campaign-label">Current campaign</p>
+              <h2>{LANDING_PREVIEW.name}</h2>
+            </div>
+            <p className="landing-campaign-turns">{LANDING_PREVIEW.turnsLabel}</p>
+          </div>
+
+          <p className="landing-campaign-scene">{LANDING_PREVIEW.scene}</p>
+        </div>
+
+        <div className="landing-campaign-screen-stage">
+          <div className="landing-campaign-screen-olive-frame">
+            <div className="landing-campaign-snippet landing-campaign-snippet--preview">
+              <p className="landing-campaign-preview-dateline"><em>{LANDING_PREVIEW.dateline}</em></p>
+              <p>{LANDING_PREVIEW.snippet}</p>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
