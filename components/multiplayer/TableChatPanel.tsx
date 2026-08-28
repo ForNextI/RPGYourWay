@@ -29,7 +29,8 @@ export function TableChatPanel({
   onUnreadCountChange,
   onPanelChange,
   onRefreshSession,
-  onClaimCharacter,
+  onSetCharacterClaim,
+  onUpdateDisplayName,
   onLeaveSession,
   onCloseSession,
   onBackToPlay,
@@ -44,7 +45,8 @@ export function TableChatPanel({
   onUnreadCountChange: (count: number) => void
   onPanelChange: (panel: MultiplayerSecondaryPanel) => void
   onRefreshSession: () => Promise<void>
-  onClaimCharacter: (characterId: string | null) => Promise<void>
+  onSetCharacterClaim: (characterId: string, claimed: boolean) => Promise<void>
+  onUpdateDisplayName: (displayName: string) => Promise<unknown>
   onLeaveSession: () => Promise<void>
   onCloseSession: () => Promise<void>
   onBackToPlay: () => void
@@ -60,6 +62,8 @@ export function TableChatPanel({
   const [sending, setSending] = useState(false)
   const [copyState, setCopyState] = useState<'idle' | 'copied'>('idle')
   const [seatBusy, setSeatBusy] = useState(false)
+  const [nameBusy, setNameBusy] = useState(false)
+  const [displayNameDraft, setDisplayNameDraft] = useState('')
   const [leaving, setLeaving] = useState(false)
   const [closing, setClosing] = useState(false)
   const [screenReaderNotice, setScreenReaderNotice] = useState('')
@@ -76,8 +80,14 @@ export function TableChatPanel({
 
   const participantByClientId = useMemo(() => new Map(session.participants.map((participant) => [participant.realtimeClientId, participant])), [session.participants])
   const selfParticipant = session.participants.find((participant) => participant.isSelf) ?? null
-  const selfCharacterId = selfParticipant?.characterId ?? ''
-  const claimedByOther = useMemo(() => new Set(session.participants.filter((participant) => !participant.isSelf && participant.characterId).map((participant) => participant.characterId as string)), [session.participants])
+  const selfCharacterIds = useMemo(() => new Set(selfParticipant?.characterIds ?? []), [selfParticipant?.characterIds])
+  const claimedByOther = useMemo(() => new Set(session.participants.filter((participant) => !participant.isSelf).flatMap((participant) => participant.characterIds)), [session.participants])
+
+  const rosterSignature = useMemo(() => session.characters.map((character) => `${character.characterId}:${character.displayName}`).join('|'), [session.characters])
+
+  useEffect(() => {
+    setDisplayNameDraft(selfParticipant?.displayName ?? '')
+  }, [selfParticipant?.displayName])
 
   useEffect(() => {
     if (visible && unreadCount > 0) onUnreadCountChange(0)
@@ -204,9 +214,9 @@ export function TableChatPanel({
             else next.add(clientId)
             return next
           })
-          if (message.action === 'enter' || message.action === 'leave') {
+          if (message.action === 'enter' || message.action === 'leave' || message.action === 'update') {
             const participant = participantsRef.current.find((entry) => entry.realtimeClientId === clientId)
-            if (participant && clientId !== selfParticipant?.realtimeClientId) {
+            if (participant && clientId !== selfParticipant?.realtimeClientId && (message.action === 'enter' || message.action === 'leave')) {
               setScreenReaderNotice(`${participant.displayName} ${message.action === 'enter' ? 'joined' : 'left'} the multiplayer table.`)
             }
             void onRefreshSession()
@@ -241,6 +251,12 @@ export function TableChatPanel({
       realtimeRef.current = null
     }
   }, [session.id, session.inviteCode, session.isMember, session.selfSeatId, selfParticipant?.realtimeClientId, onRefreshSession, onUnreadCountChange])
+
+  useEffect(() => {
+    if (!session.isCoordinator || connectionState !== 'connected' || !session.selfSeatId || !realtimeRef.current) return
+    const channel = realtimeRef.current.channels.get(`rpg-mp:${session.id}:presence`)
+    void channel.presence.update({ seatId: session.selfSeatId, rosterSignature }).catch(() => undefined)
+  }, [session.isCoordinator, session.selfSeatId, session.id, rosterSignature, connectionState])
 
   useEffect(() => {
     if (!visible || !logRef.current || !nearBottomRef.current) return
@@ -278,12 +294,37 @@ export function TableChatPanel({
     }
   }
 
-  async function chooseCharacter(value: string) {
+  async function signalRoomUpdate() {
+    const realtime = realtimeRef.current
+    if (!realtime || !session.selfSeatId) return
+    try {
+      await realtime.channels.get(`rpg-mp:${session.id}:presence`).presence.update({ seatId: session.selfSeatId, changedAt: Date.now() })
+    } catch {
+      // The server mutation already succeeded; a later presence event or refresh will reconcile the room.
+    }
+  }
+
+  async function chooseCharacter(characterId: string, claimed: boolean) {
     setSeatBusy(true)
     try {
-      await onClaimCharacter(value || null)
+      await onSetCharacterClaim(characterId, claimed)
+      await signalRoomUpdate()
     } finally {
       setSeatBusy(false)
+    }
+  }
+
+  async function saveDisplayName(event: FormEvent) {
+    event.preventDefault()
+    const nextName = displayNameDraft.replace(/\s+/g, ' ').trim().slice(0, 48)
+    if (!nextName || nextName === selfParticipant?.displayName || nameBusy) return
+    setNameBusy(true)
+    try {
+      await onUpdateDisplayName(nextName)
+      await signalRoomUpdate()
+      setScreenReaderNotice(`Your table chat name is now ${nextName}.`)
+    } finally {
+      setNameBusy(false)
     }
   }
 
@@ -339,24 +380,39 @@ export function TableChatPanel({
             {session.participants.map((participant) => (
               <div key={participant.seatId} className="aigm-multiplayer-participant">
                 <span className={`aigm-presence-dot ${onlineClientIds.has(participant.realtimeClientId) ? 'aigm-presence-dot--online' : ''}`} aria-hidden="true" />
-                <span><strong>{participant.displayName}{participant.isSelf ? ' (you)' : ''}</strong>{participant.characterName ? ` · ${participant.characterName}` : ' · no character selected'}</span>
+                <span><strong>{participant.displayName}{participant.isSelf ? ' (you)' : ''}</strong>{participant.characterNames.length ? ` · ${participant.characterNames.join(', ')}` : ' · no characters selected'}</span>
                 {participant.isCoordinator ? <span className="aigm-coordinator-badge">Coordinator</span> : null}
               </div>
             ))}
           </div>
 
           {selfParticipant ? (
-            <div className="aigm-multiplayer-character-choice">
-              <label htmlFor="multiplayer-character-seat">Your character</label>
-              <select id="multiplayer-character-seat" value={selfCharacterId} disabled={seatBusy} onChange={(event) => void chooseCharacter(event.target.value)}>
-                <option value="">Choose a character…</option>
-                {session.characters.map((character) => (
-                  <option key={character.characterId} value={character.characterId} disabled={claimedByOther.has(character.characterId)}>
-                    {character.displayName}{claimedByOther.has(character.characterId) ? ' · already taken' : ''}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <>
+              <form className="aigm-multiplayer-name-choice" onSubmit={saveDisplayName}>
+                <label htmlFor="multiplayer-display-name">Your chat name</label>
+                <div>
+                  <input id="multiplayer-display-name" value={displayNameDraft} maxLength={48} onChange={(event) => setDisplayNameDraft(event.target.value)} disabled={nameBusy} autoComplete="nickname" />
+                  <button type="submit" disabled={nameBusy || !displayNameDraft.trim() || displayNameDraft.replace(/\s+/g, ' ').trim() === selfParticipant.displayName}>{nameBusy ? 'Saving…' : 'Save'}</button>
+                </div>
+              </form>
+
+              <fieldset className="aigm-multiplayer-character-choice" disabled={seatBusy}>
+                <legend>Your characters</legend>
+                <p>Choose every campaign character you control. One player may run several characters.</p>
+                <div className="aigm-multiplayer-character-checks">
+                  {session.characters.map((character) => {
+                    const mine = selfCharacterIds.has(character.characterId)
+                    const unavailable = !mine && claimedByOther.has(character.characterId)
+                    return (
+                      <label key={character.characterId} className={unavailable ? 'is-unavailable' : ''}>
+                        <input type="checkbox" checked={mine} disabled={unavailable || seatBusy} onChange={(event) => void chooseCharacter(character.characterId, event.target.checked)} />
+                        <span>{character.displayName}{unavailable ? ' · controlled by another player' : ''}</span>
+                      </label>
+                    )
+                  })}
+                </div>
+              </fieldset>
+            </>
           ) : null}
 
           {session.isCoordinator ? (

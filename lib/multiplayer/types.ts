@@ -9,6 +9,10 @@ export type MultiplayerCharacterSeat = {
 export type MultiplayerParticipant = {
   seatId: string
   displayName: string
+  /** A human participant may control any number of the campaign's available characters. */
+  characterIds: string[]
+  characterNames: string[]
+  /** Compatibility helpers for UI/code that still wants a primary character. */
   characterId: string | null
   characterName: string | null
   isCoordinator: boolean

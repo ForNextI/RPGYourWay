@@ -26,7 +26,7 @@ import {
   type SavedAdventureState,
   type StoredPartyCharacter,
 } from '@/lib/aigm/campaign-storage'
-import { saveAdventureState } from '@/lib/aigm/campaign-persistence'
+import { loadAdventureState, saveAdventureState } from '@/lib/aigm/campaign-persistence'
 import { CHARACTER_INTAKE_ANALYSIS_REVISION, CHARACTER_INTAKE_VERSION } from '@/lib/aigm/version'
 import type { CharacterIntakeApiError, CharacterIntakeApiResponse, CharacterIntakeResult, CharacterIntakeSettings } from '@/lib/aigm/types'
 
@@ -139,6 +139,11 @@ function publicRulesetLabel(ruleset: RulesetId) {
   return RULESETS.find((option) => option.id === ruleset)?.label ?? 'D&D 5.5e'
 }
 
+function rulesetIdFromStoredLabel(label: string | undefined): RulesetId {
+  const clean = (label || '').trim().toLowerCase()
+  return RULESETS.find((option) => option.label.toLowerCase() === clean || option.id.toLowerCase() === clean)?.id ?? 'dnd-5.5e-srd-5.2.1'
+}
+
 function classSummary(result: CharacterIntakeResult) {
   return result.character.classes.map((entry) => `${entry.name} ${entry.level}`).join(' / ') || 'Character'
 }
@@ -202,7 +207,7 @@ function StartModal({ title, children, onClose, wide = false }: { title: string;
   )
 }
 
-export function StartOnboarding() {
+export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }: { mode?: 'new-campaign' | 'add-character'; multiplayerCode?: string }) {
   const [ageBand, setAgeBand] = useState<AiAgeBand | null>(null)
   const [ageReady, setAgeReady] = useState(false)
   const [ageModalOpen, setAgeModalOpen] = useState(false)
@@ -211,6 +216,8 @@ export function StartOnboarding() {
   const [rulesOpen, setRulesOpen] = useState(false)
   const [activeStep, setActiveStep] = useState<1 | 2 | 3 | 4>(1)
   const [party, setParty] = useState<PartyMember[]>([])
+  const [existingAdventure, setExistingAdventure] = useState<SavedAdventureState | null>(null)
+  const [existingAdventureLoading, setExistingAdventureLoading] = useState(mode === 'add-character')
   const [pasteOpen, setPasteOpen] = useState(false)
   const [pasteText, setPasteText] = useState('')
   const [importMessage, setImportMessage] = useState('')
@@ -253,10 +260,38 @@ export function StartOnboarding() {
   }, [])
 
   useEffect(() => {
+    if (mode !== 'add-character') return
+    let cancelled = false
+    async function restoreExistingAdventure() {
+      const adventureId = window.localStorage.getItem(CURRENT_ADVENTURE_KEY) || ''
+      const loaded = adventureId ? await loadAdventureState(window.localStorage, adventureId) : { state: null }
+      if (cancelled) return
+      const state = loaded.state
+      setExistingAdventure(state)
+      setExistingAdventureLoading(false)
+      setParty([])
+      if (state) setRuleset(rulesetIdFromStoredLabel(state.settings.ruleset))
+      if (!state) setCreateError('No current campaign is available in this browser. Return to Play or Start and choose a saved campaign first.')
+      else if (state.characters.length >= 6) setCreateError('This campaign already has the maximum of six characters.')
+    }
+    void restoreExistingAdventure().catch(() => {
+      if (!cancelled) {
+        setExistingAdventureLoading(false)
+        setCreateError('RPG Your Way could not load the current campaign for character addition.')
+      }
+    })
+    return () => { cancelled = true }
+  }, [mode])
+
+  useEffect(() => {
+    if (mode === 'add-character') {
+      setParty((current) => current.filter((member) => member.imported || ruleset === 'dnd-5.5e-srd-5.2.1'))
+      return
+    }
     if (ruleset === 'dnd-5.5e-srd-5.2.1') setParty((current) => current.length ? current : defaultParty())
     else setParty((current) => current.filter((member) => member.imported))
     setLeaderChoice('auto')
-  }, [ruleset])
+  }, [ruleset, mode])
 
   const recommendation = useMemo(() => recommendLeader(party), [party])
   const leader = leaderChoice === 'none' ? null : leaderChoice === 'auto' ? recommendation : party.find((member) => member.id === leaderChoice) ?? recommendation
@@ -267,7 +302,10 @@ export function StartOnboarding() {
   const playReadyForEngine = ageBand !== 'under-13' && partyReady && questionsDone && namesReady
   const importBusy = party.some((member) => member.status === 'importing') || clarificationBusy
   const activeImportWorkflow = party.find((member) => member.status === 'importing' || member.status === 'needs-required' || member.status === 'needs-recommended') ?? null
-  const remainingPartySlots = Math.max(0, 6 - party.length)
+  const existingCharacterCount = mode === 'add-character' ? (existingAdventure?.characters.length ?? 0) : 0
+  const totalPartyCount = existingCharacterCount + party.length
+  const remainingPartySlots = Math.max(0, 6 - totalPartyCount)
+  const existingStarterIds = useMemo(() => new Set(existingAdventure?.characters.map((character) => character.starterId).filter((value): value is string => Boolean(value)) ?? []), [existingAdventure])
 
   function chooseAge(next: AiAgeBand) {
     window.localStorage.setItem(AI_AGE_BAND_STORAGE_KEY, next)
@@ -286,11 +324,11 @@ export function StartOnboarding() {
     const existingKeys = new Set(party.map((member) => member.sourceFileKey).filter((value): value is string => Boolean(value)))
     const uniqueFiles = allowed.filter((file) => !existingKeys.has(sourceFileKey(file)))
     const duplicates = allowed.length - uniqueFiles.length
-    const room = Math.max(0, 6 - party.length)
+    const room = Math.max(0, 6 - existingCharacterCount - party.length)
     const additions: PartyMember[] = uniqueFiles.slice(0, room).map((file) => ({
       id: crypto.randomUUID(), label: file.name.replace(/\.[^.]+$/, '') || 'Character file', className: file.name, imported: true, status: 'file-added', file, sourceFileName: file.name, sourceMimeType: file.type || 'application/octet-stream', sourceFileKey: sourceFileKey(file),
     }))
-    setParty((current) => [...current, ...additions].slice(0, 6))
+    setParty((current) => [...current, ...additions].slice(0, Math.max(0, 6 - existingCharacterCount)))
     if (rejected) setImportMessage(`${rejected} file${rejected === 1 ? '' : 's'} skipped. Use PDF, JSON, XML, TXT, or Markdown files no larger than 8 MB each.`)
     else if (duplicates) setImportMessage(`${duplicates} duplicate character file${duplicates === 1 ? ' was' : 's were'} already in the party and ${duplicates === 1 ? 'was' : 'were'} not added again.`)
     else if (uniqueFiles.length > room) setImportMessage(`Only ${room} more character${room === 1 ? '' : 's'} can be added. Maximum party size is 6.`)
@@ -299,11 +337,11 @@ export function StartOnboarding() {
 
   function addPastedCharacter() {
     const text = pasteText.trim()
-    if (!text || party.length >= 6) return
+    if (!text || totalPartyCount >= 6) return
     const firstLine = text.split(/\r?\n/).find(Boolean)?.slice(0, 60) || 'Pasted character'
     const file = new File([text], `${firstLine.replace(/[^a-z0-9 _-]+/gi, '').slice(0, 50) || 'Pasted character'}.txt`, { type: 'text/plain' })
     const addition: PartyMember = { id: crypto.randomUUID(), label: firstLine, className: 'Pasted character information', imported: true, status: 'file-added', file, sourceText: text, sourceFileName: file.name, sourceMimeType: 'text/plain' }
-    setParty((current) => [...current, addition].slice(0, 6))
+    setParty((current) => [...current, addition].slice(0, Math.max(0, 6 - existingCharacterCount)))
     setPasteText('')
     setPasteOpen(false)
   }
@@ -405,7 +443,7 @@ export function StartOnboarding() {
     setParty((current) => {
       const exists = current.some((member) => member.id === id)
       if (exists) return current.filter((member) => member.id !== id)
-      if (current.length >= 6) return current
+      if (existingStarterIds.has(id) || existingCharacterCount + current.length >= 6) return current
       const starter = STARTERS.find((member) => member.id === id)
       return starter ? [...current, starter] : current
     })
@@ -513,7 +551,102 @@ export function StartOnboarding() {
     }
   }
 
+  async function addCharactersToExistingCampaign() {
+    if (mode !== 'add-character' || !existingAdventure || !partyReady || party.length === 0 || creatingCampaign) return
+    if (existingAdventure.characters.length + party.length > 6) {
+      setCreateError('RPG Your Way parties can contain no more than six characters.')
+      return
+    }
+    setCreatingCampaign(true)
+    setCreateError('')
+    try {
+      const additions = await Promise.all(party.map((member) => storedCharacterFor(member, null)))
+      const nextState: SavedAdventureState = {
+        ...existingAdventure,
+        characters: [...existingAdventure.characters, ...additions],
+        updated_at: new Date().toISOString(),
+      }
+      await saveAdventureState(window.localStorage, nextState, existingAdventure)
+      window.localStorage.setItem(CURRENT_ADVENTURE_KEY, nextState.adventure_id)
+      const playUrl = multiplayerCode ? `/play?multiplayer=${encodeURIComponent(multiplayerCode)}` : '/play'
+      window.location.assign(playUrl)
+    } catch (error) {
+      setCreateError(error instanceof Error ? error.message : 'RPG Your Way could not add those characters to the campaign.')
+      setCreatingCampaign(false)
+    }
+  }
+
   if (!ageReady) return null
+
+  if (mode === 'add-character') {
+    const currentPartyNames = existingAdventure?.characters.map((character) => character.playName || (character.result ? inferPlayName(character.result) : 'Character')) ?? []
+    const playUrl = multiplayerCode ? `/play?multiplayer=${encodeURIComponent(multiplayerCode)}` : '/play'
+    return (
+      <section className="start-onboarding start-add-character-mode" aria-label="Add characters to the current campaign">
+        <div className="start-add-character-header">
+          <div>
+            <p className="kicker">Existing campaign</p>
+            <h1>Add another character</h1>
+            {existingAdventure ? <p>Add one or more characters to <strong>{existingAdventure.adventure_name}</strong>. Everything already in the campaign stays exactly where it is.</p> : null}
+          </div>
+          <a className="start-info-control" href={playUrl}>Back to Play</a>
+        </div>
+
+        {existingAdventureLoading ? <p className="auth-message" role="status">Loading the current campaign…</p> : null}
+        {createError ? <p className="auth-message auth-message-error" role="alert">{createError}</p> : null}
+
+        {ageBand === 'under-13' ? (
+          <section className="start-step start-under13"><div className="start-step-nameplate"><span>Age</span>Age settings</div><h2>AI character import is not available to users under 13.</h2><p>You can change the age selection if it was entered incorrectly.</p><button type="button" className="start-info-control" onClick={() => setAgeModalOpen(true)}>Change age settings</button></section>
+        ) : existingAdventure && existingAdventure.characters.length < 6 ? (
+          <section className="start-step start-party-step" aria-labelledby="add-party-heading">
+            <div className="start-step-nameplate"><span>+</span>Add to Your Party</div>
+            <div className="start-step-heading-row"><div><h2 id="add-party-heading">Choose the new character or characters</h2><p>Your current party remains untouched. Add ready-to-play characters, import your own records, or mix both.</p>{currentPartyNames.length ? <p className="start-party-note"><strong>Already in the campaign:</strong> {currentPartyNames.join(', ')}</p> : null}</div></div>
+
+            <div className="start-character-actions start-character-actions--primary">
+              <button type="button" className="start-primary-control" onClick={() => setModal('starters')} disabled={ruleset !== 'dnd-5.5e-srd-5.2.1' || remainingPartySlots === 0}>Choose from<br />ready-to-play characters</button>
+              <button type="button" className="start-primary-control" onClick={() => fileRef.current?.click()} disabled={remainingPartySlots === 0}>And/or browse for<br />your character files</button>
+              <button type="button" className="start-primary-control" onClick={() => setPasteOpen((open) => !open)} disabled={remainingPartySlots === 0}>And/or paste your<br />character&apos;s information</button>
+            </div>
+            <input ref={fileRef} className="sr-only" type="file" multiple tabIndex={-1} aria-hidden="true" accept=".pdf,.json,.xml,.txt,.md,.markdown,application/pdf,application/json,text/plain,text/markdown,application/xml,text/xml" onChange={(event) => { addFiles(Array.from(event.target.files ?? [])); event.target.value = '' }} />
+            <div className="start-character-actions start-character-actions--secondary"><button type="button" className="start-info-control" onClick={() => setModal('import-help')}>Character import help</button></div>
+
+            {pasteOpen ? <div className="start-paste-panel"><label><span>Paste one character&apos;s information</span><textarea rows={7} value={pasteText} onChange={(event) => setPasteText(event.target.value)} placeholder="Paste the character record here." /></label><div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={addPastedCharacter} disabled={!pasteText.trim() || totalPartyCount >= 6}>Add this character</button><button type="button" className="start-info-control" onClick={() => setPasteOpen(false)}>Cancel</button></div></div> : null}
+            {importMessage ? <p className="auth-message" role="status">{importMessage}</p> : null}
+
+            <div className="start-party-grid">
+              {party.map((member) => (
+                <article className="start-party-card" key={member.id}>
+                  {member.portraitUrl ? <Image src={member.portraitUrl} alt="" width={96} height={96} className="start-party-portrait" /> : <div className="start-party-placeholder"><FileText aria-hidden="true" /></div>}
+                  <div className="start-party-card-copy">
+                    <strong>{member.label}</strong><span>{member.className}</span>
+                    {member.imported ? <small className={`start-status start-status--${member.status}`} role="status">{member.status === 'file-added' ? 'File added' : member.status === 'importing' ? 'Importing…' : member.status === 'needs-required' ? 'Required answers needed' : member.status === 'needs-recommended' ? 'Recommended questions' : member.status === 'error' ? 'Import needs attention' : 'Ready'}</small> : <small className="start-status start-status--ready" role="status">Ready</small>}
+                    {member.error ? <small className="start-card-error" role="alert">{member.error}</small> : null}
+                  </div>
+                  <div className="start-party-card-actions">
+                    {member.status === 'file-added' || member.status === 'error' ? <button type="button" onClick={() => void importCharacter(member.id)} disabled={importBusy || Boolean(activeImportWorkflow && activeImportWorkflow.id !== member.id)}>Import into RPG Your Way</button> : null}
+                    {member.status === 'needs-required' || member.status === 'needs-recommended' ? <button type="button" onClick={() => { setActiveCharacterId(member.id); setClarificationText(''); setModal('character-questions') }}>{member.status === 'needs-required' ? 'Answer required questions' : 'Review recommended questions'}</button> : null}
+                    {member.imported && member.status === 'ready' && member.result ? <button type="button" onClick={() => { setActiveCharacterId(member.id); setModal('character-review') }}>Review</button> : null}
+                    <button type="button" onClick={() => removeMember(member.id)} disabled={importBusy}>Remove</button>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <p className="start-party-count start-party-count--main">Current party: {totalPartyCount} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p>
+            {partyReady && party.length > 0 ? <div className="start-party-confirm"><button type="button" className="start-primary-control" disabled={creatingCampaign} onClick={() => void addCharactersToExistingCampaign()}>{creatingCampaign ? 'Adding characters…' : `Add ${party.length === 1 ? 'this character' : 'these characters'} and return to Play`}</button><p>{party.length} new {party.length === 1 ? 'character is' : 'characters are'} ready.</p></div> : null}
+            {party.length ? <button type="button" className="start-reset-link" onClick={() => { if (window.confirm('Clear the characters you are adding?')) { setParty([]); setImportMessage('') } }}>Clear these additions</button> : null}
+          </section>
+        ) : null}
+
+        {ageModalOpen ? <StartModal title="Before AI gameplay" onClose={() => { if (ageBand) setAgeModalOpen(false) }}><div className="start-age-choices"><button type="button" onClick={() => chooseAge('adult')}>I am 18 or older</button><button type="button" onClick={() => chooseAge('teen')}>I am 13–17 and have permission from a parent or guardian</button><button type="button" onClick={() => chooseAge('under-13')}>I am under 13</button></div></StartModal> : null}
+        {modal === 'import-help' ? <StartModal title="Character import help" onClose={() => setModal(null)} wide><p>Add PDF, JSON, XML, TXT, or Markdown character records by browsing for the files, or paste the character information directly. Files may be up to 8 MB.</p><p>After the file is added, choose <strong>Import into RPG Your Way</strong>. RPG Your Way reads the record, converts it into the character structure used during play, and asks only clarifications worth resolving.</p><p>New characters enter the existing campaign fully rested. The current campaign, existing characters, transcript, settings, and story state are not reset.</p><p>Importing a normal character is generally free. If a character is unusually large or complex, RPG Your Way tells you before additional AI processing uses part of your available usage balance.</p><a className="start-inline-link" href="/downloads/rpgyourway-character-update-template-v2.txt" download>Download the blank plain-text character template</a><a className="start-inline-link" href="/legal/privacy">Read the full Privacy information</a></StartModal> : null}
+        {modal === 'starters' ? <StartModal title="Add ready-to-play characters" onClose={() => setModal(null)} wide><p className="start-modal-lede">Choose any available characters up to the six-character party limit.</p><div className="start-starter-grid">{STARTERS.map((starter) => { const selected = party.some((member) => member.id === starter.id); const alreadyPresent = existingStarterIds.has(starter.id); const disabled = alreadyPresent || (!selected && remainingPartySlots === 0); return <button type="button" key={starter.id} className={`start-starter-choice${selected ? ' is-selected' : ''}`} onClick={() => toggleStarter(starter.id)} aria-pressed={selected} disabled={disabled}><Image src={starter.portraitUrl!} alt="" width={100} height={100} /><strong>{starter.className}</strong><span>{alreadyPresent ? 'Already in party' : selected ? 'Adding' : 'Add'}</span></button> })}</div><p className="start-party-count">Current party: {totalPartyCount} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p></StartModal> : null}
+        {modal === 'paid-import' && activeCharacter ? <StartModal title="Additional AI processing" onClose={() => setModal(null)}><p>This character is unusually large or complex. Importing it requires additional AI processing and will use part of your available usage balance.</p><p>No usage will be deducted unless you continue.</p><div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={() => { setModal(null); void importCharacter(activeCharacter.id, true) }}>Continue and use my balance</button><button type="button" className="start-info-control" onClick={() => setModal(null)}>Cancel</button></div></StartModal> : null}
+        {modal === 'character-questions' && activeCharacter?.result ? <CharacterQuestionsModal member={activeCharacter} clarificationText={clarificationText} setClarificationText={setClarificationText} busy={clarificationBusy} onSend={() => void sendCharacterClarification()} onSkip={() => skipRecommended(activeCharacter.id)} onClose={() => setModal(null)} /> : null}
+        {modal === 'character-review' && activeCharacter?.result ? <StartModal title={`Review ${activeCharacter.result.character.name}`} onClose={() => setModal(null)} wide><div className="start-review-summary">{activeCharacter.result.sheet_summary.map((line) => <p key={line}>{line}</p>)}</div>{activeCharacter.result.detected_issues.length ? <div className="start-review-notices"><h3>Notices</h3>{activeCharacter.result.detected_issues.map((issue, index) => <div className="start-question-card" key={`${issue.category}-${index}`}><strong>{issue.category}</strong><p>{issue.issue}</p><small>{issue.why_it_matters}</small></div>)}</div> : <p>No unresolved notices were recorded.</p>}</StartModal> : null}
+      </section>
+    )
+  }
 
   return (
     <section className="start-onboarding" aria-label="Start a new campaign">
@@ -549,7 +682,7 @@ export function StartOnboarding() {
             </div>
             <input ref={fileRef} className="sr-only" type="file" multiple tabIndex={-1} aria-hidden="true" accept=".pdf,.json,.xml,.txt,.md,.markdown,application/pdf,application/json,text/plain,text/markdown,application/xml,text/xml" onChange={(event) => { addFiles(Array.from(event.target.files ?? [])); event.target.value = '' }} />
             <div className="start-character-actions start-character-actions--secondary"><button type="button" className="start-info-control" onClick={() => setModal('import-help')}>Character import help</button></div>
-            {pasteOpen ? <div className="start-paste-panel"><label><span>Paste one character&apos;s information</span><textarea rows={7} value={pasteText} onChange={(event) => setPasteText(event.target.value)} placeholder="Paste the character record here." /></label><div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={addPastedCharacter} disabled={!pasteText.trim() || party.length >= 6}>Add this character</button><button type="button" className="start-info-control" onClick={() => setPasteOpen(false)}>Cancel</button></div></div> : null}
+            {pasteOpen ? <div className="start-paste-panel"><label><span>Paste one character&apos;s information</span><textarea rows={7} value={pasteText} onChange={(event) => setPasteText(event.target.value)} placeholder="Paste the character record here." /></label><div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={addPastedCharacter} disabled={!pasteText.trim() || totalPartyCount >= 6}>Add this character</button><button type="button" className="start-info-control" onClick={() => setPasteOpen(false)}>Cancel</button></div></div> : null}
             {importMessage ? <p className="auth-message" role="status">{importMessage}</p> : null}
 
             <div className="start-party-grid">
@@ -571,7 +704,7 @@ export function StartOnboarding() {
               ))}
             </div>
 
-            <p className="start-party-count start-party-count--main">Current party: {party.length} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p>
+            <p className="start-party-count start-party-count--main">Current party: {totalPartyCount} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p>
             {partyReady ? <div className="start-party-confirm"><button type="button" className="start-primary-control" onClick={() => { setImportMessage(''); setActiveStep(3) }}>Use this party</button><p>{party.length} {party.length === 1 ? 'character is' : 'characters are'} ready.</p></div> : null}
             <button type="button" className="start-reset-link" onClick={() => { if (window.confirm('Reset this setup and start again?')) window.location.reload() }}>Or reset everything and start again</button>
           </section> : null}
@@ -604,7 +737,7 @@ export function StartOnboarding() {
       {modal === 'faq' ? <StartModal title="I need help with all of this" onClose={() => setModal(null)} wide><div className="start-faq-list">{START_FAQ.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div><div className="start-faq-more"><strong>Still need help?</strong><p>Start Page Help can answer questions about setting up your campaign.</p><button type="button" className="start-primary-control" onClick={() => setModal('ai-help')}>My question wasn&apos;t above. I still need help.</button></div></StartModal> : null}
       {modal === 'ai-help' ? <StartModal title="Start Page Help" onClose={() => setModal(null)} wide><p className="start-modal-lede">Ask about the choices on this page or about getting a campaign started. You have {Math.max(0, 25 - helpCount)} of 25 free questions remaining in this onboarding session.</p><div className="start-ai-dialogue" role="log" aria-live="polite" aria-relevant="additions text" aria-label="Start Page Help conversation">{helpConversation.map((turn) => <div key={turn.id} className={`start-ai-turn start-ai-turn--${turn.role}`}><strong>{turn.role === 'assistant' ? 'Start Page Help' : 'You'}</strong><p>{turn.text}</p>{turn.role === 'assistant' ? <button type="button" data-aigm-manual-listen="true" className="start-listen-link" onClick={() => helpVoiceRef.current?.replay(turn.text)}><Volume2 aria-hidden="true" />Listen</button> : null}</div>)}{helpBusy ? <div className="start-ai-turn start-ai-turn--assistant"><strong>Start Page Help</strong><p>Thinking…</p></div> : null}<div ref={helpEndRef} /></div><div className="start-ai-composer"><label><span>Your question</span><span className="start-field-bezel"><textarea ref={helpInputRef} rows={4} value={helpQuestion} onChange={(event) => setHelpQuestion(event.target.value)} placeholder="What do you want help with?" /></span></label><div className="start-ai-composer-actions"><AigmVoiceControls ref={helpVoiceRef} profile="onboarding" assistantName="Start Page Help" currentMessage={helpQuestion} onTranscriptUpdate={setHelpQuestion} onError={setHelpError} disabled={helpBusy || helpCount >= 25} /><button type="button" className="start-primary-control" disabled={!helpQuestion.trim() || helpBusy || helpCount >= 25} onClick={() => void askStartHelp()}>{helpBusy ? 'Checking…' : 'Ask Start Page Help'}</button></div>{helpError ? <p className="auth-message auth-message-error" role="alert">{helpError}</p> : null}<small>{Math.max(0, 25 - helpCount)} questions remaining.</small></div></StartModal> : null}
       {modal === 'import-help' ? <StartModal title="Character import help" onClose={() => setModal(null)} wide><p>Add PDF, JSON, XML, TXT, or Markdown character records by browsing for the files, or paste the character information directly. Files may be up to 8 MB.</p><p>After the file is added, choose <strong>Import into RPG Your Way</strong>. RPG Your Way will read the record, convert it into the character structure used during play, and ask only the clarifications that are worth resolving.</p><p><strong>New campaign</strong> and <strong>Don&apos;t sweat the small stuff</strong> are applied automatically. New campaign starts the character fully rested. Don&apos;t sweat the small stuff assumes ordinary inexpensive class necessities while still tracking consequential equipment and priced or consumed components.</p><p>Importing a normal character is generally free. If a character is unusually large or complex, RPG Your Way will tell you before additional AI processing uses part of your available usage balance.</p><p>Names and portraits can be changed later on the Play page through the Characters sidebar.</p><p>Character information is sent to the AI service when RPG Your Way imports or uses the character. Campaign records remain in the browser unless the campaign is exported.</p><a className="start-inline-link" href="/downloads/rpgyourway-character-update-template-v2.txt" download>Download the blank plain-text character template</a><a className="start-inline-link" href="/legal/privacy">Read the full Privacy information</a></StartModal> : null}
-      {modal === 'starters' ? <StartModal title="Choose ready-to-play characters" onClose={() => setModal(null)} wide><p className="start-modal-lede">Choose up to six. The current library uses D&amp;D 5.5e.</p><div className="start-starter-grid">{STARTERS.map((starter) => { const selected = party.some((member) => member.id === starter.id); return <button type="button" key={starter.id} className={`start-starter-choice${selected ? ' is-selected' : ''}`} onClick={() => toggleStarter(starter.id)} aria-pressed={selected}><Image src={starter.portraitUrl!} alt="" width={100} height={100} /><strong>{starter.className}</strong><span>{selected ? 'In party' : 'Add'}</span></button> })}</div><p className="start-party-count">Current party: {party.length} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p></StartModal> : null}
+      {modal === 'starters' ? <StartModal title="Choose ready-to-play characters" onClose={() => setModal(null)} wide><p className="start-modal-lede">Choose up to six. The current library uses D&amp;D 5.5e.</p><div className="start-starter-grid">{STARTERS.map((starter) => { const selected = party.some((member) => member.id === starter.id); return <button type="button" key={starter.id} className={`start-starter-choice${selected ? ' is-selected' : ''}`} onClick={() => toggleStarter(starter.id)} aria-pressed={selected}><Image src={starter.portraitUrl!} alt="" width={100} height={100} /><strong>{starter.className}</strong><span>{selected ? 'In party' : 'Add'}</span></button> })}</div><p className="start-party-count">Current party: {totalPartyCount} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p></StartModal> : null}
       {modal === 'paid-import' && activeCharacter ? <StartModal title="Additional AI processing" onClose={() => setModal(null)}><p>This character is unusually large or complex. Importing it requires additional AI processing and will use part of your available usage balance.</p><p>No usage will be deducted unless you continue.</p><div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={() => { setModal(null); void importCharacter(activeCharacter.id, true) }}>Continue and use my balance</button><button type="button" className="start-info-control" onClick={() => setModal(null)}>Cancel</button></div></StartModal> : null}
       {modal === 'character-questions' && activeCharacter?.result ? <CharacterQuestionsModal member={activeCharacter} clarificationText={clarificationText} setClarificationText={setClarificationText} busy={clarificationBusy} onSend={() => void sendCharacterClarification()} onSkip={() => skipRecommended(activeCharacter.id)} onClose={() => setModal(null)} /> : null}
       {modal === 'character-review' && activeCharacter?.result ? <StartModal title={`Review ${activeCharacter.result.character.name}`} onClose={() => setModal(null)} wide><div className="start-review-summary">{activeCharacter.result.sheet_summary.map((line) => <p key={line}>{line}</p>)}</div>{activeCharacter.result.detected_issues.length ? <div className="start-review-notices"><h3>Notices</h3>{activeCharacter.result.detected_issues.map((issue, index) => <div className="start-question-card" key={`${issue.category}-${index}`}><strong>{issue.category}</strong><p>{issue.issue}</p><small>{issue.why_it_matters}</small></div>)}</div> : <p>No unresolved notices were recorded.</p>}<p className="start-modal-lede">Names and portraits can be changed later on the Play page through the Characters sidebar.</p></StartModal> : null}

@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.11.1')
-assert.equal(pkg.rpgywVersion, '1.11.1')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.1'/)
+assert.equal(pkg.version, '1.11.2')
+assert.equal(pkg.rpgywVersion, '1.11.2')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.2'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -56,7 +56,7 @@ for (const file of [
   'ACCESSIBILITY.md',
   'app/accessibility/page.tsx',
   'scripts/validate-accessibility.mts',
-  'README-1.11.1.md',
+  'README-1.11.2.md',
   'lib/multiplayer/types.ts',
   'lib/multiplayer/errors.ts',
   'lib/multiplayer/server.ts',
@@ -65,6 +65,8 @@ for (const file of [
   'app/api/multiplayer/sessions/[inviteCode]/route.ts',
   'app/api/multiplayer/sessions/[inviteCode]/join/route.ts',
   'app/api/multiplayer/sessions/[inviteCode]/seat/route.ts',
+  'app/api/multiplayer/sessions/[inviteCode]/display-name/route.ts',
+  'app/api/multiplayer/sessions/[inviteCode]/characters/route.ts',
   'app/api/multiplayer/sessions/[inviteCode]/leave/route.ts',
   'app/api/multiplayer/sessions/[inviteCode]/close/route.ts',
   'app/api/multiplayer/ably-token/route.ts',
@@ -73,6 +75,7 @@ for (const file of [
   'components/multiplayer/TableChatPanel.tsx',
   'components/multiplayer/useMultiplayerSession.ts',
   'supabase/migrations/20260828043000_native_multiplayer_phase1.sql',
+  'supabase/migrations/20260828073000_multiplayer_names_multi_character.sql',
   'scripts/test-multiplayer-phase1.mts',
   'postcss.config.mjs',
   'data/settings/eberron.json',
@@ -129,7 +132,7 @@ assert.doesNotMatch(landingCampaignPanel193, /16 Hammer 1501 DR/)
 assert.doesNotMatch(home, /Warning: AI GM ahead/)
 assert.doesNotMatch(home, /Open Now/)
 assert.doesNotMatch(home, /Tabletop gaming is best in person/)
-assert.match(read('app/start/page.tsx'), /<RpgywStartEntry \/>/)
+assert.match(read('app/start/page.tsx'), /<RpgywStartEntry/)
 
 const pricing = read('app/pricing/page.tsx')
 assert.match(pricing, /permanentRedirect\('\/account#add-usage'\)/)
@@ -192,7 +195,7 @@ assert.match(playPage, /redirect\('\/start'\)/)
 assert.doesNotMatch(playPage, /Import Existing Adventure|RpgywPlayEntry/)
 
 const startPage = read('app/start/page.tsx')
-assert.match(startPage, /<RpgywStartEntry \/>/)
+assert.match(startPage, /<RpgywStartEntry/)
 assert.match(startPage, /Build a new campaign here, or import an existing WardensPC or RPG Your Way adventure/)
 const startEntry = read('components/aigm/rpgyw-start-entry.tsx')
 assert.match(startEntry, /Import Existing Adventure/)
@@ -710,7 +713,7 @@ assert.match(start180, /'Onward'/)
 assert.match(start180, /Importing a normal character is generally free/)
 assert.match(start180, /before additional AI processing uses part of your available usage balance/)
 
-assert.match(startEntry180, /<StartOnboarding \/>/)
+assert.match(startEntry180, /<StartOnboarding/)
 assert.match(startEntry180, /Already have an RPG Your Way or WardensPC adventure\?/)
 assert.match(startEntry180, /site-frame site-frame-play site-frame-start/)
 assert.match(accountActions180, /admin\.auth\.admin\.deleteUser/)
@@ -791,8 +794,8 @@ assert.doesNotMatch(start189, /Click on whoever you want to edit/)
 assert.doesNotMatch(start189, /or drag files here/)
 assert.doesNotMatch(start189, /onDrop=\{onBrowseDrop\}/)
 assert.doesNotMatch(start189, /DragEvent/)
-assert.match(start189, /remainingPartySlots = Math\.max\(0, 6 - party\.length\)/)
-assert.match(start189, /Current party: \{party\.length\} · \{remainingPartySlots\}/)
+assert.match(start189, /remainingPartySlots = Math\.max\(0, 6 - totalPartyCount\)/)
+assert.match(start189, /Current party: \{totalPartyCount\} · \{remainingPartySlots\}/)
 assert.match(start189, /setImportMessage\(''\)[\s\S]*setParty\(\(current\) => current\.filter/)
 assert.match(start189, /sourceFileKey/)
 assert.match(start189, /duplicate character file/)
@@ -972,9 +975,9 @@ const env1110 = read('.env.example')
 assert.match(pkg['scripts']?.['validate:release'] ?? '', /test-multiplayer-phase1\.mts/)
 assert.match(multiplayerServer1110, /createMultiplayerSession/)
 assert.match(multiplayerServer1110, /joinMultiplayerSession/)
-assert.match(multiplayerServer1110, /claimMultiplayerCharacter/)
+assert.match(multiplayerServer1110, /setMultiplayerCharacterClaim/)
 assert.match(multiplayerServer1110, /leaveMultiplayerSession/)
-assert.match(multiplayerServer1110, /MAX_MULTIPLAYER_SEATS = 6/)
+assert.match(multiplayerServer1110, /MAX_MULTIPLAYER_PLAYERS = 6/)
 assert.match(multiplayerServer1110, /multiplayer_private_test/)
 assert.match(multiplayerServer1110, /isOwnerQaEmail/)
 assert.match(multiplayerAbly1110, /rpg-mp:\$\{sessionId\}:chat/)
@@ -993,7 +996,7 @@ assert.match(multiplayerHook1110, /leaveSession/)
 assert.match(playPage1110, /multiplayerCode/)
 assert.match(playPage1110, /redirect\(`\/start\?\$\{query\.toString\(\)\}`\)/)
 assert.match(startPage1110, /Sign in to join the multiplayer table/)
-assert.match(startPage1110, /multiplayerReturnTo/)
+assert.match(startPage1110, /multiplayerPlayReturn/)
 assert.match(gameplay1110, /Start Multiplayer/)
 assert.match(gameplay1110, /TableChatPanel/)
 assert.match(gameplay1110, /aigm-gameplay-grid--multiplayer/)
@@ -1021,3 +1024,46 @@ assert.match(multiplayerTokenRoute1111, /requestAblyTokenDetails/)
 assert.match(multiplayerChat1111, /fetchRealtimeCredential/)
 assert.match(multiplayerChat1111, /Ably \$\{code\}/)
 console.log('RPG Your Way 1.11.1 realtime diagnostics and streaming-WAV readback checks passed.')
+
+
+const start1112 = read('components/start/StartOnboarding.tsx')
+const startPage1112 = read('app/start/page.tsx')
+const startEntry1112 = read('components/aigm/rpgyw-start-entry.tsx')
+const gameplay1112 = read('components/aigm/aigm-gameplay-shell.tsx')
+const multiplayerServer1112 = read('lib/multiplayer/server.ts')
+const multiplayerTypes1112 = read('lib/multiplayer/types.ts')
+const multiplayerChat1112 = read('components/multiplayer/TableChatPanel.tsx')
+const multiplayerHook1112 = read('components/multiplayer/useMultiplayerSession.ts')
+const multiplayerSeatRoute1112 = read('app/api/multiplayer/sessions/[inviteCode]/seat/route.ts')
+const multiplayerNameRoute1112 = read('app/api/multiplayer/sessions/[inviteCode]/display-name/route.ts')
+const multiplayerCharactersRoute1112 = read('app/api/multiplayer/sessions/[inviteCode]/characters/route.ts')
+const multiplayerMigration1112 = read('supabase/migrations/20260828073000_multiplayer_names_multi_character.sql')
+const css1112 = read('app/globals.css')
+assert.match(startPage1112, /addCharacterMode/)
+assert.match(startEntry1112, /mode=\{addCharacterMode \? 'add-character' : 'new-campaign'\}/)
+assert.match(start1112, /addCharactersToExistingCampaign/)
+assert.match(start1112, /Everything already in the campaign stays exactly where it is/)
+assert.match(start1112, /characters: \[\.\.\.existingAdventure\.characters, \.\.\.additions\]/)
+assert.match(gameplay1112, /addCharacter: '1'/)
+assert.match(gameplay1112, /multiplayer\.syncCharacters/)
+assert.doesNotMatch(gameplay1112, /Adding characters will return with the rebuilt Start experience/)
+assert.match(multiplayerTypes1112, /characterIds: string\[\]/)
+assert.match(multiplayerTypes1112, /characterNames: string\[\]/)
+assert.match(multiplayerServer1112, /updateMultiplayerDisplayName/)
+assert.match(multiplayerServer1112, /setMultiplayerCharacterClaim/)
+assert.match(multiplayerServer1112, /syncMultiplayerCharacters/)
+assert.match(multiplayerServer1112, /multiplayer_character_claims/)
+assert.match(multiplayerSeatRoute1112, /claimed/)
+assert.match(multiplayerNameRoute1112, /updateMultiplayerDisplayName/)
+assert.match(multiplayerCharactersRoute1112, /syncMultiplayerCharacters/)
+assert.match(multiplayerHook1112, /setCharacterClaim/)
+assert.match(multiplayerHook1112, /updateDisplayName/)
+assert.match(multiplayerHook1112, /syncCharacters/)
+assert.match(multiplayerChat1112, /Your chat name/)
+assert.match(multiplayerChat1112, /Your characters/)
+assert.match(multiplayerChat1112, /characterNames\.join/)
+assert.match(multiplayerMigration1112, /create table if not exists public\.multiplayer_character_claims/)
+assert.match(multiplayerMigration1112, /primary key \(session_id, character_id\)/)
+assert.match(css1112, /RPG Your Way 1\.11\.2 multiplayer QA \+ site-wide character addition/)
+assert.match(css1112, /minmax\(400px, 1\.2fr\)/)
+console.log('RPG Your Way 1.11.2 multiplayer QA and site-wide character-addition checks passed.')

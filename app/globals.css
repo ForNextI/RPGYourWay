@@ -7221,7 +7221,7 @@ html {
 }
 .aigm-multiplayer-guest-shell {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 430px);
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 480px);
   gap: 1rem;
   width: min(1180px, 100%);
   min-height: min(760px, calc(100dvh - 90px));
@@ -7281,4 +7281,114 @@ html {
   .aigm-table-chat-heading,
   .multiplayer-panel-switcher-button--active,
   .aigm-table-chat-composer button { background: CanvasText; color: Canvas; }
+}
+
+/* RPG Your Way 1.11.2 multiplayer QA + site-wide character addition. */
+.start-add-character-mode {
+  display: grid;
+  gap: 1rem;
+}
+.start-add-character-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 18px;
+  background: var(--background);
+  padding: clamp(1rem, 2.5vw, 1.45rem);
+  box-shadow: 0 3px 0 var(--rpgyw-brass-shadow), 0 8px 14px rgb(29 38 29 / .1);
+}
+.start-add-character-header h1 {
+  margin: .1rem 0 .35rem;
+  color: var(--forest-deep);
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(1.65rem, 4vw, 2.45rem);
+}
+.start-add-character-header p:last-child { margin-bottom: 0; color: var(--muted); }
+.start-add-character-header > .start-info-control { flex: 0 0 auto; text-decoration: none; }
+
+.aigm-multiplayer-name-choice label,
+.aigm-multiplayer-character-choice legend {
+  display: block;
+  margin-bottom: .25rem;
+  color: var(--forest-deep);
+  font-size: .72rem;
+  font-weight: 850;
+}
+.aigm-multiplayer-name-choice > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .35rem;
+}
+.aigm-multiplayer-name-choice input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--forest);
+  border-radius: 9px;
+  background: var(--background);
+  color: var(--forest-deep);
+  padding: .48rem .55rem;
+  font-size: .78rem;
+}
+.aigm-multiplayer-name-choice button {
+  min-height: 40px;
+  border: 1px solid var(--forest);
+  border-radius: 9px;
+  background: var(--forest-deep);
+  color: var(--cream-bright);
+  padding: .42rem .65rem;
+  font-size: .74rem;
+  font-weight: 800;
+}
+.aigm-multiplayer-name-choice button:disabled { opacity: .45; }
+.aigm-multiplayer-character-choice {
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+.aigm-multiplayer-character-choice > p {
+  margin: 0 0 .38rem;
+  color: var(--muted);
+  font-size: .7rem;
+  line-height: 1.35;
+}
+.aigm-multiplayer-character-checks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .28rem;
+}
+.aigm-multiplayer-character-checks label {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: .38rem;
+  border: 1px solid color-mix(in srgb, var(--forest) 45%, var(--cream-deep));
+  border-radius: 8px;
+  background: rgb(255 255 255 / .32);
+  margin-bottom: 0;
+  padding: .38rem .42rem;
+  color: var(--forest-ink);
+  font-size: .7rem;
+  line-height: 1.25;
+}
+.aigm-multiplayer-character-checks label.is-unavailable { opacity: .58; }
+.aigm-multiplayer-character-checks input { margin-top: .1rem; flex: 0 0 auto; accent-color: var(--forest-deep); }
+.aigm-multiplayer-character-checks span { min-width: 0; overflow-wrap: anywhere; }
+
+@media (min-width: 861px) {
+  .play-page-frame .aigm-gameplay-grid--multiplayer {
+    grid-template-columns: minmax(0, 2.65fr) minmax(400px, 1.2fr) !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .start-add-character-header { flex-direction: column; }
+  .start-add-character-header > .start-info-control { width: 100%; }
+  .aigm-multiplayer-character-checks { grid-template-columns: 1fr; }
+}
+
+@media (forced-colors: active) {
+  .aigm-multiplayer-name-choice button { background: CanvasText; color: Canvas; }
 }

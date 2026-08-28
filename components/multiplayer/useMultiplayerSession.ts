@@ -110,7 +110,7 @@ export function useMultiplayerSession() {
     }
   }, [starting])
 
-  const claimCharacter = useCallback(async (characterId: string | null) => {
+  const setCharacterClaim = useCallback(async (characterId: string, claimed: boolean) => {
     const code = session?.inviteCode
     if (!code) return
     setError('')
@@ -118,15 +118,52 @@ export function useMultiplayerSession() {
       const current = await sessionResponse(await fetch(`/api/multiplayer/sessions/${encodeURIComponent(code)}/seat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ characterId }),
+        body: JSON.stringify({ characterId, claimed }),
       }))
       setSession(current)
     } catch (claimError) {
-      const message = claimError instanceof Error ? claimError.message : 'Could not change your multiplayer character.'
+      const message = claimError instanceof Error ? claimError.message : 'Could not change your multiplayer characters.'
       setError(message)
       throw claimError
     }
   }, [session?.inviteCode])
+
+  const updateDisplayName = useCallback(async (displayName: string) => {
+    const code = session?.inviteCode
+    if (!code) return
+    setError('')
+    try {
+      const current = await sessionResponse(await fetch(`/api/multiplayer/sessions/${encodeURIComponent(code)}/display-name`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ displayName }),
+      }))
+      setSession(current)
+      return current
+    } catch (nameError) {
+      const message = nameError instanceof Error ? nameError.message : 'Could not change your chat name.'
+      setError(message)
+      throw nameError
+    }
+  }, [session?.inviteCode])
+
+  const syncCharacters = useCallback(async (characters: Array<{ characterId: string; displayName: string }>) => {
+    const code = session?.inviteCode
+    if (!code || !session?.isCoordinator) return null
+    setError('')
+    try {
+      const current = await sessionResponse(await fetch(`/api/multiplayer/sessions/${encodeURIComponent(code)}/characters`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ characters }),
+      }))
+      setSession(current)
+      return current
+    } catch (syncError) {
+      setError(syncError instanceof Error ? syncError.message : 'Could not update the multiplayer character roster.')
+      return null
+    }
+  }, [session?.inviteCode, session?.isCoordinator])
 
   const leaveSession = useCallback(async () => {
     const code = session?.inviteCode
@@ -166,7 +203,9 @@ export function useMultiplayerSession() {
     setError,
     startSession,
     refreshSession,
-    claimCharacter,
+    setCharacterClaim,
+    updateDisplayName,
+    syncCharacters,
     leaveSession,
     closeSession,
   }

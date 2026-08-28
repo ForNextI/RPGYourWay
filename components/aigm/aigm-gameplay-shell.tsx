@@ -1420,6 +1420,19 @@ export function AigmGameplayShell() {
   const multiplayerActive = Boolean(multiplayerSession?.isMember)
   const chatVisible = Boolean(multiplayerSession) && (isDesktopPlayLayout ? desktopMultiplayerPanel === 'chat' : mobilePanel === 'chat')
 
+  const multiplayerRosterSignature = useMemo(
+    () => readyCharacters.map((character) => `${character.id}:${playNameFor(character)}`).join('|'),
+    [readyCharacters],
+  )
+
+  useEffect(() => {
+    if (!multiplayerSession?.isCoordinator || !multiplayerRosterSignature) return
+    void multiplayer.syncCharacters(readyCharacters.map((character) => ({
+      characterId: character.id,
+      displayName: playNameFor(character),
+    })))
+  }, [multiplayerSession?.isCoordinator, multiplayerRosterSignature, multiplayer.syncCharacters])
+
   function changeMultiplayerPanel(panel: MultiplayerSecondaryPanel) {
     if (isDesktopPlayLayout) setDesktopMultiplayerPanel(panel)
     else setMobilePanel(panel)
@@ -1498,7 +1511,10 @@ export function AigmGameplayShell() {
   }
 
   function addAnotherCharacter() {
-    setError('Adding characters will return with the rebuilt Start experience. This release is focused on continuing existing adventures.')
+    if (!partyState || readyCharacters.length >= 6) return
+    const params = new URLSearchParams({ addCharacter: '1' })
+    if (multiplayerSession?.inviteCode) params.set('multiplayer', multiplayerSession.inviteCode)
+    window.location.assign(`/start?${params.toString()}`)
   }
 
   function updateVoiceGuidedPlay(nextSettings: VoiceGuidedPlaySettings) {
@@ -2219,7 +2235,8 @@ export function AigmGameplayShell() {
             onUnreadCountChange={setMultiplayerUnreadCount}
             onPanelChange={() => undefined}
             onRefreshSession={multiplayer.refreshSession}
-            onClaimCharacter={multiplayer.claimCharacter}
+            onSetCharacterClaim={multiplayer.setCharacterClaim}
+            onUpdateDisplayName={multiplayer.updateDisplayName}
             onLeaveSession={multiplayer.leaveSession}
             onCloseSession={multiplayer.closeSession}
             onBackToPlay={() => undefined}
@@ -2454,7 +2471,8 @@ export function AigmGameplayShell() {
             onUnreadCountChange={setMultiplayerUnreadCount}
             onPanelChange={changeMultiplayerPanel}
             onRefreshSession={multiplayer.refreshSession}
-            onClaimCharacter={multiplayer.claimCharacter}
+            onSetCharacterClaim={multiplayer.setCharacterClaim}
+            onUpdateDisplayName={multiplayer.updateDisplayName}
             onLeaveSession={multiplayer.leaveSession}
             onCloseSession={multiplayer.closeSession}
             onBackToPlay={() => setMobilePanel('gameplay')}
@@ -2487,7 +2505,7 @@ export function AigmGameplayShell() {
                 <span><strong>Current party:</strong> {readyCharacters.length}</span>
                 <span><strong>Max party size:</strong> 6</span>
               </div>
-              <button type="button" onClick={addAnotherCharacter} disabled={readyCharacters.length >= 6 || sending} className="aigm-add-character inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40" title={readyCharacters.length >= 6 ? 'This party already has the maximum of six characters.' : 'Character additions return with the rebuilt Start experience.'}><Plus className="size-4" aria-hidden="true" />Add another character</button>
+              <button type="button" onClick={addAnotherCharacter} disabled={readyCharacters.length >= 6 || sending} className="aigm-add-character inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40" title={readyCharacters.length >= 6 ? 'This party already has the maximum of six characters.' : 'Add one or more characters to this campaign.'}><Plus className="size-4" aria-hidden="true" />Add another character</button>
             </div>
             <div className="aigm-character-memory-note rounded-2xl border border-primary/25 bg-primary/5 text-xs leading-relaxed text-muted-foreground"><HeartPulse className="size-4 text-primary" aria-hidden="true" /><p>Your AIGM is built for long-running campaigns and can remember earlier gameplay, but not every fact stays in immediate attention all the time. If it overlooks something it already knows, remind it or ask it to check the character or campaign record and keep playing.</p></div>
           </div>

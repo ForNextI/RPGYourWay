@@ -1,11 +1,9 @@
 # RPG Your Way
 
-**Build 1.11.1 · Realtime diagnostics + streaming-WAV readback fix**
+**Build 1.11.2 · Multiplayer QA + site-wide character addition**
 
-Build 1.11.1 hardens the new multiplayer Phase 1 connection path and fixes gameplay readback measurement for OpenAI streaming WAV responses.
+Build 1.11.2 lets multiplayer participants choose their own table-chat names and control multiple campaign characters, widens the desktop Table Chat rail, and implements **Add another character** for existing campaigns across RPG Your Way. Active multiplayer rooms automatically learn about characters added by the coordinator when Play resumes.
 
-Native multiplayer remains in private Phase 1 testing and still does **not** synchronize AIGM gameplay or split AIGM billing among players.
+Current release: **1.11.2**.
 
-Current release: **1.11.1**.
-
-See `README-1.11.1.md` for release details, `README-1.11.0.md` for the Phase 1 multiplayer foundation, and `ACCESSIBILITY.md` for the accessibility engineering standard.
+See `README-1.11.2.md` for release details, `ACCESSIBILITY.md` for the accessibility engineering standard, and earlier versioned README files for prior release notes.

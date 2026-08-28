@@ -6,7 +6,8 @@ import type { MultiplayerCharacterSeat, MultiplayerParticipant, MultiplayerSessi
 import { MultiplayerError } from '@/lib/multiplayer/errors'
 import { isOwnerQaEmail } from '@/lib/usage/owner-qa'
 
-const MAX_MULTIPLAYER_SEATS = 6
+const MAX_MULTIPLAYER_PLAYERS = 6
+const MAX_CAMPAIGN_CHARACTERS = 6
 const SESSION_LIFETIME_MS = 12 * 60 * 60 * 1000
 
 export async function requireMultiplayerUser() {
@@ -27,6 +28,12 @@ export function multiplayerDisplayName(user: User) {
   const fullName = metadata && typeof metadata.full_name === 'string' ? metadata.full_name : ''
   const emailName = user.email?.split('@')[0] ?? ''
   return cleanLabel(metadataName || fullName || emailName, 'Player', 48)
+}
+
+export function normalizeMultiplayerDisplayName(value: unknown) {
+  const displayName = cleanLabel(value, '', 48)
+  if (!displayName) throw new MultiplayerError('Choose a chat name before saving it.', 400, 'display_name_required')
+  return displayName
 }
 
 export function createInviteCode() {
@@ -64,7 +71,6 @@ type SeatRow = {
   session_id: string
   user_id: string
   display_name: string
-  character_id: string | null
   payer_user_id: string
   is_active: boolean
 }
@@ -74,6 +80,33 @@ type CharacterRow = {
   character_id: string
   display_name: string
   ordinal: number
+}
+
+type CharacterClaimRow = {
+  session_id: string
+  seat_id: string
+  character_id: string
+}
+
+function cleanCharacterRows(input: Array<{ characterId: string; displayName: string }>) {
+  const seen = new Set<string>()
+  return input
+    .filter((entry) => entry && typeof entry.characterId === 'string' && entry.characterId.trim())
+    .map((entry) => ({
+      characterId: entry.characterId.trim().slice(0, 160),
+      displayName: cleanLabel(entry.displayName, 'Character', 96),
+    }))
+    .filter((entry) => {
+      if (seen.has(entry.characterId)) return false
+      seen.add(entry.characterId)
+      return true
+    })
+    .slice(0, MAX_CAMPAIGN_CHARACTERS)
+    .map((entry, index) => ({
+      character_id: entry.characterId,
+      display_name: entry.displayName || `Character ${index + 1}`,
+      ordinal: index,
+    }))
 }
 
 export async function loadSessionByInvite(inviteCode: string, userId: string): Promise<MultiplayerSessionView> {
@@ -94,10 +127,14 @@ export async function loadSessionByInvite(inviteCode: string, userId: string): P
   if (session.status === 'closed') throw new MultiplayerError('That multiplayer session has closed.', 410, 'session_closed')
   if (session.expires_at && Date.parse(session.expires_at) <= Date.now()) throw new MultiplayerError('That multiplayer invite has expired.', 410, 'session_expired')
 
-  const [{ data: seatData, error: seatError }, { data: characterData, error: characterError }] = await Promise.all([
+  const [
+    { data: seatData, error: seatError },
+    { data: characterData, error: characterError },
+    { data: claimData, error: claimError },
+  ] = await Promise.all([
     admin
       .from('multiplayer_seats')
-      .select('id, session_id, user_id, display_name, character_id, payer_user_id, is_active')
+      .select('id, session_id, user_id, display_name, payer_user_id, is_active')
       .eq('session_id', session.id)
       .eq('is_active', true)
       .order('joined_at', { ascending: true }),
@@ -106,24 +143,49 @@ export async function loadSessionByInvite(inviteCode: string, userId: string): P
       .select('session_id, character_id, display_name, ordinal')
       .eq('session_id', session.id)
       .order('ordinal', { ascending: true }),
+    admin
+      .from('multiplayer_character_claims')
+      .select('session_id, seat_id, character_id')
+      .eq('session_id', session.id),
   ])
 
-  if (seatError || characterError) throw new MultiplayerError(seatError?.message || characterError?.message || 'Could not load the multiplayer lobby.', 503, 'multiplayer_database_unavailable')
+  if (seatError || characterError || claimError) {
+    throw new MultiplayerError(seatError?.message || characterError?.message || claimError?.message || 'Could not load the multiplayer lobby.', 503, 'multiplayer_database_unavailable')
+  }
 
   const seats = (seatData || []) as SeatRow[]
   const characters = (characterData || []) as CharacterRow[]
+  const claims = (claimData || []) as CharacterClaimRow[]
   const characterNames = new Map(characters.map((entry) => [entry.character_id, entry.display_name]))
+  const ordinalByCharacter = new Map(characters.map((entry) => [entry.character_id, entry.ordinal]))
+  const claimsBySeat = new Map<string, string[]>()
+  for (const claim of claims) {
+    const current = claimsBySeat.get(claim.seat_id) ?? []
+    current.push(claim.character_id)
+    claimsBySeat.set(claim.seat_id, current)
+  }
+  for (const [seatId, ids] of claimsBySeat) {
+    ids.sort((left, right) => (ordinalByCharacter.get(left) ?? 999) - (ordinalByCharacter.get(right) ?? 999))
+    claimsBySeat.set(seatId, ids)
+  }
+
   const selfSeat = seats.find((seat) => seat.user_id === userId) ?? null
   const coordinatorSeat = seats.find((seat) => seat.user_id === session.coordinator_user_id) ?? null
-  const participants: MultiplayerParticipant[] = seats.map((seat) => ({
-    seatId: seat.id,
-    displayName: seat.display_name,
-    characterId: seat.character_id,
-    characterName: seat.character_id ? characterNames.get(seat.character_id) ?? null : null,
-    isCoordinator: seat.user_id === session.coordinator_user_id,
-    isSelf: seat.user_id === userId,
-    realtimeClientId: realtimeClientId(seat.id, session.id),
-  }))
+  const participants: MultiplayerParticipant[] = seats.map((seat) => {
+    const characterIds = claimsBySeat.get(seat.id) ?? []
+    const controlledNames = characterIds.map((id) => characterNames.get(id)).filter((value): value is string => Boolean(value))
+    return {
+      seatId: seat.id,
+      displayName: seat.display_name,
+      characterIds,
+      characterNames: controlledNames,
+      characterId: characterIds[0] ?? null,
+      characterName: controlledNames[0] ?? null,
+      isCoordinator: seat.user_id === session.coordinator_user_id,
+      isSelf: seat.user_id === userId,
+      realtimeClientId: realtimeClientId(seat.id, session.id),
+    }
+  })
 
   return {
     id: session.id,
@@ -155,14 +217,7 @@ export async function createMultiplayerSession(user: User, input: {
   const localCampaignId = cleanLabel(input.localCampaignId, '', 160)
   if (!localCampaignId) throw new MultiplayerError('Open a saved campaign before starting multiplayer.', 400, 'campaign_required')
   const campaignName = cleanLabel(input.campaignName, 'Multiplayer campaign', 120)
-  const characters = input.characters
-    .filter((entry) => entry && typeof entry.characterId === 'string' && entry.characterId.trim())
-    .slice(0, MAX_MULTIPLAYER_SEATS)
-    .map((entry, index) => ({
-      character_id: entry.characterId.trim().slice(0, 160),
-      display_name: cleanLabel(entry.displayName, `Character ${index + 1}`, 96),
-      ordinal: index,
-    }))
+  const characters = cleanCharacterRows(input.characters)
 
   if (characters.length === 0) throw new MultiplayerError('This campaign needs at least one ready character before multiplayer can start.', 400, 'characters_required')
 
@@ -209,7 +264,7 @@ export async function createMultiplayerSession(user: User, input: {
 export async function joinMultiplayerSession(user: User, inviteCode: string) {
   const lobby = await loadSessionByInvite(inviteCode, user.id)
   if (lobby.isMember) return lobby
-  if (lobby.participants.length >= MAX_MULTIPLAYER_SEATS) throw new MultiplayerError('This multiplayer table already has six players.', 409, 'session_full')
+  if (lobby.participants.length >= MAX_MULTIPLAYER_PLAYERS) throw new MultiplayerError('This multiplayer table already has six players.', 409, 'session_full')
 
   const admin = createAdminClient()
   const { error } = await admin.from('multiplayer_seats').insert({
@@ -227,29 +282,76 @@ export async function joinMultiplayerSession(user: User, inviteCode: string) {
   return loadSessionByInvite(inviteCode, user.id)
 }
 
-export async function claimMultiplayerCharacter(userId: string, inviteCode: string, characterId: string | null) {
+export async function updateMultiplayerDisplayName(userId: string, inviteCode: string, displayName: unknown) {
   const lobby = await loadSessionByInvite(inviteCode, userId)
-  if (!lobby.selfSeatId) throw new MultiplayerError('Join this multiplayer table before choosing a character.', 403, 'membership_required')
-
-  const cleanCharacterId = characterId?.trim() || null
-  if (cleanCharacterId && !lobby.characters.some((character) => character.characterId === cleanCharacterId)) {
-    throw new MultiplayerError('That character is not available in this campaign.', 400, 'character_not_found')
-  }
-  if (cleanCharacterId && lobby.participants.some((participant) => participant.characterId === cleanCharacterId && !participant.isSelf)) {
-    throw new MultiplayerError('Another player already controls that character.', 409, 'character_claimed')
-  }
-
+  if (!lobby.selfSeatId) throw new MultiplayerError('Join this multiplayer table before changing your chat name.', 403, 'membership_required')
+  const cleanName = normalizeMultiplayerDisplayName(displayName)
   const admin = createAdminClient()
   const { error } = await admin
     .from('multiplayer_seats')
-    .update({ character_id: cleanCharacterId, updated_at: new Date().toISOString() })
+    .update({ display_name: cleanName, updated_at: new Date().toISOString() })
     .eq('id', lobby.selfSeatId)
     .eq('user_id', userId)
     .eq('is_active', true)
-  if (error) {
-    if (/duplicate|unique/i.test(error.message)) throw new MultiplayerError('Another player just claimed that character.', 409, 'character_claimed')
-    throw new MultiplayerError(error.message, 503, 'multiplayer_database_unavailable')
+  if (error) throw new MultiplayerError(error.message, 503, 'multiplayer_database_unavailable')
+  return loadSessionByInvite(inviteCode, userId)
+}
+
+export async function setMultiplayerCharacterClaim(userId: string, inviteCode: string, characterId: string, claimed: boolean) {
+  const lobby = await loadSessionByInvite(inviteCode, userId)
+  if (!lobby.selfSeatId) throw new MultiplayerError('Join this multiplayer table before choosing characters.', 403, 'membership_required')
+
+  const cleanCharacterId = characterId.trim()
+  if (!cleanCharacterId || !lobby.characters.some((character) => character.characterId === cleanCharacterId)) {
+    throw new MultiplayerError('That character is not available in this campaign.', 400, 'character_not_found')
   }
+
+  const owner = lobby.participants.find((participant) => !participant.isSelf && participant.characterIds.includes(cleanCharacterId))
+  if (claimed && owner) throw new MultiplayerError(`${owner.displayName} already controls that character.`, 409, 'character_claimed')
+
+  const admin = createAdminClient()
+  if (claimed) {
+    const { error } = await admin.from('multiplayer_character_claims').insert({
+      session_id: lobby.id,
+      seat_id: lobby.selfSeatId,
+      character_id: cleanCharacterId,
+    })
+    if (error && !/duplicate|unique/i.test(error.message)) throw new MultiplayerError(error.message, 503, 'multiplayer_database_unavailable')
+    if (error && /duplicate|unique/i.test(error.message)) {
+      const refreshed = await loadSessionByInvite(inviteCode, userId)
+      const alreadySelf = refreshed.participants.find((participant) => participant.isSelf)?.characterIds.includes(cleanCharacterId)
+      if (!alreadySelf) throw new MultiplayerError('Another player just claimed that character.', 409, 'character_claimed')
+      return refreshed
+    }
+  } else {
+    const { error } = await admin
+      .from('multiplayer_character_claims')
+      .delete()
+      .eq('session_id', lobby.id)
+      .eq('seat_id', lobby.selfSeatId)
+      .eq('character_id', cleanCharacterId)
+    if (error) throw new MultiplayerError(error.message, 503, 'multiplayer_database_unavailable')
+  }
+
+  return loadSessionByInvite(inviteCode, userId)
+}
+
+export async function syncMultiplayerCharacters(userId: string, inviteCode: string, input: Array<{ characterId: string; displayName: string }>) {
+  const lobby = await loadSessionByInvite(inviteCode, userId)
+  if (!lobby.isCoordinator) throw new MultiplayerError('Only the coordinator can update the multiplayer campaign roster.', 403, 'coordinator_required')
+  const characters = cleanCharacterRows(input)
+  if (!characters.length) throw new MultiplayerError('The multiplayer campaign needs at least one character.', 400, 'characters_required')
+
+  const admin = createAdminClient()
+  const { error } = await admin.from('multiplayer_session_characters').upsert(
+    characters.map((character) => ({ ...character, session_id: lobby.id })),
+    { onConflict: 'session_id,character_id' },
+  )
+  if (error) throw new MultiplayerError(error.message, 503, 'multiplayer_database_unavailable')
+
+  // Character addition is the supported mutation in this release. Existing room
+  // entries are intentionally not deleted here because a connected player may
+  // still control one while the coordinator's local campaign is being edited.
   return loadSessionByInvite(inviteCode, userId)
 }
 
@@ -259,6 +361,8 @@ export async function leaveMultiplayerSession(userId: string, inviteCode: string
   if (lobby.isCoordinator) throw new MultiplayerError('The coordinator must close the multiplayer session rather than leave it.', 409, 'coordinator_must_close')
 
   const admin = createAdminClient()
+  const { error: claimError } = await admin.from('multiplayer_character_claims').delete().eq('seat_id', lobby.selfSeatId)
+  if (claimError) throw new MultiplayerError(claimError.message, 503, 'multiplayer_database_unavailable')
   const { error } = await admin
     .from('multiplayer_seats')
     .update({ is_active: false, character_id: null, updated_at: new Date().toISOString() })

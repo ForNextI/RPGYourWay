@@ -15,7 +15,7 @@ import {
 } from '@/lib/aigm/campaign-storage'
 import { readAdventureIndexWithDatabase, saveAdventureState } from '@/lib/aigm/campaign-persistence'
 
-export function RpgywStartEntry() {
+export function RpgywStartEntry({ addCharacterMode = false, multiplayerCode = '' }: { addCharacterMode?: boolean; multiplayerCode?: string }) {
   const [loading, setLoading] = useState(true)
   const [adventures, setAdventures] = useState<AdventureSummary[]>([])
   const [notice, setNotice] = useState('')
@@ -93,10 +93,10 @@ export function RpgywStartEntry() {
       <SiteHeader />
       <main id="main-content" tabIndex={-1} className="inner-main play-entry-main start-page-main">
         <div className="shell start-page-shell">
-          <h1 className="sr-only">Start a new campaign or return to a saved adventure</h1>
-          <StartOnboarding />
+          <h1 className="sr-only">{addCharacterMode ? 'Add characters to the current campaign' : 'Start a new campaign or return to a saved adventure'}</h1>
+          <StartOnboarding mode={addCharacterMode ? 'add-character' : 'new-campaign'} multiplayerCode={multiplayerCode} />
 
-          <details className="start-existing-details">
+          {!addCharacterMode ? <details className="start-existing-details">
             <summary>Already have an RPG Your Way or WardensPC adventure?</summary>
             <div className="start-existing-body">
               <p className="start-existing-lede">Continue a campaign already stored in this browser, or import a full exported game JSON. This returning-player path stays separate from new-campaign onboarding.</p>
@@ -154,7 +154,7 @@ export function RpgywStartEntry() {
               {notice ? <p className="auth-message auth-message-success" role="status">{notice}</p> : null}
               {error ? <p className="auth-message auth-message-error" role="alert">{error}</p> : null}
             </div>
-          </details>
+          </details> : null}
         </div>
       </main>
       <SiteFooter />

@@ -25,6 +25,7 @@ type AblyHistoryPage = {
 
 type AblyPresence = {
   enter(data?: unknown): Promise<void>
+  update(data?: unknown): Promise<void>
   leave(data?: unknown): Promise<void>
   get(): Promise<AblyPresenceLike[]>
   subscribe(listener: (message: AblyPresenceLike) => void): Promise<void> | void
