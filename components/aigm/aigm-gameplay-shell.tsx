@@ -30,6 +30,7 @@ import {
   Swords,
   UnlockKeyhole,
   UserRound,
+  UsersRound,
   Volume2,
   X,
 } from 'lucide-react'
@@ -81,6 +82,9 @@ import {
 import { campaignMigrationSample, DIRECT_RECENT_MESSAGE_COUNT, isContinuityAuditRequest, searchCampaignHistory, shouldCheckCampaignNotes } from '@/lib/aigm/campaign-memory'
 import { loadAdventureState, saveAdventureState } from '@/lib/aigm/campaign-persistence'
 import { establishedNpcNames, mergeCampaignMemory, mergeCampaignRetcons, stampCampaignMemoryUpdates } from '@/lib/aigm/campaign-entities'
+import { TableChatPanel } from '@/components/multiplayer/TableChatPanel'
+import { MultiplayerPanelSwitcher, type MultiplayerSecondaryPanel } from '@/components/multiplayer/MultiplayerPanelSwitcher'
+import { useMultiplayerSession } from '@/components/multiplayer/useMultiplayerSession'
 
 const DICE = [4, 6, 8, 10, 12, 20, 100] as const
 const MAX_DICE_QUANTITY = 20
@@ -1278,7 +1282,11 @@ export function AigmGameplayShell() {
   const [voiceAvailable, setVoiceAvailable] = useState(false)
   const [billingNotice, setBillingNotice] = useState<string | null>(null)
   const [billingActionUrl, setBillingActionUrl] = useState<string | null>(null)
-  const [mobilePanel, setMobilePanel] = useState<'gameplay' | 'tools' | 'characters'>('gameplay')
+  const [mobilePanel, setMobilePanel] = useState<'gameplay' | 'chat' | 'tools' | 'characters'>('gameplay')
+  const [desktopMultiplayerPanel, setDesktopMultiplayerPanel] = useState<MultiplayerSecondaryPanel>('chat')
+  const [multiplayerUnreadCount, setMultiplayerUnreadCount] = useState(0)
+  const [isDesktopPlayLayout, setIsDesktopPlayLayout] = useState(false)
+  const multiplayer = useMultiplayerSession()
   const [dragTargetCharacterId, setDragTargetCharacterId] = useState<string | null>(null)
   const [initiativeOpen, setInitiativeOpen] = useState(false)
   const [sessionToolsOpen, setSessionToolsOpen] = useState(false)
@@ -1296,6 +1304,7 @@ export function AigmGameplayShell() {
   const toolsPanelRef = useRef<HTMLElement | null>(null)
   const gameplayPanelRef = useRef<HTMLElement | null>(null)
   const charactersPanelRef = useRef<HTMLElement | null>(null)
+  const chatPanelRef = useRef<HTMLElement | null>(null)
   const mobilePanelFocusReadyRef = useRef(false)
   const voiceControlsRef = useRef<AigmVoiceControlsHandle | null>(null)
   const userScrolledAwayRef = useRef(false)
@@ -1308,11 +1317,19 @@ export function AigmGameplayShell() {
       mobilePanelFocusReadyRef.current = true
       return
     }
-    if (!window.matchMedia('(max-width: 1023px)').matches) return
-    const target = mobilePanel === 'tools' ? toolsPanelRef.current : mobilePanel === 'characters' ? charactersPanelRef.current : gameplayPanelRef.current
+    if (!window.matchMedia('(max-width: 860px)').matches) return
+    const target = mobilePanel === 'chat' ? chatPanelRef.current : mobilePanel === 'tools' ? toolsPanelRef.current : mobilePanel === 'characters' ? charactersPanelRef.current : gameplayPanelRef.current
     const frame = window.requestAnimationFrame(() => target?.focus())
     return () => window.cancelAnimationFrame(frame)
   }, [mobilePanel])
+
+  useEffect(() => {
+    const query = window.matchMedia('(min-width: 861px)')
+    const sync = () => setIsDesktopPlayLayout(query.matches)
+    sync()
+    query.addEventListener('change', sync)
+    return () => query.removeEventListener('change', sync)
+  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -1399,6 +1416,31 @@ export function AigmGameplayShell() {
 
   const readyCharacters = useMemo(() => partyState?.characters.filter((character) => character.status === 'ready' && character.result) ?? [], [partyState])
   const orderedCharacters = readyCharacters
+  const multiplayerSession = multiplayer.session
+  const multiplayerActive = Boolean(multiplayerSession?.isMember)
+  const chatVisible = Boolean(multiplayerSession) && (isDesktopPlayLayout ? desktopMultiplayerPanel === 'chat' : mobilePanel === 'chat')
+
+  function changeMultiplayerPanel(panel: MultiplayerSecondaryPanel) {
+    if (isDesktopPlayLayout) setDesktopMultiplayerPanel(panel)
+    else setMobilePanel(panel)
+  }
+
+  async function startMultiplayerSession() {
+    if (!partyState) return
+    const started = await multiplayer.startSession({
+      localCampaignId: partyState.adventure_id,
+      campaignName: partyState.adventure_name,
+      characters: readyCharacters.map((character) => ({
+        characterId: character.id,
+        displayName: playNameFor(character),
+      })),
+    })
+    if (started) {
+      setDesktopMultiplayerPanel('chat')
+      if (!isDesktopPlayLayout) setMobilePanel('chat')
+      setScreenReaderAnnouncement('Multiplayer table started. The invite link and table chat are ready.')
+    }
+  }
 
   const selectedCharacter = selectedCharacterId
     ? partyState?.characters.find((character) => character.id === selectedCharacterId) ?? null
@@ -2148,13 +2190,56 @@ export function AigmGameplayShell() {
     )
   }
 
+  if (!partyState && multiplayer.loading) {
+    return (
+      <main id="main-content" tabIndex={-1} className="medieval-page medieval-page--play flex min-h-screen items-center justify-center px-5 text-foreground">
+        <div className="max-w-xl rounded-3xl border border-primary/30 bg-primary/10 p-8 text-center" role="status" aria-live="polite">
+          <LoaderCircle className="mx-auto size-10 animate-spin text-primary" aria-hidden="true" />
+          <h1 className="mt-4 font-display text-3xl font-bold">Joining the multiplayer table…</h1>
+          <p className="mt-3 text-muted-foreground">Checking the invite and restoring your table connection.</p>
+        </div>
+      </main>
+    )
+  }
+
+  if (!partyState && multiplayerSession) {
+    return (
+      <main id="main-content" tabIndex={-1} className="medieval-page medieval-page--play aigm-multiplayer-guest-main text-foreground">
+        <div className="aigm-multiplayer-guest-shell">
+          <section className="aigm-multiplayer-guest-intro" aria-labelledby="multiplayer-guest-title">
+            <p className="aigm-table-chat-eyebrow">Multiplayer lobby</p>
+            <h1 id="multiplayer-guest-title">{multiplayerSession.campaignName}</h1>
+            <p>You are connected to the table. Shared AIGM gameplay will use the coordinator’s campaign copy; this lobby keeps player presence, character seats, and human table chat synchronized.</p>
+          </section>
+          <TableChatPanel
+            session={multiplayerSession}
+            visible
+            activePanel="chat"
+            unreadCount={multiplayerUnreadCount}
+            onUnreadCountChange={setMultiplayerUnreadCount}
+            onPanelChange={() => undefined}
+            onRefreshSession={multiplayer.refreshSession}
+            onClaimCharacter={multiplayer.claimCharacter}
+            onLeaveSession={multiplayer.leaveSession}
+            onCloseSession={multiplayer.closeSession}
+            onBackToPlay={() => undefined}
+            showBackToPlay={false}
+            showPanelSwitcher={false}
+            panelRef={chatPanelRef}
+          />
+          {multiplayer.error ? <p className="aigm-table-chat-error" role="alert">{multiplayer.error}</p> : null}
+        </div>
+      </main>
+    )
+  }
+
   if (!partyState) {
     return (
       <main id="main-content" tabIndex={-1} className="medieval-page medieval-page--play flex min-h-screen items-center justify-center px-5 text-foreground">
         <div className="max-w-xl rounded-3xl border border-primary/30 bg-primary/10 p-8 text-center">
           <Shield className="mx-auto size-10 text-primary" aria-hidden="true" />
           <h1 className="mt-4 font-display text-3xl font-bold">No saved adventure found</h1>
-          <p className="mt-3 text-muted-foreground">No current adventure is selected in this browser. Go to Start to choose or import one.</p>
+          <p className="mt-3 text-muted-foreground">{multiplayer.error || 'No current adventure is selected in this browser. Go to Start to choose or import one.'}</p>
           <Link href="/start" className="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-5 py-2 font-bold text-primary-foreground">Go to Start</Link>
         </div>
       </main>
@@ -2165,9 +2250,9 @@ export function AigmGameplayShell() {
     <main id="main-content" tabIndex={-1} className="medieval-page medieval-page--play aigm-gameplay-main h-[100dvh] overflow-hidden p-3 pb-[calc(5.75rem+env(safe-area-inset-bottom))] text-foreground sm:p-4 sm:pb-[calc(5.75rem+env(safe-area-inset-bottom))] lg:pb-4">
       <h1 className="sr-only">Play: {partyState.adventure_name}</h1>
       <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{screenReaderAnnouncement}</div>
-      <div className="aigm-gameplay-grid mx-auto grid h-full max-w-[1700px] grid-cols-1 gap-3 lg:grid-cols-[minmax(260px,0.78fr)_minmax(0,2.4fr)_minmax(250px,0.86fr)] lg:gap-4">
-        <aside ref={toolsPanelRef} tabIndex={-1} className={`${mobilePanel === 'tools' ? 'flex' : 'hidden'} aigm-tools-panel order-1 min-h-0 min-w-0 flex-col gap-3 overflow-y-auto rounded-2xl border border-border bg-card p-4 lg:order-1 lg:flex`} aria-label="Dice and initiative controls">
-          <button type="button" onClick={() => setMobilePanel('gameplay')} className="mb-1 inline-flex min-h-10 items-center justify-center rounded-xl border border-primary/45 bg-primary/10 px-4 text-sm font-bold text-primary lg:hidden">Back to gameplay</button>
+      <div className={`aigm-gameplay-grid mx-auto grid h-full max-w-[1700px] grid-cols-1 gap-3 lg:grid-cols-[minmax(260px,0.78fr)_minmax(0,2.4fr)_minmax(250px,0.86fr)] lg:gap-4 ${multiplayerActive ? 'aigm-gameplay-grid--multiplayer' : ''}`}>
+        <aside ref={toolsPanelRef} tabIndex={-1} className={`${mobilePanel === 'tools' ? 'flex' : 'hidden'} aigm-tools-panel order-1 min-h-0 min-w-0 flex-col gap-3 overflow-y-auto rounded-2xl border border-border bg-card p-4 lg:order-1 lg:flex ${multiplayerActive ? `aigm-mp-secondary ${desktopMultiplayerPanel === 'tools' ? 'aigm-mp-secondary--active' : ''}` : ''}`} aria-label="Dice and initiative controls">
+          <button type="button" onClick={() => setMobilePanel('gameplay')} className="mb-1 inline-flex min-h-10 items-center justify-center rounded-xl border border-primary/45 bg-primary/10 px-4 text-sm font-bold text-primary lg:hidden">Back to Play</button>
           <section>
             <div className="aigm-dice-heading flex items-center gap-2">
               <Dices className="size-5 shrink-0 text-primary" aria-hidden="true" /><h2 className="font-display text-xl font-bold leading-tight">Roll Your Dice Here</h2>
@@ -2225,6 +2310,7 @@ export function AigmGameplayShell() {
           <section className="border-t border-border pt-4 text-xs text-muted-foreground">
             <MotionSettingsControl />
           </section>
+          {multiplayerActive ? <MultiplayerPanelSwitcher active={desktopMultiplayerPanel} unreadCount={multiplayerUnreadCount} onChange={changeMultiplayerPanel} className="aigm-mp-desktop-switcher" /> : null}
         </aside>
 
         <section ref={gameplayPanelRef} tabIndex={-1} className={`${mobilePanel === 'gameplay' ? 'flex' : 'hidden'} aigm-gameplay-conversation relative order-1 min-h-0 min-w-0 flex-col overflow-hidden rounded-3xl border border-border bg-card lg:order-2 lg:flex`} aria-label="AIGM conversation">
@@ -2303,6 +2389,7 @@ export function AigmGameplayShell() {
           <div className="aigm-gameplay-composer border-t border-border bg-background/80 px-3 py-2.5 sm:px-4 sm:py-3">
             {billingNotice && <div className="mx-auto mb-2.5 flex max-w-4xl items-center justify-between gap-3 rounded-xl border border-primary/45 bg-primary/10 px-4 py-3 text-sm" role="status"><p><strong>{billingNotice}</strong></p>{billingActionUrl ? <Link href={billingActionUrl} className="shrink-0 font-bold text-primary underline underline-offset-2">Add usage</Link> : null}</div>}
             {error && <div className="mx-auto mb-2.5 flex max-w-4xl items-start justify-between gap-3 rounded-xl border border-destructive/35 bg-destructive/10 px-4 py-3 text-sm" role="alert"><div className="flex items-start gap-2"><AlertTriangle className="mt-0.5 size-4 shrink-0 text-destructive" aria-hidden="true" /><p>{error}</p></div>{billingActionUrl ? <Link href={billingActionUrl} className="shrink-0 font-bold underline underline-offset-2">Add usage</Link> : null}</div>}
+            {multiplayer.error && <div className="mx-auto mb-2.5 flex max-w-4xl items-start gap-2 rounded-xl border border-destructive/35 bg-destructive/10 px-4 py-3 text-sm" role="alert"><UsersRound className="mt-0.5 size-4 shrink-0 text-destructive" aria-hidden="true" /><p>{multiplayer.error}</p></div>}
             <div className="mx-auto max-w-5xl">
               <label htmlFor="aigm-gameplay-message" className="sr-only">What does the party do?</label>
               <form onSubmit={submitTurn} className="aigm-composer-plaque flex items-end gap-2 rounded-2xl border p-2">
@@ -2344,6 +2431,11 @@ export function AigmGameplayShell() {
                     <button type="button" onClick={printTranscript} disabled={transcript.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-40"><Printer className="size-3.5" aria-hidden="true" />Print</button>
                     <button type="button" onClick={() => openLevelUp()} disabled={gameplay.pending_level_ups.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-40"><Sparkles className="size-3.5" aria-hidden="true" />Level Up a character</button>
                     <button type="button" onClick={() => setCharacterAssistanceDialogOpen(true)} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground"><BookOpen className="size-3.5" aria-hidden="true" />Character help: {characterAssistanceLevel} out of 10</button>
+                    {multiplayerActive ? (
+                      <button type="button" onClick={() => changeMultiplayerPanel('chat')} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground"><UsersRound className="size-3.5" aria-hidden="true" />Open multiplayer table</button>
+                    ) : ownerQaAccess ? (
+                      <button type="button" onClick={() => void startMultiplayerSession()} disabled={multiplayer.starting || readyCharacters.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-45">{multiplayer.starting ? <LoaderCircle className="size-3.5 animate-spin" aria-hidden="true" /> : <UsersRound className="size-3.5" aria-hidden="true" />}Start Multiplayer</button>
+                    ) : null}
                     <Link href="/play" className="rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground">Back to Play</Link>
                   </div>
                 )}
@@ -2353,8 +2445,25 @@ export function AigmGameplayShell() {
 
         </section>
 
-        <aside ref={charactersPanelRef} tabIndex={-1} className={`${mobilePanel === 'characters' ? 'flex' : 'hidden'} aigm-characters-panel order-3 min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-4 lg:flex`} aria-label="Current characters">
-          <button type="button" onClick={() => setMobilePanel('gameplay')} className="mb-3 inline-flex min-h-10 items-center justify-center rounded-xl border border-primary/45 bg-primary/10 px-4 text-sm font-bold text-primary lg:hidden">Back to gameplay</button>
+        {multiplayerSession ? (
+          <TableChatPanel
+            session={multiplayerSession}
+            visible={chatVisible}
+            activePanel={desktopMultiplayerPanel}
+            unreadCount={multiplayerUnreadCount}
+            onUnreadCountChange={setMultiplayerUnreadCount}
+            onPanelChange={changeMultiplayerPanel}
+            onRefreshSession={multiplayer.refreshSession}
+            onClaimCharacter={multiplayer.claimCharacter}
+            onLeaveSession={multiplayer.leaveSession}
+            onCloseSession={multiplayer.closeSession}
+            onBackToPlay={() => setMobilePanel('gameplay')}
+            panelRef={chatPanelRef}
+          />
+        ) : null}
+
+        <aside ref={charactersPanelRef} tabIndex={-1} className={`${mobilePanel === 'characters' ? 'flex' : 'hidden'} aigm-characters-panel order-3 min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-4 lg:flex ${multiplayerActive ? `aigm-mp-secondary ${desktopMultiplayerPanel === 'characters' ? 'aigm-mp-secondary--active' : ''}` : ''}`} aria-label="Current characters">
+          <button type="button" onClick={() => setMobilePanel('gameplay')} className="mb-3 inline-flex min-h-10 items-center justify-center rounded-xl border border-primary/45 bg-primary/10 px-4 text-sm font-bold text-primary lg:hidden">Back to Play</button>
           <div className="aigm-characters-heading">
             <h2 className="font-display text-xl font-bold leading-tight">Characters</h2>
           </div>
@@ -2382,6 +2491,7 @@ export function AigmGameplayShell() {
             </div>
             <div className="aigm-character-memory-note rounded-2xl border border-primary/25 bg-primary/5 text-xs leading-relaxed text-muted-foreground"><HeartPulse className="size-4 text-primary" aria-hidden="true" /><p>Your AIGM is built for long-running campaigns and can remember earlier gameplay, but not every fact stays in immediate attention all the time. If it overlooks something it already knows, remind it or ask it to check the character or campaign record and keep playing.</p></div>
           </div>
+          {multiplayerActive ? <MultiplayerPanelSwitcher active={desktopMultiplayerPanel} unreadCount={multiplayerUnreadCount} onChange={changeMultiplayerPanel} className="aigm-mp-desktop-switcher" /> : null}
 
         </aside>
       </div>
@@ -2433,12 +2543,11 @@ export function AigmGameplayShell() {
       {!selectedCharacter && (
         <nav className="aigm-mobile-nav fixed inset-x-3 bottom-3 z-40 rounded-2xl border border-border bg-card/95 p-2 shadow-2xl backdrop-blur lg:hidden" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }} aria-label="Mobile gameplay panels">
           {mobilePanel === 'gameplay' ? (
-            <div className="grid grid-cols-2 gap-2">
-              <button type="button" onClick={() => setMobilePanel('tools')} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-3 text-sm font-bold text-primary-foreground"><Dices className="size-4" aria-hidden="true" /><span className="text-center leading-tight">Initiative <span className="inline-block whitespace-nowrap">&amp; Dice</span></span></button>
-              <button type="button" onClick={() => setMobilePanel('characters')} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-3 text-sm font-bold text-primary-foreground"><UserRound className="size-4" aria-hidden="true" />Characters</button>
+            <div className={`grid gap-2 ${multiplayerActive ? 'grid-cols-3' : 'grid-cols-2'}`}>
+              {multiplayerActive ? <button type="button" onClick={() => setMobilePanel('chat')} className="inline-flex min-h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-2 text-sm font-bold text-primary-foreground"><MessageSquareText className="size-4" aria-hidden="true" /><span>Chat{multiplayerUnreadCount > 0 ? ` (${multiplayerUnreadCount})` : ''}</span></button> : null}
+              <button type="button" onClick={() => setMobilePanel('tools')} className="inline-flex min-h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-2 text-sm font-bold text-primary-foreground"><Dices className="size-4" aria-hidden="true" />{multiplayerActive ? <span className="text-center leading-tight">Dice</span> : <span className="text-center leading-tight">Initiative <span className="inline-block whitespace-nowrap">&amp; Dice</span></span>}</button>
+              <button type="button" onClick={() => setMobilePanel('characters')} className="inline-flex min-h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-2 text-sm font-bold text-primary-foreground"><UserRound className="size-4" aria-hidden="true" />{multiplayerActive ? <span>Chars</span> : <span>Characters</span>}</button>
             </div>
-          ) : mobilePanel === 'tools' ? (
-            <button type="button" onClick={() => setMobilePanel('gameplay')} className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">Back to gameplay</button>
           ) : null}
         </nav>
       )}

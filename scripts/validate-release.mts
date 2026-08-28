@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.10.0')
-assert.equal(pkg.rpgywVersion, '1.10.0')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.10\.0'/)
+assert.equal(pkg.version, '1.11.0')
+assert.equal(pkg.rpgywVersion, '1.11.0')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.0'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -56,6 +56,24 @@ for (const file of [
   'ACCESSIBILITY.md',
   'app/accessibility/page.tsx',
   'scripts/validate-accessibility.mts',
+  'README-1.11.0.md',
+  'lib/multiplayer/types.ts',
+  'lib/multiplayer/errors.ts',
+  'lib/multiplayer/server.ts',
+  'lib/multiplayer/ably-token.ts',
+  'app/api/multiplayer/sessions/route.ts',
+  'app/api/multiplayer/sessions/[inviteCode]/route.ts',
+  'app/api/multiplayer/sessions/[inviteCode]/join/route.ts',
+  'app/api/multiplayer/sessions/[inviteCode]/seat/route.ts',
+  'app/api/multiplayer/sessions/[inviteCode]/leave/route.ts',
+  'app/api/multiplayer/sessions/[inviteCode]/close/route.ts',
+  'app/api/multiplayer/ably-token/route.ts',
+  'components/multiplayer/ably-browser.ts',
+  'components/multiplayer/MultiplayerPanelSwitcher.tsx',
+  'components/multiplayer/TableChatPanel.tsx',
+  'components/multiplayer/useMultiplayerSession.ts',
+  'supabase/migrations/20260828043000_native_multiplayer_phase1.sql',
+  'scripts/test-multiplayer-phase1.mts',
   'postcss.config.mjs',
   'data/settings/eberron.json',
   'data/rules/corpora/dnd-5.5e-srd-5.2.1.json',
@@ -937,3 +955,53 @@ assert.match(gameplay1100, /mobilePanelFocusReadyRef/)
 assert.match(css1100, /RPG Your Way 1\.10\.0 accessibility foundation/)
 assert.match(css1100, /@media \(forced-colors: active\)/)
 console.log('RPG Your Way 1.10.0 accessibility foundation checks passed.')
+
+
+const multiplayerServer1110 = read('lib/multiplayer/server.ts')
+const multiplayerAbly1110 = read('lib/multiplayer/ably-token.ts')
+const multiplayerChat1110 = read('components/multiplayer/TableChatPanel.tsx')
+const multiplayerSwitcher1110 = read('components/multiplayer/MultiplayerPanelSwitcher.tsx')
+const multiplayerHook1110 = read('components/multiplayer/useMultiplayerSession.ts')
+const multiplayerMigration1110 = read('supabase/migrations/20260828043000_native_multiplayer_phase1.sql')
+const multiplayerTokenRoute1110 = read('app/api/multiplayer/ably-token/route.ts')
+const playPage1110 = read('app/play/page.tsx')
+const startPage1110 = read('app/start/page.tsx')
+const gameplay1110 = read('components/aigm/aigm-gameplay-shell.tsx')
+const css1110 = read('app/globals.css')
+const env1110 = read('.env.example')
+assert.match(pkg['scripts']?.['validate:release'] ?? '', /test-multiplayer-phase1\.mts/)
+assert.match(multiplayerServer1110, /createMultiplayerSession/)
+assert.match(multiplayerServer1110, /joinMultiplayerSession/)
+assert.match(multiplayerServer1110, /claimMultiplayerCharacter/)
+assert.match(multiplayerServer1110, /leaveMultiplayerSession/)
+assert.match(multiplayerServer1110, /MAX_MULTIPLAYER_SEATS = 6/)
+assert.match(multiplayerServer1110, /multiplayer_private_test/)
+assert.match(multiplayerServer1110, /isOwnerQaEmail/)
+assert.match(multiplayerAbly1110, /rpg-mp:\$\{sessionId\}:chat/)
+assert.match(multiplayerAbly1110, /createHmac\('sha256'/)
+assert.doesNotMatch(multiplayerAbly1110, /"\*"\s*:/)
+assert.match(multiplayerTokenRoute1110, /ABLY_API_KEY/)
+assert.match(multiplayerTokenRoute1110, /createAblyTokenRequest/)
+assert.match(multiplayerChat1110, /human-chat/)
+assert.match(multiplayerChat1110, /Chat is not sent to the AIGM and does not use AI balance/)
+assert.match(multiplayerChat1110, /aria-live="off"/)
+assert.match(multiplayerSwitcher1110, /Chat/)
+assert.match(multiplayerSwitcher1110, /Dice/)
+assert.match(multiplayerSwitcher1110, /Characters/)
+assert.match(multiplayerHook1110, /searchParams\.get\('multiplayer'\)/)
+assert.match(multiplayerHook1110, /leaveSession/)
+assert.match(playPage1110, /multiplayerCode/)
+assert.match(playPage1110, /redirect\(`\/start\?\$\{query\.toString\(\)\}`\)/)
+assert.match(startPage1110, /Sign in to join the multiplayer table/)
+assert.match(startPage1110, /multiplayerReturnTo/)
+assert.match(gameplay1110, /Start Multiplayer/)
+assert.match(gameplay1110, /TableChatPanel/)
+assert.match(gameplay1110, /aigm-gameplay-grid--multiplayer/)
+assert.match(css1110, /RPG Your Way 1\.11\.0 native multiplayer Phase 1/)
+assert.match(css1110, /@media \(min-width: 861px\)/)
+assert.match(multiplayerMigration1110, /create table if not exists public\.multiplayer_sessions/)
+assert.match(multiplayerMigration1110, /create table if not exists public\.multiplayer_seats/)
+assert.match(multiplayerMigration1110, /v_active_count >= 6/)
+assert.match(multiplayerMigration1110, /enable row level security/)
+assert.match(env1110, /ABLY_API_KEY=/)
+console.log('RPG Your Way 1.11.0 native multiplayer Phase 1 checks passed.')
