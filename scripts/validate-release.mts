@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.9.2')
-assert.equal(pkg.rpgywVersion, '1.9.2')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.9\.2'/)
+assert.equal(pkg.version, '1.9.3')
+assert.equal(pkg.rpgywVersion, '1.9.3')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.9\.3'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -50,6 +50,7 @@ for (const file of [
   'README-1.8.12.md',
   'README-1.9.0.md',
   'README-1.9.2.md',
+  'README-1.9.3.md',
   'postcss.config.mjs',
   'data/settings/eberron.json',
   'data/rules/corpora/dnd-5.5e-srd-5.2.1.json',
@@ -100,6 +101,8 @@ assert.match(home, /Why I created RPG Your Way\./)
 assert.match(home, /Who benefits from this site\?/)
 assert.match(home, /Play when you have time/)
 assert.match(home, /<LandingCampaignPanel \/>/)
+const landingCampaignPanel193 = read('components/LandingCampaignPanel.tsx')
+assert.doesNotMatch(landingCampaignPanel193, /16 Hammer 1501 DR/)
 assert.doesNotMatch(home, /Warning: AI GM ahead/)
 assert.doesNotMatch(home, /Open Now/)
 assert.doesNotMatch(home, /Tabletop gaming is best in person/)
@@ -891,4 +894,4 @@ assert.match(css191, /\.medieval-page--play \.aigm-character-card > button \{[\s
 assert.match(css191, /RPG Your Way 1\.9\.2 landing-page ribbon \+ hero reset/)
 assert.match(css191, /\.site-brand-ribbon \{/)
 assert.match(css191, /\.landing-campaign-snippet--preview \{/)
-console.log('RPG Your Way 1.9.2 landing-page ribbon and hero checks passed.')
+console.log('RPG Your Way 1.9.3 landing preview IP-cleanup checks passed.')

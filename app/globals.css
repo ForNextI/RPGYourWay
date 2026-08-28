@@ -6820,11 +6820,6 @@ body a[class*="rounded"][class*="bg-"]:focus-visible {
   align-items: initial;
   overflow: hidden;
 }
-.landing-campaign-preview-dateline {
-  margin: 0 0 .6rem;
-  color: var(--forest-deep);
-  font-size: .98rem;
-}
 .landing-campaign-snippet--preview p {
   margin: 0;
 }

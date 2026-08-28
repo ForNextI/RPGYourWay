@@ -17,7 +17,6 @@ const LANDING_PREVIEW = {
   name: 'Your campaign name',
   scene: 'Current location',
   turnsLabel: 'Turn 01',
-  dateline: '16 Hammer 1501 DR',
   snippet: 'The Wardens noticed at once that the scene ahead was trying very hard to look like an accident. Rain slicked the muddy road into a ribbon of black glass, and an overturned wagon blocked the way on the stone bridge, lantern light guttering inside the rain-dark canvas. At first glance, it offered a clean story: snapped axle, bad weather, missing horses, a traveler’s luck gone sour. But Perception was not sharper eyesight; it was the refusal to accept the obvious. The closer they came, the less the wreck agreed with itself. Why would this have happened here? Were those reins cut, not torn? Where were the horses? The driver? Then they saw a fresh scar marked roughly into the bridge stone: a crude circle diagonally bisected from upper right to lower left. That stopped the four of them, not because the mark was strange, but because it was almost theirs. They always left their sigil as notice that things had been righted, not as a warning.',
 } as const
 
@@ -113,7 +112,6 @@ export function LandingCampaignPanel() {
         <div className="landing-campaign-screen-stage">
           <div className="landing-campaign-screen-olive-frame">
             <div className="landing-campaign-snippet landing-campaign-snippet--preview">
-              <p className="landing-campaign-preview-dateline"><em>{LANDING_PREVIEW.dateline}</em></p>
               <p>{LANDING_PREVIEW.snippet}</p>
             </div>
           </div>
