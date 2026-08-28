@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.9.3')
-assert.equal(pkg.rpgywVersion, '1.9.3')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.9\.3'/)
+assert.equal(pkg.version, '1.9.4')
+assert.equal(pkg.rpgywVersion, '1.9.4')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.9\.4'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -51,6 +51,7 @@ for (const file of [
   'README-1.9.0.md',
   'README-1.9.2.md',
   'README-1.9.3.md',
+  'README-1.9.4.md',
   'postcss.config.mjs',
   'data/settings/eberron.json',
   'data/rules/corpora/dnd-5.5e-srd-5.2.1.json',
@@ -501,7 +502,7 @@ assert.match(css1723, /\.aigm-send-roll,[\s\S]*var\(--landing-olive-19\)/)
 assert.match(css1723, /\.medieval-page--play button:not\(:disabled\):hover,[\s\S]*background: var\(--forest-deep\) !important;[\s\S]*color: var\(--lime\) !important/)
 assert.match(read('components/aigm/aigm-gameplay-shell.tsx'), /aigm-die-button/)
 assert.match(read('components/aigm/aigm-gameplay-shell.tsx'), /aigm-character-card--leader/)
-assert.match(read('app/account/page.tsx'), /className="account-intro"/)
+assert.doesNotMatch(read('app/account/page.tsx'), /className="account-intro"/)
 
 console.log('RPG Your Way 1.7.23 visual-unification checks passed.')
 
@@ -894,4 +895,12 @@ assert.match(css191, /\.medieval-page--play \.aigm-character-card > button \{[\s
 assert.match(css191, /RPG Your Way 1\.9\.2 landing-page ribbon \+ hero reset/)
 assert.match(css191, /\.site-brand-ribbon \{/)
 assert.match(css191, /\.landing-campaign-snippet--preview \{/)
-console.log('RPG Your Way 1.9.3 landing preview IP-cleanup checks passed.')
+const account194 = read('app/account/page.tsx')
+assert.match(account194, /<h1 className="sr-only">Account<\/h1>/)
+assert.doesNotMatch(account194, /<section className="account-intro"/)
+assert.doesNotMatch(account194, /Your account\./)
+assert.doesNotMatch(account194, /Sign in, see your RPG Your Way balance, and add usage for Play or Script\./)
+assert.match(account194, /statusMessages\[status\]/)
+assert.match(account194, /paymentNotice/)
+assert.match(account194, /paymentError/)
+console.log('RPG Your Way 1.9.4 account-intro removal checks passed.')
