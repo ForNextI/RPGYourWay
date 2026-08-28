@@ -19,7 +19,8 @@ type AigmVoiceProfile = 'gameplay' | 'onboarding'
 
 export interface AigmVoiceControlsHandle {
   prepareNarration: () => void
-  beginNarration: () => void
+  beginNarration: (turnBillingId?: string) => void
+  narrationExpected: () => boolean
   appendNarrationDelta: (delta: string) => void
   finishNarration: (fullText: string) => void
   stopNarration: () => void
@@ -36,12 +37,17 @@ interface AigmVoiceControlsProps {
   onTranscriptUpdate: (text: string) => void
   onTranscriptComplete?: (text: string) => void
   onBusyChange?: (busy: boolean) => void
+  getTurnBillingId?: () => string
+  onUsageSettlement?: (balanceMicrousd: number | null, ownerQaExempt: boolean) => void
   onError: (message: string) => void
 }
 
 interface SpeechJob {
   generation: number
   text: string
+  componentId: string
+  billingTurnId: string | null
+  billingMode: 'live' | 'replay'
   promise: Promise<ArrayBuffer> | null
 }
 
@@ -102,6 +108,8 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
   onTranscriptUpdate,
   onTranscriptComplete,
   onBusyChange,
+  getTurnBillingId,
+  onUsageSettlement,
   onError,
 }, ref) {
   const onboardingProfile = profile === 'onboarding'
@@ -133,6 +141,10 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
   const streamedTextRef = useRef('')
   const speechHasBegunRef = useRef(false)
   const speechQueueRef = useRef<SpeechJob[]>([])
+  const speechComponentIdsRef = useRef(new Set<string>())
+  const speechStartedComponentIdsRef = useRef(new Set<string>())
+  const activeNarrationBillingIdRef = useRef<string | null>(null)
+  const activeNarrationBillingModeRef = useRef<'live' | 'replay'>('live')
   const speechGenerationRef = useRef(0)
   const narrationInterruptedRef = useRef(false)
   const speechPumpRunningRef = useRef(false)
@@ -188,13 +200,55 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
     return audioContextRef.current
   }
 
+  function reportSettlementFromHeaders(response: Response) {
+    if (response.headers.get('x-rpgyw-turn-settled') !== '1') return
+    const rawBalance = response.headers.get('x-rpgyw-balance-microusd')
+    const balance = rawBalance !== null && /^\d+$/.test(rawBalance) ? Number.parseInt(rawBalance, 10) : null
+    onUsageSettlement?.(balance, response.headers.get('x-rpgyw-owner-qa') === '1')
+  }
+
+  async function finalizeBillingTurn(turnId: string | null, expectedTtsComponents: number) {
+    if (onboardingProfile || !turnId) return
+    try {
+      const response = await fetch('/api/aigm/turn-billing/audio-complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ turn_id: turnId, expected_tts_components: Math.max(0, expectedTtsComponents) }),
+      })
+      const payload = await response.json().catch(() => ({})) as {
+        settled?: boolean
+        balance_microusd?: number | null
+        owner_qa_exempt?: boolean
+        error?: string
+      }
+      if (!response.ok) throw new Error(payload.error || 'RPG Your Way could not finalize voice usage.')
+      if (payload.settled) onUsageSettlement?.(typeof payload.balance_microusd === 'number' ? payload.balance_microusd : null, payload.owner_qa_exempt === true)
+    } catch (error) {
+      console.error('Play turn audio completion could not be reported.', error)
+    }
+  }
+
+  function startedSpeechCount() {
+    return speechStartedComponentIdsRef.current.size
+  }
+
+  function plannedSpeechCount() {
+    return speechComponentIdsRef.current.size
+  }
+
   function stopNarration() {
+    const finishingTurnId = activeNarrationBillingIdRef.current
+    const expectedStarted = startedSpeechCount()
+    if (finishingTurnId) void finalizeBillingTurn(finishingTurnId, expectedStarted)
+    activeNarrationBillingIdRef.current = null
     narrationInterruptedRef.current = true
     speechGenerationRef.current += 1
     speechBufferRef.current = ''
     streamedTextRef.current = ''
     speechHasBegunRef.current = false
     speechQueueRef.current = []
+    speechComponentIdsRef.current.clear()
+    speechStartedComponentIdsRef.current.clear()
     for (const controller of speechAbortControllersRef.current) controller.abort()
     speechAbortControllersRef.current.clear()
     try {
@@ -234,24 +288,37 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
     if (generation !== speechGenerationRef.current) throw new DOMException('Narration stopped.', 'AbortError')
   }
 
-  async function requestSpeech(text: string, generation: number, attempt = 0): Promise<ArrayBuffer> {
+  async function requestSpeech(job: SpeechJob, attempt = 0): Promise<ArrayBuffer> {
+    const { text, generation, componentId, billingTurnId, billingMode } = job
     if (generation !== speechGenerationRef.current) throw new DOMException('Narration stopped.', 'AbortError')
+    if (!onboardingProfile) speechStartedComponentIdsRef.current.add(componentId)
     const controller = new AbortController()
     speechAbortControllersRef.current.add(controller)
     try {
       const response = await fetch('/api/aigm/speech', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, voice, profile }),
+        body: JSON.stringify({
+          text,
+          voice,
+          profile,
+          ...(onboardingProfile ? {} : {
+            billing_turn_id: billingTurnId,
+            component_id: componentId,
+            billing_mode: billingMode,
+          }),
+        }),
         signal: controller.signal,
       })
+      reportSettlementFromHeaders(response)
       if (!response.ok) {
         const payload = await response.json().catch(() => ({})) as { error?: string }
         const retryable = response.status === 429 || response.status >= 500
         if (retryable && attempt < MAX_SPEECH_RETRIES) {
           await waitBeforeSpeechRetry(attempt + 1, generation)
-          return requestSpeech(text, generation, attempt + 1)
+          return requestSpeech(job, attempt + 1)
         }
+        if (!onboardingProfile && billingTurnId) void finalizeBillingTurn(billingTurnId, startedSpeechCount())
         throw new Error(payload.error || 'The narration service could not speak this passage.')
       }
       return response.arrayBuffer()
@@ -260,12 +327,12 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
     }
   }
 
-  function primeSpeechQueue() {
+  function primeSpeechQueue(forceAll = false) {
     let started = speechQueueRef.current.filter((job) => job.promise).length
     for (const job of speechQueueRef.current) {
-      if (started >= MAX_PREFETCHED_SPEECH_JOBS) break
+      if (!forceAll && started >= MAX_PREFETCHED_SPEECH_JOBS) break
       if (job.promise || job.generation !== speechGenerationRef.current) continue
-      job.promise = requestSpeech(job.text, job.generation)
+      job.promise = requestSpeech(job)
       void job.promise.catch(() => undefined)
       started += 1
     }
@@ -283,7 +350,7 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
         primeSpeechQueue()
         const job = speechQueueRef.current.shift()
         if (!job || job.generation !== pumpGeneration) continue
-        const promise = job.promise ?? requestSpeech(job.text, job.generation)
+        const promise = job.promise ?? requestSpeech(job)
         primeSpeechQueue()
         const audio = await promise
         if (job.generation !== speechGenerationRef.current) continue
@@ -322,9 +389,14 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
     const clean = speechSafeText(text)
     if (!clean) return
     speechHasBegunRef.current = true
+    const componentId = crypto.randomUUID()
+    if (!onboardingProfile) speechComponentIdsRef.current.add(componentId)
     speechQueueRef.current.push({
       generation: speechGenerationRef.current,
       text: clean,
+      componentId,
+      billingTurnId: onboardingProfile ? null : activeNarrationBillingIdRef.current,
+      billingMode: activeNarrationBillingModeRef.current,
       promise: null,
     })
     primeSpeechQueue()
@@ -344,13 +416,19 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
     ensureAudioContext()
   }
 
-  function beginNarration() {
+  function beginNarration(turnBillingId?: string) {
     setShowSettings(false)
     stopNarration()
+    activeNarrationBillingIdRef.current = onboardingProfile ? null : (turnBillingId?.trim() || null)
+    activeNarrationBillingModeRef.current = 'live'
     narrationInterruptedRef.current = false
     if (!guidedMode && !narrationEnabled) return
     ensureAudioContext()
     streamedTextRef.current = ''
+  }
+
+  function narrationExpected() {
+    return guidedMode || narrationEnabled
   }
 
   function appendNarrationDelta(delta: string) {
@@ -361,7 +439,12 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
   }
 
   function finishNarration(fullText: string) {
-    if (narrationInterruptedRef.current || (!guidedMode && !narrationEnabled)) return
+    const turnId = activeNarrationBillingIdRef.current
+    if (narrationInterruptedRef.current || (!guidedMode && !narrationEnabled)) {
+      if (turnId) void finalizeBillingTurn(turnId, startedSpeechCount())
+      activeNarrationBillingIdRef.current = null
+      return
+    }
     const streamedText = streamedTextRef.current
     if (!streamedText.trim()) {
       speechBufferRef.current = fullText
@@ -369,19 +452,32 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
       speechBufferRef.current += fullText.slice(streamedText.length)
     }
     drainSpeechBuffer(true)
+    // Once the complete reply is known, launch every remaining speech component.
+    // Settlement waits for those server-side requests to become terminal, not for
+    // the player to finish listening to the audio.
+    primeSpeechQueue(true)
+    if (turnId) void finalizeBillingTurn(turnId, plannedSpeechCount())
+    activeNarrationBillingIdRef.current = null
   }
 
   function replay(text: string) {
     stopNarration()
     narrationInterruptedRef.current = false
+    activeNarrationBillingIdRef.current = onboardingProfile ? null : crypto.randomUUID()
+    activeNarrationBillingModeRef.current = 'replay'
     ensureAudioContext()
     speechBufferRef.current = text
     drainSpeechBuffer(true)
+    primeSpeechQueue(true)
+    const turnId = activeNarrationBillingIdRef.current
+    if (turnId) void finalizeBillingTurn(turnId, plannedSpeechCount())
+    activeNarrationBillingIdRef.current = null
   }
 
   useImperativeHandle(ref, () => ({
     prepareNarration,
     beginNarration,
+    narrationExpected,
     appendNarrationDelta,
     finishNarration,
     stopNarration,
@@ -508,6 +604,12 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
       const data = new FormData()
       data.append('audio', new File([blob], `rpgyw-${spokenNoun}.${extensionFor(mimeType)}`, { type: mimeType || 'audio/webm' }))
       data.append('context', profile)
+      if (!onboardingProfile) {
+        const billingTurnId = getTurnBillingId?.()
+        if (!billingTurnId) throw new Error('RPG Your Way could not prepare this spoken turn for billing.')
+        data.append('turn_id', billingTurnId)
+        data.append('component_id', crypto.randomUUID())
+      }
       abortController = new AbortController()
       transcriptionAbortRef.current?.abort()
       transcriptionAbortRef.current = abortController

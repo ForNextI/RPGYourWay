@@ -11,12 +11,12 @@ import fs from 'node:fs'
 
 assert.equal(PLAY_PACKS.length, 6)
 const expected = [
-  ['starter', 600, 500, 50],
-  ['occasional', 1690, 1500, 105],
-  ['regular', 3340, 3000, 210],
-  ['frequent', 4990, 4500, 315],
-  ['extended', 7200, 6500, 455],
-  ['marathon', 9950, 9000, 630],
+  ['starter', 572, 500, 25],
+  ['occasional', 1653, 1500, 75],
+  ['regular', 3275, 3000, 150],
+  ['frequent', 4897, 4500, 225],
+  ['extended', 7060, 6500, 325],
+  ['marathon', 9763, 9000, 450],
 ] as const
 for (const [id, price, usage, operating] of expected) {
   const pack = playPackById(id)
@@ -26,11 +26,12 @@ for (const [id, price, usage, operating] of expected) {
   assert.equal(pack.siteOperatingCents, operating)
   assert.equal(nominalUsageMicrousd(pack), usage * 10_000)
   const standardStripeFee = Math.round(price * 0.029 + 30)
-  assert.ok(includedProcessingCents(pack) >= standardStripeFee, `${id} must cover the standard domestic-card processing assumption.`)
+  assert.equal(includedProcessingCents(pack), standardStripeFee, `${id} must recover the standard domestic-card processing assumption without extra padding.`)
+  assert.equal(pack.siteOperatingCents, Math.round(pack.usageCents * 0.05), `${id} site contribution must be exactly 5% of usage value.`)
 }
 assert.equal(playPackById('bogus'), null)
-assert.equal(formatPurchasePrice(600), '$6.00')
-assert.equal(formatPurchasePrice(1690), '$16.90')
+assert.equal(formatPurchasePrice(572), '$5.72')
+assert.equal(formatPurchasePrice(1653), '$16.53')
 
 const checkoutSource = fs.readFileSync(new URL('../lib/stripe/checkout.ts', import.meta.url), 'utf8')
 assert.match(checkoutSource, /from ['"]\.\.\/billing\/play-packs['"]/)

@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.8.11')
-assert.equal(pkg.rpgywVersion, '1.8.11')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.8\.11'/)
+assert.equal(pkg.version, '1.8.12')
+assert.equal(pkg.rpgywVersion, '1.8.12')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.8\.12'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -42,6 +42,12 @@ for (const file of [
   'lib/usage/owner-qa.ts',
   'lib/usage/play-cost.ts',
   'lib/usage/server-billing.ts',
+  'lib/usage/audio-cost.ts',
+  'lib/usage/play-turn-billing.ts',
+  'app/api/aigm/turn-billing/audio-complete/route.ts',
+  'supabase/migrations/20260828002500_play_turn_voice_billing.sql',
+  'scripts/test-audio-cost.mts',
+  'README-1.8.12.md',
   'postcss.config.mjs',
   'data/settings/eberron.json',
   'data/rules/corpora/dnd-5.5e-srd-5.2.1.json',
@@ -50,14 +56,17 @@ for (const file of [
 const account = read('app/account/page.tsx')
 for (const phrase of [
   'Sign in or create an account', 'Usage balance', 'Available for Play and Script', 'Add usage',
-  'Purchase price includes payment processing and site operating costs', '2.9% + 30¢',
-  'A Note on Usage', 'Usage can vary quite a bit from one session to another.',
-  'There aren&apos;t extra charges hidden inside the heavier session.',
+  'Purchase price includes payment processing and a small site operating contribution', '2.9% + 30¢',
+  'What am I getting for my money?', 'RPG Your Way sells prepaid usage, not turns.',
+  'about 20–30 turns', 'about 360–540 turns', 'Usage to date', 'Where your balance has gone',
+  'AI processing', 'Talk-to-text', 'AI readback', 'Play Pack purchases', 'Purchase history',
+  'RPG Your Way does not show a turn-by-turn charge list.',
 ]) assert.match(account, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
-assert.doesNotMatch(account, /Lifetime added|Lifetime used|No separate Script wallet/)
+assert.doesNotMatch(account, /Lifetime added|Lifetime used|No separate Script wallet|Recent activity|signedUsageDollars/)
 
 const packs = read('lib/billing/play-packs.ts')
-for (const amount of ['priceCents: 600', 'priceCents: 1_690', 'priceCents: 3_340', 'priceCents: 4_990', 'priceCents: 7_200', 'priceCents: 9_950']) assert.match(packs, new RegExp(amount))
+for (const amount of ['priceCents: 572', 'priceCents: 1_653', 'priceCents: 3_275', 'priceCents: 4_897', 'priceCents: 7_060', 'priceCents: 9_763']) assert.match(packs, new RegExp(amount))
+for (const operating of ['siteOperatingCents: 25', 'siteOperatingCents: 75', 'siteOperatingCents: 150', 'siteOperatingCents: 225', 'siteOperatingCents: 325', 'siteOperatingCents: 450']) assert.match(packs, new RegExp(operating))
 for (const usage of ['usageCents: 500', 'usageCents: 1_500', 'usageCents: 3_000', 'usageCents: 4_500', 'usageCents: 6_500', 'usageCents: 9_000']) assert.match(packs, new RegExp(usage))
 
 const layout = read('app/layout.tsx')
@@ -171,7 +180,11 @@ assert.doesNotMatch(ownerQa, /@.*@/)
 const gameplay = read('app/api/aigm/gameplay-chat/route.ts')
 assert.match(gameplay, /requireUsageAccount/)
 assert.match(gameplay, /reserveUsage/)
-assert.match(gameplay, /settleUsage/)
+assert.doesNotMatch(gameplay, /settleUsage/)
+assert.match(gameplay, /recordPlayTurnComponent/)
+assert.match(gameplay, /markGameplayComplete/)
+assert.match(gameplay, /attachPlayTurnReservation/)
+assert.match(gameplay, /narration_expected/)
 assert.match(gameplay, /terraProviderCostMicrousd/)
 assert.match(gameplay, /usage_billing/)
 assert.match(gameplay, /x-rpgyw-operation-id/)
@@ -211,6 +224,11 @@ assert.match(read('postcss.config.mjs'), /@tailwindcss\/postcss/)
 
 const env = read('.env.example')
 assert.match(env, /OPENAI_API_KEY=/)
+assert.match(env, /OPENAI_AUDIO_API_KEY=/)
+assert.match(env, /OPENAI_TTS_API_KEY=/)
+assert.match(env, /OPENAI_TRANSCRIBE_API_KEY=/)
+assert.match(env, /OPENAI_TTS_MODEL=gpt-4o-mini-tts/)
+assert.match(env, /OPENAI_TRANSCRIBE_MODEL=gpt-4o-mini-transcribe/)
 assert.match(env, /STRIPE_SECRET_KEY=/)
 assert.match(env, /STRIPE_WEBHOOK_SECRET=/)
 assert.match(env, /SUPABASE_SERVICE_ROLE_KEY=/)
@@ -803,3 +821,47 @@ assert.match(css1811, /\.site-footer \.kofi-support-button/)
 assert.match(css1811, /body a\[class\*=\"rounded\"\]\[class\*=\"border\"\]/)
 assert.match(css1811, /\.landing-notice-grid \.landing-notice-card h1,[\s\S]*0 0 0 3px var\(--rpgyw-brass-edge\)/)
 console.log('RPG Your Way 1.8.11 pale-olive palette, standardized brass furniture, inset bezels, popup, and Ko-fi checks passed.')
+
+const turnBilling1812 = read('lib/usage/play-turn-billing.ts')
+const audioCost1812 = read('lib/usage/audio-cost.ts')
+const speech1812 = read('app/api/aigm/speech/route.ts')
+const transcribe1812 = read('app/api/aigm/transcribe/route.ts')
+const voice1812 = read('components/aigm/aigm-voice-controls.tsx')
+const shell1812 = read('components/aigm/aigm-gameplay-shell.tsx')
+const account1812 = read('app/account/page.tsx')
+const migration1812 = read('supabase/migrations/20260828002500_play_turn_voice_billing.sql')
+assert.match(turnBilling1812, /roundUsageMicrousdToCent\(providerTotal\)/)
+assert.match(turnBilling1812, /component_type === 'ttt'/)
+assert.match(turnBilling1812, /component_type === 'gameplay'/)
+assert.match(turnBilling1812, /component_type === 'tts'/)
+assert.match(turnBilling1812, /rpgyw_capture_usage/)
+assert.match(turnBilling1812, /ownerQa \? 0/)
+assert.match(audioCost1812, /Math\.ceil\(\(usage\.inputTokens \* 5 \+ usage\.outputTokens \* 20\) \/ 4\)/)
+assert.match(audioCost1812, /TTS_ESTIMATED_MICROUSD_PER_SECOND = 250/)
+assert.match(speech1812, /response_format: 'wav'/)
+assert.match(speech1812, /OPENAI_TTS_API_KEY/)
+assert.match(speech1812, /billingMode === 'replay'/)
+assert.match(transcribe1812, /OPENAI_TRANSCRIBE_API_KEY/)
+assert.match(transcribe1812, /await upstream\.json/)
+assert.doesNotMatch(transcribe1812, /stream=true|stream', 'true'/)
+assert.match(transcribe1812, /usable_transcript: false/)
+assert.match(voice1812, /billing_turn_id: billingTurnId/)
+assert.match(voice1812, /expected_tts_components/)
+assert.match(shell1812, /exchangeId = turnBillingId/)
+assert.match(shell1812, /draftTurnBillingIdRef/)
+assert.match(shell1812, /balanceMicrousd <= 1_000_000/)
+assert.match(account1812, /rpgyw_usage_summary/)
+assert.match(account1812, /rpgyw_purchase_history/)
+assert.match(account1812, /available <= 1_000_000/)
+assert.doesNotMatch(account1812, /\.from\('usage_ledger'\)/)
+assert.match(css1811, /RPG Your Way 1\.8\.12 account usage summary/)
+assert.match(css1811, /\.account-main \.usage-summary-grid/)
+assert.match(css1811, /\.account-main \.usage-estimate-row/)
+assert.match(migration1812, /create table if not exists public\.play_turn_billing/)
+assert.match(migration1812, /create table if not exists public\.play_turn_components/)
+assert.match(migration1812, /drop policy if exists "usage_ledger_select_own"/)
+assert.match(migration1812, /create or replace function public\.rpgyw_usage_summary\(\)/)
+assert.match(migration1812, /create or replace function public\.rpgyw_purchase_history/)
+assert.match(migration1812, /grant execute on function public\.rpgyw_usage_summary\(\) to authenticated/)
+console.log('RPG Your Way 1.8.12 Play Pack repricing, whole-turn voice billing, aggregate account reporting, and low-balance checks passed.')
+

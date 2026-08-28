@@ -60,12 +60,14 @@ export async function reserveUsage(
     feature: string
     sourceRef?: string | null
     operationId?: string | null
+    holdMinutes?: number
   },
 ): Promise<UsageReservation> {
   const maximumMicrousd = Math.max(10_000, Math.trunc(input.maximumMicrousd || 0))
   const feature = input.feature.trim() || 'play'
   const sourceRef = input.sourceRef?.trim() || null
   const operationId = cleanOperationId(input.operationId)
+  const holdMinutes = Math.max(1, Math.min(60, Math.trunc(input.holdMinutes || 10)))
 
   if (account.ownerQa) {
     return { account, holdId: null, maximumMicrousd, source: 'play', sourceRef, operationId, feature }
@@ -76,7 +78,7 @@ export async function reserveUsage(
     p_source: 'play',
     p_source_ref: sourceRef,
     p_idempotency_key: `play:${feature}:${account.userId}:${operationId}`,
-    p_expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+    p_expires_at: new Date(Date.now() + holdMinutes * 60 * 1000).toISOString(),
   })
 
   if (error || typeof data !== 'string') {

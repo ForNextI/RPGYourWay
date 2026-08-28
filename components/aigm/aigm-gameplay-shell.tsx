@@ -154,6 +154,8 @@ interface GameplayApiResponse {
     balance_microusd?: number | null
     owner_qa_exempt?: boolean
     settlement_warning?: string | null
+    pending?: boolean
+    turn_billing_id?: string
   }
 }
 
@@ -1295,6 +1297,7 @@ export function AigmGameplayShell() {
   const userScrolledAwayRef = useRef(false)
   const initiallyPositionedAdventureRef = useRef<string | null>(null)
   const queuedVoiceTurnRef = useRef<string | null>(null)
+  const draftTurnBillingIdRef = useRef<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -1629,6 +1632,33 @@ export function AigmGameplayShell() {
     setShowJumpButton(away)
   }
 
+  function getDraftTurnBillingId() {
+    if (!draftTurnBillingIdRef.current) draftTurnBillingIdRef.current = crypto.randomUUID()
+    return draftTurnBillingIdRef.current
+  }
+
+  function handleUsageSettlement(balanceMicrousd: number | null, ownerQaExempt: boolean) {
+    if (ownerQaExempt || balanceMicrousd === null) return
+    if (balanceMicrousd <= 1_000_000) {
+      setBillingNotice(`Low balance: $${(Math.max(0, balanceMicrousd) / 1_000_000).toFixed(2)} remaining.`)
+      setBillingActionUrl('/account#add-usage')
+    }
+  }
+
+  async function finalizeTurnWithoutAudio(turnBillingId: string) {
+    try {
+      const response = await fetch('/api/aigm/turn-billing/audio-complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ turn_id: turnBillingId, expected_tts_components: 0 }),
+      })
+      const payload = await response.json().catch(() => ({})) as { settled?: boolean; balance_microusd?: number | null; owner_qa_exempt?: boolean }
+      if (response.ok && payload.settled) handleUsageSettlement(typeof payload.balance_microusd === 'number' ? payload.balance_microusd : null, payload.owner_qa_exempt === true)
+    } catch {
+      // The server-side hold remains safe; a later billing reconciliation can finish it.
+    }
+  }
+
   function requestAdventureOpening() {
     if (document.fullscreenEnabled && !document.fullscreenElement) {
       void document.documentElement.requestFullscreen().catch(() => undefined)
@@ -1690,7 +1720,10 @@ export function AigmGameplayShell() {
     const visibleUserText = diceResult ? [playerText.trim(), `Dice result: ${diceResult}`].filter(Boolean).join('\n\n') : playerText
     const activeTranscript = activeGameplay.transcript.length > 0 ? activeGameplay.transcript : activeGameplay.messages
     const nextSequence = (activeTranscript.at(-1)?.sequence ?? activeTranscript.length) + 1
-    const exchangeId = crypto.randomUUID()
+    const turnBillingId = mode === 'turn' && draftTurnBillingIdRef.current ? draftTurnBillingIdRef.current : crypto.randomUUID()
+    if (mode === 'turn') draftTurnBillingIdRef.current = null
+    const exchangeId = turnBillingId
+    const narrationExpected = voiceAvailable ? (voiceControlsRef.current?.narrationExpected() ?? false) : false
     const exchangeTurn = mode === 'opening' ? 0 : countTurn ? activeGameplay.turn_count + 1 : activeGameplay.turn_count
     const userEntry = mode === 'turn' ? nowMessage('user', visibleUserText, nextSequence, exchangeTurn, exchangeId) : null
     const transcriptWithUser = userEntry ? [...activeTranscript, userEntry] : activeTranscript
@@ -1708,7 +1741,7 @@ export function AigmGameplayShell() {
     setBillingNotice(null)
     setStreamingReply('')
     setScreenReaderAnnouncement(mode === 'opening' ? 'The Game Master is preparing the opening scene.' : 'Your turn was sent. The Game Master is responding.')
-    voiceControlsRef.current?.beginNarration()
+    voiceControlsRef.current?.beginNarration(turnBillingId)
     userScrolledAwayRef.current = false
     setShowJumpButton(false)
 
@@ -1724,7 +1757,7 @@ export function AigmGameplayShell() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-rpgyw-operation-id': crypto.randomUUID(),
+          'x-rpgyw-operation-id': turnBillingId,
         },
         body: JSON.stringify({
           mode,
@@ -1760,6 +1793,7 @@ export function AigmGameplayShell() {
           pending_level_up_character_ids: activeGameplay.pending_level_ups,
           owner_god_mode: ownerGodModeActive,
           voice_guided_play: voiceAvailable && voiceGuidedPlay.enabled,
+          narration_expected: narrationExpected,
           guidance_level: voiceGuidedPlay.guidance_level,
           character_assistance_level: characterAssistanceLevel,
           dice_preference: voiceGuidedPlay.dice_preference,
@@ -1782,16 +1816,11 @@ export function AigmGameplayShell() {
         }
         throw new Error([payload.error || 'The gameplay AIGM could not answer.', payload.details, payload.request_id ? `Reference: ${payload.request_id}` : ''].filter(Boolean).join(' '))
       }
-      voiceControlsRef.current?.finishNarration(payload.message)
+      if (voiceControlsRef.current) voiceControlsRef.current.finishNarration(payload.message)
+      else void finalizeTurnWithoutAudio(turnBillingId)
       setScreenReaderAnnouncement(voiceGuidedPlay.enabled && voiceAvailable
         ? 'The Game Master reply is complete and is being read aloud.'
         : `${activePartyState.game_master_name || 'Game Master'}: ${payload.message}`)
-      const remainingBalance = payload.usage_billing?.balance_microusd
-      if (!payload.usage_billing?.owner_qa_exempt && typeof remainingBalance === 'number' && remainingBalance <= 1_000_000) {
-        setBillingNotice(`Low balance: $${(Math.max(0, remainingBalance) / 1_000_000).toFixed(2)} remaining.`)
-        setBillingActionUrl('/account#add-usage')
-      }
-
       if (payload.owner_god_mode_active === true && ownerQaAccess) {
         setOwnerGodModeActive(true)
         window.sessionStorage.setItem(OWNER_GOD_MODE_SESSION_KEY, 'active')
@@ -2272,6 +2301,8 @@ export function AigmGameplayShell() {
                   onTranscriptUpdate={(text) => { setMessage(text); if (!voiceGuidedPlay.enabled) requestAnimationFrame(() => textareaRef.current?.focus()) }}
                   onTranscriptComplete={handleGuidedTranscriptComplete}
                   onBusyChange={(busy) => { setVoiceCaptureBusy(busy); if (!busy && !voiceGuidedPlay.enabled) requestAnimationFrame(() => textareaRef.current?.focus()) }}
+                  getTurnBillingId={getDraftTurnBillingId}
+                  onUsageSettlement={handleUsageSettlement}
                   onError={setError}
                 /> : null}
                 <button type="submit" disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0 || !message.trim()} className="aigm-gameplay-send flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground disabled:opacity-45" aria-label="Send gameplay turn">{sending ? <LoaderCircle className="size-5 animate-spin" aria-hidden="true" /> : <Send className="size-5" aria-hidden="true" />}</button>

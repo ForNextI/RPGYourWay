@@ -3,7 +3,7 @@ import { PageShell } from '@/components/PageShell'
 import { PLAY_PACKS, formatPurchasePrice, formatUsageValue } from '@/lib/billing/play-packs'
 import { beginPlayPackCheckout } from '@/app/pricing/actions'
 import { createClient } from '@/lib/supabase/server'
-import { formatUsageDollars, signedUsageDollars, usageMicrousd } from '@/lib/usage/money'
+import { formatUsageDollars, usageMicrousd } from '@/lib/usage/money'
 import { finalizeCheckoutSessionById } from '@/lib/stripe/server'
 import { signOut } from './actions'
 import { isOwnerQaEmail } from '@/lib/usage/owner-qa'
@@ -22,32 +22,37 @@ const statusMessages: Record<string, string> = {
   'account-deleted': 'Your RPG Your Way account was deleted.',
 }
 
-function activityLabel(source: unknown) {
-  if (source === 'shape') return 'Script'
-  if (source === 'play') return 'Play'
-  if (source === 'stripe') return 'Play Pack purchase'
-  if (source === 'stripe-surplus') return 'Payment processing credit'
-  if (source === 'refund') return 'Refund'
-  return typeof source === 'string' && source.trim() ? source.trim() : 'Usage adjustment'
-}
-
 function UsageNote() {
+  const estimates = [
+    ['Starter Play', '$5', 'about 20–30 turns'],
+    ['Occasional Play', '$15', 'about 60–90 turns'],
+    ['Regular Play', '$30', 'about 120–180 turns'],
+    ['Frequent Play', '$45', 'about 180–270 turns'],
+    ['Extended Play', '$65', 'about 260–390 turns'],
+    ['Marathon Play', '$90', 'about 360–540 turns'],
+  ] as const
+
   return (
     <details className="usage-note-details">
-      <summary>A Note on Usage</summary>
+      <summary>What am I getting for my money?</summary>
       <div className="usage-note-copy">
-        <p>Usage can vary quite a bit from one session to another.</p>
-        <p>What you&apos;re paying for is the amount of AI processing your game requires. In simple terms, the more thinking the game has to do, the more usage it takes.</p>
-        <p>If your party spends an afternoon wandering through a field, visiting a tavern, talking with friends, playing dice, and listening to the bard sing, that may use relatively little.</p>
-        <p>A complicated party with multiple characters, subclasses, multiclassing, spells, abilities, and a large combat encounter requires considerably more.</p>
-        <p>That means two sessions of similar length may use different amounts of your balance.</p>
-        <p>There aren&apos;t extra charges hidden inside the heavier session. It simply required more processing to run.</p>
-        <p>We want you to know that before you play, especially if you enjoy mechanically complex characters, large parties, or combat-heavy games.</p>
-        <p>However you like to play, enjoy.</p>
+        <p><strong>RPG Your Way sells prepaid usage, not turns.</strong> The ranges below are deliberately broad planning estimates based on real gameplay testing.</p>
+        <div className="usage-estimate-table" role="table" aria-label="Estimated gameplay by Play Pack">
+          {estimates.map(([name, usage, turns]) => (
+            <div className="usage-estimate-row" role="row" key={name}>
+              <strong role="cell">{name}</strong>
+              <span role="cell">{usage} usage</span>
+              <span role="cell">{turns}</span>
+            </div>
+          ))}
+        </div>
+        <p>These are estimates, not guaranteed minimums or maximums. A mature, complex campaign with frequent talk-to-text and readback can use balance faster. A simpler campaign or lighter voice use may stretch it farther.</p>
+        <p>During Play, gameplay AI, talk-to-text, and AI readback all draw from the same prepaid balance. You can always see your remaining balance and your aggregate usage totals below.</p>
       </div>
     </details>
   )
 }
+
 
 export default async function AccountPage({ searchParams }: AccountPageProps) {
   const params = await searchParams
@@ -75,8 +80,10 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
   }
 
   let wallet: Record<string, unknown> | null = null
-  let ledger: Record<string, unknown>[] = []
+  let usageSummary: Record<string, unknown> | null = null
+  let purchases: Record<string, unknown>[] = []
   let walletUnavailable = false
+  let summaryUnavailable = false
 
   if (user) {
     await supabase.rpc('rpgyw_release_expired_usage')
@@ -90,20 +97,24 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
       walletUnavailable = true
     } else {
       wallet = walletResult.data as Record<string, unknown>
-      const ledgerResult = await supabase
-        .from('usage_ledger')
-        .select('id,entry_type,amount_microusd,balance_after_microusd,source,source_ref,created_at')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(10)
-      ledger = (ledgerResult.data ?? []) as Record<string, unknown>[]
+      const [summaryResult, purchaseResult] = await Promise.all([
+        supabase.rpc('rpgyw_usage_summary'),
+        supabase.rpc('rpgyw_purchase_history', { p_limit: 50 }),
+      ])
+      if (summaryResult.error) summaryUnavailable = true
+      else usageSummary = (Array.isArray(summaryResult.data) ? summaryResult.data[0] : summaryResult.data) as Record<string, unknown> | null
+      purchases = purchaseResult.error ? [] : (purchaseResult.data ?? []) as Record<string, unknown>[]
     }
   }
 
   const balance = usageMicrousd(wallet?.balance_microusd)
   const reserved = usageMicrousd(wallet?.reserved_microusd)
   const available = Math.max(0, balance - reserved)
-  const lowBalance = !ownerQa && !walletUnavailable && available > 0 && available <= 1_000_000
+  const lowBalance = !ownerQa && !walletUnavailable && available <= 1_000_000
+  const aiUsage = usageMicrousd(usageSummary?.ai_processing_microusd)
+  const talkToTextUsage = usageMicrousd(usageSummary?.talk_to_text_microusd)
+  const readbackUsage = usageMicrousd(usageSummary?.readback_microusd)
+  const totalUsage = usageMicrousd(usageSummary?.total_microusd)
 
   return (
     <PageShell>
@@ -158,7 +169,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                   <p className="auth-message auth-message-error">The usage balance is not available yet. Apply the shared-balance database migration, then reload this page.</p>
                 ) : (
                   <>
-                    <p className="usage-balance-copy">Your balance stays in your account until you use it. Successful AI processing deducts its actual metered cost.</p>
+                    <p className="usage-balance-copy">Your balance stays in your account until you use it. During Play, gameplay AI, talk-to-text, and AI readback use this balance; Script processing uses the same balance too.</p>
                     {reserved > 0 ? <p className="usage-balance-reserved"><strong>{formatUsageDollars(reserved)}</strong> is temporarily reserved for work already in progress. Total balance: {formatUsageDollars(balance)}.</p> : null}
                     {lowBalance ? <p className="usage-low-balance" role="status"><strong>Low balance:</strong> {formatUsageDollars(available)} remaining. Add usage before your next larger request.</p> : null}
                   </>
@@ -193,43 +204,64 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
 
                 <div className="usage-disclosure-row">
                   <div className="usage-disclosure-copy">
-                    <p><strong>Purchase price includes payment processing and site operating costs.*</strong></p>
-                    <p><strong>*</strong> Prices assume Stripe&apos;s standard U.S. domestic-card processing rate of 2.9% + 30¢. Site operating amounts are $0.50, $1.05, $2.10, $3.15, $4.55, and $6.30 by pack.</p>
+                    <p><strong>Purchase price includes payment processing and a small site operating contribution.*</strong></p>
+                    <p><strong>*</strong> Each pack contributes 5% of its usage value toward keeping RPG Your Way online: $0.25, $0.75, $1.50, $2.25, $3.25, and $4.50. Prices also retain the existing Stripe assumption of 2.9% + 30¢.</p>
                     <p>If actual payment-processing costs are lower than the amount included, the difference is credited to your RPG Your Way balance.</p>
                   </div>
                   <UsageNote />
                 </div>
               </section> : null}
 
-              {!walletUnavailable ? (
-                <section className="usage-activity" aria-labelledby="usage-activity-heading">
+              {!ownerQa && !walletUnavailable ? (
+                <section className="usage-activity" aria-labelledby="usage-summary-heading">
                   <div className="usage-activity-heading">
                     <div>
-                      <p className="account-state-label">Balance history</p>
-                      <h2 id="usage-activity-heading">Recent activity</h2>
+                      <p className="account-state-label">Usage to date</p>
+                      <h2 id="usage-summary-heading">Where your balance has gone</h2>
                     </div>
-                    <p>Purchases and successful Play or Script usage appear here.</p>
+                    <p>Account totals only. RPG Your Way does not show a turn-by-turn charge list.</p>
                   </div>
-                  {ledger.length ? (
+                  {summaryUnavailable ? <p className="usage-activity-empty">Usage totals are temporarily unavailable.</p> : (
+                    <div className="usage-summary-grid">
+                      <div className="usage-summary-item"><span>AI processing</span><strong>{formatUsageDollars(aiUsage)}</strong></div>
+                      <div className="usage-summary-item"><span>Talk-to-text</span><strong>{formatUsageDollars(talkToTextUsage)}</strong></div>
+                      <div className="usage-summary-item"><span>AI readback</span><strong>{formatUsageDollars(readbackUsage)}</strong></div>
+                      <div className="usage-summary-item usage-summary-item--total"><span>Total metered usage</span><strong>{formatUsageDollars(totalUsage)}</strong></div>
+                    </div>
+                  )}
+                </section>
+              ) : null}
+
+              {!ownerQa && !walletUnavailable ? (
+                <section className="usage-activity" aria-labelledby="purchase-history-heading">
+                  <div className="usage-activity-heading">
+                    <div>
+                      <p className="account-state-label">Play Pack purchases</p>
+                      <h2 id="purchase-history-heading">Purchase history</h2>
+                    </div>
+                    <p>Your purchases are kept here without a per-turn receipt.</p>
+                  </div>
+                  {purchases.length ? (
                     <div className="usage-activity-list">
-                      {ledger.map((entry) => {
-                        const amount = typeof entry.amount_microusd === 'number' || typeof entry.amount_microusd === 'string' ? entry.amount_microusd : 0
-                        const date = typeof entry.created_at === 'string' ? new Date(entry.created_at) : null
+                      {purchases.map((purchase) => {
+                        const date = typeof purchase.created_at === 'string' ? new Date(purchase.created_at) : null
+                        const priceCents = Number(purchase.purchase_price_cents || 0)
+                        const usageCents = Number(purchase.usage_value_cents || 0)
                         return (
-                          <div className="usage-activity-row" key={String(entry.id)}>
+                          <div className="usage-activity-row" key={String(purchase.id)}>
                             <div>
-                              <strong>{activityLabel(entry.source)}</strong>
-                              <span>{date && !Number.isNaN(date.getTime()) ? date.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) : ''}</span>
+                              <strong>{typeof purchase.pack_name === 'string' ? purchase.pack_name : 'Play Pack'}</strong>
+                              <span>{date && !Number.isNaN(date.getTime()) ? date.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}</span>
                             </div>
                             <div className="usage-activity-amount">
-                              <strong>{signedUsageDollars(amount)}</strong>
-                              <span>Balance {formatUsageDollars(entry.balance_after_microusd)}</span>
+                              <strong>${(Math.max(0, priceCents) / 100).toFixed(2)} paid</strong>
+                              <span>${(Math.max(0, usageCents) / 100).toFixed(2)} usage added</span>
                             </div>
                           </div>
                         )
                       })}
                     </div>
-                  ) : <p className="usage-activity-empty">No balance activity yet. Your first Play Pack purchase will start this history.</p>}
+                  ) : <p className="usage-activity-empty">No Play Pack purchases yet.</p>}
                 </section>
               ) : null}
               <DeleteAccountControl />

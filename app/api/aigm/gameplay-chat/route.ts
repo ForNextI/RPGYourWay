@@ -15,8 +15,10 @@ import { naturalizeRawHumanAppearanceLabels } from '@/lib/aigm/appearance-langua
 import { aiContentSafetyPrompt, normalizeAiContentMode } from '@/lib/site/ai-content-mode'
 import { decodeJsonStringFieldPrefix } from '@/lib/aigm/voice-streaming'
 import { gameplayScopeDecision } from '@/lib/aigm/gameplay-scope'
-import { billingErrorResponse, releaseUsage, requireUsageAccount, reserveUsage, settleUsage, type UsageReservation } from '@/lib/usage/server-billing'
+import { billingErrorResponse, releaseUsage, requireUsageAccount, reserveUsage, type UsageReservation } from '@/lib/usage/server-billing'
 import { estimateTerraMaximumMicrousd, terraProviderCostMicrousd } from '@/lib/usage/play-cost'
+import { ttsReserveMicrousd } from '@/lib/usage/audio-cost'
+import { attachPlayTurnReservation, ensurePlayTurn, markGameplayComplete, markPlayTurnReleased, recordPlayTurnComponent, successfulProviderCostSoFar } from '@/lib/usage/play-turn-billing'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -161,6 +163,7 @@ interface GameplayChatBody {
   dice_preference?: 'player_rolls' | 'aigm_rolls' | 'ask_each_time'
   character_assistance_level?: number
   stream?: boolean
+  narration_expected?: boolean
 }
 
 interface OpenAIResponsePayload {
@@ -991,6 +994,9 @@ export async function POST(request: Request) {
     return billingErrorResponse(error)
   }
 
+  const turnBillingId = request.headers.get('x-rpgyw-operation-id')?.trim() || requestId
+  const narrationExpected = body.narration_expected === true
+
   const ownerAccessAuthenticated = usageAccount.ownerQa
   const ownerGodModePhraseSupplied = mode === 'turn' && ownerGodModePhraseMatches(message)
   const ownerGodModeActivation = ownerAccessAuthenticated && ownerGodModePhraseSupplied
@@ -1562,18 +1568,24 @@ This imported campaign was saved in Teen mode even though the onboarding page sh
   let reservation: UsageReservation | null = null
   try {
     const serializedContext = JSON.stringify({ ...context, lore_web_search_available: false })
-    const maximumMicrousd = estimateTerraMaximumMicrousd(
+    const sourceRef = [body.adventure_id || 'campaign', mode === 'turn' ? `turn-${safeCount(body.turn_count) + 1}` : 'opening'].join(':')
+    await ensurePlayTurn(usageAccount, { turnId: turnBillingId, kind: 'live', sourceRef })
+    const providerCostBeforeGameplay = await successfulProviderCostSoFar(usageAccount, turnBillingId)
+    const terraMaximumMicrousd = estimateTerraMaximumMicrousd(
       systemPrompt.length + serializedContext.length,
       6_500,
       1.6,
       10,
     )
+    const maximumMicrousd = terraMaximumMicrousd + providerCostBeforeGameplay + (narrationExpected ? ttsReserveMicrousd() : 0)
     reservation = await reserveUsage(usageAccount, {
       maximumMicrousd,
-      feature: 'gameplay',
-      sourceRef: [body.adventure_id || 'campaign', mode === 'turn' ? `turn-${safeCount(body.turn_count) + 1}` : 'opening'].join(':'),
-      operationId: request.headers.get('x-rpgyw-operation-id') || requestId,
+      feature: 'gameplay-turn',
+      sourceRef,
+      operationId: turnBillingId,
+      holdMinutes: 30,
     })
+    await attachPlayTurnReservation(usageAccount, turnBillingId, reservation, narrationExpected)
 
     async function requestGameplay(streamResponse: boolean) {
       return fetch('https://api.openai.com/v1/responses', {
@@ -1616,6 +1628,7 @@ This imported campaign was saved in Teen mode even though the onboarding page sh
           request_id: response.headers.get('x-request-id'),
         },
       })
+      await markPlayTurnReleased(usageAccount, turnBillingId, 'provider_error')
       reservation = null
       return NextResponse.json({
         error: errorPayload.error?.message || 'The gameplay AIGM could not answer.',
@@ -1638,7 +1651,11 @@ This imported campaign was saved in Teen mode even though the onboarding page sh
               controller.enqueue(streamLine({ type: 'message_delta', delta }))
             })
             if (!consumed.outputText.trim()) throw new Error('The gameplay AIGM returned no usable text.')
-            const billing = await settleUsage(reservation!, {
+            await recordPlayTurnComponent(usageAccount, {
+              turnId: turnBillingId,
+              componentId: `gameplay:${turnBillingId}`,
+              componentType: 'gameplay',
+              status: 'success',
               model,
               providerCostMicrousd: terraProviderCostMicrousd(consumed.usage),
               metadata: {
@@ -1648,20 +1665,24 @@ This imported campaign was saved in Teen mode even though the onboarding page sh
                 owner_god_mode: ownerGodModeActive,
               },
             })
+            await markGameplayComplete(usageAccount, turnBillingId)
             settled = true
             const payload = {
               ...buildGameplayPayload(consumed.outputText, consumed.responseId),
               usage_billing: {
-                billed_microusd: billing.billedMicrousd,
-                balance_microusd: billing.balanceMicrousd,
-                owner_qa_exempt: billing.ownerQaExempt,
-                settlement_warning: billing.settlementWarning,
+                billed_microusd: 0,
+                balance_microusd: null,
+                owner_qa_exempt: usageAccount.ownerQa,
+                settlement_warning: null,
+                pending: true,
+                turn_billing_id: turnBillingId,
               },
             }
             controller.enqueue(streamLine({ type: 'result', payload }))
           } catch (error) {
             if (!settled) {
               await releaseUsage(reservation, { model, metadata: { reason: 'stream_or_parse_failure' } })
+              await markPlayTurnReleased(usageAccount, turnBillingId, 'stream_or_parse_failure')
             }
             controller.enqueue(streamLine({ type: 'error', error: error instanceof Error ? error.message : 'The gameplay AIGM stream failed.' }))
           } finally {
@@ -1684,6 +1705,7 @@ This imported campaign was saved in Teen mode even though the onboarding page sh
     const outputText = extractOutputText(payload)
     if (!outputText) {
       await releaseUsage(reservation, { model, metadata: { reason: 'empty_provider_output' } })
+      await markPlayTurnReleased(usageAccount, turnBillingId, 'empty_provider_output')
       reservation = null
       return NextResponse.json({ error: 'The gameplay AIGM returned no usable text.', request_id: requestId }, { status: 502 })
     }
@@ -1694,11 +1716,16 @@ This imported campaign was saved in Teen mode even though the onboarding page sh
       gameplayPayload = buildGameplayPayload(outputText, payload.id || requestId)
     } catch (error) {
       await releaseUsage(reservation, { model, metadata: { reason: 'invalid_structured_output' } })
+      await markPlayTurnReleased(usageAccount, turnBillingId, 'invalid_structured_output')
       reservation = null
       throw error
     }
 
-    const billing = await settleUsage(reservation, {
+    await recordPlayTurnComponent(usageAccount, {
+      turnId: turnBillingId,
+      componentId: `gameplay:${turnBillingId}`,
+      componentType: 'gameplay',
+      status: 'success',
       model,
       providerCostMicrousd: terraProviderCostMicrousd(payload.usage),
       metadata: {
@@ -1708,18 +1735,24 @@ This imported campaign was saved in Teen mode even though the onboarding page sh
         owner_god_mode: ownerGodModeActive,
       },
     })
+    await markGameplayComplete(usageAccount, turnBillingId)
     reservation = null
     return NextResponse.json({
       ...gameplayPayload,
       usage_billing: {
-        billed_microusd: billing.billedMicrousd,
-        balance_microusd: billing.balanceMicrousd,
-        owner_qa_exempt: billing.ownerQaExempt,
-        settlement_warning: billing.settlementWarning,
+        billed_microusd: 0,
+        balance_microusd: null,
+        owner_qa_exempt: usageAccount.ownerQa,
+        settlement_warning: null,
+        pending: true,
+        turn_billing_id: turnBillingId,
       },
     }, { headers: { 'Cache-Control': 'no-store' } })
   } catch (error) {
-    if (reservation) await releaseUsage(reservation, { model, metadata: { reason: 'request_failure' } })
+    if (reservation) {
+      await releaseUsage(reservation, { model, metadata: { reason: 'request_failure' } })
+      await markPlayTurnReleased(usageAccount, turnBillingId, 'request_failure')
+    }
     if (error && typeof error === 'object' && 'status' in error) return billingErrorResponse(error)
     return NextResponse.json({
       error: error instanceof Error ? error.message : 'The gameplay AIGM request failed.',

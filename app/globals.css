@@ -6617,3 +6617,82 @@ body a[class*="rounded"][class*="bg-"]:focus-visible {
 .site-footer a:not(.kofi-support-button) {
   box-shadow: none !important;
 }
+
+/* RPG Your Way 1.8.12 account usage summary + turn-estimate furniture.
+   Customer-facing accounting stays aggregate: no per-turn receipt tape. */
+.account-main .usage-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .7rem;
+  margin-top: 1rem;
+}
+.account-main .usage-summary-item,
+.account-main .usage-estimate-row {
+  border: 1px solid var(--forest-deep);
+  border-radius: 11px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--rpgyw-pale-olive-light) 78%, var(--cream-bright)),
+      color-mix(in srgb, var(--rpgyw-pale-olive) 68%, var(--cream-bright))
+    );
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-edge),
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    inset 0 -2px 0 rgb(63 74 49 / .08),
+    0 2px 0 2px var(--rpgyw-brass-shadow),
+    0 6px 10px rgb(37 45 35 / .09);
+}
+.account-main .usage-summary-item {
+  display: grid;
+  gap: .28rem;
+  padding: .8rem .85rem;
+}
+.account-main .usage-summary-item span {
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 800;
+}
+.account-main .usage-summary-item strong {
+  color: var(--forest-deep);
+  font-size: 1.15rem;
+}
+.account-main .usage-summary-item--total {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--forest) 88%, white),
+      var(--forest-deep)
+    );
+  color: var(--cream-bright);
+}
+.account-main .usage-summary-item--total span,
+.account-main .usage-summary-item--total strong {
+  color: var(--cream-bright);
+}
+.account-main .usage-estimate-table {
+  display: grid;
+  gap: .55rem;
+}
+.account-main .usage-estimate-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1.2fr) minmax(90px, .65fr) minmax(150px, 1fr);
+  align-items: center;
+  gap: .7rem;
+  padding: .65rem .75rem;
+}
+.account-main .usage-estimate-row strong { color: var(--forest-deep); }
+.account-main .usage-estimate-row span:last-child {
+  color: var(--forest-deep);
+  font-weight: 900;
+  text-align: right;
+}
+
+@media (max-width: 760px) {
+  .account-main .usage-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .account-main .usage-estimate-row { grid-template-columns: 1fr; gap: .12rem; }
+  .account-main .usage-estimate-row span:last-child { text-align: left; }
+}
+@media (max-width: 440px) {
+  .account-main .usage-summary-grid { grid-template-columns: 1fr; }
+}

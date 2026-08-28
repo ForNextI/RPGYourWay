@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { isRateLimited } from '@/lib/aigm/rate-limit'
 import { isKnownPhantomTranscription, transcriptionPromptFor } from '@/lib/aigm/transcription-guard'
 import { billingErrorResponse, requireUsageAccount } from '@/lib/usage/server-billing'
+import { transcriptionProviderCostMicrousd } from '@/lib/usage/audio-cost'
+import { ensurePlayTurn, recordPlayTurnComponent } from '@/lib/usage/play-turn-billing'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -17,13 +19,16 @@ function line(value: unknown) {
 }
 
 export async function POST(request: Request) {
+  let account
   try {
-    await requireUsageAccount()
+    account = await requireUsageAccount()
   } catch (error) {
     return billingErrorResponse(error)
   }
 
-  const apiKey = process.env.OPENAI_API_KEY
+  const apiKey = process.env.OPENAI_TRANSCRIBE_API_KEY?.trim()
+    || process.env.OPENAI_AUDIO_API_KEY?.trim()
+    || process.env.OPENAI_API_KEY?.trim()
   if (!apiKey) return NextResponse.json({ error: 'Voice transcription is not configured yet.' }, { status: 503 })
   if (isRateLimited(request, 'aigm-transcription', MAX_REQUESTS_PER_TEN_MINUTES, WINDOW_MS)) {
     return NextResponse.json({ error: 'This connection has sent too many microphone recordings in a short period. Wait a few minutes and try again.' }, { status: 429 })
@@ -38,8 +43,19 @@ export async function POST(request: Request) {
 
   const audio = form.get('audio')
   const context = form.get('context') === 'onboarding' ? 'onboarding' : 'gameplay'
+  const turnId = typeof form.get('turn_id') === 'string' ? String(form.get('turn_id')).trim() : ''
+  const componentId = typeof form.get('component_id') === 'string' ? String(form.get('component_id')).trim() : crypto.randomUUID()
   if (!(audio instanceof File) || audio.size === 0) return NextResponse.json({ error: 'No microphone recording was received.' }, { status: 400 })
   if (audio.size > MAX_AUDIO_BYTES) return NextResponse.json({ error: 'That recording is too long. Keep spoken turns under two minutes.' }, { status: 413 })
+
+  if (context === 'gameplay') {
+    if (!turnId) return NextResponse.json({ error: 'This spoken turn is missing its billing id. Please try recording it again.' }, { status: 400 })
+    try {
+      await ensurePlayTurn(account, { turnId, kind: 'live' })
+    } catch (error) {
+      return NextResponse.json({ error: error instanceof Error ? error.message : 'Play turn billing could not be prepared.' }, { status: 400 })
+    }
+  }
 
   const model = process.env.OPENAI_TRANSCRIBE_MODEL?.trim() || DEFAULT_MODEL
   const upstreamForm = new FormData()
@@ -47,7 +63,6 @@ export async function POST(request: Request) {
   upstreamForm.append('model', model)
   upstreamForm.append('language', 'en')
   upstreamForm.append('prompt', transcriptionPromptFor(context))
-  upstreamForm.append('stream', 'true')
 
   let upstream: Response
   try {
@@ -58,82 +73,78 @@ export async function POST(request: Request) {
       signal: AbortSignal.timeout(55_000),
     })
   } catch (error) {
+    if (context === 'gameplay' && turnId) {
+      await recordPlayTurnComponent(account, {
+        turnId,
+        componentId,
+        componentType: 'ttt',
+        status: 'failed',
+        model,
+        metadata: { reason: 'provider_connection_failure' },
+      }).catch(() => undefined)
+    }
     return NextResponse.json({ error: error instanceof Error ? error.message : 'The transcription connection failed.' }, { status: 502 })
   }
 
-  if (!upstream.ok || !upstream.body) {
-    const payload = await upstream.json().catch(() => ({})) as { error?: { message?: string } }
+  const payload = await upstream.json().catch(() => ({})) as {
+    text?: string
+    usage?: unknown
+    error?: { message?: string }
+  }
+  const providerCostMicrousd = transcriptionProviderCostMicrousd(payload.usage)
+
+  if (!upstream.ok) {
+    if (context === 'gameplay' && turnId) {
+      await recordPlayTurnComponent(account, {
+        turnId,
+        componentId,
+        componentType: 'ttt',
+        status: 'failed',
+        model,
+        providerCostMicrousd,
+        metadata: { reason: 'provider_error', status: upstream.status, provider_request_id: upstream.headers.get('x-request-id') },
+      }).catch(() => undefined)
+    }
     return NextResponse.json({ error: payload.error?.message || 'The transcription service could not read that recording.' }, { status: upstream.status || 502 })
   }
 
-  const contentType = upstream.headers.get('content-type') || ''
-  if (!contentType.includes('text/event-stream')) {
-    const payload = await upstream.json().catch(() => ({})) as { text?: string; error?: { message?: string } }
-    const text = typeof payload.text === 'string' ? payload.text.trim() : ''
-    if (!text || isKnownPhantomTranscription(text)) {
-      return NextResponse.json({ error: payload.error?.message || 'No speech was detected in that recording.' }, { status: 422 })
+  const text = typeof payload.text === 'string' ? payload.text.trim() : ''
+  if (!text || isKnownPhantomTranscription(text)) {
+    if (context === 'gameplay' && turnId) {
+      await recordPlayTurnComponent(account, {
+        turnId,
+        componentId,
+        componentType: 'ttt',
+        status: 'success',
+        model,
+        providerCostMicrousd,
+        metadata: { reason: 'no_speech', provider_request_id: upstream.headers.get('x-request-id'), usable_transcript: false },
+      }).catch(() => undefined)
     }
-    return new Response(line({ type: 'done', text }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/x-ndjson; charset=utf-8',
-        'Cache-Control': 'no-store',
-        'X-Content-Type-Options': 'nosniff',
-      },
-    })
+    return NextResponse.json({ error: 'No speech was detected in that recording.' }, { status: 422 })
   }
 
-  const stream = new ReadableStream<Uint8Array>({
-    async start(controller) {
-      const reader = upstream.body!.getReader()
-      const decoder = new TextDecoder()
-      let buffer = ''
-      let transcript = ''
+  if (context === 'gameplay' && turnId) {
+    try {
+      await recordPlayTurnComponent(account, {
+        turnId,
+        componentId,
+        componentType: 'ttt',
+        status: 'success',
+        model,
+        providerCostMicrousd,
+        metadata: {
+          provider_request_id: upstream.headers.get('x-request-id'),
+          audio_bytes: audio.size,
+        },
+      })
+    } catch (error) {
+      console.error('Talk-to-text usage could not be recorded.', error)
+      return NextResponse.json({ error: 'RPG Your Way could not record this transcription against your Play balance. Please try again.' }, { status: 503 })
+    }
+  }
 
-      function consumeEventBlock(eventBlock: string) {
-        for (const eventLine of eventBlock.split('\n')) {
-          if (!eventLine.startsWith('data:')) continue
-          const raw = eventLine.slice(5).trim()
-          if (!raw || raw === '[DONE]') continue
-          const event = JSON.parse(raw) as { type?: string; delta?: string; text?: string; message?: string; error?: { message?: string } }
-          if (event.type === 'transcript.text.delta' && event.delta) transcript += event.delta
-          else if (event.type === 'transcript.text.done' && typeof event.text === 'string') transcript = event.text
-          else if (event.type === 'error') throw new Error(event.error?.message || event.message || 'The transcription service returned an error.')
-        }
-      }
-
-      function consumeBufferedEvents(final = false) {
-        buffer = buffer.replace(/\r\n/g, '\n').replace(/\r/g, '\n')
-        const events = buffer.split('\n\n')
-        buffer = events.pop() || ''
-        for (const eventBlock of events) consumeEventBlock(eventBlock)
-        if (final && buffer.trim()) {
-          consumeEventBlock(buffer)
-          buffer = ''
-        }
-      }
-
-      try {
-        while (true) {
-          const { value, done } = await reader.read()
-          if (done) break
-          buffer += decoder.decode(value, { stream: true })
-          consumeBufferedEvents()
-        }
-        buffer += decoder.decode()
-        consumeBufferedEvents(true)
-        const finalText = transcript.trim()
-        if (!finalText || isKnownPhantomTranscription(finalText)) throw new Error('No speech was detected in that recording.')
-        controller.enqueue(line({ type: 'done', text: finalText }))
-      } catch (error) {
-        controller.enqueue(line({ type: 'error', error: error instanceof Error ? error.message : 'The transcription stream failed.' }))
-      } finally {
-        controller.close()
-      }
-    },
-  })
-
-  return new Response(stream, {
+  return new Response(line({ type: 'done', text }), {
     status: 200,
     headers: {
       'Content-Type': 'application/x-ndjson; charset=utf-8',
