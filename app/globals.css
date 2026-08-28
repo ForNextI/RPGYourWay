@@ -7867,3 +7867,17 @@ html {
     justify-content: flex-end;
   }
 }
+
+
+/* RPG Your Way 1.11.8 mini-rating focus-ring hotfix.
+   Keep the cream trigger face; use the house lime only as the spaced focus/open
+   outline instead of flooding the whole control. */
+.start-mini-rating-menu > summary:hover,
+.start-mini-rating-menu > summary:focus,
+.start-mini-rating-menu > summary:focus-visible,
+.start-mini-rating-menu[open] > summary {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 97%, white), var(--cream)) !important;
+  color: var(--forest-deep) !important;
+  outline: 3px solid var(--lime);
+  outline-offset: 3px;
+}

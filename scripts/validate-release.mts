@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.11.7')
-assert.equal(pkg.rpgywVersion, '1.11.7')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.7'/)
+assert.equal(pkg.version, '1.11.8')
+assert.equal(pkg.rpgywVersion, '1.11.8')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.8'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -61,6 +61,7 @@ for (const file of [
   'README-1.11.5.md',
   'README-1.11.6.md',
   'README-1.11.7.md',
+  'README-1.11.8.md',
   'lib/multiplayer/types.ts',
   'lib/multiplayer/errors.ts',
   'lib/multiplayer/server.ts',
@@ -1158,3 +1159,10 @@ assert.match(release1117Css, /\.start-character-actions--secondary \{[\s\S]*?mar
 assert.match(release1117Css, /\.start-mini-rating-menu > summary:hover,[\s\S]*?background: var\(--lime\) !important;/)
 assert.match(release1117Css, /\.start-mini-rating-options button:hover,[\s\S]*?background: var\(--lime\) !important;/)
 console.log('RPG Your Way 1.11.7 Start rating and destructive-action QA checks passed.')
+
+
+const release1118Css = read('app/globals.css')
+assert.match(release1118Css, /RPG Your Way 1\.11\.8 mini-rating focus-ring hotfix/)
+assert.match(release1118Css, /\.start-mini-rating-menu > summary:hover,[\s\S]*?outline: 3px solid var\(--lime\);[\s\S]*?outline-offset: 3px;/)
+assert.match(release1118Css, /background: linear-gradient\(180deg, color-mix\(in srgb, var\(--cream-bright\) 97%, white\), var\(--cream\)\) !important;/)
+console.log('RPG Your Way 1.11.8 mini-rating focus-ring hotfix checks passed.')
