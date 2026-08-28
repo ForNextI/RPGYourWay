@@ -1,0 +1,592 @@
+{
+  "id": "wardens-pc-starter-druid",
+  "playName": "Druid",
+  "sourceFileName": "Druid 1 Mark II.txt",
+  "sourceMimeType": "text/plain",
+  "portraitUrl": "/images/starter-characters/druid.webp",
+  "sourceText": "WARDENSPC PLAIN-TEXT CHARACTER RECORD\n\n\nRECORD INFORMATION\n\nRecord Version: Druid 1 Mark III\nLast Updated: 2026-08-11\nRules Version: 2024 D&D rules / SRD 5.2.1\nSource Character Sheet: Mistinarperadnacles_169281031.pdf\nDevelopment Status: Complete\n\n\nCHECKBOX KEY\n\nEquipment:\n[X] = actively worn, wielded, held, or otherwise ready for immediate use\n[ ] = carried, packed, stored, or not currently in use\n\nHit Dice, Limited-Use Resources, and Spell Slots:\n[ ] = available\n[X] = expended or used\n\nHeroic Inspiration:\n[X] = currently possessed\n[ ] = not currently possessed\n\nConcentration:\n[X] = currently concentrating on the named spell or effect\n[ ] = not currently concentrating\n\nSpells:\nCantrips do not need checkboxes.\n[X] = prepared or always prepared\n[ ] = known, recorded, or in a spellbook but not currently prepared\n\nAttuned Items:\n[X] = currently attuned\n[ ] = carried but not currently attuned\n\n\nIDENTITY AND ORIGIN\n\nPlayer Name: Mistinarperadnacles\nCharacter Name: Druid 1\nName Used During Play: Druid 1\nSex: Male\nPronouns: He/Him\nSpecies: Green Dragonborn\nLineage, Ancestry, or Heritage: Green Dragon ancestry\nClass and Level: Druid 1\nSubclass: None at level 1\nSubclass Gained at Level: Druid level 3\nBackground: Sage\nSage Specialty: Researcher\nOrigin Feat: Magic Initiate (Wizard)\nPrimal Order: Magician\nExperience Points or Milestone: Milestone\nAlignment: Chaotic Neutral\n\nFaith or Deity:\nThe Living Continuance, a setting-neutral druidic philosophy holding that life\nis not a fixed ideal state. Forests, marshes, ruins, farms, cities, fungi,\npredators, and people continually alter one another. Wisdom lies in preserving\nthe possibility of healthy change rather than freezing the world into a\nsingle preferred arrangement.\n\nHome Region or Place of Origin: Not specified\nCurrent Residence or Base:\nFormerly Mossglass Station; no permanent base established at the start of play\n\nSize: Medium\nAge: 31\nHeight: 6 ft. 5 in.\nWeight: 258 lb.\n\nSkin, Scales, Fur, or Other Coloration:\nVivid emerald-green scales with darker moss-green mottling over the back,\nshoulders, and tail.\n\nHair, Crest, Horns, or Other Distinguishing Features:\nNo hair. Pale ivory horns curve outward and back. Small leaf-shaped scale\nridges frame the jaw.\n\nEyes: Yellow-green\n\nGeneral Appearance:\nA broad Green Dragonborn with a long reptilian face, heavy tail, and layered\nscales resembling wet leaves in shade. His horns and claws are scratched and\nworn from fieldwork rather than polished.\n\nHe wears practical leather armor beneath a weathered scholar's robe. His\nwooden shield is stained with old plant dyes and field marks. His staff serves\nas walking stick, spellcasting focus, measuring rod, and Shillelagh weapon.\n\n\nCAMPAIGN AND TOKEN INFORMATION\n\nCampaign: WardensPC starter character\nIs Current Party's Active Leader: No\n\nAssociated Token Background Color: Green\n\nCharacter Token or Portrait Notes:\nUse a green token background. Show a broad 6 ft. 5 in. Green Dragonborn man\nwith vivid emerald scales, darker moss-green mottling, yellow-green eyes,\npale ivory horns sweeping outward and back, leaf-shaped jaw ridges, a heavy\ntail, scratched claws, leather armor, a weathered scholar's robe, wooden\nshield, sickle, and natural wooden staff.\n\nHe should look like a field researcher who has spent years kneeling in mud,\ntaking samples, reading damaged inscriptions, and following animal trails,\nnot a pristine ceremonial nature priest.\n\n\nCOMBAT AND TRACKING\n\nArmor Class: 14\nArmor Class Calculation:\nLeather armor 11 + Dexterity modifier 1 + shield 2\n\nCurrent Hit Points: 10\nMaximum Hit Points: 10\nTemporary Hit Points: None\n\nHit Dice:\n1d8 total\n[ ] 1d8 available\n\nDeath Saves:\nSuccesses: [ ][ ][ ]\nFailures: [ ][ ][ ]\n\nHeroic Inspiration: [ ]\nConcentration: [ ]\nConcentrating On:\n\nSpeed and Movement Types: Walking 30 ft.\nInitiative: +1\nProficiency Bonus: +2\nDruid Spell Save DC: 13\nDruid Spell Attack Bonus: +5\nBreath Weapon Save DC: 12\nAbility Save DC: 9 for Strength-based Grapple or Shove effects\nPassive Perception: 15\nPassive Insight: 13\nPassive Investigation: 11\nCurrent Conditions: None\n\nOther Combat Notes:\nShillelagh transforms the staff into Druid 1's primary melee weapon, using\nWisdom rather than Strength.\nProduce Flame and Ray of Frost provide ranged spell attacks.\nFaerie Fire and Entangle control groups and improve allies' positioning.\nHealing Word provides emergency healing at range.\nHis Poison Breath Weapon can affect a group in either a cone or a line.\nPoison Resistance protects him from Poison damage.\nDruid 1 has no Wild Shape feature at level 1 under the 2024 Druid progression.\n\n\nABILITY SCORES\n\nStrength: 8 (-1)\nDexterity: 12 (+1)\nConstitution: 15 (+2)\nIntelligence: 13 (+1)\nWisdom: 17 (+3)\nCharisma: 10 (+0)\n\n\nSAVING THROWS\n\nStrength: -1\nDexterity: +1\nConstitution: +2\nIntelligence: +3, proficient\nWisdom: +5, proficient\nCharisma: +0\n\nSaving Throw Proficiencies: Intelligence and Wisdom\nSaving Throw Modifiers or Special Advantages: None\n\n\nSKILLS\n\nAcrobatics: +1\nAnimal Handling: +3\nArcana: +6, proficient and enhanced by Primal Order\nAthletics: -1\nDeception: +0\nHistory: +3, proficient\nInsight: +3\nIntimidation: +0\nInvestigation: +1\nMedicine: +3\nNature: +6, proficient and enhanced by Primal Order\nPerception: +5, proficient\nPerformance: +0\nPersuasion: +0\nReligion: +1\nSleight of Hand: +1\nStealth: +1\nSurvival: +3\n\nExpertise or Other Skill Notes:\nPrimal Order: Magician adds Druid 1's Wisdom modifier to his Intelligence\n(Arcana) and Intelligence (Nature) checks as recorded on the source sheet.\n\n\nSENSES AND DEFENSES\n\nDarkvision or Other Senses: Darkvision 60 ft.\nDamage Resistances: Poison\nDamage Vulnerabilities: None\nDamage Immunities: None\nCondition Immunities: None\n\nDefensive Advantages, Disadvantages, or Special Notes:\nThe shield contributes +2 AC while wielded.\nAbsorb Elements can provide temporary protection from an eligible elemental\ndamage type when prepared and cast.\nDraconic Flight is unavailable until character level 5.\n\n\nTRAINING AND PROFICIENCIES\n\nArmor Training: Light armor\nShield Training: Shields\nWeapon Proficiencies: Simple weapons\nTool Proficiencies:\nCalligrapher's supplies\nHerbalism kit\n\nVehicle Proficiencies: None recorded\nGaming Set or Musical Instrument Proficiencies: None\n\nOther Training:\nField sampling and specimen preservation\nEcological succession studies\nToxic-plant and contaminated-water surveys\nHistorical land-use research\nDruidic trail marking\nScientific illustration and field notation\nHerbal preparation\n\n\nLANGUAGES\n\nLanguages Known:\nCommon\nDraconic\nElvish\n\nSecret or Class Languages:\nDruidic\n\nCommunication Notes:\nDruidic can be used to leave hidden messages. Other creatures who know Druidic\nspot them automatically. Other observers can detect that a message exists with\na successful DC 15 Intelligence (Investigation) check but cannot decipher it\nwithout magic.\n\nComprehend Languages provides literal understanding of spoken and written\nlanguage while active, subject to the spell's normal limitations.\n\n\nATTACKS, WEAPONS, AND OFFENSIVE OPTIONS\n\nName: Shillelagh Staff\nAttack Bonus or Save DC: +5\nDamage or Effect: 1d8+3 Bludgeoning or Force\nDamage Type: Bludgeoning or Force, chosen when damage is dealt\nRange or Reach: 5 ft.\nAction Type:\nBonus Action to cast Shillelagh; Action to attack\n\nProperties:\nMagically empowered simple staff; one-handed while shield is wielded\n\nWeapon Mastery:\nTopple is the Quarterstaff's mastery property, but Druid 1 has no Weapon\nMastery feature\n\nAmmunition or Uses: At will; Shillelagh lasts 1 minute\n\nNotes:\nPrimary melee option. Shillelagh allows Wisdom to replace Strength for attack\nand damage rolls and changes the weapon's damage die as stated by the spell.\n\n\nName: Staff without Shillelagh\nAttack Bonus or Save DC: +1\nDamage or Effect:\n1d6-1 Bludgeoning one-handed\n1d8-1 Bludgeoning two-handed\n\nDamage Type: Bludgeoning\nRange or Reach: 5 ft.\nAction Type: Action\nProperties: Simple, versatile\nWeapon Mastery:\nTopple is the weapon's mastery property, but Druid 1 has no Weapon Mastery\nfeature\n\nAmmunition or Uses: None\nNotes: The same wooden staff used as focus and walking stick.\n\n\nName: Sickle\nAttack Bonus or Save DC: +1\nDamage or Effect:\n1d4-1 Slashing normally\nTwo-Weapon Fighting / Light-property extra attack: 1d4-1 Slashing; the negative\nStrength modifier still applies under the Light-property rule\nDamage Type: Slashing\nRange or Reach: 5 ft.\nAction Type: Action or Light-property additional attack\nProperties: Light, simple\nWeapon Mastery:\nNick is the weapon's mastery property, but Druid 1 has no Weapon Mastery\nfeature\n\nAmmunition or Uses: None\nNotes: Utility tool and backup weapon.\n\n\nName: Produce Flame\nAttack Bonus or Save DC: +5 spell attack\nDamage or Effect: 1d8 Fire\nDamage Type: Fire\nRange or Reach: 60 ft. when hurled\nAction Type:\nBonus Action to create the flame; attack as allowed by the spell\n\nProperties: Druid cantrip\nWeapon Mastery: None\nAmmunition or Uses: At will\n\n\nName: Ray of Frost\nAttack Bonus or Save DC: +5 spell attack\nDamage or Effect:\n1d8 Cold damage and the target's Speed is reduced by 10 ft. until the start of\nDruid 1's next turn\n\nDamage Type: Cold\nRange or Reach: 60 ft.\nAction Type: Action\nProperties: Magic Initiate (Wizard) cantrip\nWeapon Mastery: None\nAmmunition or Uses: At will\n\n\nName: Breath Weapon, Poison\nAttack Bonus or Save DC: Dexterity save DC 12\nDamage or Effect:\n1d10 Poison damage on a failed save, or half as much on a successful save\n\nDamage Type: Poison\nRange or Reach:\nChoose each time:\n15-ft. cone\n30-ft. line that is 5 ft. wide\n\nAction Type:\nReplaces one attack when Druid 1 takes the Attack action\n\nProperties: Green Dragonborn species trait\nWeapon Mastery: None\nAmmunition or Uses: 2 uses per Long Rest\n\n\nName: Unarmed Strike\nAttack Bonus or Save DC: +1 attack or DC 9 save\nDamage or Effect: 0 Bludgeoning damage, Grapple, or Shove\nDamage Type: Bludgeoning\nRange or Reach: 5 ft.\nAction Type: Attack\nProperties: Unarmed\nWeapon Mastery: None\nAmmunition or Uses: None\n\n\nSELECTED WEAPON MASTERIES\n\nNone. Druid 1 does not have the Weapon Mastery feature.\n\n\nARMOR AND SHIELDS\n\nArmor: Leather armor\nCurrently Worn: [X]\nArmor Class: 12 before shield\nStrength Requirement: None\nStealth Effect: None\nNotes: Base AC 11 plus Dexterity modifier 1.\n\nShield: Wooden shield\nCurrently Wielded: [X]\nArmor Class Bonus: +2\nNotes:\nCurrent total AC is 14. Druid 1 can hold the shield and use his staff\none-handed.\n\n\nEQUIPMENT\n\n[X] Item: Leather armor | Quantity: 1 | Weight: 10 lb. | Worn, Held, or Stored Where: Worn beneath robe | Notes: Primary armor.\n[X] Item: Wooden shield | Quantity: 1 | Weight: 6 lb. | Worn, Held, or Stored Where: Wielded | Notes: Plant-dyed and marked with field measurements.\n[X] Item: Wooden druidic-focus staff | Quantity: 1 | Weight: 4 lb. | Worn, Held, or Stored Where: In hand | Notes: Druid class starting focus; walking staff, measuring rod, and Shillelagh weapon.\n[ ] Item: Scholar's quarterstaff | Quantity: 1 | Weight: 4 lb. | Worn, Held, or Stored Where: Strapped externally to pack | Notes: Separate quarterstaff supplied by the Sage background; retained rather than merged with the druidic focus.\n[X] Item: Sickle | Quantity: 1 | Weight: 2 lb. | Worn, Held, or Stored Where: Belt | Notes: Tool and backup weapon.\n[X] Item: Weathered scholar's robe | Quantity: 1 | Weight: 4 lb. | Worn, Held, or Stored Where: Worn | Notes: Reinforced at knees and elbows.\n[X] Item: Backpack | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Worn | Notes: Main equipment container.\n[X] Item: Ordinary pouch | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Belt | Notes: Coins, chalk, small samples, and components.\n[X] Item: Component pouch | Quantity: 1 | Weight: 2 lb. | Worn, Held, or Stored Where: Belt | Notes: Noncostly material components when the staff is unavailable.\n[ ] Item: Calligrapher's supplies | Quantity: 1 set | Weight: 5 lb. | Worn, Held, or Stored Where: Backpack | Notes: Pens, brushes, ink, and preparation tools.\n[ ] Item: Herbalism kit | Quantity: 1 set | Weight: 3 lb. | Worn, Held, or Stored Where: Backpack | Notes: Clippers, mortar, pouches, vials, and preparation tools.\n[ ] Item: Parchment | Quantity: 8 sheets | Weight: Negligible | Worn, Held, or Stored Where: Document case | Notes: Field notes and copies.\n[ ] Item: Research book | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Backpack | Notes: Mossglass Station field reference on disturbed ecosystems.\n[ ] Item: Oil | Quantity: 2 flasks | Weight: 2 lb. total | Worn, Held, or Stored Where: Padded backpack compartment | Notes: Lamp and general use.\n[ ] Item: Rations | Quantity: 10 days | Weight: 20 lb. total | Worn, Held, or Stored Where: External provision bundle secured to pack frame | Notes: Durable traveling food; carried outside the backpack interior to respect its capacity.\n[ ] Item: Waterskin | Quantity: 1 | Weight: 5 lb. full | Worn, Held, or Stored Where: Backpack exterior | Notes: Filled at the start of play.\n[ ] Item: Hemp rope | Quantity: 50 ft. | Weight: 5 lb. | Worn, Held, or Stored Where: Exterior coil on pack frame | Notes: Climbing, hauling, and restraint use.\n[ ] Item: Bedroll | Quantity: 1 | Weight: 7 lb. | Worn, Held, or Stored Where: Strapped to backpack | Notes: Standard traveling bedroll.\n[ ] Item: Wool blanket | Quantity: 1 | Weight: 3 lb. | Worn, Held, or Stored Where: Strapped to backpack | Notes: Camp and cold-weather use.\n[ ] Item: Mess kit | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Wooden bowl, small plate, spoon, and eating knife.\n[ ] Item: Wooden mug | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Personal drinking vessel.\n[X] Item: Tinderbox | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Belt pouch | Notes: Flint, fire steel, and dry tinder.\n[ ] Item: Dry kindling | Quantity: 3 small bundles | Weight: 1 lb. total | Worn, Held, or Stored Where: Backpack | Notes: Wrapped against damp.\n[ ] Item: Torches | Quantity: 10 | Weight: 10 lb. total | Worn, Held, or Stored Where: Side lashings on pack | Notes: Each burns for 1 hour.\n[ ] Item: Healing bandages | Quantity: 5 clean dressings | Weight: 1 lb. total | Worn, Held, or Stored Where: Backpack | Notes: Clean linen; no automatic magical healing.\n[ ] Item: Chalk | Quantity: Exactly 2 pieces | Weight: Negligible | Worn, Held, or Stored Where: Belt pouch | Notes: Emergency marking chalk.\n[ ] Item: Pleasant-dream nightcap | Quantity: 1 | Weight: Negligible | Worn, Held, or Stored Where: Backpack | Notes: d100 result 65; produces pleasant dreams when worn but grants no mechanical rest benefit.\n\nCoins:\nCP: 0\nSP: 0\nEP: 0\nGP: 17\nPP: 0\n\nRecorded Total Weight: Approximately 108 lb.\nCarrying Capacity: 120 lb.\nEncumbrance Threshold, if Used: Not used\nPush, Drag, or Lift Capacity: 240 lb.\n\n\nATTUNED ITEMS\n\nAttunement Slots Used: 0\nAttuned Items: None\n\n\nLIMITED-USE RESOURCES\n\nResource: Breath Weapon, Poison\nMaximum Uses: 2\nRecovery: All uses return after a Long Rest\n[ ] Use 1 available\n[ ] Use 2 available\n\nActivation:\nReplace one attack during the Attack action.\n\nEffect:\nChoose a 15-ft. cone or 30-ft. line that is 5 ft. wide. Creatures in the area\nmake a Dexterity saving throw against DC 12. A creature takes 1d10 Poison\ndamage on a failed save or half as much on a successful save.\n\n\nResource: Magic Initiate free casting of Comprehend Languages\nMaximum Uses: 1\nRecovery: Long Rest\n[ ] Free casting available\n\nEffect:\nCast Comprehend Languages once without expending a spell slot. Druid 1 can\nalso cast the spell using Druid spell slots.\n\n\nSPELLCASTING\n\nSpellcasting Class, Feature, or Source: Druid\nSpellcasting Ability: Wisdom\nSpell Save DC: 13\nSpell Attack Bonus: +5\nSpellcasting Focus:\nWooden druidic-focus staff or component pouch\n\nRitual Casting:\nDruid 1 can cast a prepared Druid spell as a ritual if the spell has the\nRitual tag.\n\nPrepared Druid Spells:\nFaerie Fire\nHealing Word\nEntangle\nGoodberry\n\nAlways Prepared through Druidic:\nSpeak with Animals\n\nConcentration Rules or Notes:\nDruid 1 can maintain only one Concentration spell at a time.\nFaerie Fire and Entangle require Concentration.\n\nOther Spellcasting Notes:\nDruid 1 has two level-1 spell slots.\nPrepared Druid spells can be changed after a Long Rest under the normal rules.\n\n\nSpellcasting Class, Feature, or Source: Magic Initiate (Wizard)\nSpellcasting Ability: Wisdom\nSpell Save DC: 13\nSpell Attack Bonus: +5\nSpellcasting Focus:\nComponent pouch or the spell's listed components\n\nCantrips:\nCreate Bonfire\nRay of Frost\nAlways Prepared Spell:\nComprehend Languages\n\nOther Spellcasting Notes:\nComprehend Languages is always prepared, has the Ritual tag, can be cast once\nwithout a spell slot per Long Rest, and can also be cast using Druid spell slots.\n\n\nSPELL SLOTS\n\n1st Level: 2 total, 0 used\n[ ][ ]\n\n\nSPELLS\n\nCantrip:\nName: Produce Flame\nSource: Druid\nSpellcasting Ability: Wisdom\nCasting Time: Bonus Action\nRange: Self; flame can be hurled to 60 ft.\nAttack Bonus or Save DC: +5 spell attack when hurled\nDamage or Effect:\nCreates a flame providing light for up to 10 minutes. It can be hurled for\n1d8 Fire damage as permitted by the spell.\nComponents: Verbal, Somatic\nDuration: 10 minutes\nConcentration: No\nRitual: No\n\nCantrip:\nName: Druidcraft\nSource: Druid\nSpellcasting Ability: Wisdom\nCasting Time: Action\nRange: 30 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nCreates one minor nature-themed magical effect permitted by the spell.\nComponents: Verbal, Somatic\nDuration: Instantaneous or as stated by the chosen effect\nConcentration: No\nRitual: No\n\nCantrip:\nName: Shillelagh\nSource: Primal Order: Magician\nSpellcasting Ability: Wisdom\nCasting Time: Bonus Action\nRange: Self\nAttack Bonus or Save DC: +5 when attacking with the empowered staff\nDamage or Effect:\nEmpowers the staff to use Wisdom for attack and damage and deal 1d8+3\nBludgeoning or Force damage at level 1, chosen when the damage is dealt.\nComponents: Verbal, Somatic, Material\nDuration: 1 minute\nConcentration: No\nRitual: No\n\nCantrip:\nName: Create Bonfire\nSource: Magic Initiate (Wizard)\nSpellcasting Ability: Wisdom\nCasting Time: Action\nRange: 60 ft.; 5-ft. cube\nAttack Bonus or Save DC: Dexterity save DC 13\nDamage or Effect:\nCreates a magical bonfire. A creature entering or ending its turn in the fire\ntakes the spell's Fire damage on a failed save.\nComponents: Verbal, Somatic\nDuration: Concentration, up to 1 minute\nConcentration: Yes\nRitual: No\n\nCantrip:\nName: Ray of Frost\nSource: Magic Initiate (Wizard)\nSpellcasting Ability: Wisdom\nCasting Time: Action\nRange: 60 ft.\nAttack Bonus or Save DC: +5 spell attack\nDamage or Effect:\n1d8 Cold damage and reduces the target's Speed by 10 ft. until the start of\nDruid 1's next turn.\nComponents: Verbal, Somatic\nDuration: Instantaneous\nConcentration: No\nRitual: No\n\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Faerie Fire\nLevel: 1\nSource: Druid\nSpellcasting Ability: Wisdom\nCasting Time: Action\nRange: 60 ft.; 20-ft. cube\nAttack Bonus or Save DC: Dexterity save DC 13\nDamage or Effect:\nEligible creatures and objects in the area are outlined in light on a failed\nsave. Attacks against an outlined creature have Advantage if the attacker can\nsee it, and the creature cannot benefit from being Invisible.\nComponents: Verbal\nDuration: Concentration, up to 1 minute\nConcentration: Yes\nRitual: No\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Healing Word\nLevel: 1\nSource: Druid\nSpellcasting Ability: Wisdom\nCasting Time: Bonus Action\nRange: 60 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nRestores Hit Points to a creature in range according to the spell.\nComponents: Verbal\nDuration: Instantaneous\nConcentration: No\nRitual: No\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Entangle\nLevel: 1\nSource: Druid\nSpellcasting Ability: Wisdom\nCasting Time: Action\nRange: 90 ft.; 20-ft. square\nAttack Bonus or Save DC: Strength save DC 13\nDamage or Effect:\nCreates grasping plants that restrain creatures failing the spell's saving\nthrow and create Difficult Terrain as described by the spell.\nComponents: Verbal, Somatic\nDuration: Concentration, up to 1 minute\nConcentration: Yes\nRitual: No\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Goodberry\nLevel: 1\nSource: Druid\nSpellcasting Ability: Wisdom\nCasting Time: Action\nRange: Self\nAttack Bonus or Save DC: None\nDamage or Effect:\nCreates ten magical berries that provide nourishment and restore 1 Hit Point\nwhen eaten as stated by the spell.\nComponents: Verbal, Somatic, Material\nDuration: 24 hours\nConcentration: No\nRitual: No\n\n1st-Level or Higher Spell:\n[X] Always Prepared through Druidic\nName: Speak with Animals\nLevel: 1\nSource: Druidic\nSpellcasting Ability: Wisdom\nCasting Time: Action or ritual\nRange: Self\nAttack Bonus or Save DC: None\nDamage or Effect:\nAllows verbal communication with Beasts, subject to the spell's normal\nlimitations.\nComponents: Verbal, Somatic\nDuration: 10 minutes\nConcentration: No\nRitual: Yes\n\n1st-Level or Higher Spell:\n[X] Always Prepared through Magic Initiate\nName: Comprehend Languages\nLevel: 1\nSource: Magic Initiate (Wizard)\nSpellcasting Ability: Wisdom\nCasting Time: Action\nRange: Self\nAttack Bonus or Save DC: None\nDamage or Effect:\nProvides literal understanding of language, subject to the spell's normal\nlimitations.\nComponents: Verbal, Somatic, Material\nDuration: 1 hour\nConcentration: No\nRitual: Yes\nFree Uses or Special Casting Rules:\nOne free casting per Long Rest; can also be cast using Druid spell slots.\n\n\nRECORDED DRUID SPELL OPTIONS NOT CURRENTLY PREPARED\n\nThe source sheet records the following additional level-1 Druid spell options.\nThey are not prepared in the starter configuration unless changed after a\nLong Rest:\n\nAbsorb Elements\nAnimal Friendship\nBeast Bond\nBuzzing Bee\nCharm Person\nCreate or Destroy Water\nCure Wounds\nDetect Magic\nDetect Poison and Disease\nEarth Tremor\nFog Cloud\nIce Knife\nJump\nLongstrider\nProtection from Evil and Good\nPurify Food and Drink\nThunderwave\n\n\nFEATURES AND ABILITIES\n\nClass Features:\n\nSpellcasting\nDruid 1 casts Druid spells using Wisdom. His spell save DC is 13 and his spell\nattack bonus is +5.\n\nDruidic\nDruid 1 knows Druidic, always has Speak with Animals prepared, and can leave\nhidden Druidic messages.\n\nPrimal Order: Magician\nDruid 1 knows one additional Druid cantrip, Shillelagh. His source sheet\nrecords a +3 Wisdom-based bonus to Intelligence (Arcana) and Intelligence\n(Nature) checks.\n\n\nSubclass Features:\n\nNone at level 1. Druid subclass is chosen at level 3.\n\nWild Shape:\nNot available at Druid level 1 under the 2024 class progression.\n\n\nSpecies Traits:\n\nCreature Type\nHumanoid.\n\nSize\nMedium.\n\nSpeed\n30 ft.\n\nDraconic Ancestry: Green Dragon\nDruid 1's Breath Weapon deals Poison damage, and he has Resistance to Poison.\n\nBreath Weapon\nTwice per Long Rest, Druid 1 can replace one attack with a 15-ft. cone or\n30-ft. line of magical poison. The saving throw DC is 12.\n\nDamage Resistance\nDruid 1 has Resistance to Poison damage.\n\nDarkvision\nDruid 1 has Darkvision to 60 ft.\n\nDraconic Flight\nNot yet available. Beginning at character level 5, Druid 1 can manifest\nspectral wings as a Bonus Action once per Long Rest. The wings last up to\n10 minutes and grant a Fly Speed equal to his Speed.\n\n\nFeats:\n\nMagic Initiate (Wizard)\nDruid 1 knows Create Bonfire and Ray of Frost and always has Comprehend\nLanguages prepared. Wisdom is the spellcasting ability for these spells.\nComprehend Languages is always prepared, has the Ritual tag, can be cast once\nwithout a spell slot per Long Rest, and can also be cast using Druid spell slots.\n\n\nBackground Benefits:\n\nSage\nAbility score increases have already been applied.\nProficiencies include Arcana, History, and Calligrapher's Supplies.\nOrigin Feat: Magic Initiate (Wizard).\n\nSage Specialty: Researcher\nNarrative background only. It grants no automatic institutional access,\nresearch answer, library privilege, or mechanical bonus.\n\nSource Roll: Legacy Sage Specialty d8 result 6.\n\n\nPERSONALITY TRAITS\n\nDruid 1 is extraordinarily vain. He considers Dragonborn the highest and most\nperfect form of civilized life, superior not only to other peoples but even to\ndragons themselves.\n\nHe regards himself as an especially complete expression of Dragonborn\nperfection. His emerald scales, horns, intellect, judgment, and physical\npresence are, in his estimation, all unusually excellent.\n\nHe assumes that nearly everyone around him is in love with him. Friendly\nattention, disagreement, embarrassment, irritation, professional respect, and\nordinary eye contact can all be interpreted as evidence of concealed\nattraction.\n\nHe is overbearing, listens poorly, and assumes that his judgment is usually\nbetter than the judgment of the people around him. He dislikes backing down\nonce he has announced a plan.\n\nWhen one of his plans fails, he accepts that the failure was technically his\nresponsibility. He does not automatically accept that somebody else would have\nmade a better choice.\n\nHe is terrible with money. Prices, budgets, reserves, and the idea that desire\nmust be constrained by available coin all seem like unnecessary complications.\nHe expects to acquire what he wants when he wants it and is surprised when\nmerchants or companions insist that arithmetic applies.\n\nIDEALS\n\nNo Limits.\n\nDruid 1 believes existence contains possibilities that institutions, inherited\ncategories, and conventional scholarship are too quick to dismiss. A forest\ncan grow through a ruin. A city can become habitat. Poison can be medicine,\nwarning, defense, or evidence. A damaged landscape is not necessarily a dead\none.\n\nHe distrusts any doctrine claiming that nature, knowledge, or a person's\nfuture must remain inside a fixed boundary.\n\nSource Roll: Sage Ideal d6 result 4.\n\nBONDS\n\nDruid 1 is committed to preserving Mossglass Station, the field library and\nresearch sanctuary where he trained.\n\nMossglass contains decades of field journals, seed samples, water records,\nanimal-migration maps, oral histories, and studies of land recovering after\nfire, poison, war, agriculture, and abandonment.\n\nThe station is currently closed and partly damaged. Some of its records were\nstolen by people connected to the illegal camp.\n\nSource Roll: Sage Bond d6 result 3.\n\nFLAWS\n\nDruid 1 is easily distracted by the promise of information.\n\nA strange footprint, unfamiliar fungus, contradictory field note, unexpected\nanimal behavior, or damaged inscription can pull his attention away from the\nimmediate plan. He may recognize that something is dangerous and still believe\nthat one quick examination will be worth the delay.\n\nThis is especially hazardous when other people trust his judgment enough to\nfollow him into a dangerous distraction.\n\nSource Roll: Sage Flaw d6 result 1.\n\nALLIES AND ORGANIZATIONS\n\nName or Group: Mossglass Station\nRelationship or Connection:\nFormer workplace, research sanctuary, and institution protected by Druid 1's\nBond\n\nNotes:\nMossglass is a modest field station built beside a recovering wetland. It\ncontains a library, herbarium, seed room, water-testing bench, greenhouse,\nguest loft, and decades of observations.\n\nThe station was attacked after researchers documented poison and labor abuses\nconnected to a remote extraction camp.\n\nSupporting Organization Roll: d20 result 4.\n\nName or Group: Professor Ilyra Fen\nRelationship or Connection:\nFormer supervisor, field mentor, and missing correspondent\n\nNotes:\nIlyra taught Druid 1 to record not only what a landscape contains but what has\nchanged, who caused the change, who benefits, and what evidence would survive\npolitical denial.\n\nHer last letter reported that Mossglass had been searched. No later letter\narrived.\n\nSupporting Relationship Roll: d20 result 7.\n\nName or Group: The Living Continuance\nRelationship or Connection:\nDruidic philosophical tradition\n\nNotes:\nThe Living Continuance treats adaptation, succession, migration, decay, and\nregrowth as sacred processes. Its practitioners oppose needless destruction\nbut do not assume that untouched wilderness is the only legitimate form of\nliving land.\n\nCHARACTER NOTES, GOALS, FEARS, AND RELATIONSHIPS\n\nGoals:\n\nDruid 1 wants to recover Mossglass Station's stolen field journals and sample\nregisters.\n\nThe missing records connect unusual poison concentrations, trapped animals,\nworkers' illnesses, altered stream routes, and the movement of goods through\nthe illegal camp.\n\nHis larger project is the Atlas of Recovering Ground, a public field guide\nshowing how damaged landscapes can be restored without erasing the people who\nlive and work within them.\n\nHe wants the Atlas copied widely enough that no institution can suppress it by\ndestroying one library.\n\nSupporting Goal Roll: d20 result 11.\n\nFears:\n\nDruid 1 fears that one of his restoration experiments caused more damage than\nhe understood.\n\nBefore Mossglass was attacked, he helped introduce a fungus into a poisoned\ntest plot because laboratory and small-field evidence suggested it would bind\nthe contaminant. The fungus spread beyond the marked area.\n\nHe does not yet know whether it is healing the wetland, concentrating the\npoison into a new hazard, or changing the food chain in some less obvious way.\n\nHe also fears that his hunger to understand such changes will one day make him\nobserve a preventable disaster instead of stopping it.\n\nSupporting Fear Roll: d20 result 5.\n\nHabits or Mannerisms:\n\nHe regularly checks the condition and appearance of his scales in reflective\nwater, polished metal, glass, or another person's visibly shiny equipment.\n\nHe assumes praise is accurate but insufficiently detailed. Criticism is usually\ninterpreted as jealousy, confusion, or an awkward attempt to gain his\nattention.\n\nHe frequently interrupts advice, announces a decision, and then summarizes the\ndiscussion as though everyone had reached his conclusion together.\n\nHe cannot conjure animals with Speak with Animals and cannot compel them to\nobey. The prank works only when qualifying creatures are actually nearby and\ncan be persuaded to participate.\n\nWhen shopping, he points at what he wants before asking the price. If told he\ncannot afford it, he reacts as though the merchant has introduced a strange\nlocal custom rather than reported a mathematical fact.\n\nHe often expects another companion to explain the budget, negotiate the\nprice, return an unnecessary purchase, or solve the financial consequences.\n\nImportant Relationships:\n\nProfessor Ilyra Fen:\nFormer supervisor and missing mentor whose final letter reported that\nMossglass had been searched.\n\nMossglass Station:\nHis scholarly home, protected institution, and source of the stolen records.\n\nThe Living Continuance:\nHis druidic tradition and intellectual framework.\n\nOther Character Notes:\n\nHis Dragonborn-supremacist beliefs are characterization, not an objective fact\nabout the setting. Other creatures are not mechanically or morally inferior.\n\nHis assumptions that other people are in love with him are usually incorrect\nand grant no social benefit.\n\nHis poor financial judgment does not increase his available coins, purchasing\npower, access to credit, or ability to compel another person to pay.\n\nHis Green Dragonborn ancestry and poison resistance influenced his research\nspecialty but do not make him immune to poisonous environments, contaminated\nfood, disease, or secondary ecological effects.\n\nHis pleasant-dream nightcap is a minor magical trinket. It improves the content\nof his dreams but grants no additional healing, spell recovery, immunity to\nnightmares imposed by another effect, or other mechanical benefit.\n\nThe missing Mossglass records, Professor Ilyra Fen, the spreading fungus, and\nthe Atlas of Recovering Ground are future AI Game Master story hooks.\n\n\nBACKSTORY\n\nDruid 1 grew up in a Green Dragonborn community near a broad region of marsh,\nwoodland, abandoned fields, and old extraction sites.\n\nThe adults around him knew which pools were safe, which plants drew poison\nfrom the soil, which insects vanished first when water changed, and which\nofficial assurances were usually followed by sick livestock.\n\nHe was not raised in a secluded druid circle. His education came through\nMossglass Station, a field library where scholars, herbalists, druids,\nsurveyors, and local residents compared written records with lived knowledge.\n\nProfessor Ilyra Fen recruited him after he corrected the labels on several\npreserved plants during a public lecture. She expected him to be embarrassed.\nHe instead returned the next day with a list of six additional errors and\nthree questions the collection could not answer.\n\nAt Mossglass, he studied landscapes that had been burned, flooded, mined,\nfarmed, poisoned, abandoned, or rebuilt. His Green ancestry and resistance to\nPoison damage allowed him to enter some contaminated areas more safely than\nother researchers, although Ilyra repeatedly warned him that resistance was\nnot invulnerability.\n\nHe became particularly interested in ecological succession: what arrives\nfirst after damage, what follows, what never returns, and which human choices\nhelp or obstruct recovery.\n\nHis most ambitious experiment involved a fungus capable of binding a common\nindustrial poison. Early trials appeared successful. The fungus later spread\nbeyond the marked test plot, and the station had not completed its assessment\nbefore the attack.\n\nMossglass researchers had begun documenting a pattern linking poisoned water,\ntrapped animals, disappearing workers, and freight routes through the wilderness.\nSomeone searched the station, stole several journals and sample registers,\nand damaged the greenhouse.\n\nProfessor Ilyra sent Druid 1 one final warning before her letters stopped.\n\nHe followed the field evidence rather than the road. Changes in insect\npopulations, animal movement, water taste, and cut vegetation led him toward\nan illegal trapping and labor camp.\n\nOPTIONAL BACKSTORY\n\nThis is optional story material only. It does not establish current party membership, leadership, or party role.\n\nDruid 1 followed field evidence from damaged land, poisoned water, trapped animals, and unusual traffic to an illegal trapping and labor camp. Barbarian 1 entered the same compound by another route to steal contracts, keys, and payroll records. Warlock 1 and Bard 1 arrived while tracing the House of Shared Bread's stolen Wayfarer Ledger. The four investigations collided inside the camp. Separate plans became impossible once alarms sounded, cages opened, workers attempted escape, and records began disappearing. Druid 1 identified a safe route through the surrounding wetland, Barbarian 1 opened a barred service gate, and Warlock 1 and Bard 1 used magic, memory, and coordination to move captives through the confusion. The four escaped together and continued traveling as the Wild party.\n\n\nHOMEBREW OR UNUSUAL RULES\n\nRule, Feature, Item, or Spell:\nSage Specialty: Researcher\n\nFull Effect:\nNarrative background only. It grants no automatic institutional access,\nresearch results, library privilege, field authority, or mechanical bonus.\n\nSource or Rules Reference:\nLegacy Sage specialty table used as a narrative generator.\n\n\nRule, Feature, Item, or Spell:\nMossglass Station, Living Continuance, and Atlas of Recovering Ground\n\nFull Effect:\nThese are setting-neutral narrative institutions and story hooks. They grant\nno automatic supplies, shelter, authority, information, income, or favors.\n\nSource or Rules Reference:\nWardensPC starter-character narrative material.\n\n\nRule, Feature, Item, or Spell:\nPleasant-Dream Nightcap\n\nFull Effect:\nThe nightcap causes pleasant dreams while worn. It grants no extra healing,\nrest recovery, resistance to magical sleep effects, immunity to supernatural\nnightmares, or other mechanical benefit.\n\nSource or Rules Reference:\nTrinket d100 result 65; WardensPC clarification.\n\n\nRule, Feature, Item, or Spell:\nDraconic Flight\n\nFull Effect:\nListed on the species record but unavailable until character level 5.\n\nSource or Rules Reference:\n2024 Dragonborn species trait.\n",
+  "result": {
+    "document_assessment": {
+      "kind": "other_character_sheet",
+      "is_usable": true,
+      "reason": "Readable and comprehensive WardensPC plain-text character record for a 2024 D&D Druid, including mechanics, equipment, spells, resource tracking, and story material."
+    },
+    "assistant_message": "Druid 1, the Green Dragonborn Sage and Mossglass field researcher, is ready to begin fully rested. Your recorded armor, shield, focus, spells, supplies, and all rest-based resources are in place; no clarification is needed.",
+    "confidence": "high",
+    "intake_settings": {
+      "campaign_start_mode": "new_fully_rested",
+      "dont_sweat_small_stuff": true,
+      "ruleset": "D&D 5.5e (2024 rules)"
+    },
+    "opening_state": {
+      "campaign_start_mode": "new_fully_rested",
+      "fully_rested_defaults_applied": true,
+      "current_hit_points": 10,
+      "temporary_hit_points": 0,
+      "condition_notes": [],
+      "resource_state": "Fully rested. One d8 Hit Die, two 1st-level Druid spell slots, two Poison Breath Weapon uses, and the Magic Initiate free casting of Comprehend Languages are available. Death saves are clear; Heroic Inspiration is not possessed.",
+      "standard_adventuring_setup": "Leather armor is worn; wooden shield, druidic-focus staff, sickle, backpack, belt pouch, component pouch, weathered scholar's robe, and tinderbox are recorded as currently ready or worn.",
+      "setup_confirmed": true
+    },
+    "applied_assumptions": [
+      "New-campaign fully-rested defaults replaced no current-state values because the supplied record already shows full HP, no temporary HP, no conditions, clear death saves, and all rest-based resources available.",
+      "Ordinary noncostly, nonconsumed spell materials are covered by the recorded druidic-focus staff or component pouch.",
+      "Listed portable equipment is treated as carried as recorded, including packed and externally strapped supplies.",
+      "The pleasant-dream nightcap is retained as a minor magical trinket with only its explicitly stated narrative dream effect."
+    ],
+    "player_corrections": [],
+    "character": {
+      "name": "Druid 1",
+      "sex": "Male",
+      "pronouns": "He/Him",
+      "age": "31",
+      "alignment": "Chaotic Neutral",
+      "species": "Green Dragonborn",
+      "background": "Sage",
+      "classes": [
+        {
+          "name": "Druid",
+          "level": 1,
+          "subclass": ""
+        }
+      ],
+      "total_level": 1,
+      "armor_class": 14,
+      "initiative_modifier": 1,
+      "hit_points": {
+        "maximum": 10,
+        "current_shown_on_sheet": 10,
+        "temporary_shown_on_sheet": 0
+      },
+      "speed": "Walking 30 ft.",
+      "proficiency_bonus": "+2",
+      "ability_scores": {
+        "strength": 8,
+        "dexterity": 12,
+        "constitution": 15,
+        "intelligence": 13,
+        "wisdom": 17,
+        "charisma": 10
+      },
+      "saving_throws": [
+        "Strength +1",
+        "Dexterity +1",
+        "Constitution +2",
+        "Intelligence +3 (proficient)",
+        "Wisdom +5 (proficient)",
+        "Charisma +0"
+      ],
+      "skills": [
+        "Acrobatics +1",
+        "Animal Handling +3",
+        "Arcana +6 (proficient; enhanced by Primal Order: Magician)",
+        "Athletics -1",
+        "Deception +0",
+        "History +3 (proficient)",
+        "Insight +3",
+        "Intimidation +0",
+        "Investigation +1",
+        "Medicine +3",
+        "Nature +6 (proficient; enhanced by Primal Order: Magician)",
+        "Perception +5 (proficient)",
+        "Performance +0",
+        "Persuasion +0",
+        "Religion +1",
+        "Sleight of Hand +1",
+        "Stealth +1",
+        "Survival +3"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 15",
+        "Passive Insight 13",
+        "Passive Investigation 11"
+      ],
+      "languages": [
+        "Common",
+        "Draconic",
+        "Elvish",
+        "Druidic"
+      ],
+      "attacks": [
+        {
+          "name": "Shillelagh Staff",
+          "attack_bonus": "+5",
+          "damage": "1d8+3 Bludgeoning or Force; choose type when damage is dealt",
+          "properties": [
+            "5-ft. reach",
+            "Bonus Action to cast Shillelagh; Action to attack",
+            "Magically empowered simple staff",
+            "One-handed while wielding shield",
+            "At will; effect lasts 1 minute"
+          ]
+        },
+        {
+          "name": "Staff without Shillelagh",
+          "attack_bonus": "+1",
+          "damage": "1d6-1 Bludgeoning one-handed; 1d8-1 Bludgeoning two-handed",
+          "properties": [
+            "5-ft. reach",
+            "Action",
+            "Simple",
+            "Versatile",
+            "Topple mastery property, but no Weapon Mastery feature"
+          ]
+        },
+        {
+          "name": "Sickle",
+          "attack_bonus": "+1",
+          "damage": "1d4-1 Slashing; Light-property additional attack also deals 1d4-1 Slashing",
+          "properties": [
+            "5-ft. reach",
+            "Action or Light-property additional attack",
+            "Light",
+            "Simple",
+            "Nick mastery property, but no Weapon Mastery feature"
+          ]
+        },
+        {
+          "name": "Produce Flame",
+          "attack_bonus": "+5 spell attack",
+          "damage": "1d8 Fire when hurled",
+          "properties": [
+            "60-ft. hurled range",
+            "Bonus Action to create flame; attack as permitted by spell",
+            "Druid cantrip",
+            "At will"
+          ]
+        },
+        {
+          "name": "Ray of Frost",
+          "attack_bonus": "+5 spell attack",
+          "damage": "1d8 Cold; target Speed reduced by 10 ft. until start of Druid 1's next turn",
+          "properties": [
+            "60-ft. range",
+            "Action",
+            "Magic Initiate (Wizard) cantrip",
+            "At will"
+          ]
+        },
+        {
+          "name": "Create Bonfire",
+          "attack_bonus": "Dexterity save DC 13",
+          "damage": "Spell Fire damage on failed save to a creature entering or ending its turn in the bonfire",
+          "properties": [
+            "60-ft. range; 5-ft. cube",
+            "Action",
+            "Concentration up to 1 minute",
+            "Magic Initiate (Wizard) cantrip",
+            "At will"
+          ]
+        },
+        {
+          "name": "Breath Weapon, Poison",
+          "attack_bonus": "Dexterity save DC 12",
+          "damage": "1d10 Poison damage on failed save; half on success",
+          "properties": [
+            "Choose a 15-ft. cone or 30-ft. line 5 ft. wide",
+            "Replaces one attack when taking the Attack action",
+            "Green Dragonborn species trait",
+            "2 uses per Long Rest"
+          ]
+        },
+        {
+          "name": "Unarmed Strike",
+          "attack_bonus": "+1 attack or DC 9 save",
+          "damage": "0 Bludgeoning damage, Grapple, or Shove",
+          "properties": [
+            "5-ft. reach",
+            "Attack",
+            "Unarmed"
+          ]
+        }
+      ],
+      "armor_and_shields": [
+        {
+          "name": "Leather armor",
+          "quantity": "1",
+          "sheet_status": "Worn; AC 12 before shield (base 11 + Dexterity modifier 1)"
+        }
+      ],
+      "equipment_highlights": [
+        {
+          "name": "Leather armor",
+          "quantity": "1",
+          "sheet_status": "Worn beneath robe; 10 lb.; primary armor"
+        },
+        {
+          "name": "Wooden shield",
+          "quantity": "1",
+          "sheet_status": "Wielded; 6 lb.; plant-dyed and marked with field measurements; +2 AC"
+        },
+        {
+          "name": "Wooden druidic-focus staff",
+          "quantity": "1",
+          "sheet_status": "In hand; 4 lb.; class focus, walking staff, measuring rod, and Shillelagh weapon"
+        },
+        {
+          "name": "Scholar's quarterstaff",
+          "quantity": "1",
+          "sheet_status": "Strapped externally to pack; 4 lb.; separate Sage-background quarterstaff"
+        },
+        {
+          "name": "Sickle",
+          "quantity": "1",
+          "sheet_status": "At belt; 2 lb.; tool and backup weapon"
+        },
+        {
+          "name": "Weathered scholar's robe",
+          "quantity": "1",
+          "sheet_status": "Worn; 4 lb.; reinforced at knees and elbows"
+        },
+        {
+          "name": "Backpack",
+          "quantity": "1",
+          "sheet_status": "Worn; 5 lb.; main equipment container"
+        },
+        {
+          "name": "Ordinary pouch",
+          "quantity": "1",
+          "sheet_status": "At belt; 1 lb.; holds coins, chalk, small samples, and components"
+        },
+        {
+          "name": "Component pouch",
+          "quantity": "1",
+          "sheet_status": "At belt; 2 lb.; covers noncostly material components when staff is unavailable"
+        },
+        {
+          "name": "Calligrapher's supplies",
+          "quantity": "1 set",
+          "sheet_status": "In backpack; 5 lb.; pens, brushes, ink, and preparation tools"
+        },
+        {
+          "name": "Herbalism kit",
+          "quantity": "1 set",
+          "sheet_status": "In backpack; 3 lb.; clippers, mortar, pouches, vials, and preparation tools"
+        },
+        {
+          "name": "Parchment",
+          "quantity": "8 sheets",
+          "sheet_status": "In document case; negligible weight; field notes and copies"
+        },
+        {
+          "name": "Research book",
+          "quantity": "1",
+          "sheet_status": "In backpack; 5 lb.; Mossglass Station reference on disturbed ecosystems"
+        },
+        {
+          "name": "Oil",
+          "quantity": "2 flasks",
+          "sheet_status": "In padded backpack compartment; 2 lb. total; lamp and general use"
+        },
+        {
+          "name": "Rations",
+          "quantity": "10 days",
+          "sheet_status": "External provision bundle on pack frame; 20 lb. total"
+        },
+        {
+          "name": "Waterskin",
+          "quantity": "1",
+          "sheet_status": "Full; on backpack exterior; 5 lb."
+        },
+        {
+          "name": "Hemp rope",
+          "quantity": "50 ft.",
+          "sheet_status": "Exterior coil on pack frame; 5 lb.; climbing, hauling, and restraint"
+        },
+        {
+          "name": "Bedroll",
+          "quantity": "1",
+          "sheet_status": "Strapped to backpack; 7 lb."
+        },
+        {
+          "name": "Wool blanket",
+          "quantity": "1",
+          "sheet_status": "Strapped to backpack; 3 lb.; camp and cold-weather use"
+        },
+        {
+          "name": "Mess kit",
+          "quantity": "1",
+          "sheet_status": "In backpack; 1 lb.; bowl, plate, spoon, and eating knife"
+        },
+        {
+          "name": "Wooden mug",
+          "quantity": "1",
+          "sheet_status": "In backpack; 1 lb."
+        },
+        {
+          "name": "Tinderbox",
+          "quantity": "1",
+          "sheet_status": "In belt pouch; 1 lb.; flint, fire steel, and dry tinder"
+        },
+        {
+          "name": "Dry kindling",
+          "quantity": "3 small bundles",
+          "sheet_status": "In backpack; 1 lb. total; wrapped against damp"
+        },
+        {
+          "name": "Torches",
+          "quantity": "10",
+          "sheet_status": "Side lashings on pack; 10 lb. total; each burns 1 hour"
+        },
+        {
+          "name": "Healing bandages",
+          "quantity": "5 clean dressings",
+          "sheet_status": "In backpack; 1 lb. total; clean linen, no automatic magical healing"
+        },
+        {
+          "name": "Chalk",
+          "quantity": "2 pieces",
+          "sheet_status": "In belt pouch; negligible weight; emergency marking chalk"
+        },
+        {
+          "name": "Pleasant-dream nightcap",
+          "quantity": "1",
+          "sheet_status": "In backpack; negligible weight; produces pleasant dreams with no mechanical rest benefit"
+        }
+      ],
+      "currency": {
+        "cp": 0,
+        "sp": 0,
+        "ep": 0,
+        "gp": 17,
+        "pp": 0,
+        "total_gp_value": 17
+      },
+      "valuables": [],
+      "resources": [
+        {
+          "name": "Hit Dice",
+          "maximum_or_frequency": "1d8 per Long Rest",
+          "current_shown_on_sheet": "1 available"
+        },
+        {
+          "name": "Breath Weapon, Poison",
+          "maximum_or_frequency": "2 uses per Long Rest",
+          "current_shown_on_sheet": "2 available"
+        },
+        {
+          "name": "Magic Initiate free casting of Comprehend Languages",
+          "maximum_or_frequency": "1 per Long Rest",
+          "current_shown_on_sheet": "1 available"
+        },
+        {
+          "name": "1st-level Druid spell slots",
+          "maximum_or_frequency": "2 slots",
+          "current_shown_on_sheet": "2 available; 0 used"
+        },
+        {
+          "name": "Oil",
+          "maximum_or_frequency": "2 flasks",
+          "current_shown_on_sheet": "2 flasks remaining"
+        },
+        {
+          "name": "Rations",
+          "maximum_or_frequency": "10 days",
+          "current_shown_on_sheet": "10 days remaining"
+        },
+        {
+          "name": "Waterskin",
+          "maximum_or_frequency": "1 waterskin",
+          "current_shown_on_sheet": "1 filled waterskin"
+        },
+        {
+          "name": "Dry kindling",
+          "maximum_or_frequency": "3 small bundles",
+          "current_shown_on_sheet": "3 bundles remaining"
+        },
+        {
+          "name": "Torches",
+          "maximum_or_frequency": "10 torches",
+          "current_shown_on_sheet": "10 remaining"
+        },
+        {
+          "name": "Healing bandages",
+          "maximum_or_frequency": "5 clean dressings",
+          "current_shown_on_sheet": "5 remaining"
+        },
+        {
+          "name": "Chalk",
+          "maximum_or_frequency": "2 pieces",
+          "current_shown_on_sheet": "2 remaining"
+        },
+        {
+          "name": "Parchment",
+          "maximum_or_frequency": "8 sheets",
+          "current_shown_on_sheet": "8 remaining"
+        }
+      ],
+      "spellcasting": {
+        "ability": "Wisdom",
+        "save_dc": "13",
+        "attack_bonus": "+5",
+        "slots": [
+          {
+            "level": "1st",
+            "total_shown": "2",
+            "used_shown": "0"
+          }
+        ],
+        "cantrips": [
+          "Produce Flame (Druid)",
+          "Druidcraft (Druid)",
+          "Shillelagh (Primal Order: Magician)",
+          "Create Bonfire (Magic Initiate: Wizard)",
+          "Ray of Frost (Magic Initiate: Wizard)"
+        ],
+        "prepared_or_known_spells": [
+          "Faerie Fire (prepared)",
+          "Healing Word (prepared)",
+          "Entangle (prepared)",
+          "Goodberry (prepared)",
+          "Speak with Animals (always prepared through Druidic; ritual)",
+          "Comprehend Languages (always prepared through Magic Initiate; ritual; one free casting per Long Rest and may use Druid slots)"
+        ],
+        "spellbook_or_other_spells": [
+          "Absorb Elements",
+          "Animal Friendship",
+          "Beast Bond",
+          "Buzzing Bee",
+          "Charm Person",
+          "Create or Destroy Water",
+          "Cure Wounds",
+          "Detect Magic",
+          "Detect Poison and Disease",
+          "Earth Tremor",
+          "Fog Cloud",
+          "Ice Knife",
+          "Jump",
+          "Longstrider",
+          "Protection from Evil and Good",
+          "Purify Food and Drink",
+          "Thunderwave"
+        ]
+      },
+      "feats_and_features": [
+        "Spellcasting: Druid spells use Wisdom; save DC 13 and spell attack bonus +5. SRD rules: You have learned to cast spells through studying the mystical forces of nature. See “Spells” for the rules on spellcasting. The information below details",
+        "Druidic: knows Druidic, always has Speak with Animals prepared, and can leave hidden messages. SRD rules: You know Druidic, the secret language of Druids. While learning this ancient tongue, you also unlocked the magic of communicating with animals; you always have the Speak with Animals spell prepared. You can use Druidic to leave hidden messages. You and others who know Druidic automatically spot such a message. Others spot the message’s presence with a successful DC 15 Intelligence (Investigation) check but can’t decipher it without magic.",
+        "Primal Order: Magician: knows Shillelagh and adds Wisdom modifier to Intelligence (Arcana) and Intelligence (Nature) checks. SRD rules: You have dedicated yourself to one of the following sacred roles of your choice. Magician. You know one extra cantrip from the Druid spell list. In addition, your mystical connection to nature gives you a bonus to your Intelligence (Arcana or Nature) checks. The bonus equals your Wisdom modifier (minimum bonus of +1). Warden. Trained for battle, you gain proficiency with Martial weapons and training with Medium armor.",
+        "Ritual Casting: may cast prepared Druid ritual spells as rituals.",
+        "No subclass at Druid level 1; subclass selected at Druid level 3.",
+        "Wild Shape is unavailable at Druid level 1 under the 2024 progression.",
+        "Green Dragonborn: Humanoid, Medium, 30-ft. Speed, Darkvision 60 ft., Poison Resistance, and Poison Breath Weapon.",
+        "Breath Weapon: twice per Long Rest, replace one attack with a 15-ft. cone or 30-ft.-by-5-ft. line; Dexterity DC 12; 1d10 Poison damage or half on save. SRD rules: When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone or a 30-foot Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (DC 8 plus your Constitution modifier and Proficiency Bonus). On a failed save, a creature takes 1d10 damage of the type determined by your Draconic Ancestry trait. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10). You can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest.",
+        "Draconic Flight is unavailable until character level 5.",
+        "Magic Initiate (Wizard): Create Bonfire, Ray of Frost, and always-prepared Comprehend Languages; Wisdom is the casting ability; Comprehend Languages has one free Long Rest casting and can use Druid slots. SRD rules: Origin Feat. You gain the following benefits. Two Cantrips. You learn two cantrips of your choice from the Cleric, Druid, or Wizard spell list. Intelligence, Wisdom, or Charisma is your spellcasting ability for this feat’s spells (choose when you select this feat). Level 1 Spell. Choose a level 1 spell from the same list you selected for this feat’s cantrips. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have. Spell Change. Whenever you gain a new level, you can replace one of the spells you chose for this feat with a different spell of the same level from the chosen spell list. Repeatable. You can take this feat more than once, but you must choose a different spell list each time.",
+        "Sage: Arcana, History, Calligrapher's Supplies, and Magic Initiate (Wizard) origin feat; ability increases already applied.",
+        "Sage Specialty: Researcher is narrative only and provides no automatic research access, privileges, or mechanical benefit.",
+        "Armor Training: Light armor.",
+        "Shield Training: Shields.",
+        "Weapon Proficiencies: Simple weapons.",
+        "Tool Proficiencies: Calligrapher's supplies and Herbalism kit.",
+        "Druidic messages are automatically noticed by creatures knowing Druidic; others may detect a message with DC 15 Intelligence (Investigation) but cannot decipher it without magic."
+      ],
+      "aliases_and_nicknames": [
+        "Druid 1"
+      ],
+      "story_facts": [
+        {
+          "fact": "Druid 1 follows The Living Continuance, a druidic philosophy valuing healthy change, adaptation, decay, regrowth, and the preservation of possibility rather than a fixed ideal state.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "He formerly worked at Mossglass Station, a wetland field library and research sanctuary; it is closed, partly damaged, and has no established current replacement base.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "Mossglass Station holds field journals, seed samples, water records, animal-migration maps, oral histories, and recovery studies. It was attacked after researchers documented poison and labor abuses tied to a remote extraction camp.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "Records from Mossglass were stolen by people connected to the illegal camp.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "Professor Ilyra Fen was Druid 1's field mentor and former supervisor. Her last letter said Mossglass had been searched, and no later correspondence arrived.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "Druid 1 seeks the stolen Mossglass journals and sample registers, which connect poison concentrations, trapped animals, workers' illnesses, altered stream routes, and camp freight movements.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "His long-term project is the Atlas of Recovering Ground, a widely copied public field guide for restoring damaged landscapes without erasing local people.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "He helped introduce a poison-binding fungus to a Mossglass test plot. It spread beyond the marked area; its effect on the wetland and food chain is unknown.",
+          "likely_visibility": "probably_private"
+        },
+        {
+          "fact": "He fears his hunger for knowledge could make him observe a preventable disaster rather than stop it.",
+          "likely_visibility": "probably_private"
+        },
+        {
+          "fact": "He followed ecological evidence toward an illegal trapping and labor camp after Mossglass was attacked.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "His Dragonborn-supremacist beliefs are personal characterization, not a setting truth and provide no mechanical or social benefit.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "His Green ancestry and Poison Resistance do not make him immune to poisonous environments, contamination, disease, or ecological consequences.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "Mossglass Station, The Living Continuance, and the Atlas of Recovering Ground are narrative hooks and grant no automatic supplies, shelter, authority, income, information, or favors.",
+          "likely_visibility": "unknown"
+        }
+      ],
+      "personality_goals_and_fears": [
+        "Extraordinarily vain; considers Dragonborn the highest form of civilized life and himself an especially complete expression of Dragonborn perfection.",
+        "Assumes most attention, disagreement, embarrassment, irritation, professional respect, and eye contact indicate concealed attraction.",
+        "Overbearing and poor at listening; dislikes retreating from a declared plan and treats failed plans as his responsibility without conceding another person may have chosen better.",
+        "Terrible with money; expects to obtain desired things despite available funds and delegates or avoids financial consequences.",
+        "Ideal — No Limits: rejects fixed boundaries around nature, knowledge, and personal futures; sees damaged landscapes as possible sites of recovery.",
+        "Bond: committed to preserving Mossglass Station and recovering its stolen research records.",
+        "Flaw: easily distracted by unfamiliar evidence, fungi, tracks, animal behavior, field notes, and inscriptions despite danger.",
+        "Goal: recover Mossglass records and publish the Atlas of Recovering Ground widely.",
+        "Fear: his restoration fungus may have caused unseen harm, and his curiosity may someday outweigh intervention.",
+        "Regularly inspects his scales in reflective surfaces; treats praise as insufficiently detailed and criticism as jealousy, confusion, or attention-seeking.",
+        "Interrupts advice, declares decisions, and later summarizes discussions as though all agreed.",
+        "When shopping, points to wanted items before asking prices and reacts to insufficient funds as though arithmetic were an unusual local custom."
+      ],
+      "relationships_and_organizations": [
+        "Mossglass Station — former workplace, scholarly home, research sanctuary, and protected institution. Built by a recovering wetland, with a library, herbarium, seed room, water-testing bench, greenhouse, guest loft, and decades of observations.",
+        "Professor Ilyra Fen — former supervisor, field mentor, and missing correspondent. She taught him to document landscape change, causation, beneficiaries, and durable evidence.",
+        "The Living Continuance — Druid 1's philosophical and druidic tradition; honors adaptation, succession, migration, decay, and regrowth while opposing needless destruction."
+      ],
+      "is_current_party_active_leader": false
+    },
+    "sheet_summary": [
+      "Druid 1 is a level 1 Green Dragonborn Druid (2024 rules), Sage background, with Primal Order: Magician and Magic Initiate (Wizard).",
+      "His primary combat configuration is AC 14 in leather armor with wooden shield, 10 HP, +1 initiative, 30-ft. Speed, Poison Resistance, and Darkvision 60 ft.",
+      "His prepared Druid magic emphasizes control and support: Faerie Fire, Entangle, Healing Word, Goodberry, and always-prepared Speak with Animals. His Wizard initiation adds Create Bonfire, Ray of Frost, and Comprehend Languages.",
+      "He carries complete light adventuring and field-research equipment, 17 gp, and a pleasant-dream nightcap.",
+      "Mossglass Station, Professor Ilyra Fen, the stolen records, an illegal extraction camp, a spreading experimental fungus, and the Atlas of Recovering Ground provide ready story hooks."
+    ],
+    "detected_issues": [],
+    "clarification_questions": [],
+    "details_not_found": [],
+    "additional_details": [
+      "Source record: WardensPC Plain-Text Character Record, version “Druid 1 Mark III,” last updated 2026-08-11; source sheet named Mistinarperadnacles_169281031.pdf; development status Complete",
+      "Player Name: Mistinarperadnacles. Campaign: WardensPC starter character. Token background color: Green",
+      "Appearance: 6 ft. 5 in., 258 lb., broad Green Dragonborn with vivid emerald scales, darker moss-green mottling over back, shoulders, and tail; yellow-green eyes; pale ivory horns curving outward and back; leaf-shaped scale ridges at the jaw; scratched horns and claws; long reptilian face and heavy tail. He wears practical leather armor under a weathered scholar's robe",
+      "Portrait direction: field researcher rather than ceremonial priest—shown with leather armor, weathered robe, wooden shield, sickle, and natural staff, as someone accustomed to mud, samples, damaged inscriptions, and animal trails",
+      "Faith: The Living Continuance. Former residence: Mossglass Station",
+      "Other training: field sampling and specimen preservation; ecological succession studies; toxic-plant and contaminated-water surveys; historical land-use research; Druidic trail marking; scientific illustration and field notation; herbal preparation",
+      "Armor and shield are mechanically clear as worn/wielded from the listed AC calculation. The separate scholar's quarterstaff remains distinct from the wooden druidic-focus staff",
+      "Recorded total carried weight is approximately 108 lb.; carrying capacity 120 lb.; push, drag, or lift capacity 240 lb.; no encumbrance threshold is used",
+      "Attunement slots used: 0. No attuned items",
+      "Heroic Inspiration is absent. No active concentration or current conditions are recorded",
+      "Absorb Elements is an unprepared recorded Druid option; when later prepared and cast, it can provide temporary protection from an eligible elemental damage type",
+      "The staff's listed Topple property and sickle's listed Nick property are not usable because Druid 1 lacks Weapon Mastery",
+      "The green token portrait should emphasize his field-researcher persona and worn equipment, not a pristine nature-priest image",
+      "The nightcap is a minor magical trinket from trinket d100 result 65. It causes pleasant dreams only and does not improve rest recovery or counter other nightmare or sleep effects",
+      "Sage Specialty source roll: legacy Sage Specialty d8 result 6. Sage Ideal roll: d6 result 4. Sage Bond roll: d6 result 3. Sage Flaw roll: d6 result 1. Supporting organization roll: d20 result 4. Supporting relationship roll: d20 result 7. Supporting goal roll: d20 result 11. Supporting fear roll: d20 result 5",
+      "Speak with Animals permits communication and possible persuasion only with a nearby qualifying Beast; it cannot create, summon, charm, dominate, or compel a creature",
+      "Rules text includes material from the System Reference Document 5.2.1 (SRD 5.2.1) by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd, licensed under the Creative Commons Attribution 4.0 International License at https://creativecommons.org/licenses/by/4.0/legalcode."
+    ]
+  }
+}

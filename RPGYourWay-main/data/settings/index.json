@@ -1,0 +1,59 @@
+{
+  "settings": [
+    {
+      "id": "forgotten-realms",
+      "displayName": "The Forgotten Realms",
+      "file": "forgotten-realms.json"
+    },
+    {
+      "id": "golarion",
+      "displayName": "Golarion",
+      "file": "golarion.json"
+    },
+    {
+      "id": "imperium-of-man",
+      "displayName": "The Imperium of Man",
+      "file": "imperium-of-man.json"
+    },
+    {
+      "id": "night-city",
+      "displayName": "Night City",
+      "file": "night-city.json"
+    },
+    {
+      "id": "exandria",
+      "displayName": "Exandria",
+      "file": "exandria.json"
+    },
+    {
+      "id": "sixth-world",
+      "displayName": "The Sixth World",
+      "file": "sixth-world.json"
+    },
+    {
+      "id": "eberron",
+      "displayName": "Eberron",
+      "file": "eberron.json"
+    },
+    {
+      "id": "ravenloft",
+      "displayName": "Ravenloft",
+      "file": "ravenloft.json"
+    },
+    {
+      "id": "world-of-darkness",
+      "displayName": "World of Darkness",
+      "file": "world-of-darkness.json"
+    },
+    {
+      "id": "greyhawk",
+      "displayName": "Greyhawk",
+      "file": "greyhawk.json"
+    },
+    {
+      "id": "dragonlance",
+      "displayName": "Dragonlance",
+      "file": "dragonlance.json"
+    }
+  ]
+}

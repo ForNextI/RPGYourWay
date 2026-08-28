@@ -1,0 +1,535 @@
+{
+  "id": "wardens-pc-starter-wizard",
+  "playName": "Wizard",
+  "sourceFileName": "Wizard 1 Mark II.txt",
+  "sourceMimeType": "text/plain",
+  "portraitUrl": "/images/starter-characters/wizard.webp",
+  "sourceText": "WARDENSPC PLAIN-TEXT CHARACTER RECORD\n\n\nRECORD INFORMATION\n\nRecord Version: Wizard 1 Mark III\nLast Updated: 2026-08-11\nRules Version: 2024 D&D rules / SRD 5.2.1, with legacy High Elf traits retained from the authoritative source PDF\nSource Character Sheet: Mistinarperadnacles_169281123 (1).pdf\nDevelopment Status: Complete\n\n\nCHECKBOX KEY\n\nEquipment:\n[X] = actively worn, wielded, held, or otherwise ready for immediate use\n[ ] = carried, packed, stored, or not currently in use\n\nHit Dice, Limited-Use Resources, and Spell Slots:\n[ ] = available\n[X] = expended or used\n\nHeroic Inspiration:\n[X] = currently possessed\n[ ] = not currently possessed\n\nConcentration:\n[X] = currently concentrating on the named spell or effect\n[ ] = not currently concentrating\n\nSpells:\nCantrips do not need checkboxes.\n[X] = prepared or always prepared\n[ ] = known, recorded, or in a spellbook but not currently prepared\n\nAttuned Items:\n[X] = currently attuned\n[ ] = carried but not currently attuned\n\n\nIDENTITY AND ORIGIN\n\nPlayer Name: Mistinarperadnacles\nCharacter Name: Wizard 1\nName Used During Play: Wizard 1\nSex: Female\nPronouns: She/Her\nSpecies: High Elf\nLineage, Ancestry, or Heritage: Legacy High Elf traits as printed on the source character sheet\nClass and Level: Wizard 1\nSubclass: None at level 1\nSubclass Gained at Level: Wizard level 3\nBackground: Sage\nSage Specialty: Professor\nOrigin Feat: Magic Initiate (Wizard)\nExperience Points or Milestone: Milestone\nAlignment: Neutral Good\nFaith or Deity: No named deity. She believes recurring beauty, proportion, and harmony are evidence that reality has an underlying order that can be understood.\nHome Region or Place of Origin: Not specified\nCurrent Residence or Base: No permanent base established\nSize: Medium\nAge: 126\nHeight: 5 ft. 7 in.\nWeight: 116 lb.\n\nSkin, Scales, Fur, or Other Coloration:\nLight golden-beige skin with warm undertones.\n\nHair, Crest, Horns, or Other Distinguishing Features:\nLong, straight black hair usually tied low at the nape; long pointed ears;\nfine, angular features.\n\nEyes:\nDark brown and almond-shaped.\n\nGeneral Appearance:\nA slender High Elf with an erect posture, precise movements, and an intensely\nobservant expression. Her features and coloring read as East Asian, and her\ntraveling clothes and equipment are kept in meticulous order.\n\n\nCAMPAIGN AND TOKEN INFORMATION\n\nCampaign: WardensPC starter character\nIs Current Party's Active Leader: No\n\nAssociated Token Background Color: Black\n\nCharacter Token or Portrait Notes:\nUse a black token background. Show a slender High Elf woman with light\ngolden-beige skin, long straight black hair tied low, dark-brown almond-shaped\neyes, long pointed ears, precise posture, a geometric arcane-focus staff, and\nan immediately accessible spellbook.\n\n\nCOMBAT AND TRACKING\n\nArmor Class: 11\nArmor Class Calculation: 10 + Dexterity modifier 1\nCommon Armor Class after casting Mage Armor: 14\nArmor Class after Mage Armor and Shield: 19 until the start of her next turn\nCurrent Hit Points: 8\nMaximum Hit Points: 8\nTemporary Hit Points: None\n\nHit Dice:\n1d6 total\n[ ] 1d6 available\n\nDeath Saves:\nSuccesses: [ ][ ][ ]\nFailures: [ ][ ][ ]\n\nHeroic Inspiration: [ ]\nConcentration: [ ]\nConcentrating On: None\n\nSpeed and Movement Types: Walking 30 ft.\nInitiative: +1\nProficiency Bonus: +2\nAbility Save DC: 13 for Wizard and Magic Initiate spells\nPassive Perception: 14\nPassive Insight: 14\nPassive Investigation: 15\nCurrent Conditions: None\n\nOther Combat Notes:\nRay of Frost is the normal at-will attack.\nMagic Missile provides reliable ranged damage when a spell slot is warranted.\nSleep provides control but requires Concentration.\nMage Armor is normally cast early in an adventuring day when danger is expected.\nShield is always prepared through Magic Initiate and can be cast once per Long\nRest without expending a spell slot.\n\n\nABILITY SCORES\n\nStrength: 8 (-1)\nDexterity: 12 (+1)\nConstitution: 14 (+2)\nIntelligence: 17 (+3)\nWisdom: 14 (+2)\nCharisma: 10 (+0)\n\n\nSAVING THROWS\n\nStrength: -1\nDexterity: +1\nConstitution: +2\nIntelligence: +5, proficient\nWisdom: +4, proficient\nCharisma: +0\n\nSaving Throw Proficiencies: Intelligence and Wisdom\nSaving Throw Modifiers or Special Advantages:\nAdvantage on saving throws made to avoid or end the Charmed condition.\nMagic cannot put her to sleep.\n\n\nSKILLS\n\nAcrobatics: +1\nAnimal Handling: +2\nArcana: +5, proficient\nAthletics: -1\nDeception: +0\nHistory: +5, proficient\nInsight: +4, proficient\nIntimidation: +0\nInvestigation: +5, proficient\nMedicine: +2\nNature: +3\nPerception: +4, proficient\nPerformance: +0\nPersuasion: +0\nReligion: +3\nSleight of Hand: +1\nStealth: +1\nSurvival: +2\n\nExpertise or Other Skill Notes: None at level 1\n\n\nSENSES AND DEFENSES\n\nDarkvision or Other Senses: Darkvision 60 ft.\nDamage Resistances: None\nDamage Vulnerabilities: None\nDamage Immunities: None\nCondition Immunities: Magical sleep\n\nDefensive Advantages, Disadvantages, or Special Notes:\nShe has Advantage on saving throws made to avoid or end the Charmed condition.\nMage Armor and Shield substantially improve her otherwise low Armor Class.\n\n\nTRAINING AND PROFICIENCIES\n\nArmor Training: None\nShield Training: None\nWeapon Proficiencies:\nSimple weapons\nLongsword\nShortsword\nShortbow\nLongbow\n\nTool Proficiencies: Calligrapher's supplies\nVehicle Proficiencies: None recorded\nGaming Set or Musical Instrument Proficiencies: None\nOther Training:\nUniversity-level teaching, comparative magical theory, ancient scripts,\nresearch methods, archival handling, and formal calligraphy.\n\n\nLANGUAGES\n\nLanguages Known:\nCommon\nElvish\nDraconic\n\nSecret or Class Languages: None\nCommunication Notes:\nThe setting-specific language printed on the source PDF has been replaced with\nDraconic so this starter character remains setting-neutral.\n\n\nATTACKS, WEAPONS, AND OFFENSIVE OPTIONS\n\nName: Ray of Frost\nAttack Bonus or Save DC: +5 ranged spell attack\nDamage or Effect: 1d8 Cold damage; target's Speed is reduced by 10 ft. until the start of Wizard 1's next turn\nDamage Type: Cold\nRange or Reach: 60 ft.\nAction Type: Magic action\nProperties: Wizard cantrip; verbal and somatic components\nWeapon Mastery: None\nAmmunition or Uses: At will\nNotes:\nPrimary at-will attack. Damage becomes 2d8 at character level 5, 3d8 at level\n11, and 4d8 at level 17.\n\nName: Dagger\nAttack Bonus or Save DC: +3\nDamage or Effect:\n1d4+1 Piercing normally\nTwo-Weapon Fighting / Light-property extra attack: 1d4 Piercing\nDamage Type: Piercing\nRange or Reach: 5 ft. melee; thrown range 20/60 ft.\nAction Type: Attack action or Light-property additional attack\nProperties: Simple, finesse, light, thrown\nWeapon Mastery: Nick is the weapon's mastery property, but Wizard 1 has no Weapon Mastery feature\nAmmunition or Uses: Two daggers carried\nNotes: Emergency weapon.\n\nName: Arcane-Focus Staff\nAttack Bonus or Save DC: +1\nDamage or Effect: 1d6-1 one-handed or 1d8-1 two-handed\nDamage Type: Bludgeoning\nRange or Reach: 5 ft.\nAction Type: Attack action\nProperties: Simple, versatile; also functions as an Arcane Focus\nWeapon Mastery: Topple is the weapon's mastery property, but Wizard 1 has no Weapon Mastery feature\nAmmunition or Uses: None\nNotes:\nA dark polished staff fitted with narrow brass measuring rings and geometric\ninlays. It is primarily a spellcasting focus rather than a combat weapon.\n\nName: Unarmed Strike\nAttack Bonus or Save DC: +1 attack or DC 9 save\nDamage or Effect: 0 Bludgeoning damage, Grapple, or Shove\nDamage Type: Bludgeoning\nRange or Reach: 5 ft.\nAction Type: Attack\nProperties: Unarmed\nWeapon Mastery: None\nAmmunition or Uses: None\n\n\nSELECTED WEAPON MASTERIES\n\nNone. Wizard 1 does not have the Weapon Mastery feature.\n\n\nARMOR AND SHIELDS\n\nArmor: None\nCurrently Worn: [ ]\nArmor Class: 11 without magic; 14 after Mage Armor\nStrength Requirement: None\nStealth Effect: None\nNotes:\nWizard 1 is not trained with armor. Wearing armor without training prevents\nspellcasting under the 2024 rules.\n\nShield: None\nCurrently Wielded: [ ]\nArmor Class Bonus: None\nNotes: Wizard 1 has no shield training.\n\n\nEQUIPMENT\n\n[X] Item: Arcane-focus staff | Quantity: 1 | Weight: 4 lb. | Worn, Held, or Stored Where: Held or immediately accessible | Notes: Dark polished wood with brass measuring rings; also usable as a quarterstaff.\n[ ] Item: Scholar's quarterstaff | Quantity: 1 | Weight: 4 lb. | Worn, Held, or Stored Where: Strapped externally to pack | Notes: Separate quarterstaff supplied by the Sage background; retained rather than merged.\n[X] Item: Dagger | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Belt | Notes: Emergency weapon.\n[ ] Item: Dagger | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Reserve weapon.\n[X] Item: Spellbook | Quantity: 1 | Weight: 3 lb. | Worn, Held, or Stored Where: Satchel at her side | Notes: Pale gray leather covers stitched with a black geometric grid; usable as a Wizard spellcasting focus.\n[X] Item: Component pouch | Quantity: 1 | Weight: 2 lb. | Worn, Held, or Stored Where: Belt | Notes: Immediately accessible noncostly spell components.\n[X] Item: Robe and traveling clothes | Quantity: 1 set | Weight: 4 lb. | Worn, Held, or Stored Where: Worn | Notes: Neat, layered, and practical.\n[ ] Item: Spare robe | Quantity: 1 | Weight: 4 lb. | Worn, Held, or Stored Where: External garment roll secured to pack | Notes: Separate robe supplied by the Sage background; retained rather than merged.\n[X] Item: Backpack | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Worn | Notes: Main equipment container.\n[X] Item: Ordinary pouch | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Belt | Notes: Holds coins, chalk, and small items.\n[ ] Item: Calligrapher's supplies | Quantity: 1 set | Weight: 5 lb. | Worn, Held, or Stored Where: Backpack | Notes: Pens, inks, brushes, paper guides, and related tools.\n[ ] Item: Scholarly reference book | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Backpack | Notes: A comparative catalogue of architectural and magical forms; represents the Sage background history book.\n[ ] Item: Scholar's Pack book | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Backpack | Notes: Separate mundane book from the Scholar's Pack; retained in addition to the spellbook and Sage book.\n[ ] Item: Parchment | Quantity: 18 sheets | Weight: Negligible | Worn, Held, or Stored Where: Document case in backpack | Notes: Consolidated from the Scholar's Pack (10 sheets) and Sage background (8 sheets); both sources are retained, for 18 total.\n[ ] Item: Ink bottle | Quantity: 1 | Weight: Negligible | Worn, Held, or Stored Where: Calligrapher's case | Notes: Black ink.\n[ ] Item: Ink pen | Quantity: 1 | Weight: Negligible | Worn, Held, or Stored Where: Calligrapher's case | Notes: Writing and annotation.\n[ ] Item: Hooded lamp | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: General illumination.\n[ ] Item: Oil | Quantity: 10 flasks | Weight: 10 lb. total | Worn, Held, or Stored Where: External padded flask carrier secured to pack | Notes: Lamp fuel and general utility; carried outside the backpack interior to respect its capacity.\n[X] Item: Tinderbox | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Belt pouch | Notes: Contains flint, fire steel, and dry tinder.\n[ ] Item: Dry kindling | Quantity: 3 small bundles | Weight: 1 lb. total | Worn, Held, or Stored Where: Backpack | Notes: Wrapped against damp.\n[ ] Item: Torches | Quantity: 10 | Weight: 10 lb. total | Worn, Held, or Stored Where: Side lashings on pack | Notes: Each burns for 1 hour.\n[ ] Item: Rations | Quantity: 10 days | Weight: 20 lb. total | Worn, Held, or Stored Where: External provision bundle secured to pack frame | Notes: Durable traveling food; carried outside the backpack interior to respect its capacity.\n[ ] Item: Waterskin | Quantity: 1 | Weight: 5 lb. full | Worn, Held, or Stored Where: Backpack exterior | Notes: Filled at the start of play.\n[ ] Item: Bedroll | Quantity: 1 | Weight: 7 lb. | Worn, Held, or Stored Where: Strapped to backpack | Notes: Standard traveling bedroll.\n[ ] Item: Wool blanket | Quantity: 1 | Weight: 3 lb. | Worn, Held, or Stored Where: Strapped to backpack | Notes: Cold-weather and camp use.\n[ ] Item: Mess kit | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Wooden bowl, small plate, spoon, and eating knife.\n[ ] Item: Wooden mug | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Personal drinking vessel.\n[ ] Item: Healing bandages | Quantity: 5 clean dressings | Weight: 1 lb. total | Worn, Held, or Stored Where: Backpack | Notes: Clean linen; no automatic magical healing.\n[ ] Item: Chalk | Quantity: Exactly 2 pieces | Weight: Negligible | Worn, Held, or Stored Where: Belt pouch | Notes: Marking and diagram work.\n[ ] Item: Folded letter from Professor Neral Voss | Quantity: 1 | Weight: Negligible | Worn, Held, or Stored Where: Inside spellbook cover | Notes: His final letter asks the question that became the center of her life's work.\n[ ] Item: Trinket | Quantity: 1 | Weight: Negligible | Worn, Held, or Stored Where: Backpack | Notes: d100 result 53; a small box containing buttons of many different sizes.\n\nComponent Pouch Contents Needed by Current Spells:\nA firefly shell or phosphorescent moss for Light\nA bit of fleece for Minor Illusion\nA short length of copper wire for Message\nA small feather or piece of down for Feather Fall\nA piece of cured leather for Mage Armor\nA pinch of sand or a few rose petals for Sleep\n\nCostly or Consumed Spell Components:\nNone required by the current spell list.\n\nCoins:\nCP: 0\nSP: 0\nEP: 0\nGP: 13\nPP: 0\n\nRecorded Total Weight: Approximately 105 lb.\nCarrying Capacity: 120 lb.\nEncumbrance Threshold, if Used: Not used\nPush, Drag, or Lift Capacity: 240 lb.\n\n\nATTUNED ITEMS\n\nAttunement Slots Used: 0\nAttuned Items: None\n\n\nLIMITED-USE RESOURCES\n\nResource: Arcane Recovery\nMaximum Uses: 1\nRecovery: Long Rest\n[ ] Available\n\nActivation:\nAfter finishing a Short Rest, Wizard 1 studies her spellbook.\n\nEffect:\nRecover expended spell slots with a combined level no greater than 1. At\nWizard level 1, this restores one expended level 1 spell slot.\n\n\nResource: Magic Initiate Free Casting of Shield\nMaximum Uses: 1\nRecovery: Long Rest\n[ ] Available\n\nActivation:\nReaction when hit by an attack roll or targeted by Magic Missile.\n\nEffect:\nCast Shield without expending a spell slot. Shield can also be cast using\nWizard spell slots.\n\n\nSPELLCASTING\n\nSpellcasting Class, Feature, or Source: Wizard\nSpellcasting Ability: Intelligence\nSpell Save DC: 13\nSpell Attack Bonus: +5\nSpellcasting Focus:\nArcane-focus staff or spellbook. A component pouch is also carried.\n\nRitual Casting:\nRitual Adept allows Wizard 1 to cast a ritual-tagged spell directly from her\nspellbook without preparing it. The ritual casting adds 10 minutes to the\nnormal casting time and does not expend a spell slot.\n\nSpells Prepared or Known Calculation:\nWizard 1 knows three Wizard cantrips and has six level 1 Wizard spells in her\nspellbook. She prepares four level 1 Wizard spells after a Long Rest.\n\nMagic Initiate (Wizard) grants two additional cantrips and Shield, which is\nalways prepared and does not count against the four Wizard preparations.\n\nThe legacy High Elf Cantrip trait grants Prestidigitation.\n\nCurrent Prepared Wizard Spells:\nFeather Fall\nMage Armor\nMagic Missile\nSleep\n\nRecorded but Not Currently Prepared:\nDetect Magic, which can still be cast as a Ritual from the spellbook\nThunderwave\n\nConcentration Rules or Notes:\nOnly one Concentration effect can be maintained at a time. Taking damage may\nrequire a Constitution saving throw to maintain Concentration.\n\nOther Spellcasting Notes:\nWizard 1 can replace any of her four prepared Wizard spells with other spells\nfrom her spellbook after finishing a Long Rest.\n\n\nSPELL SLOTS\n\n1st Level: 2 total, 0 used\n[ ][ ]\n\nPact Magic or Other Special Slots: None\n\n\nSPELLS\n\nCantrip:\nName: Ray of Frost\nSource: Wizard\nSpellcasting Ability: Intelligence\nCasting Time: Action\nRange: 60 ft.\nAttack Bonus or Save DC: +5 ranged spell attack\nDamage or Effect:\nOn a hit, the target takes 1d8 Cold damage and its Speed is reduced by 10 ft.\nuntil the start of Wizard 1's next turn.\nComponents: V, S\nDuration: Instantaneous\nConcentration: No\nRitual: No\nNotes: Primary damaging cantrip.\n\nCantrip:\nName: Light\nSource: Wizard\nSpellcasting Ability: Intelligence\nCasting Time: Action\nRange: Touch\nAttack Bonus or Save DC: None\nDamage or Effect:\nOne Large or smaller unattended object sheds Bright Light for 20 ft. and Dim\nLight for another 20 ft. The light may be any color. Opaque covering blocks it.\nComponents: V, M; firefly or phosphorescent moss\nDuration: 1 hour\nConcentration: No\nRitual: No\nNotes: Casting Light again ends the previous Light spell.\n\nCantrip:\nName: Mage Hand\nSource: Wizard\nSpellcasting Ability: Intelligence\nCasting Time: Action\nRange: 30 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nCreates a spectral hand that can manipulate objects, open unlocked doors or\ncontainers, stow or retrieve items from open containers, and pour out a vial.\nIt can be moved up to 30 ft. with a later Magic action. It cannot attack,\nactivate magic items, or carry more than 10 lb.\nComponents: V, S\nDuration: 1 minute\nConcentration: No\nRitual: No\nNotes: The hand vanishes if more than 30 ft. away or if the spell is recast.\n\nCantrip:\nName: Prestidigitation\nSource: Legacy High Elf Cantrip trait\nSpellcasting Ability: Intelligence\nCasting Time: Action\nRange: 10 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nCreates one minor magical effect chosen when cast, such as a small sensory\neffect, cleaning or soiling a small object, lighting or snuffing a small flame,\nchilling, warming, or flavoring a small amount of material, creating a tiny\nmark, or producing a harmless trinket or image for a brief time.\nComponents: V, S\nDuration: Instantaneous or up to 1 hour, depending on the effect\nConcentration: No\nRitual: No\nNotes: Up to three noninstantaneous effects may be active at once.\n\nCantrip:\nName: Minor Illusion\nSource: Magic Initiate (Wizard)\nSpellcasting Ability: Intelligence\nCasting Time: Action\nRange: 30 ft.\nAttack Bonus or Save DC: Intelligence (Investigation) against DC 13 to identify\nDamage or Effect:\nCreates either a sound or an image of an object within a 5-foot Cube. A creature\nthat uses the Study action can identify the illusion with a successful check.\nPhysical interaction reveals an image as illusory.\nComponents: S, M; a bit of fleece\nDuration: 1 minute\nConcentration: No\nRitual: No\nNotes: The illusion ends if Wizard 1 casts Minor Illusion again.\n\nCantrip:\nName: Message\nSource: Magic Initiate (Wizard)\nSpellcasting Ability: Intelligence\nCasting Time: Action\nRange: 120 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nWizard 1 points toward a creature and whispers. Only the target hears the\nmessage, and it may whisper a reply that only Wizard 1 hears.\nComponents: S, M; copper wire\nDuration: 1 round\nConcentration: No\nRitual: No\nNotes:\nCan pass through a solid barrier if she knows the target and knows it is beyond\nthe barrier. Magical silence, 1 ft. of stone, metal, or wood, or a thin sheet\nof lead blocks the spell.\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Feather Fall\nLevel: 1\nSource: Wizard spellbook\nSpellcasting Ability: Intelligence\nCasting Time: Reaction when Wizard 1 or a visible creature within 60 ft. falls\nRange: 60 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nChoose up to five falling creatures. Their descent slows to 60 ft. per round.\nA target that lands before the spell ends takes no falling damage.\nComponents: V, M; a small feather or piece of down\nDuration: 1 minute\nConcentration: No\nRitual: No\nFree Uses or Special Casting Rules: None\nNotes: Prepared as an emergency protection spell.\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Mage Armor\nLevel: 1\nSource: Wizard spellbook\nSpellcasting Ability: Intelligence\nCasting Time: Action\nRange: Touch\nAttack Bonus or Save DC: None\nDamage or Effect:\nA willing unarmored target's base Armor Class becomes 13 plus its Dexterity\nmodifier. Wizard 1's AC becomes 14.\nComponents: V, S, M; a piece of cured leather\nDuration: 8 hours\nConcentration: No\nRitual: No\nFree Uses or Special Casting Rules: None\nNotes: Ends early if the target dons armor.\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Magic Missile\nLevel: 1\nSource: Wizard spellbook\nSpellcasting Ability: Intelligence\nCasting Time: Action\nRange: 120 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nCreates three darts. Each automatically hits a visible creature of Wizard 1's\nchoice and deals 1d4+1 Force damage. The darts strike simultaneously and may\nbe divided among multiple creatures.\nComponents: V, S\nDuration: Instantaneous\nConcentration: No\nRitual: No\nFree Uses or Special Casting Rules: None\nNotes: Creates one additional dart for each slot level above 1.\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Sleep\nLevel: 1\nSource: Wizard spellbook\nSpellcasting Ability: Intelligence\nCasting Time: Action\nRange: 60 ft.; 5-foot-radius Sphere\nAttack Bonus or Save DC: Wisdom save DC 13\nDamage or Effect:\nChosen creatures in the Sphere that fail the first save are Incapacitated until\nthe end of their next turn, then repeat the save. A creature that fails again\nbecomes Unconscious for the remaining duration. Damage or an adjacent creature\nusing an action to shake the target ends the effect on that target.\nComponents: V, S, M; a pinch of sand or rose petals\nDuration: Concentration, up to 1 minute\nConcentration: Yes\nRitual: No\nFree Uses or Special Casting Rules: None\nNotes:\nCreatures that do not sleep, including elves, and creatures immune to Exhaustion\nautomatically succeed on saves against this spell.\n\n1st-Level or Higher Spell:\n[ ] Recorded but not prepared\nName: Detect Magic\nLevel: 1\nSource: Wizard spellbook\nSpellcasting Ability: Intelligence\nCasting Time: Action or Ritual\nRange: Self; detects within 30 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nWizard 1 senses magical effects within 30 ft. She can take a later Magic action\nto see a faint aura around visible affected creatures or objects and learns a\nspell's school of magic when applicable.\nComponents: V, S\nDuration: Concentration, up to 10 minutes\nConcentration: Yes\nRitual: Yes\nFree Uses or Special Casting Rules:\nCan be cast as a Ritual directly from the spellbook without preparation or a\nspell slot.\nNotes:\nBlocked by 1 ft. of stone, dirt, or wood; 1 inch of metal; or a thin sheet of lead.\n\n1st-Level or Higher Spell:\n[ ] Recorded but not prepared\nName: Thunderwave\nLevel: 1\nSource: Wizard spellbook\nSpellcasting Ability: Intelligence\nCasting Time: Action\nRange: Self; 15-foot Cube originating from Wizard 1\nAttack Bonus or Save DC: Constitution save DC 13\nDamage or Effect:\nA creature that fails takes 2d8 Thunder damage and is pushed 10 ft. away. A\nsuccessful save takes half damage and is not pushed. Unsecured objects wholly\ninside the Cube are pushed 10 ft.\nComponents: V, S\nDuration: Instantaneous\nConcentration: No\nRitual: No\nFree Uses or Special Casting Rules: None\nNotes:\nThe boom is audible within 300 ft. Damage increases by 1d8 for each slot level\nabove 1.\n\n1st-Level or Higher Spell:\n[X] Always prepared\nName: Shield\nLevel: 1\nSource: Magic Initiate (Wizard)\nSpellcasting Ability: Intelligence\nCasting Time: Reaction when hit by an attack roll or targeted by Magic Missile\nRange: Self\nAttack Bonus or Save DC: None\nDamage or Effect:\nWizard 1 gains +5 Armor Class until the start of her next turn, including\nagainst the triggering attack, and takes no damage from Magic Missile.\nComponents: V, S\nDuration: 1 round\nConcentration: No\nRitual: No\nFree Uses or Special Casting Rules:\nOne free casting per Long Rest. It can also be cast using Wizard spell slots.\nNotes:\nAlways prepared and does not count against the four prepared Wizard spells.\n\n\nFEATURES AND ABILITIES\n\nClass Features:\n\nSpellcasting\nWizard 1 knows three Wizard cantrips, has six level 1 spells in her spellbook,\nprepares four of those spells after each Long Rest, and has two level 1 spell\nslots. Intelligence is her spellcasting ability.\n\nSpellbook\nHer spellbook is a Tiny 3-pound object with 100 pages. It can be read only by\nher or by someone using Identify. It contains Detect Magic, Feather Fall, Mage\nArmor, Magic Missile, Sleep, and Thunderwave.\n\nRitual Adept\nWizard 1 can cast any ritual-tagged spell directly from her spellbook without\npreparing it, provided she reads from the book. Ritual casting takes 10 minutes\nlonger than normal and does not expend a spell slot.\n\nArcane Recovery\nAfter a Short Rest, she can recover expended spell slots with a combined level\nno greater than half her Wizard level rounded up. At level 1, she recovers one\nlevel 1 slot. This feature can be used once per Long Rest.\n\nSubclass Features:\n\nNone at level 1.\n\nSpecies Traits:\n\nDarkvision\nWizard 1 can see in darkness to 60 ft. as shades of gray.\n\nKeen Senses\nWizard 1 is proficient in Perception.\n\nFey Ancestry\nWizard 1 has Advantage on saving throws made to avoid or end the Charmed\ncondition, and magic cannot put her to sleep.\n\nTrance\nWizard 1 does not need to sleep. Four hours of semiconscious meditation provide\nthe benefit a human gains from eight hours of sleep.\n\nElf Weapon Training\nWizard 1 is proficient with the longsword, shortsword, shortbow, and longbow.\n\nCantrip\nWizard 1 knows Prestidigitation and uses Intelligence for it.\n\nExtra Language\nWizard 1 knows Draconic.\n\nFeats:\n\nMagic Initiate (Wizard)\nWizard 1 knows Minor Illusion and Message. She always has Shield prepared, can\ncast it once per Long Rest without a spell slot, and can also cast it using her\nWizard spell slots. Intelligence is the spellcasting ability for these spells.\n\nBackground Benefits:\n\nSage\nAbility score increases have already been applied. Sage grants Arcana, History,\nCalligrapher's Supplies, and Magic Initiate (Wizard).\n\nSage Specialty: Professor\nThis was randomly generated from the legacy Sage specialty table and is used as\nnarrative background only. It grants no additional mechanical feature.\n\n\nPERSONALITY TRAITS\n\nWizard 1 is extremely friendly, charming, and sociable. She approaches new\npeople with immediate warmth and often treats someone as a close friend before\nthey have done anything to earn that level of trust.\n\nShe speaks naturally from her position of learning and expertise, but she does\nnot reliably notice when other people have stopped understanding her. She is\npoor at translating complex ideas into ordinary language and uses technical\nwords such as “ontological” without realizing that an explanation may be\nneeded.\n\nShe is quick to laugh and enjoys making jokes, although her jokes are usually\nbad. Her friendliness is sincere rather than strategic, and her social ease\ncan make her seem more broadly accessible than her actual explanations are.\n\nIDEALS\n\nBeauty.\n\nShe believes beauty is not merely decoration. Elegant proportions, harmonious\nstructures, and recurring forms are signs that something true lies beneath the\nsurface. A theory that is beautiful but unsupported is incomplete; a truth that\nappears ugly may simply not yet be understood.\n\nSource Roll: Legacy Sage Ideal d6 result 2.\n\nBONDS\n\nShe has spent most of her adult life pursuing one question:\n\nWhy do the same geometric relationships recur in ancient spell diagrams,\nliving growth patterns, music, and monumental architecture? Are these patterns\ncoincidence, the habits of mortal minds, or fragments of an underlying language\nin which reality itself is written?\n\nShe calls this proposed underlying system the Concordance Principle. Her notes,\nspellbook annotations, and the final letter of Professor Neral Voss are all tied\nto that search.\n\nSource Roll: Legacy Sage Bond d6 result 5.\n\nFLAWS\n\nWizard 1 is exceptionally bad at keeping secrets. Once she knows something, she\nfeels pressure to explain it, correct misunderstandings about it, or share it\nwith someone who might understand its importance. She can rationalize disclosure\nas scholarship, accuracy, or the public good even when silence would be safer.\n\nThis flaw does not mean she automatically reveals every secret immediately, but\nkeeping one should be treated as a genuine strain and potential story complication.\n\nSource Roll: Legacy Sage Flaw d6 result 6.\n\nALLIES AND ORGANIZATIONS\n\nSupporting Organization Roll: d20 result 14.\n\nName or Group: Professor Neral Voss\nRelationship or Connection: Deceased colleague and intellectual catalyst\nNotes:\nVoss studied recurring proportions in old monuments. His final letter asked why\na particular relationship appeared in every surviving example except one. Wizard\n1 has not answered the question and carries the letter inside her spellbook.\n\nSupporting Relationship Roll: d20 result 16.\n\nName or Group: The Collegium Review Council\nRelationship or Connection: Institutional opposition\nNotes:\nThe council rejected Wizard 1's request to investigate a municipal archive wall\nbased on a geometric prediction. When the hidden chamber was eventually found,\nthe discovery embarrassed the council. Some members now regard her as brilliant;\nothers regard her as dangerous to institutional order.\n\nCHARACTER NOTES, GOALS, FEARS, AND RELATIONSHIPS\n\nGoals:\n\nWizard 1 intends to complete an illustrated work called the Atlas of Recurring\nForms. It will compare magical diagrams, natural structures, music, script, and\narchitecture in an attempt to prove or disprove the Concordance Principle.\n\nShe also wants to locate the missing architectural survey referenced in Neral\nVoss's final letter. She believes it may contain the one example that either\ncompletes her theory or destroys it.\n\nSupporting Goal Roll: d20 result 15.\n\nFears:\n\nHer deepest fear is not professional humiliation. It is discovering that the\nConcordance Principle is a beautiful illusion created by her own pattern-seeking\nmind. She fears that a century of work may have produced elegance without truth.\n\nA second fear follows from her flaw: that she will reveal something important to\nthe wrong person and only understand the damage after it is done.\n\nSupporting Fear Roll: d20 result 16.\n\nHabits or Mannerisms:\n\nShe laughs readily, including at her own unsuccessful jokes.\n\nWhen explaining something, she tends to accelerate into specialist language\nand abstract terminology. She may only realize that she has lost her audience\nafter someone interrupts or asks her to begin again.\n\nShe forms friendships rapidly and begins speaking in the intimate, inclusive\nlanguage of “we” and “us” before the other person has decided whether they are\nfriends at all.\n\nImportant Relationships:\n\nProfessor Neral Voss:\nDeceased colleague whose unanswered final question drives her life's work.\n\nThe Collegium of Measures:\nHer former academic home, professional network, source of library access, and\ncontinuing institutional complication.\n\nOther Character Notes:\n\nHer Concordance research is a setting-neutral AI Game Master hook. It can lead\nto ruins, magical diagrams, unusual music, architecture, natural formations,\nencoded texts, or apparently unrelated discoveries without requiring a named\ncampaign world.\n\nThe box of buttons need not have an established meaning yet. It remains an open\ncharacter object that may acquire significance during play or personality work.\n\n\nBACKSTORY\n\nWizard 1 spent much of her first century in formal education. Her talent for\nmagic developed alongside a fascination with proportion, script, architecture,\nand the visual structure of spells. She eventually became a professor at the\nCollegium of Measures, where she taught comparative magical theory, ancient\nscripts, and the disciplined construction of arcane diagrams.\n\nHer central research began with Professor Neral Voss, a colleague who noticed\nthat the same small family of geometric relationships appeared in unrelated\nworks from widely separated periods. The proportions occurred in spell diagrams,\nold civic buildings, musical notation, branching plants, and decorative scripts.\nVoss treated the resemblance as an intriguing curiosity. Wizard 1 came to suspect\nthat it pointed toward an underlying structure shared by magic, matter, and mind.\n\nVoss died before their work reached a conclusion. His final letter asked why one\nfamous municipal archive appeared to omit a relationship found in every comparable\nstructure. Wizard 1 studied the surviving plans and concluded that the proportion\nwas not absent. The plans concealed a chamber whose dimensions completed the\npattern.\n\nThe Collegium Review Council refused permission to disturb the archive. Its\nmembers considered the evidence too theoretical and feared damage, expense,\nand public embarrassment. The refusal pushed Wizard 1 toward direct field\ninvestigation rather than waiting indefinitely for academic permission.\n\nShe remains connected to the Collegium's library and to former students, but\nher Atlas of Recurring Forms now travels with her in notes, copied diagrams,\nand annotations threaded throughout her spellbook.\n\nThe dispute established her ideal, bond, flaw, goal, and fear. It has not yet\ndetermined her personality. That remains to be discovered.\n\nSupporting Formative Event Roll: d20 result 20.\n\nOPTIONAL BACKSTORY\n\nThis is optional story material only. It does not establish current party membership, leadership, or party role.\n\nWizard 1 and Cleric 1 came from rival scholarly institutions and each possessed evidence the other lacked concerning a sealed municipal archive. Wizard 1 predicted a hidden chamber from irregularities in the building's geometry, while Cleric 1 produced old textual evidence describing a room that no longer appeared on any plan. They hired Fighter 1 to organize equipment, transport, and security. Their official access request failed, and Rogue 1 found an unofficial route through a disused service passage that did not require breaking the archive wall or endangering the collection. The hidden chamber existed. Its contents proved that Wizard 1's geometric prediction and Cleric 1's textual research had converged on the same truth. The four completed the investigation together and continued traveling as the City party.\n\n\nHOMEBREW OR UNUSUAL RULES\n\nRule, Feature, Item, or Spell:\nMixed Rules Heritage\n\nFull Effect:\nWizard 1 uses the 2024 Wizard class and Sage background mechanics shown on the\nsource PDF while retaining the legacy High Elf traits printed on that same PDF.\nDo not silently replace Darkvision, Keen Senses, Fey Ancestry, Trance, Elf Weapon\nTraining, the High Elf cantrip, or the extra language with a different Elf ruleset.\n\nSource or Rules Reference:\nAuthoritative D&D Beyond source PDF.\n\nRule, Feature, Item, or Spell:\nSage Specialty: Professor\n\nFull Effect:\nNarrative background only. It grants no Researcher feature, academic rank benefit,\nautomatic library access, or other mechanical bonus.\n\nSource or Rules Reference:\nLegacy Sage specialty table used as a narrative generator.\n\nRule, Feature, Item, or Spell:\nPrepared Spell Selection\n\nFull Effect:\nThe source PDF's open circles did not establish preparation. This record selects\nFeather Fall, Mage Armor, Magic Missile, and Sleep as Wizard 1's current four\nprepared Wizard spells. Detect Magic and Thunderwave remain in the spellbook.\nDetect Magic can still be cast as a Ritual through Ritual Adept.\n\nSource or Rules Reference:\n2024 Wizard Spellcasting and Ritual Adept features.\n\nRule, Feature, Item, or Spell:\nMagic Initiate Shield\n\nFull Effect:\nShield is always prepared, does not count against Wizard 1's four prepared Wizard\nspells, can be cast once per Long Rest without a spell slot, and can also be cast\nusing Wizard spell slots.\n\nSource or Rules Reference:\nMagic Initiate (Wizard) origin feat.\n",
+  "result": {
+    "document_assessment": {
+      "kind": "other_character_sheet",
+      "is_usable": true,
+      "reason": "Readable, detailed plain-text D&D 2024 character record with complete mechanics, inventory, spellcasting, current-state tracking, and story material."
+    },
+    "assistant_message": "Wizard 1, the High Elf Sage and arcane scholar, is ready for a new campaign fully rested. Her spellbook, focus, components, prepared spells, and starting supplies are all accounted for; no clarification is needed.",
+    "confidence": "high",
+    "intake_settings": {
+      "campaign_start_mode": "new_fully_rested",
+      "dont_sweat_small_stuff": true,
+      "ruleset": "D&D 5.5e (2024 rules)"
+    },
+    "opening_state": {
+      "campaign_start_mode": "new_fully_rested",
+      "fully_rested_defaults_applied": true,
+      "current_hit_points": 8,
+      "temporary_hit_points": 0,
+      "condition_notes": [],
+      "resource_state": "Fully rested. One Hit Die, Arcane Recovery, Magic Initiate's free Shield casting, and both 1st-level spell slots are available. Death saves are clear; Heroic Inspiration is not possessed.",
+      "standard_adventuring_setup": "",
+      "setup_confirmed": false
+    },
+    "applied_assumptions": [
+      "New-campaign fully-rested defaults were applied: HP is 8/8, temporary HP is 0, death saves are clear, no conditions are active, and rest-based resources and spell slots are available.",
+      "Ordinary listed portable equipment is treated as carried; the record's explicit ready/worn statuses are preserved without requiring a hand-state or adventuring-setup choice.",
+      "The carried component pouch and arcane-focus staff cover the current spell list's ordinary, noncostly material components.",
+      "The filled waterskin is treated as full, as explicitly stated in the record."
+    ],
+    "player_corrections": [],
+    "character": {
+      "name": "Wizard 1",
+      "sex": "Female",
+      "pronouns": "She/Her",
+      "age": "126",
+      "alignment": "Neutral Good",
+      "species": "High Elf",
+      "background": "Sage",
+      "classes": [
+        {
+          "name": "Wizard",
+          "level": 1,
+          "subclass": ""
+        }
+      ],
+      "total_level": 1,
+      "armor_class": 11,
+      "initiative_modifier": 1,
+      "hit_points": {
+        "maximum": 8,
+        "current_shown_on_sheet": 8,
+        "temporary_shown_on_sheet": 0
+      },
+      "speed": "Walking 30 ft.",
+      "proficiency_bonus": "+2",
+      "ability_scores": {
+        "strength": 8,
+        "dexterity": 12,
+        "constitution": 14,
+        "intelligence": 17,
+        "wisdom": 14,
+        "charisma": 10
+      },
+      "saving_throws": [
+        "Strength +1",
+        "Dexterity +1",
+        "Constitution +2",
+        "Intelligence +5 (proficient)",
+        "Wisdom +4 (proficient)",
+        "Charisma +0",
+        "Advantage on saving throws made to avoid or end the Charmed condition"
+      ],
+      "skills": [
+        "Acrobatics +1",
+        "Animal Handling +2",
+        "Arcana +5 (proficient)",
+        "Athletics -1",
+        "Deception +0",
+        "History +5 (proficient)",
+        "Insight +4 (proficient)",
+        "Intimidation +0",
+        "Investigation +5 (proficient)",
+        "Medicine +2",
+        "Nature +3",
+        "Perception +4 (proficient)",
+        "Performance +0",
+        "Persuasion +0",
+        "Religion +3",
+        "Sleight of Hand +1",
+        "Stealth +1",
+        "Survival +2"
+      ],
+      "senses": [
+        "Darkvision 60 ft.",
+        "Passive Perception 14",
+        "Passive Insight 14",
+        "Passive Investigation 15"
+      ],
+      "languages": [
+        "Common",
+        "Elvish",
+        "Draconic"
+      ],
+      "attacks": [
+        {
+          "name": "Ray of Frost",
+          "attack_bonus": "+5 ranged spell attack",
+          "damage": "1d8 Cold; target's Speed is reduced by 10 ft. until the start of Wizard 1's next turn",
+          "properties": [
+            "Wizard cantrip",
+            "Magic action",
+            "range 60 ft.",
+            "verbal and somatic components",
+            "at will"
+          ]
+        },
+        {
+          "name": "Dagger",
+          "attack_bonus": "+3",
+          "damage": "1d4+1 Piercing; Light-property additional attack deals 1d4 Piercing",
+          "properties": [
+            "Simple",
+            "finesse",
+            "light",
+            "thrown (20/60)",
+            "melee 5 ft.",
+            "two daggers carried",
+            "Nick is its mastery property, but Wizard 1 has no Weapon Mastery feature"
+          ]
+        },
+        {
+          "name": "Arcane-Focus Staff",
+          "attack_bonus": "+1",
+          "damage": "1d6-1 Bludgeoning one-handed, or 1d8-1 two-handed",
+          "properties": [
+            "Simple",
+            "versatile",
+            "melee 5 ft.",
+            "arcane focus",
+            "Topple is its mastery property, but Wizard 1 has no Weapon Mastery feature"
+          ]
+        },
+        {
+          "name": "Unarmed Strike",
+          "attack_bonus": "+1 attack or DC 9 save",
+          "damage": "0 Bludgeoning damage, Grapple, or Shove",
+          "properties": [
+            "Unarmed",
+            "melee 5 ft."
+          ]
+        },
+        {
+          "name": "Magic Missile",
+          "attack_bonus": "Automatically hits",
+          "damage": "Three darts, each dealing 1d4+1 Force damage; darts may be divided among visible creatures",
+          "properties": [
+            "1st-level Wizard spell",
+            "range 120 ft.",
+            "uses a spell slot",
+            "one additional dart per slot level above 1"
+          ]
+        },
+        {
+          "name": "Thunderwave",
+          "attack_bonus": "Constitution save DC 13",
+          "damage": "2d8 Thunder damage on a failed save, half on a success; failed save also pushes 10 ft.",
+          "properties": [
+            "1st-level Wizard spell",
+            "Self; 15-foot Cube",
+            "not currently prepared",
+            "audible within 300 ft."
+          ]
+        }
+      ],
+      "armor_and_shields": [],
+      "equipment_highlights": [
+        {
+          "name": "Arcane-focus staff",
+          "quantity": "1",
+          "sheet_status": "Ready/immediately accessible; described as held or immediately accessible. Dark polished wood with brass measuring rings and geometric inlays; functions as a quarterstaff and arcane focus."
+        },
+        {
+          "name": "Scholar's quarterstaff",
+          "quantity": "1",
+          "sheet_status": "Carried; strapped externally to pack. Separate Sage-background quarterstaff."
+        },
+        {
+          "name": "Dagger",
+          "quantity": "1",
+          "sheet_status": "Ready; carried at belt as an emergency weapon."
+        },
+        {
+          "name": "Dagger",
+          "quantity": "1",
+          "sheet_status": "Carried in backpack as a reserve weapon."
+        },
+        {
+          "name": "Spellbook",
+          "quantity": "1",
+          "sheet_status": "Ready; in side satchel. Pale gray leather with a black geometric grid."
+        },
+        {
+          "name": "Component pouch",
+          "quantity": "1",
+          "sheet_status": "Ready; worn at belt with ordinary noncostly components."
+        },
+        {
+          "name": "Robe and traveling clothes",
+          "quantity": "1 set",
+          "sheet_status": "Worn; neat, layered, and practical."
+        },
+        {
+          "name": "Spare robe",
+          "quantity": "1",
+          "sheet_status": "Carried; external garment roll on pack."
+        },
+        {
+          "name": "Backpack",
+          "quantity": "1",
+          "sheet_status": "Worn; main equipment container."
+        },
+        {
+          "name": "Ordinary pouch",
+          "quantity": "1",
+          "sheet_status": "Ready; belt pouch holding coins, chalk, and small items."
+        },
+        {
+          "name": "Calligrapher's supplies",
+          "quantity": "1 set",
+          "sheet_status": "Carried in backpack; pens, inks, brushes, paper guides, and related tools."
+        },
+        {
+          "name": "Scholarly reference book",
+          "quantity": "1",
+          "sheet_status": "Carried in backpack; comparative catalogue of architectural and magical forms."
+        },
+        {
+          "name": "Scholar's Pack book",
+          "quantity": "1",
+          "sheet_status": "Carried in backpack; separate mundane book."
+        },
+        {
+          "name": "Parchment",
+          "quantity": "18 sheets",
+          "sheet_status": "Carried in document case in backpack."
+        },
+        {
+          "name": "Ink bottle",
+          "quantity": "1",
+          "sheet_status": "Carried in calligrapher's case; black ink."
+        },
+        {
+          "name": "Ink pen",
+          "quantity": "1",
+          "sheet_status": "Carried in calligrapher's case."
+        },
+        {
+          "name": "Hooded lamp",
+          "quantity": "1",
+          "sheet_status": "Carried in backpack."
+        },
+        {
+          "name": "Oil",
+          "quantity": "10 flasks",
+          "sheet_status": "Carried in an external padded flask carrier on pack."
+        },
+        {
+          "name": "Tinderbox",
+          "quantity": "1",
+          "sheet_status": "Ready; carried in belt pouch."
+        },
+        {
+          "name": "Dry kindling",
+          "quantity": "3 small bundles",
+          "sheet_status": "Carried in backpack; wrapped against damp."
+        },
+        {
+          "name": "Torches",
+          "quantity": "10",
+          "sheet_status": "Carried in side lashings on pack; each burns for 1 hour."
+        },
+        {
+          "name": "Rations",
+          "quantity": "10 days",
+          "sheet_status": "Carried in an external provision bundle on pack frame."
+        },
+        {
+          "name": "Waterskin",
+          "quantity": "1",
+          "sheet_status": "Carried on backpack exterior; full at campaign start."
+        },
+        {
+          "name": "Bedroll",
+          "quantity": "1",
+          "sheet_status": "Carried; strapped to backpack."
+        },
+        {
+          "name": "Wool blanket",
+          "quantity": "1",
+          "sheet_status": "Carried; strapped to backpack."
+        },
+        {
+          "name": "Mess kit",
+          "quantity": "1",
+          "sheet_status": "Carried in backpack; wooden bowl, small plate, spoon, and eating knife."
+        },
+        {
+          "name": "Wooden mug",
+          "quantity": "1",
+          "sheet_status": "Carried in backpack."
+        },
+        {
+          "name": "Healing bandages",
+          "quantity": "5 clean dressings",
+          "sheet_status": "Carried in backpack; mundane, not automatic magical healing."
+        },
+        {
+          "name": "Chalk",
+          "quantity": "2 pieces",
+          "sheet_status": "Carried in belt pouch."
+        },
+        {
+          "name": "Folded letter from Professor Neral Voss",
+          "quantity": "1",
+          "sheet_status": "Carried inside spellbook cover."
+        },
+        {
+          "name": "Trinket: small box containing buttons of many sizes",
+          "quantity": "1",
+          "sheet_status": "Carried in backpack; d100 trinket result 53."
+        }
+      ],
+      "currency": {
+        "cp": 0,
+        "sp": 0,
+        "ep": 0,
+        "gp": 13,
+        "pp": 0,
+        "total_gp_value": 13
+      },
+      "valuables": [],
+      "resources": [
+        {
+          "name": "Hit Dice",
+          "maximum_or_frequency": "1d6 per Long Rest",
+          "current_shown_on_sheet": "1 available"
+        },
+        {
+          "name": "Arcane Recovery",
+          "maximum_or_frequency": "1 use per Long Rest; after a Short Rest, restore expended spell slots with combined level 1",
+          "current_shown_on_sheet": "1 available"
+        },
+        {
+          "name": "Magic Initiate free casting of Shield",
+          "maximum_or_frequency": "1 use per Long Rest",
+          "current_shown_on_sheet": "1 available"
+        },
+        {
+          "name": "Heroic Inspiration",
+          "maximum_or_frequency": "0 or 1",
+          "current_shown_on_sheet": "0 possessed"
+        },
+        {
+          "name": "Oil",
+          "maximum_or_frequency": "10 flasks",
+          "current_shown_on_sheet": "10 flasks remaining"
+        },
+        {
+          "name": "Dry kindling",
+          "maximum_or_frequency": "3 small bundles",
+          "current_shown_on_sheet": "3 bundles remaining"
+        },
+        {
+          "name": "Torches",
+          "maximum_or_frequency": "10 torches",
+          "current_shown_on_sheet": "10 remaining"
+        },
+        {
+          "name": "Rations",
+          "maximum_or_frequency": "10 days",
+          "current_shown_on_sheet": "10 days remaining"
+        },
+        {
+          "name": "Healing bandages",
+          "maximum_or_frequency": "5 clean dressings",
+          "current_shown_on_sheet": "5 remaining"
+        },
+        {
+          "name": "Chalk",
+          "maximum_or_frequency": "2 pieces",
+          "current_shown_on_sheet": "2 remaining"
+        },
+        {
+          "name": "Parchment",
+          "maximum_or_frequency": "18 sheets",
+          "current_shown_on_sheet": "18 sheets remaining"
+        }
+      ],
+      "spellcasting": {
+        "ability": "Intelligence",
+        "save_dc": "13",
+        "attack_bonus": "+5",
+        "slots": [
+          {
+            "level": "1st",
+            "total_shown": "2",
+            "used_shown": "0"
+          }
+        ],
+        "cantrips": [
+          "Ray of Frost (Wizard)",
+          "Light (Wizard)",
+          "Mage Hand (Wizard)",
+          "Prestidigitation (legacy High Elf Cantrip trait)",
+          "Minor Illusion (Magic Initiate (Wizard))",
+          "Message (Magic Initiate (Wizard))"
+        ],
+        "prepared_or_known_spells": [
+          "Feather Fall (prepared)",
+          "Mage Armor (prepared)",
+          "Magic Missile (prepared)",
+          "Sleep (prepared; Concentration)",
+          "Shield (always prepared through Magic Initiate (Wizard); one free casting per Long Rest, then may use Wizard slots)"
+        ],
+        "spellbook_or_other_spells": [
+          "Detect Magic (in spellbook, not prepared; can be ritual-cast from spellbook)",
+          "Thunderwave (in spellbook, not prepared)"
+        ]
+      },
+      "feats_and_features": [
+        "Spellcasting: three Wizard cantrips, six 1st-level spells in spellbook, four prepared Wizard spells, and two 1st-level slots. SRD rules: As a student of arcane magic, you have learned to cast spells. See “Spells” for the rules on spellcasting. The information below details how you use those rules with Wizard spells, which appear in the Wizard spell list later in the class’s description. Cantrips. You know three Wizard cantrips of your choice. Light, Mage Hand, and Ray of Frost are recommended. Whenever you finish a Long Rest, you can replace one of your cantrips from this feature with another Wizard cantrip of your choice.",
+        "Spellbook: Tiny 3-pound, 100-page book; contains Detect Magic, Feather Fall, Mage Armor, Magic Missile, Sleep, and Thunderwave. It can be read only by Wizard 1 or someone using Identify.",
+        "Ritual Adept: may cast ritual-tagged spells from spellbook without preparing them; ritual casting takes 10 extra minutes and no spell slot. SRD rules: You can cast any spell as a Ritual if that spell has the Ritual tag and the spell is in your spellbook. You needn’t have the spell prepared, but you must read from the book to cast a spell in this way.",
+        "Arcane Recovery: once per Long Rest after a Short Rest, recover expended spell slots with combined level up to 1. SRD rules: You can regain some of your magical energy by studying your spellbook. When you finish a Short Rest, you can choose expended spell slots to recover. The spell slots can have a combined level equal to no more than half your Wizard level (round up), and none of the slots can be level 6 or higher. For example, if you’re a level 4 Wizard, you can recover up to two levels’ worth of spell slots, regaining either one level 2 spell slot or two level 1 spell slots. Once you use this feature, you can’t do so again until you finish a Long Rest.",
+        "Darkvision: 60 ft., shades of gray in darkness. SRD rules: You have Darkvision with a range of 60 feet.",
+        "Keen Senses: proficiency in Perception. SRD rules: You have proficiency in the Insight, Perception, or Survival skill.",
+        "Fey Ancestry: Advantage on saving throws to avoid or end Charmed; magic cannot put her to sleep. SRD rules: You have Advantage on saving throws you make to avoid or end the Charmed condition.",
+        "Trance: four hours of semiconscious meditation provides the benefit of eight hours of sleep. SRD rules: You don’t need to sleep, and magic can’t put you to sleep. You can finish a Long Rest in 4 hours if you spend those hours in a trancelike meditation, during which you retain consciousness.",
+        "Elf Weapon Training: proficiency with longsword, shortsword, shortbow, and longbow.",
+        "Legacy High Elf Cantrip: Prestidigitation using Intelligence.",
+        "Extra Language: Draconic.",
+        "Magic Initiate (Wizard): Minor Illusion, Message, and always-prepared Shield; Shield has one free Long Rest casting and may also use Wizard spell slots. SRD rules: Origin Feat. You gain the following benefits. Two Cantrips. You learn two cantrips of your choice from the Cleric, Druid, or Wizard spell list. Intelligence, Wisdom, or Charisma is your spellcasting ability for this feat’s spells (choose when you select this feat). Level 1 Spell. Choose a level 1 spell from the same list you selected for this feat’s cantrips. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have. Spell Change. Whenever you gain a new level, you can replace one of the spells you chose for this feat with a different spell of the same level from the chosen spell list. Repeatable. You can take this feat more than once, but you must choose a different spell list each time.",
+        "Sage: Arcana, History, Calligrapher's Supplies, and Magic Initiate (Wizard); ability increases already applied.",
+        "Sage Specialty: Professor; narrative only, no additional mechanical benefit."
+      ],
+      "aliases_and_nicknames": [
+        "Name Used During Play: Wizard 1"
+      ],
+      "story_facts": [
+        {
+          "fact": "She believes recurring beauty, proportion, and harmony indicate an underlying order in reality that can be understood.",
+          "likely_visibility": "probably_private"
+        },
+        {
+          "fact": "Her central scholarly hypothesis is the Concordance Principle: recurring geometric relationships may be fragments of a language in which reality itself is written.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "She carries Professor Neral Voss's final letter, which asks why one municipal archive seems to omit a relationship present in comparable structures.",
+          "likely_visibility": "probably_private"
+        },
+        {
+          "fact": "She predicted a hidden municipal archive chamber from its geometric irregularities; the chamber was eventually found, embarrassing the Collegium Review Council.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "She intends to complete an illustrated Atlas of Recurring Forms comparing magical diagrams, natural structures, music, script, and architecture.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "She seeks a missing architectural survey that may validate or disprove the Concordance Principle.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "The button-filled trinket box has no established meaning and may gain significance during play.",
+          "likely_visibility": "unknown"
+        }
+      ],
+      "personality_goals_and_fears": [
+        "Extremely friendly, charming, and sociable; she treats new people as close friends unusually quickly.",
+        "Speaks from a position of learning and expertise, but often loses people in technical language without noticing.",
+        "Quick to laugh and fond of bad jokes; her friendliness is sincere rather than strategic.",
+        "Believes beauty, harmony, and elegant proportions are evidence of truth, though beauty without support is incomplete.",
+        "Wants to complete the Atlas of Recurring Forms and locate the missing survey cited by Neral Voss.",
+        "Fears that the Concordance Principle is only an elegant product of her own pattern-seeking mind.",
+        "Fears revealing important information to the wrong person and recognizing the harm too late.",
+        "Exceptionally poor at keeping secrets; feels pressure to explain, correct, or share significant knowledge.",
+        "Laughs readily, accelerates into specialist terminology while explaining, and uses inclusive 'we' and 'us' quickly in new friendships."
+      ],
+      "relationships_and_organizations": [
+        "Professor Neral Voss: deceased colleague and intellectual catalyst; his unanswered final question drives her research.",
+        "The Collegium Review Council: institutional opposition. It rejected her archive investigation request; the later hidden-chamber discovery embarrassed it, leaving some members impressed and others hostile.",
+        "The Collegium of Measures: former academic home, professional network, library-access source, and continuing institutional complication."
+      ],
+      "is_current_party_active_leader": false
+    },
+    "sheet_summary": [
+      "Wizard 1 is a level 1 Neutral Good female High Elf Wizard with the Sage background, 8 HP, AC 11, initiative +1, and Intelligence 17.",
+      "She has legacy High Elf traits alongside 2024 Wizard and Sage mechanics, as explicitly directed by the record.",
+      "Her primary at-will attack is Ray of Frost (+5, 1d8 Cold); Magic Missile is her reliable slot-based ranged damage option.",
+      "She has two available 1st-level slots. Feather Fall, Mage Armor, Magic Missile, and Sleep are prepared; Shield is always prepared through Magic Initiate.",
+      "Detect Magic is unprepared but ritual-castable from her spellbook. Thunderwave remains recorded but unprepared.",
+      "She carries an immediately accessible arcane-focus staff, spellbook, and component pouch, along with full scholarly and expedition supplies.",
+      "Recorded weight is approximately 105 lb. against a 120 lb. carrying capacity.",
+      "Her ongoing story centers on the Concordance Principle, the late Professor Neral Voss, the missing architectural survey, and institutional tension with the Collegium."
+    ],
+    "detected_issues": [],
+    "clarification_questions": [],
+    "details_not_found": [],
+    "additional_details": [
+      "Appearance: slender High Elf woman with light golden-beige skin, long straight black hair usually tied low at the nape, dark-brown almond-shaped eyes, long pointed ears, fine angular features, erect posture, precise movements, and an intensely observant expression. Her features and coloring read as East Asian",
+      "Token guidance: black background; show her geometric arcane-focus staff and immediately accessible spellbook",
+      "Size Medium; height 5 ft. 7 in.; weight 116 lb.; city-born with no permanent current base",
+      "Faith: no named deity. Her worldview treats recurring beauty, proportion, and harmony as evidence of comprehensible underlying order",
+      "Armor notes: unarmored AC 11 (10 + Dexterity modifier); Mage Armor normally raises it to 14, and Shield can raise it to 19 until the start of her next turn. She has no armor or shield training",
+      "Weapon training: simple weapons, longsword, shortsword, shortbow, and longbow. She has no Weapon Mastery feature",
+      "Component notes: current spells require only ordinary noncostly materials: firefly shell or phosphorescent moss, fleece, copper wire, feather/down, cured leather, and sand or rose petals. The component pouch covers these. No costly or consumed components are required",
+      "Sleep is a Concentration spell. Detect Magic is also Concentration when cast. Only one Concentration effect may be maintained at a time, and taking damage may require a Constitution save to maintain it",
+      "Recorded equipment weight is approximately 105 lb.; carrying capacity is 120 lb.; push, drag, or lift capacity is 240 lb. The record does not use an encumbrance threshold",
+      "Attunement: 0 of 3 slots used; no attuned items",
+      "Mixed Rules Heritage homebrew/rules note: retain the legacy High Elf traits printed in the authoritative source PDF; do not silently substitute a different Elf ruleset",
+      "The source PDF's open spell circles did not establish preparation; this record expressly selects Feather Fall, Mage Armor, Magic Missile, and Sleep as the four prepared Wizard spells",
+      "Sage Specialty: Professor is narrative background only and grants no Researcher benefit, academic rank benefit, automatic library access, or other mechanical bonus",
+      "Campaign metadata: WardensPC starter character",
+      "Rules text includes material from the System Reference Document 5.2.1 (SRD 5.2.1) by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd, licensed under the Creative Commons Attribution 4.0 International License at https://creativecommons.org/licenses/by/4.0/legalcode."
+    ]
+  }
+}

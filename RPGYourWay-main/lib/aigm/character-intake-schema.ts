@@ -1,0 +1,400 @@
+const stringArray = {
+  type: 'array',
+  items: { type: 'string' },
+} as const
+
+const campaignStartMode = {
+  type: 'string',
+  enum: ['new_fully_rested', 'continuing'],
+} as const
+
+const equipmentEntry = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    name: { type: 'string' },
+    quantity: { type: 'string' },
+    sheet_status: { type: 'string' },
+  },
+  required: ['name', 'quantity', 'sheet_status'],
+} as const
+
+const featureEntry = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    id: { type: 'string' },
+    name: { type: 'string' },
+    detail: { type: 'string' },
+    category: {
+      type: 'string',
+      enum: ['class', 'subclass', 'species', 'feat', 'background', 'item', 'other'],
+    },
+    class_name: { type: 'string' },
+    subclass_name: { type: 'string' },
+    level_gained: { type: 'integer' },
+    source: { type: 'string' },
+  },
+  required: ['id', 'name', 'detail', 'category', 'class_name', 'subclass_name', 'level_gained', 'source'],
+} as const
+
+const proficiencies = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    armor: stringArray,
+    shields: stringArray,
+    weapons: stringArray,
+    tools: stringArray,
+    vehicles: stringArray,
+    gaming_sets: stringArray,
+    musical_instruments: stringArray,
+    other_training: stringArray,
+  },
+  required: ['armor', 'shields', 'weapons', 'tools', 'vehicles', 'gaming_sets', 'musical_instruments', 'other_training'],
+} as const
+
+const biography = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    appearance: { type: 'string' },
+    faith: { type: 'string' },
+    place_of_origin: { type: 'string' },
+    current_residence: { type: 'string' },
+    size: { type: 'string' },
+    height: { type: 'string' },
+    weight: { type: 'string' },
+  },
+  required: ['appearance', 'faith', 'place_of_origin', 'current_residence', 'size', 'height', 'weight'],
+} as const
+
+export const CHARACTER_INTAKE_SCHEMA = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    document_assessment: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        kind: {
+          type: 'string',
+          enum: ['dnd_beyond_character_sheet', 'other_character_sheet', 'not_character_sheet', 'unreadable'],
+        },
+        is_usable: { type: 'boolean' },
+        reason: { type: 'string' },
+      },
+      required: ['kind', 'is_usable', 'reason'],
+    },
+    assistant_message: {
+      type: 'string',
+      description: 'A concise, friendly AIGM message identifying the character and stating only the useful clarifications that remain.',
+    },
+    confidence: {
+      type: 'string',
+      enum: ['high', 'medium', 'low'],
+    },
+    intake_settings: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        campaign_start_mode: campaignStartMode,
+        dont_sweat_small_stuff: { type: 'boolean' },
+        ruleset: { type: 'string' },
+      },
+      required: ['campaign_start_mode', 'dont_sweat_small_stuff', 'ruleset'],
+    },
+    opening_state: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        campaign_start_mode: campaignStartMode,
+        fully_rested_defaults_applied: { type: 'boolean' },
+        current_hit_points: { type: 'integer' },
+        temporary_hit_points: { type: 'integer' },
+        condition_notes: stringArray,
+        resource_state: { type: 'string' },
+        standard_adventuring_setup: { type: 'string' },
+        setup_confirmed: { type: 'boolean' },
+      },
+      required: [
+        'campaign_start_mode',
+        'fully_rested_defaults_applied',
+        'current_hit_points',
+        'temporary_hit_points',
+        'condition_notes',
+        'resource_state',
+        'standard_adventuring_setup',
+        'setup_confirmed',
+      ],
+    },
+    applied_assumptions: stringArray,
+    player_corrections: stringArray,
+    character: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        name: { type: 'string' },
+        sex: { type: 'string' },
+        pronouns: { type: 'string' },
+        age: { type: 'string' },
+        alignment: { type: 'string' },
+        species: { type: 'string' },
+        background: { type: 'string' },
+        classes: {
+          type: 'array',
+          items: {
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+              name: { type: 'string' },
+              level: { type: 'integer' },
+              subclass: { type: 'string' },
+            },
+            required: ['name', 'level', 'subclass'],
+          },
+        },
+        total_level: { type: 'integer' },
+        armor_class: { type: 'integer' },
+        initiative_modifier: { type: 'integer' },
+        hit_points: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            maximum: { type: 'integer' },
+            current_shown_on_sheet: { type: 'integer' },
+            temporary_shown_on_sheet: { type: 'integer' },
+          },
+          required: ['maximum', 'current_shown_on_sheet', 'temporary_shown_on_sheet'],
+        },
+        speed: { type: 'string' },
+        proficiency_bonus: { type: 'string' },
+        ability_scores: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            strength: { type: 'integer' },
+            dexterity: { type: 'integer' },
+            constitution: { type: 'integer' },
+            intelligence: { type: 'integer' },
+            wisdom: { type: 'integer' },
+            charisma: { type: 'integer' },
+          },
+          required: ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'],
+        },
+        saving_throws: stringArray,
+        skills: stringArray,
+        senses: stringArray,
+        languages: stringArray,
+        attacks: {
+          type: 'array',
+          items: {
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+              name: { type: 'string' },
+              attack_bonus: { type: 'string' },
+              damage: { type: 'string' },
+              properties: stringArray,
+            },
+            required: ['name', 'attack_bonus', 'damage', 'properties'],
+          },
+        },
+        armor_and_shields: {
+          type: 'array',
+          items: equipmentEntry,
+        },
+        equipment_highlights: {
+          type: 'array',
+          items: equipmentEntry,
+        },
+        currency: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            cp: { type: 'number', minimum: 0 },
+            sp: { type: 'number', minimum: 0 },
+            ep: { type: 'number', minimum: 0 },
+            gp: { type: 'number', minimum: 0 },
+            pp: { type: 'number', minimum: 0 },
+            total_gp_value: { type: 'number', minimum: 0 },
+          },
+          required: ['cp', 'sp', 'ep', 'gp', 'pp', 'total_gp_value'],
+        },
+        valuables: {
+          type: 'array',
+          items: {
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+              name: { type: 'string' },
+              quantity: { type: 'string' },
+              value_each_gp: { type: 'string' },
+              estimated_total_gp: { type: 'string' },
+            },
+            required: ['name', 'quantity', 'value_each_gp', 'estimated_total_gp'],
+          },
+        },
+        resources: {
+          type: 'array',
+          items: {
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+              name: { type: 'string' },
+              maximum_or_frequency: { type: 'string' },
+              current_shown_on_sheet: { type: 'string' },
+            },
+            required: ['name', 'maximum_or_frequency', 'current_shown_on_sheet'],
+          },
+        },
+        spellcasting: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            ability: { type: 'string' },
+            save_dc: { type: 'string' },
+            attack_bonus: { type: 'string' },
+            slots: {
+              type: 'array',
+              items: {
+                type: 'object',
+                additionalProperties: false,
+                properties: {
+                  level: { type: 'string' },
+                  total_shown: { type: 'string' },
+                  used_shown: { type: 'string' },
+                },
+                required: ['level', 'total_shown', 'used_shown'],
+              },
+            },
+            cantrips: stringArray,
+            prepared_or_known_spells: stringArray,
+            spellbook_or_other_spells: stringArray,
+          },
+          required: [
+            'ability',
+            'save_dc',
+            'attack_bonus',
+            'slots',
+            'cantrips',
+            'prepared_or_known_spells',
+            'spellbook_or_other_spells',
+          ],
+        },
+        features: {
+          type: 'array',
+          items: featureEntry,
+        },
+        proficiencies,
+        biography,
+        aliases_and_nicknames: stringArray,
+        story_facts: {
+          type: 'array',
+          items: {
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+              fact: { type: 'string' },
+              likely_visibility: {
+                type: 'string',
+                enum: ['public', 'party_known', 'probably_private', 'unknown'],
+              },
+            },
+            required: ['fact', 'likely_visibility'],
+          },
+        },
+        personality_goals_and_fears: stringArray,
+        relationships_and_organizations: stringArray,
+        is_current_party_active_leader: { type: 'boolean' },
+      },
+      required: [
+        'name',
+        'sex',
+        'pronouns',
+        'age',
+        'alignment',
+        'species',
+        'background',
+        'classes',
+        'total_level',
+        'armor_class',
+        'initiative_modifier',
+        'hit_points',
+        'speed',
+        'proficiency_bonus',
+        'ability_scores',
+        'saving_throws',
+        'skills',
+        'senses',
+        'languages',
+        'attacks',
+        'armor_and_shields',
+        'equipment_highlights',
+        'currency',
+        'valuables',
+        'resources',
+        'spellcasting',
+        'features',
+        'proficiencies',
+        'biography',
+        'aliases_and_nicknames',
+        'story_facts',
+        'personality_goals_and_fears',
+        'relationships_and_organizations',
+        'is_current_party_active_leader',
+      ],
+    },
+    sheet_summary: stringArray,
+    detected_issues: {
+      type: 'array',
+      items: {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          category: { type: 'string' },
+          issue: { type: 'string' },
+          why_it_matters: { type: 'string' },
+        },
+        required: ['category', 'issue', 'why_it_matters'],
+      },
+    },
+    clarification_questions: {
+      type: 'array',
+      items: {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          priority: {
+            type: 'string',
+            enum: ['required', 'important', 'optional'],
+          },
+          question: { type: 'string' },
+          reason: { type: 'string' },
+        },
+        required: ['priority', 'question', 'reason'],
+      },
+    },
+    details_not_found: stringArray,
+    additional_details: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Meaningful character-record information that does not fit another structured field. Preserve homebrew, appearance, inventory, relationships, rules notes, and unusual details rather than discarding them.',
+    },
+  },
+  required: [
+    'document_assessment',
+    'assistant_message',
+    'confidence',
+    'intake_settings',
+    'opening_state',
+    'applied_assumptions',
+    'player_corrections',
+    'character',
+    'sheet_summary',
+    'detected_issues',
+    'clarification_questions',
+    'details_not_found',
+    'additional_details',
+  ],
+} as const

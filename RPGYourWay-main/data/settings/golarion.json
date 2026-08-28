@@ -1,0 +1,310 @@
+{
+  "schemaVersion": 1,
+  "id": "golarion",
+  "displayName": "Golarion",
+  "aliases": [
+    "Golarion",
+    "Lost Omens",
+    "Age of Lost Omens",
+    "Inner Sea",
+    "Absalom",
+    "Avistan",
+    "Garund",
+    "Tian Xia",
+    "Pathfinder setting"
+  ],
+  "canonFrame": {
+    "defaultEra": "4725 AR, at the opening of the Hellfire Crisis",
+    "editionAssumptions": "Use Pathfinder Second Edition Remaster and the Lost Omens line as the active rules and setting layer. The remaster changes terminology and rules presentation without erasing the world's accumulated history. Earlier Pathfinder First Edition books remain useful historical sources, but their mechanics, alignments, creature assumptions, and political conditions do not automatically override current Lost Omens material.",
+    "timelineNotes": "Golarion's published timeline advances roughly one in-world year for each real-world publication year. Pathfinder Second Edition began in 4719 AR. Gorum died in 4724 AR, causing the Godsrain and opening the War of Immortals. The Hellfire Crisis begins in 4725 AR with open conflict between Andoran and Cheliax and continues through later publications. Use 4725 AR as a stable current frame and do not invent later outcomes."
+  },
+  "campaignFoundations": [
+    "Golarion is a whole planet; the Inner Sea region is only its best-documented campaign heart.",
+    "Aroden's death ended reliable prophecy and began the Age of Lost Omens.",
+    "The setting embraces sharp regional contrasts, from classical fantasy kingdoms to undead states, alien ruins, revolutionary republics, and gun-using wastelands.",
+    "Gods, outsiders, spirits, occult forces, and planar travel are objective parts of the world.",
+    "Magic is widespread but uneven, and some regions industrialize or weaponize it more aggressively than others.",
+    "Adventurers and the Pathfinder Society are recognized forces, but they do not replace governments, communities, or local experts.",
+    "Published Adventure Paths often advance canon; do not assume a particular outcome unless the campaign selects it.",
+    "Ancestry does not determine morality, nationality, or culture.",
+    "The setting's tone ranges from heroic adventure to horror, political struggle, exploration, myth, and weird science.",
+    "Regional sourcebooks outrank broad summaries when describing their current area."
+  ],
+  "gameMasterGuidance": [
+    "Ask which year and region matter before naming current rulers, wars, or divine consequences.",
+    "Default to 4725 AR and the opening phase of the Hellfire Crisis when no date is chosen.",
+    "Keep the player characters central rather than using iconic Pathfinder characters to resolve events.",
+    "Treat Adventure Path outcomes as optional history unless confirmed by a current setting source or player choice.",
+    "Use the remastered names and assumptions for current play, while recognizing older names when players use them.",
+    "Distinguish nation, ethnicity, ancestry, faith, and personal identity.",
+    "Let regional institutions shape law, travel, magic, trade, and prejudice.",
+    "Do not make every corner of Golarion equally high-magic, equally safe, or equally cosmopolitan.",
+    "Mark invented settlements and NPCs as campaign-created facts.",
+    "When a current event remains unresolved in published canon, preserve the uncertainty."
+  ],
+  "canonBoundaries": [
+    "Do not treat the Inner Sea as the entire planet.",
+    "Do not blend First Edition's 4710s political present with the 4720s current era.",
+    "Do not assume every Adventure Path occurred exactly as published.",
+    "Do not revive Aroden or restore reliable prophecy without an explicit campaign change.",
+    "Gorum is dead in the default frame; Arazni has joined the core twenty deities.",
+    "Do not assume the Hellfire Crisis has a settled winner.",
+    "Do not import D&D cosmology, gods, or factions into Golarion merely because the rules resemble one another.",
+    "Do not treat Cheliax, Geb, Irrisen, the Mwangi Expanse, Tian Xia, or other regions as one-note genre exhibits.",
+    "Do not use alignment as a current universal rules mechanic under the remaster.",
+    "When older and newer regional books disagree, prefer the newer Lost Omens source for the selected date."
+  ],
+  "referenceChunks": [
+    {
+      "id": "age-of-lost-omens",
+      "title": "The Age of Lost Omens",
+      "tags": [
+        "Aroden",
+        "prophecy",
+        "4719 AR",
+        "4724 AR",
+        "4725 AR",
+        "Godsrain"
+      ],
+      "era": "4606 AR to 4725 AR",
+      "editionScope": "Pathfinder Second Edition Remaster",
+      "text": "The modern era begins with Aroden's death in 4606 AR. Aroden was a powerful human who became a god and was expected to return to Golarion, inaugurating an age of human glory. Instead he died for reasons that remain unresolved, prophecy failed across the world, and storms, political upheaval, and supernatural disasters followed. The resulting Age of Lost Omens is defined not by an absence of omens, but by the unreliability of destiny. Heroes cannot safely assume that a foretold outcome will occur. Pathfinder Second Edition began in 4719 AR after numerous first-edition campaigns had changed the Inner Sea. Those outcomes form part of the published setting, but a home campaign may keep, alter, or omit them. In 4724 AR the mantis god Achaekek slew Gorum, god of battle. Gorum's divine blood and essence fell as the Godsrain, creating war shards, mythic transformations, and worldwide instability. Arazni rose into the core twenty deities to fill the vacant place in the principal pantheon. The War of Immortals is not a single battle with a finished result. It is an era of divine disruption, opportunism, new heroes, and changing magic. In 4725 AR the Hellfire Crisis begins with Andoran and Cheliax moving from a long cold conflict into open war. Published material continues to develop this event. Do not forecast victories, border changes, or divine deaths that have not been established. In play, attach dates to volatile facts. Stable geography and ancient history can be used across editions, but rulers, abolished institutions, active wars, deities, and public attitudes should follow the selected year. When players want an earlier classic era, shift the whole political frame rather than mixing favorite facts from several dates."
+    },
+    {
+      "id": "golarion-and-the-solar-system",
+      "title": "Golarion and Its Wider Cosmos",
+      "tags": [
+        "Golarion",
+        "Castrovel",
+        "Akiton",
+        "Arcadia",
+        "Tian Xia",
+        "planes"
+      ],
+      "era": "Stable planetary foundation",
+      "editionScope": "All Pathfinder editions",
+      "text": "Golarion is one world in a populated solar system and a much larger multiverse. Its moon, neighboring planets, distant worlds, and planes have histories that occasionally intrude into terrestrial affairs. Elves trace an important migration through the neighboring world Castrovel, while Numerian technology came from a crashed alien vessel. Earth also exists within Pathfinder cosmology and has interacted with Golarion in rare stories. These facts support science-fantasy and planar adventures without making ordinary people experts in astronomy or interplanetary travel. The best-documented region is the Inner Sea, centered on the sea between Avistan and northern Garund. That focus must not shrink the planet. Tian Xia lies far to the east and contains many nations with their own histories and cosmologies. Southern Garund includes the Mwangi Expanse and lands beyond it. Casmaron, Arcadia, the Crown of the World, and other regions extend the setting's cultural and geographic scale. Use a regional book when one exists rather than treating Inner Sea assumptions as universal. The planes include realms strongly associated with moral, elemental, spiritual, and conceptual forces. Gods maintain domains, psychopomps manage aspects of death, fiends and celestials pursue agendas, and the First World embodies primal possibility. The Universe contains the mortal worlds, while the Netherworld, Astral Plane, Ethereal Plane, elemental planes, and outer planes have distinct functions under current cosmology. Planar boundaries can be thin around ancient ruins, magical catastrophes, divine sites, and powerful artifacts. Portals and interplanetary vessels are exceptional campaign elements, not ordinary public transportation. Treat off-world ancestries and technology as real but locally unusual unless the campaign begins in a place where they are established."
+    },
+    {
+      "id": "inner-sea-regions",
+      "title": "The Ten Inner Sea Meta-Regions",
+      "tags": [
+        "Inner Sea",
+        "Broken Lands",
+        "Eye of Dread",
+        "Golden Road",
+        "Shining Kingdoms"
+      ],
+      "era": "4720s AR",
+      "editionScope": "Lost Omens",
+      "text": "The Lost Omens World Guide organizes the Inner Sea into ten broad meta-regions. They are navigation aids, not sovereign states. The Broken Lands include areas shaped by ruined empires, crusades, Numerian technology, and the former Worldwound. The Eye of Dread contains haunted Ustalav, revolutionary and recovering states, the Gravelands, and threats around Lake Encarthan. The Golden Road follows trade, desert, and ancient civilizations from Qadira and Katapesh toward Osirion and Thuvia. The High Seas include island nations, pirate waters, sea powers, and the edges of several continents. The Impossible Lands encompass Nex, Geb, the Mana Wastes, and Jalmeray, where immortal rulers, magical war, undead labor, and unusual technology shape everyday life. The Mwangi Expanse contains diverse nations, city-states, forests, rivers, faiths, and peoples; it is not an undifferentiated jungle. Old Cheliax includes Cheliax, Ravounel, Isger, Nidal, and neighboring lands marked by imperial history, rebellion, infernal law, and shadow. The Saga Lands unite Varisia, New Thassilon, Irrisen, the Lands of the Linnorm Kings, and the Realm of the Mammoth Lords around northern epics, ancient ruins, winter, and migration. The Shining Kingdoms include Andoran, Druma, Galt, Kyonin, Taldor, and the Five Kings Mountains, combining republican politics, trade, revolution, elven sovereignty, empire, and dwarven holds. The Verduran Forest, Lake Encarthan, and other boundary areas connect rather than isolate these labels. Use meta-regions to select relevant lore, then narrow to a nation, city, and community. Laws, ancestry availability, faiths, currencies, and technology differ sharply inside each region. A character from the Golden Road still needs a specific homeland and social background."
+    },
+    {
+      "id": "absalom",
+      "title": "Absalom, City at the Center of the World",
+      "tags": [
+        "Absalom",
+        "Starstone Isle",
+        "Pathfinder Society",
+        "Starstone",
+        "Grand Lodge"
+      ],
+      "era": "4720s AR",
+      "editionScope": "Lost Omens",
+      "text": "Absalom stands on Starstone Isle in the Inner Sea and has served for nearly five thousand years as a center of trade, culture, religion, and ambition. Its founder Aroden raised the Starstone from the sea and became a god after surviving the Test of the Starstone. The test remains accessible to would-be divinities, though almost everyone who attempts it dies. Cayden Cailean, Iomedae, and Norgorber are famous successful aspirants. The city is cosmopolitan because trade routes, pilgrimages, embassies, adventurers, and refugees converge there. It contains numerous districts with distinct economies and identities, from noble and governmental quarters to docks, markets, foreign enclaves, and poorer neighborhoods. Slavery has been abolished in current canon. The disappearance of Lord Gyr destabilized city leadership, and Wynsal Starborn served as acting primarch during a period of crisis. Exact current officeholders should be checked against the chosen year. Absalom's institutions include the Grand Council, district governments, temples, trade interests, criminal powers, and the Pathfinder Society's Grand Lodge. The Society is an influential explorer and scholarly organization, not the city's government. Its agents recover knowledge and relics, but its history includes colonial habits, internal politics, and mistakes that current leaders attempt to address. The city has survived repeated sieges, leaving old fortifications, wrecks, abandoned camps, and grudges across the island. The magical cornucopias once associated with Aroden no longer provide effortless security. Absalom should feel wealthy and extraordinary without becoming frictionless. Housing, status, citizenship, guild interests, religious disputes, and old siege infrastructure create ordinary pressures beneath its claim to be the world's center."
+    },
+    {
+      "id": "broken-lands",
+      "title": "The Broken Lands",
+      "tags": [
+        "Numeria",
+        "Brevoy",
+        "Sarkoris",
+        "Gravelands",
+        "Worldwound",
+        "Mendev"
+      ],
+      "era": "4720s AR",
+      "editionScope": "Lost Omens",
+      "text": "The Broken Lands are shaped by collapse, contested identity, and powers that do not fit comfortably together. Numeria combines Kellid communities, political factions, alien ruins, crashed technology, and a history of Technic League exploitation. Technology can be spectacular and dangerous, but most residents are not casual engineers of starships. Numerian devices require skill, scavenging, power, and often luck. Brevoy is a divided realm formed from Rostland and Issia. Noble houses, vanished royalty, regional resentment, and the threat of civil conflict define its politics. The River Kingdoms to the south contain many small states whose borders and laws can change quickly. The Stolen Lands support frontier campaigns, but they are not empty territory; fey, monsters, settlers, neighboring powers, and older claims all matter. Sarkoris was devastated when the Worldwound opened, and Mendev became the base of crusades against the demons pouring through it. The Worldwound has since been closed in published canon, creating the Sarkoris Scar and a long recovery rather than restoring the old land overnight. Sarkorian survivors, crusader veterans, displaced communities, lingering demons, damaged ecology, and abandoned fortifications remain important. The region supports stories of rebuilding, archaeological recovery, technological danger, noble conflict, and disputes over who has the right to shape recovered land. Do not make every Numerian plot about robots or every Sarkorian plot about active invasion. The most useful tensions come from people deciding what follows disaster: preservation, return, extraction, revenge, reconciliation, or a new political order."
+    },
+    {
+      "id": "eye-of-dread",
+      "title": "The Eye of Dread",
+      "tags": [
+        "Ustalav",
+        "Gravelands",
+        "Lastwall",
+        "Belkzen",
+        "Lake Encarthan",
+        "Tar-Baphon"
+      ],
+      "era": "4720s AR",
+      "editionScope": "Lost Omens",
+      "text": "The Eye of Dread surrounds Lake Encarthan and nearby haunted lands. Ustalav supports gothic horror through decaying aristocracy, rural superstition, universities, occult societies, monsters, and political weakness. Its people are not universally ignorant victims; doctors, scholars, priests, investigators, peasants, and nobles possess different kinds of knowledge and competing explanations for the supernatural. Lastwall once guarded against the Whispering Tyrant, the lich Tar-Baphon. Its capital Vigil was destroyed when he escaped, and much of the nation became the Gravelands, where undead armies, shattered communities, resistance forces, and refugees define the present. The Knights of Lastwall continue the fight without possessing a secure nation-state. Do not restore Lastwall's old institutions simply because an earlier book describes them. Belkzen is an orc homeland with many holds, traditions, leaders, and relationships. Current material rejects the idea that it is merely a wilderness full of enemies. Orc communities have their own politics and have fought threats that endanger neighboring peoples as well as themselves. The Gravelands create opportunities for alliances that older prejudices make difficult. Other states around the lake, including Kyonin, Druma, Razmiran, and the River Kingdoms, bring trade, faith, espionage, and military pressure. The region is effective when horror and politics reinforce each other. Undead territory changes refugee policy and commerce; a noble's curse affects inheritance; a monster hunt exposes wartime profiteering. Tar-Baphon is a vast threat, but he should not personally appear in every local story."
+    },
+    {
+      "id": "golden-road",
+      "title": "The Golden Road",
+      "tags": [
+        "Osirion",
+        "Qadira",
+        "Katapesh",
+        "Thuvia",
+        "Rahadoum",
+        "desert"
+      ],
+      "era": "4720s AR",
+      "editionScope": "Lost Omens",
+      "text": "The Golden Road links ancient states, desert routes, coastal ports, religious conflict, and global commerce. Osirion contains living cities and communities alongside monuments and tombs from several dynasties. It should not be reduced to an archaeological park. Modern rulers, farmers, merchants, priests, scholars, and foreign expeditions all negotiate ownership of the past. Qadira is the westernmost satrapy of the vast Padishah Empire of Kelesh and a major military and commercial power. Its politics connect the Inner Sea to Casmaron. Katapesh is famous for markets and trade under the Pactmasters, mysterious rulers whose systems can make almost anything available while favoring wealth and leverage. Current treatment should not romanticize exploitation or use markets as an excuse for consequence-free trafficking. Thuvia's city-states compete over the sun orchid elixir, a substance capable of restoring youth. The formula, production cycle, and distribution create diplomacy, espionage, and moral conflict. Rahadoum's Laws of Mortality prohibit organized religion after devastating religious wars. This is a political and philosophical tradition, not proof that Rahadoumi people are without ethics, spirituality, or private belief. Water, safe routes, weather, hospitality, caravan law, local languages, and relations with geniekin and elemental powers matter. Desert communities are not interchangeable. Use architecture, food, clothing, legal institutions, family networks, and trade specialties to distinguish locations. Ancient curses and outsiders can appear, but ordinary control of wells, ports, grain, and tolls often drives more immediate conflict."
+    },
+    {
+      "id": "impossible-lands",
+      "title": "The Impossible Lands",
+      "tags": [
+        "Geb",
+        "Nex",
+        "Mana Wastes",
+        "Alkenstar",
+        "Jalmeray",
+        "high magic"
+      ],
+      "era": "4720s AR",
+      "editionScope": "Lost Omens Remaster",
+      "text": "The Impossible Lands were transformed by centuries of war between the archmages Nex and Geb. Nex is a magically advanced nation of academies, constructs, experiments, and cities shaped by powerful spells. Geb is an undead-ruled state where the ghostly ruler Geb, aristocratic undead, living subjects, and necromantic agriculture coexist through an oppressive hierarchy. Its export of food gives it influence beyond its borders. Do not portray the living population as nonexistent or the undead as one undifferentiated class. Between the rivals, the Mana Wastes suffer unstable magic and altered environments. Alkenstar developed firearms and mechanical technology partly because conventional magic is unreliable. Guns are therefore regionally important, not a universal baseline for Golarion. Inventors, shieldmarshals, criminals, manufacturers, and foreign agents compete over technology and trade routes. Jalmeray, on the island of Khasa, is shaped by Vudrani traditions, elemental influences, monasteries, martial arts, scholarship, and imperial history. It should not be treated as a decorative appendage to Nex and Geb. The region as a whole supports stories about magical labor, immortal rulers, technological adaptation, colonial history, and the cost of wonders. Reality-bending landmarks should have social consequences. A wished city requires governance. Undead-worked fields affect trade and morality. Unstable magic changes medicine and building codes. Firearms create licensing and smuggling. The Impossible Lands are strongest when extraordinary conditions have become ordinary institutions rather than appearing only as isolated spectacle."
+    },
+    {
+      "id": "mwangi-expanse",
+      "title": "The Mwangi Expanse",
+      "tags": [
+        "Mwangi Expanse",
+        "Nantambu",
+        "Magaambya",
+        "Usaro",
+        "Vidrian",
+        "Jaha"
+      ],
+      "era": "4720s AR",
+      "editionScope": "Lost Omens Remaster",
+      "text": "The Mwangi Expanse is a large, culturally diverse region of forests, savannas, rivers, mountains, city-states, nations, ruins, and magical ecologies. It is not a blank jungle or a place defined by outsiders discovering it. Local peoples possess deep historical, scientific, magical, religious, and political knowledge. Nantambu is associated with the Magaambya, an ancient academy founded in the tradition of Old-Mage Jatembe. Its approach combines scholarship, service, and multiple magical methods. Vidrian emerged from revolution against colonial rule and faces the difficult work of building institutions, managing trade, and deciding its relationship with former powers. Mzali is ruled by the child-god Walkena and contains devotion, fear, resistance, and complex debates over sovereignty. Usaro and other hostile powers are threats without representing the whole Expanse. The region includes many ancestries and communities, including humans, elves, dwarves, catfolk, gnolls, iruxi, orcs, and others, each with internal variety. The orcs of Matanji, elves of the Ekujae, and residents of major cities have specific histories that should not be generalized to everyone sharing an ancestry. Ancient ruins can involve serpentfolk, cyclopes, Azlanti influence, lost cities, local empires, or entirely different origins. Do not label every ruin foreign or assume local people have no claim to its contents. Campaigns should treat scholarship, conservation, diplomacy, and community permission as real choices. Weather, disease, rivers, roads, and magical ecosystems matter, but they should create grounded decisions rather than exotic punishment for entering the region."
+    },
+    {
+      "id": "old-cheliax-and-hellfire",
+      "title": "Old Cheliax and the Hellfire Crisis",
+      "tags": [
+        "Cheliax",
+        "Andoran",
+        "Ravounel",
+        "Hellknights",
+        "Hellfire Crisis",
+        "House Thrune"
+      ],
+      "era": "4725 AR",
+      "editionScope": "Current Lost Omens",
+      "text": "Cheliax is an imperial state ruled by House Thrune through infernal law, aristocratic power, bureaucracy, military force, and bargains with Hell. The government is oppressive, but Chelaxian people are not automatically loyal diabolists. Families, reformers, merchants, priests, enslaved and formerly enslaved people, nobles, and provincial communities navigate the regime in different ways. Ravounel successfully broke from Cheliax and established an independent state centered on Kintargo. Isger remains marked by Chelaxian influence, war, and local recovery. Nidal is an old ally of Cheliax bound to Zon-Kuthon and shadow. Hellknight orders enforce ideals of law through distinct philosophies; they are not simply Chelaxian police, and different orders can cooperate with or oppose Thrune interests. Andoran is a republic that presents itself as a champion of liberty and abolition. It also contains political factions, commercial interests, military pressures, and contradictions between ideals and practice. The long rivalry between Andoran and Cheliax becomes open war in summer 4725 AR after relics and consequences associated with Gorum's death destabilize the balance. This Hellfire Crisis expands across later releases. In the default frame, portray mobilization, espionage, propaganda, border fear, privateering, sabotage, refugees, and contested alliances. Do not declare a victor or permanent border change. Local characters may fight for ideals, survival, profit, revenge, or reform. Infernal magic is important to Cheliax, but ordinary logistics and political legitimacy are equally important. A contract with a devil can decide one operation; grain, ships, public support, and exhausted soldiers decide whether a war can continue."
+    },
+    {
+      "id": "saga-lands",
+      "title": "The Saga Lands",
+      "tags": [
+        "Varisia",
+        "New Thassilon",
+        "Irrisen",
+        "Linnorm Kings",
+        "Mammoth Lords",
+        "Ulfen"
+      ],
+      "era": "4720s AR",
+      "editionScope": "Lost Omens",
+      "text": "The Saga Lands encompass northern territories linked by migration, ancient empires, winter, dangerous frontiers, and epic traditions. Varisia contains city-states, rural communities, Shoanti homelands, ancient Thassilonian ruins, and competing foreign influences. Its people should not be defined solely by ruins left by runelords. New Thassilon emerged when ancient figures and territories returned through temporal and magical upheaval. It includes realms shaped by Sorshen and Belimarius, whose policies and personalities differ. Do not treat it as a simple restoration of ancient Thassilon or assume all runelord-era practices continue unchanged. Irrisen was founded by the witch queen Baba Yaga and long ruled by her descendants. It is a land of supernatural winter, witches, fey, human communities, and political fear. Anastasia Nikolaevna of Earth became its queen in published canon. That extraordinary fact should not turn every Irriseni scene into an Earth crossover; most residents deal with local survival, law, and magic. The Lands of the Linnorm Kings contain Ulfen settlements, ambitious rulers, seafaring, trade, raiding traditions, and the custom that a would-be king earns status by slaying a linnorm. The Realm of the Mammoth Lords includes following peoples, megafauna, spirits, and communities with knowledge adapted to vast northern landscapes. Use oral tradition, clan obligations, seasonal movement, old monuments, and contested land claims. Avoid generic Viking accents or portraying every northern culture as violent and technologically backward. Varisian caravans, Shoanti quahs, Ulfen jarls, Irriseni villages, and Kellid followings require separate cultural treatment."
+    },
+    {
+      "id": "shining-kingdoms",
+      "title": "The Shining Kingdoms",
+      "tags": [
+        "Andoran",
+        "Druma",
+        "Galt",
+        "Kyonin",
+        "Taldor",
+        "Five Kings Mountains"
+      ],
+      "era": "4720s AR",
+      "editionScope": "Lost Omens Remaster",
+      "text": "The Shining Kingdoms present several forms of classical fantasy politics in close proximity. Andoran is a republic organized around liberty, civic debate, naval power, and opposition to slavery and tyranny. Druma is dominated by the mercantile philosophy of the Prophecies of Kalistrade and by immense trade wealth. Galt has endured generations of revolution and political violence and now faces reconstruction rather than an endless frozen Terror. Kyonin is an elven homeland protected by magic and shaped by the return of elves from Castrovel, ancient forests, foreign relations, and the threat of the demon Treerazer. Taldor is a declining but still powerful empire with aristocratic traditions, reform movements, bureaucracy, military history, and influence far beyond its current strength. The Five Kings Mountains contain dwarven holds with their own rivalries, industries, memories, and relations to surface powers. These nations trade, spy, intermarry, argue over borders, and compete for prestige. Courts and assemblies matter, but so do provincial estates, guilds, temples, universities, newspapers, and military orders. The Hellfire Crisis places particular pressure on Andoran and its neighbors in 4725 AR. Do not reduce the region to a clean moral map. Andoran can fail its ideals, Druman wealth can support charity or exploitation, Galtish survivors can disagree over justice, Kyonin can be protective and isolationist, and Taldan reformers can still benefit from hierarchy. Use institutional conflict to generate adventure: disputed elections, sabotaged trade, elven border magic, dwarven succession, revolutionary evidence, or noble estates hiding threats."
+    },
+    {
+      "id": "tian-xia",
+      "title": "Tian Xia",
+      "tags": [
+        "Tian Xia",
+        "Minkai",
+        "Goka",
+        "Hwanggot",
+        "Xa Hoi",
+        "Shenmen"
+      ],
+      "era": "4720s AR",
+      "editionScope": "Lost Omens Tian Xia",
+      "text": "Tian Xia is a continent with more than twenty distinct nations, numerous seas and island chains, ancient dragon traditions, local pantheons, modern states, and wide variation in technology and magic. It must not be compressed into one East Asian analogue. Minkai, Hwanggot, Goka, Xa Hoi, Shenmen, Bachuan, Nagajor, Minata, and other lands possess different governments, cultures, histories, and current pressures. Dragons have important historical and spiritual roles, including traditions in which they served as stewards under heavenly authority. That heritage does not make every dragon benevolent or every nation dragon-ruled. The continent contains humans and many other ancestries, including kitsune, tengu, samsarans, sprites, nagaji, wayangs, and regional peoples whose identities are not reducible to ancestry. Goka is a major cosmopolitan port and trade city. Minkai has undergone political upheaval and renewed imperial government in published canon. Hwanggot rebuilt after occupation and conflict. Shenmen contains spider-associated powers and horror traditions. Minata is an archipelagic region of many cultures protected by reefs linked in legend to dragons. Use current regional material for details rather than importing assumptions from older, more generalized presentations. Tian Xia campaigns can involve court politics, maritime trade, spirit relations, martial schools, urban crime, archaeology, family obligation, revolution, festivals, and frontier travel. Naming, religion, clothing, architecture, and etiquette should follow a selected nation. Do not create a character who is merely 'from Tian Xia' when a specific homeland can be established."
+    },
+    {
+      "id": "faith-and-gods",
+      "title": "Faith, Gods, and Divine Change",
+      "tags": [
+        "Arazni",
+        "Pharasma",
+        "Aroden",
+        "Gorum",
+        "Achaekek",
+        "deities"
+      ],
+      "era": "4724 to 4725 AR",
+      "editionScope": "Lost Omens Divine Mysteries",
+      "text": "Golarion's gods are active powers with churches, doctrines, sacred sites, outsiders, and political influence. Many people honor several deities while devoting themselves to one. Clergy can disagree internally, and divine power does not make every religious claim infallible. Regional pantheons and non-deific philosophies are as important as the Inner Sea's core twenty. Aroden is dead and his death remains a central mystery. Pharasma judges souls and oversees the Boneyard through psychopomps and servants. Achaekek, the mantis god associated with divine punishment and assassination, slew Gorum in 4724 AR. The Godsrain changed divine politics and scattered pieces of warlike power through existence. Gorum is not an active patron in the default frame, though former worshippers, relics, memories, and divine residue remain. Arazni, once a mortal hero, then a divine figure, victim, unwilling ruler, and survivor, became one of the core twenty after Gorum's death. Her current faith emphasizes survival, dignity, and resistance to abuse, but her history should not be flattened into a simple triumph. Other gods and demigods also changed during the War of Immortals; include only developments supported by the chosen source. The remaster replaces alignment-based divine rules with sanctification and revised terminology. Do not use old alignment requirements as current mechanics. In roleplay, distinguish doctrine, church organization, local custom, and personal belief. A temple can be politically compromised while its god remains real; a sincere worshipper can misunderstand doctrine; and a community may combine several traditions without treating them as mutually exclusive."
+    },
+    {
+      "id": "magic-technology-and-economy",
+      "title": "Magic, Technology, and Economy",
+      "tags": [
+        "magic",
+        "artifice",
+        "firearms",
+        "Numeria",
+        "Alkenstar",
+        "trade"
+      ],
+      "era": "4720s AR",
+      "editionScope": "Pathfinder Second Edition Remaster",
+      "text": "Magic is known across Golarion, but its prevalence, regulation, and practical use vary. Absalom supports extensive magical commerce and services. Nex institutionalizes advanced spellcraft. Geb uses necromancy as state infrastructure. Nantambu integrates magical education with civic service. Rural communities may rely on a shrine, herbalist, local ritualist, or traveling specialist instead of a commercial magic market. Firearms are especially associated with Alkenstar, the Mana Wastes, and particular military or commercial networks. Numeria contains alien technology recovered from the wreck of the Divinity and related ruins. Clockwork, alchemy, construct manufacture, and magical transport exist elsewhere. None of these facts establishes a uniform global technology level. The Inner Sea uses common coin values for gameplay, but nations mint their own currency and large transactions may rely on gems, trade goods, letters, banking, contracts, or magical security. Major roads and shipping lanes support long-distance trade. Weather, monsters, war, tariffs, piracy, and political borders keep travel consequential. Rules prices are baselines, not proof of local inventory. Rarity traits help indicate access, while regional knowledge determines what can be purchased or commissioned. A gun in Alkenstar, a Tian artifact in Goka, and a resurrection service in Absalom have different social meanings. When creating a settlement, decide who controls magical services, whether craft is regulated, what goods are exported, what resources are scarce, and how recent wars affect supply. This produces a more convincing Golarion location than decorating a generic town with random magic items."
+    },
+    {
+      "id": "major-organizations",
+      "title": "Major Organizations and Networks",
+      "tags": [
+        "Pathfinder Society",
+        "Hellknights",
+        "Red Mantis",
+        "Aspis Consortium",
+        "Firebrands"
+      ],
+      "era": "4720s AR",
+      "editionScope": "Lost Omens",
+      "text": "The Pathfinder Society is an international organization devoted to exploration, recovery, scholarship, and publication. Its Grand Lodge is in Absalom, with lodges and agents across the world. Venture-captains direct missions, while field agents possess varied motives and expertise. The Society's history includes both genuine preservation and harmful extraction. Current play can explore reform, local consent, and competition over who owns recovered knowledge. Hellknight orders pursue law through severe codes and martial discipline. Each order has a distinct concern, such as borders, civic disorder, dangerous magic, or rebellion. They are not all loyal to Cheliax and are not automatically fiends, though their methods can be brutal. The Red Mantis assassins combine professional murder, secrecy, and devotion to Achaekek. Their divine context is especially important after Gorum's death. The Aspis Consortium is a commercial and colonial rival to the Pathfinder Society, willing to exploit people, sites, and artifacts for profit. Firebrands are a broad movement of rebels, liberators, performers, and public heroes whose decentralized nature produces both inspiration and recklessness. Eagle Knights serve Andoran through several branches and may become central during the Hellfire Crisis. Churches, knightly orders, magical schools, criminal syndicates, noble houses, and regional alliances often matter more locally than a global faction. Introduce organizations through specific agents with limited authority. A faction should offer resources and obligations, not simply hand the party a universal moral label."
+    },
+    {
+      "id": "common-canon-traps",
+      "title": "Common Golarion Canon Traps",
+      "tags": [
+        "canon",
+        "errors",
+        "timeline",
+        "remaster",
+        "Adventure Paths"
+      ],
+      "era": "All eras",
+      "editionScope": "All Pathfinder editions",
+      "text": "The largest error is mixing dates. First Edition's political present, Second Edition's 4719 opening, the 4724 Godsrain, and the 4725 Hellfire Crisis are not simultaneous. Attach years to rulers, wars, divine deaths, and national conditions. Do not assume every Adventure Path unfolded exactly as written. Paizo often advances the setting using a selected outcome, but a player campaign may reject it. Use broad current facts without forcing the original heroes or plot sequence into play. Do not treat the Inner Sea as Golarion. Tian Xia, Arcadia, southern Garund, Casmaron, and other regions are not peripheral fantasy blanks. Use regional sources and avoid merging distinct cultures. Do not import D&D terminology or cosmology automatically. Pathfinder has its own gods, planes, ancestries, factions, and history. Under the remaster, alignment is not the current universal mechanic, and some names and rules changed. Gorum is dead in the default frame. Aroden remains dead. Prophecy remains unreliable. Lastwall is not intact, the Worldwound is not open, slavery is abolished in Absalom, and Galt is not eternally frozen at the height of its Terror. These statements are timeline-sensitive but important. Avoid genre caricature. Numeria is not only robots, Ustalav not only vampires, the Mwangi Expanse not an empty jungle, Tian Xia not one culture, and Cheliax not populated entirely by willing devil worshippers. When evidence is uncertain, say so. A smaller accurate answer is better than an invented mayor, treaty, deity, or border."
+    }
+  ]
+}

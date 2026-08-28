@@ -1,0 +1,599 @@
+{
+  "id": "wardens-pc-starter-warlock",
+  "playName": "Warlock",
+  "sourceFileName": "Warlock 1 Mark II.txt",
+  "sourceMimeType": "text/plain",
+  "portraitUrl": "/images/starter-characters/warlock.webp",
+  "sourceText": "WARDENSPC PLAIN-TEXT CHARACTER RECORD\n\n\nRECORD INFORMATION\n\nRecord Version: Warlock 1 Mark III\nLast Updated: 2026-08-11\nRules Version: 2024 D&D rules / SRD 5.2.1\nSource Character Sheet: Mistinarperadnacles_169280417.pdf\nDevelopment Status: Complete\n\n\nCHECKBOX KEY\n\nEquipment:\n[X] = actively worn, wielded, held, or otherwise ready for immediate use\n[ ] = carried, packed, stored, or not currently in use\n\nHit Dice, Limited-Use Resources, and Spell Slots:\n[ ] = available\n[X] = expended or used\n\nHeroic Inspiration:\n[X] = currently possessed\n[ ] = not currently possessed\n\nConcentration:\n[X] = currently concentrating on the named spell or effect\n[ ] = not currently concentrating\n\nSpells:\nCantrips do not need checkboxes.\n[X] = prepared or always prepared\n[ ] = known, recorded, or in a spellbook but not currently prepared\n\nAttuned Items:\n[X] = currently attuned\n[ ] = carried but not currently attuned\n\n\nIDENTITY AND ORIGIN\n\nPlayer Name: Mistinarperadnacles\nCharacter Name: Warlock 1\nName Used During Play: Warlock 1\nSex: Female\nPronouns: She/Her\nSpecies: Orc\nLineage, Ancestry, or Heritage: Orc\nClass and Level: Warlock 1\nSubclass: None at level 1\nSubclass Gained at Level: Warlock level 3\nBackground: Acolyte\nOrigin Feat: Magic Initiate (Cleric)\nEldritch Invocation: Pact of the Tome\nExperience Points or Milestone: Milestone\nAlignment: Neutral Good\n\nFaith or Deity:\nThe Common Table, a setting-neutral religious tradition devoted to hospitality,\nmutual aid, safe passage, and the belief that nobody should be abandoned\nhungry, wounded, or nameless.\n\nPact Source:\nAn unidentified presence called the Guest Beyond the Last Door. Warlock 1\ndoes not know whether this presence is divine, eldritch, ancestral, or\nsomething that merely learned how to answer a prayer.\n\nMechanical Patron:\nNone selected at level 1. Warlock subclass and patron mechanics begin at\nWarlock level 3.\n\nHome Region or Place of Origin: Not specified\nCurrent Residence or Base: No permanent base established\nSize: Medium\nAge: 22\nHeight: 6 ft. 3 in.\nWeight: 226 lb.\n\nSkin, Scales, Fur, or Other Coloration:\nDeep forest-green skin with darker green at the knuckles, elbows, and ears.\n\nHair, Crest, Horns, or Other Distinguishing Features:\nCoarse black hair arranged in several thick braids; pronounced lower tusks;\nbroad nose; one split in the left ear.\n\nEyes: Yellow-gold\n\nGeneral Appearance:\nA strikingly beautiful Orc woman with a heavy jaw, prominent tusks, expressive\nyellow-gold eyes, and a direct, memorable face. She does not believe that she\nis beautiful and becomes dismissive or uncomfortable when anyone suggests it.\n\nHer body is broad and noticeably overweight without being extreme. Because of\nher size, height, and Orcish appearance, strangers often assume that she must\nbe immensely strong. In fact, she has spent most of her life reading, copying,\nadministering stores, and performing ritual work. Her Strength 8 is genuine,\nand physical effort tires or embarrasses her more quickly than people expect.\n\nShe wears a dark blue-gray acolyte robe over fitted leather armor. Her orb is\nsmoky green glass held in a bronze cage. Her conjured Book of Shadows appears\nbound in dark leather with pale stitching and a blank circle stamped into the\ncover.\n\n\nCAMPAIGN AND TOKEN INFORMATION\n\nCampaign: WardensPC starter character\nIs Current Party's Active Leader: No\n\nAssociated Token Background Color: Green\n\nCharacter Token or Portrait Notes:\nUse a green token background. Show a tall, broad-shouldered Orc woman with deep\nforest-green skin, darker knuckles and ears, thick black braids, large lower\ntusks, yellow-gold eyes, and a split left ear.\n\nShe wears a dark blue-gray acolyte robe over leather armor, holds a smoky green\norb, and carries or summons a dark Book of Shadows. She should be broad,\nheavyset, and strikingly beautiful, with an appearance that leads others to\noverestimate her physical strength. Do not depict her as a generic armored\nwarrior.\n\n\nCOMBAT AND TRACKING\n\nArmor Class: 13\nArmor Class Calculation: Leather armor 11 + Dexterity modifier 2\nCurrent Hit Points: 9\nMaximum Hit Points: 9\nTemporary Hit Points: None\n\nHit Dice:\n1d8 total\n[ ] 1d8 available\n\nDeath Saves:\nSuccesses: [ ][ ][ ]\nFailures: [ ][ ][ ]\n\nHeroic Inspiration: [ ]\nConcentration: [ ]\nConcentrating On:\n\nSpeed and Movement Types: Walking 30 ft.\nInitiative: +2\nProficiency Bonus: +2\nSpell Save DC: 13\nSpell Attack Bonus: +5\nAbility Save DC: 9 for Strength-based Grapple or Shove effects\nPassive Perception: 10\nPassive Insight: 12\nPassive Investigation: 13\nCurrent Conditions: None\n\nOther Combat Notes:\nEldritch Blast is her principal ranged attack.\nStarry Wisp offers shorter-range Radiant damage.\nToll the Dead and Mind Sliver attack different saving throws.\nHex uses her single Pact Magic slot and requires Concentration.\nAdrenaline Rush allows rapid repositioning and grants 2 Temporary Hit Points.\nRelentless Endurance can keep her standing at 1 Hit Point once per Long Rest.\n\n\nABILITY SCORES\n\nStrength: 8 (-1)\nDexterity: 14 (+2)\nConstitution: 13 (+1)\nIntelligence: 13 (+1)\nWisdom: 10 (+0)\nCharisma: 17 (+3)\n\n\nSAVING THROWS\n\nStrength: -1\nDexterity: +2\nConstitution: +1\nIntelligence: +1\nWisdom: +2, proficient\nCharisma: +5, proficient\n\nSaving Throw Proficiencies: Wisdom and Charisma\nSaving Throw Modifiers or Special Advantages: None\n\n\nSKILLS\n\nAcrobatics: +2\nAnimal Handling: +0\nArcana: +3, proficient\nAthletics: -1\nDeception: +3\nHistory: +1\nInsight: +2, proficient\nIntimidation: +3\nInvestigation: +3, proficient\nMedicine: +0\nNature: +1\nPerception: +0\nPerformance: +3\nPersuasion: +3\nReligion: +3, proficient\nSleight of Hand: +2\nStealth: +2\nSurvival: +0\n\nExpertise or Other Skill Notes: None\n\n\nSENSES AND DEFENSES\n\nDarkvision or Other Senses: Darkvision 120 ft.\nDamage Resistances: None\nDamage Vulnerabilities: None\nDamage Immunities: None\nCondition Immunities: None\n\nDefensive Advantages, Disadvantages, or Special Notes:\nRelentless Endurance can reduce Warlock 1 to 1 Hit Point instead of 0 once per\nLong Rest when she is not killed outright.\n\nAdrenaline Rush grants 2 Temporary Hit Points when she uses it to Dash.\n\n\nTRAINING AND PROFICIENCIES\n\nArmor Training: Light armor\nShield Training: None\nWeapon Proficiencies: Simple weapons\nTool Proficiencies: Calligrapher's supplies\nVehicle Proficiencies: None recorded\nGaming Set or Musical Instrument Proficiencies: None\n\nOther Training:\nReligious copying and illuminated script\nGuest ledgers and sanctuary records\nRitual preparation\nTranslation of devotional texts\nShelter administration and distribution of supplies\n\n\nLANGUAGES\n\nLanguages Known:\nCommon\nDraconic\nOrc\n\nSecret or Class Languages: None\n\nCommunication Notes:\nComprehend Languages can provide literal understanding of spoken or written\nlanguage while the spell is active, subject to the spell's normal limitations.\n\n\nATTACKS, WEAPONS, AND OFFENSIVE OPTIONS\n\nName: Eldritch Blast\nAttack Bonus or Save DC: +5 spell attack\nDamage or Effect: 1d10 Force\nDamage Type: Force\nRange or Reach: 120 ft.\nAction Type: Action\nProperties: Warlock cantrip\nWeapon Mastery: None\nAmmunition or Uses: At will\nNotes: Principal ranged attack.\n\nName: Starry Wisp\nAttack Bonus or Save DC: +5 spell attack\nDamage or Effect:\n1d8 Radiant. On a hit, until the end of Warlock 1's next turn, the target emits\nDim Light in a 10-foot radius and can't benefit from the Invisible condition.\nDamage Type: Radiant\nRange or Reach: 60 ft.\nAction Type: Action\nProperties: Cantrip selected through Pact of the Tome\nWeapon Mastery: None\nAmmunition or Uses: At will\n\nName: Toll the Dead\nAttack Bonus or Save DC: Wisdom save DC 13\nDamage or Effect:\n1d8 Necrotic damage, or 1d12 if the target is missing any Hit Points\nDamage Type: Necrotic\nRange or Reach: 60 ft.\nAction Type: Action\nProperties: Cantrip selected through Pact of the Tome\nWeapon Mastery: None\nAmmunition or Uses: At will\n\nName: Mind Sliver\nAttack Bonus or Save DC: Intelligence save DC 13\nDamage or Effect:\n1d6 Psychic damage. The target subtracts 1d4 from the next saving throw it\nmakes before the end of Warlock 1's next turn.\nDamage Type: Psychic\nRange or Reach: 60 ft.\nAction Type: Action\nProperties: Cantrip selected through Pact of the Tome\nWeapon Mastery: None\nAmmunition or Uses: At will\n\nName: Dagger\nAttack Bonus or Save DC: +4\nDamage or Effect:\n1d4+2 Piercing normally\nTwo-Weapon Fighting / Light-property extra attack: 1d4 Piercing\nDamage Type: Piercing\nRange or Reach: 5 ft. melee; thrown range 20/60 ft.\nAction Type: Action or Light-property additional attack\nProperties: Finesse, light, thrown, simple\nWeapon Mastery: Nick is the weapon's property, but Warlock 1 has no Weapon Mastery feature\nAmmunition or Uses: Two daggers total\nNotes:\nOne dagger is immediately accessible and one is packed as reserve.\n\nName: Sickle\nAttack Bonus or Save DC: +1\nDamage or Effect:\n1d4-1 Slashing normally\nTwo-Weapon Fighting / Light-property extra attack: 1d4-1 Slashing; the negative\nStrength modifier still applies under the Light-property rule\nDamage Type: Slashing\nRange or Reach: 5 ft.\nAction Type: Action or Light-property additional attack\nProperties: Light, simple\nWeapon Mastery: Nick is the weapon's property, but Warlock 1 has no Weapon Mastery feature\nAmmunition or Uses: None\nNotes:\nA devotional and utility implement that can serve as a backup weapon.\n\nName: Inflict Wounds\nAttack Bonus or Save DC: Constitution save DC 13\nDamage or Effect: 2d10 Necrotic damage on a failed save, half on a success\nDamage Type: Necrotic\nRange or Reach: Touch\nAction Type: Action\nProperties: Magic Initiate (Cleric) 1st-level spell\nWeapon Mastery: None\nAmmunition or Uses:\nOne free casting per Long Rest, or one Pact Magic slot\n\nName: Unarmed Strike\nAttack Bonus or Save DC: +1 attack or DC 9 save\nDamage or Effect: 0 Bludgeoning damage, Grapple, or Shove\nDamage Type: Bludgeoning\nRange or Reach: 5 ft.\nAction Type: Attack\nProperties: Unarmed\nWeapon Mastery: None\nAmmunition or Uses: None\n\n\nSELECTED WEAPON MASTERIES\n\nNone. Warlock 1 does not have the Weapon Mastery feature.\n\n\nARMOR AND SHIELDS\n\nArmor: Leather armor\nCurrently Worn: [X]\nArmor Class: 13\nStrength Requirement: None\nStealth Effect: None\nNotes: Base AC 11 plus Dexterity modifier 2.\n\nShield: None\nCurrently Wielded: [ ]\nArmor Class Bonus: None\nNotes: Warlock 1 is not trained to use shields.\n\n\nEQUIPMENT\n\n[X] Item: Leather armor | Quantity: 1 | Weight: 10 lb. | Worn, Held, or Stored Where: Worn beneath robe | Notes: Primary armor.\n[X] Item: Dark blue-gray acolyte robe | Quantity: 1 | Weight: 4 lb. | Worn, Held, or Stored Where: Worn | Notes: Religious clothing and recognizable former office.\n[X] Item: Orb arcane focus | Quantity: 1 | Weight: 3 lb. | Worn, Held, or Stored Where: In hand or belt cradle | Notes: Smoky green glass held in a bronze cage.\n[X] Item: Book of Shadows | Quantity: 1 conjured book | Weight: Not tracked | Worn, Held, or Stored Where: Accessible | Notes: Conjured through Pact of the Tome and usable as a spellcasting focus.\n[X] Item: Dagger | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Belt sheath | Notes: Immediately accessible.\n[ ] Item: Dagger | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Reserve weapon.\n[X] Item: Sickle | Quantity: 1 | Weight: 2 lb. | Worn, Held, or Stored Where: Belt hook | Notes: Utility and devotional implement.\n[X] Item: Holy symbol | Quantity: 1 | Weight: Negligible | Worn, Held, or Stored Where: Worn | Notes: A small round table engraved with seven empty places.\n[X] Item: Backpack | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Worn | Notes: Main equipment container.\n[X] Item: Ordinary pouch | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Belt | Notes: Coins, chalk, ink, and small components.\n[X] Item: Component pouch | Quantity: 1 | Weight: 2 lb. | Worn, Held, or Stored Where: Belt | Notes: Noncostly material components.\n[ ] Item: Calligrapher's supplies | Quantity: 1 set | Weight: 5 lb. | Worn, Held, or Stored Where: Backpack | Notes: Pens, brushes, ink, and preparation tools.\n[ ] Item: Parchment | Quantity: 20 sheets | Weight: Negligible | Worn, Held, or Stored Where: Document case | Notes: Consolidated from the Scholar's Pack (10 sheets) and Acolyte background (10 sheets); both sources are retained, for 20 total.\n[ ] Item: Devotional book | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Backpack | Notes: Prayers, hospitality rites, and Common Table teachings.\n[ ] Item: Sanctuary ledger and reference book | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Backpack | Notes: Scholar's Pack book, used as a sanctuary ledger and reference volume.\n[ ] Item: Occult-lore book | Quantity: 1 | Weight: 5 lb. | Worn, Held, or Stored Where: Backpack | Notes: Separate book supplied by the Warlock class starting package; retained rather than merged.\n[ ] Item: Ink pen | Quantity: 1 | Weight: Negligible | Worn, Held, or Stored Where: Calligrapher's case | Notes: Writing tool.\n[ ] Item: Ink | Quantity: 1 bottle | Weight: Negligible | Worn, Held, or Stored Where: Padded calligrapher's case | Notes: Writing supply.\n[ ] Item: Oil | Quantity: 10 flasks | Weight: 10 lb. total | Worn, Held, or Stored Where: External padded flask carrier secured to pack | Notes: Lamp fuel and general use; carried outside the backpack interior to respect its capacity.\n[ ] Item: Lamp | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Reading and camp light.\n[X] Item: Tinderbox | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Belt pouch | Notes: Flint, fire steel, and dry tinder.\n[ ] Item: Waterskin | Quantity: 1 | Weight: 5 lb. full | Worn, Held, or Stored Where: Backpack exterior | Notes: Extra mundane travel gear retained from the source record.\n[ ] Item: Rations | Quantity: 7 days | Weight: 14 lb. total | Worn, Held, or Stored Where: External provision bundle secured to pack frame | Notes: Durable traveling food; carried outside the backpack interior to respect its capacity.\n[ ] Item: Bedroll | Quantity: 1 | Weight: 7 lb. | Worn, Held, or Stored Where: Strapped to backpack | Notes: Standard traveling bedroll.\n[ ] Item: Wool blanket | Quantity: 1 | Weight: 3 lb. | Worn, Held, or Stored Where: Strapped to backpack | Notes: Camp and cold-weather use.\n[ ] Item: Mess kit | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Wooden bowl, small plate, spoon, and eating knife.\n[ ] Item: Wooden mug | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: Personal drinking vessel.\n[ ] Item: Dry kindling | Quantity: 3 small bundles | Weight: 1 lb. total | Worn, Held, or Stored Where: Backpack | Notes: Wrapped against damp.\n[ ] Item: Torches | Quantity: 10 | Weight: 10 lb. total | Worn, Held, or Stored Where: Side lashings on pack | Notes: Each burns for 1 hour.\n[ ] Item: Healing bandages | Quantity: 5 clean dressings | Weight: 1 lb. total | Worn, Held, or Stored Where: Backpack | Notes: Clean linen; no automatic magical healing.\n[ ] Item: Chalk | Quantity: Exactly 2 pieces | Weight: Negligible | Worn, Held, or Stored Where: Belt pouch | Notes: Emergency marking chalk.\n[ ] Item: Trinket | Quantity: 1 | Weight: 1 lb. | Worn, Held, or Stored Where: Backpack | Notes: d100 result 43; a silver bell without a clapper.\n\nCoins:\nCP: 0\nSP: 0\nEP: 0\nGP: 23\nPP: 0\n\nRecorded Total Weight: Approximately 105 lb.\nCarrying Capacity: 120 lb.\nEncumbrance Threshold, if Used: Not used\nPush, Drag, or Lift Capacity: 240 lb.\n\n\nATTUNED ITEMS\n\nAttunement Slots Used: 0\nAttuned Items: None\n\n\nLIMITED-USE RESOURCES\n\nResource: Pact Magic\nMaximum Uses: 1 Pact Magic slot\nSlot Level: 1\nRecovery: Short or Long Rest\n[ ] Pact Magic slot available\n\nNotes:\nThe Pact Magic slot can cast Charm Person, Hex, or Inflict Wounds. While the\nBook of Shadows is on Warlock 1's person, it can also cast Detect Magic or\nComprehend Languages because those Tome spells are prepared and function as\nWarlock spells. Detect Magic and Comprehend Languages can instead be cast as\nRituals without expending the Pact Magic slot.\n\n\nResource: Adrenaline Rush\nMaximum Uses: 2\nRecovery: Short or Long Rest\n[ ] Use 1 available\n[ ] Use 2 available\n\nActivation:\nBonus Action.\n\nEffect:\nWarlock 1 takes the Dash action and gains 2 Temporary Hit Points.\n\n\nResource: Relentless Endurance\nMaximum Uses: 1\nRecovery: Long Rest\n[ ] Use available\n\nEffect:\nWhen Warlock 1 would be reduced to 0 Hit Points but not killed outright, she\ncan drop to 1 Hit Point instead.\n\n\nResource: Magic Initiate free casting of Inflict Wounds\nMaximum Uses: 1\nRecovery: Long Rest\n[ ] Free casting available\n\nEffect:\nCast Inflict Wounds once without expending the Pact Magic slot. Warlock 1 can\nalso cast the spell using her Pact Magic slot.\n\n\nSPELLCASTING\n\nSpellcasting Class, Feature, or Source: Warlock Pact Magic\nSpellcasting Ability: Charisma\nSpell Save DC: 13\nSpell Attack Bonus: +5\nSpellcasting Focus:\nSmoky green orb or conjured Book of Shadows\n\nRitual Casting:\nPact of the Tome makes the two selected level-1 Ritual spells prepared while\nthe Book of Shadows is on Warlock 1's person. They can be cast normally with an\neligible Pact Magic slot or as Rituals without expending a slot.\n\nPrepared Warlock Spells:\nCharm Person\nHex\n\nConcentration Rules or Notes:\nWarlock 1 can maintain only one Concentration spell at a time. Hex, Guidance,\nResistance, and Detect Magic require Concentration.\n\nOther Spellcasting Notes:\nWarlock 1 has one level-1 Pact Magic slot. It returns after a Short or Long Rest.\n\n\nSpellcasting Class, Feature, or Source: Magic Initiate (Cleric)\nSpellcasting Ability: Charisma\nSpell Save DC: 13\nSpell Attack Bonus: +5\nSpellcasting Focus:\nHoly symbol or component pouch when required\n\nCantrips:\nGuidance\nResistance\nAlways Prepared Spell:\nInflict Wounds\n\nOther Spellcasting Notes:\nInflict Wounds can be cast once without a spell slot per Long Rest and can also\nbe cast using the Pact Magic slot.\n\n\nSpellcasting Class, Feature, or Source: Pact of the Tome\nSpellcasting Ability: Charisma\nSpell Save DC: 13\nSpell Attack Bonus: +5\nSpellcasting Focus: Book of Shadows\n\nSelected Cantrips:\nToll the Dead\nMind Sliver\nStarry Wisp\n\nSelected Tome Spells, Prepared while the Book of Shadows is on Warlock 1's Person:\nDetect Magic\nComprehend Languages\n\nBook Conjuration:\nAt the end of a Short or Long Rest, Warlock 1 can conjure the Book of Shadows\nin her hand. The book disappears if she conjures another one or if she dies.\n\n\nPACT MAGIC SLOTS\n\n1st Level: 1 total, 0 used\n[ ]\n\n\nSPELLS\n\nCantrip:\nName: Prestidigitation\nSource: Warlock\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: 10 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nCreates one minor magical effect allowed by the spell\nComponents: Verbal, Somatic\nDuration: Up to 1 hour, depending on effect\nConcentration: No\nRitual: No\n\nCantrip:\nName: Eldritch Blast\nSource: Warlock\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: 120 ft.\nAttack Bonus or Save DC: +5 spell attack\nDamage or Effect: 1d10 Force damage\nComponents: Verbal, Somatic\nDuration: Instantaneous\nConcentration: No\nRitual: No\n\nCantrip:\nName: Guidance\nSource: Magic Initiate (Cleric)\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: Touch\nAttack Bonus or Save DC: None\nDamage or Effect:\nTarget adds 1d4 to one ability check of its choice before the spell ends\nComponents: Verbal, Somatic\nDuration: Concentration, up to 1 minute\nConcentration: Yes\nRitual: No\n\nCantrip:\nName: Resistance\nSource: Magic Initiate (Cleric)\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: Touch\nAttack Bonus or Save DC: None\nDamage or Effect:\nTarget adds 1d4 to one saving throw of its choice before the spell ends\nComponents: Verbal, Somatic\nDuration: Concentration, up to 1 minute\nConcentration: Yes\nRitual: No\n\nCantrip:\nName: Toll the Dead\nSource: Pact of the Tome\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: 60 ft.\nAttack Bonus or Save DC: Wisdom save DC 13\nDamage or Effect:\n1d8 Necrotic damage, or 1d12 if the target is missing any Hit Points\nComponents: Verbal, Somatic\nDuration: Instantaneous\nConcentration: No\nRitual: No\n\nCantrip:\nName: Mind Sliver\nSource: Pact of the Tome\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: 60 ft.\nAttack Bonus or Save DC: Intelligence save DC 13\nDamage or Effect:\n1d6 Psychic damage. The target subtracts 1d4 from the next saving throw it\nmakes before the end of Warlock 1's next turn.\nComponents: Verbal\nDuration: 1 round\nConcentration: No\nRitual: No\n\nCantrip:\nName: Starry Wisp\nSource: Pact of the Tome\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: 60 ft.\nAttack Bonus or Save DC: +5 spell attack\nDamage or Effect:\n1d8 Radiant damage. On a hit, until the end of Warlock 1's next turn, the target\nemits Dim Light in a 10-foot radius and can't benefit from the Invisible condition.\nComponents: Verbal, Somatic\nDuration: Instantaneous\nConcentration: No\nRitual: No\n\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Charm Person\nLevel: 1\nSource: Warlock\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: 30 ft.\nAttack Bonus or Save DC: Wisdom save DC 13\nDamage or Effect:\nOne eligible creature becomes Charmed for the duration on a failed save,\nsubject to the spell's normal limitations.\nComponents: Verbal, Somatic\nDuration: 1 hour\nConcentration: No\nRitual: No\n\n1st-Level or Higher Spell:\n[X] Prepared\nName: Hex\nLevel: 1\nSource: Warlock\nSpellcasting Ability: Charisma\nCasting Time: Bonus Action\nRange: 90 ft.\nAttack Bonus or Save DC: None\nDamage or Effect:\nWarlock 1 curses one creature. Her attacks deal an extra 1d6 Necrotic damage\nto it, and the target has Disadvantage on checks made with one chosen ability.\nComponents: Verbal, Somatic, Material\nDuration: Concentration, up to 1 hour\nConcentration: Yes\nRitual: No\n\n1st-Level or Higher Spell:\n[X] Always Prepared through Magic Initiate\nName: Inflict Wounds\nLevel: 1\nSource: Magic Initiate (Cleric)\nSpellcasting Ability: Charisma\nCasting Time: Action\nRange: Touch\nAttack Bonus or Save DC: Constitution save DC 13\nDamage or Effect:\n2d10 Necrotic damage on a failed save, or half as much on a successful save\nComponents: Verbal, Somatic\nDuration: Instantaneous\nConcentration: No\nRitual: No\nFree Uses or Special Casting Rules:\nOne free casting per Long Rest; can also be cast using the Pact Magic slot.\n\n1st-Level or Higher Spell:\n[X] Prepared while Book of Shadows is on Warlock 1's person\nName: Detect Magic\nLevel: 1\nSource: Pact of the Tome\nSpellcasting Ability: Charisma\nCasting Time: Action or ritual\nRange: Self; 30-ft. sphere\nAttack Bonus or Save DC: None\nDamage or Effect:\nDetects the presence of magic within range, subject to the spell's normal rules\nComponents: Verbal, Somatic\nDuration: Concentration, up to 10 minutes\nConcentration: Yes\nRitual: Yes\n\n1st-Level or Higher Spell:\n[X] Prepared while Book of Shadows is on Warlock 1's person\nName: Comprehend Languages\nLevel: 1\nSource: Pact of the Tome\nSpellcasting Ability: Charisma\nCasting Time: Action or ritual\nRange: Self\nAttack Bonus or Save DC: None\nDamage or Effect:\nProvides literal understanding of language, subject to the spell's normal rules\nComponents: Verbal, Somatic, Material\nDuration: 1 hour\nConcentration: No\nRitual: Yes\n\n\nFEATURES AND ABILITIES\n\nClass Features:\n\nEldritch Invocations\nWarlock 1 has selected Pact of the Tome.\n\nPact of the Tome\nAt the end of a Short or Long Rest, Warlock 1 can conjure a Book of Shadows.\nThe book contains three selected cantrips and two selected level-1 Ritual spells.\nWhile the book is on her person, those five selected spells are prepared and\nfunction as Warlock spells for her. Warlock 1 can use the book as a spellcasting\nfocus.\n\nPact Magic\nWarlock 1 casts Warlock spells using Charisma. Her spell save DC is 13 and\nher spell attack bonus is +5. She has one level-1 Pact Magic slot, which\nreturns after a Short or Long Rest.\n\n\nSubclass Features:\n\nNone at level 1. Warlock subclass is chosen at level 3.\n\n\nSpecies Traits:\n\nCreature Type\nHumanoid.\n\nSize\nMedium.\n\nSpeed\n30 ft.\n\nAdrenaline Rush\nAs a Bonus Action, Warlock 1 can Dash and gain 2 Temporary Hit Points. She has\ntwo uses and regains all expended uses after a Short or Long Rest.\n\nDarkvision\nWarlock 1 has Darkvision to 120 ft.\n\nRelentless Endurance\nOnce per Long Rest, when Warlock 1 would be reduced to 0 Hit Points but not\nkilled outright, she can drop to 1 Hit Point instead.\n\n\nFeats:\n\nMagic Initiate (Cleric)\nWarlock 1 knows Guidance and Resistance and always has Inflict Wounds prepared.\nCharisma is the spellcasting ability for these spells. Inflict Wounds can be\ncast once without a spell slot per Long Rest and can also be cast using the\nPact Magic slot.\n\n\nBackground Benefits:\n\nAcolyte\nAbility score increases have already been applied.\nProficiencies include Insight, Religion, and Calligrapher's Supplies.\nOrigin Feat: Magic Initiate (Cleric).\n\n\nPERSONALITY TRAITS\n\nWarlock 1 is strikingly beautiful and almost painfully unaware of it. She does\nnot merely avoid discussing her appearance. She genuinely believes that other\npeople are exaggerating, joking, flattering her, or confusing her with someone\nelse.\n\nCompliments make her insecure and dismissive. She may answer sincere praise\nwith a suspicious “No, I’m not,” then attempt to change the subject before the\nother person can explain.\n\nWarlock 1 sincerely embraces charity and protection, but she also revels in\nthe destructive side of her magic. A successful Eldritch Blast, Inflict\nWounds, or other violent spell can fill her with exhilaration. She likes the\nsensation of power, the visible result, and the knowledge that something\ndangerous has been broken because she chose to break it.\n\nThat pleasure frightens her afterward. She worries that somewhere inside her\nis an evil version of herself who would stop protecting people and begin\nseeking destruction for its own sake.\n\nShe is physically much weaker than her size suggests. People often look at her\nbroad Orcish frame and assume that she can lift a wagon. She cannot. She finds\nthe assumption irritating and faintly humiliating.\n\nIDEALS\n\nCharity.\n\nWarlock 1 believes that people in need should be helped even when the cost is\nreal and no reward is expected. Shelter, food, healing, and safe passage are\nnot luxuries to be reserved for people who have proved themselves worthy.\n\nThis ideal comes from the Common Table and remains sincere despite the event\nthat gave her Warlock magic.\n\nSource Roll: Acolyte Ideal d6 result 2.\n\nBONDS\n\nThe sanctuary is more than a building. It is a storehouse, kitchen, guest hall,\ncopying room, and network hub connecting isolated refuges across the wilderness.\n\nSource Roll: Acolyte Bond d6 result 5.\n\nFLAWS\n\nWarlock 1's piety sometimes leads her to trust people who loudly profess faith\nor moral purpose.\n\nShe is not automatically credulous in every area of life. Her weakness appears\nwhen someone speaks the language of charity, hospitality, pilgrimage, or sacred\nduty. She wants such claims to be true and can overlook warning signs that she\nwould recognize in another context.\n\nThat flaw helped the false pilgrims enter the House of Shared Bread.\n\nSource Roll: Acolyte Flaw d6 result 3.\n\nALLIES AND ORGANIZATIONS\n\nName or Group: The Common Table\nRelationship or Connection:\nWarlock 1's religious tradition.\n\nNotes:\nThe Common Table operates kitchens, shrines, wayhouses, guest halls, and small\nrefuges. Its teaching emphasizes hospitality, mutual obligation, safe passage,\nand the recording of names so that displaced people are not erased.\n\nSupporting Organization Roll: d20 result 5.\n\nName or Group: The House of Shared Bread\nRelationship or Connection:\nWarlock 1's former sanctuary and the institution protected by her Bond.\n\nNotes:\nThe House stands on an isolated road through the wilderness. It offers meals,\nsleeping space, letters, route information, and introductions to smaller\nrefuges.\n\nA stolen Wayfarer Ledger once connected the sanctuary to the hidden locations\nof people fleeing coercive institutions. Recovering or neutralizing that\nledger is urgent.\n\nName or Group: Mother Orra Vale\nRelationship or Connection:\nSenior keeper of the House of Shared Bread and Warlock 1's first religious\nmentor.\n\nNotes:\nOrra taught that hospitality is not the absence of caution. A door can remain\nopen while the people inside still ask who is arriving, what they need, and\nwhether anyone is following them.\n\nOrra was injured during the attack on the sanctuary. She survived, but her\ncurrent health and location are uncertain.\n\nSupporting Relationship Roll: d20 result 1.\n\nName or Group: The Guest Beyond the Last Door\nRelationship or Connection:\nUnidentified source associated with Warlock 1's Book of Shadows.\n\nNotes:\nThe presence first answered during the attack on the House of Shared Bread.\nIt spoke from blank pages after Warlock 1 prayed for the power to protect the\npeople inside.\n\nIt has not clearly demanded worship, service, or secrecy. That absence of\nobvious terms makes the relationship less reassuring rather than more.\n\nCHARACTER NOTES, GOALS, FEARS, AND RELATIONSHIPS\n\nGoals:\n\nWarlock 1 wants to recover the stolen Wayfarer Ledger before its list of\nrefuges, guides, and displaced travelers can be used to locate vulnerable\npeople.\n\nShe also wants to restore the House of Shared Bread and reconnect the smaller\nwayhouses that stopped communicating after the attack.\n\nHer larger goal is to build a safer system in which no single ledger, shrine,\nkeeper, or captured courier can expose the entire refuge network.\n\nSupporting Goal Roll: d20 result 14.\n\nFears:\n\nWarlock 1 fears that the presence answering her prayers was not part of the\nCommon Table at all.\n\nShe worries that the Guest Beyond the Last Door learned the language of her\nfaith, waited until she was frightened enough to accept help without questions,\nand entered her life through the Book of Shadows.\n\nShe also fears that one of the false pilgrims reached a refuge named in the\nWayfarer Ledger because she personally argued that the strangers should be\nadmitted.\n\nA second fear is more intimate: she enjoys destructive magic. The exhilaration\nis real, and she worries that repeated use will strip away her hesitation until\nshe becomes an evil version of herself who embraces harm rather than merely\nusing it.\n\nSupporting Fear Roll: d20 result 4.\n\nHabits or Mannerisms:\n\nShe reflexively rejects compliments about her appearance and may become more\ninsistent the more sincerely they are offered.\n\nImmediately after using destructive magic, she sometimes smiles, laughs, or\nstares at the result with open satisfaction. A moment later she becomes\nself-conscious and tries to conceal how much she enjoyed it.\n\nShe has an intense aversion to small woodland animals and vermin. Squirrels,\nchipmunks, hedgehogs, mice, rats, and rabbits all strike her as fundamentally\nwrong. She may recoil, climb onto furniture, demand that someone remove the\nanimal, or repeat “Get her away” with increasing urgency.\n\nThis reaction is not based on danger, disease, or a specific traumatic event.\nThe creatures simply produce an immediate, irrational alarm response.\n\nWhen asked to lift, drag, or carry something that appears easy for a woman of\nher size, she often attempts it once, fails, and becomes defensive before\nanyone has commented.\n\nImportant Relationships:\n\nMother Orra Vale:\nReligious mentor, injured sanctuary keeper, and the person whose teaching now\ncomplicates Warlock 1's guilt.\n\nThe House of Shared Bread:\nHer spiritual home and the institution she is determined to protect.\n\nThe Guest Beyond the Last Door:\nThe unknown presence associated with her powers and Book of Shadows.\n\nOther Character Notes:\n\nWarlock 1's patron subclass has not yet been selected. The Guest Beyond the\nLast Door is a narrative mystery and does not predetermine a future subclass.\n\nHer Charisma 17 expresses itself through striking presence and beauty rather\nthan self-confidence. She does not understand the effect she has on other\npeople and often assumes their reactions must have another cause.\n\nHer silver bell without a clapper came from the House of Shared Bread. Raiders\nremoved the clapper to prevent it from sounding an alarm. She recovered the\nbell after the attack and carries it as a mundane reminder.\n\nHer pleasure in destructive magic does not change her alignment by itself.\nIt is a source of temptation, fear, and possible character development.\n\nHer aversion to small animals is mechanically severe enough to impose the\nFrightened condition as described under Small-Animal Aversion.\n\nHer Book of Shadows disappears and can be reconjured under Pact of the Tome.\nThe devotional and sanctuary books in her backpack are ordinary physical books.\n\nThe Wayfarer Ledger, Mother Orra's fate, the false pilgrims, and the identity\nof the Guest Beyond the Last Door are future AI Game Master story hooks.\n\n\nBACKSTORY\n\nWarlock 1 was raised among Orc families who maintained a rough network of\nroads, bridges, seasonal shelters, and supply caches through a sparsely settled\nregion of the wilderness.\n\nShe entered the Common Table as an adolescent and was eventually assigned to\nthe House of Shared Bread, a sanctuary built where several difficult routes\nmet.\n\nThe House was not a grand temple. It contained a kitchen, storeroom, guest\nhall, copying table, shrine alcove, and enough sleeping space for travelers\nwho could not safely continue after dark.\n\nWarlock 1 copied prayers and letters, recorded arrivals, inspected stored food,\nprepared guest spaces, and helped maintain the Wayfarer Ledger. The ledger\nconnected travelers to guides, refuges, healers, and discreet routes through\nthe wilderness.\n\nAnother acolyte served at the same sanctuary, preserving names and journeys\nthrough spoken recitation, song, and public teaching. Warlock 1 maintained\nwritten records, ritual texts, and stores. Their skills overlapped without\nbeing identical.\n\nA group of travelers arrived during poor weather carrying the symbols and\nphrases of a distant charitable order. Warlock 1 argued that the House should\nadmit them.\n\nThe visitors were not pilgrims.\n\nThey searched the sanctuary for the Wayfarer Ledger and attacked when Mother\nOrra attempted to close the archive room. The raiders removed the clapper from\nthe sanctuary bell, wounded Orra, and blocked the main exit.\n\nWarlock 1 retreated into the copying room with several guests. She prayed over\nan unfinished ledger and asked for the power to protect everyone still inside.\n\nWords appeared on pages that had been blank.\n\nThe voice identified itself only as a guest waiting beyond the last door. A\ndark Book of Shadows formed in Warlock 1's hands. The magic it contained helped\nher force a route through the raiders and move surviving guests out of the\nbuilding.\n\nThe sanctuary survived, but the Wayfarer Ledger was stolen. Warlock 1 left to\nfollow the raiders and still serves the Common Table while carrying power that\nmay have nothing to do with it.\n\n\nOPTIONAL BACKSTORY\n\nThis is optional story material only. It does not establish current party membership, leadership, or party role.\n\nWarlock 1 and Bard 1 served together at the House of Shared Bread. After the sanctuary was attacked and the Wayfarer Ledger stolen, they left together to follow the raiders. Their investigation led toward an illegal trapping and labor camp where names from the sanctuary network were being used to identify fugitives and vulnerable travelers. Druid 1 had independently tracked injured animals, damaged land, and unusual traffic to the same place. Barbarian 1 entered by another route seeking contracts, keys, and payroll records. The four investigations collided inside the camp. Druid 1 found a safe route through the surrounding wilds, Barbarian 1 opened a barred service gate, and Warlock 1 and Bard 1 used magic, ritual knowledge, and coordination to move captives through the confusion. The four escaped together and continued traveling as the Wild party.\n\n\nHOMEBREW OR UNUSUAL RULES\n\nRule, Feature, Item, or Spell:\nThe Common Table, House of Shared Bread, and Wayfarer Ledger\n\nFull Effect:\nThese are setting-neutral narrative institutions and story hooks. They grant\nno automatic shelter, legal authority, income, supplies, information, or\nfavors.\n\nSource or Rules Reference:\nWardensPC starter-character narrative material.\n\n\nRule, Feature, Item, or Spell:\nThe Guest Beyond the Last Door\n\nFull Effect:\nThis is the unidentified narrative source associated with Warlock 1's Pact of\nthe Tome. It grants no features beyond those printed on the character record\nand does not predetermine her future Warlock subclass.\n\nSource or Rules Reference:\nWardensPC starter-character narrative material.\n\n\nRule, Feature, Item, or Spell:\nAcolyte Ideal, Bond, and Flaw\n\nFull Effect:\nThe legacy Acolyte tables were used only as narrative generators. They grant\nno additional mechanical features.\n\nSource or Rules Reference:\nLegacy Acolyte background tables.\n\n\nRule, Feature, Item, or Spell:\nSmall-Animal Aversion\n\nFull Effect:\nWarlock 1 has an intense irrational fear of living squirrels, chipmunks,\nhedgehogs, mice, rats, rabbits, and similar small creatures.\n\nWhen she can see one of these creatures within 30 feet, she automatically has\nthe Frightened condition. The visible creature is the source of the fear. No\nsaving throw is made.\n\nThe condition ends immediately when no qualifying creature is visible within\n30 feet. It can begin again whenever one becomes visible within that range.\n\nWhile Frightened in this way, Warlock 1 follows the normal rules for the\nFrightened condition. She has Disadvantage on ability checks and attack rolls\nwhile the source of fear is within line of sight, and she cannot willingly\nmove closer to it.\n\nOrdinary pictures, carvings, toys, tracks, and mentions of such creatures do\nnot trigger the condition. The AI Game Master may treat a swarm as a\nqualifying source if it is visibly composed of one of the listed creatures.\n\nSource or Rules Reference:\nWardensPC character-specific homebrew; normal Frightened condition rules.\n",
+  "result": {
+    "document_assessment": {
+      "kind": "other_character_sheet",
+      "is_usable": true,
+      "reason": "Readable, detailed plain-text 2024 D&D character record with sufficient mechanics, equipment, resources, spells, homebrew, and story material to run the character."
+    },
+    "assistant_message": "Warlock 1, the Orc Pact of the Tome Warlock of the Common Table, is ready to play at full strength.",
+    "confidence": "high",
+    "intake_settings": {
+      "campaign_start_mode": "new_fully_rested",
+      "dont_sweat_small_stuff": true,
+      "ruleset": "D&D 5.5e (2024 rules)"
+    },
+    "opening_state": {
+      "campaign_start_mode": "new_fully_rested",
+      "fully_rested_defaults_applied": true,
+      "current_hit_points": 9,
+      "temporary_hit_points": 0,
+      "condition_notes": [],
+      "resource_state": "Fully rested: 1/1 Pact Magic slot, 2/2 Adrenaline Rush uses, Relentless Endurance available, and Magic Initiate's free Inflict Wounds casting available. Death saves are clear; Heroic Inspiration is not possessed.",
+      "standard_adventuring_setup": "",
+      "setup_confirmed": false
+    },
+    "applied_assumptions": [
+      "New-campaign fully rested defaults were applied: current HP set to maximum, temporary HP set to 0, no active conditions or concentration, clear death saves, and rest-recovered resources available.",
+      "Listed portable equipment is treated as carried or accessible as recorded; no moment-to-moment hand, readied, or packing choices were established.",
+      "The listed component pouch and spellcasting foci cover ordinary material components with no stated cost and that are not consumed.",
+      "The Book of Shadows is available and on Warlock 1's person at the start, so its selected Tome spells are prepared."
+    ],
+    "player_corrections": [],
+    "character": {
+      "name": "Warlock 1",
+      "sex": "Female",
+      "pronouns": "She/Her",
+      "age": "22",
+      "alignment": "Neutral Good",
+      "species": "Orc",
+      "background": "Acolyte",
+      "classes": [
+        {
+          "name": "Warlock",
+          "level": 1,
+          "subclass": ""
+        }
+      ],
+      "total_level": 1,
+      "armor_class": 13,
+      "initiative_modifier": 2,
+      "hit_points": {
+        "maximum": 9,
+        "current_shown_on_sheet": 9,
+        "temporary_shown_on_sheet": 0
+      },
+      "speed": "Walking 30 ft.",
+      "proficiency_bonus": "+2",
+      "ability_scores": {
+        "strength": 8,
+        "dexterity": 14,
+        "constitution": 13,
+        "intelligence": 13,
+        "wisdom": 10,
+        "charisma": 17
+      },
+      "saving_throws": [
+        "Strength -1",
+        "Dexterity +2",
+        "Constitution +1",
+        "Intelligence +1",
+        "Wisdom +2 (proficient)",
+        "Charisma +5 (proficient)"
+      ],
+      "skills": [
+        "Acrobatics +2",
+        "Animal Handling +0",
+        "Arcana +3 (proficient)",
+        "Athletics -1",
+        "Deception +3",
+        "History +1",
+        "Insight +2 (proficient)",
+        "Intimidation +3",
+        "Investigation +3 (proficient)",
+        "Medicine +0",
+        "Nature +1",
+        "Perception +0",
+        "Performance +3",
+        "Persuasion +3",
+        "Religion +3 (proficient)",
+        "Sleight of Hand +2",
+        "Stealth +2",
+        "Survival +0"
+      ],
+      "senses": [
+        "Darkvision 120 ft.",
+        "Passive Perception 10",
+        "Passive Insight 12",
+        "Passive Investigation 13"
+      ],
+      "languages": [
+        "Common",
+        "Draconic",
+        "Orc"
+      ],
+      "attacks": [
+        {
+          "name": "Eldritch Blast",
+          "attack_bonus": "+5 spell attack",
+          "damage": "1d10 Force",
+          "properties": [
+            "Warlock cantrip",
+            "range 120 ft.",
+            "Action",
+            "at will",
+            "principal ranged attack"
+          ]
+        },
+        {
+          "name": "Starry Wisp",
+          "attack_bonus": "+5 spell attack",
+          "damage": "1d8 Radiant; on hit, target emits Dim Light in a 10-foot radius and cannot benefit from Invisible until the end of Warlock 1's next turn",
+          "properties": [
+            "Pact of the Tome cantrip",
+            "range 60 ft.",
+            "Action",
+            "at will"
+          ]
+        },
+        {
+          "name": "Toll the Dead",
+          "attack_bonus": "Wisdom save DC 13",
+          "damage": "1d8 Necrotic, or 1d12 Necrotic if the target is missing any Hit Points",
+          "properties": [
+            "Pact of the Tome cantrip",
+            "range 60 ft.",
+            "Action",
+            "at will"
+          ]
+        },
+        {
+          "name": "Mind Sliver",
+          "attack_bonus": "Intelligence save DC 13",
+          "damage": "1d6 Psychic; target subtracts 1d4 from its next saving throw before the end of Warlock 1's next turn",
+          "properties": [
+            "Pact of the Tome cantrip",
+            "range 60 ft.",
+            "Action",
+            "at will"
+          ]
+        },
+        {
+          "name": "Dagger",
+          "attack_bonus": "+4",
+          "damage": "1d4+2 Piercing; Light-property additional attack 1d4 Piercing",
+          "properties": [
+            "simple",
+            "finesse",
+            "light",
+            "thrown 20/60 ft.",
+            "melee 5 ft.",
+            "two daggers total",
+            "Nick property; no Weapon Mastery feature"
+          ]
+        },
+        {
+          "name": "Sickle",
+          "attack_bonus": "+1",
+          "damage": "1d4-1 Slashing; Light-property additional attack 1d4-1 Slashing",
+          "properties": [
+            "simple",
+            "light",
+            "melee 5 ft.",
+            "Nick property; no Weapon Mastery feature",
+            "devotional and utility backup weapon"
+          ]
+        },
+        {
+          "name": "Inflict Wounds",
+          "attack_bonus": "+5 spell attack",
+          "damage": "2d10 Necrotic",
+          "properties": [
+            "Magic Initiate (Cleric) level-1 spell",
+            "touch",
+            "Action",
+            "one free casting per Long Rest or use one Pact Magic slot",
+            "source record instead lists Constitution save DC 13"
+          ]
+        },
+        {
+          "name": "Unarmed Strike",
+          "attack_bonus": "+1 attack or DC 9 save",
+          "damage": "0 Bludgeoning damage, Grapple, or Shove",
+          "properties": [
+            "unarmed",
+            "melee 5 ft."
+          ]
+        }
+      ],
+      "armor_and_shields": [
+        {
+          "name": "Leather armor",
+          "quantity": "1",
+          "sheet_status": "Worn; AC 13 (base 11 + Dexterity modifier 2)"
+        },
+        {
+          "name": "Shield",
+          "quantity": "0",
+          "sheet_status": "None; not trained with shields"
+        }
+      ],
+      "equipment_highlights": [
+        {
+          "name": "Leather armor",
+          "quantity": "1",
+          "sheet_status": "Worn beneath robe; 10 lb.; primary armor"
+        },
+        {
+          "name": "Dark blue-gray acolyte robe",
+          "quantity": "1",
+          "sheet_status": "Worn; 4 lb.; religious clothing and recognizable former office"
+        },
+        {
+          "name": "Orb arcane focus",
+          "quantity": "1",
+          "sheet_status": "Ready in hand or belt cradle; 3 lb.; smoky green glass in a bronze cage"
+        },
+        {
+          "name": "Book of Shadows",
+          "quantity": "1 conjured book",
+          "sheet_status": "Accessible; weight not tracked; Pact of the Tome focus"
+        },
+        {
+          "name": "Dagger",
+          "quantity": "1",
+          "sheet_status": "Ready in belt sheath; 1 lb."
+        },
+        {
+          "name": "Dagger",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack as reserve; 1 lb."
+        },
+        {
+          "name": "Sickle",
+          "quantity": "1",
+          "sheet_status": "Ready on belt hook; 2 lb.; utility and devotional implement"
+        },
+        {
+          "name": "Holy symbol",
+          "quantity": "1",
+          "sheet_status": "Worn; small round table engraved with seven empty places"
+        },
+        {
+          "name": "Backpack",
+          "quantity": "1",
+          "sheet_status": "Worn; 5 lb.; main equipment container"
+        },
+        {
+          "name": "Ordinary pouch",
+          "quantity": "1",
+          "sheet_status": "Worn on belt; 1 lb.; contains coins, chalk, ink, and small components"
+        },
+        {
+          "name": "Component pouch",
+          "quantity": "1",
+          "sheet_status": "Worn on belt; 2 lb.; noncostly material components"
+        },
+        {
+          "name": "Calligrapher's supplies",
+          "quantity": "1 set",
+          "sheet_status": "Packed in backpack; 5 lb."
+        },
+        {
+          "name": "Parchment",
+          "quantity": "20 sheets",
+          "sheet_status": "Packed in document case; consolidated Scholar's Pack and Acolyte supplies"
+        },
+        {
+          "name": "Devotional book",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack; 5 lb.; prayers, hospitality rites, and Common Table teachings"
+        },
+        {
+          "name": "Sanctuary ledger and reference book",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack; 5 lb.; Scholar's Pack book"
+        },
+        {
+          "name": "Occult-lore book",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack; 5 lb.; separate Warlock starting-package book"
+        },
+        {
+          "name": "Ink pen",
+          "quantity": "1",
+          "sheet_status": "In calligrapher's case"
+        },
+        {
+          "name": "Ink",
+          "quantity": "1 bottle",
+          "sheet_status": "In padded calligrapher's case"
+        },
+        {
+          "name": "Oil",
+          "quantity": "10 flasks",
+          "sheet_status": "External padded flask carrier on pack; 10 lb. total"
+        },
+        {
+          "name": "Lamp",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack; 1 lb."
+        },
+        {
+          "name": "Tinderbox",
+          "quantity": "1",
+          "sheet_status": "Ready in belt pouch; 1 lb."
+        },
+        {
+          "name": "Waterskin",
+          "quantity": "1",
+          "sheet_status": "Packed on backpack exterior; full, 5 lb."
+        },
+        {
+          "name": "Rations",
+          "quantity": "7 days",
+          "sheet_status": "External provision bundle on pack frame; 14 lb. total"
+        },
+        {
+          "name": "Bedroll",
+          "quantity": "1",
+          "sheet_status": "Strapped to backpack; 7 lb."
+        },
+        {
+          "name": "Wool blanket",
+          "quantity": "1",
+          "sheet_status": "Strapped to backpack; 3 lb."
+        },
+        {
+          "name": "Mess kit",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack; 1 lb."
+        },
+        {
+          "name": "Wooden mug",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack; 1 lb."
+        },
+        {
+          "name": "Dry kindling",
+          "quantity": "3 small bundles",
+          "sheet_status": "Packed in backpack; 1 lb. total"
+        },
+        {
+          "name": "Torches",
+          "quantity": "10",
+          "sheet_status": "Side lashings on pack; 10 lb. total; each burns 1 hour"
+        },
+        {
+          "name": "Healing bandages",
+          "quantity": "5 clean dressings",
+          "sheet_status": "Packed in backpack; 1 lb.; mundane, nonmagical"
+        },
+        {
+          "name": "Chalk",
+          "quantity": "2 pieces",
+          "sheet_status": "Belt pouch; emergency marking chalk"
+        },
+        {
+          "name": "Trinket: silver bell without a clapper",
+          "quantity": "1",
+          "sheet_status": "Packed in backpack; 1 lb.; recovered after the sanctuary attack"
+        }
+      ],
+      "currency": {
+        "cp": 0,
+        "sp": 0,
+        "ep": 0,
+        "gp": 23,
+        "pp": 0,
+        "total_gp_value": 23
+      },
+      "valuables": [
+        {
+          "name": "Silver bell without a clapper",
+          "quantity": "1",
+          "value_each_gp": "",
+          "estimated_total_gp": ""
+        }
+      ],
+      "resources": [
+        {
+          "name": "Hit Dice",
+          "maximum_or_frequency": "1d8 per Long Rest",
+          "current_shown_on_sheet": "1d8 available"
+        },
+        {
+          "name": "Pact Magic",
+          "maximum_or_frequency": "1 level-1 slot; recovers on Short or Long Rest",
+          "current_shown_on_sheet": "1 available; 0 used"
+        },
+        {
+          "name": "Adrenaline Rush",
+          "maximum_or_frequency": "2 uses; recovers on Short or Long Rest",
+          "current_shown_on_sheet": "2 available; 0 used"
+        },
+        {
+          "name": "Relentless Endurance",
+          "maximum_or_frequency": "1 use; recovers on Long Rest",
+          "current_shown_on_sheet": "1 available"
+        },
+        {
+          "name": "Magic Initiate free casting of Inflict Wounds",
+          "maximum_or_frequency": "1 use; recovers on Long Rest",
+          "current_shown_on_sheet": "1 available"
+        },
+        {
+          "name": "Oil",
+          "maximum_or_frequency": "10 flasks",
+          "current_shown_on_sheet": "10 remaining"
+        },
+        {
+          "name": "Rations",
+          "maximum_or_frequency": "7 days",
+          "current_shown_on_sheet": "7 days remaining"
+        },
+        {
+          "name": "Torches",
+          "maximum_or_frequency": "10 torches; 1 hour burn time each",
+          "current_shown_on_sheet": "10 remaining"
+        },
+        {
+          "name": "Dry kindling",
+          "maximum_or_frequency": "3 small bundles",
+          "current_shown_on_sheet": "3 remaining"
+        },
+        {
+          "name": "Healing bandages",
+          "maximum_or_frequency": "5 clean mundane dressings",
+          "current_shown_on_sheet": "5 remaining"
+        },
+        {
+          "name": "Chalk",
+          "maximum_or_frequency": "2 pieces",
+          "current_shown_on_sheet": "2 remaining"
+        },
+        {
+          "name": "Parchment",
+          "maximum_or_frequency": "20 sheets",
+          "current_shown_on_sheet": "20 remaining"
+        },
+        {
+          "name": "Ink",
+          "maximum_or_frequency": "1 bottle",
+          "current_shown_on_sheet": "1 remaining"
+        }
+      ],
+      "spellcasting": {
+        "ability": "Charisma",
+        "save_dc": "13",
+        "attack_bonus": "+5",
+        "slots": [
+          {
+            "level": "1st-level Pact Magic",
+            "total_shown": "1",
+            "used_shown": "0"
+          }
+        ],
+        "cantrips": [
+          "Prestidigitation (Warlock)",
+          "Eldritch Blast (Warlock)",
+          "Guidance (Magic Initiate [Cleric])",
+          "Resistance (Magic Initiate [Cleric])",
+          "Toll the Dead (Pact of the Tome)",
+          "Mind Sliver (Pact of the Tome)",
+          "Starry Wisp (Pact of the Tome)"
+        ],
+        "prepared_or_known_spells": [
+          "Charm Person (prepared Warlock spell)",
+          "Hex (prepared Warlock spell)",
+          "Inflict Wounds (always prepared through Magic Initiate [Cleric]; one free Long Rest casting)",
+          "Detect Magic (prepared through Pact of the Tome while Book of Shadows is on her person; ritual)",
+          "Comprehend Languages (prepared through Pact of the Tome while Book of Shadows is on her person; ritual)"
+        ],
+        "spellbook_or_other_spells": [
+          "Book of Shadows: conjured at the end of a Short or Long Rest; disappears if another is conjured or Warlock 1 dies; serves as a spellcasting focus."
+        ]
+      },
+      "feats_and_features": [
+        "Eldritch Invocations: Pact of the Tome. SRD rules: You have unearthed Eldritch Invocations, pieces of forbidden knowledge that imbue you with an abiding magical ability or other lessons. You gain one invocation of your choice, such as Pact of the Tome. Invocations are described in the “Eldritch Invocation Options” section later in this class’s description. Prerequisites. If an invocation has a prerequisite, you must meet it to learn that invocation. For example, if an invocation requires you to be a level 5+ Warlock, you can select the invocation once you reach Warlock level 5. Replacing and Gaining Invocations. Whenever you gain a Warlock level, you can replace one of your invocations with another one for which you qualify. You can’t replace an invocation if it’s a prerequisite for another invocation that you have. When you gain certain Warlock levels, you gain more invocations of your choice, as shown in the Invocations column of the Warlock Features table. You can’t pick the same invocation more than once unless its description says otherwise.",
+        "Pact of the Tome: can conjure Book of Shadows at the end of a Short or Long Rest; book supplies selected cantrips and selected level-1 ritual spells as prepared Warlock spells while on her person, and functions as a focus. SRD rules: Stitching together strands of shadow, you conjure forth a book in your hand at the end of a Short or Long Rest. This Book of Shadows (you determine its appearance) contains eldritch magic that only you can access, granting you the benefits below. The book disappears if you conjure another book with this feature or if you die. Cantrips and Rituals. When the book appears, choose three cantrips, and choose two level 1 spells that have the Ritual tag. The spells can be from any class’s spell list, and they must be spells you don’t already have prepared. While the book is on your person, you have the chosen spells prepared, and they function as Warlock spells for you. Spellcasting Focus. You can use the book as a Spellcasting Focus.",
+        "Pact Magic: Charisma casting; one level-1 Pact Magic slot recovered on a Short or Long Rest. SRD rules: Through occult ceremony, you have formed a pact with a mysterious entity to gain magical powers. The entity is a voice in the shadows—its identity unclear—but its boon to you is concrete: the ability to cast spells. See “Spells” for the rules on spellcasting. The information below details how you use those rules with Warlock spells, which appear in the Warlock spell list later in the class’s description. Cantrips. You know two Warlock cantrips of your choice. Eldritch Blast and Prestidigitation are recommended. Whenever you gain a Warlock level, you can replace one of your cantrips from this feature with another Warlock cantrip of your choice. When you reach Warlock levels 4 and 10, you learn another Warlock cantrip of your choice, as shown in the Cantrips column of the Warlock Features table. Spell Slots. The Warlock Features table shows how many spell slots you have to cast your Warlock spells of levels 1–5. The table also shows the level of those slots, all of which are the same level. You regain all expended Pact Magic spell slots when you finish a Short or Long Rest. For example, when you’re a level 5 Warlock, you have two level 3 spell slots. To cast the level 1 spell Charm Person, you must spend one of those slots, and you cast it as a level 3 spell. Prepared Spells of Level 1+. You prepare the list of level 1+ spells that are available for you to cast with this feature. To start, choose two level 1 Warlock spells. Charm Person and Hex are recommended. The number of spells on your list increases as you gain Warlock levels, as shown in the Prepared Spells column of the Warlock Features table. Whenever that number increases, choose additional Warlock spells until the number of spells on your list matches the number in the table. The chosen spells must be of a level no higher than what’s shown in the table’s Slot Level column for your level. When you reach level 6, for example, you learn a new Warlock spell, which can be of levels 1–3. If another Warlock feature gives you spells that you always have prepared, those spells don’t count",
+        "Orc: Humanoid, Medium, 30-foot Speed, Darkvision 120 feet.",
+        "Adrenaline Rush: Bonus Action Dash and gain 2 Temporary Hit Points; 2 uses per Short or Long Rest. SRD rules: You can take the Dash action as a Bonus Action. When you do so, you gain a number of Temporary Hit Points equal to your Proficiency",
+        "Relentless Endurance: once per Long Rest, drop to 1 HP instead of 0 when not killed outright. SRD rules: When you are reduced to 0 Hit Points but not killed outright, you can drop to 1 Hit Point instead. Once you use this trait, you can’t do so again until you finish a Long Rest.",
+        "Magic Initiate (Cleric): Guidance, Resistance, and always-prepared Inflict Wounds using Charisma; one free Long Rest casting, with Pact Magic casting also allowed. SRD rules: Origin Feat. You gain the following benefits. Two Cantrips. You learn two cantrips of your choice from the Cleric, Druid, or Wizard spell list. Intelligence, Wisdom, or Charisma is your spellcasting ability for this feat’s spells (choose when you select this feat). Level 1 Spell. Choose a level 1 spell from the same list you selected for this feat’s cantrips. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have. Spell Change. Whenever you gain a new level, you can replace one of the spells you chose for this feat with a different spell of the same level from the chosen spell list. Repeatable. You can take this feat more than once, but you must choose a different spell list each time.",
+        "Acolyte: Insight, Religion, and Calligrapher's Supplies proficiencies; ability increases already applied.",
+        "Small-Animal Aversion (homebrew): automatically Frightened while a qualifying visible living small animal is within 30 feet; no saving throw; ends immediately when none is visible within that range."
+      ],
+      "aliases_and_nicknames": [
+        "Warlock 1"
+      ],
+      "story_facts": [
+        {
+          "fact": "Warlock 1 follows the Common Table, a tradition of hospitality, mutual aid, safe passage, and ensuring nobody is abandoned hungry, wounded, or nameless.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "Her narrative pact source is the unidentified Guest Beyond the Last Door; she does not know whether it is divine, eldritch, ancestral, or something else.",
+          "likely_visibility": "probably_private"
+        },
+        {
+          "fact": "Her former sanctuary, the House of Shared Bread, was attacked by false pilgrims seeking the Wayfarer Ledger.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "The Wayfarer Ledger contains connections to hidden refuges, guides, healers, and discreet routes. It was stolen and its recovery or neutralization is urgent.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "Mother Orra Vale, Warlock 1's first religious mentor and senior keeper of the House, survived the attack but was injured; her current health and location are uncertain.",
+          "likely_visibility": "party_known"
+        },
+        {
+          "fact": "The Guest first answered her prayer during the attack, speaking from blank pages and forming the Book of Shadows that helped her lead survivors out.",
+          "likely_visibility": "probably_private"
+        },
+        {
+          "fact": "Warlock 1 argued to admit the false pilgrims, a source of personal guilt.",
+          "likely_visibility": "probably_private"
+        },
+        {
+          "fact": "Her silver bell had its clapper removed by raiders to prevent an alarm; she recovered it after the attack.",
+          "likely_visibility": "party_known"
+        }
+      ],
+      "personality_goals_and_fears": [
+        "Strikingly beautiful but genuinely unaware of it; she distrusts or dismisses compliments and becomes uncomfortable when praised.",
+        "Sincerely charitable and protective, but feels exhilaration at destructive magic and fears that enjoyment could become cruelty.",
+        "Physically weaker than strangers expect from her broad Orcish build; assumptions about her strength irritate and embarrass her.",
+        "Ideal: Charity—food, shelter, healing, and safe passage should be provided even at real cost and without expected reward.",
+        "Bond: the House of Shared Bread, a sanctuary, storehouse, kitchen, guest hall, copying room, and refuge-network hub.",
+        "Flaw: she is inclined to trust people who loudly profess charity, hospitality, pilgrimage, faith, or sacred duty.",
+        "Goal: recover the Wayfarer Ledger before vulnerable people can be found through it.",
+        "Goal: restore the House of Shared Bread, reconnect smaller wayhouses, and build a refuge network without a single point of failure.",
+        "Fear: the Guest Beyond the Last Door may have learned the language of her faith to exploit a desperate prayer.",
+        "Fear: false pilgrims may have reached a refuge because she personally argued for their admission.",
+        "Fear: repeated pleasure in destructive magic may turn her into a person who seeks harm.",
+        "She reflexively rejects appearance-based compliments; after destructive magic she may briefly smile, laugh, or stare with satisfaction before becoming self-conscious.",
+        "She has an intense irrational aversion to small woodland animals and vermin, especially squirrels, chipmunks, hedgehogs, mice, rats, and rabbits.",
+        "When asked to lift or carry something people assume she can manage, she may attempt it, fail, and become defensive."
+      ],
+      "relationships_and_organizations": [
+        "The Common Table: Warlock 1's religious tradition, operating kitchens, shrines, wayhouses, guest halls, and refuges; it records names so displaced people are not erased.",
+        "The House of Shared Bread: her former sanctuary and spiritual home on an isolated wilderness road; she seeks to protect and restore it.",
+        "Mother Orra Vale: senior keeper of the House of Shared Bread, first religious mentor, injured during the attack, and currently of uncertain location and health.",
+        "The Guest Beyond the Last Door: unidentified presence associated with the Book of Shadows; it has made no clear demands for worship, service, or secrecy."
+      ],
+      "is_current_party_active_leader": false
+    },
+    "sheet_summary": [
+      "Warlock 1 is a level-1 Neutral Good female Orc Warlock with the Acolyte background, Pact of the Tome invocation, and Magic Initiate (Cleric).",
+      "She has AC 13, 9 maximum HP, +2 initiative, 30-foot speed, Charisma 17, Wisdom and Charisma save proficiency, and Darkvision 120 feet.",
+      "Her principal offense is Eldritch Blast; her Tome expands her cantrip options and supplies Detect Magic and Comprehend Languages as ritual-capable prepared Warlock spells while her Book is present.",
+      "She begins fully rested with all short- and long-rest resources available, no temporary HP, no conditions, no concentration, and no Heroic Inspiration.",
+      "She carries extensive written, ritual, travel, illumination, and mundane supply gear, with approximately 105 lb. recorded against 120 lb. carrying capacity.",
+      "The character has a persistent homebrew Small-Animal Aversion that mechanically imposes Frightened when qualifying living small animals are visible within 30 feet."
+    ],
+    "detected_issues": [],
+    "clarification_questions": [],
+    "details_not_found": [
+      "Player name beyond the record's listed player name, Mistinarperadnacles.",
+      "A selected Warlock subclass or mechanical patron; none is selected because subclass mechanics begin at Warlock level 3.",
+      "A permanent residence or base.",
+      "Any attuned magic items.",
+      "A monetary appraisal for the silver bell without a clapper."
+    ],
+    "additional_details": [
+      "Record metadata: Record Version Warlock 1 Mark III; last updated 2026-08-11; rules version 2024 D&D rules / SRD 5.2.1; source sheet Mistinarperadnacles_169280417.pdf; development status Complete",
+      "Campaign metadata: WardensPC starter character; associated token background color Green",
+      "Appearance: 6 ft. 3 in., 226 lb., deep forest-green skin with darker green knuckles, elbows, and ears; coarse black hair in thick braids; pronounced lower tusks, broad nose, split left ear, and yellow-gold eyes. She is broad, noticeably overweight, strikingly beautiful, and typically mistaken for someone very strong",
+      "Token guidance: portray a tall, broad-shouldered, heavyset Orc woman in a dark blue-gray acolyte robe over leather armor, holding a smoky-green orb and carrying or summoning a dark Book of Shadows. Do not portray her as a generic armored warrior",
+      "Faith: the Common Table is a setting-neutral tradition devoted to hospitality, mutual aid, safe passage, and the conviction that nobody should be abandoned hungry, wounded, or nameless",
+      "Mechanical patron: none selected at level 1. The Guest Beyond the Last Door is narrative material only and does not predetermine a later subclass",
+      "Other combat notes: Hex uses the sole Pact Magic slot and requires Concentration. Guidance, Resistance, and Detect Magic also require Concentration. Relentless Endurance can prevent being reduced to 0 HP once per Long Rest when Warlock 1 is not killed outright",
+      "Proficiencies and training beyond core mechanics: light armor, simple weapons, Calligrapher's Supplies, religious copying and illuminated script, guest ledgers and sanctuary records, ritual preparation, translation of devotional texts, and shelter administration and supply distribution",
+      "No damage resistances, vulnerabilities, immunities, condition immunities, vehicle proficiencies, gaming-set proficiencies, musical-instrument proficiencies, expertise, selected Weapon Masteries, or attuned items are recorded",
+      "Carrying details: recorded total weight is approximately 105 lb.; carrying capacity is 120 lb.; push, drag, or lift capacity is 240 lb.; no encumbrance threshold is used. Oil and rations are explicitly carried externally to respect backpack capacity",
+      "Comprehend Languages provides literal understanding of spoken or written language while active, subject to its normal limits",
+      "Homebrew narrative institutions—the Common Table, House of Shared Bread, and Wayfarer Ledger—grant no automatic shelter, legal authority, income, supplies, information, or favors. Legacy Acolyte ideal, bond, and flaw rolls are narrative generators only and grant no mechanics",
+      "Small-Animal Aversion applies to living squirrels, chipmunks, hedgehogs, mice, rats, rabbits, and similar creatures. Pictures, carvings, toys, tracks, and mentions do not trigger it; a visibly qualifying swarm may do so. The normal Frightened effects apply while triggered: Disadvantage on ability checks and attack rolls while the source is in sight, and no willing movement closer to it",
+      "Backstory: raised among Orc families maintaining roads, bridges, seasonal shelters, and supply caches through the wilderness. She joined the Common Table as an adolescent, served at the House of Shared Bread copying prayers and letters, managing records and stores, preparing guest spaces, and helping maintain the Wayfarer Ledger. False pilgrims attacked during poor weather, wounded Mother Orra, stole the ledger, and trapped people in the sanctuary. Her desperate prayer over an unfinished ledger summoned the Book of Shadows and enabled an escape with surviving guests",
+      "Rules text includes material from the System Reference Document 5.2.1 (SRD 5.2.1) by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd, licensed under the Creative Commons Attribution 4.0 International License at https://creativecommons.org/licenses/by/4.0/legalcode."
+    ]
+  }
+}
