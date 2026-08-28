@@ -1,3 +1,0 @@
-# RPG Your Way 1.8.6
-
-Fourth Start-page QA pass. Removes the remaining Play-shell parchment field so onboarding plaques float directly on the hex map, strengthens the brass-edged numbered nameplates, renames Step 2 to Gather Your Party with explicit mix-and-match character actions, removes the redundant ready-to-play information button, renames Step 3 to Adjustable gameplay settings with Customize and Use default settings, restores full 1–10 campaign-growth scales including the campaign weirdness control, makes question selectors consistently dimensional, adds olive/brass input bezels to campaign and Game Master naming, and changes the final UI handoff control to Onward.
