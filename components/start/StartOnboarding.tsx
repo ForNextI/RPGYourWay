@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import {
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   CircleHelp,
@@ -104,7 +105,7 @@ const QUESTION_HELP = [
 ] as const
 
 const CAMPAIGN_TOPICS = ['Humor', 'Serious drama', 'Exploration', 'Mystery', 'Social interaction', 'Combat', 'Tactical challenge', 'Politics and intrigue', 'Puzzles', 'NPC relationships'] as const
-const CHARACTER_TOPICS = ['Backstory reveal', 'Player-character romance', 'Secret privacy'] as const
+const CHARACTER_TOPICS = ['Character backstory usage', 'Inter-party romance', 'Character secret reveals'] as const
 
 function defaultParty() {
   return DEFAULT_STARTER_IDS.map((id) => STARTERS.find((starter) => starter.id === id)!).filter(Boolean)
@@ -237,7 +238,7 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
   const [storyDirection, setStoryDirection] = useState(5)
   const [campaignScale, setCampaignScale] = useState(7)
   const [campaignRatings, setCampaignRatings] = useState<Record<string, number>>(() => Object.fromEntries(CAMPAIGN_TOPICS.map((topic) => [topic, 5])))
-  const [characterRatings, setCharacterRatings] = useState<Record<string, number>>({ 'Backstory reveal': 7, 'Player-character romance': 1, 'Secret privacy': 10 })
+  const [characterRatings, setCharacterRatings] = useState<Record<string, number>>({ 'Character backstory usage': 7, 'Inter-party romance': 1, 'Character secret reveals': 10 })
   const [helpQuestion, setHelpQuestion] = useState('')
   const [helpConversation, setHelpConversation] = useState<StartDialogueTurn[]>([])
   const [helpError, setHelpError] = useState('')
@@ -798,10 +799,42 @@ function RatingControl({ value, onChange, low, high, label, ariaLabel }: { value
   return <div className="start-rating-control" role="group" aria-label={accessibleLabel} aria-describedby={descriptionId}>{label ? <strong>{label}</strong> : null}<div className="start-rating-scale">{Array.from({ length: 10 }, (_, index) => index + 1).map((number) => <button type="button" key={number} className={value === number ? 'is-selected' : ''} aria-pressed={value === number} aria-label={`${accessibleLabel}: ${number} of 10`} onClick={() => onChange(number)}>{number}</button>)}</div><div id={descriptionId} className="start-rating-labels"><span>{low}</span><span>{high}</span></div></div>
 }
 
+function MiniRatingSelect({ topic, value, onChange }: { topic: string; value: number; onChange: (value: number) => void }) {
+  const detailsRef = useRef<HTMLDetailsElement | null>(null)
+  return (
+    <div className="start-mini-rating-item">
+      <span>{topic}</span>
+      <details ref={detailsRef} className="start-mini-rating-menu">
+        <summary aria-label={`${topic} rating, ${value} of 10`}>
+          <strong>{value}</strong>
+          <ChevronDown aria-hidden="true" />
+        </summary>
+        <div className="start-mini-rating-options" aria-label={`${topic} rating choices`}>
+          {Array.from({ length: 10 }, (_, index) => index + 1).map((number) => (
+            <button
+              type="button"
+              key={number}
+              className={number === value ? 'is-selected' : ''}
+              aria-pressed={number === value}
+              aria-label={`${topic}: ${number} of 10`}
+              onClick={() => {
+                onChange(number)
+                if (detailsRef.current) detailsRef.current.open = false
+              }}
+            >
+              {number}
+            </button>
+          ))}
+        </div>
+      </details>
+    </div>
+  )
+}
+
 function CampaignMix({ values, onChange }: { values: Record<string, number>; onChange: (topic: string, value: number) => void }) {
-  return <><h2>How much of each do you want in the campaign?</h2><div className="start-mini-ratings">{CAMPAIGN_TOPICS.map((topic) => <label key={topic}><span>{topic}</span><select value={values[topic]} onChange={(event) => onChange(topic, Number(event.target.value))} aria-label={`${topic} rating`}>{Array.from({ length: 10 }, (_, index) => <option key={index + 1}>{index + 1}</option>)}</select></label>)}</div></>
+  return <><h2>How much of each do you want in the campaign?</h2><div className="start-mini-ratings">{CAMPAIGN_TOPICS.map((topic) => <MiniRatingSelect key={topic} topic={topic} value={values[topic]} onChange={(value) => onChange(topic, value)} />)}</div></>
 }
 
 function CharacterPriorities({ values, onChange }: { values: Record<string, number>; onChange: (topic: string, value: number) => void }) {
-  return <><h2>How much should these character choices matter?</h2><div className="start-mini-ratings start-mini-ratings--three">{CHARACTER_TOPICS.map((topic) => <label key={topic}><span>{topic}</span><select value={values[topic]} onChange={(event) => onChange(topic, Number(event.target.value))} aria-label={`${topic} rating`}>{Array.from({ length: 10 }, (_, index) => <option key={index + 1}>{index + 1}</option>)}</select></label>)}</div></>
+  return <><h2>How much should these character choices matter?</h2><div className="start-mini-ratings start-mini-ratings--three">{CHARACTER_TOPICS.map((topic) => <MiniRatingSelect key={topic} topic={topic} value={values[topic]} onChange={(value) => onChange(topic, value)} />)}</div></>
 }

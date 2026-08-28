@@ -1,9 +1,9 @@
 # RPG Your Way
 
-**Build 1.11.6 · Start and short-window UI QA**
+**Build 1.11.7 · Start controls and destructive-action polish**
 
-Build 1.11.6 improves Start copy and accordion affordances, keeps the Onward control visible while disabled until campaign and GM names are complete, restores independent Chat and Dice scrolling in short multiplayer windows, and shifts the sitewide pale-green furniture palette toward a warmer olive.
+Build 1.11.7 cleans up Start question labels and number pickers, adds breathing room below Character import help, moves party removal into the character-record header with an explicit second-click confirmation, and adds an extra Are you sure? step before account deletion.
 
-Current release: **1.11.6**.
+Current release: **1.11.7**.
 
-See `README-1.11.6.md` for release details, `ACCESSIBILITY.md` for the accessibility engineering standard, and earlier versioned README files for prior release notes.
+See `README-1.11.7.md` for release details, `ACCESSIBILITY.md` for the accessibility engineering standard, and earlier versioned README files for prior release notes.

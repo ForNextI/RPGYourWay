@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.11.6')
-assert.equal(pkg.rpgywVersion, '1.11.6')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.6'/)
+assert.equal(pkg.version, '1.11.7')
+assert.equal(pkg.rpgywVersion, '1.11.7')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.7'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -60,6 +60,7 @@ for (const file of [
   'README-1.11.4.md',
   'README-1.11.5.md',
   'README-1.11.6.md',
+  'README-1.11.7.md',
   'lib/multiplayer/types.ts',
   'lib/multiplayer/errors.ts',
   'lib/multiplayer/server.ts',
@@ -1098,7 +1099,7 @@ assert.match(release1114Home, /Megaphone/)
 assert.match(release1114Home, /Multiplayer is now live(?:, with chat)?\./)
 assert.match(release1114Landing, /return clean/)
 assert.doesNotMatch(release1114Landing, /const limit = 1100/)
-assert.match(release1114Gameplay, /Remove from party/)
+assert.match(release1114Gameplay, /Remove (?:from party|this character)/)
 assert.match(release1114Gameplay, /function removePartyCharacter/)
 assert.match(release1114Gameplay, /character-sheet-title.*playNameFor\(character\)/)
 assert.match(release1114Multiplayer, /removedIds/)
@@ -1126,13 +1127,34 @@ assert.match(release1116Start, /accordion-plus start-rules-accordion-plus/)
 assert.match(release1116Start, /Choose these ready-to-play characters/)
 assert.match(release1116Start, /These default characters are built for the D&amp;D 5\.5e system\./)
 assert.match(release1116Start, /Paste your character&apos;s information, then add characters one at a time/)
-assert.match(release1116Start, /Backstory reveal/)
 assert.doesNotMatch(release1116Start, /Backstory influence/)
 assert.match(release1116Start, /activeStep === 4 && questionsDone/)
 assert.doesNotMatch(release1116Start, /activeStep === 4 && namesReady && questionsDone/)
 assert.match(release1116Css, /RPG Your Way 1\.11\.6 Start-language, responsive secondary-panel scrolling/)
 assert.match(release1116Css, /aigm-table-chat-panel\.aigm-mp-secondary--active,[\s\S]*aigm-tools-panel\.aigm-mp-secondary--active[\s\S]*overflow-y: auto !important/)
 assert.match(release1116Css, /start-rules-current--display\[aria-expanded="true"\][\s\S]*rotate\(45deg\)/)
-assert.match(release1116Css, /start-mini-ratings select:hover,[\s\S]*color: var\(--lime\) !important/)
 assert.match(release1116Css, /--rpgyw-pale-olive: #d6d1a3/)
 console.log('RPG Your Way 1.11.6 Start, scrolling, accordion, and olive-palette QA checks passed.')
+
+const release1117Start = read('components/start/StartOnboarding.tsx')
+const release1117Gameplay = read('components/aigm/aigm-gameplay-shell.tsx')
+const release1117AccountDelete = read('components/account/DeleteAccountControl.tsx')
+const release1117Css = read('app/globals.css')
+assert.match(release1117Start, /Character backstory usage/)
+assert.match(release1117Start, /Inter-party romance/)
+assert.match(release1117Start, /Character secret reveals/)
+assert.doesNotMatch(release1117Start, /Player-character romance/)
+assert.match(release1117Start, /function MiniRatingSelect/)
+assert.match(release1117Start, /start-mini-rating-options/)
+assert.doesNotMatch(release1117Start, /CHARACTER_TOPICS = \['Backstory reveal'/)
+assert.match(release1117Gameplay, /Remove this character/)
+assert.match(release1117Gameplay, /Are you sure\?/)
+assert.doesNotMatch(release1117Gameplay, /window\.confirm\(`Remove/)
+assert.match(release1117AccountDelete, /account-delete-link--armed/)
+assert.match(release1117AccountDelete, /Are you sure\?/)
+assert.match(release1117AccountDelete, /Type <strong>DELETE<\/strong> to confirm\./)
+assert.match(release1117Css, /RPG Your Way 1\.11\.7 Start rating controls \+ safer destructive actions/)
+assert.match(release1117Css, /\.start-character-actions--secondary \{[\s\S]*?margin-bottom: \.9rem;/)
+assert.match(release1117Css, /\.start-mini-rating-menu > summary:hover,[\s\S]*?background: var\(--lime\) !important;/)
+assert.match(release1117Css, /\.start-mini-rating-options button:hover,[\s\S]*?background: var\(--lime\) !important;/)
+console.log('RPG Your Way 1.11.7 Start rating and destructive-action QA checks passed.')

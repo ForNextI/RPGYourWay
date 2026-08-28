@@ -7694,3 +7694,176 @@ html {
     scrollbar-gutter: stable;
   }
 }
+
+/* RPG Your Way 1.11.7 Start rating controls + safer destructive actions. */
+.start-character-actions--secondary {
+  margin-bottom: .9rem;
+}
+
+/* Questions 2 and 3 use a house-built number picker rather than the browser's
+   white/blue native select popup. Numbers stay forest green at rest; the
+   active/hovered furniture turns lime while preserving dark readable type. */
+.start-mini-rating-item {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .55rem;
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 11px;
+  background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep));
+  color: var(--cream-bright);
+  padding: .48rem .55rem .48rem .72rem;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 48%, white),
+    inset 0 1px 0 rgb(255 255 255 / .16),
+    0 3px 0 var(--rpgyw-brass-shadow),
+    0 6px 10px rgb(43 47 38 / .10);
+  font-size: .78rem;
+  font-weight: 800;
+}
+.start-mini-rating-item > span {
+  color: var(--cream-bright);
+  line-height: 1.15;
+}
+.start-mini-rating-menu {
+  position: relative;
+  min-width: 64px;
+}
+.start-mini-rating-menu > summary {
+  min-width: 64px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .3rem;
+  list-style: none;
+  border: 2px solid var(--rpgyw-brass-highlight);
+  border-radius: 9px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 97%, white), var(--cream));
+  color: var(--forest-deep);
+  padding: .3rem .45rem;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 62%, white),
+    0 3px 0 var(--rpgyw-brass-shadow);
+  font-weight: 900;
+}
+.start-mini-rating-menu > summary::-webkit-details-marker { display: none; }
+.start-mini-rating-menu > summary::marker { content: ''; }
+.start-mini-rating-menu > summary svg {
+  width: 1rem;
+  height: 1rem;
+  transition: transform .14s ease;
+}
+.start-mini-rating-menu[open] > summary svg { transform: rotate(180deg); }
+.start-mini-rating-menu > summary:hover,
+.start-mini-rating-menu > summary:focus-visible,
+.start-mini-rating-menu[open] > summary {
+  background: var(--lime) !important;
+  color: var(--forest-deep) !important;
+}
+.start-mini-rating-options {
+  position: absolute;
+  z-index: 90;
+  top: calc(100% + .35rem);
+  right: 0;
+  width: 100%;
+  min-width: 64px;
+  display: grid;
+  overflow: hidden;
+  border: 2px solid var(--rpgyw-brass-edge);
+  border-radius: 10px;
+  background: var(--cream-bright);
+  box-shadow: 0 5px 0 var(--rpgyw-brass-shadow), 0 12px 22px rgb(35 45 35 / .2);
+}
+.start-mini-rating-options button {
+  min-height: 34px;
+  border: 0;
+  border-radius: 0 !important;
+  background: var(--cream-bright);
+  color: var(--forest-deep);
+  cursor: pointer;
+  font-weight: 900;
+}
+.start-mini-rating-options button + button {
+  border-top: 1px solid color-mix(in srgb, var(--rpgyw-brass-edge) 35%, transparent);
+}
+.start-mini-rating-options button:hover,
+.start-mini-rating-options button:focus-visible,
+.start-mini-rating-options button.is-selected:hover,
+.start-mini-rating-options button.is-selected:focus-visible {
+  background: var(--lime) !important;
+  color: var(--forest-deep) !important;
+}
+.start-mini-rating-options button.is-selected {
+  background: color-mix(in srgb, var(--landing-olive-19) 58%, var(--cream-bright));
+  color: var(--forest-deep);
+}
+
+.character-sheet-header-controls {
+  align-self: flex-start;
+}
+.character-sheet-header-controls .character-remove-button {
+  background: color-mix(in srgb, var(--destructive) 5%, var(--background));
+  color: var(--destructive);
+}
+.character-sheet-header-controls .character-remove-button--confirm {
+  background: var(--danger) !important;
+  color: white !important;
+  border-color: #6d1d18 !important;
+}
+.character-sheet-header-controls .character-remove-button--confirm:hover,
+.character-sheet-header-controls .character-remove-button--confirm:focus-visible {
+  background: #6d1d18 !important;
+  color: white !important;
+}
+
+.account-delete-arm-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: .55rem;
+}
+.account-delete-arm-row .account-delete-link { margin-top: 0; }
+.account-delete-link--armed {
+  min-height: 38px;
+  border: 1px solid #6d1d18;
+  border-radius: 9px;
+  background: var(--danger);
+  color: white;
+  padding: .35rem .6rem;
+  text-decoration: none;
+}
+.account-delete-link--armed:hover,
+.account-delete-link--armed:focus-visible {
+  background: #6d1d18;
+  color: white;
+  padding-inline: .6rem;
+}
+.account-delete-cancel {
+  min-height: 38px;
+  border: 1px solid var(--rpgyw-brass-edge);
+  border-radius: 9px;
+  background: var(--cream-bright);
+  color: var(--forest-deep);
+  padding: .35rem .6rem;
+  cursor: pointer;
+  font-weight: 900;
+}
+.account-delete-cancel:hover,
+.account-delete-cancel:focus-visible {
+  background: var(--lime);
+  color: var(--forest-deep);
+}
+
+@media (max-width: 700px) {
+  .character-sheet-heading-row {
+    flex-wrap: wrap;
+  }
+  .character-sheet-header-controls {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

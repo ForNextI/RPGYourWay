@@ -699,6 +699,7 @@ function CharacterSheetOverlay({
   const [recordEditError, setRecordEditError] = useState<string | null>(null)
   const [recordEditProposal, setRecordEditProposal] = useState<CharacterEditApiResponse | null>(null)
   const [recordSections, setRecordSections] = useState<Record<string, boolean>>(DEFAULT_RECORD_SECTIONS)
+  const [confirmingRemove, setConfirmingRemove] = useState(false)
 
   useEffect(() => {
     setEditingIdentity(false)
@@ -713,6 +714,7 @@ function CharacterSheetOverlay({
     setRecordEditError(null)
     setRecordEditProposal(null)
     setRecordSections(storedRecordSections(character.id))
+    setConfirmingRemove(false)
   }, [character.id, character.portraitUrl, result?.character.name, character.playName, startInRecordEditor])
 
   function setRecordSectionOpen(section: string, open: boolean) {
@@ -937,9 +939,6 @@ function CharacterSheetOverlay({
                   <button type="button" onClick={() => setShowSmartLevelingHelp((open) => !open)} aria-expanded={showSmartLevelingHelp} aria-controls="character-smart-level-help" className="character-smart-level-button inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/45 bg-primary/10 px-3 text-xs font-bold text-primary transition hover:bg-primary/15">
                     <HelpCircle className="size-4" aria-hidden="true" />Smart way to level
                   </button>
-                  <button type="button" onClick={() => onRemove(character.id)} disabled={!canRemove} title={canRemove ? 'Remove this character from the current party. Campaign history is preserved.' : 'A campaign must keep at least one active character.'} className="character-remove-button inline-flex min-h-9 items-center gap-2 rounded-lg border border-destructive/45 bg-destructive/5 px-3 text-xs font-bold text-destructive disabled:cursor-not-allowed disabled:opacity-45">
-                    <Trash2 className="size-4" aria-hidden="true" />Remove from party
-                  </button>
                 </div>
                 {showSmartLevelingHelp && (
                   <div id="character-smart-level-help" className="mt-3 max-w-2xl rounded-2xl border border-primary/35 bg-background/90 p-4 text-sm leading-relaxed shadow-sm" role="region" aria-label="Smart way to level your character">
@@ -959,9 +958,24 @@ function CharacterSheetOverlay({
                 )}
               </div>
             </div>
-            <button type="button" onClick={onClose} className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background transition hover:border-primary/55 hover:text-primary" aria-label="Close character record">
-              <X className="size-5" aria-hidden="true" />
-            </button>
+            <div className="character-sheet-header-controls flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  if (!canRemove) return
+                  if (confirmingRemove) onRemove(character.id)
+                  else setConfirmingRemove(true)
+                }}
+                disabled={!canRemove}
+                title={canRemove ? 'Remove this character from the current party. Campaign history is preserved.' : 'A campaign must keep at least one active character.'}
+                className={`character-remove-button inline-flex min-h-10 items-center gap-2 rounded-xl border border-destructive/45 px-3 text-xs font-bold transition disabled:cursor-not-allowed disabled:opacity-45 ${confirmingRemove ? 'character-remove-button--confirm' : ''}`}
+              >
+                <Trash2 className="size-4" aria-hidden="true" />{confirmingRemove ? 'Are you sure?' : 'Remove this character'}
+              </button>
+              <button type="button" onClick={onClose} className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background transition hover:border-primary/55 hover:text-primary" aria-label="Close character record">
+                <X className="size-5" aria-hidden="true" />
+              </button>
+            </div>
           </div>
 
           {editingIdentity && (
@@ -1578,7 +1592,6 @@ export function AigmGameplayShell() {
       return
     }
     const targetName = playNameFor(target)
-    if (!window.confirm(`Remove ${targetName} from the current party? The campaign history stays intact, but this character will no longer be an active party member.`)) return
 
     const removedWasLeader = target.result?.character.is_current_party_active_leader === true
     let characters = partyState.characters.filter((character) => character.id !== characterId)
