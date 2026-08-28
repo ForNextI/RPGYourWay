@@ -7428,8 +7428,12 @@ html {
   min-height: 0;
   max-height: min(48%, 27rem);
   flex: 0 1 auto;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
+
 .aigm-multiplayer-lobby-details[open] {
   display: flex;
   flex-direction: column;
@@ -7456,10 +7460,9 @@ html {
 .aigm-multiplayer-accordion-plus::after { height: 12px; }
 .aigm-multiplayer-lobby-details[open] > summary .aigm-multiplayer-accordion-plus { transform: rotate(45deg); }
 .aigm-multiplayer-lobby-body {
+  flex: 0 0 auto;
   min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-gutter: stable;
+  overflow: visible;
 }
 .aigm-table-chat-log { min-height: 5.5rem; }
 
@@ -7892,25 +7895,4 @@ html {
   color: var(--forest-deep) !important;
   outline: 3px solid var(--lime);
   outline-offset: 3px;
-}
-
-/* Multiplayer Table Setup:
-   keep the accordion header visible and scroll its contents when needed. */
-.aigm-multiplayer-lobby-details[open] {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden !important;
-}
-
-.aigm-multiplayer-lobby-details[open] > summary {
-  flex: 0 0 auto;
-}
-
-.aigm-multiplayer-lobby-details[open] > .aigm-multiplayer-lobby-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  scrollbar-gutter: stable;
 }
