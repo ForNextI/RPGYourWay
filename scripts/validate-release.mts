@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.11.4')
-assert.equal(pkg.rpgywVersion, '1.11.4')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.4'/)
+assert.equal(pkg.version, '1.11.5')
+assert.equal(pkg.rpgywVersion, '1.11.5')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.5'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -58,6 +58,7 @@ for (const file of [
   'scripts/validate-accessibility.mts',
   'README-1.11.2.md',
   'README-1.11.4.md',
+  'README-1.11.5.md',
   'lib/multiplayer/types.ts',
   'lib/multiplayer/errors.ts',
   'lib/multiplayer/server.ts',
@@ -1093,7 +1094,7 @@ const release1114Multiplayer = read('lib/multiplayer/server.ts')
 const release1114Css = read('app/globals.css')
 assert.match(release1114Home, /Reduction in prices, yay!/)
 assert.match(release1114Home, /Megaphone/)
-assert.match(release1114Home, /Multiplayer is now live\./)
+assert.match(release1114Home, /Multiplayer is now live(?:, with chat)?\./)
 assert.match(release1114Landing, /return clean/)
 assert.doesNotMatch(release1114Landing, /const limit = 1100/)
 assert.match(release1114Gameplay, /Remove from party/)
@@ -1105,3 +1106,12 @@ assert.match(release1114Css, /RPG Your Way 1\.11\.4 party management \+ landing 
 assert.match(release1114Css, /\.landing-news-eyebrow \{[\s\S]*?background:/)
 assert.match(release1114Css, /\.landing-campaign-snippet > span \{[\s\S]*?-webkit-line-clamp: 10;/)
 console.log('RPG Your Way 1.11.4 party-management and landing-news checks passed.')
+
+
+const release1115Home = read('app/page.tsx')
+const release1115Css = read('app/globals.css')
+assert.match(release1115Home, /Multiplayer is now live, with chat\./)
+assert.match(release1115Css, /RPG Your Way 1\.11\.5 add-character plaque hotfix \+ news copy/)
+assert.match(release1115Css, /\.start-add-character-header \{[\s\S]*?background: var\(--cream-bright\) !important;/)
+assert.match(release1115Css, /\.start-add-character-mode > \.start-party-step \{[\s\S]*?margin-top: \.8rem;/)
+console.log('RPG Your Way 1.11.5 add-character plaque and news hotfix checks passed.')

@@ -7614,3 +7614,17 @@ html {
     -webkit-line-clamp: 12;
   }
 }
+
+
+/* RPG Your Way 1.11.5 add-character plaque hotfix + news copy. */
+.start-add-character-header {
+  background: var(--cream-bright) !important;
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--cream-bright) 97%, white),
+    color-mix(in srgb, var(--cream) 88%, var(--cream-bright))
+  ) !important;
+}
+.start-add-character-mode > .start-party-step {
+  margin-top: .8rem;
+}
