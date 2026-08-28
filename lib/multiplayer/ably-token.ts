@@ -42,3 +42,46 @@ export function createAblyTokenRequest(input: { apiKey: string; sessionId: strin
 export function multiplayerCapabilityForTest(sessionId: string) {
   return canonicalCapability(sessionId)
 }
+
+export type AblyTokenDetails = {
+  token: string
+  keyName?: string
+  issued?: number
+  expires?: number
+  capability?: string
+  clientId?: string
+}
+
+function ablyErrorMessage(payload: unknown, status: number) {
+  if (!payload || typeof payload !== 'object') return `Ably authorization failed with HTTP ${status}.`
+  const row = payload as { message?: unknown; code?: unknown; error?: unknown }
+  const nested = row.error && typeof row.error === 'object' ? row.error as { message?: unknown; code?: unknown } : null
+  const message = typeof row.message === 'string' ? row.message : typeof nested?.message === 'string' ? nested.message : ''
+  const code = Number.isFinite(Number(row.code)) ? Number(row.code) : Number.isFinite(Number(nested?.code)) ? Number(nested?.code) : 0
+  return `${message || `Ably authorization failed with HTTP ${status}.`}${code ? ` (Ably ${code})` : ''}`
+}
+
+export async function requestAblyTokenDetails(
+  input: { apiKey: string; sessionId: string; clientId: string; now?: number; ttl?: number },
+  fetchImpl: typeof fetch = fetch,
+): Promise<AblyTokenDetails> {
+  const request = createAblyTokenRequest(input)
+  let response: Response
+  try {
+    response = await fetchImpl(`https://main.realtime.ably.net/keys/${encodeURIComponent(request.keyName)}/requestToken`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+      signal: AbortSignal.timeout(10_000),
+    })
+  } catch (error) {
+    throw new Error(error instanceof Error
+      ? `RPG Your Way could not reach Ably to authorize multiplayer realtime: ${error.message}`
+      : 'RPG Your Way could not reach Ably to authorize multiplayer realtime.')
+  }
+
+  const payload = await response.json().catch(() => ({})) as Record<string, unknown>
+  if (!response.ok) throw new Error(ablyErrorMessage(payload, response.status))
+  if (typeof payload.token !== 'string' || !payload.token) throw new Error('Ably authorized the request but did not return a usable realtime token.')
+  return payload as AblyTokenDetails
+}

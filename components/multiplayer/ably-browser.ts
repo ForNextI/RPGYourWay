@@ -7,6 +7,12 @@ export type AblyMessageLike = {
   timestamp?: number
 }
 
+export type AblyErrorLike = {
+  message?: string
+  code?: number
+  statusCode?: number
+}
+
 export type AblyPresenceLike = {
   action?: string
   clientId?: string
@@ -40,8 +46,8 @@ export type AblyRealtimeLike = {
   }
   connection: {
     state: string
-    on(listener: (change: { current?: string; reason?: { message?: string } }) => void): void
-    off(listener?: (change: { current?: string; reason?: { message?: string } }) => void): void
+    on(listener: (change: { current?: string; reason?: AblyErrorLike }) => void): void
+    off(listener?: (change: { current?: string; reason?: AblyErrorLike }) => void): void
   }
   close(): void
 }

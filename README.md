@@ -1,11 +1,11 @@
 # RPG Your Way
 
-**Build 1.11.0 · Native multiplayer Phase 1**
+**Build 1.11.1 · Realtime diagnostics + streaming-WAV readback fix**
 
-Build 1.11.0 establishes the private-test native multiplayer lobby and realtime transport foundation: authenticated room creation and joining, invite links, connected-player presence, character-seat claims, human table chat, reconnectable room-scoped Ably credentials, and the responsive Play/Chat/Dice/Characters panel system.
+Build 1.11.1 hardens the new multiplayer Phase 1 connection path and fixes gameplay readback measurement for OpenAI streaming WAV responses.
 
-This release does **not** yet synchronize AIGM gameplay or split AIGM billing among players. Those remain the next multiplayer phases.
+Native multiplayer remains in private Phase 1 testing and still does **not** synchronize AIGM gameplay or split AIGM billing among players.
 
-Current release: **1.11.0**.
+Current release: **1.11.1**.
 
-See `README-1.11.0.md` for release details, `ACCESSIBILITY.md` for the accessibility engineering standard, and earlier versioned README files for prior release notes.
+See `README-1.11.1.md` for release details, `README-1.11.0.md` for the Phase 1 multiplayer foundation, and `ACCESSIBILITY.md` for the accessibility engineering standard.

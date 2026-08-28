@@ -58,7 +58,17 @@ export function measureWavDuration(value: ArrayBuffer | Uint8Array): WavMeasurem
     const chunkId = ascii(bytes, offset, 4)
     const chunkSize = view.getUint32(offset + 4, true)
     const dataStart = offset + 8
-    if (dataStart + chunkSize > bytes.byteLength) break
+    const declaredEnd = dataStart + chunkSize
+
+    if (chunkId === 'data' && (chunkSize === 0xffffffff || declaredEnd > bytes.byteLength)) {
+      // OpenAI streams WAV responses with 0xFFFFFFFF length sentinels because the
+      // final payload size is not known when the header is emitted. Treat the
+      // remaining response bytes as PCM data rather than rejecting a valid stream.
+      dataBytes += Math.max(0, bytes.byteLength - dataStart)
+      break
+    }
+
+    if (declaredEnd > bytes.byteLength) break
 
     if (chunkId === 'fmt ' && chunkSize >= 16) {
       byteRate = view.getUint32(dataStart + 8, true)
@@ -66,7 +76,7 @@ export function measureWavDuration(value: ArrayBuffer | Uint8Array): WavMeasurem
       dataBytes += chunkSize
     }
 
-    offset = dataStart + chunkSize + (chunkSize % 2)
+    offset = declaredEnd + (chunkSize % 2)
   }
 
   if (!byteRate || !dataBytes) throw new Error('Speech provider returned a WAV file without measurable audio data.')

@@ -42,6 +42,17 @@ const tts = ttsProviderCostMicrousdFromWav(wav)
 assert.equal(tts.providerCostMicrousd, 500)
 assert.equal(ttsReserveMicrousd(), 250_000)
 
+// OpenAI's streaming WAV response uses 0xFFFFFFFF as the RIFF/data length sentinel.
+// The complete HTTP body is still measurable from the bytes that actually arrived.
+const streamingWav = wav.slice()
+const streamingView = new DataView(streamingWav.buffer)
+streamingView.setUint32(4, 0xffffffff, true)
+streamingView.setUint32(40, 0xffffffff, true)
+const streamingMeasured = measureWavDuration(streamingWav)
+assert.equal(streamingMeasured.durationSeconds, 2)
+assert.equal(streamingMeasured.dataBytes, 64_000)
+assert.equal(ttsProviderCostMicrousdFromWav(streamingWav).providerCostMicrousd, 500)
+
 // One whole-turn customer rounding, never component-by-component rounding.
 const ttt = 4_485
 const gameplay = 684_112

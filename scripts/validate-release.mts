@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.11.0')
-assert.equal(pkg.rpgywVersion, '1.11.0')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.0'/)
+assert.equal(pkg.version, '1.11.1')
+assert.equal(pkg.rpgywVersion, '1.11.1')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.1'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -56,7 +56,7 @@ for (const file of [
   'ACCESSIBILITY.md',
   'app/accessibility/page.tsx',
   'scripts/validate-accessibility.mts',
-  'README-1.11.0.md',
+  'README-1.11.1.md',
   'lib/multiplayer/types.ts',
   'lib/multiplayer/errors.ts',
   'lib/multiplayer/server.ts',
@@ -981,7 +981,7 @@ assert.match(multiplayerAbly1110, /rpg-mp:\$\{sessionId\}:chat/)
 assert.match(multiplayerAbly1110, /createHmac\('sha256'/)
 assert.doesNotMatch(multiplayerAbly1110, /"\*"\s*:/)
 assert.match(multiplayerTokenRoute1110, /ABLY_API_KEY/)
-assert.match(multiplayerTokenRoute1110, /createAblyTokenRequest/)
+assert.match(multiplayerTokenRoute1110, /requestAblyTokenDetails/)
 assert.match(multiplayerChat1110, /human-chat/)
 assert.match(multiplayerChat1110, /Chat is not sent to the AIGM and does not use AI balance/)
 assert.match(multiplayerChat1110, /aria-live="off"/)
@@ -1005,3 +1005,19 @@ assert.match(multiplayerMigration1110, /v_active_count >= 6/)
 assert.match(multiplayerMigration1110, /enable row level security/)
 assert.match(env1110, /ABLY_API_KEY=/)
 console.log('RPG Your Way 1.11.0 native multiplayer Phase 1 checks passed.')
+
+const audioCost1111 = read('lib/usage/audio-cost.ts')
+const speechRoute1111 = read('app/api/aigm/speech/route.ts')
+const multiplayerAbly1111 = read('lib/multiplayer/ably-token.ts')
+const multiplayerTokenRoute1111 = read('app/api/multiplayer/ably-token/route.ts')
+const multiplayerChat1111 = read('components/multiplayer/TableChatPanel.tsx')
+assert.match(audioCost1111, /chunkSize === 0xffffffff/)
+assert.match(audioCost1111, /bytes\.byteLength - dataStart/)
+assert.match(speechRoute1111, /ttsProviderCostMicrousdFromWav/)
+assert.match(multiplayerAbly1111, /requestAblyTokenDetails/)
+assert.match(multiplayerAbly1111, /main\.realtime\.ably\.net/)
+assert.match(multiplayerTokenRoute1111, /ABLY_API_KEY\?\.trim\(\)/)
+assert.match(multiplayerTokenRoute1111, /requestAblyTokenDetails/)
+assert.match(multiplayerChat1111, /fetchRealtimeCredential/)
+assert.match(multiplayerChat1111, /Ably \$\{code\}/)
+console.log('RPG Your Way 1.11.1 realtime diagnostics and streaming-WAV readback checks passed.')

@@ -2,7 +2,7 @@
 
 import { Check, Copy, LoaderCircle, MessageSquareText, Send, UsersRound, X } from 'lucide-react'
 import { FormEvent, type RefObject, useEffect, useMemo, useRef, useState } from 'react'
-import { loadAblyRealtime, type AblyMessageLike, type AblyPresenceLike, type AblyRealtimeLike } from '@/components/multiplayer/ably-browser'
+import { loadAblyRealtime, type AblyErrorLike, type AblyMessageLike, type AblyPresenceLike, type AblyRealtimeLike } from '@/components/multiplayer/ably-browser'
 import { MultiplayerPanelSwitcher, type MultiplayerSecondaryPanel } from '@/components/multiplayer/MultiplayerPanelSwitcher'
 import type { MultiplayerChatMessage, MultiplayerSessionView } from '@/lib/multiplayer/types'
 
@@ -87,7 +87,7 @@ export function TableChatPanel({
     let cancelled = false
     let chatListener: ((message: AblyMessageLike) => void) | null = null
     let presenceListener: ((message: AblyPresenceLike) => void) | null = null
-    let connectionListener: ((change: { current?: string; reason?: { message?: string } }) => void) | null = null
+    let connectionListener: ((change: { current?: string; reason?: AblyErrorLike }) => void) | null = null
     let chatChannelName = ''
     let presenceChannelName = ''
 
@@ -122,24 +122,45 @@ export function TableChatPanel({
       }
     }
 
+    async function fetchRealtimeCredential() {
+      const response = await fetch('/api/multiplayer/ably-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ inviteCode: session.inviteCode }),
+      })
+      const payload = await response.json().catch(() => ({})) as Record<string, unknown>
+      if (!response.ok) throw new Error(typeof payload.error === 'string' ? payload.error : 'Could not authorize multiplayer realtime.')
+      if (typeof payload.token !== 'string' || !payload.token) throw new Error('RPG Your Way did not receive a usable realtime token from Ably.')
+      return payload
+    }
+
+    function realtimeFailure(reason?: AblyErrorLike) {
+      const code = typeof reason?.code === 'number' ? reason.code : 0
+      const status = typeof reason?.statusCode === 'number' ? reason.statusCode : 0
+      const suffix = code ? ` (Ably ${code}${status ? ` / HTTP ${status}` : ''})` : ''
+      return `${reason?.message || 'Realtime connection failed.'}${suffix}`
+    }
+
     async function connect() {
       if (!session.isMember || !session.selfSeatId) return
       setConnectionState('connecting')
       setConnectionError('')
       try {
+        let initialCredential: Record<string, unknown> | null = await fetchRealtimeCredential()
+        if (cancelled) return
         const Realtime = await loadAblyRealtime()
         if (cancelled) return
         const realtime = new Realtime({
           authCallback: (_tokenParams, callback) => {
-            void fetch('/api/multiplayer/ably-token', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ inviteCode: session.inviteCode }),
-            }).then(async (response) => {
-              const payload = await response.json().catch(() => ({})) as Record<string, unknown>
-              if (!response.ok) throw new Error(typeof payload.error === 'string' ? payload.error : 'Could not authorize multiplayer realtime.')
-              callback(null, payload)
-            }).catch((error) => callback(error instanceof Error ? error : new Error('Could not authorize multiplayer realtime.')))
+            if (initialCredential) {
+              const credential = initialCredential
+              initialCredential = null
+              callback(null, credential)
+              return
+            }
+            void fetchRealtimeCredential()
+              .then((credential) => callback(null, credential))
+              .catch((error) => callback(error instanceof Error ? error : new Error('Could not authorize multiplayer realtime.')))
           },
         })
         realtimeRef.current = realtime
@@ -155,7 +176,7 @@ export function TableChatPanel({
             setConnectionError('')
           } else if (current === 'failed') {
             setConnectionState('failed')
-            setConnectionError(change.reason?.message || 'Realtime connection failed.')
+            setConnectionError(realtimeFailure(change.reason))
           } else if (current === 'disconnected' || current === 'suspended' || current === 'closed') {
             setConnectionState('disconnected')
           } else {
