@@ -6861,3 +6861,82 @@ body a[class*="rounded"][class*="bg-"]:focus-visible {
     padding-top: .9rem;
   }
 }
+
+/* RPG Your Way 1.10.0 accessibility foundation.
+   WCAG 2.2 AA work: strong two-tone focus, focus visibility below the sticky
+   header, minimum pointer targets, mobile form zoom safety, forced-colors
+   support, and readable link cues in prose. */
+html {
+  scroll-padding-top: 5.5rem;
+}
+#main-content,
+:target {
+  scroll-margin-top: 5.5rem;
+}
+
+:where(a[href], button, input:not([type="hidden"]), select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 3px solid var(--cream-bright) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 5px var(--forest-deep) !important;
+}
+
+:where(button, [role="button"], summary, input:not([type="hidden"]), select, textarea) {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.prose-page a:not(.button),
+.accessibility-page a {
+  text-decoration: underline;
+  text-decoration-thickness: .08em;
+  text-underline-offset: .16em;
+}
+.accessibility-page section + section {
+  margin-top: 2rem;
+}
+.accessibility-page h2 {
+  margin-bottom: .65rem;
+  color: var(--forest-deep);
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+}
+.accessibility-page ul {
+  padding-left: 1.4rem;
+}
+.accessibility-page li + li {
+  margin-top: .45rem;
+}
+
+@media (max-width: 639px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
+    font-size: 1rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  :where(a[href], button, input:not([type="hidden"]), select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 3px solid Highlight !important;
+    box-shadow: none !important;
+  }
+  :where(button, input, select, textarea, summary, .button, [role="button"]) {
+    border: 1px solid ButtonText;
+  }
+  .skip-link {
+    border-color: ButtonText;
+    background: Canvas;
+    color: CanvasText;
+  }
+}

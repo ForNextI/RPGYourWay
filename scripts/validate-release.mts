@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.9.4')
-assert.equal(pkg.rpgywVersion, '1.9.4')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.9\.4'/)
+assert.equal(pkg.version, '1.10.0')
+assert.equal(pkg.rpgywVersion, '1.10.0')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.10\.0'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -52,6 +52,10 @@ for (const file of [
   'README-1.9.2.md',
   'README-1.9.3.md',
   'README-1.9.4.md',
+  'README-1.10.0.md',
+  'ACCESSIBILITY.md',
+  'app/accessibility/page.tsx',
+  'scripts/validate-accessibility.mts',
   'postcss.config.mjs',
   'data/settings/eberron.json',
   'data/rules/corpora/dnd-5.5e-srd-5.2.1.json',
@@ -904,3 +908,32 @@ assert.match(account194, /statusMessages\[status\]/)
 assert.match(account194, /paymentNotice/)
 assert.match(account194, /paymentError/)
 console.log('RPG Your Way 1.9.4 account-intro removal checks passed.')
+
+
+const accessibility1100 = read('app/accessibility/page.tsx')
+const accessibilityStandard1100 = read('ACCESSIBILITY.md')
+const accessibilityValidator1100 = read('scripts/validate-accessibility.mts')
+const header1100 = read('components/SiteHeader.tsx')
+const footer1100 = read('components/SiteFooter.tsx')
+const start1100 = read('components/start/StartOnboarding.tsx')
+const deleteAccount1100 = read('components/account/DeleteAccountControl.tsx')
+const gameplay1100 = read('components/aigm/aigm-gameplay-shell.tsx')
+const css1100 = read('app/globals.css')
+assert.match(accessibility1100, /Web Content Accessibility Guidelines/)
+assert.match(accessibility1100, /WCAG<\/abbr> 2\.2 Level AA/)
+assert.match(accessibility1100, /does not claim independent certification/)
+assert.match(accessibilityStandard1100, /WCAG 2\.2 Level AA/)
+assert.match(accessibilityStandard1100, /NVDA \+ Firefox or Chrome/)
+assert.match(accessibilityValidator1100, /accessibility regression checks passed/)
+assert.match(pkg['scripts']?.['validate:release'] ?? '', /validate-accessibility\.mts/)
+assert.match(header1100, /usePathname/)
+assert.match(header1100, /aria-current=/)
+assert.match(footer1100, /href="\/accessibility"/)
+assert.match(start1100, /useAccessibleDialog<HTMLElement>/)
+assert.match(start1100, /role="log" aria-live="polite"/)
+assert.match(deleteAccount1100, /aria-describedby="delete-account-confirm-help"/)
+assert.match(gameplay1100, /aria-label="Your gameplay action or message"/)
+assert.match(gameplay1100, /mobilePanelFocusReadyRef/)
+assert.match(css1100, /RPG Your Way 1\.10\.0 accessibility foundation/)
+assert.match(css1100, /@media \(forced-colors: active\)/)
+console.log('RPG Your Way 1.10.0 accessibility foundation checks passed.')

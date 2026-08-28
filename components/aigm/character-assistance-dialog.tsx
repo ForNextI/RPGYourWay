@@ -36,8 +36,8 @@ export function CharacterAssistanceDialog({ open, level, onClose, onSave }: Char
         </div>
 
         <p className="mt-4 text-sm leading-7 text-muted-foreground">This controls how proactively the AIGM points out abilities, reactions, spells, features, or other character options that might matter in the current situation.</p>
-        <div className="mt-4 grid grid-cols-5 gap-2 sm:grid-cols-10">
-          {LEVELS.map((value) => <button key={value} type="button" onClick={() => setDraft(value)} className={`min-h-10 rounded-xl border text-sm font-bold ${draft === value ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-background hover:border-primary/55'}`}>{value}</button>)}
+        <div className="mt-4 grid grid-cols-5 gap-2 sm:grid-cols-10" role="group" aria-label="Character assistance level">
+          {LEVELS.map((value) => <button key={value} type="button" onClick={() => setDraft(value)} aria-pressed={draft === value} aria-label={`${value} out of 10`} className={`min-h-10 rounded-xl border text-sm font-bold ${draft === value ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-background hover:border-primary/55'}`}>{value}</button>)}
         </div>
         <div className="mt-2 flex justify-between gap-4 text-[0.72rem] font-semibold text-muted-foreground"><span>1 · Let me handle them</span><span className="text-right">10 · Actively help me</span></div>
 

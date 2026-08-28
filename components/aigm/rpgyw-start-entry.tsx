@@ -93,6 +93,7 @@ export function RpgywStartEntry() {
       <SiteHeader />
       <main id="main-content" tabIndex={-1} className="inner-main play-entry-main start-page-main">
         <div className="shell start-page-shell">
+          <h1 className="sr-only">Start a new campaign or return to a saved adventure</h1>
           <StartOnboarding />
 
           <details className="start-existing-details">
@@ -140,7 +141,7 @@ export function RpgywStartEntry() {
                       </div>
                     </div>
                     <p>Use a full exported game JSON from WardensPC or RPG Your Way. The imported copy gets a new local campaign ID, so the original export remains untouched.</p>
-                    <input ref={importRef} className="sr-only" type="file" accept="application/json,.json" onChange={importAdventure} />
+                    <input ref={importRef} className="sr-only" type="file" tabIndex={-1} aria-hidden="true" accept="application/json,.json" onChange={importAdventure} />
                     <button className="button button-primary" type="button" onClick={() => importRef.current?.click()}>Import Existing Adventure</button>
                     <div className="play-entry-device-note">
                       <Smartphone aria-hidden="true" />

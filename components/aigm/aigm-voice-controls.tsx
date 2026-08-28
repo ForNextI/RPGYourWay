@@ -837,7 +837,7 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
       </button>
 
       {showSettings && !speaking && (
-        <div id={settingsId} className="absolute bottom-[calc(100%+0.65rem)] right-0 z-50 w-80 rounded-2xl border border-primary/35 bg-card p-4 text-sm shadow-2xl" role="dialog" aria-label={`${spokenAssistantName} voice settings`}>
+        <div id={settingsId} className="absolute bottom-[calc(100%+0.65rem)] right-0 z-50 w-80 rounded-2xl border border-primary/35 bg-card p-4 text-sm shadow-2xl" role="group" aria-label={`${spokenAssistantName} voice settings`}>
           <button type="button" onClick={() => setShowSettings(false)} className="absolute right-2 top-2 rounded-lg p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground" aria-label="Close narration settings"><X className="size-4" aria-hidden="true" /></button>
           <div className="flex items-center gap-2 pr-8">
             <Settings2 className="size-5 text-primary" aria-hidden="true" />
@@ -871,7 +871,7 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
 
       {(openingMicrophone || recording || transcribing) && (
         <span className="absolute bottom-[calc(100%+0.55rem)] left-0 z-40 whitespace-nowrap rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground shadow-xl" role="status">
-          {openingMicrophone ? 'Opening your microphone…' : recording ? 'Listening… press Enter or click the red stop control when you finish.' : `Transcribing your ${spokenNoun}…`}
+          {openingMicrophone ? 'Opening your microphone…' : recording ? 'Listening… press Enter or activate Stop recording when you finish.' : `Transcribing your ${spokenNoun}…`}
         </span>
       )}
     </div>

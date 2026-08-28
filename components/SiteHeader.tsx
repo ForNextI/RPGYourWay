@@ -1,5 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { FullscreenToggle } from '@/components/FullscreenToggle'
 
 const links = [
@@ -19,13 +22,14 @@ type SiteHeaderProps = {
 }
 
 export function SiteHeader({ variant = 'default' }: SiteHeaderProps) {
+  const pathname = usePathname()
   const landingHeader = variant === 'landing'
 
   return (
     <header className={`site-header${landingHeader ? ' site-header--landing' : ''}`}>
       <div className="shell header-inner">
         <div className="site-brand-ribbon">
-          <Link className="brand" href="/" aria-label="RPG Your Way home">
+          <Link className="brand" href="/" aria-label="RPG Your Way home" aria-current={pathname === '/' ? 'page' : undefined}>
             <span className="brand-mark" aria-hidden="true">
               <Image src="/rpgyw-compass.png" alt="" width={32} height={32} priority />
             </span>
@@ -48,7 +52,7 @@ export function SiteHeader({ variant = 'default' }: SiteHeaderProps) {
                   <span className="nav-external-arrow" aria-hidden="true">↗</span>
                 </a>
               ) : (
-                <Link href={link.href}>{link.label}</Link>
+                <Link href={link.href} aria-current={pathname === link.href || (link.href !== '/' && pathname.startsWith(`${link.href}/`)) ? 'page' : undefined}>{link.label}</Link>
               )}
             </span>
           ))}

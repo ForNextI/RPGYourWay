@@ -105,7 +105,7 @@ export function MotionPreferenceProvider({ children }: { children: ReactNode }) 
             <div className="min-w-0 flex-1">
               <p className="font-display font-bold">Reduced motion is active</p>
               <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                Your device requests reduced motion, so Wardens PC has disabled scrolling text, flashing effects, and nonessential animation. You can review this under Motion settings in the footer.
+                Your device requests reduced motion, so RPG Your Way has disabled scrolling text, flashing effects, and nonessential animation. You can review this under Motion settings in the footer.
               </p>
             </div>
             <button type="button" onClick={dismissNotice} className="rounded-lg p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground" aria-label="Dismiss reduced motion notice">

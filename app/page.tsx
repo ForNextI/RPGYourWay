@@ -173,6 +173,7 @@ export default function HomePage() {
   return (
     <PageShell headerVariant="landing">
       <main id="main-content" tabIndex={-1}>
+        <h1 className="sr-only">RPG Your Way: Your AI GM</h1>
         <section className="landing-return-section landing-return-section--hero" aria-label="Start or return to a campaign">
           <div className="shell landing-return-grid">
             <div className="brand-logo-card landing-return-logo">
@@ -193,7 +194,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="landing-reasons-section" aria-label="Why RPG Your Way exists and who it benefits">
+        <section className="landing-reasons-section" aria-labelledby="landing-reasons-heading">
+          <h2 id="landing-reasons-heading" className="sr-only">Why RPG Your Way exists and who it benefits</h2>
           <div className="shell landing-reasons-grid">
             <div className="landing-reason-card landing-reason-created" aria-label="Why I created RPG Your Way">
               <WhyCreatedAccordion />
@@ -204,7 +206,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="feature-section" aria-label="RPG Your Way features">
+        <section className="feature-section" aria-labelledby="landing-features-heading">
+          <h2 id="landing-features-heading" className="sr-only">RPG Your Way features</h2>
           <div className="shell feature-grid">
             {features.map((feature) => (
               <article className="feature-card" key={feature.title}>

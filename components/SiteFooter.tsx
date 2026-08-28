@@ -40,6 +40,7 @@ export function SiteFooter() {
             <nav aria-label="Footer navigation" className="footer-links">
               <a href="mailto:brett@rpgyourway.com">Contact</a>
               <Link href="/account">Account</Link>
+              <Link href="/accessibility">Accessibility</Link>
               <Link href="/legal/privacy">Privacy</Link>
               <Link href="/legal/terms">Terms</Link>
             </nav>

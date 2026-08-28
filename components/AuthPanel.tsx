@@ -1,5 +1,6 @@
 'use client'
 
+import { useId } from 'react'
 import { signIn, signUp } from '@/app/account/actions'
 
 type AuthPanelProps = {
@@ -17,6 +18,7 @@ const statusMessages: Record<string, string> = {
 }
 
 export function AuthPanel({ returnTo = '/account', status = '', error = '', compact = false }: AuthPanelProps) {
+  const passwordHintId = useId()
   const statusText = statusMessages[status]
   const errorText = error === 'confirmation'
     ? 'That confirmation link could not be verified. Please try signing in again.'
@@ -56,13 +58,13 @@ export function AuthPanel({ returnTo = '/account', status = '', error = '', comp
             </label>
             <label>
               <span>Password</span>
-              <input name="password" type="password" autoComplete="new-password" minLength={8} required />
+              <input name="password" type="password" autoComplete="new-password" minLength={8} required aria-describedby={passwordHintId} />
             </label>
             <label>
               <span>Confirm password</span>
-              <input name="confirmPassword" type="password" autoComplete="new-password" minLength={8} required />
+              <input name="confirmPassword" type="password" autoComplete="new-password" minLength={8} required aria-describedby={passwordHintId} />
             </label>
-            <p className="auth-hint">Use at least 8 characters and enter the same password twice.</p>
+            <p id={passwordHintId} className="auth-hint">Use at least 8 characters and enter the same password twice.</p>
             <button className="button button-secondary auth-submit" type="submit">Create account</button>
           </form>
         </section>

@@ -464,7 +464,7 @@ function CharacterCard({
         onPointerCancel={(event) => finishPointerDrag(event.currentTarget, false)}
         onContextMenu={(event) => { if (pointerDraggingRef.current) event.preventDefault() }}
         className="w-full p-3 text-left transition hover:bg-secondary/65 focus-visible:outline-none"
-        aria-label={`Open ${name} character record. Drag to reorder the party.`}
+        aria-label={`Open ${name} character record.`}
       >
         <div className="grid grid-cols-[3.5rem_minmax(0,1fr)] grid-rows-3 gap-x-3 gap-y-0.5">
           <div className="relative row-span-3 flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-background/70">
@@ -499,7 +499,7 @@ function CharacterCard({
         </div>
       ) : null}
 
-<div className="aigm-character-reorder aigm-character-reorder-accessible absolute bottom-1.5 right-1.5 z-20 flex items-center gap-1 rounded-lg border border-border/80 bg-card/95 p-0.5 shadow-sm" aria-label={`Reorder ${name} in the party`}>
+<div className="aigm-character-reorder aigm-character-reorder-accessible absolute bottom-1.5 right-1.5 z-20 flex items-center gap-1 rounded-lg border border-border/80 bg-card/95 p-0.5 shadow-sm" role="group" aria-label={`Reorder ${name} in the party`}>
         <button type="button" onClick={() => onMoveUp(character.id)} disabled={!canMoveUp} className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition hover:bg-secondary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30" aria-label={`Move ${name} up in party order`} title={`Move ${name} up`}><ArrowUp className="size-3.5" aria-hidden="true" /></button>
         <button type="button" onClick={() => onMoveDown(character.id)} disabled={!canMoveDown} className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition hover:bg-secondary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30" aria-label={`Move ${name} down in party order`} title={`Move ${name} down`}><ArrowDown className="size-3.5" aria-hidden="true" /></button>
       </div>
@@ -925,12 +925,12 @@ function CharacterSheetOverlay({
                   <button type="button" onClick={() => onLevelUp(character.id)} disabled={!canLevelUp} title={canLevelUp ? 'This character has earned a level.' : 'The AIGM will make Level Up available when this character earns a level.'} className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-3 text-xs font-bold text-primary disabled:cursor-not-allowed disabled:opacity-45">
                     <Sparkles className="size-4" aria-hidden="true" />Level Up
                   </button>
-                  <button type="button" onClick={() => setShowSmartLevelingHelp((open) => !open)} aria-expanded={showSmartLevelingHelp} className="character-smart-level-button inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/45 bg-primary/10 px-3 text-xs font-bold text-primary transition hover:bg-primary/15">
+                  <button type="button" onClick={() => setShowSmartLevelingHelp((open) => !open)} aria-expanded={showSmartLevelingHelp} aria-controls="character-smart-level-help" className="character-smart-level-button inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/45 bg-primary/10 px-3 text-xs font-bold text-primary transition hover:bg-primary/15">
                     <HelpCircle className="size-4" aria-hidden="true" />Smart way to level
                   </button>
                 </div>
                 {showSmartLevelingHelp && (
-                  <div className="mt-3 max-w-2xl rounded-2xl border border-primary/35 bg-background/90 p-4 text-sm leading-relaxed shadow-sm" role="dialog" aria-label="Smart way to level your character">
+                  <div id="character-smart-level-help" className="mt-3 max-w-2xl rounded-2xl border border-primary/35 bg-background/90 p-4 text-sm leading-relaxed shadow-sm" role="region" aria-label="Smart way to level your character">
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="font-display text-lg font-bold text-foreground">Smart way to level your character</p>
@@ -1293,11 +1293,26 @@ export function AigmGameplayShell() {
   const conversationRef = useRef<HTMLDivElement | null>(null)
   const endRef = useRef<HTMLDivElement | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+  const toolsPanelRef = useRef<HTMLElement | null>(null)
+  const gameplayPanelRef = useRef<HTMLElement | null>(null)
+  const charactersPanelRef = useRef<HTMLElement | null>(null)
+  const mobilePanelFocusReadyRef = useRef(false)
   const voiceControlsRef = useRef<AigmVoiceControlsHandle | null>(null)
   const userScrolledAwayRef = useRef(false)
   const initiallyPositionedAdventureRef = useRef<string | null>(null)
   const queuedVoiceTurnRef = useRef<string | null>(null)
   const draftTurnBillingIdRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (!mobilePanelFocusReadyRef.current) {
+      mobilePanelFocusReadyRef.current = true
+      return
+    }
+    if (!window.matchMedia('(max-width: 1023px)').matches) return
+    const target = mobilePanel === 'tools' ? toolsPanelRef.current : mobilePanel === 'characters' ? charactersPanelRef.current : gameplayPanelRef.current
+    const frame = window.requestAnimationFrame(() => target?.focus())
+    return () => window.cancelAnimationFrame(frame)
+  }, [mobilePanel])
 
   useEffect(() => {
     let cancelled = false
@@ -2124,7 +2139,7 @@ export function AigmGameplayShell() {
   if (hydratingAdventure) {
     return (
       <main id="main-content" tabIndex={-1} className="medieval-page medieval-page--play flex min-h-screen items-center justify-center px-5 text-foreground">
-        <div className="max-w-xl rounded-3xl border border-primary/30 bg-primary/10 p-8 text-center">
+        <div className="max-w-xl rounded-3xl border border-primary/30 bg-primary/10 p-8 text-center" role="status" aria-live="polite">
           <LoaderCircle className="mx-auto size-10 animate-spin text-primary" aria-hidden="true" />
           <h1 className="mt-4 font-display text-3xl font-bold">Opening your adventure…</h1>
           <p className="mt-3 text-muted-foreground">Restoring the campaign saved in this browser.</p>
@@ -2148,15 +2163,16 @@ export function AigmGameplayShell() {
 
   return (
     <main id="main-content" tabIndex={-1} className="medieval-page medieval-page--play aigm-gameplay-main h-[100dvh] overflow-hidden p-3 pb-[calc(5.75rem+env(safe-area-inset-bottom))] text-foreground sm:p-4 sm:pb-[calc(5.75rem+env(safe-area-inset-bottom))] lg:pb-4">
+      <h1 className="sr-only">Play: {partyState.adventure_name}</h1>
       <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{screenReaderAnnouncement}</div>
       <div className="aigm-gameplay-grid mx-auto grid h-full max-w-[1700px] grid-cols-1 gap-3 lg:grid-cols-[minmax(260px,0.78fr)_minmax(0,2.4fr)_minmax(250px,0.86fr)] lg:gap-4">
-        <aside className={`${mobilePanel === 'tools' ? 'flex' : 'hidden'} aigm-tools-panel order-1 min-h-0 min-w-0 flex-col gap-3 overflow-y-auto rounded-2xl border border-border bg-card p-4 lg:order-1 lg:flex`} aria-label="Dice and initiative controls">
+        <aside ref={toolsPanelRef} tabIndex={-1} className={`${mobilePanel === 'tools' ? 'flex' : 'hidden'} aigm-tools-panel order-1 min-h-0 min-w-0 flex-col gap-3 overflow-y-auto rounded-2xl border border-border bg-card p-4 lg:order-1 lg:flex`} aria-label="Dice and initiative controls">
           <button type="button" onClick={() => setMobilePanel('gameplay')} className="mb-1 inline-flex min-h-10 items-center justify-center rounded-xl border border-primary/45 bg-primary/10 px-4 text-sm font-bold text-primary lg:hidden">Back to gameplay</button>
           <section>
             <div className="aigm-dice-heading flex items-center gap-2">
               <Dices className="size-5 shrink-0 text-primary" aria-hidden="true" /><h2 className="font-display text-xl font-bold leading-tight">Roll Your Dice Here</h2>
             </div>
-            <div className="aigm-dice-mode-toggle mt-1 grid w-full grid-cols-2 rounded-xl p-1" aria-label="Dice mode">
+            <div className="aigm-dice-mode-toggle mt-1 grid w-full grid-cols-2 rounded-xl p-1" role="group" aria-label="Dice mode">
               <button type="button" onClick={() => setDiceMode('purist')} aria-pressed={gameplay.dice_mode === 'purist'} className={`aigm-dice-mode-button inline-flex min-w-0 items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold whitespace-nowrap ${gameplay.dice_mode === 'purist' ? 'aigm-dice-mode-button--active' : ''}`}><LockKeyhole className="size-3.5 shrink-0" aria-hidden="true" />Purist</button>
               <button type="button" onClick={() => setDiceMode('cheat')} aria-pressed={gameplay.dice_mode === 'cheat'} className={`aigm-dice-mode-button inline-flex min-w-0 items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold whitespace-nowrap ${gameplay.dice_mode === 'cheat' ? 'aigm-dice-mode-button--active' : ''}`}><UnlockKeyhole className="size-3.5 shrink-0" aria-hidden="true" /><span className="text-center leading-tight">Story<br />first</span></button>
             </div>
@@ -2166,12 +2182,12 @@ export function AigmGameplayShell() {
               <input id="dice-quantity" type="number" min={1} max={MAX_DICE_QUANTITY} value={diceQuantity} disabled={gameplay.dice_mode === 'purist' && Boolean(lastRoll)} onChange={(event) => setDiceQuantity(Math.max(1, Math.min(MAX_DICE_QUANTITY, Number(event.target.value) || 1)))} className="w-full bg-transparent px-3 py-2 text-center text-lg font-bold outline-none disabled:opacity-50" />
               <button type="button" onClick={() => setDiceQuantity((value) => Math.min(MAX_DICE_QUANTITY, value + 1))} disabled={gameplay.dice_mode === 'purist' && Boolean(lastRoll)} className="aigm-dice-stepper flex min-h-11 items-center justify-center border-l border-border text-primary transition disabled:opacity-40" aria-label="Use one more die"><Plus className="size-4" aria-hidden="true" /></button>
             </div>
-            <p className="mt-2 text-sm font-semibold text-foreground">Of which kind?</p>
-            <div className="mt-3 flex flex-wrap justify-center gap-2">
+            <p id="dice-kind-label" className="mt-2 text-sm font-semibold text-foreground">Of which kind?</p>
+            <div className="mt-3 flex flex-wrap justify-center gap-2" role="group" aria-labelledby="dice-kind-label">
               {DICE.map((sides) => <button key={sides} type="button" onClick={() => rollDice(sides)} disabled={sending || (gameplay.dice_mode === 'purist' && Boolean(lastRoll))} className="aigm-die-button min-h-11 w-[calc(33.333%-0.4rem)] whitespace-nowrap rounded-xl border px-2 py-2 text-base font-bold disabled:cursor-not-allowed disabled:opacity-40">d{sides}</button>)}
             </div>
             {lastRoll && (
-              <div className="aigm-roll-result mt-3 rounded-xl border p-3 text-sm">
+              <div className="aigm-roll-result mt-3 rounded-xl border p-3 text-sm" role="status" aria-live="polite">
                 <p className="font-semibold text-primary">{lastRoll}</p>
                 <p className="mt-1 text-xs text-muted-foreground">Send fate to the AIGM now, or include it with your next message.</p>
                 <button type="button" onClick={sendLatestRoll} disabled={sending || gameplay.messages.length === 0} className="aigm-send-roll mt-3 inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg px-3 text-xs font-bold disabled:opacity-45"><Send className="size-3.5" aria-hidden="true" />Send this roll</button>
@@ -2182,14 +2198,14 @@ export function AigmGameplayShell() {
 
           <section className="border-t border-border pt-4">
             <div className="grid gap-2">
-              <button type="button" onClick={() => setInitiativeOpen((open) => !open)} className="aigm-initiative-toggle flex min-h-11 min-w-0 w-full items-center justify-between gap-3 rounded-xl border px-3 text-left" aria-expanded={initiativeOpen}>
+              <button type="button" onClick={() => setInitiativeOpen((open) => !open)} className="aigm-initiative-toggle flex min-h-11 min-w-0 w-full items-center justify-between gap-3 rounded-xl border px-3 text-left" aria-expanded={initiativeOpen} aria-controls="aigm-initiative-panel">
                 <span className="min-w-0"><span className="block font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-primary">Turn order</span><span className="block truncate font-display text-lg font-bold">Initiative</span></span>
                 <ChevronDown className={`size-5 shrink-0 transition-transform ${initiativeOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
               </button>
               <button type="button" onClick={rollPartyInitiative} disabled={readyCharacters.length === 0 || sending} className="aigm-roll-initiative inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl px-3 text-sm font-bold disabled:opacity-40"><Swords className="size-4" aria-hidden="true" />Roll Party Initiative</button>
             </div>
             {initiativeOpen && (
-              <div className="mt-3">
+              <div id="aigm-initiative-panel" className="mt-3" role="region" aria-label="Initiative order">
                 {gameplay.combat_active && <span className="mb-2 inline-flex rounded-full bg-primary/15 px-2 py-1 text-[10px] font-bold text-primary">Combat order active</span>}
                 <div className="space-y-2">
                   {gameplay.initiative.length > 0 ? gameplay.initiative.map((entry, index) => (
@@ -2211,7 +2227,7 @@ export function AigmGameplayShell() {
           </section>
         </aside>
 
-        <section className={`${mobilePanel === 'gameplay' ? 'flex' : 'hidden'} aigm-gameplay-conversation relative order-1 min-h-0 min-w-0 flex-col overflow-hidden rounded-3xl border border-border bg-card lg:order-2 lg:flex`} aria-label="AIGM conversation">
+        <section ref={gameplayPanelRef} tabIndex={-1} className={`${mobilePanel === 'gameplay' ? 'flex' : 'hidden'} aigm-gameplay-conversation relative order-1 min-h-0 min-w-0 flex-col overflow-hidden rounded-3xl border border-border bg-card lg:order-2 lg:flex`} aria-label="AIGM conversation">
           <div className="aigm-gameplay-topbar border-b border-border bg-secondary/45 px-4 py-3 sm:px-5">
             <div className="aigm-gameplay-summary min-w-0">
               <span className="aigm-gameplay-summary-icon aigm-topbar-nameplate flex shrink-0 items-center justify-center bg-primary text-primary-foreground"><Sparkles className="size-5" aria-hidden="true" /></span>
@@ -2290,7 +2306,7 @@ export function AigmGameplayShell() {
             <div className="mx-auto max-w-5xl">
               <label htmlFor="aigm-gameplay-message" className="sr-only">What does the party do?</label>
               <form onSubmit={submitTurn} className="aigm-composer-plaque flex items-end gap-2 rounded-2xl border p-2">
-                <textarea id="aigm-gameplay-message" ref={textareaRef} rows={2} value={message} onChange={(event) => setMessage(event.target.value)} onKeyDown={handleGameplayKeyDown} disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0} placeholder={gameplay.messages.length === 0 ? 'Begin your adventure before sending an action.' : 'What do you do? Talk to me just like you would a person.'} className="aigm-gameplay-message-input min-h-16 max-h-32 min-w-0 flex-1 resize-y bg-transparent px-3 py-2 text-sm leading-relaxed outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:text-base" />
+                <textarea id="aigm-gameplay-message" ref={textareaRef} aria-label="Your gameplay action or message" rows={2} value={message} onChange={(event) => setMessage(event.target.value)} onKeyDown={handleGameplayKeyDown} disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0} placeholder={gameplay.messages.length === 0 ? 'Begin your adventure before sending an action.' : 'What do you do? Talk to me just like you would a person.'} className="aigm-gameplay-message-input min-h-16 max-h-32 min-w-0 flex-1 resize-y bg-transparent px-3 py-2 text-sm leading-relaxed outline-none disabled:cursor-not-allowed disabled:opacity-60 sm:text-base" />
                 {voiceAvailable ? <AigmVoiceControls
                   ref={voiceControlsRef}
                   disabled={gameplay.messages.length === 0 || (!voiceGuidedPlay.enabled && sending)}
@@ -2337,7 +2353,7 @@ export function AigmGameplayShell() {
 
         </section>
 
-        <aside className={`${mobilePanel === 'characters' ? 'flex' : 'hidden'} aigm-characters-panel order-3 min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-4 lg:flex`} aria-label="Current characters">
+        <aside ref={charactersPanelRef} tabIndex={-1} className={`${mobilePanel === 'characters' ? 'flex' : 'hidden'} aigm-characters-panel order-3 min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-4 lg:flex`} aria-label="Current characters">
           <button type="button" onClick={() => setMobilePanel('gameplay')} className="mb-3 inline-flex min-h-10 items-center justify-center rounded-xl border border-primary/45 bg-primary/10 px-4 text-sm font-bold text-primary lg:hidden">Back to gameplay</button>
           <div className="aigm-characters-heading">
             <h2 className="font-display text-xl font-bold leading-tight">Characters</h2>

@@ -38,6 +38,7 @@ function UsageNote() {
       <div className="usage-note-copy">
         <p><strong>RPG Your Way sells prepaid usage, not turns.</strong> The ranges below are deliberately broad planning estimates based on real gameplay testing.</p>
         <div className="usage-estimate-table" role="table" aria-label="Estimated gameplay by Play Pack">
+          <div className="sr-only" role="row"><span role="columnheader">Play Pack</span><span role="columnheader">Usage value</span><span role="columnheader">Estimated turns</span></div>
           {estimates.map(([name, usage, turns]) => (
             <div className="usage-estimate-row" role="row" key={name}>
               <strong role="cell">{name}</strong>
@@ -161,7 +162,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                 {ownerQa ? (
                   <p className="usage-balance-copy">This account is the RPG Your Way owner QA account. Play and Script provider usage is still measured for internal cost tracking, but customer balance deductions are skipped. No Play Pack purchase is required.</p>
                 ) : walletUnavailable ? (
-                  <p className="auth-message auth-message-error">The usage balance is not available yet. Apply the shared-balance database migration, then reload this page.</p>
+                  <p className="auth-message auth-message-error" role="alert">The usage balance is not available yet. Apply the shared-balance database migration, then reload this page.</p>
                 ) : (
                   <>
                     <p className="usage-balance-copy">Your balance stays in your account until you use it. During Play, gameplay AI, talk-to-text, and AI readback use this balance; Script processing uses the same balance too.</p>
