@@ -7881,7 +7881,6 @@ html {
   }
 }
 
-
 /* RPG Your Way 1.11.8 mini-rating focus-ring hotfix.
    Keep the cream trigger face; use the house lime only as the spaced focus/open
    outline instead of flooding the whole control. */
@@ -7895,25 +7894,23 @@ html {
   outline-offset: 3px;
 }
 
-/* Multiplayer lobby: keep every section at its natural height
-   and scroll the whole right-hand panel when necessary. */
-.aigm-multiplayer-guest-shell .aigm-table-chat-panel {
-  height: calc(100dvh - 3rem) !important;
-  max-height: calc(100dvh - 3rem) !important;
-  min-height: 0 !important;
-  overflow-y: scroll !important;
+/* Multiplayer Table Setup:
+   keep the accordion header visible and scroll its contents when needed. */
+.aigm-multiplayer-lobby-details[open] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden !important;
+}
+
+.aigm-multiplayer-lobby-details[open] > summary {
+  flex: 0 0 auto;
+}
+
+.aigm-multiplayer-lobby-details[open] > .aigm-multiplayer-lobby-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
-}
-
-.aigm-multiplayer-guest-shell .aigm-table-chat-heading,
-.aigm-multiplayer-guest-shell .aigm-multiplayer-lobby-details,
-.aigm-multiplayer-guest-shell .aigm-table-chat-error,
-.aigm-multiplayer-guest-shell .aigm-table-chat-composer {
-  flex: 0 0 auto !important;
-}
-
-.aigm-multiplayer-guest-shell .aigm-table-chat-log {
-  flex: 0 0 14rem !important;
-  min-height: 14rem;
 }
