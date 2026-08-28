@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.11.5')
-assert.equal(pkg.rpgywVersion, '1.11.5')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.5'/)
+assert.equal(pkg.version, '1.11.6')
+assert.equal(pkg.rpgywVersion, '1.11.6')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.6'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -59,6 +59,7 @@ for (const file of [
   'README-1.11.2.md',
   'README-1.11.4.md',
   'README-1.11.5.md',
+  'README-1.11.6.md',
   'lib/multiplayer/types.ts',
   'lib/multiplayer/errors.ts',
   'lib/multiplayer/server.ts',
@@ -673,7 +674,7 @@ const css180 = read('app/globals.css')
 assert.match(start180, /I need help with all of this/)
 assert.match(start180, /My question wasn&apos;t above\. I still need help\./)
 assert.match(start180, /25 free questions remaining in this onboarding session/)
-assert.match(start180, /Choose the game rules/)
+assert.match(start180, /Choose the game system/)
 assert.match(start180, /The Uncharted Realms/)
 assert.match(start180, /D&D 5\.5e/)
 assert.match(start180, /<span>2<\/span>Gather Your Party/)
@@ -770,7 +771,7 @@ assert.match(start188, /useState<1 \| 2 \| 3 \| 4>\(1\)/)
 assert.match(start188, /activeStep === 1/)
 assert.match(start188, /\(default\)/)
 assert.match(start188, /or choose a different one/)
-assert.match(start188, /Use these game rules/)
+assert.match(start188, /Use this game system/)
 assert.match(start188, /<strong>Selected:<\/strong>/)
 assert.match(start188, /setActiveStep\(2\)/)
 assert.match(start188, /activeStep === 2/)
@@ -845,9 +846,9 @@ console.log('RPG Your Way 1.8.10 Start dialogue, default-readback controls, and 
 
 const css1811 = read('app/globals.css')
 assert.match(css1811, /RPG Your Way 1\.8\.11/)
-assert.match(css1811, /--rpgyw-pale-olive: #dde2b9/)
-assert.match(css1811, /--rpgyw-pale-olive-light: #edf0d4/)
-assert.match(css1811, /--rpgyw-pale-olive-deep: #c8d09b/)
+assert.match(css1811, /--rpgyw-pale-olive: #d6d1a3/)
+assert.match(css1811, /--rpgyw-pale-olive-light: #ebe6c5/)
+assert.match(css1811, /--rpgyw-pale-olive-deep: #beb77c/)
 assert.match(css1811, /--landing-mint: var\(--rpgyw-pale-olive\)/)
 assert.match(css1811, /--landing-mint-19: var\(--rpgyw-pale-olive\)/)
 assert.doesNotMatch(css1811, /#d9e2cf|#e8eddf|#dce5d3|#c7d4bc/i)
@@ -1115,3 +1116,23 @@ assert.match(release1115Css, /RPG Your Way 1\.11\.5 add-character plaque hotfix 
 assert.match(release1115Css, /\.start-add-character-header \{[\s\S]*?background: var\(--cream-bright\) !important;/)
 assert.match(release1115Css, /\.start-add-character-mode > \.start-party-step \{[\s\S]*?margin-top: \.8rem;/)
 console.log('RPG Your Way 1.11.5 add-character plaque and news hotfix checks passed.')
+
+
+const release1116Start = read('components/start/StartOnboarding.tsx')
+const release1116Css = read('app/globals.css')
+assert.match(release1116Start, /Choose the game system/)
+assert.match(release1116Start, /Use this game system/)
+assert.match(release1116Start, /accordion-plus start-rules-accordion-plus/)
+assert.match(release1116Start, /Choose these ready-to-play characters/)
+assert.match(release1116Start, /These default characters are built for the D&amp;D 5\.5e system\./)
+assert.match(release1116Start, /Paste your character&apos;s information, then add characters one at a time/)
+assert.match(release1116Start, /Backstory reveal/)
+assert.doesNotMatch(release1116Start, /Backstory influence/)
+assert.match(release1116Start, /activeStep === 4 && questionsDone/)
+assert.doesNotMatch(release1116Start, /activeStep === 4 && namesReady && questionsDone/)
+assert.match(release1116Css, /RPG Your Way 1\.11\.6 Start-language, responsive secondary-panel scrolling/)
+assert.match(release1116Css, /aigm-table-chat-panel\.aigm-mp-secondary--active,[\s\S]*aigm-tools-panel\.aigm-mp-secondary--active[\s\S]*overflow-y: auto !important/)
+assert.match(release1116Css, /start-rules-current--display\[aria-expanded="true"\][\s\S]*rotate\(45deg\)/)
+assert.match(release1116Css, /start-mini-ratings select:hover,[\s\S]*color: var\(--lime\) !important/)
+assert.match(release1116Css, /--rpgyw-pale-olive: #d6d1a3/)
+console.log('RPG Your Way 1.11.6 Start, scrolling, accordion, and olive-palette QA checks passed.')

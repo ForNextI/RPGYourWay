@@ -1,9 +1,9 @@
 # RPG Your Way
 
-**Build 1.11.5 · Add-character plaque and news hotfix**
+**Build 1.11.6 · Start and short-window UI QA**
 
-Build 1.11.5 makes the existing-campaign Add Character header a fully opaque cream plaque, adds breathing room above the overlapping **Add to Your Party** nameplate, and updates the landing-page multiplayer news headline to call out chat.
+Build 1.11.6 improves Start copy and accordion affordances, keeps the Onward control visible while disabled until campaign and GM names are complete, restores independent Chat and Dice scrolling in short multiplayer windows, and shifts the sitewide pale-green furniture palette toward a warmer olive.
 
-Current release: **1.11.5**.
+Current release: **1.11.6**.
 
-See `README-1.11.5.md` for release details, `ACCESSIBILITY.md` for the accessibility engineering standard, and earlier versioned README files for prior release notes.
+See `README-1.11.6.md` for release details, `ACCESSIBILITY.md` for the accessibility engineering standard, and earlier versioned README files for prior release notes.

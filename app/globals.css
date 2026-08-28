@@ -2017,9 +2017,9 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
    Flat geometry, shallow depth: no ornamental sci-fi chrome. */
 
 :root {
-  --landing-pale-olive: #dde2b9;
-  --landing-pale-olive-light: #edf0d4;
-  --landing-pale-olive-deep: #c8d09b;
+  --landing-pale-olive: #d6d1a3;
+  --landing-pale-olive-light: #ebe6c5;
+  --landing-pale-olive-deep: #beb77c;
   /* Legacy variable names remain as aliases so older component rules inherit the new palette. */
   --landing-mint: var(--landing-pale-olive);
   --landing-mint-light: var(--landing-pale-olive-light);
@@ -6242,9 +6242,9 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
    the same physical vocabulary everywhere: inner contrast line -> brass rim -> depth. */
 
 :root {
-  --rpgyw-pale-olive: #dde2b9;
-  --rpgyw-pale-olive-light: #edf0d4;
-  --rpgyw-pale-olive-deep: #c8d09b;
+  --rpgyw-pale-olive: #d6d1a3;
+  --rpgyw-pale-olive-light: #ebe6c5;
+  --rpgyw-pale-olive-deep: #beb77c;
   --rpgyw-control-inner-light: color-mix(in srgb, var(--cream-bright) 88%, white);
   --rpgyw-control-inner-dark: var(--forest-deep);
   --rpgyw-rim-spread: 2px;
@@ -7627,4 +7627,70 @@ html {
 }
 .start-add-character-mode > .start-party-step {
   margin-top: .8rem;
+}
+
+
+/* RPG Your Way 1.11.6 Start-language, responsive secondary-panel scrolling,
+   accordion affordance, and warmer olive palette QA. */
+
+/* The ruleset selector is an accordion, so give it the same rotating + / ×
+   affordance used elsewhere rather than making the text itself carry that job. */
+.start-rules-current--display {
+  position: relative;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  justify-content: stretch;
+  column-gap: .7rem;
+  padding-right: .75rem;
+}
+.start-rules-current-copy {
+  display: grid;
+  place-content: center;
+  gap: .05rem;
+  min-width: 0;
+}
+.start-rules-accordion-plus {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  border-width: 1px;
+}
+.start-rules-accordion-plus::before { width: 12px; }
+.start-rules-accordion-plus::after { height: 12px; }
+.start-rules-current--display[aria-expanded="true"] .start-rules-accordion-plus {
+  transform: rotate(45deg);
+}
+
+/* Native select menus are partly OS-controlled, but the Start controls we own
+   should keep the house dark-forest face and turn the number lime on hover/focus. */
+.start-mini-ratings select:hover,
+.start-mini-ratings select:focus,
+.start-mini-ratings select:focus-visible {
+  background: var(--forest-deep) !important;
+  color: var(--lime) !important;
+  border-color: var(--rpgyw-brass-highlight) !important;
+}
+.start-mini-ratings select option:checked {
+  background: var(--forest-deep);
+  color: var(--lime);
+}
+
+/* On shortened browser windows the active multiplayer secondary view needs its
+   own vertical scroll instead of relying on the document scrollbar, which Play
+   intentionally suppresses. Chat and Dice therefore remain fully reachable at
+   ordinary laptop zoom and on short mobile viewports. */
+.play-page-frame .aigm-gameplay-grid--multiplayer > .aigm-table-chat-panel.aigm-mp-secondary--active,
+.play-page-frame .aigm-gameplay-grid--multiplayer > .aigm-tools-panel.aigm-mp-secondary--active {
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+@media (max-width: 860px) {
+  .aigm-table-chat-panel.aigm-table-chat-panel--visible,
+  .aigm-tools-panel {
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
 }
