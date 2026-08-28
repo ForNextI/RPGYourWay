@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.8.12')
-assert.equal(pkg.rpgywVersion, '1.8.12')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.8\.12'/)
+assert.equal(pkg.version, '1.9.0')
+assert.equal(pkg.rpgywVersion, '1.9.0')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.9\.0'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -48,6 +48,7 @@ for (const file of [
   'supabase/migrations/20260828002500_play_turn_voice_billing.sql',
   'scripts/test-audio-cost.mts',
   'README-1.8.12.md',
+  'README-1.9.0.md',
   'postcss.config.mjs',
   'data/settings/eberron.json',
   'data/rules/corpora/dnd-5.5e-srd-5.2.1.json',
@@ -91,7 +92,7 @@ assert.match(footer, /fill="#FF5E5B"/)
 assert.match(footer, /kofi-cup/)
 
 const home = read('app/page.tsx')
-assert.match(home, /href="\/start">Start New Campaign<\/Link>/)
+assert.match(home, /href="\/start">Start A New Campaign<\/Link>/)
 assert.match(home, /<LandingCampaignPanel \/>/)
 assert.match(read('app/start/page.tsx'), /<RpgywStartEntry \/>/)
 
@@ -332,7 +333,7 @@ assert.match(landing1714, /Tabletop gaming is best in person\. No question\./)
 assert.match(landing1714, /Why I created RPG Your Way\./)
 assert.match(landing1714, /Who benefits from this site\?/)
 assert.match(landing1714, /<LandingCampaignPanel \/>/)
-assert.match(landing1714, />Start New Campaign<\/Link>/)
+assert.match(landing1714, />Start A New Campaign<\/Link>/)
 
 const campaignPanel1714 = read('components/LandingCampaignPanel.tsx')
 assert.match(campaignPanel1714, /Return to Adventure/)
@@ -354,7 +355,7 @@ assert.match(landingCampaignCurrent, /Return to Adventure/)
 
 
 const landing1717 = read('app/page.tsx')
-assert.match(landing1717, />Start New Campaign<\/Link>/)
+assert.match(landing1717, />Start A New Campaign<\/Link>/)
 assert.match(landing1717, /<WhyCreatedAccordion \/>/)
 assert.match(landing1717, /<AudienceAccordion \/>/)
 
@@ -375,7 +376,7 @@ console.log('RPG Your Way 1.7.17 landing console and repository cleanup checks p
 const landing1718 = read('app/page.tsx')
 assert.match(landing1718, /landing-reason-created/)
 assert.match(landing1718, /landing-reason-audience/)
-assert.match(landing1718, />Start New Campaign<\/Link>/)
+assert.match(landing1718, />Start A New Campaign<\/Link>/)
 assert.match(landing1718, /Why I created RPG Your Way\./)
 assert.match(landing1718, /Who benefits from this site\?/)
 
@@ -863,5 +864,14 @@ assert.match(migration1812, /drop policy if exists "usage_ledger_select_own"/)
 assert.match(migration1812, /create or replace function public\.rpgyw_usage_summary\(\)/)
 assert.match(migration1812, /create or replace function public\.rpgyw_purchase_history/)
 assert.match(migration1812, /grant execute on function public\.rpgyw_usage_summary\(\) to authenticated/)
-console.log('RPG Your Way 1.8.12 Play Pack repricing, whole-turn voice billing, aggregate account reporting, and low-balance checks passed.')
+const css190 = read('app/globals.css')
+assert.match(css190, /RPG Your Way 1\.9\.0 Play readability pass/)
+assert.match(css190, /\.aigm-session-tools-toggle/)
+assert.match(css190, /\.aigm-latest-turn/)
+assert.match(css190, /\.aigm-character-card/)
+assert.match(home, /href="\/start">Start A New Campaign<\/Link>/)
+assert.match(gameplayShell, /aigm-session-tools-toggle/)
+assert.match(gameplayShell, /aigm-latest-turn/)
+
+console.log('RPG Your Way 1.9.0 Play readability and landing-copy checks passed.')
 

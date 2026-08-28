@@ -2282,7 +2282,7 @@ export function AigmGameplayShell() {
             </div>
           </div>
 
-          {showJumpButton && <button type="button" onClick={() => { userScrolledAwayRef.current = false; setShowJumpButton(false); scrollToLatest(true) }} className="absolute bottom-28 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-xs font-bold shadow-xl"><ArrowDown className="size-4" aria-hidden="true" />Latest turn</button>}
+          {showJumpButton && <button type="button" onClick={() => { userScrolledAwayRef.current = false; setShowJumpButton(false); scrollToLatest(true) }} className="aigm-latest-turn absolute bottom-28 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-xs font-bold shadow-xl"><ArrowDown className="size-4" aria-hidden="true" />Latest turn</button>}
 
           <div className="aigm-gameplay-composer border-t border-border bg-background/80 px-3 py-2.5 sm:px-4 sm:py-3">
             {billingNotice && <div className="mx-auto mb-2.5 flex max-w-4xl items-center justify-between gap-3 rounded-xl border border-primary/45 bg-primary/10 px-4 py-3 text-sm" role="status"><p><strong>{billingNotice}</strong></p>{billingActionUrl ? <Link href={billingActionUrl} className="shrink-0 font-bold text-primary underline underline-offset-2">Add usage</Link> : null}</div>}
@@ -2314,9 +2314,9 @@ export function AigmGameplayShell() {
                   onClick={() => setSessionToolsOpen((open) => !open)}
                   aria-expanded={sessionToolsOpen}
                   aria-controls="aigm-session-tools-panel"
-                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-border bg-secondary/55 px-3 py-1.5 text-xs font-bold text-foreground transition hover:border-primary/55 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="aigm-session-tools-toggle inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-border px-3 py-1.5 font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-primary">Session tools</span>
+                  <span className="font-display font-bold">Session tools</span>
                   <ChevronDown className={`size-4 shrink-0 transition-transform ${sessionToolsOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                 </button>
                 <button type="button" onClick={() => setExportGameHelpDialogOpen(true)} className="aigm-session-help inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><FileDown className="size-3.5 shrink-0" aria-hidden="true" />When and how to export</button>

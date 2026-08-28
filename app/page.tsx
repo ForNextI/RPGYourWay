@@ -217,7 +217,7 @@ export default function HomePage() {
         <section className="landing-return-section" aria-label="Start or return to a campaign">
           <div className="shell landing-return-grid">
             <div className="landing-player-stack">
-              <Link className="landing-new-player button button-secondary" href="/start">Start New Campaign</Link>
+              <Link className="landing-new-player button button-secondary" href="/start">Start A New Campaign</Link>
               <LandingCampaignPanel />
             </div>
 

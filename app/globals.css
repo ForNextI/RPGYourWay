@@ -6696,3 +6696,65 @@ body a[class*="rounded"][class*="bg-"]:focus-visible {
 @media (max-width: 440px) {
   .account-main .usage-summary-grid { grid-template-columns: 1fr; }
 }
+
+/* RPG Your Way 1.9.0 Play readability pass.
+   Give the narrow rails a little breathing room and reduce the amount of
+   pale olive competing for attention in the gameplay workspace. */
+
+/* Restore a small visual pause after each dark rail title plaque. */
+.medieval-page--play .aigm-dice-mode-toggle,
+.medieval-page--play .aigm-character-list {
+  margin-top: .5rem !important;
+}
+
+/* The campaign eyebrow uses the same warm light furniture as the two help
+   buttons below the composer instead of another pale-olive surface. */
+.medieval-page--play .aigm-gameplay-topbar {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--cream-bright) 92%, white),
+      var(--landing-pale)
+    ) !important;
+}
+
+/* Character tiles are intentionally the lightest large surfaces in the rail. */
+.medieval-page--play .aigm-character-card {
+  background: var(--cream-bright) !important;
+}
+
+/* Session tools is a real dark-green control, with readable serif labeling. */
+.medieval-page--play .aigm-session-tools-toggle {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--forest-deep) !important;
+  background-image: none !important;
+  color: var(--cream-bright) !important;
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: .9rem;
+  box-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-edge),
+    inset 0 1px 0 rgb(255 255 255 / .20),
+    inset 0 -2px 0 rgb(0 0 0 / .13),
+    0 3px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-shadow),
+    0 8px 13px rgb(29 38 29 / .15) !important;
+}
+.medieval-page--play .aigm-session-tools-toggle > span,
+.medieval-page--play .aigm-session-tools-toggle > svg {
+  color: var(--cream-bright) !important;
+}
+.medieval-page--play .aigm-session-tools-toggle > span {
+  font-size: .9rem;
+  letter-spacing: .01em;
+  text-transform: none;
+}
+
+/* Latest turn belongs to the warm light family, not the olive one. */
+.medieval-page--play .aigm-latest-turn {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--cream-bright) 92%, white),
+      var(--landing-pale)
+    ) !important;
+  color: var(--forest-deep) !important;
+}
