@@ -59,7 +59,7 @@ export function RpgywStartEntry({ addCharacterMode = false, multiplayerCode = ''
         return
       }
       if (imported.stage !== 'complete') {
-        setError('That exported file has not reached Play yet. Finish its setup in WardensPC before importing it here, or wait for the rebuilt RPG Your Way onboarding flow.')
+        setError('That exported file predates a playable campaign state. RPG Your Way can import WardensPC exports that had already reached Play; use Start to create a new campaign from character information instead.')
         return
       }
 

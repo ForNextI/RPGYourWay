@@ -376,11 +376,11 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 .preview-row span { margin-top: .2rem; color: #d9ddc7; font-size: .76rem; }
 
 .landing-accordion {
-  overflow: hidden;
-  border: 2px solid var(--forest);
-  border-radius: 20px;
-  background: rgb(251 242 230 / .96);
-  box-shadow: var(--shadow);
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 .landing-accordion-summary,
 .audience-item > summary { cursor: pointer; list-style: none; user-select: none; }
@@ -426,8 +426,7 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 .accordion-plus::after { width: 2px; height: 16px; }
 .landing-accordion[open] > .landing-accordion-summary .accordion-plus,
 .audience-item[open] > summary .accordion-plus { transform: rotate(45deg); }
-.landing-accordion[open] > .landing-accordion-summary { border-bottom: 1px solid var(--border); }
-.landing-accordion-body { padding: clamp(1rem, 3vw, 1.45rem); background: rgb(244 228 207 / .7); }
+.landing-accordion-body { margin-top: .65rem; border-radius: 14px; padding: clamp(1rem, 3vw, 1.45rem); background: rgb(244 228 207 / .86); }
 .unique-body p { margin: 0; color: var(--muted); }
 .audience-list { display: grid; gap: .65rem; }
 .audience-item {
@@ -2073,50 +2072,6 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
   color: inherit;
 }
 
-/* The two purpose accordions must occupy the same two-column geometry as
-   the console/logo row, with both controls visibly present. */
-.landing-reasons-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  align-items: stretch;
-}
-.landing-reason-card {
-  position: static !important;
-  display: block !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  margin: 0 !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: none !important;
-}
-.landing-reason-card > * {
-  position: static !important;
-  display: block !important;
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: none !important;
-}
-.landing-reason-card details {
-  display: block !important;
-  width: 100% !important;
-}
-.landing-reason-card summary {
-  width: 100% !important;
-  min-height: 64px;
-  border: 1px solid var(--landing-brass);
-  border-radius: 17px;
-  background: var(--cream-bright);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / .86),
-    inset 0 -2px 0 color-mix(in srgb, var(--landing-brass-light) 42%, transparent),
-    0 3px 0 var(--landing-brass),
-    0 8px 15px rgb(54 58 42 / .09);
-}
-
 /* Establish the dimensional-flat treatment on the landing cards below. */
 .feature-card {
   border-color: var(--landing-brass);
@@ -2470,25 +2425,6 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
   display: block !important;
   width: 100% !important;
 }
-.landing-reason-card summary,
-.landing-reason-card button {
-  width: 100% !important;
-  min-height: 64px;
-  border: 1px solid var(--landing-brass-mid) !important;
-  border-radius: 17px !important;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--landing-pale) 88%, white),
-      var(--landing-pale)
-    ) !important;
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / .86),
-    inset 0 -2px 0 rgb(112 84 43 / .08),
-    0 3px 0 var(--landing-brass-dark),
-    0 8px 14px rgb(43 47 37 / .12) !important;
-}
-
 /* Console and logo are equal visual modules on desktop. */
 .landing-return-grid {
   align-items: stretch;
@@ -2821,21 +2757,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
 
 /* The two big accordions are the pale siblings of the forest controls.
    Same brass rim, same physical depth, different face color. */
-.landing-reason-card summary,
-.landing-reason-card button {
-  border: 2px solid var(--rpgyw-brass-edge) !important;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 72%, white),
-    inset 0 1px 0 rgb(255 255 255 / .82),
-    inset 0 -2px 0 rgb(112 84 43 / .08),
-    0 3px 0 var(--rpgyw-brass-shadow),
-    0 8px 14px rgb(43 47 37 / .12) !important;
-}
-.landing-reason-card summary:hover,
-.landing-reason-card summary:focus-visible {
-  color: var(--rpgyw-control-hover) !important;
-}
-
 /* The + control is a real miniature button now, not a flat symbol. */
 .landing-reason-card .accordion-plus,
 .audience-item .accordion-plus {
@@ -3003,19 +2924,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     inset 0 1px 0 rgb(255 255 255 / .12),
     0 2px 0 var(--landing-brass-dark),
     0 5px 9px rgb(31 40 31 / .14) !important;
-}
-
-/* Explicitly preserve the lime-text hover on the two major landing questions.
-   Their pale dimensional face stays pale. */
-.landing-reason-card summary:hover .landing-accordion-prompt,
-.landing-reason-card summary:focus-visible .landing-accordion-prompt,
-.landing-reason-card summary:hover .audience-prompt,
-.landing-reason-card summary:focus-visible .audience-prompt {
-  color: var(--lime) !important;
-}
-.landing-reason-card summary:hover .accordion-plus,
-.landing-reason-card summary:focus-visible .accordion-plus {
-  color: var(--lime) !important;
 }
 
 /* Keep the header compact on narrower screens despite the added trim. */
@@ -4746,16 +4654,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
 }
 .start-choice:hover span,
 .start-choice:focus-visible span { color: var(--lime); }
-.start-choice--selected {
-  border-color: var(--rpgyw-brass-highlight);
-  background: var(--forest-deep);
-  color: var(--cream-bright);
-}
-.start-choice--selected span { color: var(--cream-bright); }
-.start-choice--selected:hover,
-.start-choice--selected:focus-visible,
-.start-choice--selected:hover span,
-.start-choice--selected:focus-visible span { color: var(--lime); }
 .start-fixed-setting {
   display: inline-flex;
   align-items: center;
@@ -5208,11 +5106,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   background: var(--landing-olive-19-deep);
   color: var(--lime);
 }
-.start-rules-panel .start-choice--selected {
-  background: var(--forest-deep);
-  color: var(--cream-bright);
-}
-.start-rules-panel .start-choice--selected span { color: var(--cream-bright); }
 .start-rules-panel .start-fixed-setting {
   margin-top: .75rem;
   background: var(--forest-deep);
@@ -5664,7 +5557,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep));
   color: var(--lime) !important;
 }
-.start-choice--selected,
 .start-rating-scale button.is-selected {
   background: var(--landing-olive-19-deep);
   color: var(--cream-bright);
@@ -5672,7 +5564,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     inset 0 0 0 2px color-mix(in srgb, var(--rpgyw-brass-highlight) 74%, white),
     0 2px 0 var(--rpgyw-brass-shadow);
 }
-.start-choice--selected span { color: var(--cream-bright); }
 
 /* RPG Your Way 1.8.6 — Start QA IV: open map field, stronger step furniture, dimensional question controls, and naming bezels. */
 
@@ -5917,17 +5808,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
   .start-rating-scale { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .start-mini-ratings label { min-height: 54px; }
 }
-
-/* Current selections are forest/cream; unselected choices remain olive/cream. */
-.start-choice--selected {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--forest-deep) 94%, white), var(--forest-deep));
-  color: var(--cream-bright);
-  box-shadow:
-    inset 0 0 0 2px color-mix(in srgb, var(--rpgyw-brass-highlight) 76%, white),
-    0 3px 0 var(--rpgyw-brass-shadow),
-    0 6px 10px rgb(30 38 30 / .14);
-}
-.start-choice--selected span { color: var(--cream-bright); }
 
 /* Review/change actions on completed settings remain proper tertiary buttons. */
 .start-complete-plaque button {
@@ -6327,6 +6207,21 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
     0 4px 7px rgb(29 38 29 / .11) !important;
 }
 
+/* Canonical Start choice selection. One class owns the persistent selected state;
+   hover/focus may change the words to lime, but never erase the selection face. */
+body .start-choice.start-choice--selected {
+  background: var(--forest-deep) !important;
+  background-image: none !important;
+  color: var(--cream-bright) !important;
+}
+body .start-choice.start-choice--selected :where(strong, span) {
+  color: var(--cream-bright) !important;
+}
+body .start-choice.start-choice--selected:hover :where(strong, span),
+body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
+  color: var(--lime) !important;
+}
+
 /* The header ribbon keeps its intentionally quiet navigation behavior. Its existing
    compass and fullscreen utility furniture retain their own small brass treatment. */
 .site-header .main-nav a,
@@ -6338,7 +6233,7 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
    brass rim and brass lower edge. This is the light-panel version of the same trick. */
 :where(
   .landing-notice-card,
-  .landing-reason-card,
+  .landing-accordion-body,
   .feature-card,
   .landing-campaign-summary-card,
   .shape-intro,
@@ -7895,30 +7790,4 @@ html {
   color: var(--forest-deep) !important;
   outline: 3px solid var(--lime);
   outline-offset: 3px;
-}
-/* Solo / Multiplayer campaign-mode selection.
-   The chosen mode stays forest green with white lettering. */
-button.start-choice[aria-pressed="true"] {
-  background: var(--forest-deep) !important;
-  background-image: none !important;
-  color: var(--cream-bright) !important;
-  border-color: var(--rpgyw-brass-highlight) !important;
-}
-
-button.start-choice[aria-pressed="true"] strong,
-button.start-choice[aria-pressed="true"] span {
-  color: var(--cream-bright) !important;
-}
-
-button.start-choice[aria-pressed="true"]:hover,
-button.start-choice[aria-pressed="true"]:focus-visible {
-  background: var(--forest-deep) !important;
-  color: var(--cream-bright) !important;
-}
-
-button.start-choice[aria-pressed="true"]:hover strong,
-button.start-choice[aria-pressed="true"]:hover span,
-button.start-choice[aria-pressed="true"]:focus-visible strong,
-button.start-choice[aria-pressed="true"]:focus-visible span {
-  color: var(--cream-bright) !important;
 }

@@ -122,6 +122,41 @@ async function recordProviderEvent(
   }
 }
 
+export async function recordIncludedProviderUsage(
+  account: UsageAccount,
+  input: {
+    feature: string
+    operationId?: string | null
+    sourceRef?: string | null
+    model: string
+    providerCostMicrousd: number
+    success?: boolean
+    metadata?: Record<string, unknown>
+  },
+) {
+  const feature = input.feature.trim() || 'play_included'
+  const operationId = cleanOperationId(input.operationId)
+  try {
+    const admin = createAdminClient()
+    const { error } = await admin.from('provider_usage_events').upsert({
+      user_id: account.userId,
+      surface: 'play',
+      feature,
+      source_ref: input.sourceRef?.trim() || null,
+      operation_id: operationId,
+      model: input.model,
+      provider_cost_microusd: usageMicrousd(input.providerCostMicrousd),
+      billed_microusd: 0,
+      owner_qa_exempt: account.ownerQa,
+      success: input.success !== false,
+      metadata: { included_usage: true, ...(input.metadata || {}) },
+    }, { onConflict: 'user_id,surface,feature,operation_id' })
+    if (error) console.error('Included provider usage event could not be recorded.', error)
+  } catch (error) {
+    console.error('Included provider usage event could not be recorded.', error)
+  }
+}
+
 export async function releaseUsage(
   reservation: UsageReservation | null | undefined,
   input: { model?: string; metadata?: Record<string, unknown> } = {},

@@ -458,7 +458,7 @@ function normalizedOwnerCommand(value: string) {
 }
 
 function configuredOwnerGodModePhrase() {
-  return process.env.WARDENS_GOD_MODE_PHRASE?.trim() || DEFAULT_OWNER_GOD_MODE_PHRASE
+  return process.env.RPGYW_GOD_MODE_PHRASE?.trim() || DEFAULT_OWNER_GOD_MODE_PHRASE
 }
 
 function ownerGodModePhraseMatches(value: string) {

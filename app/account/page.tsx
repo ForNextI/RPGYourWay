@@ -138,7 +138,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                     <p className="account-state-label">Connected account</p>
                     <h2 id="account-connected-heading">You&apos;re signed in.</h2>
                     <p className="account-email">{email ?? 'Authenticated RPG Your Way user'}</p>
-                    <p className="account-foundation-note">Your account keeps purchases and usage together. Play campaigns stay in this browser unless you export them.</p>
+                    <p className="account-foundation-note">Your account keeps purchases, usage, and cloud campaigns together. Signed-in campaigns can continue on another signed-in device; this browser also keeps a local cache.</p>
                   </div>
                   <form action={signOut}>
                     <button className="button button-secondary" type="submit">Sign out</button>

@@ -9,7 +9,7 @@ export default function SupportPage() {
         <div className="shell narrow-shell prose-page">
           <p className="kicker">Support</p>
           <h1 className="page-title">Help without a scavenger hunt.</h1>
-          <p>Support contact details and the paid-beta support process will be added before live payments are enabled.</p>
+          <p>For help with RPG Your Way, email <a href="mailto:brett@rpgyourway.com">brett@rpgyourway.com</a>. Include the page you were using and what happened; do not send passwords or API keys.</p>
         </div>
       </main>
     </PageShell>

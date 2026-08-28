@@ -16,7 +16,7 @@ import { aiContentSafetyPrompt, normalizeAiContentMode } from '@/lib/site/ai-con
 import { supportedSystemFor } from '@/lib/aigm/supported-systems'
 import { formatRulesReference, rulesReferenceFor } from '@/lib/aigm/rules-library'
 import { estimateTerraMaximumMicrousd, terraProviderCostMicrousd } from '@/lib/usage/play-cost'
-import { billingErrorResponse, releaseUsage, requireUsageAccount, reserveUsage, settleUsage, type UsageReservation } from '@/lib/usage/server-billing'
+import { billingErrorResponse, recordIncludedProviderUsage, releaseUsage, requireUsageAccount, reserveUsage, settleUsage, type UsageAccount, type UsageReservation } from '@/lib/usage/server-billing'
 import type {
   CampaignStartMode,
   CharacterIntakeApiError,
@@ -168,8 +168,8 @@ async function groundDetectedIssues(
   model: string,
   settings: CharacterIntakeSettings,
   result: CharacterIntakeResult,
-): Promise<CharacterIntakeResult> {
-  if (!result.detected_issues.length) return result
+): Promise<{ result: CharacterIntakeResult; providerCostMicrousd: number; providerRequestId: string | null }> {
+  if (!result.detected_issues.length) return { result, providerCostMicrousd: 0, providerRequestId: null }
 
   const system = supportedSystemFor(settings.ruleset)
   const classNames = result.character.classes.map((entry) => `${entry.name} ${entry.level}${entry.subclass ? ` ${entry.subclass}` : ''}`).join('; ')
@@ -225,25 +225,41 @@ async function groundDetectedIssues(
       signal: AbortSignal.timeout(25_000),
     })
     const verifyPayload = (await verifyResponse.json()) as OpenAIResponsePayload
+    const providerCostMicrousd = terraProviderCostMicrousd(verifyPayload.usage)
+    const providerRequestId = verifyPayload.id || verifyResponse.headers.get('x-request-id')
     if (!verifyResponse.ok) throw new Error('Rules warning verifier failed.')
     const verifyText = extractOutputText(verifyPayload)
     if (!verifyText) throw new Error('Rules warning verifier returned no output.')
     const parsed = JSON.parse(verifyText) as { keep_indexes?: number[] }
     const keep = new Set((parsed.keep_indexes ?? []).filter((index) => Number.isInteger(index) && index >= 0 && index < result.detected_issues.length))
-    return { ...result, detected_issues: result.detected_issues.filter((_issue, index) => keep.has(index)) }
+    return {
+      result: { ...result, detected_issues: result.detected_issues.filter((_issue, index) => keep.has(index)) },
+      providerCostMicrousd,
+      providerRequestId,
+    }
   } catch (error) {
     console.error('Character intake rules-warning verification failed; retaining only self-evident record issues.', { error })
     return {
-      ...result,
-      detected_issues: result.detected_issues.filter((issue) => looksLikeInternalRecordIssue(issue.category, issue.issue, issue.why_it_matters)),
+      result: {
+        ...result,
+        detected_issues: result.detected_issues.filter((issue) => looksLikeInternalRecordIssue(issue.category, issue.issue, issue.why_it_matters)),
+      },
+      providerCostMicrousd: 0,
+      providerRequestId: null,
     }
   }
 }
 
 export async function POST(request: Request) {
   const requestId = crypto.randomUUID()
-  const apiKey = process.env.OPENAI_API_KEY
+  let account: UsageAccount
+  try {
+    account = await requireUsageAccount()
+  } catch (error) {
+    return billingErrorResponse(error)
+  }
 
+  const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) {
     return jsonError(
       503,
@@ -364,7 +380,6 @@ export async function POST(request: Request) {
   let reservation: UsageReservation | null = null
   if (demandingImport) {
     try {
-      const account = await requireUsageAccount()
       reservation = await reserveUsage(account, {
         maximumMicrousd: maximumDeductionMicrousd,
         feature: 'character_import',
@@ -452,8 +467,13 @@ export async function POST(request: Request) {
       return jsonError(502, 'The AIGM returned an unreadable character intake.', requestId)
     }
 
+    let verificationCostMicrousd = 0
+    let verificationRequestId: string | null = null
     if (result.document_assessment.is_usable) {
-      result = await groundDetectedIssues(request, apiKey, model, settings, result)
+      const verification = await groundDetectedIssues(request, apiKey, model, settings, result)
+      result = verification.result
+      verificationCostMicrousd = verification.providerCostMicrousd
+      verificationRequestId = verification.providerRequestId
       result = enrichDnd55CharacterRecord(result).result
     }
 
@@ -468,15 +488,34 @@ export async function POST(request: Request) {
       return jsonError(422, kindMessage, requestId, result.document_assessment.reason)
     }
 
+    const providerCostMicrousd = terraProviderCostMicrousd(payload.usage) + verificationCostMicrousd
     let usageBilling = null
     if (reservation) {
       const billing = await settleUsage(reservation, {
         model,
-        providerCostMicrousd: terraProviderCostMicrousd(payload.usage),
-        metadata: { provider_request_id: payload.id || openAIResponse.headers.get('x-request-id'), source_file: upload.name },
+        providerCostMicrousd,
+        metadata: {
+          provider_request_id: payload.id || openAIResponse.headers.get('x-request-id'),
+          verification_request_id: verificationRequestId,
+          verification_provider_cost_microusd: verificationCostMicrousd,
+          source_file: upload.name,
+        },
       })
       reservation = null
       usageBilling = { billed_microusd: billing.billedMicrousd, balance_microusd: billing.balanceMicrousd, owner_qa_exempt: billing.ownerQaExempt, settlement_warning: billing.settlementWarning }
+    } else {
+      await recordIncludedProviderUsage(account, {
+        feature: 'character_import_included',
+        operationId: request.headers.get('x-rpgyw-operation-id') || requestId,
+        sourceRef: upload.name,
+        model,
+        providerCostMicrousd,
+        metadata: {
+          provider_request_id: payload.id || openAIResponse.headers.get('x-request-id'),
+          verification_request_id: verificationRequestId,
+          verification_provider_cost_microusd: verificationCostMicrousd,
+        },
+      })
     }
 
     const response: CharacterIntakeApiResponse & { paid_processing: boolean; usage_billing?: typeof usageBilling } = {

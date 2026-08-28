@@ -9,7 +9,7 @@ export default function PrivacyPage() {
         <div className="shell narrow-shell prose-page">
           <p className="kicker">Legal</p>
           <h1 className="page-title">Privacy</h1>
-          <p>This is a build placeholder, not the final privacy policy. RPG Your Way accounts, payments, analytics, and campaign cloud storage are now being wired. Signed-in campaign state is stored with the account so a campaign can be continued from another signed-in device; browser storage may be used as a local cache. The final policy will describe retention, deletion, multiplayer membership, transcripts, and service providers in full before public launch.</p>
+          <p>RPG Your Way uses accounts, payments, analytics, and campaign cloud storage to operate the service. Signed-in campaign state is stored with the account so a campaign can continue from another signed-in device; browser storage may also be used as a local cache. Account deletion, multiplayer membership, transcripts, and service-provider data are handled as part of those features. This page will be expanded as the service and its data practices change.</p>
         </div>
       </main>
     </PageShell>

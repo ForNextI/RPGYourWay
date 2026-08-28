@@ -1014,7 +1014,6 @@ function CharacterSheetOverlay({
                   <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">Use this box to add, remove, replace, or correct information in the permanent character record. Rules questions and gameplay questions belong in the main AIGM chat. Nothing changes until you choose Save to Character.</p>
                   <p className="mt-2 max-w-3xl text-xs leading-relaxed text-muted-foreground"><strong className="text-foreground">Text updates only:</strong> ordinary character edits do not accept screenshots or photos. If you need to show RPG Your Way a class or subclass advancement chart, the Level Up interface can accept an image when advancement material is needed.</p>
                   <div className="mt-2 flex flex-wrap items-center gap-3">
-                    <Link href="/#wardens-latest-update" className="inline-flex text-xs font-bold text-primary underline-offset-4 hover:underline">Have an older character? Read the latest character-record update notes.</Link>
                     <a href="/downloads/rpgyourway-character-update-template-v2.txt" download="RPG Your Way_Plain_Text_Character_Update_Template_v2.txt" className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-3 text-xs font-bold text-primary">
                       <Download className="size-4" aria-hidden="true" />Blank update template, if you want to use it
                     </a>

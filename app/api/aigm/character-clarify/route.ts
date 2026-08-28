@@ -9,7 +9,7 @@ import {
 } from '@/lib/aigm/version'
 import { aiContentSafetyPrompt, normalizeAiContentMode } from '@/lib/site/ai-content-mode'
 import { estimateTerraMaximumMicrousd, terraProviderCostMicrousd } from '@/lib/usage/play-cost'
-import { billingErrorResponse, releaseUsage, requireUsageAccount, reserveUsage, settleUsage, type UsageReservation } from '@/lib/usage/server-billing'
+import { billingErrorResponse, recordIncludedProviderUsage, releaseUsage, requireUsageAccount, reserveUsage, settleUsage, type UsageAccount, type UsageReservation } from '@/lib/usage/server-billing'
 import type {
   CharacterIntakeApiError,
   CharacterIntakeApiResponse,
@@ -106,8 +106,14 @@ function settingsFromBody(body: ClarifyRequestBody): CharacterIntakeSettings {
 
 export async function POST(request: Request) {
   const requestId = crypto.randomUUID()
-  const apiKey = process.env.OPENAI_API_KEY
+  let account: UsageAccount
+  try {
+    account = await requireUsageAccount()
+  } catch (error) {
+    return billingErrorResponse(error)
+  }
 
+  const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) {
     return jsonError(503, 'The AIGM connection is not configured yet.', requestId)
   }
@@ -148,7 +154,6 @@ export async function POST(request: Request) {
   let reservation: UsageReservation | null = null
   if (body.bill_usage === true) {
     try {
-      const account = await requireUsageAccount()
       reservation = await reserveUsage(account, {
         maximumMicrousd: estimateTerraMaximumMicrousd(serializedIntake.length + message.length + 12_000, 10_000, 1.6, 10),
         feature: 'character_import_clarification',
@@ -241,15 +246,25 @@ export async function POST(request: Request) {
       return jsonError(502, 'The AIGM returned an unreadable update.', requestId)
     }
 
+    const providerCostMicrousd = terraProviderCostMicrousd(payload.usage)
     let usageBilling = null
     if (reservation) {
       const billing = await settleUsage(reservation, {
         model,
-        providerCostMicrousd: terraProviderCostMicrousd(payload.usage),
+        providerCostMicrousd,
         metadata: { provider_request_id: payload.id || openAIResponse.headers.get('x-request-id'), character: body.intake.character.name },
       })
       reservation = null
       usageBilling = { billed_microusd: billing.billedMicrousd, balance_microusd: billing.balanceMicrousd, owner_qa_exempt: billing.ownerQaExempt, settlement_warning: billing.settlementWarning }
+    } else {
+      await recordIncludedProviderUsage(account, {
+        feature: 'character_import_clarification_included',
+        operationId: request.headers.get('x-rpgyw-operation-id') || requestId,
+        sourceRef: body.intake.character.name || 'character',
+        model,
+        providerCostMicrousd,
+        metadata: { provider_request_id: payload.id || openAIResponse.headers.get('x-request-id') },
+      })
     }
 
     const response: CharacterIntakeApiResponse & { usage_billing?: typeof usageBilling } = {

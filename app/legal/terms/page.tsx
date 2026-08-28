@@ -9,7 +9,7 @@ export default function TermsPage() {
         <div className="shell narrow-shell prose-page">
           <p className="kicker">Legal</p>
           <h1 className="page-title">Terms</h1>
-          <p>This is a build placeholder, not the final terms of service. The commercial terms, payment rules, refunds, and usage limits will be finalized before paid access is switched on.</p>
+          <p>RPG Your Way currently offers paid AI usage through prepaid Play Packs. The prices, usage amounts, and limits shown in the product apply to those purchases. These terms may be expanded as the service evolves, including additional detail about payment handling and refunds.</p>
         </div>
       </main>
     </PageShell>

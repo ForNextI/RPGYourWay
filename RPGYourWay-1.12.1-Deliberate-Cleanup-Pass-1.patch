@@ -1,0 +1,2166 @@
+diff --git a/.env.example b/.env.example
+index b0c8279..7229d4c 100644
+--- a/.env.example
++++ b/.env.example
+@@ -8,6 +8,11 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_REPLACE_ME
+ 
+ # Keep service-role, secret, and direct database credentials server-side only.
+ OPENAI_API_KEY=
++# Optional text-model overrides. Gameplay can be tuned independently; other AIGM helpers use OPENAI_MODEL.
++OPENAI_MODEL=gpt-5.6-terra
++OPENAI_GAMEPLAY_MODEL=gpt-5.6-terra
++# Optional owner-QA command phrase. Server-side only.
++RPGYW_GOD_MODE_PHRASE=
+ # Optional dedicated audio keys. When blank, both routes fall back to OPENAI_API_KEY.
+ OPENAI_AUDIO_API_KEY=
+ OPENAI_TTS_API_KEY=
+diff --git a/app/account/page.tsx b/app/account/page.tsx
+index 7453f81..247916e 100644
+--- a/app/account/page.tsx
++++ b/app/account/page.tsx
+@@ -138,7 +138,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
+                     <p className="account-state-label">Connected account</p>
+                     <h2 id="account-connected-heading">You&apos;re signed in.</h2>
+                     <p className="account-email">{email ?? 'Authenticated RPG Your Way user'}</p>
+-                    <p className="account-foundation-note">Your account keeps purchases and usage together. Play campaigns stay in this browser unless you export them.</p>
++                    <p className="account-foundation-note">Your account keeps purchases, usage, and cloud campaigns together. Signed-in campaigns can continue on another signed-in device; this browser also keeps a local cache.</p>
+                   </div>
+                   <form action={signOut}>
+                     <button className="button button-secondary" type="submit">Sign out</button>
+diff --git a/app/api/aigm/character-clarify/route.ts b/app/api/aigm/character-clarify/route.ts
+index 555426f..ed891e1 100644
+--- a/app/api/aigm/character-clarify/route.ts
++++ b/app/api/aigm/character-clarify/route.ts
+@@ -9,7 +9,7 @@ import {
+ } from '@/lib/aigm/version'
+ import { aiContentSafetyPrompt, normalizeAiContentMode } from '@/lib/site/ai-content-mode'
+ import { estimateTerraMaximumMicrousd, terraProviderCostMicrousd } from '@/lib/usage/play-cost'
+-import { billingErrorResponse, releaseUsage, requireUsageAccount, reserveUsage, settleUsage, type UsageReservation } from '@/lib/usage/server-billing'
++import { billingErrorResponse, recordIncludedProviderUsage, releaseUsage, requireUsageAccount, reserveUsage, settleUsage, type UsageAccount, type UsageReservation } from '@/lib/usage/server-billing'
+ import type {
+   CharacterIntakeApiError,
+   CharacterIntakeApiResponse,
+@@ -106,8 +106,14 @@ function settingsFromBody(body: ClarifyRequestBody): CharacterIntakeSettings {
+ 
+ export async function POST(request: Request) {
+   const requestId = crypto.randomUUID()
+-  const apiKey = process.env.OPENAI_API_KEY
++  let account: UsageAccount
++  try {
++    account = await requireUsageAccount()
++  } catch (error) {
++    return billingErrorResponse(error)
++  }
+ 
++  const apiKey = process.env.OPENAI_API_KEY
+   if (!apiKey) {
+     return jsonError(503, 'The AIGM connection is not configured yet.', requestId)
+   }
+@@ -148,7 +154,6 @@ export async function POST(request: Request) {
+   let reservation: UsageReservation | null = null
+   if (body.bill_usage === true) {
+     try {
+-      const account = await requireUsageAccount()
+       reservation = await reserveUsage(account, {
+         maximumMicrousd: estimateTerraMaximumMicrousd(serializedIntake.length + message.length + 12_000, 10_000, 1.6, 10),
+         feature: 'character_import_clarification',
+@@ -241,15 +246,25 @@ export async function POST(request: Request) {
+       return jsonError(502, 'The AIGM returned an unreadable update.', requestId)
+     }
+ 
++    const providerCostMicrousd = terraProviderCostMicrousd(payload.usage)
+     let usageBilling = null
+     if (reservation) {
+       const billing = await settleUsage(reservation, {
+         model,
+-        providerCostMicrousd: terraProviderCostMicrousd(payload.usage),
++        providerCostMicrousd,
+         metadata: { provider_request_id: payload.id || openAIResponse.headers.get('x-request-id'), character: body.intake.character.name },
+       })
+       reservation = null
+       usageBilling = { billed_microusd: billing.billedMicrousd, balance_microusd: billing.balanceMicrousd, owner_qa_exempt: billing.ownerQaExempt, settlement_warning: billing.settlementWarning }
++    } else {
++      await recordIncludedProviderUsage(account, {
++        feature: 'character_import_clarification_included',
++        operationId: request.headers.get('x-rpgyw-operation-id') || requestId,
++        sourceRef: body.intake.character.name || 'character',
++        model,
++        providerCostMicrousd,
++        metadata: { provider_request_id: payload.id || openAIResponse.headers.get('x-request-id') },
++      })
+     }
+ 
+     const response: CharacterIntakeApiResponse & { usage_billing?: typeof usageBilling } = {
+diff --git a/app/api/aigm/character-intake/route.ts b/app/api/aigm/character-intake/route.ts
+index 26a7ba1..d9f8287 100644
+--- a/app/api/aigm/character-intake/route.ts
++++ b/app/api/aigm/character-intake/route.ts
+@@ -16,7 +16,7 @@ import { aiContentSafetyPrompt, normalizeAiContentMode } from '@/lib/site/ai-con
+ import { supportedSystemFor } from '@/lib/aigm/supported-systems'
+ import { formatRulesReference, rulesReferenceFor } from '@/lib/aigm/rules-library'
+ import { estimateTerraMaximumMicrousd, terraProviderCostMicrousd } from '@/lib/usage/play-cost'
+-import { billingErrorResponse, releaseUsage, requireUsageAccount, reserveUsage, settleUsage, type UsageReservation } from '@/lib/usage/server-billing'
++import { billingErrorResponse, recordIncludedProviderUsage, releaseUsage, requireUsageAccount, reserveUsage, settleUsage, type UsageAccount, type UsageReservation } from '@/lib/usage/server-billing'
+ import type {
+   CampaignStartMode,
+   CharacterIntakeApiError,
+@@ -168,8 +168,8 @@ async function groundDetectedIssues(
+   model: string,
+   settings: CharacterIntakeSettings,
+   result: CharacterIntakeResult,
+-): Promise<CharacterIntakeResult> {
+-  if (!result.detected_issues.length) return result
++): Promise<{ result: CharacterIntakeResult; providerCostMicrousd: number; providerRequestId: string | null }> {
++  if (!result.detected_issues.length) return { result, providerCostMicrousd: 0, providerRequestId: null }
+ 
+   const system = supportedSystemFor(settings.ruleset)
+   const classNames = result.character.classes.map((entry) => `${entry.name} ${entry.level}${entry.subclass ? ` ${entry.subclass}` : ''}`).join('; ')
+@@ -225,25 +225,41 @@ async function groundDetectedIssues(
+       signal: AbortSignal.timeout(25_000),
+     })
+     const verifyPayload = (await verifyResponse.json()) as OpenAIResponsePayload
++    const providerCostMicrousd = terraProviderCostMicrousd(verifyPayload.usage)
++    const providerRequestId = verifyPayload.id || verifyResponse.headers.get('x-request-id')
+     if (!verifyResponse.ok) throw new Error('Rules warning verifier failed.')
+     const verifyText = extractOutputText(verifyPayload)
+     if (!verifyText) throw new Error('Rules warning verifier returned no output.')
+     const parsed = JSON.parse(verifyText) as { keep_indexes?: number[] }
+     const keep = new Set((parsed.keep_indexes ?? []).filter((index) => Number.isInteger(index) && index >= 0 && index < result.detected_issues.length))
+-    return { ...result, detected_issues: result.detected_issues.filter((_issue, index) => keep.has(index)) }
++    return {
++      result: { ...result, detected_issues: result.detected_issues.filter((_issue, index) => keep.has(index)) },
++      providerCostMicrousd,
++      providerRequestId,
++    }
+   } catch (error) {
+     console.error('Character intake rules-warning verification failed; retaining only self-evident record issues.', { error })
+     return {
+-      ...result,
+-      detected_issues: result.detected_issues.filter((issue) => looksLikeInternalRecordIssue(issue.category, issue.issue, issue.why_it_matters)),
++      result: {
++        ...result,
++        detected_issues: result.detected_issues.filter((issue) => looksLikeInternalRecordIssue(issue.category, issue.issue, issue.why_it_matters)),
++      },
++      providerCostMicrousd: 0,
++      providerRequestId: null,
+     }
+   }
+ }
+ 
+ export async function POST(request: Request) {
+   const requestId = crypto.randomUUID()
+-  const apiKey = process.env.OPENAI_API_KEY
++  let account: UsageAccount
++  try {
++    account = await requireUsageAccount()
++  } catch (error) {
++    return billingErrorResponse(error)
++  }
+ 
++  const apiKey = process.env.OPENAI_API_KEY
+   if (!apiKey) {
+     return jsonError(
+       503,
+@@ -364,7 +380,6 @@ export async function POST(request: Request) {
+   let reservation: UsageReservation | null = null
+   if (demandingImport) {
+     try {
+-      const account = await requireUsageAccount()
+       reservation = await reserveUsage(account, {
+         maximumMicrousd: maximumDeductionMicrousd,
+         feature: 'character_import',
+@@ -452,8 +467,13 @@ export async function POST(request: Request) {
+       return jsonError(502, 'The AIGM returned an unreadable character intake.', requestId)
+     }
+ 
++    let verificationCostMicrousd = 0
++    let verificationRequestId: string | null = null
+     if (result.document_assessment.is_usable) {
+-      result = await groundDetectedIssues(request, apiKey, model, settings, result)
++      const verification = await groundDetectedIssues(request, apiKey, model, settings, result)
++      result = verification.result
++      verificationCostMicrousd = verification.providerCostMicrousd
++      verificationRequestId = verification.providerRequestId
+       result = enrichDnd55CharacterRecord(result).result
+     }
+ 
+@@ -468,15 +488,34 @@ export async function POST(request: Request) {
+       return jsonError(422, kindMessage, requestId, result.document_assessment.reason)
+     }
+ 
++    const providerCostMicrousd = terraProviderCostMicrousd(payload.usage) + verificationCostMicrousd
+     let usageBilling = null
+     if (reservation) {
+       const billing = await settleUsage(reservation, {
+         model,
+-        providerCostMicrousd: terraProviderCostMicrousd(payload.usage),
+-        metadata: { provider_request_id: payload.id || openAIResponse.headers.get('x-request-id'), source_file: upload.name },
++        providerCostMicrousd,
++        metadata: {
++          provider_request_id: payload.id || openAIResponse.headers.get('x-request-id'),
++          verification_request_id: verificationRequestId,
++          verification_provider_cost_microusd: verificationCostMicrousd,
++          source_file: upload.name,
++        },
+       })
+       reservation = null
+       usageBilling = { billed_microusd: billing.billedMicrousd, balance_microusd: billing.balanceMicrousd, owner_qa_exempt: billing.ownerQaExempt, settlement_warning: billing.settlementWarning }
++    } else {
++      await recordIncludedProviderUsage(account, {
++        feature: 'character_import_included',
++        operationId: request.headers.get('x-rpgyw-operation-id') || requestId,
++        sourceRef: upload.name,
++        model,
++        providerCostMicrousd,
++        metadata: {
++          provider_request_id: payload.id || openAIResponse.headers.get('x-request-id'),
++          verification_request_id: verificationRequestId,
++          verification_provider_cost_microusd: verificationCostMicrousd,
++        },
++      })
+     }
+ 
+     const response: CharacterIntakeApiResponse & { paid_processing: boolean; usage_billing?: typeof usageBilling } = {
+diff --git a/app/api/aigm/gameplay-chat/route.ts b/app/api/aigm/gameplay-chat/route.ts
+index f986d74..9f3b5b4 100644
+--- a/app/api/aigm/gameplay-chat/route.ts
++++ b/app/api/aigm/gameplay-chat/route.ts
+@@ -458,7 +458,7 @@ function normalizedOwnerCommand(value: string) {
+ }
+ 
+ function configuredOwnerGodModePhrase() {
+-  return process.env.WARDENS_GOD_MODE_PHRASE?.trim() || DEFAULT_OWNER_GOD_MODE_PHRASE
++  return process.env.RPGYW_GOD_MODE_PHRASE?.trim() || DEFAULT_OWNER_GOD_MODE_PHRASE
+ }
+ 
+ function ownerGodModePhraseMatches(value: string) {
+diff --git a/app/api/start/help/route.ts b/app/api/start/help/route.ts
+index d936b26..ed9b909 100644
+--- a/app/api/start/help/route.ts
++++ b/app/api/start/help/route.ts
+@@ -1,7 +1,8 @@
+ import { NextResponse } from 'next/server'
+ import { START_FAQ, START_HELP_KNOWLEDGE } from '@/lib/start/help-knowledge'
+-import { createClient } from '@/lib/supabase/server'
+ import { isRateLimited } from '@/lib/aigm/rate-limit'
++import { terraProviderCostMicrousd } from '@/lib/usage/play-cost'
++import { billingErrorResponse, recordIncludedProviderUsage, requireUsageAccount, type UsageAccount } from '@/lib/usage/server-billing'
+ 
+ export const runtime = 'nodejs'
+ export const dynamic = 'force-dynamic'
+@@ -11,9 +12,11 @@ const DEFAULT_MODEL = 'gpt-5.6-terra'
+ const MAX_QUESTIONS_PER_HOUR = 25
+ 
+ interface OpenAIResponsePayload {
++  id?: string
+   output_text?: string
+   output?: Array<{ content?: Array<{ type?: string; text?: string }> }>
+   error?: { message?: string }
++  usage?: unknown
+ }
+ 
+ function outputText(payload: OpenAIResponsePayload) {
+@@ -23,24 +26,34 @@ function outputText(payload: OpenAIResponsePayload) {
+ }
+ 
+ export async function POST(request: Request) {
+-  const supabase = await createClient()
+-  const { data } = await supabase.auth.getUser()
+-  if (!data.user) return NextResponse.json({ error: 'Sign in to use Start Page Help.' }, { status: 401 })
+-  if (isRateLimited(request, 'start-page-help', MAX_QUESTIONS_PER_HOUR, 60 * 60 * 1000)) return NextResponse.json({ error: 'Start Page Help has received too many questions from this connection. Try again later.' }, { status: 429 })
++  const requestId = crypto.randomUUID()
++  let account: UsageAccount
++  try {
++    account = await requireUsageAccount()
++  } catch (error) {
++    return billingErrorResponse(error)
++  }
++
++  if (isRateLimited(request, 'start-page-help', MAX_QUESTIONS_PER_HOUR, 60 * 60 * 1000)) {
++    return NextResponse.json({ error: 'Start Page Help has received too many questions from this connection. Try again later.' }, { status: 429 })
++  }
+ 
+   const body = await request.json().catch(() => null) as { question?: unknown } | null
+   const question = typeof body?.question === 'string' ? body.question.trim().slice(0, 1500) : ''
+   if (!question) return NextResponse.json({ error: 'Enter a question first.' }, { status: 400 })
++
+   const apiKey = process.env.OPENAI_API_KEY
+   if (!apiKey) return NextResponse.json({ error: 'Start Page Help is not configured yet.' }, { status: 503 })
+ 
+   const faq = START_FAQ.map(([q, a]) => `Q: ${q}\nA: ${a}`).join('\n\n')
++  const model = process.env.OPENAI_MODEL?.trim() || DEFAULT_MODEL
++
+   try {
+     const response = await fetch('https://api.openai.com/v1/responses', {
+       method: 'POST',
+       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+       body: JSON.stringify({
+-        model: process.env.OPENAI_MODEL?.trim() || DEFAULT_MODEL,
++        model,
+         store: false,
+         reasoning: { effort: 'low' },
+         max_output_tokens: 500,
+@@ -51,10 +64,22 @@ export async function POST(request: Request) {
+       }),
+       signal: AbortSignal.timeout(25_000),
+     })
++
+     const payload = await response.json() as OpenAIResponsePayload
+     if (!response.ok) return NextResponse.json({ error: payload.error?.message || 'Start Page Help could not answer right now.' }, { status: response.status || 502 })
++
+     const answer = outputText(payload)
+     if (!answer) return NextResponse.json({ error: 'Start Page Help returned no answer.' }, { status: 502 })
++
++    await recordIncludedProviderUsage(account, {
++      feature: 'start_page_help_included',
++      operationId: request.headers.get('x-rpgyw-operation-id') || requestId,
++      sourceRef: 'start-help',
++      model,
++      providerCostMicrousd: terraProviderCostMicrousd(payload.usage),
++      metadata: { provider_request_id: payload.id || response.headers.get('x-request-id') },
++    })
++
+     return NextResponse.json({ answer }, { headers: { 'Cache-Control': 'no-store' } })
+   } catch {
+     return NextResponse.json({ error: 'Start Page Help could not answer right now.' }, { status: 502 })
+diff --git a/app/globals.css b/app/globals.css
+index af57bf4..054d633 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -376,11 +376,11 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
+ .preview-row span { margin-top: .2rem; color: #d9ddc7; font-size: .76rem; }
+ 
+ .landing-accordion {
+-  overflow: hidden;
+-  border: 2px solid var(--forest);
+-  border-radius: 20px;
+-  background: rgb(251 242 230 / .96);
+-  box-shadow: var(--shadow);
++  overflow: visible;
++  border: 0;
++  border-radius: 0;
++  background: transparent;
++  box-shadow: none;
+ }
+ .landing-accordion-summary,
+ .audience-item > summary { cursor: pointer; list-style: none; user-select: none; }
+@@ -426,8 +426,7 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
+ .accordion-plus::after { width: 2px; height: 16px; }
+ .landing-accordion[open] > .landing-accordion-summary .accordion-plus,
+ .audience-item[open] > summary .accordion-plus { transform: rotate(45deg); }
+-.landing-accordion[open] > .landing-accordion-summary { border-bottom: 1px solid var(--border); }
+-.landing-accordion-body { padding: clamp(1rem, 3vw, 1.45rem); background: rgb(244 228 207 / .7); }
++.landing-accordion-body { margin-top: .65rem; border-radius: 14px; padding: clamp(1rem, 3vw, 1.45rem); background: rgb(244 228 207 / .86); }
+ .unique-body p { margin: 0; color: var(--muted); }
+ .audience-list { display: grid; gap: .65rem; }
+ .audience-item {
+@@ -2073,50 +2072,6 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
+   color: inherit;
+ }
+ 
+-/* The two purpose accordions must occupy the same two-column geometry as
+-   the console/logo row, with both controls visibly present. */
+-.landing-reasons-grid {
+-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+-  align-items: stretch;
+-}
+-.landing-reason-card {
+-  position: static !important;
+-  display: block !important;
+-  width: 100% !important;
+-  min-width: 0 !important;
+-  max-width: none !important;
+-  margin: 0 !important;
+-  opacity: 1 !important;
+-  visibility: visible !important;
+-  transform: none !important;
+-}
+-.landing-reason-card > * {
+-  position: static !important;
+-  display: block !important;
+-  width: 100% !important;
+-  max-width: none !important;
+-  margin: 0 !important;
+-  opacity: 1 !important;
+-  visibility: visible !important;
+-  transform: none !important;
+-}
+-.landing-reason-card details {
+-  display: block !important;
+-  width: 100% !important;
+-}
+-.landing-reason-card summary {
+-  width: 100% !important;
+-  min-height: 64px;
+-  border: 1px solid var(--landing-brass);
+-  border-radius: 17px;
+-  background: var(--cream-bright);
+-  box-shadow:
+-    inset 0 1px 0 rgb(255 255 255 / .86),
+-    inset 0 -2px 0 color-mix(in srgb, var(--landing-brass-light) 42%, transparent),
+-    0 3px 0 var(--landing-brass),
+-    0 8px 15px rgb(54 58 42 / .09);
+-}
+-
+ /* Establish the dimensional-flat treatment on the landing cards below. */
+ .feature-card {
+   border-color: var(--landing-brass);
+@@ -2470,25 +2425,6 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
+   display: block !important;
+   width: 100% !important;
+ }
+-.landing-reason-card summary,
+-.landing-reason-card button {
+-  width: 100% !important;
+-  min-height: 64px;
+-  border: 1px solid var(--landing-brass-mid) !important;
+-  border-radius: 17px !important;
+-  background:
+-    linear-gradient(
+-      180deg,
+-      color-mix(in srgb, var(--landing-pale) 88%, white),
+-      var(--landing-pale)
+-    ) !important;
+-  box-shadow:
+-    inset 0 1px 0 rgb(255 255 255 / .86),
+-    inset 0 -2px 0 rgb(112 84 43 / .08),
+-    0 3px 0 var(--landing-brass-dark),
+-    0 8px 14px rgb(43 47 37 / .12) !important;
+-}
+-
+ /* Console and logo are equal visual modules on desktop. */
+ .landing-return-grid {
+   align-items: stretch;
+@@ -2821,21 +2757,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
+ 
+ /* The two big accordions are the pale siblings of the forest controls.
+    Same brass rim, same physical depth, different face color. */
+-.landing-reason-card summary,
+-.landing-reason-card button {
+-  border: 2px solid var(--rpgyw-brass-edge) !important;
+-  box-shadow:
+-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-highlight) 72%, white),
+-    inset 0 1px 0 rgb(255 255 255 / .82),
+-    inset 0 -2px 0 rgb(112 84 43 / .08),
+-    0 3px 0 var(--rpgyw-brass-shadow),
+-    0 8px 14px rgb(43 47 37 / .12) !important;
+-}
+-.landing-reason-card summary:hover,
+-.landing-reason-card summary:focus-visible {
+-  color: var(--rpgyw-control-hover) !important;
+-}
+-
+ /* The + control is a real miniature button now, not a flat symbol. */
+ .landing-reason-card .accordion-plus,
+ .audience-item .accordion-plus {
+@@ -3005,19 +2926,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
+     0 5px 9px rgb(31 40 31 / .14) !important;
+ }
+ 
+-/* Explicitly preserve the lime-text hover on the two major landing questions.
+-   Their pale dimensional face stays pale. */
+-.landing-reason-card summary:hover .landing-accordion-prompt,
+-.landing-reason-card summary:focus-visible .landing-accordion-prompt,
+-.landing-reason-card summary:hover .audience-prompt,
+-.landing-reason-card summary:focus-visible .audience-prompt {
+-  color: var(--lime) !important;
+-}
+-.landing-reason-card summary:hover .accordion-plus,
+-.landing-reason-card summary:focus-visible .accordion-plus {
+-  color: var(--lime) !important;
+-}
+-
+ /* Keep the header compact on narrower screens despite the added trim. */
+ @media (max-width: 760px) {
+   .site-header .brand {
+@@ -4746,16 +4654,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
+ }
+ .start-choice:hover span,
+ .start-choice:focus-visible span { color: var(--lime); }
+-.start-choice--selected {
+-  border-color: var(--rpgyw-brass-highlight);
+-  background: var(--forest-deep);
+-  color: var(--cream-bright);
+-}
+-.start-choice--selected span { color: var(--cream-bright); }
+-.start-choice--selected:hover,
+-.start-choice--selected:focus-visible,
+-.start-choice--selected:hover span,
+-.start-choice--selected:focus-visible span { color: var(--lime); }
+ .start-fixed-setting {
+   display: inline-flex;
+   align-items: center;
+@@ -5208,11 +5106,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
+   background: var(--landing-olive-19-deep);
+   color: var(--lime);
+ }
+-.start-rules-panel .start-choice--selected {
+-  background: var(--forest-deep);
+-  color: var(--cream-bright);
+-}
+-.start-rules-panel .start-choice--selected span { color: var(--cream-bright); }
+ .start-rules-panel .start-fixed-setting {
+   margin-top: .75rem;
+   background: var(--forest-deep);
+@@ -5664,7 +5557,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
+   background: linear-gradient(180deg, var(--landing-olive-19), var(--landing-olive-19-deep));
+   color: var(--lime) !important;
+ }
+-.start-choice--selected,
+ .start-rating-scale button.is-selected {
+   background: var(--landing-olive-19-deep);
+   color: var(--cream-bright);
+@@ -5672,7 +5564,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
+     inset 0 0 0 2px color-mix(in srgb, var(--rpgyw-brass-highlight) 74%, white),
+     0 2px 0 var(--rpgyw-brass-shadow);
+ }
+-.start-choice--selected span { color: var(--cream-bright); }
+ 
+ /* RPG Your Way 1.8.6 — Start QA IV: open map field, stronger step furniture, dimensional question controls, and naming bezels. */
+ 
+@@ -5918,17 +5809,6 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
+   .start-mini-ratings label { min-height: 54px; }
+ }
+ 
+-/* Current selections are forest/cream; unselected choices remain olive/cream. */
+-.start-choice--selected {
+-  background: linear-gradient(180deg, color-mix(in srgb, var(--forest-deep) 94%, white), var(--forest-deep));
+-  color: var(--cream-bright);
+-  box-shadow:
+-    inset 0 0 0 2px color-mix(in srgb, var(--rpgyw-brass-highlight) 76%, white),
+-    0 3px 0 var(--rpgyw-brass-shadow),
+-    0 6px 10px rgb(30 38 30 / .14);
+-}
+-.start-choice--selected span { color: var(--cream-bright); }
+-
+ /* Review/change actions on completed settings remain proper tertiary buttons. */
+ .start-complete-plaque button {
+   min-height: 36px;
+@@ -6327,6 +6207,21 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
+     0 4px 7px rgb(29 38 29 / .11) !important;
+ }
+ 
++/* Canonical Start choice selection. One class owns the persistent selected state;
++   hover/focus may change the words to lime, but never erase the selection face. */
++body .start-choice.start-choice--selected {
++  background: var(--forest-deep) !important;
++  background-image: none !important;
++  color: var(--cream-bright) !important;
++}
++body .start-choice.start-choice--selected :where(strong, span) {
++  color: var(--cream-bright) !important;
++}
++body .start-choice.start-choice--selected:hover :where(strong, span),
++body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
++  color: var(--lime) !important;
++}
++
+ /* The header ribbon keeps its intentionally quiet navigation behavior. Its existing
+    compass and fullscreen utility furniture retain their own small brass treatment. */
+ .site-header .main-nav a,
+@@ -6338,7 +6233,7 @@ body :where(button, .button, .fake-button, summary, [role="button"]):not(:disabl
+    brass rim and brass lower edge. This is the light-panel version of the same trick. */
+ :where(
+   .landing-notice-card,
+-  .landing-reason-card,
++  .landing-accordion-body,
+   .feature-card,
+   .landing-campaign-summary-card,
+   .shape-intro,
+@@ -7896,29 +7791,3 @@ html {
+   outline: 3px solid var(--lime);
+   outline-offset: 3px;
+ }
+-/* Solo / Multiplayer campaign-mode selection.
+-   The chosen mode stays forest green with white lettering. */
+-button.start-choice[aria-pressed="true"] {
+-  background: var(--forest-deep) !important;
+-  background-image: none !important;
+-  color: var(--cream-bright) !important;
+-  border-color: var(--rpgyw-brass-highlight) !important;
+-}
+-
+-button.start-choice[aria-pressed="true"] strong,
+-button.start-choice[aria-pressed="true"] span {
+-  color: var(--cream-bright) !important;
+-}
+-
+-button.start-choice[aria-pressed="true"]:hover,
+-button.start-choice[aria-pressed="true"]:focus-visible {
+-  background: var(--forest-deep) !important;
+-  color: var(--cream-bright) !important;
+-}
+-
+-button.start-choice[aria-pressed="true"]:hover strong,
+-button.start-choice[aria-pressed="true"]:hover span,
+-button.start-choice[aria-pressed="true"]:focus-visible strong,
+-button.start-choice[aria-pressed="true"]:focus-visible span {
+-  color: var(--cream-bright) !important;
+-}
+diff --git a/app/legal/privacy/page.tsx b/app/legal/privacy/page.tsx
+index 674ce69..bbbe452 100644
+--- a/app/legal/privacy/page.tsx
++++ b/app/legal/privacy/page.tsx
+@@ -9,7 +9,7 @@ export default function PrivacyPage() {
+         <div className="shell narrow-shell prose-page">
+           <p className="kicker">Legal</p>
+           <h1 className="page-title">Privacy</h1>
+-          <p>This is a build placeholder, not the final privacy policy. RPG Your Way accounts, payments, analytics, and campaign cloud storage are now being wired. Signed-in campaign state is stored with the account so a campaign can be continued from another signed-in device; browser storage may be used as a local cache. The final policy will describe retention, deletion, multiplayer membership, transcripts, and service providers in full before public launch.</p>
++          <p>RPG Your Way uses accounts, payments, analytics, and campaign cloud storage to operate the service. Signed-in campaign state is stored with the account so a campaign can continue from another signed-in device; browser storage may also be used as a local cache. Account deletion, multiplayer membership, transcripts, and service-provider data are handled as part of those features. This page will be expanded as the service and its data practices change.</p>
+         </div>
+       </main>
+     </PageShell>
+diff --git a/app/legal/terms/page.tsx b/app/legal/terms/page.tsx
+index 5821bcd..d76a8f5 100644
+--- a/app/legal/terms/page.tsx
++++ b/app/legal/terms/page.tsx
+@@ -9,7 +9,7 @@ export default function TermsPage() {
+         <div className="shell narrow-shell prose-page">
+           <p className="kicker">Legal</p>
+           <h1 className="page-title">Terms</h1>
+-          <p>This is a build placeholder, not the final terms of service. The commercial terms, payment rules, refunds, and usage limits will be finalized before paid access is switched on.</p>
++          <p>RPG Your Way currently offers paid AI usage through prepaid Play Packs. The prices, usage amounts, and limits shown in the product apply to those purchases. These terms may be expanded as the service evolves, including additional detail about payment handling and refunds.</p>
+         </div>
+       </main>
+     </PageShell>
+diff --git a/app/page.tsx b/app/page.tsx
+index f7e5012..9a43cd2 100644
+--- a/app/page.tsx
++++ b/app/page.tsx
+@@ -181,7 +181,7 @@ export default function HomePage() {
+             <h2 id="landing-news-heading" className="sr-only">RPG Your Way news</h2>
+             <div className="landing-news-headlines">
+               <p>Reduction in prices, yay!</p>
+-              <p>Multiplayer is now live, with chat.</p>
++              <p>Multiplayer testing is underway, with chat.</p>
+             </div>
+           </div>
+         </section>
+diff --git a/app/robots.ts b/app/robots.ts
+index d1293f2..92b7255 100644
+--- a/app/robots.ts
++++ b/app/robots.ts
+@@ -4,7 +4,8 @@ export default function robots(): MetadataRoute.Robots {
+   return {
+     rules: {
+       userAgent: '*',
+-      disallow: '/',
++      allow: '/',
++      disallow: ['/api/', '/auth/'],
+     },
+   }
+ }
+diff --git a/app/support/page.tsx b/app/support/page.tsx
+index 0838556..7bf75e3 100644
+--- a/app/support/page.tsx
++++ b/app/support/page.tsx
+@@ -9,7 +9,7 @@ export default function SupportPage() {
+         <div className="shell narrow-shell prose-page">
+           <p className="kicker">Support</p>
+           <h1 className="page-title">Help without a scavenger hunt.</h1>
+-          <p>Support contact details and the paid-beta support process will be added before live payments are enabled.</p>
++          <p>For help with RPG Your Way, email <a href="mailto:brett@rpgyourway.com">brett@rpgyourway.com</a>. Include the page you were using and what happened; do not send passwords or API keys.</p>
+         </div>
+       </main>
+     </PageShell>
+diff --git a/components/aigm/aigm-gameplay-shell.tsx b/components/aigm/aigm-gameplay-shell.tsx
+index 5b7da37..e228f44 100644
+--- a/components/aigm/aigm-gameplay-shell.tsx
++++ b/components/aigm/aigm-gameplay-shell.tsx
+@@ -1014,7 +1014,6 @@ function CharacterSheetOverlay({
+                   <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">Use this box to add, remove, replace, or correct information in the permanent character record. Rules questions and gameplay questions belong in the main AIGM chat. Nothing changes until you choose Save to Character.</p>
+                   <p className="mt-2 max-w-3xl text-xs leading-relaxed text-muted-foreground"><strong className="text-foreground">Text updates only:</strong> ordinary character edits do not accept screenshots or photos. If you need to show RPG Your Way a class or subclass advancement chart, the Level Up interface can accept an image when advancement material is needed.</p>
+                   <div className="mt-2 flex flex-wrap items-center gap-3">
+-                    <Link href="/#wardens-latest-update" className="inline-flex text-xs font-bold text-primary underline-offset-4 hover:underline">Have an older character? Read the latest character-record update notes.</Link>
+                     <a href="/downloads/rpgyourway-character-update-template-v2.txt" download="RPG Your Way_Plain_Text_Character_Update_Template_v2.txt" className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-3 text-xs font-bold text-primary">
+                       <Download className="size-4" aria-hidden="true" />Blank update template, if you want to use it
+                     </a>
+diff --git a/components/aigm/rpgyw-start-entry.tsx b/components/aigm/rpgyw-start-entry.tsx
+index 419d341..7fddbed 100644
+--- a/components/aigm/rpgyw-start-entry.tsx
++++ b/components/aigm/rpgyw-start-entry.tsx
+@@ -59,7 +59,7 @@ export function RpgywStartEntry({ addCharacterMode = false, multiplayerCode = ''
+         return
+       }
+       if (imported.stage !== 'complete') {
+-        setError('That exported file has not reached Play yet. Finish its setup in WardensPC before importing it here, or wait for the rebuilt RPG Your Way onboarding flow.')
++        setError('That exported file predates a playable campaign state. RPG Your Way can import WardensPC exports that had already reached Play; use Start to create a new campaign from character information instead.')
+         return
+       }
+ 
+diff --git a/lib/shape/access.ts b/lib/shape/access.ts
+deleted file mode 100644
+index 341b282..0000000
+--- a/lib/shape/access.ts
++++ /dev/null
+@@ -1,17 +0,0 @@
+-export function shapeBetaEmails() {
+-  return (process.env.RPGYW_SHAPE_BETA_EMAILS || '')
+-    .split(',')
+-    .map((email) => email.trim().toLowerCase())
+-    .filter(Boolean)
+-}
+-
+-export function shapeAccessConfigured() {
+-  return shapeBetaEmails().length > 0
+-}
+-
+-export function shapeEmailAllowed(email: string | null | undefined) {
+-  if (!email) return false
+-  const allowed = shapeBetaEmails()
+-  if (allowed.length === 0) return process.env.NODE_ENV !== 'production'
+-  return allowed.includes(email.trim().toLowerCase())
+-}
+diff --git a/lib/usage/server-billing.ts b/lib/usage/server-billing.ts
+index 6c39b60..268a61b 100644
+--- a/lib/usage/server-billing.ts
++++ b/lib/usage/server-billing.ts
+@@ -122,6 +122,41 @@ async function recordProviderEvent(
+   }
+ }
+ 
++export async function recordIncludedProviderUsage(
++  account: UsageAccount,
++  input: {
++    feature: string
++    operationId?: string | null
++    sourceRef?: string | null
++    model: string
++    providerCostMicrousd: number
++    success?: boolean
++    metadata?: Record<string, unknown>
++  },
++) {
++  const feature = input.feature.trim() || 'play_included'
++  const operationId = cleanOperationId(input.operationId)
++  try {
++    const admin = createAdminClient()
++    const { error } = await admin.from('provider_usage_events').upsert({
++      user_id: account.userId,
++      surface: 'play',
++      feature,
++      source_ref: input.sourceRef?.trim() || null,
++      operation_id: operationId,
++      model: input.model,
++      provider_cost_microusd: usageMicrousd(input.providerCostMicrousd),
++      billed_microusd: 0,
++      owner_qa_exempt: account.ownerQa,
++      success: input.success !== false,
++      metadata: { included_usage: true, ...(input.metadata || {}) },
++    }, { onConflict: 'user_id,surface,feature,operation_id' })
++    if (error) console.error('Included provider usage event could not be recorded.', error)
++  } catch (error) {
++    console.error('Included provider usage event could not be recorded.', error)
++  }
++}
++
+ export async function releaseUsage(
+   reservation: UsageReservation | null | undefined,
+   input: { model?: string; metadata?: Record<string, unknown> } = {},
+diff --git a/lib/version.ts b/lib/version.ts
+index 27a38b3..82d4a8c 100644
+--- a/lib/version.ts
++++ b/lib/version.ts
+@@ -1 +1 @@
+-export const APP_VERSION = '1.12.0'
++export const APP_VERSION = '1.12.1'
+diff --git a/package.json b/package.json
+index d59b091..354a31f 100644
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "rpg-your-way",
+-  "version": "1.12.0",
++  "version": "1.12.1",
+   "private": true,
+   "packageManager": "pnpm@10.14.0",
+   "scripts": {
+@@ -27,5 +27,5 @@
+     "postcss": "^8.5",
+     "tailwindcss": "^4.3.3"
+   },
+-  "rpgywVersion": "1.12.0"
++  "rpgywVersion": "1.12.1"
+ }
+diff --git a/scripts/validate-release.mts b/scripts/validate-release.mts
+index 8cfd59c..647735f 100644
+--- a/scripts/validate-release.mts
++++ b/scripts/validate-release.mts
+@@ -5,1186 +5,217 @@ import path from 'node:path'
+ const root = process.cwd()
+ const read = (relative: string) => fs.readFileSync(path.join(root, relative), 'utf8')
+ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
++const has = (source: string, phrase: string, label = phrase) => assert.ok(source.includes(phrase), `Missing ${label}`)
++const lacks = (source: string, phrase: string, label = phrase) => assert.ok(!source.includes(phrase), `Retired ${label} is still present`)
++const before = (source: string, first: string, second: string, label: string) => {
++  const a = source.indexOf(first)
++  const b = source.indexOf(second)
++  assert.ok(a >= 0 && b >= 0 && a < b, `${label}: expected ${first} before ${second}`)
++}
+ 
+-const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
++const pkg = JSON.parse(read('package.json')) as {
++  name?: string
++  version?: string
++  rpgywVersion?: string
++  dependencies?: Record<string, string>
++}
+ assert.equal(pkg.name, 'rpg-your-way')
+-assert.equal(pkg.version, '1.12.0')
+-assert.equal(pkg.rpgywVersion, '1.12.0')
+-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.12\.0'/)
++assert.equal(pkg.version, '1.12.1')
++assert.equal(pkg.rpgywVersion, '1.12.1')
++has(read('lib/version.ts'), "APP_VERSION = '1.12.1'", 'visible app version')
+ 
+ for (const file of [
+-  'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
+-  'app/account/page.tsx', 'app/pricing/page.tsx', 'app/pricing/actions.ts',
+-  'app/api/shape/jobs/route.ts', 'app/api/shape/quote/route.ts', 'app/api/shape/transform/route.ts',
+-  'app/api/shape/projects/route.ts', 'app/api/shape/usage/route.ts', 'app/api/stripe/webhook/route.ts',
+-  'components/SiteHeader.tsx', 'components/SiteFooter.tsx', 'components/ShapeWorkspace.tsx', 'components/PersistentPlayModal.tsx',
+-  'lib/billing/play-packs.ts', 'lib/shape/billing.ts', 'lib/shape/settlement.ts', 'lib/shape/transcript.ts',
+-  'lib/stripe/server.ts', 'lib/stripe/checkout.ts', 'lib/usage/money.ts', 'lib/usage/openai-cost.ts',
+-  'supabase/migrations/20260825003000_shared_usage_balance.sql',
+-  'supabase/migrations/20260825060000_script_commercial_billing.sql',
+-  'supabase/migrations/20260825120000_play_provider_usage.sql',
+-  'app/api/play/access/route.ts',
+-  'app/api/aigm/gameplay-chat/route.ts',
+-  'app/api/aigm/speech/route.ts',
+-  'app/api/aigm/transcribe/route.ts',
+-  'components/aigm/rpgyw-start-entry.tsx',
++  'app/page.tsx',
++  'app/globals.css',
++  'app/layout.tsx',
++  'app/robots.ts',
++  'app/start/page.tsx',
++  'app/play/page.tsx',
++  'app/script/page.tsx',
++  'app/account/page.tsx',
++  'app/support/page.tsx',
++  'app/legal/privacy/page.tsx',
++  'app/legal/terms/page.tsx',
+   'components/start/StartOnboarding.tsx',
+-  'app/api/aigm/character-intake/route.ts',
+-  'app/api/aigm/character-clarify/route.ts',
+-  'app/api/start/help/route.ts',
+-  'lib/aigm/character-intake-prompt.ts',
+-  'lib/start/help-knowledge.ts',
+-  'components/account/DeleteAccountControl.tsx',
++  'components/aigm/rpgyw-start-entry.tsx',
+   'components/aigm/aigm-gameplay-shell.tsx',
++  'components/multiplayer/TableChatPanel.tsx',
++  'components/multiplayer/MultiplayerPanelSwitcher.tsx',
+   'lib/aigm/campaign-storage.ts',
+   'lib/aigm/campaign-persistence.ts',
+   'lib/aigm/cloud-campaigns.ts',
+   'lib/cloud-campaigns/server.ts',
+-  'app/api/campaigns/route.ts',
+-  'app/api/campaigns/[campaignId]/route.ts',
+-  'supabase/migrations/20260828163000_cloud_campaigns.sql',
+-  'lib/aigm/character-display-rules.ts',
+-  'lib/usage/owner-qa.ts',
+-  'lib/usage/play-cost.ts',
++  'lib/multiplayer/server.ts',
+   'lib/usage/server-billing.ts',
+-  'lib/usage/audio-cost.ts',
+   'lib/usage/play-turn-billing.ts',
+-  'app/api/aigm/turn-billing/audio-complete/route.ts',
+-  'supabase/migrations/20260828002500_play_turn_voice_billing.sql',
+-  'scripts/test-audio-cost.mts',
+-  'ACCESSIBILITY.md',
+-  'app/accessibility/page.tsx',
+-  'scripts/validate-accessibility.mts',
+-  'lib/multiplayer/types.ts',
+-  'lib/multiplayer/errors.ts',
+-  'lib/multiplayer/server.ts',
+-  'lib/multiplayer/ably-token.ts',
++  'lib/usage/play-cost.ts',
++  'lib/usage/audio-cost.ts',
++  'lib/shape/settlement.ts',
++  'lib/shape/billing.ts',
++  'app/api/aigm/gameplay-chat/route.ts',
++  'app/api/aigm/character-intake/route.ts',
++  'app/api/aigm/character-clarify/route.ts',
++  'app/api/start/help/route.ts',
++  'app/api/shape/jobs/route.ts',
++  'app/api/shape/transform/route.ts',
++  'app/api/stripe/webhook/route.ts',
+   'app/api/multiplayer/sessions/route.ts',
+-  'app/api/multiplayer/sessions/[inviteCode]/route.ts',
+-  'app/api/multiplayer/sessions/[inviteCode]/join/route.ts',
+-  'app/api/multiplayer/sessions/[inviteCode]/seat/route.ts',
+-  'app/api/multiplayer/sessions/[inviteCode]/display-name/route.ts',
+-  'app/api/multiplayer/sessions/[inviteCode]/characters/route.ts',
+-  'app/api/multiplayer/sessions/[inviteCode]/leave/route.ts',
+-  'app/api/multiplayer/sessions/[inviteCode]/close/route.ts',
+   'app/api/multiplayer/ably-token/route.ts',
+-  'components/multiplayer/ably-browser.ts',
+-  'components/multiplayer/MultiplayerPanelSwitcher.tsx',
+-  'components/multiplayer/TableChatPanel.tsx',
+-  'components/multiplayer/useMultiplayerSession.ts',
++  'supabase/migrations/20260825003000_shared_usage_balance.sql',
++  'supabase/migrations/20260825060000_script_commercial_billing.sql',
++  'supabase/migrations/20260825120000_play_provider_usage.sql',
++  'supabase/migrations/20260828002500_play_turn_voice_billing.sql',
+   'supabase/migrations/20260828043000_native_multiplayer_phase1.sql',
+   'supabase/migrations/20260828073000_multiplayer_names_multi_character.sql',
++  'supabase/migrations/20260828163000_cloud_campaigns.sql',
++  'scripts/validate-accessibility.mts',
++  'scripts/test-shape-runtime.mts',
++  'scripts/test-usage-money.mts',
++  'scripts/test-provider-cost.mts',
++  'scripts/test-stripe-funding.mts',
++  'scripts/test-audio-cost.mts',
+   'scripts/test-multiplayer-phase1.mts',
+-  'postcss.config.mjs',
+-  'data/settings/eberron.json',
+-  'data/rules/corpora/dnd-5.5e-srd-5.2.1.json',
+ ]) assert.ok(exists(file), `Missing ${file}`)
+ 
+-const account = read('app/account/page.tsx')
+-for (const phrase of [
+-  'Sign in or create an account', 'Usage balance', 'Available for Play and Script', 'Add usage',
+-  'Purchase price includes payment processing and a small site operating contribution', '2.9% + 30¢',
+-  'What am I getting for my money?', 'RPG Your Way sells prepaid usage, not turns.',
+-  'about 20–30 turns', 'about 360–540 turns', 'Usage to date', 'Where your balance has gone',
+-  'AI processing', 'Talk-to-text', 'AI readback', 'Play Pack purchases', 'Purchase history',
+-  'RPG Your Way does not show a turn-by-turn charge list.',
+-]) assert.match(account, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
+-assert.doesNotMatch(account, /Lifetime added|Lifetime used|No separate Script wallet|Recent activity|signedUsageDollars/)
+-
+-const packs = read('lib/billing/play-packs.ts')
+-for (const amount of ['priceCents: 572', 'priceCents: 1_653', 'priceCents: 3_275', 'priceCents: 4_897', 'priceCents: 7_060', 'priceCents: 9_763']) assert.match(packs, new RegExp(amount))
+-for (const operating of ['siteOperatingCents: 25', 'siteOperatingCents: 75', 'siteOperatingCents: 150', 'siteOperatingCents: 225', 'siteOperatingCents: 325', 'siteOperatingCents: 450']) assert.match(packs, new RegExp(operating))
+-for (const usage of ['usageCents: 500', 'usageCents: 1_500', 'usageCents: 3_000', 'usageCents: 4_500', 'usageCents: 6_500', 'usageCents: 9_000']) assert.match(packs, new RegExp(usage))
+-
+-const layout = read('app/layout.tsx')
+-assert.match(layout, /@vercel\/analytics\/next/)
+-assert.match(layout, /<Analytics \/>/)
+-
+-const header = read('components/SiteHeader.tsx')
+-assert.match(header, /href: '\/account', label: 'Account'/)
+-assert.match(header, /thereadingofthewardens\.com/)
+-assert.match(header, /target="_blank"/)
+-assert.match(header, /fullscreen-nav-gap/)
+-assert.match(header, /Your AI GM/)
+-const css = read('app/globals.css')
+-assert.match(css, /header-inner \{ min-height: 52px/)
+-assert.match(css, /usage-disclosure-row/)
+-assert.match(css, /kofi-support-button/)
+-assert.match(css, /shape-quote/)
+-
+-const footer = read('components/SiteFooter.tsx')
+-assert.match(footer, /Buy Brett a Coffee/)
+-assert.match(footer, /ko-fi\.com\/dodoink/)
+-assert.match(footer, /fill="#FF5E5B"/)
+-assert.match(footer, /kofi-cup/)
++// Dead private-beta access code is deliberately gone.
++assert.equal(exists('lib/shape/access.ts'), false, 'Dead Script beta-access helper should stay deleted')
+ 
++// Environment names describe this product, and the model overrides used by the code are documented.
++const env = read('.env.example')
++has(env, 'OPENAI_MODEL=gpt-5.6-terra')
++has(env, 'OPENAI_GAMEPLAY_MODEL=gpt-5.6-terra')
++has(env, 'OPENAI_SHAPE_MODEL=gpt-5.6-terra')
++has(env, 'RPGYW_GOD_MODE_PHRASE=')
++lacks(env, 'WARDENS_GOD_MODE_PHRASE')
++const gameplayRoute = read('app/api/aigm/gameplay-chat/route.ts')
++has(gameplayRoute, 'process.env.RPGYW_GOD_MODE_PHRASE')
++lacks(gameplayRoute, 'process.env.WARDENS_GOD_MODE_PHRASE')
++
++// Public site is crawlable; API and auth machinery are not crawl targets.
++const robots = read('app/robots.ts')
++has(robots, "allow: '/'")
++has(robots, "disallow: ['/api/', '/auth/']")
++lacks(robots, "disallow: '/'")
++
++// Landing page keeps the two purpose accordions, but their wrapper is not a second raised plaque.
+ const home = read('app/page.tsx')
+-assert.match(home, /href="\/start">Start A New Campaign<\/Link>/)
+-assert.match(home, /PageShell headerVariant="landing"/)
+-assert.match(home, /Why I created RPG Your Way\./)
+-assert.match(home, /Who benefits from this site\?/)
+-assert.match(home, /Play when you have time/)
+-assert.match(home, /<LandingCampaignPanel \/>/)
+-const landingCampaignPanel193 = read('components/LandingCampaignPanel.tsx')
+-assert.doesNotMatch(landingCampaignPanel193, /16 Hammer 1501 DR/)
+-assert.doesNotMatch(home, /Warning: AI GM ahead/)
+-assert.doesNotMatch(home, /Open Now/)
+-assert.doesNotMatch(home, /Tabletop gaming is best in person/)
+-assert.match(read('app/start/page.tsx'), /<RpgywStartEntry/)
+-
+-const pricing = read('app/pricing/page.tsx')
+-assert.match(pricing, /permanentRedirect\('\/account#add-usage'\)/)
+-
+-const scriptPage = read('app/script/page.tsx')
+-assert.match(scriptPage, /same prepaid RPG Your Way usage balance as Play/)
+-assert.match(scriptPage, /maximum estimated balance deduction/)
+-assert.doesNotMatch(scriptPage, /private test|no payment is collected/i)
+-
+-const workspace = read('components/ShapeWorkspace.tsx')
+-assert.match(workspace, /See maximum usage/)
+-assert.match(workspace, /Begin Script · max/)
+-assert.match(workspace, /Maximum estimated deduction/)
+-assert.match(workspace, /Progress advances only when a real Script step finishes/)
+-assert.match(workspace, /role="progressbar"/)
+-assert.match(workspace, /setQuoteMicrousd\(null\)/)
+-assert.match(workspace, /Add usage in Account/)
+-assert.doesNotMatch(workspace, /Begin private Script test|Script opens soon|Preview only/)
+-
+-const jobs = read('app/api/shape/jobs/route.ts')
+-assert.match(jobs, /estimateShapeMaximumMicrousd/)
+-assert.match(jobs, /rpgyw_reserve_usage/)
+-assert.match(jobs, /maximum_deduction_microusd/)
+-assert.match(jobs, /settleShapeJobUsage/)
+-assert.doesNotMatch(jobs, /shapeEmailAllowed|private test list/)
+-
+-const transform = read('app/api/shape/transform/route.ts')
+-assert.match(transform, /cache_write_tokens/)
+-assert.match(transform, /settleCompletedJob/)
+-assert.match(transform, /section_disposition/)
+-assert.match(transform, /no_new_prose/)
+-assert.doesNotMatch(transform, /diagnostic:\s*message/)
+-assert.doesNotMatch(transform, /shapeEmailAllowed|private test list/)
+-
+-const settlement = read('lib/shape/settlement.ts')
+-assert.match(settlement, /roundUsageMicrousdToCent\(providerCostMicrousd\)/)
+-assert.match(settlement, /Math\.min\(roundedProviderCostMicrousd, maximumMicrousd\)/)
+-assert.match(settlement, /rpgyw_capture_usage/)
+-assert.match(settlement, /cache_write_tokens/)
+-
+-const stripe = read('lib/stripe/server.ts')
+-assert.match(stripe, /latest_charge\.balance_transaction/)
+-assert.match(stripe, /processingSurplusCents/)
+-assert.match(stripe, /stripe-surplus/)
+-assert.match(stripe, /account\?status=checkout-cancelled#add-usage/)
+-
+-const migration = read('supabase/migrations/20260825060000_script_commercial_billing.sql')
+-assert.match(migration, /cache_write_tokens/)
+-assert.match(migration, /usage_hold_id/)
+-assert.match(migration, /maximum_deduction_microusd/)
+-assert.match(migration, /provider_cost_microusd/)
+-assert.match(migration, /billed_microusd/)
+-
+-
+-const playPage = read('app/play/page.tsx')
+-assert.match(playPage, /<AigmGameplayShell \/>/)
+-assert.match(playPage, /MotionPreferenceProvider/)
+-assert.match(playPage, /<MotionPreferenceProvider>/)
+-assert.match(playPage, /redirect\('\/start'\)/)
+-assert.doesNotMatch(playPage, /Import Existing Adventure|RpgywPlayEntry/)
+-
+-const startPage = read('app/start/page.tsx')
+-assert.match(startPage, /<RpgywStartEntry/)
+-assert.match(startPage, /Build a new campaign here, or import an existing WardensPC or RPG Your Way adventure/)
++has(home, 'Why I created RPG Your Way.')
++has(home, 'Who benefits from this site?')
++has(home, 'Multiplayer testing is underway, with chat.')
++lacks(home, 'Multiplayer is now live, with chat.')
++const css = read('app/globals.css')
++has(css, '.landing-accordion {\n  overflow: visible;\n  border: 0;')
++has(css, '.landing-accordion-body { margin-top: .65rem;')
++has(css, '  .landing-accordion-body,\n  .feature-card,', 'accordion body in shared raised-plaque system')
++lacks(css, 'button.start-choice[aria-pressed="true"]', 'one-off Start campaign-mode CSS patch')
++has(css, 'body .start-choice.start-choice--selected {')
++has(css, 'background-image: none !important;', 'persistent selected face reset')
++
++// Start uses one explicit persistent selected class for ruleset and solo/multiplayer choices.
++const start = read('components/start/StartOnboarding.tsx')
++has(start, "campaignMode === 'solo' ? ' start-choice--selected' : ''")
++has(start, "campaignMode === 'multiplayer' ? ' start-choice--selected' : ''")
++has(start, "ruleset === option.id ? ' start-choice--selected' : ''")
++
++// Included/free AI work still requires an account and is measured for true provider cost.
++const billing = read('lib/usage/server-billing.ts')
++has(billing, 'export async function recordIncludedProviderUsage(')
++has(billing, "included_usage: true")
++has(billing, "onConflict: 'user_id,surface,feature,operation_id'")
++
++const intake = read('app/api/aigm/character-intake/route.ts')
++const intakePost = intake.slice(intake.indexOf('export async function POST'))
++before(intakePost, 'account = await requireUsageAccount()', "fetch('https://api.openai.com/v1/responses'", 'Character Intake authentication gate')
++has(intake, "feature: 'character_import_included'")
++has(intake, 'verification_provider_cost_microusd')
++has(intake, 'terraProviderCostMicrousd(payload.usage) + verificationCostMicrousd')
++
++const clarify = read('app/api/aigm/character-clarify/route.ts')
++const clarifyPost = clarify.slice(clarify.indexOf('export async function POST'))
++before(clarifyPost, 'account = await requireUsageAccount()', "fetch('https://api.openai.com/v1/responses'", 'Character Clarify authentication gate')
++has(clarify, "feature: 'character_import_clarification_included'")
++
++const startHelp = read('app/api/start/help/route.ts')
++before(startHelp, 'account = await requireUsageAccount()', "fetch('https://api.openai.com/v1/responses'", 'Start Page Help authentication gate')
++has(startHelp, "feature: 'start_page_help_included'")
++has(startHelp, 'terraProviderCostMicrousd(payload.usage)')
++
++// Account and transition copy reflect the current cloud architecture.
++const account = read('app/account/page.tsx')
++has(account, 'Your account keeps purchases, usage, and cloud campaigns together.')
++lacks(account, 'Play campaigns stay in this browser unless you export them.')
+ const startEntry = read('components/aigm/rpgyw-start-entry.tsx')
+-assert.match(startEntry, /Import Existing Adventure/)
+-assert.match(startEntry, /parseAdventureState/)
+-assert.match(startEntry, /imported\.stage !== 'complete'/)
+-assert.match(startEntry, /window\.location\.assign\('\/play'\)/)
+-assert.match(startEntry, /Loading your campaigns/)
+-assert.doesNotMatch(startEntry, /setPlaying|AigmGameplayShell/)
++has(startEntry, 'RPG Your Way can import WardensPC exports that had already reached Play')
++lacks(startEntry, 'wait for the rebuilt RPG Your Way onboarding flow')
+ const gameplayShell = read('components/aigm/aigm-gameplay-shell.tsx')
+-assert.match(gameplayShell, /Go to Start/)
+-assert.match(gameplayShell, /href="\/start"/)
+-
+-const campaignPersistence = read('lib/aigm/campaign-persistence.ts')
+-assert.match(campaignPersistence, /rpgyw-aigm-campaigns/)
+-assert.doesNotMatch(campaignPersistence, /wardenspc-aigm-campaigns/)
+-
+-const ownerQa = read('lib/usage/owner-qa.ts')
+-assert.match(ownerQa, /OWNER_QA_EMAIL = 'brett@rpgyourway\.com'/)
+-assert.doesNotMatch(ownerQa, /@.*@/)
+-
+-const gameplay = read('app/api/aigm/gameplay-chat/route.ts')
+-assert.match(gameplay, /requireUsageAccount/)
+-assert.match(gameplay, /reserveUsage/)
+-assert.doesNotMatch(gameplay, /settleUsage/)
+-assert.match(gameplay, /recordPlayTurnComponent/)
+-assert.match(gameplay, /markGameplayComplete/)
+-assert.match(gameplay, /attachPlayTurnReservation/)
+-assert.match(gameplay, /narration_expected/)
+-assert.match(gameplay, /terraProviderCostMicrousd/)
+-assert.match(gameplay, /usage_billing/)
+-assert.match(gameplay, /x-rpgyw-operation-id/)
+-
+-const billing = read('lib/usage/server-billing.ts')
+-assert.match(billing, /rpgyw_reserve_usage/)
+-assert.match(billing, /rpgyw_capture_usage/)
+-assert.match(billing, /roundUsageMicrousdToCent/)
+-assert.match(billing, /ownerQa/)
+-assert.match(billing, /provider_usage_events/)
+-
+-const playAccess = read('app/api/play/access/route.ts')
+-assert.match(playAccess, /voice_available:\s*true/)
+-const speech = read('app/api/aigm/speech/route.ts')
+-const transcribe = read('app/api/aigm/transcribe/route.ts')
+-assert.doesNotMatch(speech, /if \(!account\.ownerQa\)/)
+-assert.doesNotMatch(transcribe, /if \(!account\.ownerQa\)/)
+-
++lacks(gameplayShell, '/#wardens-latest-update')
++
++// Support/legal pages must not describe already-live systems as future work.
++const support = read('app/support/page.tsx')
++has(support, 'mailto:brett@rpgyourway.com')
++lacks(support, 'before live payments are enabled')
++const privacy = read('app/legal/privacy/page.tsx')
++lacks(privacy, 'build placeholder')
++lacks(privacy, 'are now being wired')
++const terms = read('app/legal/terms/page.tsx')
++lacks(terms, 'build placeholder')
++lacks(terms, 'before paid access is switched on')
++
++// Cloud campaign state remains canonical, with revision conflict protection and account membership.
++const cloudMigration = read('supabase/migrations/20260828163000_cloud_campaigns.sql')
++has(cloudMigration, 'create table if not exists public.campaigns')
++has(cloudMigration, 'create table if not exists public.campaign_members')
++has(cloudMigration, 'revision bigint not null default 1')
++const cloudServer = read('lib/cloud-campaigns/server.ts')
++has(cloudServer, 'revision_conflict')
++has(cloudServer, 'campaign_members')
++const cloudClient = read('lib/aigm/cloud-campaigns.ts')
++has(cloudClient, 'expected_revision')
++const persistence = read('lib/aigm/campaign-persistence.ts')
++has(persistence, 'loadCloudCampaignState')
++has(persistence, 'saveCloudCampaignState')
++
++// Billing remains server-authoritative and separates provider cost from customer billing.
++has(billing, 'rpgyw_reserve_usage')
++has(billing, 'rpgyw_capture_usage')
++has(billing, "surface: 'play'")
++const providerMigration = read('supabase/migrations/20260825120000_play_provider_usage.sql')
++has(providerMigration, 'provider_usage_events')
++has(providerMigration, 'unique (user_id, surface, feature, operation_id)')
++const playTurnBilling = read('lib/usage/play-turn-billing.ts')
++has(playTurnBilling, 'providerTotal')
++has(playTurnBilling, 'ttt_provider_microusd')
++has(playTurnBilling, 'gameplay_provider_microusd')
++has(playTurnBilling, 'tts_provider_microusd')
++
++// Script and Stripe remain on the shared prepaid balance.
++const scriptPage = read('app/script/page.tsx')
++has(scriptPage, 'same prepaid RPG Your Way usage balance as Play')
+ const shapeJobs = read('app/api/shape/jobs/route.ts')
+-assert.match(shapeJobs, /isOwnerQaEmail/)
+-assert.match(shapeJobs, /if \(!auth\.ownerQa\)/)
+-const shapeSettlement = read('lib/shape/settlement.ts')
+-assert.match(shapeSettlement, /ownerQa/)
+-assert.match(shapeSettlement, /billed_microusd: 0/)
+-
+-const playMigration = read('supabase/migrations/20260825120000_play_provider_usage.sql')
+-assert.match(playMigration, /provider_usage_events/)
+-assert.match(playMigration, /owner_qa_exempt/)
+-assert.match(playMigration, /no browser read\/write policies/i)
+-
+-assert.equal(pkg.dependencies?.['@vercel/analytics'], '^1.5.0')
+-assert.equal(pkg.dependencies?.['lucide-react'], '^1.16.0')
+-const devDependencies = (pkg as { devDependencies?: Record<string,string> }).devDependencies || {}
+-assert.equal(devDependencies['tailwindcss'], '^4.3.3')
+-assert.equal(devDependencies['@tailwindcss/postcss'], '^4.3.3')
+-assert.match(read('postcss.config.mjs'), /@tailwindcss\/postcss/)
+-
+-const env = read('.env.example')
+-assert.match(env, /OPENAI_API_KEY=/)
+-assert.match(env, /OPENAI_AUDIO_API_KEY=/)
+-assert.match(env, /OPENAI_TTS_API_KEY=/)
+-assert.match(env, /OPENAI_TRANSCRIBE_API_KEY=/)
+-assert.match(env, /OPENAI_TTS_MODEL=gpt-4o-mini-tts/)
+-assert.match(env, /OPENAI_TRANSCRIBE_MODEL=gpt-4o-mini-transcribe/)
+-assert.match(env, /STRIPE_SECRET_KEY=/)
+-assert.match(env, /STRIPE_WEBHOOK_SECRET=/)
+-assert.match(env, /SUPABASE_SERVICE_ROLE_KEY=/)
+-assert.doesNotMatch(env, /RPGYW_SHAPE_BETA_EMAILS/)
+-
+-for (const productionFile of ['lib/stripe/checkout.ts', 'lib/shape/billing.ts', 'lib/shape/settlement.ts']) {
+-  assert.doesNotMatch(read(productionFile), /from ['"][^'"]+\.ts['"]/, `${productionFile} must not import .ts extensions.`)
+-}
+-
+-
+-const playAccess175 = read('app/api/play/access/route.ts')
+-assert.match(playAccess175, /voice_available:\s*true/)
+-assert.doesNotMatch(playAccess175, /voice_available:\s*account\.ownerQa/)
+-for (const voiceRoute175 of ['app/api/aigm/speech/route.ts', 'app/api/aigm/transcribe/route.ts']) {
+-  const source175 = read(voiceRoute175)
+-  assert.match(source175, /await requireUsageAccount\(\)/)
+-  assert.doesNotMatch(source175, /if \(!account\.ownerQa\)/)
+-  assert.doesNotMatch(source175, /being readied for prepaid Play billing/)
+-}
+-const gameplay175 = read('components/aigm/aigm-gameplay-shell.tsx')
+-assert.match(gameplay175, /aigm-character-reorder/)
+-assert.match(gameplay175, /Character record/)
+-assert.doesNotMatch(gameplay175, /Complete character record/)
+-assert.match(gameplay175, /character-sheet-dialog/)
+-assert.match(gameplay175, /character-sheet-actions/)
+-assert.match(gameplay175, /aigm-gameplay-send/)
+-const voiceControls175 = read('components/aigm/aigm-voice-controls.tsx')
+-assert.match(voiceControls175, /aigm-voice-controls/)
+-const css175 = read('app/globals.css')
+-assert.match(css175, /RPG Your Way 1\.7\.5 Play UI and voice cleanup/)
+-assert.match(css175, /grid-template-columns:\s*minmax\(230px, \.64fr\)/)
+-assert.match(css175, /\.aigm-character-reorder/)
+-assert.match(css175, /\.character-sheet-dialog/)
+-
+-console.log('RPG Your Way 1.7.5 Play UI and voice cleanup checks passed.')
+-
+-
+-const gameplay179 = read('components/aigm/aigm-gameplay-shell.tsx')
+-assert.match(gameplay179, /aigm-conversation-column/)
+-assert.match(gameplay179, /aigm-message-wrap/)
+-assert.match(gameplay179, /Initiative <span className="inline-block whitespace-nowrap">&amp; Dice<\/span>/)
+-assert.doesNotMatch(gameplay179, /\b(?:bg|text|border)-accent(?:-foreground)?(?:\/[\w.-]+)?\b/)
+-const css179 = read('app/globals.css')
+-assert.match(css179, /RPG Your Way 1\.7\.9 recovered Play layout and color cleanup/)
+-assert.match(css179, /grid-template-columns:\s*minmax\(260px, \.78fr\) minmax\(0, 2\.4fr\) minmax\(250px, \.86fr\)/)
+-assert.match(css179, /\.aigm-assistant-message\s*\{\s*max-width:\s*calc\(100% - 3rem\)/)
+-const access179 = read('app/api/play/access/route.ts')
+-assert.match(access179, /voice_available:\s*true/)
+-assert.doesNotMatch(access179, /voice_available:\s*account\.ownerQa/)
+-
+-console.log('RPG Your Way 1.7.9 recovery, voice-validator, and Play presentation checks passed.')
+-
+-
+-const gameplay1710 = read('components/aigm/aigm-gameplay-shell.tsx')
+-assert.match(gameplay1710, /aigm-gameplay-summary/)
+-assert.match(gameplay1710, /rows=\{2\}/)
+-assert.match(gameplay1710, /onReorder=\{reorderPartyCharacter\}/)
+-assert.match(gameplay1710, /pointerDraggingRef/)
+-assert.match(gameplay1710, /aigm-session-help/)
+-assert.match(gameplay1710, /data-open=\{sessionToolsOpen/)
+-assert.doesNotMatch(gameplay1710, /Current party<\/p>/)
+-const authPanel1710 = read('components/AuthPanel.tsx')
+-assert.match(authPanel1710, /Confirm password/)
+-assert.match(authPanel1710, /name="confirmPassword"/)
+-const authActions1710 = read('app/account/actions.ts')
+-assert.match(authActions1710, /password !== confirmPassword/)
+-const authPrompt1710 = read('components/AuthPrompt.tsx')
+-assert.match(authPrompt1710, /Not now\. I just want to look around\./)
+-const css1710 = read('app/globals.css')
+-assert.match(css1710, /RPG Your Way 1\.7\.12 Play space-reclamation and account-entry cleanup/)
+-assert.match(css1710, /minmax\(230px, \.68fr\) minmax\(0, 2\.85fr\) minmax\(240px, \.72fr\)/)
+-assert.match(css1710, /aigm-session-tools\[data-open="true"\]/)
+-assert.match(css1710, /\.auth-not-now \{[\s\S]*width: 100%/)
+-
+-console.log('RPG Your Way 1.7.12 Play space and account-entry checks passed.')
+-
+-
+-const gameplay1714 = read('components/aigm/aigm-gameplay-shell.tsx')
+-assert.match(gameplay1714, />Purist<\/button>/)
+-assert.match(gameplay1714, /<span className="text-center leading-tight">Story<br \/>first<\/span><\/button>/)
+-assert.match(gameplay1714, />How many dice\?<\/label>/)
+-assert.match(gameplay1714, />Of which kind\?<\/p>/)
+-assert.match(gameplay1714, /Can I direct my game\?/)
+-assert.match(gameplay1714, /Drag to reorder/)
+-assert.match(gameplay1714, /const \[dragging, setDragging\] = useState\(false\)/)
+-
+-const siteHeader1714 = read('components/SiteHeader.tsx')
+-assert.match(siteHeader1714, /\{ href: '\/start', label: 'Start' \}/)
+-assert.match(siteHeader1714, /\{ href: '\/account', label: 'Account' \}/)
+-
+-const playPage1714 = read('app/play/page.tsx')
+-assert.match(playPage1714, /play-page-frame/)
+-assert.match(playPage1714, /<SiteHeader \/>/)
+-assert.match(playPage1714, /<MotionPreferenceProvider>/)
+-assert.match(playPage1714, /<AigmGameplayShell \/>/)
+-
+-const landing1714 = read('app/page.tsx')
+-assert.match(landing1714, /PageShell headerVariant="landing"/)
+-assert.match(landing1714, /Why I created RPG Your Way\./)
+-assert.match(landing1714, /Who benefits from this site\?/)
+-assert.match(landing1714, /<LandingCampaignPanel \/>/)
+-assert.match(landing1714, />Start A New Campaign<\/Link>/)
+-assert.doesNotMatch(landing1714, /~~ Warning: AI GM ahead ~~/)
+-assert.doesNotMatch(landing1714, /Open Now/)
+-assert.doesNotMatch(landing1714, /Tabletop gaming is best in person\. No question\./)
+-
+-const campaignPanel1714 = read('components/LandingCampaignPanel.tsx')
+-assert.match(campaignPanel1714, /Return to Adventure/)
+-assert.match(campaignPanel1714, /available_display/)
+-assert.match(campaignPanel1714, /loadAdventureState/)
+-assert.match(campaignPanel1714, /CURRENT_ADVENTURE_KEY/)
+-
+-const css1714 = read('app/globals.css')
+-assert.match(css1714, /RPG Your Way 1\.7\.14 Play \+ landing return pass/)
+-assert.match(css1714, /translateY\(calc\(-100% \+ 4px\)\)/)
+-assert.match(css1714, /\.landing-return-grid/)
+-assert.match(css1714, /\.landing-campaign-snippet/)
+-assert.match(css1714, /\.fullscreen-nav-gap\s*\{\s*margin-left:\s*\.25rem/)
+-
+-console.log('RPG Your Way 1.7.16 landing-validator hotfix checks passed.')
+-
+-const landingCampaignCurrent = read('components/LandingCampaignPanel.tsx')
+-assert.match(landingCampaignCurrent, /Return to Adventure/)
+-
+-
+-const landing1717 = read('app/page.tsx')
+-assert.match(landing1717, />Start A New Campaign<\/Link>/)
+-assert.match(landing1717, /<WhyCreatedAccordion \/>/)
+-assert.match(landing1717, /<AudienceAccordion \/>/)
+-
+-const campaign1717 = read('components/LandingCampaignPanel.tsx')
+-assert.match(campaign1717, /Return to Adventure/)
+-assert.doesNotMatch(campaign1717, /Return to Playing/)
+-
+-const css1717 = read('app/globals.css')
+-assert.match(css1717, /RPG Your Way 1\.7\.17 landing console \+ repository cleanup/)
+-assert.match(css1717, /\.landing-ai-warning \.landing-notice-card h1/)
+-assert.match(css1717, /\.landing-player-stack\s*\{/)
+-assert.match(css1717, /\.landing-new-player\.button/)
+-assert.match(css1717, /\.landing-return-button\.button/)
+-
+-console.log('RPG Your Way 1.7.17 landing console and repository cleanup checks passed.')
+-
+-
+-const landing1718 = read('app/page.tsx')
+-assert.match(landing1718, /landing-reason-created/)
+-assert.match(landing1718, /landing-reason-audience/)
+-assert.match(landing1718, />Start A New Campaign<\/Link>/)
+-assert.match(landing1718, /Why I created RPG Your Way\./)
+-assert.match(landing1718, /Who benefits from this site\?/)
+-
+-const campaign1718 = read('components/LandingCampaignPanel.tsx')
+-assert.match(campaign1718, /return clean|const limit = (?:360|1100)/)
+-assert.match(campaign1718, /landing-campaign-summary-card/)
+-assert.match(campaign1718, /landing-balance-control/)
+-assert.match(campaign1718, /Return to Adventure/)
+-assert.match(campaign1718, /<span>\{campaign\.snippet/)
+-
+-const css1718 = read('app/globals.css')
+-assert.match(css1718, /RPG Your Way 1\.7\.18 dimensional flat landing system/)
+-assert.match(css1718, /--landing-mint:/)
+-assert.match(css1718, /--landing-olive:/)
+-assert.match(css1718, /\.landing-open-now \.landing-notice-card h2/)
+-assert.match(css1718, /\.landing-thesis-strip p/)
+-assert.match(css1718, /\.landing-reason-card summary/)
+-assert.match(css1718, /\.landing-campaign-summary-card/)
+-assert.match(css1718, /\.landing-campaign-snippet > span/)
+-assert.match(css1718, /\.landing-balance-control/)
+-assert.match(css1718, /grid-template-columns: minmax\(0, \.85fr\) minmax\(0, 1\.45fr\)/)
+-
+-console.log('RPG Your Way 1.7.18 dimensional landing console checks passed.')
+-
+-
+-const landing1719 = read('app/page.tsx')
+-assert.match(landing1719, /landing-return-section--hero/)
+-assert.match(landing1719, /landing-reason-created/)
+-assert.match(landing1719, /landing-reason-audience/)
+-assert.doesNotMatch(landing1719, /landing-notice-pair-section/)
+-assert.doesNotMatch(landing1719, /landing-thesis-strip/)
+-assert.doesNotMatch(landing1719, /className="hero-unique landing-reason-card/)
+-assert.doesNotMatch(landing1719, /className="hero-audience landing-reason-card/)
+-
+-const campaign1719 = read('components/LandingCampaignPanel.tsx')
+-assert.match(campaign1719, /return clean|const limit = (?:360|1100)/)
+-assert.match(campaign1719, /landing-campaign-summary-card/)
+-assert.match(campaign1719, /landing-balance-control/)
+-assert.match(campaign1719, /Return to Adventure/)
+-
+-const css1719 = read('app/globals.css')
+-assert.match(css1719, /RPG Your Way 1\.7\.19 dimensional landing language/)
+-assert.match(css1719, /--landing-brass-light:/)
+-assert.match(css1719, /\.landing-notice-grid/)
+-assert.match(css1719, /\.landing-notice-grid \.landing-notice-card h1/)
+-assert.match(css1719, /\.landing-reason-card summary/)
+-assert.match(css1719, /\.landing-player-stack,\n\.landing-return-logo/)
+-assert.match(css1719, /\.landing-campaign-summary-card/)
+-assert.match(css1719, /\.landing-campaign-snippet > span\s*\{\s*-webkit-line-clamp: 5;/)
+-assert.match(css1719, /\.landing-balance-control\s*\{/)
+-assert.match(css1719, /\.landing-return-logo\s*\{/)
+-assert.match(css1719, /aspect-ratio: 1 \/ 1;/)
+-assert.match(css1719, /white-space: nowrap;/)
+-
+-console.log('RPG Your Way 1.7.19 dimensional landing language checks passed.')
+-
+-
+-const campaign1720 = read('components/LandingCampaignPanel.tsx')
+-assert.match(campaign1720, /return clean|const limit = (?:360|1100)/)
+-
+-console.log('RPG Your Way 1.7.20 validator tail-limit hotfix checks passed.')
+-
+-
+-const landing1721 = read('app/page.tsx')
+-assert.match(landing1721, /PageShell headerVariant="landing"/)
+-assert.match(landing1721, /Why I created RPG Your Way\./)
+-assert.match(landing1721, /Who benefits from this site\?/ )
+-if (landing1721.includes('const features')) {
+-  assert.match(landing1721, /Play a long-running campaign without waiting for everybody to be free at the same time\.|Run an ongoing tabletop campaign without waiting for a whole group to be free at the same moment\./)
+-  assert.match(landing1721, /Play one character or run a party of up to six\.|Play one character or manage a full party\./)
+-  assert.match(landing1721, /Type or talk to your Game Master\.|The interface is being built mobile-first/)
+-}
+-assert.doesNotMatch(landing1721, /className="landing-notice-body"/)
+-
+-const css1721 = read('app/globals.css')
+-assert.match(css1721, /RPG Your Way 1\.7\.21 dimensional controls \+ human-language pass/)
+-assert.match(css1721, /--rpgyw-control-hover: var\(--lime\)/)
+-assert.match(css1721, /\.site-header \.brand:hover/)
+-assert.match(css1721, /\.landing-notice-body/)
+-assert.match(css1721, /\.landing-reason-card \.accordion-plus/)
+-assert.match(css1721, /border: 2px solid var\(--rpgyw-brass-edge\)/)
+-assert.match(css1721, /color: var\(--rpgyw-control-hover\) !important/)
+-assert.match(css1721, /body :where\(button, \.button, \.fake-button, summary, \[role="button"\]\)/)
+-
+-console.log('RPG Your Way 1.7.21 dimensional controls and language checks passed.')
+-
+-
+-const css1722 = read('app/globals.css')
+-assert.match(css1722, /RPG Your Way 1\.7\.22 header hover \+ dimensional utility controls/)
+-assert.match(css1722, /\.site-header \.main-nav a:hover,[\s\S]*background: var\(--forest-deep\);[\s\S]*color: var\(--lime\) !important/)
+-assert.match(css1722, /\.site-header \.brand-mark[\s\S]*border: 2px solid var\(--landing-brass-mid\)/)
+-assert.match(css1722, /\.site-header \.fullscreen-toggle[\s\S]*border: 2px solid var\(--landing-brass-mid\)/)
+-assert.match(css1722, /\.site-header \.fullscreen-toggle:hover,[\s\S]*background: var\(--forest-deep\);[\s\S]*color: var\(--lime\) !important/)
+-assert.match(css1722, /\.landing-reason-card summary:hover \.landing-accordion-prompt/)
+-assert.match(read('components/SiteHeader.tsx'), /className="brand-mark"/)
+-assert.match(read('components/FullscreenToggle.tsx'), /className="fullscreen-toggle"/)
+-
+-console.log('RPG Your Way 1.7.22 header hover and dimensional utility-control checks passed.')
+-
+-const css1723 = read('app/globals.css')
+-assert.match(css1723, /RPG Your Way 1\.7\.23 visual unification/)
+-assert.match(css1723, /\.shape-main > \.shape-shell,[\s\S]*background: transparent/)
+-assert.match(css1723, /\.account-intro[\s\S]*border: 2px solid var\(--rpgyw-brass-edge\)/)
+-assert.match(css1723, /\.aigm-die-button,[\s\S]*background:/)
+-assert.match(css1723, /\.aigm-send-roll,[\s\S]*var\(--landing-olive-19\)/)
+-assert.match(css1723, /\.medieval-page--play button:not\(:disabled\):hover,[\s\S]*background: var\(--forest-deep\) !important;[\s\S]*color: var\(--lime\) !important/)
+-assert.match(read('components/aigm/aigm-gameplay-shell.tsx'), /aigm-die-button/)
+-assert.match(read('components/aigm/aigm-gameplay-shell.tsx'), /aigm-character-card--leader/)
+-assert.doesNotMatch(read('app/account/page.tsx'), /className="account-intro"/)
+-
+-console.log('RPG Your Way 1.7.23 visual-unification checks passed.')
+-
+-
+-const css1724 = read('app/globals.css')
+-assert.match(css1724, /RPG Your Way 1\.7\.24 Play visual correction/)
+-assert.match(css1724, /\.aigm-dice-mode-button[\s\S]*border: 1px solid var\(--rpgyw-brass-edge\)/)
+-assert.match(css1724, /\.aigm-characters-heading h2[\s\S]*font-size: clamp/)
+-assert.match(css1724, /\.aigm-conversation-stage[\s\S]*background: var\(--forest-deep\)/)
+-assert.match(css1724, /\.aigm-conversation-olive-frame[\s\S]*var\(--landing-olive-19-deep\)/)
+-assert.match(css1724, /\.aigm-conversation-scroll[\s\S]*border: 2px solid var\(--landing-brass-dark\)/)
+-const gameplay1724 = read('components/aigm/aigm-gameplay-shell.tsx')
+-assert.match(gameplay1724, /aigm-dice-mode-toggle/)
+-assert.match(gameplay1724, /aigm-conversation-stage/)
+-assert.match(gameplay1724, /aigm-conversation-olive-frame/)
+-
+-console.log('RPG Your Way 1.7.24 Play visual-correction checks passed.')
+-
+-
+-const css1725 = read('app/globals.css')
+-assert.match(css1725, /RPG Your Way 1\.7\.25 Play rail repair \+ landing bezel/)
+-assert.match(css1725, /\.aigm-dice-mode-toggle[\s\S]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/)
+-assert.match(css1725, /\.aigm-party-capacity[\s\S]*text-align: center/)
+-assert.match(css1725, /\.landing-campaign-screen-stage[\s\S]*background: var\(--forest-deep\)/)
+-assert.match(css1725, /\.landing-campaign-screen-olive-frame[\s\S]*var\(--landing-olive-19-deep\)/)
+-const gameplay1725 = read('components/aigm/aigm-gameplay-shell.tsx')
+-assert.match(gameplay1725, /Current party:/)
+-assert.match(gameplay1725, /Max party size:/)
+-assert.doesNotMatch(gameplay1725, /\{readyCharacters\.length\} · Max 6/)
+-assert.match(read('components/LandingCampaignPanel.tsx'), /landing-campaign-screen-stage/)
+-assert.match(read('components/LandingCampaignPanel.tsx'), /landing-campaign-screen-olive-frame/)
+-
+-console.log('RPG Your Way 1.7.25 Play rail and landing-bezel checks passed.')
+-
+-const authPanel1726 = read('components/AuthPanel.tsx')
+-assert.match(authPanel1726, /<span>Email address<\/span>/)
+-assert.match(authPanel1726, /name="email"/)
+-assert.match(authPanel1726, /name="confirmPassword"/)
+-assert.doesNotMatch(authPanel1726, /confirmEmail/)
+-assert.doesNotMatch(authPanel1726, /Confirm your email address/)
+-const authActions1726 = read('app/account/actions.ts')
+-assert.doesNotMatch(authActions1726, /confirmEmail/)
+-assert.doesNotMatch(authActions1726, /email addresses do not match/)
+-assert.match(authActions1726, /Enter your email address and choose a password\./)
+-assert.match(authActions1726, /password !== confirmPassword/)
+-const authPrompt1726 = read('components/AuthPrompt.tsx')
+-assert.ok(authPrompt1726.indexOf('Not now. I just want to look around.') < authPrompt1726.indexOf('<AuthPanel'), 'Not-now control must appear above the sign-in/create-account cards.')
+-const css1726 = read('app/globals.css')
+-assert.match(css1726, /RPG Your Way 1\.7\.26 account-entry cleanup/)
+-assert.match(css1726, /\.auth-dialog-footer \{ display: block; margin: 0 0 \.8rem; \}/)
+-
+-console.log('RPG Your Way 1.7.26 account-entry cleanup checks passed.')
+-
+-
+-const css1727 = read('app/globals.css')
+-const header1727 = read('components/SiteHeader.tsx')
+-assert.match(css1727, /RPG Your Way 1\.7\.27 account dimensional pass \+ quiet-at-rest accents/)
+-assert.match(css1727, /\.account-main \.account-intro,[\s\S]*border: 2px solid var\(--rpgyw-brass-edge\) !important/)
+-assert.match(css1727, /\.account-main \.auth-card,[\s\S]*var\(--landing-mint-19\)/)
+-assert.match(css1727, /\.feature-card:nth-child\(2\) \.feature-eyebrow \{\s*color: var\(--cream-bright\);/)
+-assert.match(css1727, /\.kofi-support-button \{[\s\S]*color: var\(--lime\);/)
+-assert.match(css1727, /\.kofi-support-button:hover \{[\s\S]*color: var\(--lime\);/)
+-assert.match(header1727, /className="nav-external-arrow"/)
+-assert.match(header1727, />↗<\/span>/)
+-assert.match(header1727, /opens in a new tab/)
+-
+-console.log('RPG Your Way 1.7.27 account styling, quiet accents, and Read external-link cue checks passed.')
+-
+-
+-const css1728 = read('app/globals.css')
+-assert.match(css1728, /RPG Your Way 1\.7\.28 landing feature nameplates/)
+-assert.match(css1728, /\.feature-card \{[\s\S]*var\(--landing-pale\)/)
+-assert.match(css1728, /\.feature-eyebrow \{[\s\S]*border: 2px solid var\(--landing-brass-mid\)/)
+-assert.match(css1728, /\.feature-card:nth-child\(1\) \.feature-eyebrow,[\s\S]*\.feature-card:nth-child\(3\) \.feature-eyebrow[\s\S]*background:[\s\S]*var\(--forest-deep\)/)
+-assert.match(css1728, /\.feature-card:nth-child\(2\) \.feature-eyebrow \{[\s\S]*var\(--landing-pale\)[\s\S]*color: var\(--forest-deep\)/)
+-assert.match(css1728, /\.feature-card:nth-child\(2\) \{[\s\S]*var\(--forest-deep\)[\s\S]*color: var\(--cream-bright\);/)
+-assert.match(css1728, /\.feature-card:nth-child\(2\) h3 \{\s*color: var\(--cream-bright\);/)
+-assert.match(css1728, /\.feature-card:nth-child\(2\) > p:last-child \{\s*color: var\(--cream-bright\);/)
+-
+-console.log('RPG Your Way 1.7.28 landing feature-nameplate checks passed.')
+-
+-
+-const landing1730 = read('app/page.tsx')
+-const persistent1730 = read('components/PersistentPlayModal.tsx')
+-const css1730 = read('app/globals.css')
+-assert.match(landing1730, /persistentPlay: true/)
+-assert.match(landing1730, /<PersistentPlayModal \/>/)
+-assert.match(landing1730, /Play when you have time/)
+-assert.match(persistent1730, /Persistent Campaign\?/)
+-assert.match(persistent1730, /what the hell do we mean by persistent play\?/)
+-assert.match(persistent1730, /three hundred turns later/)
+-assert.match(persistent1730, /Tell it to look it up\./)
+-assert.match(persistent1730, /Five\. The robot doesn’t eat\./)
+-assert.match(persistent1730, /Work with your AI, not against it\./)
+-assert.match(css1730, /RPG Your Way 1\.7\.30: three-line premise plaque \+ persistent-play explanation/)
+-assert.match(css1730, /\.landing-reason-card \.persistent-play-close-x \{[\s\S]*width: 40px !important/)
+-assert.match(css1730, /\.landing-reason-card \.persistent-play-modal-footer button \{[\s\S]*background: var\(--forest-deep\) !important/)
+-assert.match(css1730, /\.persistent-play-thesis,[\s\S]*color: var\(--cream-bright\) !important/)
+-
+-
+-assert.match(gameplayShell, /aigm-topbar-nameplate/)
+-assert.match(gameplayShell, /aigm-gameplay-gm/)
+-assert.doesNotMatch(gameplayShell, /Accept what fate sends your way/)
+-assert.doesNotMatch(gameplayShell, /HP, AC, conditions, currency, and tracked resources update/)
+-assert.match(css, /RPG Your Way 1\.7\.31/)
+-console.log('RPG Your Way 1.7.31 compact Play header and rail-space checks passed.')
+-
+-
+-assert.match(gameplayShell, /aigm-gameplay-heading-copy/)
+-assert.match(gameplayShell, /<div className="aigm-character-footer">[\s\S]*Add another character<\/button>[\s\S]*<div className="aigm-character-memory-note/ )
+-assert.match(css, /RPG Your Way 1\.7\.32/)
+-assert.match(css, /\.aigm-dice-heading,[\s\S]*height: fit-content !important/)
+-assert.match(css, /\.aigm-dice-mode-toggle,[\s\S]*margin-top: 0 !important/)
+-assert.match(css, /\.aigm-gameplay-heading-copy \{[\s\S]*flex-direction: column/)
+-assert.match(css, /\.aigm-gameplay-meta \{[\s\S]*white-space: normal/)
+-console.log('RPG Your Way 1.7.32 Play rail-heading, campaign-header, and character-list flow checks passed.')
+-
+-
+-assert.match(css, /RPG Your Way 1\.7\.33: Play-only desktop header width/)
+-assert.match(css, /\.play-page-frame > \.site-header \.header-inner \{[\s\S]*width: calc\(100% - 1rem\)[\s\S]*max-width: none/)
+-assert.match(css, /@media \(min-width: 861px\) \{[\s\S]*\.play-page-frame \.aigm-gameplay-grid \{[\s\S]*grid-template-columns: minmax\(230px, \.68fr\) minmax\(0, 2\.85fr\) minmax\(240px, \.72fr\)/)
+-assert.match(css, /\.play-page-frame \.aigm-mobile-nav \{[\s\S]*display: none !important/)
+-assert.match(css, /\.aigm-dice-mode-button:not\(\.aigm-dice-mode-button--active\):hover,[\s\S]*color: var\(--lime\) !important/)
+-assert.match(css, /\.aigm-dice-mode-button--active,[\s\S]*color: var\(--cream-bright\) !important/)
+-console.log('RPG Your Way 1.7.33 Play desktop-layout, header-width, and dice-mode-state checks passed.')
+-
+-assert.match(gameplay1714, /<span className="text-center leading-tight">Story<br \/>first<\/span>/)
+-console.log('RPG Your Way 1.7.34 Story-first two-line centering check passed.')
+-
+-assert.match(gameplayShell, /aigm-character-memory-note/)
+-assert.match(css, /RPG Your Way 1\.7\.35/)
+-assert.match(css, /\.aigm-character-memory-note > svg \{[\s\S]*float: left/)
+-console.log('RPG Your Way 1.7.35 character-rail final-flow cleanup check passed.')
+-
+-
+-const start180 = read('components/start/StartOnboarding.tsx')
+-const startEntry180 = read('components/aigm/rpgyw-start-entry.tsx')
+-const accountActions180 = read('app/account/actions.ts')
+-const accountPage180 = read('app/account/page.tsx')
+-const footer180 = read('components/SiteFooter.tsx')
+-const css180 = read('app/globals.css')
+-
+-// 1.8 current Start onboarding contract.
+-assert.match(start180, /I need help with all of this/)
+-assert.match(start180, /My question wasn&apos;t above\. I still need help\./)
+-assert.match(start180, /25 free questions remaining in this onboarding session/)
+-assert.match(start180, /Choose the game system/)
+-assert.match(start180, /The Uncharted Realms/)
+-assert.match(start180, /D&D 5\.5e/)
+-assert.match(start180, /<span>2<\/span>Gather Your Party/)
+-assert.match(start180, /Choose from<br \/>ready-to-play characters/)
+-assert.match(start180, /And\/or browse for<br \/>your character files/)
+-assert.match(start180, /And\/or paste your<br \/>character&apos;s information/)
+-assert.match(start180, /Character import help/)
+-assert.doesNotMatch(start180, /About ready-to-play characters/)
+-assert.match(start180, /File added/)
+-assert.match(start180, /Import into RPG Your Way/)
+-assert.match(start180, /Required before this character can be used/)
+-assert.match(start180, /Recommended before play/)
+-assert.match(start180, /Names and portraits can be changed later on the Play page through the Characters sidebar/)
+-assert.doesNotMatch(start180, /or drag files here/)
+-assert.match(start180, /Proposed party leader:/)
+-assert.doesNotMatch(start180, />Keep<\/button>/)
+-assert.match(start180, /How did we choose this leader\?/)
+-assert.match(start180, /Strength override/)
+-assert.match(start180, /<span>3<\/span>Adjustable gameplay settings/)
+-assert.match(start180, />Customize<\/button>/)
+-assert.match(start180, />Use default settings<\/button>/)
+-assert.match(start180, /How weird do you want your campaign to get\?/)
+-assert.match(start180, /Grounded and local/)
+-assert.match(start180, /Reality-bending and cosmic/)
+-assert.match(start180, /Long-term story direction/)
+-assert.match(start180, /rows=\{3\}/)
+-assert.match(start180, /start-field-bezel/)
+-assert.match(start180, /Descriptive campaign name here — have fun/)
+-assert.match(start180, /placeholder="Game Master name"/)
+-assert.doesNotMatch(start180, /The Sharn Chronicles/)
+-assert.doesNotMatch(start180, /Malcolm/)
+-assert.doesNotMatch(start180, /UI review build: character standardization/)
+-assert.doesNotMatch(start180, /Male · Fable/)
+-assert.doesNotMatch(start180, /Female · Marin/)
+-assert.match(start180, /'Onward'/)
+-assert.match(start180, /Importing a normal character is generally free/)
+-assert.match(start180, /before additional AI processing uses part of your available usage balance/)
+-
+-assert.match(startEntry180, /<StartOnboarding/)
+-assert.match(startEntry180, /Already have an RPG Your Way or WardensPC adventure\?/)
+-assert.match(startEntry180, /site-frame site-frame-play site-frame-start/)
+-assert.match(accountActions180, /admin\.auth\.admin\.deleteUser/)
+-assert.match(accountActions180, /confirmation !== 'DELETE'/)
+-assert.match(accountPage180, /<DeleteAccountControl \/>/)
+-assert.match(footer180, /mailto:brett@rpgyourway\.com/)
+-assert.match(footer180, />Contact</)
+-
+-assert.doesNotMatch(css180, /--lime: #00ff00/)
+-assert.match(css180, /RPG Your Way 1\.8\.6/)
+-assert.match(css180, /\.site-frame-start \.start-page-main > \.start-page-shell \{[\s\S]*background: transparent/)
+-assert.match(css180, /\.start-step-nameplate,[\s\S]*border: 3px solid var\(--rpgyw-brass-highlight\)/)
+-assert.match(css180, /\.start-drop-zone \{[\s\S]*border: 7px solid var\(--landing-olive-19-deep\)/)
+-assert.match(css180, /\.start-settings-bezel \{[\s\S]*border: 7px solid var\(--landing-olive-19-deep\)/)
+-assert.match(css180, /\.start-question-textarea \{[\s\S]*border: 7px solid var\(--landing-olive-19-deep\)/)
+-assert.match(css180, /\.start-rating-scale button\.is-selected \{[\s\S]*var\(--forest-deep\)/)
+-assert.match(css180, /\.start-mini-ratings label \{[\s\S]*border: 2px solid var\(--rpgyw-brass-highlight\)/)
+-assert.match(css180, /\.start-field-bezel \{[\s\S]*border: 7px solid var\(--landing-olive-19-deep\)/)
+-console.log('RPG Your Way 1.8.6 Start open-map, dimensional-controls, question-scale, and naming-bezel checks passed.')
+-
+-
+-const start187 = read('components/start/StartOnboarding.tsx')
+-const intake187 = read('app/api/aigm/character-intake/route.ts')
+-const clarify187 = read('app/api/aigm/character-clarify/route.ts')
+-const help187 = read('app/api/start/help/route.ts')
+-const prompt187 = read('lib/aigm/character-intake-prompt.ts')
+-assert.match(start187, /Import into RPG Your Way/)
+-assert.match(start187, /Required before this character can be used/)
+-assert.match(start187, /Recommended before play/)
+-assert.match(start187, /Continue without these answers/)
+-assert.match(start187, /Names and portraits can be changed later on the Play page through the Characters sidebar\./)
+-assert.match(start187, /window\.location\.assign\('\/play'\)/)
+-assert.match(start187, /saveAdventureState/)
+-assert.doesNotMatch(start187, /or drag files here/)
+-assert.doesNotMatch(start187, /start-drop-zone/)
+-assert.match(intake187, /paid_intake_confirmation_required/)
+-assert.match(intake187, /allow_paid/)
+-assert.match(intake187, /reserveUsage/)
+-assert.match(intake187, /settleUsage/)
+-assert.match(clarify187, /bill_usage/)
+-assert.match(help187, /START_HELP_KNOWLEDGE/)
+-assert.match(help187, /max_output_tokens: 500/)
+-assert.match(help187, /MAX_QUESTIONS_PER_HOUR = 25/)
+-assert.match(start187, /activeImportWorkflow/)
+-assert.match(start187, /Finish importing .* before starting another character/)
+-assert.match(prompt187, /Separate clarification questions into two tiers/)
+-assert.match(css, /RPG Your Way 1\.8\.7/)
+-assert.doesNotMatch(css, /start-file-drop-control/)
+-assert.match(css, /start-clarification-tier/)
+-assert.match(css, /site-header \.brand-mark \{ width: 44px; height: 44px;/)
+-console.log('RPG Your Way 1.8.7 functional Start import, clarification, help, campaign creation, footer, and compass checks passed.')
+-
+-const start188 = read('components/start/StartOnboarding.tsx')
+-assert.match(start188, /useState<1 \| 2 \| 3 \| 4>\(1\)/)
+-assert.match(start188, /activeStep === 1/)
+-assert.match(start188, /\(default\)/)
+-assert.match(start188, /or choose a different one/)
+-assert.match(start188, /Use this game system/)
+-assert.match(start188, /<strong>Selected:<\/strong>/)
+-assert.match(start188, /setActiveStep\(2\)/)
+-assert.match(start188, /activeStep === 2/)
+-assert.match(start188, /activeStep === 3 && partyReady/)
+-assert.match(start188, /activeStep === 4 && questionsDone/)
+-assert.match(start188, /Or reset everything and start again/)
+-assert.doesNotMatch(start188, /Current default/)
+-assert.doesNotMatch(start188, /<p className="start-fixed-setting"><strong>Setting:<\/strong> The Uncharted Realms<\/p>/)
+-assert.match(css, /RPG Your Way 1\.8\.8/)
+-assert.match(css, /start-rules-card--single-step/)
+-assert.match(css, /start-reset-link/)
+-console.log('RPG Your Way 1.8.8 sequential Step 1 game-rules board checks passed.')
+-
+-
+-const start189 = read('components/start/StartOnboarding.tsx')
+-const help189 = read('lib/start/help-knowledge.ts')
+-assert.match(start189, /<span>2<\/span>Gather Your Party/)
+-assert.match(start189, /Names and portraits can be changed later on the Play page through the Characters sidebar\./)
+-assert.doesNotMatch(start189, /Click on whoever you want to edit/)
+-assert.doesNotMatch(start189, /or drag files here/)
+-assert.doesNotMatch(start189, /onDrop=\{onBrowseDrop\}/)
+-assert.doesNotMatch(start189, /DragEvent/)
+-assert.match(start189, /remainingPartySlots = Math\.max\(0, 6 - totalPartyCount\)/)
+-assert.match(start189, /Current party: \{totalPartyCount\} · \{remainingPartySlots\}/)
+-assert.match(start189, /setImportMessage\(''\)[\s\S]*setParty\(\(current\) => current\.filter/)
+-assert.match(start189, /sourceFileKey/)
+-assert.match(start189, /duplicate character file/)
+-assert.match(start189, />Use this party<\/button>/)
+-assert.match(start189, /setActiveStep\(3\)/)
+-assert.match(start189, /questionsDone \? <div className="start-settings-leader"/)
+-assert.match(start189, /Proposed party leader:/)
+-assert.match(start189, /start-step-continue/)
+-assert.match(help189, /browsing for the file/)
+-assert.doesNotMatch(help189, /browsing or dragging/)
+-assert.match(css, /RPG Your Way 1\.8\.9/)
+-assert.match(css, /\.start-party-note/)
+-assert.match(css, /\.start-party-confirm/)
+-assert.match(css, /\.start-settings-leader/)
+-console.log('RPG Your Way 1.8.9 Step 2 party-count, no-drag, plain-note, duplicate-file, and deferred-leader checks passed.')
+-
+-
+-const start1810 = read('components/start/StartOnboarding.tsx')
+-const voice1810 = read('components/aigm/aigm-voice-controls.tsx')
+-const transcribe1810 = read('app/api/aigm/transcribe/route.ts')
+-const speech1810 = read('app/api/aigm/speech/route.ts')
+-const transcriptionGuard1810 = read('lib/aigm/transcription-guard.ts')
+-assert.match(start1810, /<span>4<\/span><strong id="names-heading">The naming of the names<\/strong>/)
+-assert.match(start1810, /<span className="sr-only">Campaign name<\/span>/)
+-assert.match(start1810, /<span className="sr-only">Game Master name<\/span>/)
+-assert.doesNotMatch(start1810, /Give your campaign a fun name<\/span>/)
+-assert.doesNotMatch(start1810, /What do you want to call your Game Master\?<\/span>/)
+-assert.match(start1810, /helpConversation/)
+-assert.match(start1810, /start-ai-dialogue/)
+-assert.match(start1810, /AigmVoiceControls/)
+-assert.match(start1810, /profile="onboarding" assistantName="Start Page Help"/)
+-assert.match(start1810, /profile="onboarding" assistantName="RPG Your Way"/)
+-assert.match(start1810, /clarificationConversation/)
+-assert.match(start1810, /Required before this character can be used/)
+-assert.match(start1810, /Recommended before play/)
+-assert.match(start1810, /data-aigm-manual-listen="true"/)
+-assert.match(voice1810, /assistantName\?\.trim\(\) \|\| \(onboardingProfile \? 'RPG Your Way' : 'Game Master'\)/)
+-assert.doesNotMatch(voice1810, /Ithamir’s voice/)
+-assert.match(transcribe1810, /form\.get\('context'\) === 'onboarding'/)
+-assert.match(transcribe1810, /transcriptionPromptFor\(context\)/)
+-assert.match(speech1810, /profile === 'onboarding'/)
+-assert.match(speech1810, /onboarding or setup-help reply/)
+-assert.doesNotMatch(transcriptionGuard1810, /for Ithamir/)
+-assert.match(css, /RPG Your Way 1\.8\.10/)
+-assert.match(css, /\.start-ai-turn--assistant/)
+-assert.match(css, /\.start-ai-composer/)
+-console.log('RPG Your Way 1.8.10 Start dialogue, default-readback controls, and naming-step cleanup checks passed.')
+-
+-const css1811 = read('app/globals.css')
+-assert.match(css1811, /RPG Your Way 1\.8\.11/)
+-assert.match(css1811, /--rpgyw-pale-olive: #d6d1a3/)
+-assert.match(css1811, /--rpgyw-pale-olive-light: #ebe6c5/)
+-assert.match(css1811, /--rpgyw-pale-olive-deep: #beb77c/)
+-assert.match(css1811, /--landing-mint: var\(--rpgyw-pale-olive\)/)
+-assert.match(css1811, /--landing-mint-19: var\(--rpgyw-pale-olive\)/)
+-assert.doesNotMatch(css1811, /#d9e2cf|#e8eddf|#dce5d3|#c7d4bc/i)
+-assert.match(css1811, /body :where\(button, \.button, \.fake-button, summary, \[role="button"\]\)/)
+-assert.match(css1811, /0 0 0 var\(--rpgyw-rim-spread\) var\(--rpgyw-brass-edge\)/)
+-assert.match(css1811, /section\[role="dialog"\]/)
+-assert.match(css1811, /border: 5px solid var\(--landing-olive-19-deep\) !important/)
+-assert.match(css1811, /\.site-footer \.kofi-support-button/)
+-assert.match(css1811, /body a\[class\*=\"rounded\"\]\[class\*=\"border\"\]/)
+-assert.match(css1811, /\.landing-notice-grid \.landing-notice-card h1,[\s\S]*0 0 0 3px var\(--rpgyw-brass-edge\)/)
+-console.log('RPG Your Way 1.8.11 pale-olive palette, standardized brass furniture, inset bezels, popup, and Ko-fi checks passed.')
+-
+-const turnBilling1812 = read('lib/usage/play-turn-billing.ts')
+-const audioCost1812 = read('lib/usage/audio-cost.ts')
+-const speech1812 = read('app/api/aigm/speech/route.ts')
+-const transcribe1812 = read('app/api/aigm/transcribe/route.ts')
+-const voice1812 = read('components/aigm/aigm-voice-controls.tsx')
+-const shell1812 = read('components/aigm/aigm-gameplay-shell.tsx')
+-const account1812 = read('app/account/page.tsx')
+-const migration1812 = read('supabase/migrations/20260828002500_play_turn_voice_billing.sql')
+-assert.match(turnBilling1812, /roundUsageMicrousdToCent\(providerTotal\)/)
+-assert.match(turnBilling1812, /component_type === 'ttt'/)
+-assert.match(turnBilling1812, /component_type === 'gameplay'/)
+-assert.match(turnBilling1812, /component_type === 'tts'/)
+-assert.match(turnBilling1812, /rpgyw_capture_usage/)
+-assert.match(turnBilling1812, /ownerQa \? 0/)
+-assert.match(audioCost1812, /Math\.ceil\(\(usage\.inputTokens \* 5 \+ usage\.outputTokens \* 20\) \/ 4\)/)
+-assert.match(audioCost1812, /TTS_ESTIMATED_MICROUSD_PER_SECOND = 250/)
+-assert.match(speech1812, /response_format: 'wav'/)
+-assert.match(speech1812, /OPENAI_TTS_API_KEY/)
+-assert.match(speech1812, /billingMode === 'replay'/)
+-assert.match(transcribe1812, /OPENAI_TRANSCRIBE_API_KEY/)
+-assert.match(transcribe1812, /await upstream\.json/)
+-assert.doesNotMatch(transcribe1812, /stream=true|stream', 'true'/)
+-assert.match(transcribe1812, /usable_transcript: false/)
+-assert.match(voice1812, /billing_turn_id: billingTurnId/)
+-assert.match(voice1812, /expected_tts_components/)
+-assert.match(shell1812, /exchangeId = turnBillingId/)
+-assert.match(shell1812, /draftTurnBillingIdRef/)
+-assert.match(shell1812, /balanceMicrousd <= 1_000_000/)
+-assert.match(account1812, /rpgyw_usage_summary/)
+-assert.match(account1812, /rpgyw_purchase_history/)
+-assert.match(account1812, /available <= 1_000_000/)
+-assert.doesNotMatch(account1812, /\.from\('usage_ledger'\)/)
+-assert.match(css1811, /RPG Your Way 1\.8\.12 account usage summary/)
+-assert.match(css1811, /\.account-main \.usage-summary-grid/)
+-assert.match(css1811, /\.account-main \.usage-estimate-row/)
+-assert.match(migration1812, /create table if not exists public\.play_turn_billing/)
+-assert.match(migration1812, /create table if not exists public\.play_turn_components/)
+-assert.match(migration1812, /drop policy if exists "usage_ledger_select_own"/)
+-assert.match(migration1812, /create or replace function public\.rpgyw_usage_summary\(\)/)
+-assert.match(migration1812, /create or replace function public\.rpgyw_purchase_history/)
+-assert.match(migration1812, /grant execute on function public\.rpgyw_usage_summary\(\) to authenticated/)
+-const css190 = read('app/globals.css')
+-assert.match(css190, /RPG Your Way 1\.9\.0 Play readability pass/)
+-assert.match(css190, /\.aigm-session-tools-toggle/)
+-assert.match(css190, /\.aigm-latest-turn/)
+-assert.match(css190, /\.aigm-character-card/)
+-assert.match(home, /href="\/start">Start A New Campaign<\/Link>/)
+-assert.match(gameplayShell, /aigm-session-tools-toggle/)
+-assert.match(gameplayShell, /aigm-latest-turn/)
+-
+-console.log('RPG Your Way 1.9.0 Play readability and landing-copy checks passed.')
+-
+-
+-const css191 = read('app/globals.css')
+-assert.match(css191, /RPG Your Way 1\.9\.1 character-card surface correction/)
+-assert.match(css191, /\.medieval-page--play \.aigm-character-card > button \{[\s\S]*?background: var\(--background\) !important;/)
+-assert.match(css191, /RPG Your Way 1\.9\.2 landing-page ribbon \+ hero reset/)
+-assert.match(css191, /\.site-brand-ribbon \{/)
+-assert.match(css191, /\.landing-campaign-snippet--preview \{/)
+-const account194 = read('app/account/page.tsx')
+-assert.match(account194, /<h1 className="sr-only">Account<\/h1>/)
+-assert.doesNotMatch(account194, /<section className="account-intro"/)
+-assert.doesNotMatch(account194, /Your account\./)
+-assert.doesNotMatch(account194, /Sign in, see your RPG Your Way balance, and add usage for Play or Script\./)
+-assert.match(account194, /statusMessages\[status\]/)
+-assert.match(account194, /paymentNotice/)
+-assert.match(account194, /paymentError/)
+-console.log('RPG Your Way 1.9.4 account-intro removal checks passed.')
+-
+-
+-const accessibility1100 = read('app/accessibility/page.tsx')
+-const accessibilityStandard1100 = read('ACCESSIBILITY.md')
+-const accessibilityValidator1100 = read('scripts/validate-accessibility.mts')
+-const header1100 = read('components/SiteHeader.tsx')
+-const footer1100 = read('components/SiteFooter.tsx')
+-const start1100 = read('components/start/StartOnboarding.tsx')
+-const deleteAccount1100 = read('components/account/DeleteAccountControl.tsx')
+-const gameplay1100 = read('components/aigm/aigm-gameplay-shell.tsx')
+-const css1100 = read('app/globals.css')
+-assert.match(accessibility1100, /Web Content Accessibility Guidelines/)
+-assert.match(accessibility1100, /WCAG<\/abbr> 2\.2 Level AA/)
+-assert.match(accessibility1100, /does not claim independent certification/)
+-assert.match(accessibilityStandard1100, /WCAG 2\.2 Level AA/)
+-assert.match(accessibilityStandard1100, /NVDA \+ Firefox or Chrome/)
+-assert.match(accessibilityValidator1100, /accessibility regression checks passed/)
+-assert.match(pkg['scripts']?.['validate:release'] ?? '', /validate-accessibility\.mts/)
+-assert.match(header1100, /usePathname/)
+-assert.match(header1100, /aria-current=/)
+-assert.match(footer1100, /href="\/accessibility"/)
+-assert.match(start1100, /useAccessibleDialog<HTMLElement>/)
+-assert.match(start1100, /role="log" aria-live="polite"/)
+-assert.match(deleteAccount1100, /aria-describedby="delete-account-confirm-help"/)
+-assert.match(gameplay1100, /aria-label="Your gameplay action or message"/)
+-assert.match(gameplay1100, /mobilePanelFocusReadyRef/)
+-assert.match(css1100, /RPG Your Way 1\.10\.0 accessibility foundation/)
+-assert.match(css1100, /@media \(forced-colors: active\)/)
+-console.log('RPG Your Way 1.10.0 accessibility foundation checks passed.')
+-
+-
+-const multiplayerServer1110 = read('lib/multiplayer/server.ts')
+-const multiplayerAbly1110 = read('lib/multiplayer/ably-token.ts')
+-const multiplayerChat1110 = read('components/multiplayer/TableChatPanel.tsx')
+-const multiplayerSwitcher1110 = read('components/multiplayer/MultiplayerPanelSwitcher.tsx')
+-const multiplayerHook1110 = read('components/multiplayer/useMultiplayerSession.ts')
+-const multiplayerMigration1110 = read('supabase/migrations/20260828043000_native_multiplayer_phase1.sql')
+-const multiplayerTokenRoute1110 = read('app/api/multiplayer/ably-token/route.ts')
+-const playPage1110 = read('app/play/page.tsx')
+-const startPage1110 = read('app/start/page.tsx')
+-const gameplay1110 = read('components/aigm/aigm-gameplay-shell.tsx')
+-const css1110 = read('app/globals.css')
+-const env1110 = read('.env.example')
+-assert.match(pkg['scripts']?.['validate:release'] ?? '', /test-multiplayer-phase1\.mts/)
+-assert.match(multiplayerServer1110, /createMultiplayerSession/)
+-assert.match(multiplayerServer1110, /joinMultiplayerSession/)
+-assert.match(multiplayerServer1110, /setMultiplayerCharacterClaim/)
+-assert.match(multiplayerServer1110, /leaveMultiplayerSession/)
+-assert.match(multiplayerServer1110, /MAX_MULTIPLAYER_PLAYERS = 6/)
+-assert.match(multiplayerServer1110, /multiplayer_private_test/)
+-assert.match(multiplayerServer1110, /isOwnerQaEmail/)
+-assert.match(multiplayerAbly1110, /rpg-mp:\$\{sessionId\}:chat/)
+-assert.match(multiplayerAbly1110, /createHmac\('sha256'/)
+-assert.doesNotMatch(multiplayerAbly1110, /"\*"\s*:/)
+-assert.match(multiplayerTokenRoute1110, /ABLY_API_KEY/)
+-assert.match(multiplayerTokenRoute1110, /requestAblyTokenDetails/)
+-assert.match(multiplayerChat1110, /human-chat/)
+-assert.match(multiplayerChat1110, /Chat is not sent to the AIGM and does not use AI balance/)
+-assert.match(multiplayerChat1110, /aria-live="off"/)
+-assert.match(multiplayerSwitcher1110, /Chat/)
+-assert.match(multiplayerSwitcher1110, /Dice/)
+-assert.match(multiplayerSwitcher1110, /Characters/)
+-assert.match(multiplayerHook1110, /searchParams\.get\('multiplayer'\)/)
+-assert.match(multiplayerHook1110, /leaveSession/)
+-assert.match(playPage1110, /multiplayerCode/)
+-assert.match(playPage1110, /redirect\(`\/start\?\$\{query\.toString\(\)\}`\)/)
+-assert.match(startPage1110, /Sign in to join the multiplayer table/)
+-assert.match(startPage1110, /multiplayerPlayReturn/)
+-assert.match(gameplay1110, /Start Multiplayer/)
+-assert.match(gameplay1110, /TableChatPanel/)
+-assert.match(gameplay1110, /aigm-gameplay-grid--multiplayer/)
+-assert.match(css1110, /RPG Your Way 1\.11\.0 native multiplayer Phase 1/)
+-assert.match(css1110, /@media \(min-width: 861px\)/)
+-assert.match(multiplayerMigration1110, /create table if not exists public\.multiplayer_sessions/)
+-assert.match(multiplayerMigration1110, /create table if not exists public\.multiplayer_seats/)
+-assert.match(multiplayerMigration1110, /v_active_count >= 6/)
+-assert.match(multiplayerMigration1110, /enable row level security/)
+-assert.match(env1110, /ABLY_API_KEY=/)
+-console.log('RPG Your Way 1.11.0 native multiplayer Phase 1 checks passed.')
+-
+-const audioCost1111 = read('lib/usage/audio-cost.ts')
+-const speechRoute1111 = read('app/api/aigm/speech/route.ts')
+-const multiplayerAbly1111 = read('lib/multiplayer/ably-token.ts')
+-const multiplayerTokenRoute1111 = read('app/api/multiplayer/ably-token/route.ts')
+-const multiplayerChat1111 = read('components/multiplayer/TableChatPanel.tsx')
+-assert.match(audioCost1111, /chunkSize === 0xffffffff/)
+-assert.match(audioCost1111, /bytes\.byteLength - dataStart/)
+-assert.match(speechRoute1111, /ttsProviderCostMicrousdFromWav/)
+-assert.match(multiplayerAbly1111, /requestAblyTokenDetails/)
+-assert.match(multiplayerAbly1111, /main\.realtime\.ably\.net/)
+-assert.match(multiplayerTokenRoute1111, /ABLY_API_KEY\?\.trim\(\)/)
+-assert.match(multiplayerTokenRoute1111, /requestAblyTokenDetails/)
+-assert.match(multiplayerChat1111, /fetchRealtimeCredential/)
+-assert.match(multiplayerChat1111, /Ably \$\{code\}/)
+-console.log('RPG Your Way 1.11.1 realtime diagnostics and streaming-WAV readback checks passed.')
+-
+-
+-const start1112 = read('components/start/StartOnboarding.tsx')
+-const startPage1112 = read('app/start/page.tsx')
+-const startEntry1112 = read('components/aigm/rpgyw-start-entry.tsx')
+-const gameplay1112 = read('components/aigm/aigm-gameplay-shell.tsx')
+-const multiplayerServer1112 = read('lib/multiplayer/server.ts')
+-const multiplayerTypes1112 = read('lib/multiplayer/types.ts')
+-const multiplayerChat1112 = read('components/multiplayer/TableChatPanel.tsx')
+-const multiplayerHook1112 = read('components/multiplayer/useMultiplayerSession.ts')
+-const multiplayerSeatRoute1112 = read('app/api/multiplayer/sessions/[inviteCode]/seat/route.ts')
+-const multiplayerNameRoute1112 = read('app/api/multiplayer/sessions/[inviteCode]/display-name/route.ts')
+-const multiplayerCharactersRoute1112 = read('app/api/multiplayer/sessions/[inviteCode]/characters/route.ts')
+-const multiplayerMigration1112 = read('supabase/migrations/20260828073000_multiplayer_names_multi_character.sql')
+-const css1112 = read('app/globals.css')
+-assert.match(startPage1112, /addCharacterMode/)
+-assert.match(startEntry1112, /mode=\{addCharacterMode \? 'add-character' : 'new-campaign'\}/)
+-assert.match(start1112, /addCharactersToExistingCampaign/)
+-assert.match(start1112, /Everything already in the campaign stays exactly where it is/)
+-assert.match(start1112, /characters: \[\.\.\.existingAdventure\.characters, \.\.\.additions\]/)
+-assert.match(gameplay1112, /addCharacter: '1'/)
+-assert.match(gameplay1112, /multiplayer\.syncCharacters/)
+-assert.doesNotMatch(gameplay1112, /Adding characters will return with the rebuilt Start experience/)
+-assert.match(multiplayerTypes1112, /characterIds: string\[\]/)
+-assert.match(multiplayerTypes1112, /characterNames: string\[\]/)
+-assert.match(multiplayerServer1112, /updateMultiplayerDisplayName/)
+-assert.match(multiplayerServer1112, /setMultiplayerCharacterClaim/)
+-assert.match(multiplayerServer1112, /syncMultiplayerCharacters/)
+-assert.match(multiplayerServer1112, /multiplayer_character_claims/)
+-assert.match(multiplayerSeatRoute1112, /claimed/)
+-assert.match(multiplayerNameRoute1112, /updateMultiplayerDisplayName/)
+-assert.match(multiplayerCharactersRoute1112, /syncMultiplayerCharacters/)
+-assert.match(multiplayerHook1112, /setCharacterClaim/)
+-assert.match(multiplayerHook1112, /updateDisplayName/)
+-assert.match(multiplayerHook1112, /syncCharacters/)
+-assert.match(multiplayerChat1112, /Your chat name/)
+-assert.match(multiplayerChat1112, /Your characters/)
+-assert.match(multiplayerChat1112, /characterNames\.join/)
+-assert.match(multiplayerMigration1112, /create table if not exists public\.multiplayer_character_claims/)
+-assert.match(multiplayerMigration1112, /primary key \(session_id, character_id\)/)
+-assert.match(css1112, /RPG Your Way 1\.11\.2 multiplayer QA \+ site-wide character addition/)
+-assert.match(css1112, /minmax\(400px, 1\.2fr\)/)
+-console.log('RPG Your Way 1.11.2 multiplayer QA and site-wide character-addition checks passed.')
+-
+-
+-const multiplayer1113 = read('components/multiplayer/TableChatPanel.tsx')
+-const multiplayerTypes1113 = read('lib/multiplayer/types.ts')
+-const multiplayerServer1113 = read('lib/multiplayer/server.ts')
+-const gameplay1113 = read('components/aigm/aigm-gameplay-shell.tsx')
+-const css1113 = read('app/globals.css')
+-assert.match(multiplayer1113, /session\.participants\.length\}\/\{session\.playerCapacity\} players/)
+-assert.match(multiplayer1113, /accordion-plus aigm-multiplayer-accordion-plus/)
+-assert.match(multiplayerTypes1113, /playerCapacity: number/)
+-assert.match(multiplayerServer1113, /lobby\.participants\.length >= lobby\.playerCapacity/)
+-assert.match(gameplay1113, /navigator as WakeLockNavigator/)
+-assert.match(gameplay1113, /wakeLock\.request\('screen'\)/)
+-assert.match(gameplay1113, /exitMultiplayerToSoloPlay/)
+-assert.match(gameplay1113, /aigm-gameplay-send--ready/)
+-assert.match(css1113, /RPG Your Way 1\.11\.3 multiplayer QA hardening \+ Play polish/)
+-assert.match(css1113, /\.aigm-multiplayer-lobby-body \{[\s\S]*?overflow-y: auto/)
+-assert.match(css1113, /\.start-add-character-header > \.start-info-control \{[\s\S]*?width: auto !important/)
+-console.log('RPG Your Way 1.11.3 multiplayer QA hardening and Play polish checks passed.')
+-
+-
+-const release1114Home = read('app/page.tsx')
+-const release1114Landing = read('components/LandingCampaignPanel.tsx')
+-const release1114Gameplay = read('components/aigm/aigm-gameplay-shell.tsx')
+-const release1114Multiplayer = read('lib/multiplayer/server.ts')
+-const release1114Css = read('app/globals.css')
+-assert.match(release1114Home, /Reduction in prices, yay!/)
+-assert.match(release1114Home, /Megaphone/)
+-assert.match(release1114Home, /Multiplayer is now live(?:, with chat)?\./)
+-assert.match(release1114Landing, /return clean/)
+-assert.doesNotMatch(release1114Landing, /const limit = 1100/)
+-assert.match(release1114Gameplay, /Remove (?:from party|this character)/)
+-assert.match(release1114Gameplay, /function removePartyCharacter/)
+-assert.match(release1114Gameplay, /character-sheet-title.*playNameFor\(character\)/)
+-assert.match(release1114Multiplayer, /removedIds/)
+-assert.match(release1114Multiplayer, /multiplayer_character_claims/)
+-assert.match(release1114Css, /RPG Your Way 1\.11\.4 party management \+ landing news polish/)
+-assert.match(release1114Css, /\.landing-news-eyebrow \{[\s\S]*?background:/)
+-assert.match(release1114Css, /\.landing-campaign-snippet > span \{[\s\S]*?-webkit-line-clamp: 10;/)
+-console.log('RPG Your Way 1.11.4 party-management and landing-news checks passed.')
+-
+-
+-const release1115Home = read('app/page.tsx')
+-const release1115Css = read('app/globals.css')
+-assert.match(release1115Home, /Multiplayer is now live, with chat\./)
+-assert.match(release1115Css, /RPG Your Way 1\.11\.5 add-character plaque hotfix \+ news copy/)
+-assert.match(release1115Css, /\.start-add-character-header \{[\s\S]*?background: var\(--cream-bright\) !important;/)
+-assert.match(release1115Css, /\.start-add-character-mode > \.start-party-step \{[\s\S]*?margin-top: \.8rem;/)
+-console.log('RPG Your Way 1.11.5 add-character plaque and news hotfix checks passed.')
+-
+-
+-const release1116Start = read('components/start/StartOnboarding.tsx')
+-const release1116Css = read('app/globals.css')
+-assert.match(release1116Start, /Choose the game system/)
+-assert.match(release1116Start, /Use this game system/)
+-assert.match(release1116Start, /accordion-plus start-rules-accordion-plus/)
+-assert.match(release1116Start, /Choose these ready-to-play characters/)
+-assert.match(release1116Start, /These default characters are built for the D&amp;D 5\.5e system\./)
+-assert.match(release1116Start, /Paste your character&apos;s information, then add characters one at a time/)
+-assert.doesNotMatch(release1116Start, /Backstory influence/)
+-assert.match(release1116Start, /activeStep === 4 && questionsDone/)
+-assert.doesNotMatch(release1116Start, /activeStep === 4 && namesReady && questionsDone/)
+-assert.match(release1116Css, /RPG Your Way 1\.11\.6 Start-language, responsive secondary-panel scrolling/)
+-assert.match(release1116Css, /aigm-table-chat-panel\.aigm-mp-secondary--active,[\s\S]*aigm-tools-panel\.aigm-mp-secondary--active[\s\S]*overflow-y: auto !important/)
+-assert.match(release1116Css, /start-rules-current--display\[aria-expanded="true"\][\s\S]*rotate\(45deg\)/)
+-assert.match(release1116Css, /--rpgyw-pale-olive: #d6d1a3/)
+-console.log('RPG Your Way 1.11.6 Start, scrolling, accordion, and olive-palette QA checks passed.')
+-
+-const release1117Start = read('components/start/StartOnboarding.tsx')
+-const release1117Gameplay = read('components/aigm/aigm-gameplay-shell.tsx')
+-const release1117AccountDelete = read('components/account/DeleteAccountControl.tsx')
+-const release1117Css = read('app/globals.css')
+-assert.match(release1117Start, /Character backstory usage/)
+-assert.match(release1117Start, /Inter-party romance/)
+-assert.match(release1117Start, /Character secret reveals/)
+-assert.doesNotMatch(release1117Start, /Player-character romance/)
+-assert.match(release1117Start, /function MiniRatingSelect/)
+-assert.match(release1117Start, /start-mini-rating-options/)
+-assert.doesNotMatch(release1117Start, /CHARACTER_TOPICS = \['Backstory reveal'/)
+-assert.match(release1117Gameplay, /Remove this character/)
+-assert.match(release1117Gameplay, /Are you sure\?/)
+-assert.doesNotMatch(release1117Gameplay, /window\.confirm\(`Remove/)
+-assert.match(release1117AccountDelete, /account-delete-link--armed/)
+-assert.match(release1117AccountDelete, /Are you sure\?/)
+-assert.match(release1117AccountDelete, /Type <strong>DELETE<\/strong> to confirm\./)
+-assert.match(release1117Css, /RPG Your Way 1\.11\.7 Start rating controls \+ safer destructive actions/)
+-assert.match(release1117Css, /\.start-character-actions--secondary \{[\s\S]*?margin-bottom: \.9rem;/)
+-assert.match(release1117Css, /\.start-mini-rating-menu > summary:hover,[\s\S]*?background: var\(--lime\) !important;/)
+-assert.match(release1117Css, /\.start-mini-rating-options button:hover,[\s\S]*?background: var\(--lime\) !important;/)
+-console.log('RPG Your Way 1.11.7 Start rating and destructive-action QA checks passed.')
+-
+-
+-const release1118Css = read('app/globals.css')
+-assert.match(release1118Css, /RPG Your Way 1\.11\.8 mini-rating focus-ring hotfix/)
+-assert.match(release1118Css, /\.start-mini-rating-menu > summary:hover,[\s\S]*?outline: 3px solid var\(--lime\);[\s\S]*?outline-offset: 3px;/)
+-assert.match(release1118Css, /background: linear-gradient\(180deg, color-mix\(in srgb, var\(--cream-bright\) 97%, white\), var\(--cream\)\) !important;/)
+-console.log('RPG Your Way 1.11.8 mini-rating focus-ring hotfix checks passed.')
+-
+-const release1120Migration = read('supabase/migrations/20260828163000_cloud_campaigns.sql')
+-const release1120CloudServer = read('lib/cloud-campaigns/server.ts')
+-const release1120CloudClient = read('lib/aigm/cloud-campaigns.ts')
+-const release1120Persistence = read('lib/aigm/campaign-persistence.ts')
+-const release1120Start = read('components/start/StartOnboarding.tsx')
+-const release1120StartEntry = read('components/aigm/rpgyw-start-entry.tsx')
+-const release1120Gameplay = read('components/aigm/aigm-gameplay-shell.tsx')
+-const release1120Storage = read('lib/aigm/campaign-storage.ts')
+-assert.match(release1120Migration, /create table if not exists public\.campaigns/)
+-assert.match(release1120Migration, /create table if not exists public\.campaign_members/)
+-assert.match(release1120Migration, /revision bigint not null default 1/)
+-assert.match(release1120Migration, /Intentionally no browser table policies/)
+-assert.match(release1120CloudServer, /revision_conflict/)
+-assert.match(release1120CloudServer, /campaign_members/)
+-assert.match(release1120CloudClient, /expected_revision/)
+-assert.match(release1120Persistence, /loadCloudCampaignState/)
+-assert.match(release1120Persistence, /saveCloudCampaignState/)
+-assert.match(release1120Start, /campaign_mode: campaignMode/)
+-assert.match(release1120Start, />Solo</)
+-assert.match(release1120Start, />Multiplayer</)
+-assert.match(release1120StartEntry, /Your account/)
+-assert.match(release1120StartEntry, /Legacy import/)
+-assert.doesNotMatch(release1120StartEntry, /There is no cloud campaign synchronization/)
+-assert.match(release1120Gameplay, /Download transcript/)
+-assert.match(release1120Gameplay, /gameplay transcript\. Multiplayer table chat is separate and is not included\./)
+-assert.doesNotMatch(release1120Gameplay, /Export Your Game|When and how to export|downloadAdventure|ExportGameHelpDialog/)
+-assert.match(release1120Storage, /Multiplayer table chat is separate/)
+-console.log('RPG Your Way 1.12.0 cloud campaign foundation checks passed.')
++has(shapeJobs, 'rpgyw_reserve_usage')
++has(shapeJobs, 'settleShapeJobUsage')
++lacks(shapeJobs, 'shapeEmailAllowed')
++const shapeTransform = read('app/api/shape/transform/route.ts')
++has(shapeTransform, 'settleCompletedJob')
++lacks(shapeTransform, 'shapeEmailAllowed')
++const stripe = read('lib/stripe/server.ts')
++has(stripe, 'processingSurplusCents')
++has(stripe, 'stripe-surplus')
++
++// Multiplayer remains room-scoped through Ably and uses a separate human Table Chat transcript.
++const multiplayer = read('lib/multiplayer/server.ts')
++has(multiplayer, 'MAX_MULTIPLAYER_PLAYERS')
++has(multiplayer, 'campaign_fingerprint')
++const tableChat = read('components/multiplayer/TableChatPanel.tsx')
++has(tableChat, 'Table Chat')
++has(tableChat, 'not sent to the AIGM')
++const storage = read('lib/aigm/campaign-storage.ts')
++has(storage, 'Multiplayer table chat is separate')
++
++// Accessibility foundation stays wired and the old exact-format CSS trap stays retired.
++const accessibility = read('app/accessibility/page.tsx')
++has(accessibility, 'Accessibility')
++has(css, 'outline: 3px solid var(--lime);')
++assert.match(css, /background:\s*linear-gradient\(\s*180deg,\s*color-mix\(in srgb, var\(--cream-bright\) 97%, white\),\s*var\(--cream\)\s*\) !important;/)
++
++console.log('RPG Your Way 1.12.1 deliberate cleanup pass 1 checks passed.')
