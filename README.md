@@ -1,9 +1,9 @@
 # RPG Your Way
 
-**Build 1.11.2 · Multiplayer QA + site-wide character addition**
+**Build 1.11.3 · Multiplayer QA hardening + Play polish**
 
-Build 1.11.2 lets multiplayer participants choose their own table-chat names and control multiple campaign characters, widens the desktop Table Chat rail, and implements **Add another character** for existing campaigns across RPG Your Way. Active multiplayer rooms automatically learn about characters added by the coordinator when Play resumes.
+Build 1.11.3 keeps expanded multiplayer setup controls inside the Play viewport, gives Table setup the site-standard rotating plus control, makes multiplayer Back to Play actually leave realtime play, keeps Play awake where the browser supports Screen Wake Lock, makes the gameplay Send button visibly ready when text can be sent, sizes multiplayer player capacity to the campaign party, and repairs the Add another character header layout.
 
-Current release: **1.11.2**.
+Current release: **1.11.3**.
 
-See `README-1.11.2.md` for release details, `ACCESSIBILITY.md` for the accessibility engineering standard, and earlier versioned README files for prior release notes.
+See `README-1.11.3.md` for release details, `ACCESSIBILITY.md` for the accessibility engineering standard, and earlier versioned README files for prior release notes.

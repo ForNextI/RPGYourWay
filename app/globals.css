@@ -7392,3 +7392,98 @@ html {
 @media (forced-colors: active) {
   .aigm-multiplayer-name-choice button { background: CanvasText; color: Canvas; }
 }
+
+
+/* RPG Your Way 1.11.3 multiplayer QA hardening + Play polish. */
+
+/* The add-character header used a globally full-width tertiary control inside a
+   horizontal flex row, which made Back to Play consume almost the entire board. */
+.start-add-character-header > div {
+  min-width: 0;
+  max-width: 52rem;
+}
+.start-add-character-header > .start-info-control {
+  width: auto !important;
+  min-width: 9.5rem;
+  white-space: nowrap;
+}
+.start-add-character-header h1 {
+  max-width: none;
+  line-height: 1.02;
+}
+
+/* Keep the multiplayer rail inside the Play viewport even when Table setup is
+   expanded. Setup gets its own scrollable body; chat/composer controls remain
+   reachable instead of lengthening the entire page. */
+.play-page-frame .aigm-gameplay-grid--multiplayer,
+.play-page-frame .aigm-gameplay-grid--multiplayer > .aigm-mp-secondary {
+  min-height: 0;
+  max-height: 100%;
+}
+.play-page-frame .aigm-gameplay-grid--multiplayer > .aigm-mp-secondary {
+  height: 100%;
+  overflow: hidden;
+}
+.aigm-multiplayer-lobby-details {
+  min-height: 0;
+  max-height: min(48%, 27rem);
+  flex: 0 1 auto;
+  overflow: hidden;
+}
+.aigm-multiplayer-lobby-details[open] {
+  display: flex;
+  flex-direction: column;
+}
+.aigm-multiplayer-lobby-details > summary {
+  flex: 0 0 auto;
+  justify-content: space-between;
+  cursor: pointer;
+  list-style: none;
+}
+.aigm-multiplayer-lobby-details > summary::-webkit-details-marker { display: none; }
+.aigm-multiplayer-lobby-summary-label {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: .45rem;
+}
+.aigm-multiplayer-accordion-plus {
+  width: 30px;
+  height: 30px;
+  border-width: 1px;
+}
+.aigm-multiplayer-accordion-plus::before { width: 12px; }
+.aigm-multiplayer-accordion-plus::after { height: 12px; }
+.aigm-multiplayer-lobby-details[open] > summary .aigm-multiplayer-accordion-plus { transform: rotate(45deg); }
+.aigm-multiplayer-lobby-body {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.aigm-table-chat-log { min-height: 5.5rem; }
+
+/* A sendable Play action should advertise itself immediately. Disabled remains
+   quiet; once text is present the face is forest/white and hover becomes lime. */
+.medieval-page--play .aigm-gameplay-send.aigm-gameplay-send--ready:not(:disabled) {
+  background: var(--forest-deep) !important;
+  background-image: none !important;
+  color: var(--cream-bright) !important;
+}
+.medieval-page--play .aigm-gameplay-send.aigm-gameplay-send--ready:not(:disabled):hover,
+.medieval-page--play .aigm-gameplay-send.aigm-gameplay-send--ready:not(:disabled):focus-visible {
+  background: var(--forest-deep) !important;
+  color: var(--lime) !important;
+}
+.medieval-page--play .aigm-gameplay-send.aigm-gameplay-send--ready:not(:disabled):hover svg,
+.medieval-page--play .aigm-gameplay-send.aigm-gameplay-send--ready:not(:disabled):focus-visible svg {
+  color: var(--lime) !important;
+}
+
+@media (max-width: 860px) {
+  .aigm-multiplayer-lobby-details { max-height: min(52dvh, 30rem); }
+}
+
+@media (max-width: 639px) {
+  .start-add-character-header > .start-info-control { width: 100% !important; }
+}

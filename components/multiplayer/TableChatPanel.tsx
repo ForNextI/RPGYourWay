@@ -366,7 +366,10 @@ export function TableChatPanel({
       </header>
 
       <details className="aigm-multiplayer-lobby-details">
-        <summary><UsersRound aria-hidden="true" />Table setup · {session.participants.length}/6 players</summary>
+        <summary>
+          <span className="aigm-multiplayer-lobby-summary-label"><UsersRound aria-hidden="true" />Table setup · {session.participants.length}/{session.playerCapacity} players</span>
+          <span className="accordion-plus aigm-multiplayer-accordion-plus" aria-hidden="true" />
+        </summary>
         <div className="aigm-multiplayer-lobby-body">
           <div className="aigm-multiplayer-invite-row">
             <label htmlFor="multiplayer-invite-url">Invite link</label>

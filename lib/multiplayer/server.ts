@@ -187,6 +187,8 @@ export async function loadSessionByInvite(inviteCode: string, userId: string): P
     }
   })
 
+  const playerCapacity = Math.max(1, Math.min(MAX_MULTIPLAYER_PLAYERS, characters.length))
+
   return {
     id: session.id,
     inviteCode: session.invite_code,
@@ -205,6 +207,7 @@ export async function loadSessionByInvite(inviteCode: string, userId: string): P
       displayName: entry.display_name,
       ordinal: entry.ordinal,
     })),
+    playerCapacity,
   }
 }
 
@@ -264,7 +267,9 @@ export async function createMultiplayerSession(user: User, input: {
 export async function joinMultiplayerSession(user: User, inviteCode: string) {
   const lobby = await loadSessionByInvite(inviteCode, user.id)
   if (lobby.isMember) return lobby
-  if (lobby.participants.length >= MAX_MULTIPLAYER_PLAYERS) throw new MultiplayerError('This multiplayer table already has six players.', 409, 'session_full')
+  if (lobby.participants.length >= lobby.playerCapacity) {
+    throw new MultiplayerError(`This campaign currently has room for ${lobby.playerCapacity} human player${lobby.playerCapacity === 1 ? '' : 's'}.`, 409, 'session_full')
+  }
 
   const admin = createAdminClient()
   const { error } = await admin.from('multiplayer_seats').insert({

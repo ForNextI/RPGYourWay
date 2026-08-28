@@ -8,9 +8,9 @@ const exists = (relative: string) => fs.existsSync(path.join(root, relative))
 
 const pkg = JSON.parse(read('package.json')) as { name?: string; version?: string; rpgywVersion?: string; dependencies?: Record<string,string> }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.11.2')
-assert.equal(pkg.rpgywVersion, '1.11.2')
-assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.2'/)
+assert.equal(pkg.version, '1.11.3')
+assert.equal(pkg.rpgywVersion, '1.11.3')
+assert.match(read('lib/version.ts'), /APP_VERSION = '1\.11\.3'/)
 
 for (const file of [
   'app/page.tsx', 'app/play/page.tsx', 'app/start/page.tsx', 'app/script/page.tsx', 'app/shape/page.tsx',
@@ -57,6 +57,7 @@ for (const file of [
   'app/accessibility/page.tsx',
   'scripts/validate-accessibility.mts',
   'README-1.11.2.md',
+  'README-1.11.3.md',
   'lib/multiplayer/types.ts',
   'lib/multiplayer/errors.ts',
   'lib/multiplayer/server.ts',
@@ -1067,3 +1068,22 @@ assert.match(multiplayerMigration1112, /primary key \(session_id, character_id\)
 assert.match(css1112, /RPG Your Way 1\.11\.2 multiplayer QA \+ site-wide character addition/)
 assert.match(css1112, /minmax\(400px, 1\.2fr\)/)
 console.log('RPG Your Way 1.11.2 multiplayer QA and site-wide character-addition checks passed.')
+
+
+const multiplayer1113 = read('components/multiplayer/TableChatPanel.tsx')
+const multiplayerTypes1113 = read('lib/multiplayer/types.ts')
+const multiplayerServer1113 = read('lib/multiplayer/server.ts')
+const gameplay1113 = read('components/aigm/aigm-gameplay-shell.tsx')
+const css1113 = read('app/globals.css')
+assert.match(multiplayer1113, /session\.participants\.length\}\/\{session\.playerCapacity\} players/)
+assert.match(multiplayer1113, /accordion-plus aigm-multiplayer-accordion-plus/)
+assert.match(multiplayerTypes1113, /playerCapacity: number/)
+assert.match(multiplayerServer1113, /lobby\.participants\.length >= lobby\.playerCapacity/)
+assert.match(gameplay1113, /navigator as WakeLockNavigator/)
+assert.match(gameplay1113, /wakeLock\.request\('screen'\)/)
+assert.match(gameplay1113, /exitMultiplayerToSoloPlay/)
+assert.match(gameplay1113, /aigm-gameplay-send--ready/)
+assert.match(css1113, /RPG Your Way 1\.11\.3 multiplayer QA hardening \+ Play polish/)
+assert.match(css1113, /\.aigm-multiplayer-lobby-body \{[\s\S]*?overflow-y: auto/)
+assert.match(css1113, /\.start-add-character-header > \.start-info-control \{[\s\S]*?width: auto !important/)
+console.log('RPG Your Way 1.11.3 multiplayer QA hardening and Play polish checks passed.')

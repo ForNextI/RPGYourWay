@@ -1285,6 +1285,7 @@ export function AigmGameplayShell() {
   const [mobilePanel, setMobilePanel] = useState<'gameplay' | 'chat' | 'tools' | 'characters'>('gameplay')
   const [desktopMultiplayerPanel, setDesktopMultiplayerPanel] = useState<MultiplayerSecondaryPanel>('chat')
   const [multiplayerUnreadCount, setMultiplayerUnreadCount] = useState(0)
+  const [exitingMultiplayer, setExitingMultiplayer] = useState(false)
   const [isDesktopPlayLayout, setIsDesktopPlayLayout] = useState(false)
   const multiplayer = useMultiplayerSession()
   const [dragTargetCharacterId, setDragTargetCharacterId] = useState<string | null>(null)
@@ -1329,6 +1330,38 @@ export function AigmGameplayShell() {
     sync()
     query.addEventListener('change', sync)
     return () => query.removeEventListener('change', sync)
+  }, [])
+
+  useEffect(() => {
+    type WakeLockSentinelLike = { release: () => Promise<void>; released?: boolean }
+    type WakeLockNavigator = Navigator & { wakeLock?: { request: (type: 'screen') => Promise<WakeLockSentinelLike> } }
+
+    let cancelled = false
+    let sentinel: WakeLockSentinelLike | null = null
+
+    async function requestWakeLock() {
+      if (cancelled || document.visibilityState !== 'visible') return
+      const wakeLock = (navigator as WakeLockNavigator).wakeLock
+      if (!wakeLock || (sentinel && !sentinel.released)) return
+      try {
+        sentinel = await wakeLock.request('screen')
+      } catch {
+        // Wake Lock is progressive enhancement. Unsupported/denied devices keep normal browser behavior.
+      }
+    }
+
+    function handleVisibilityChange() {
+      if (document.visibilityState === 'visible') void requestWakeLock()
+    }
+
+    void requestWakeLock()
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => {
+      cancelled = true
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      if (sentinel && !sentinel.released) void sentinel.release().catch(() => undefined)
+      sentinel = null
+    }
   }, [])
 
   useEffect(() => {
@@ -1508,6 +1541,24 @@ export function AigmGameplayShell() {
       return reorderedReady[readyIndex++] ?? character
     })
     persist({ ...partyState, characters, updated_at: new Date().toISOString() })
+  }
+
+  async function exitMultiplayerToSoloPlay() {
+    if (exitingMultiplayer) return
+    const current = multiplayer.session
+    if (!current) {
+      window.location.assign('/play')
+      return
+    }
+    setExitingMultiplayer(true)
+    try {
+      if (current.isCoordinator) await multiplayer.closeSession()
+      else await multiplayer.leaveSession()
+      window.location.assign('/play')
+    } catch (exitError) {
+      setError(exitError instanceof Error ? exitError.message : 'Could not leave multiplayer cleanly.')
+      setExitingMultiplayer(false)
+    }
   }
 
   function addAnotherCharacter() {
@@ -2425,7 +2476,7 @@ export function AigmGameplayShell() {
                   onUsageSettlement={handleUsageSettlement}
                   onError={setError}
                 /> : null}
-                <button type="submit" disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0 || !message.trim()} className="aigm-gameplay-send flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground disabled:opacity-45" aria-label="Send gameplay turn">{sending ? <LoaderCircle className="size-5 animate-spin" aria-hidden="true" /> : <Send className="size-5" aria-hidden="true" />}</button>
+                <button type="submit" disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0 || !message.trim()} className={`aigm-gameplay-send ${message.trim() && !sending && !voiceCaptureBusy && gameplay.messages.length > 0 ? 'aigm-gameplay-send--ready' : ''} flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground disabled:opacity-45`} aria-label="Send gameplay turn">{sending ? <LoaderCircle className="size-5 animate-spin" aria-hidden="true" /> : <Send className="size-5" aria-hidden="true" />}</button>
               </form>
 
               <div className="aigm-session-tools mt-2 grid gap-2 border-t border-border/70 pt-2 sm:grid-cols-[auto_minmax(0,1fr)_minmax(0,1fr)]" data-open={sessionToolsOpen ? 'true' : 'false'} aria-label="Session tools and export guidance">
@@ -2453,7 +2504,11 @@ export function AigmGameplayShell() {
                     ) : ownerQaAccess ? (
                       <button type="button" onClick={() => void startMultiplayerSession()} disabled={multiplayer.starting || readyCharacters.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-45">{multiplayer.starting ? <LoaderCircle className="size-3.5 animate-spin" aria-hidden="true" /> : <UsersRound className="size-3.5" aria-hidden="true" />}Start Multiplayer</button>
                     ) : null}
-                    <Link href="/play" className="rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground">Back to Play</Link>
+                    {multiplayerActive ? (
+                      <button type="button" onClick={() => void exitMultiplayerToSoloPlay()} disabled={exitingMultiplayer} className="rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-45">{exitingMultiplayer ? 'Leaving multiplayer…' : 'Back to Play'}</button>
+                    ) : (
+                      <Link href="/play" className="rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground">Back to Play</Link>
+                    )}
                   </div>
                 )}
               </div>

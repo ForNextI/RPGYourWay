@@ -34,6 +34,8 @@ export type MultiplayerSessionView = {
   expiresAt: string | null
   participants: MultiplayerParticipant[]
   characters: MultiplayerCharacterSeat[]
+  /** Human-player capacity follows the campaign's current character count, capped at six. */
+  playerCapacity: number
 }
 
 export type MultiplayerChatMessage = {
