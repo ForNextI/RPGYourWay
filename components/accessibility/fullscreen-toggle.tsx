@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowDownLeft, ArrowDownRight, ArrowUpLeft, ArrowUpRight } from 'lucide-react'
+import { ArrowDownLeft, ArrowUpRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 interface FullscreenToggleProps {

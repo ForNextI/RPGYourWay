@@ -134,13 +134,13 @@ export function MotionSettingsControl({ compact = false }: { compact?: boolean }
 
   if (compact) {
     return (
-      <label className="motion-settings-control motion-settings-control--compact inline-flex min-h-11 min-w-0 max-w-full items-center gap-2 rounded-xl border border-amber-200/35 bg-black/35 px-3 py-2 text-amber-100">
+      <label className="motion-settings-control motion-settings-control--compact">
         <span className="shrink-0 text-xs font-bold uppercase tracking-[0.14em]">Motion</span>
         <select
           name="motionPreference"
           value={preference}
           onChange={(event) => setPreference(event.target.value as MotionPreference)}
-          className="motion-settings-select motion-settings-select--compact min-w-0 max-w-[12rem] rounded-lg border border-amber-200/30 bg-black/45 px-2.5 py-1.5 text-xs text-amber-50"
+          className="motion-settings-select motion-settings-select--compact"
           aria-label="Motion settings"
         >
           <option value="system">Use device setting</option>

@@ -251,10 +251,6 @@ function liveStateFor(character: StoredPartyCharacter): CharacterLiveState | nul
   return normalizeLiveState(character.liveState, character.result)
 }
 
-function classAndSpeciesLine(result: CharacterIntakeResult) {
-  return [classSummary(result), result.character.species].filter(Boolean).join(' · ')
-}
-
 function abbreviatedAlignment(value: string) {
   const clean = value.replace(/\s+/g, ' ').trim()
   if (!clean) return '—'

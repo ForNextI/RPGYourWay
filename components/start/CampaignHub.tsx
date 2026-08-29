@@ -1,7 +1,7 @@
 'use client'
 
 import { type ChangeEvent, useEffect, useRef, useState } from 'react'
-import { Check, Cloud, FileUp, LoaderCircle, LogOut, Play, Shield, Trash2, UserMinus, UsersRound, X } from 'lucide-react'
+import { Check, Cloud, FileUp, LoaderCircle, LogOut, Play, Shield, Trash2, UserMinus, X } from 'lucide-react'
 import {
   CURRENT_ADVENTURE_KEY,
   canonicalAdventureName,

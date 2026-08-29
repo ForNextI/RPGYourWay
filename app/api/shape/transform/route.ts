@@ -1,7 +1,6 @@
 import { SHAPE_PROMPT_VERSION, selectedShapeModel } from '@/lib/shape/config'
 import { settleShapeJobUsage } from '@/lib/shape/settlement'
 import {
-  SHAPE_PROVISIONAL_PROSE_CHARACTERS,
   SHAPE_SINGLE_PASS_CHARACTERS,
   buildShapeAnalysisChunks,
   buildShapeRecoverySubchunks,

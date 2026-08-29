@@ -355,11 +355,6 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
     setParty((current) => current.map((member) => member.id === memberId ? updater(member) : member))
   }
 
-  function questionsFor(member: PartyMember) {
-    const questions = member.result?.clarification_questions ?? []
-    return { required: questions.filter((question) => question.priority === 'required'), recommended: questions.filter((question) => question.priority !== 'required') }
-  }
-
   async function importCharacter(memberId: string, allowPaid = false) {
     const member = party.find((entry) => entry.id === memberId)
     if (!member?.file || importBusy) return

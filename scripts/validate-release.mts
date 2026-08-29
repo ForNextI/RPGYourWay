@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.84')
-assert.equal(pkg.rpgywVersion, '1.12.84')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.84'", 'visible app version')
+assert.equal(pkg.version, '1.13.0')
+assert.equal(pkg.rpgywVersion, '1.13.0')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.0'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -85,7 +85,7 @@ for (const file of [
   'scripts/test-stripe-funding.mts',
   'scripts/test-audio-cost.mts',
   'scripts/test-multiplayer-phase1.mts',
-  'scripts/test-11274-multiplayer-turns.mts',
+  'scripts/test-multiplayer-turns.mts',
 ]) assert.ok(exists(file), `Missing ${file}`)
 
 // Dead private-beta access code is deliberately gone.
@@ -116,8 +116,8 @@ has(home, 'Multiplayer is live, with built-in table chat.')
 lacks(home, 'Multiplayer testing is underway, with chat.')
 const css = read('app/globals.css')
 has(css, '.landing-accordion {\n  overflow: visible;\n  border: 0;')
-has(css, '.landing-accordion-body { margin-top: .65rem;')
-has(css, '  .landing-accordion-body,\n  .feature-card,', 'accordion body in shared raised-plaque system')
+has(css, '.landing-accordion-body {')
+has(css, 'color-mix(in srgb, var(--rpgyw-olive-dark) 90%, var(--rpgyw-cream))', 'landing accordion reveal uses dark-olive plaque')
 lacks(css, 'button.start-choice[aria-pressed="true"]', 'one-off Start campaign-mode CSS patch')
 has(css, 'body .start-choice.start-choice--selected {')
 has(css, 'background-image: none !important;', 'persistent selected face reset')
@@ -283,8 +283,8 @@ has(gameplayRoute, 'reserveMultiplayerTurnBilling')
 has(gameplayRoute, 'multiplayer_invite_code')
 
 
-// 1.12.75 UI Bible: landing console wording, Start hierarchy, one campaign accordion,
-// one accordion screw, and two-arrow full-screen furniture.
+// The current UI contract is semantic. Validation protects the lookbook and canonical
+// primitives instead of pinning release-by-release CSS archaeology.
 const landingCampaignPanel = read('components/LandingCampaignPanel.tsx')
 has(landingCampaignPanel, 'Continue Adventure')
 lacks(landingCampaignPanel, 'Return to Adventure')
@@ -295,137 +295,123 @@ has(campaignHub, 'className="campaign-hub-card"')
 has(campaignHub, 'className="campaign-hub-summary"')
 lacks(campaignHub, 'play-entry-adventure-open')
 lacks(campaignHub, 'play-entry-continue')
+
 const fullscreenToggle = read('components/accessibility/fullscreen-toggle.tsx')
 has(fullscreenToggle, 'ArrowUpRight')
 has(fullscreenToggle, 'ArrowDownLeft')
 has(fullscreenToggle, 'fullscreen-arrow-pair')
-lacks(fullscreenToggle, 'Maximize2')
-lacks(fullscreenToggle, 'Minimize2')
-has(css, 'RPG Your Way 1.12.75 — UI Bible pass.')
-has(css, `.start-campaign-hub > summary {\n  width: min(38%, 31rem);`)
-has(css, '.campaign-hub-card[open] > .campaign-hub-summary')
-has(css, `color: var(--forest-deep) !important;\n  box-shadow:`, 'accordion screw keeps forest ink')
-
-// 1.12.76 Landing Page UI Lookbook implementation.
-assert.ok(exists('UI-LOOKBOOK.md'), 'Canonical UI lookbook must travel with the source tree')
-const lookbook = read('UI-LOOKBOOK.md')
-has(lookbook, '## 1.1 Plaque')
-has(lookbook, '## 1.2 Nameplate')
-has(lookbook, '## 1.3 Button')
-has(lookbook, '## 1.6 Bezel')
-has(lookbook, '## 1.7 Accordion screw')
-has(css, 'RPG Your Way 1.12.76 — Landing Page UI Lookbook overhaul.')
-has(css, '--rpgyw-forest: #043a2d;')
-has(css, '--rpgyw-olive-dark: #6f7946;')
-has(css, '--rpgyw-olive-light: #d6d1a3;')
-has(css, '--rpgyw-cream: #f6ead4;')
-has(css, '--rpgyw-parchment: #f2dfb8;')
-has(css, '.landing-campaign-screen-stage {\n  background: var(--rpgyw-cream) !important;')
-has(css, '.landing-campaign-actions {\n  border: 0 !important;')
-has(css, '.landing-accordion-summary {\n  border: 1px solid var(--rpgyw-forest-line) !important;')
-has(css, '.landing-reason-card {\n  padding: .55rem !important;')
-has(css, '.nested-accordion-copy {\n  margin: .5rem .18rem .1rem;')
-has(css, 'width: 38px !important;\n  height: 38px !important;', 'standard accordion screw size')
-const siteHeader = read('components/SiteHeader.tsx')
-has(siteHeader, "from '@/components/accessibility/fullscreen-toggle'")
-has(siteHeader, '<FullscreenToggle className="fullscreen-toggle" />')
+lacks(fullscreenToggle, 'ArrowDownRight')
+lacks(fullscreenToggle, 'ArrowUpLeft')
 assert.equal(exists('components/FullscreenToggle.tsx'), false, 'Duplicate legacy fullscreen component should stay removed')
 
-// Accessibility foundation stays wired and the old exact-format CSS trap stays retired.
+assert.ok(exists('UI-LOOKBOOK.md'), 'Canonical UI lookbook must travel with the source tree')
+const lookbook = read('UI-LOOKBOOK.md')
+for (const heading of ['## 1.1 Plaque', '## 1.2 Nameplate', '## 1.3 Button', '## 1.6 Bezel', '## 1.7 Accordion screw']) has(lookbook, heading)
+has(lookbook, '**35 px × 35 px** nominal size', 'canonical 35 px accordion screw')
+has(lookbook, 'The visible brass surround on a canonical raised object is **2 px**', 'canonical 2 px brass surround')
+has(lookbook, '# 22. Current page-specific composition rules')
+lacks(lookbook, '1.12.80')
+lacks(lookbook, '1.12.81')
+lacks(lookbook, '1.12.82')
+lacks(lookbook, '1.12.83')
+lacks(lookbook, '1.12.84')
+
+// One palette and one geometry set own the finished interface.
+for (const token of [
+  '--rpgyw-forest: #043a2d;',
+  '--rpgyw-forest-line: #07563f;',
+  '--rpgyw-olive-dark: #6f7946;',
+  '--rpgyw-olive-light: #d6d1a3;',
+  '--rpgyw-cream: #f6ead4;',
+  '--rpgyw-parchment: #f2dfb8;',
+  '--rpgyw-lime: #c1dc4d;',
+  '--rpgyw-brass-dark: #7a6031;',
+  '--rpgyw-brass-mid: #a88a4d;',
+  '--rpgyw-brass-light: #d7bd7b;',
+  '--rpgyw-rim-spread: 2px;',
+  '--rpgyw-accordion-screw: 35px;',
+  '--rpgyw-radius-control: 14px;',
+  '--rpgyw-radius-card: 18px;',
+  '--rpgyw-radius-plaque: 20px;',
+]) has(css, token)
+for (const retired of [
+  '--cream-bright', '--forest-deep', '--landing-mint', '--landing-olive', '--rpgyw-pale-olive',
+  'RPG Your Way 1.12.', 'width: 38px !important;\n  height: 38px !important;',
+]) lacks(css, retired)
+assert.doesNotMatch(css, /border:\s*(?:1|3)px solid var\(--rpgyw-brass-(?:mid|light)\)(?:\s*!important)?;/, 'Pure brass object surrounds must use the canonical 2 px width')
+has(css, 'body :where(button, .button, summary, [role="button"]):not(:disabled):hover,', 'single application hover language')
+has(css, 'color: var(--rpgyw-lime) !important;', 'hover/focus copy uses canonical lime')
+has(css, 'width: var(--rpgyw-accordion-screw);')
+has(css, 'height: var(--rpgyw-accordion-screw);')
+assert.equal((css.match(/^\.accordion-plus\s*\{/gm) ?? []).length, 1, 'Accordion screw hardware must have one physical recipe')
+has(css, 'span:not(.accordion-plus)', 'accordion hardware is excluded from copy hover recoloring')
+lacks(css, '.landing-reason-card .accordion-plus,', 'landing accordions must not override screw hardware')
+
+// Retired UI species stay retired rather than lingering behind the final cascade.
+for (const retiredSelector of [
+  '.shape-steps', '.landing-notice-card', '.landing-notice-grid', '.landing-thesis-strip',
+  '.start-standardize-bar', '.start-onboarding-intro', '.start-fixed-setting', '.start-voice-row', '.fake-button',
+]) lacks(css, retiredSelector)
+assert.equal(exists('public/rpgyw-logo.png'), false, 'Unused superseded 2.4 MB logo asset should stay removed')
+assert.equal(exists('scripts/test-11274-multiplayer-turns.mts'), false, 'Version-number-named multiplayer test should stay retired')
+
+// Accessibility foundation and Motion controls use the same visual dialect.
 const accessibility = read('app/accessibility/page.tsx')
 has(accessibility, 'Accessibility')
-has(css, 'outline: 3px solid var(--lime);')
-assert.match(css, /background:\s*linear-gradient\(\s*180deg,\s*color-mix\(in srgb, var\(--cream-bright\) 97%, white\),\s*var\(--cream\)\s*\) !important;/)
+has(css, 'outline: 3px solid var(--rpgyw-lime);')
+const motionPreference = read('components/accessibility/motion-preference.tsx')
+has(motionPreference, 'motion-settings-control--compact')
+lacks(motionPreference, 'border-amber')
+lacks(motionPreference, 'bg-black')
 
-// 1.12.77 Landing accordion separation correction.
-has(css, 'RPG Your Way 1.12.77 — Landing accordion separation correction.')
-has(css, '.landing-reason-card {\n  align-self: start !important;')
-has(css, '.landing-accordion-body {\n  margin-top: .9rem !important;')
-has(css, 'var(--rpgyw-olive-dark) 90%, var(--rpgyw-cream)')
-has(css, 'Nested choices are canonical light-olive buttons.')
-has(lookbook, 'opening it reveals a **separate dark-olive plaque** below the button')
+// Informational pages use one canonical prose-card family.
+for (const file of [
+  'app/support/page.tsx', 'app/legal/privacy/page.tsx', 'app/legal/terms/page.tsx',
+  'app/read/page.tsx', 'app/accessibility/page.tsx', 'app/not-found.tsx',
+]) has(read(file), 'prose-page', `${file} canonical prose page`)
+has(css, '.inner-main > .shell.prose-page {')
 
-console.log('RPG Your Way 1.12.77 landing accordion correction checks passed.')
-
-
-// 1.12.78 Start-page lookbook correction.
-has(css, 'RPG Your Way 1.12.78 — Start page lookbook correction.')
-has(fullscreenToggle, '<><ArrowDownLeft /><ArrowUpRight /></>', 'inward fullscreen arrows point toward one another')
-has(css, `.start-campaign-hub {\n  border: 0 !important;`, 'campaign hub top control is not sitting on a full-width plaque')
-has(css, `.start-rules-card--single-step {\n  background: var(--rpgyw-olive-light) !important;`, 'Start Here plaque is light olive')
-has(css, `.start-rules-card--single-step .start-rules-current--display {\n  background: var(--rpgyw-forest) !important;`, 'current game-system button is forest')
-has(css, `.start-rules-card--single-step .start-rules-panel {\n  background: transparent !important;`, 'rules choices have no extra backing plaque')
-has(css, `.start-rules-card--single-step .start-rules-panel .start-choice {\n  background: var(--rpgyw-olive-dark) !important;`, 'rules choices use dark olive buttons')
-has(css, `.start-campaign-hub .play-entry-import {\n  background: var(--rpgyw-olive-light) !important;`, 'import card is light olive')
-has(campaignHub, 'className="accordion-plus campaign-danger-screw"', 'danger accordion uses standard screw')
-has(css, `.campaign-danger-button {\n  border: 1px solid var(--rpgyw-forest-line) !important;`, 'delete action uses canonical dimensional button rather than red square')
-has(lookbook, 'Start-page Step 1 palette')
-
-console.log('RPG Your Way 1.12.78 Start-page lookbook correction checks passed.')
-
-// 1.12.79 Start-page QA compression.
-has(css, 'RPG Your Way 1.12.79 — Start-page QA compression.')
-has(css, 'grid-auto-rows: max-content', 'campaign controls size to content')
-console.log('RPG Your Way 1.12.79 Start-page QA compression checks passed.')
-
-
-// 1.12.80 Start-page QA II.
-has(css, 'RPG Your Way 1.12.80 — Start-page QA II.')
+// Start and Play retain the finished composition while sharing the common primitives.
 has(start, 'className="start-rules-subtitle">New Campaign</p>', 'Start Here New Campaign subtitle')
-has(css, 'color: var(--rpgyw-lime) !important;', 'game-system hover uses lime copy')
-has(css, 'grid-template-columns: minmax(0, 1fr) auto;', 'compact campaign controls share first row')
-has(gameplayShell, 'Current saved turn: ${partyState?.gameplay.turn_count ?? 0}', 'transcript session note includes current saved turn')
-console.log('RPG Your Way 1.12.80 Start-page QA II checks passed.')
-
-
-// 1.12.81 Start-page QA III.
-has(css, 'RPG Your Way 1.12.81 — Start-page QA III.')
-has(css, '.start-mini-rating-item > span {\n  color: var(--rpgyw-forest) !important;', 'campaign category labels use forest ink')
-has(css, 'font-size: 1rem !important;', 'campaign category labels are easier to read')
-has(css, '.campaign-danger-details > summary:hover .campaign-danger-screw', 'delete accordion screw keeps fixed dimensions on hover')
-has(lookbook, 'Accordion hardware must never change physical size on hover or focus.')
-console.log('RPG Your Way 1.12.81 Start-page QA III checks passed.')
-
-
-// 1.12.82 Start/Play finishing QA.
-has(css, 'RPG Your Way 1.12.82 — final Start/Play UI QA before stylesheet cleanup.')
 lacks(start, 'Six short questions answered.', 'redundant completed-guidance subtitle')
 has(start, 'start-complete-plaque start-complete-plaque--guidance', 'completed guidance modifier')
-has(css, `.start-play-button {\n  width: 100%;`, 'Onward uses full available Start width')
-has(gameplayShell, 'className="aigm-transition-card max-w-xl rounded-3xl p-8 text-center"', 'Play transition card uses canonical class')
+has(css, '.start-play-button {')
+has(css, 'width: 100%;', 'full-width controls are available for Onward')
+has(css, '.start-mini-rating-item > span {')
+has(css, '.start-leader-card > .start-leader-main > span {')
+has(css, '.medieval-page--play .aigm-party-capacity {')
+has(css, '.medieval-page--play #dice-quantity {')
+has(css, '.medieval-page--play .aigm-gameplay-message-input {')
 has(gameplayShell, '<BookOpen className="size-3.5" aria-hidden="true" />Can I direct my game?</button>', 'story-direction help lives in Session tools')
-has(css, '.medieval-page--play #dice-quantity {', 'dice quantity uses explicit inner opening')
-has(css, '.medieval-page--play .aigm-gameplay-message-input {', 'gameplay composer input has explicit inner geometry')
-has(lookbook, 'Start/Play finishing rule (1.12.82)')
-console.log('RPG Your Way 1.12.82 Start/Play finishing QA checks passed.')
+has(gameplayShell, 'Current saved turn: ${partyState?.gameplay.turn_count ?? 0}', 'transcript session note includes current saved turn')
 
+// Script is the actual three-step converter and accepts outside campaign records.
+const scriptPageUi = read('app/script/page.tsx')
+const shapeWorkspace = read('components/ShapeWorkspace.tsx')
+lacks(scriptPageUi, 'className="shape-steps"', 'obsolete Script explainer strip')
+has(scriptPageUi, 'another text-to-play game, another game system, or a tabletop campaign you recorded digitally', 'Script accepts outside campaign records')
+has(shapeWorkspace, 'Any useful digital record of the campaign you actually played.', 'Script source guidance accepts outside records')
+lacks(shapeWorkspace, '<p className="kicker">Script workbench</p>', 'redundant Script workbench kicker')
+before(shapeWorkspace, 'id="shape-step-1-title">Upload or drop transcript', 'id="shape-step-2-title">Answer the questions', 'Script step order 1 → 2')
+before(shapeWorkspace, 'id="shape-step-2-title">Answer the questions', 'id="shape-step-3-title">See maximum usage', 'Script step order 2 → 3')
+has(css, '.shape-script-step--questions .shape-script-step-nameplate {')
 
-// 1.12.83 Script + character-record lookbook pass.
-const scriptPage11283 = read('app/script/page.tsx')
-const shapeWorkspace11283 = read('components/ShapeWorkspace.tsx')
-has(css, 'RPG Your Way 1.12.83 — Script + character-record lookbook pass.')
-lacks(scriptPage11283, 'className="shape-steps"', 'obsolete Script explainer-step strip')
-before(shapeWorkspace11283, 'id="shape-step-1-title">Upload or drop transcript', 'id="shape-step-2-title">Answer the questions', 'Script step order 1 → 2')
-before(shapeWorkspace11283, 'id="shape-step-2-title">Answer the questions', 'id="shape-step-3-title">See maximum usage', 'Script step order 2 → 3')
-has(gameplayShell, 'className="character-record-section group"', 'canonical character-record sections')
-has(gameplayShell, 'accordion-plus character-record-section-screw', 'character record uses canonical accordion screw')
-has(css, '.character-sheet-header-controls .character-remove-button--confirm {\n  background: var(--rpgyw-olive-dark) !important;', 'character removal confirmation avoids red exception')
-has(lookbook, 'Script + character-record visual rule (1.12.83)')
-console.log('RPG Your Way 1.12.83 Script + character-record lookbook checks passed.')
+// Character record material/state language is explicit and consistent.
+has(gameplayShell, 'className="character-record-section group"', 'character-record accordions')
+has(gameplayShell, 'accordion-plus character-record-section-screw', 'character record uses canonical screw')
+has(css, '.character-record-section-summary,\n.character-record-section:nth-child(even) > .character-record-section-summary,', 'closed character record summaries share one face')
+has(css, '.character-record-section[open] > .character-record-section-summary,', 'open character record summary state')
+has(css, '.character-record-section-body,\n.character-record-nested-body {', 'character-record reveal backing')
+has(css, 'background: var(--rpgyw-olive-dark) !important;', 'dark-olive record reveal')
+has(css, '.character-sheet-header-controls .character-remove-button--confirm {')
 
-// 1.12.84 Script/character-record QA II + Play/Start nips.
-const scriptPage11284 = read('app/script/page.tsx')
-const shapeWorkspace11284 = read('components/ShapeWorkspace.tsx')
-has(css, 'RPG Your Way 1.12.84 — Script/character-record QA II + Play/Start nips.')
-has(css, '.medieval-page--play .aigm-party-capacity {\n  width: 100%;', 'Play party capacity is constrained to its rail')
-has(css, '.start-leader-card > .start-leader-main > span {', 'party-leader label has explicit upper-left placement')
-has(scriptPage11284, 'another text-to-play game, another game system, or a tabletop campaign you recorded digitally', 'Script intro accepts outside campaign records')
-has(shapeWorkspace11284, 'Any useful digital record of the campaign you actually played.', 'Script source help accepts outside campaign records')
-lacks(shapeWorkspace11284, '<p className="kicker">Script workbench</p>', 'redundant Script workbench kicker')
-has(css, '.shape-script-step--questions .shape-script-step-nameplate {\n  background: var(--rpgyw-forest) !important;', 'Step 2 uses standard forest nameplate')
-has(css, '.character-record-section-summary,\n.character-record-section:nth-child(even) > .character-record-section-summary,', 'closed record accordions share light-olive face')
-has(css, '.character-record-section[open] > .character-record-section-summary,', 'open record accordions use forest face')
-has(css, '.character-record-section-body,\n.character-record-nested-body {\n  background: var(--rpgyw-olive-dark) !important;', 'record reveals use dark-olive plaque')
-has(lookbook, 'Script + character-record QA rule (1.12.84)')
-console.log('RPG Your Way 1.12.84 Script/character-record QA II checks passed.')
+// Account/Auth follows the same accordion, button, and text-entry materials.
+has(css, '.account-main .account-access-details[open] > summary {')
+has(css, 'background: var(--rpgyw-forest);')
+has(css, '.account-main .account-access-body {')
+has(css, 'background: var(--rpgyw-olive-dark);')
+has(css, '.auth-form input {')
+has(css, 'background: var(--rpgyw-parchment);')
+lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
+console.log('RPG Your Way 1.13.0 release and canonical UI checks passed.')

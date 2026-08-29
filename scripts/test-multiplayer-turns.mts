@@ -18,4 +18,4 @@ assert.equal(payers.get('payer-a'), shares[0] + shares[2])
 assert.equal(payers.get('payer-b'), shares[1])
 assert.equal(payers.get('payer-c'), shares[3])
 
-console.log('RPG Your Way 1.12.74 multiplayer turn allocation checks passed.')
+console.log('RPG Your Way multiplayer turn allocation checks passed.')

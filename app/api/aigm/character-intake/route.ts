@@ -163,7 +163,6 @@ function looksLikeInternalRecordIssue(category: string, issue: string, why: stri
 }
 
 async function groundDetectedIssues(
-  request: Request,
   apiKey: string,
   model: string,
   settings: CharacterIntakeSettings,
@@ -470,7 +469,7 @@ export async function POST(request: Request) {
     let verificationCostMicrousd = 0
     let verificationRequestId: string | null = null
     if (result.document_assessment.is_usable) {
-      const verification = await groundDetectedIssues(request, apiKey, model, settings, result)
+      const verification = await groundDetectedIssues(apiKey, model, settings, result)
       result = verification.result
       verificationCostMicrousd = verification.providerCostMicrousd
       verificationRequestId = verification.providerRequestId

@@ -899,10 +899,6 @@ function streamLine(value: unknown) {
   return new TextEncoder().encode(`${JSON.stringify(value)}\n`)
 }
 
-function loreToolUnavailable(message: string | undefined) {
-  return /(?:web[_ -]?search|hosted tool|tool).*(?:unsupported|not supported|not available|unavailable)|(?:unsupported|not supported|not available|unavailable).*(?:web[_ -]?search|hosted tool|tool)/i.test(message || '')
-}
-
 function outOfScopeReply(summary: string, scene: string, dmSecrets: DmSecretsState, gameMasterName: string) {
   return NextResponse.json<GameplayReply>({
     dm_secrets: dmSecrets,

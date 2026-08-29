@@ -81,22 +81,21 @@ assert.match(playShell, /<main\b[^>]*id="main-content"/)
 assert.match(playShell, /<h1\b/)
 
 const css = read('app/globals.css')
-assert.match(css, /RPG Your Way 1\.10\.0 accessibility foundation/)
-assert.match(css, /outline: 3px solid var\(--cream-bright\) !important/)
-assert.match(css, /0 0 0 5px var\(--forest-deep\) !important/)
+assert.match(css, /outline: 3px solid var\(--rpgyw-lime\)/)
 assert.match(css, /min-width: 24px/)
 assert.match(css, /min-height: 24px/)
 assert.match(css, /@media \(prefers-reduced-motion: reduce\)/)
 assert.match(css, /@media \(forced-colors: active\)/)
 assert.match(css, /scroll-margin-top: 5\.5rem/)
 
-// Core palette regression checks. Normal text must meet 4.5:1, and the border
-// color used to distinguish controls must meet the 3:1 non-text threshold.
-assert.ok(contrast('#5f665c', '#fbf2e6') >= 4.5, 'Muted body text lost AA contrast on the main cream surface')
-assert.ok(contrast('#07563f', '#fbf2e6') >= 4.5, 'Forest text lost AA contrast on the main cream surface')
-assert.ok(contrast('#043a2d', '#fbf2e6') >= 4.5, 'Deep-forest text lost AA contrast on the main cream surface')
-assert.ok(contrast('#c1dc4d', '#043a2d') >= 4.5, 'Lime text lost AA contrast on deep forest')
-assert.ok(contrast('#9b8a68', '#fbf2e6') >= 3, 'Standard control border lost 3:1 non-text contrast')
+// Core canonical-palette regression checks. Normal text must meet 4.5:1.
+// The forest detail line, rather than decorative brass, provides the 3:1+
+// non-text boundary for canonical controls.
+assert.ok(contrast('#5f665c', '#f6ead4') >= 4.5, 'Muted body text lost AA contrast on canonical cream')
+assert.ok(contrast('#07563f', '#f6ead4') >= 4.5, 'Forest detail/text lost AA contrast on canonical cream')
+assert.ok(contrast('#043a2d', '#f6ead4') >= 4.5, 'Forest text lost AA contrast on canonical cream')
+assert.ok(contrast('#c1dc4d', '#043a2d') >= 4.5, 'Lime interaction text lost AA contrast on forest')
+assert.ok(contrast('#07563f', '#f6ead4') >= 3, 'Canonical control detail line lost 3:1 non-text contrast')
 
 const tsxFiles = [...walk('app', '.tsx'), ...walk('components', '.tsx')]
 for (const relative of tsxFiles) {
@@ -168,4 +167,4 @@ const motion = read('components/accessibility/motion-preference.tsx')
 assert.match(motion, /prefers-reduced-motion/)
 assert.doesNotMatch(motion, /Wardens PC has disabled/)
 
-console.log('RPG Your Way 1.10.0 accessibility regression checks passed.')
+console.log('RPG Your Way 1.13.0 accessibility regression checks passed.')

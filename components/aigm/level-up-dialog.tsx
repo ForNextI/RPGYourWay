@@ -172,9 +172,6 @@ export function LevelUpDialog({ open, characters, setupAnswers, eligibleCharacte
   const constitutionScore = characterRecord?.ability_scores.constitution ?? 10
   const constitutionModifier = Math.floor((constitutionScore - 10) / 2)
   const currentMaximumHp = characterRecord?.hit_points.maximum ?? 0
-  const liveCurrency = selectedCharacter?.result
-    ? normalizeLiveState(selectedCharacter.liveState, selectedCharacter.result).currency
-    : { pp: 0, gp: 0, ep: 0, sp: 0, cp: 0, total_gp_value: 0 }
 
   function finalCurrency() {
     const values = Object.fromEntries(COIN_KEYS.map((coin) => {

@@ -2,7 +2,7 @@
 
 **Status:** Canonical UI design contract
 **Audience:** AI/webmaster/developer first; human-readable second
-**Established:** Cleanup/QA series around RPG Your Way 1.12.75
+**Established:** Canonicalized for the RPG Your Way 1.13.0 consolidation
 **Authority:** If existing CSS/components disagree with this lookbook, the lookbook wins unless Brett explicitly changes a rule.
 
 ---
@@ -320,7 +320,7 @@ For the major landing-page accordions (for example, **Why I created RPG Your Way
 | State | Surface | Text | Screw |
 |---|---|---|---|
 | Rest | Light olive | Forest | Standard cream/forest/brass screw |
-| Hover/focus | Forest | Cream | **Unchanged colors** |
+| Hover/focus | Forest | Lime | **Unchanged colors** |
 | Open/selected | Forest | Cream | Screw rotates `+` → `×`; colors unchanged |
 
 The screw never turns lime merely because the parent is hovered.
@@ -330,7 +330,7 @@ The screw never turns lime merely because the parent is hovered.
 Canonical hardware:
 
 - circle;
-- **40 px × 40 px** nominal size;
+- **35 px × 35 px** nominal size;
 - cream face;
 - forest inner detail line;
 - brass rim;
@@ -340,7 +340,7 @@ Canonical hardware:
 - no color change between closed/open;
 - no lime hover state on the screw itself.
 
-Do not maintain separate 31 px, 36 px, and 40 px screw species unless a future accessibility/mobile requirement explicitly forces one. Default to one canonical screw.
+Do not maintain page-local screw sizes unless a future accessibility requirement explicitly forces one. Default to the single canonical **35 px** screw everywhere.
 
 ## 5.4 Nested accordion layering
 
@@ -652,14 +652,15 @@ Do not create a new visual recipe merely because a new page needs a button.
 
 ---
 
-# 13. Canonical CSS token proposal
+# 13. Canonical CSS tokens
 
-These names should replace/alias the current pile of legacy color aliases over time. **Do not perform a giant one-shot stylesheet rewrite solely to rename variables.** Migrate safely as components are standardized.
+The stylesheet has one canonical RPG Your Way palette and geometry map. New UI must use these tokens rather than introducing near-duplicate page-local colors, radii, or hardware sizes.
 
 ```css
 :root {
   /* Named UI surfaces */
   --rpgyw-forest: #043a2d;
+  --rpgyw-forest-line: #07563f;
   --rpgyw-olive-dark: #6f7946;
   --rpgyw-olive-light: #d6d1a3;
   --rpgyw-cream: #f6ead4;
@@ -667,22 +668,22 @@ These names should replace/alias the current pile of legacy color aliases over t
 
   /* Interaction/material */
   --rpgyw-lime: #c1dc4d;
-  --rpgyw-forest-line: #07563f;
   --rpgyw-brass-dark: #7a6031;
   --rpgyw-brass-mid: #a88a4d;
   --rpgyw-brass-light: #d7bd7b;
 
-  /* Geometry */
-  --rpgyw-radius-button: 14px;
-  --rpgyw-radius-plaque: 18px;
-  --rpgyw-radius-card: 20px;
-  --rpgyw-screw-size: 40px;
-  --rpgyw-brass-width: 2px;
-  --rpgyw-detail-width: 1px;
+  /* Shared geometry */
+  --rpgyw-rim-spread: 2px;
+  --rpgyw-accordion-screw: 35px;
+  --rpgyw-radius-control: 14px;
+  --rpgyw-radius-card: 18px;
+  --rpgyw-radius-plaque: 20px;
 }
 ```
 
-These color values are drawn from the existing landing-page design family. Where current code has nearby legacy values (`--cream`, `--cream-bright`, `--landing-pale`, `--landing-mint-*`, `--landing-olive-*`, etc.), prefer convergence toward this canonical set rather than adding more near-duplicates.
+The visible brass surround on a canonical raised object is **2 px**. A separate **1 px** forest/cream contrast line may sit inside that brass rim; it is not a second brass width. Thin internal separators may remain 1 px when they are clearly separators rather than object surrounds.
+
+Legacy names such as `--cream-bright`, `--forest-deep`, `--landing-mint-*`, `--landing-olive-*`, and one-page color aliases are retired. Do not reintroduce them.
 
 ---
 
@@ -696,8 +697,8 @@ Reference implementation shape, not mandatory literal syntax:
   --detail: var(--rpgyw-forest-line);
   --text: var(--rpgyw-forest);
 
-  border: var(--rpgyw-brass-width) solid var(--rpgyw-brass-mid);
-  border-radius: var(--rpgyw-radius-button);
+  border: 1px solid var(--detail);
+  border-radius: var(--rpgyw-radius-control);
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--surface) 90%, var(--rpgyw-cream)),
@@ -705,7 +706,7 @@ Reference implementation shape, not mandatory literal syntax:
   );
   color: var(--text);
   box-shadow:
-    inset 0 0 0 var(--rpgyw-detail-width) var(--detail),
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-mid),
     inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 70%, transparent),
     inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 18%, transparent),
     0 3px 0 var(--rpgyw-brass-dark),
@@ -768,12 +769,12 @@ The important rule is conceptual: **no brass on the outer bezel edge; brass on t
 # 16. Accordion screw CSS model
 
 ```css
-.rpgyw-accordion-screw {
+.accordion-plus {
   position: relative;
-  width: var(--rpgyw-screw-size);
-  height: var(--rpgyw-screw-size);
-  flex: 0 0 var(--rpgyw-screw-size);
-  border: 2px solid var(--rpgyw-brass-mid);
+  width: var(--rpgyw-accordion-screw);
+  height: var(--rpgyw-accordion-screw);
+  flex: 0 0 var(--rpgyw-accordion-screw);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 999px;
   background: linear-gradient(
     180deg,
@@ -782,15 +783,16 @@ The important rule is conceptual: **no brass on the outer bezel edge; brass on t
   );
   color: var(--rpgyw-forest);
   box-shadow:
-    inset 0 0 0 1px var(--rpgyw-forest-line),
-    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 75%, transparent),
-    0 2px 0 var(--rpgyw-brass-dark),
-    0 5px 9px rgb(42 48 37 / .13);
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 74%, var(--rpgyw-brass-light)),
+    0 2px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-dark),
+    inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 10%, transparent),
+    0 5px 9px rgb(42 48 37 / .12);
   transition: transform 160ms ease;
 }
 
-[aria-expanded="true"] .rpgyw-accordion-screw,
-details[open] > summary .rpgyw-accordion-screw {
+[aria-expanded="true"] .accordion-plus,
+details[open] > summary .accordion-plus {
   transform: rotate(45deg);
 }
 ```
@@ -887,71 +889,62 @@ When continuing RPG Your Way UI work:
 **The design system should become simpler as the site matures, not accumulate another generation of almost-the-same components.**
 
 
-## Start-page compact campaign rule (1.12.80)
+# 22. Current page-specific composition rules
 
-- The permanent selected game-system anchor is a forest button with cream copy; hover/focus keeps the forest surface and changes only the copy to lime. The accordion screw never recolors.
-- `Start Here` carries the plain text subtitle `New Campaign` immediately beneath the nameplate.
-- Open campaign controls shrink-wrap their current content. Campaign identity and `Continue Adventure` may share the first row; multiplayer members, votes, and administration add height only when present.
+These are current composition rules that sit on top of the canonical primitives above. They are not release-history notes. If a future change supersedes one, edit this section in place.
 
+## 22.1 Start
 
-## Start-page rating and accordion hardware rule (1.12.81)
+- `Start Here` carries the plain subtitle **New Campaign** immediately beneath the nameplate.
+- The persistent selected game-system control is forest with cream copy. Hover/focus keeps the forest face and changes the copy to lime. Its accordion screw does not recolor or resize.
+- Open campaign controls shrink-wrap their current content. Campaign identity and **Continue Adventure** may share the first row; multiplayer members, votes, and administration add height only when present.
+- Campaign-preference category labels are readable forest text on their olive rows.
+- A completed guidance plaque carries the single prominent status **Your campaign guidance is set.** Do not add a completion-count subtitle.
+- In the proposed-party-leader plaque, **Proposed party leader:** is an upper-left label. The proposed leader name is centered and is the visual event; Change/None/explanation actions remain secondary.
+- Choice hover/focus changes the letters themselves to lime. Do not paint a separate highlighted slab behind the hovered copy.
+- The final **Onward** control uses the full available Start-page width.
+- Start-to-Play transition/status cards use canonical light olive rather than an ad-hoc translucent green.
 
-- Campaign preference category labels use forest-green text at a larger readable size on their olive rows.
-- Accordion hardware must never change physical size on hover or focus. Hover may change the parent button/nameplate state, but the screw retains its canonical dimensions and only rotates when the accordion opens.
+## 22.2 Play
 
-
-## Start/Play finishing rule (1.12.82)
-
-- A completed campaign-guidance plaque carries the single prominent status **Your campaign guidance is set.** Do not add a small completion-count subtitle beneath it.
-- The proposed party leader is the visual focus of its dark plaque: center the label and leader name, and give the leader name display-scale type while keeping Change/None and explanation actions secondary.
-- On Start choice cards, hover/focus changes the **text itself** to canonical lime. Do not create a highlighted rectangle or other backing surface behind the hovered copy.
-- The final **Onward** action uses the full available Start-page width.
-- Start-to-Play transition/status cards use canonical **light olive** rather than a translucent mint/primary wash.
-- Play dice quantity uses a rounded recessed inner opening. The current quantity is large forest text; die labels are forest at rest.
-- **Can I direct my game?** belongs inside expanded Session tools rather than occupying a permanent second control beside the Session tools button.
+- The compact **Current party / Max party size** plaque stays fully inside the character rail and never clips or forces horizontal overflow.
+- Dice quantity uses a rounded recessed opening. The quantity and die numbers are large forest text at rest.
+- **Can I direct my game?** lives inside expanded Session tools rather than as a permanent second control.
 - **Add another character** is a compact action button, not a full-width card.
-- The gameplay text input has rounded inner corners so its painted input surface never overlaps the rounded composer bezel.
+- Gameplay text input has rounded inner corners and remains inside the composer bezel.
+- The Play page may use Tailwind utilities for layout, but semantic Tailwind colors map back to the same canonical RPG Your Way palette.
 
+## 22.3 Script
 
-## Script + character-record visual rule (1.12.83)
+- Script is the working sequence **1 Upload or drop transcript → 2 Answer the questions → 3 See maximum usage**.
+- Step numbers use the same cream, brass-rimmed rounded-square number tile established by Start. Step nameplates use the standard forest + cream treatment consistently.
+- The intro is subordinate to the work; its headline does not consume the page like a landing hero.
+- Preserve the dashed drag-and-drop boundary because it communicates a distinct drop interaction.
+- Script accepts useful digital campaign records from RPG Your Way, other text-to-play games, other game systems, chat/campaign logs, and digitally recorded notes or written records from home tabletop play. The converter should do its best with any useful digital transcript/record.
+- **Parchment means text/document surface on Script.** Use it for transcript drop/paste, text entry, and produced prose. Explanatory copy and grouping furniture use cream, light olive, dark olive, or forest instead.
+- Script choice cards follow the standard state language: resting light/olive, selected/open forest + cream, hover/focus lime copy without a separate highlight slab.
 
-### Script
+## 22.4 Character record
 
-- Script is an actual three-step working sequence, not a decorative explainer strip followed by unrelated controls.
-- The visible steps are **1 Upload or drop transcript**, **2 Answer the questions**, and **3 See maximum usage**, in that order.
-- Step numbers use the same cream, brass-rimmed rounded-square number tile established by Start numbered nameplates.
-- The Script intro is subordinate to the work. Its headline should be readable and welcoming, but it must not consume the page like a landing-page hero.
-- Preserve the dashed drag-and-drop boundary for transcript upload because the dashed boundary communicates a distinct interaction. Give the drop zone the same parchment/olive/brass material language as the rest of the site rather than a generic browser-upload look.
-- Script should use the full lookbook palette in deliberate rhythm: parchment intro, light-olive and cream working plaques, forest/dark-olive nameplates, and a darker final usage step with cream/parchment contents.
-- Script choice cards follow the standard state rule: unselected is light/olive, selected/open is forest + cream, hover/focus changes text to lime without adding a separate highlight slab.
+- The character record is part of RPG Your Way, not a generic gray application panel.
+- Major record sections are canonical accordions: **closed = light olive + forest**, **open = forest + cream**, **hover/focus = lime lettering while retaining the appropriate open/closed face**.
+- Opened record content uses a **dark-olive backing plaque**. Stat, condition, list, and other informational panels inside it are **cream**.
+- Parchment is reserved for true edit/text-entry/document surfaces, not generic record backgrounds.
+- Nested accordions use the same 35 px canonical screw; no nested screw-size species.
+- Character-record action buttons use the canonical raised button family. Primary editing is forest + cream; secondary actions are cream/light-olive + forest; hover/focus uses lime copy.
+- **Remove this character** is not a permanent red exception. Its confirmation may become dark olive but stays in the house button family.
+- Profile/edit workspaces are raised structural plaques with recessed parchment fields and rounded inner corners.
 
-### Character record sheets
+## 22.5 Account, auth, and informational pages
 
-- The character record overlay is part of RPG Your Way and must use the same dimensional furniture as Landing, Start, and Play rather than generic gray application panels.
-- Major record sections are canonical accordions. Their summary faces alternate forest and dark olive for visual rhythm, use cream text, and use the canonical cream/brass accordion screw. Opened content reveals parchment.
-- Nested record sections use a lighter olive face and cream reveal while retaining brass/forest construction.
-- Extracted stat/data tiles use light olive or cream inset surfaces rather than flat neutral gray boxes.
-- Character-record action buttons use the canonical raised-button family. Primary editing uses forest + cream; secondary actions use cream + forest; hover/focus uses lime text where appropriate.
-- **Remove this character** must not be a permanent red exception. It is a normal house button at rest. The confirmation state may become dark olive, but remains part of the same button family rather than turning into a red slab.
-- Character profile/edit workspaces use raised light-olive plaques and recessed parchment inputs with rounded inner corners.
+- Account/Auth uses the same raised button, accordion, plaque, and parchment-input recipes as the rest of the site. A sign-in/create-account action must never become a flat lime slab or another page-local color species.
+- Account accordion: closed summary light olive + forest; open summary forest + cream; hover/focus copy lime; revealed backing may use dark olive with light cards on top.
+- Support, Privacy, Terms, Accessibility, Read, and 404 use the same cream/brass/forest prose-card construction rather than generic framework cards.
+- Semantic error, warning, and live-recording states may use dedicated warning colors when that distinction conveys real state. Those colors do not become ordinary furniture colors.
 
-## Script + character-record QA rule (1.12.84)
+## 22.6 Validation and maintenance
 
-### Start and Play carryovers
+- Release validation protects the **current semantic UI contract**, not exact CSS strings from old releases.
+- When a canonical primitive changes, update its one source of truth and this lookbook rather than adding a new page-local override.
+- Prefer deletion/merging over accumulating another late stylesheet layer.
 
-- The compact Play **Current party / Max party size** plaque must remain fully inside the character rail. It may be tightened, but it should not clip or force horizontal overflow.
-- In the proposed-party-leader plaque, **Proposed party leader:** is an upper-left label. The proposed leader name itself is the centered visual event.
-
-### Script
-
-- Script accepts useful **digital records of campaigns played elsewhere**, not only RPG Your Way transcripts. Copy may explicitly mention other text-to-play games, other game systems, chat/campaign logs, and digital notes or written records from home tabletop play.
-- The numbered Script step nameplates use the standard **forest + cream** button treatment consistently. Do not make Step 2 a dark-olive exception.
-- Parchment on Script is a text-surface material: use it for transcript drop/paste and text-entry controls. Explanatory copy and grouping furniture use cream or olive instead of parchment.
-
-### Character record accordions
-
-- A **closed** record accordion summary is light olive with forest lettering.
-- An **open** record accordion summary is forest with cream lettering.
-- Hover/focus changes the accordion lettering to canonical lime without changing the open/closed surface color.
-- The revealed record plaque is **dark olive**. Inset stat, condition, list, and other information panels inside it are **cream**.
-- Do not use parchment as a generic character-record background. Reserve parchment for true text-entry/text-document surfaces.
