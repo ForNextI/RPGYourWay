@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.80')
-assert.equal(pkg.rpgywVersion, '1.12.80')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.80'", 'visible app version')
+assert.equal(pkg.version, '1.12.81')
+assert.equal(pkg.rpgywVersion, '1.12.81')
+has(read('lib/version.ts'), "APP_VERSION = '1.12.81'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -376,3 +376,12 @@ has(css, 'color: var(--rpgyw-lime) !important;', 'game-system hover uses lime co
 has(css, 'grid-template-columns: minmax(0, 1fr) auto;', 'compact campaign controls share first row')
 has(gameplayShell, 'Current saved turn: ${partyState?.gameplay.turn_count ?? 0}', 'transcript session note includes current saved turn')
 console.log('RPG Your Way 1.12.80 Start-page QA II checks passed.')
+
+
+// 1.12.81 Start-page QA III.
+has(css, 'RPG Your Way 1.12.81 — Start-page QA III.')
+has(css, '.start-mini-rating-item > span {\n  color: var(--rpgyw-forest) !important;', 'campaign category labels use forest ink')
+has(css, 'font-size: 1rem !important;', 'campaign category labels are easier to read')
+has(css, '.campaign-danger-details > summary:hover .campaign-danger-screw', 'delete accordion screw keeps fixed dimensions on hover')
+has(lookbook, 'Accordion hardware must never change physical size on hover or focus.')
+console.log('RPG Your Way 1.12.81 Start-page QA III checks passed.')

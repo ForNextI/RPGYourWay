@@ -8977,3 +8977,25 @@ body :where(button, summary, [role="button"]):focus-visible .accordion-plus {
   .campaign-hub-card > .campaign-control-body > .campaign-hub-primary-action { justify-content: stretch; }
   .campaign-hub-card > .campaign-control-body > .campaign-hub-primary-action .button { width: 100%; justify-content: center; }
 }
+
+
+/* RPG Your Way 1.12.81 — Start-page QA III.
+   Campaign category labels use larger forest ink, and destructive accordion
+   hardware never changes dimensions when its parent is hovered or focused. */
+.start-mini-rating-item > span {
+  color: var(--rpgyw-forest) !important;
+  font-size: 1rem !important;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.campaign-danger-details > summary .campaign-danger-screw,
+.campaign-danger-details > summary:hover .campaign-danger-screw,
+.campaign-danger-details > summary:focus-visible .campaign-danger-screw,
+.campaign-danger-details[open] > summary .campaign-danger-screw,
+.campaign-danger-details[open] > summary:hover .campaign-danger-screw,
+.campaign-danger-details[open] > summary:focus-visible .campaign-danger-screw {
+  width: 30px !important;
+  height: 30px !important;
+  flex: 0 0 30px;
+}

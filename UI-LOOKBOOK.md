@@ -892,3 +892,9 @@ When continuing RPG Your Way UI work:
 - The permanent selected game-system anchor is a forest button with cream copy; hover/focus keeps the forest surface and changes only the copy to lime. The accordion screw never recolors.
 - `Start Here` carries the plain text subtitle `New Campaign` immediately beneath the nameplate.
 - Open campaign controls shrink-wrap their current content. Campaign identity and `Continue Adventure` may share the first row; multiplayer members, votes, and administration add height only when present.
+
+
+## Start-page rating and accordion hardware rule (1.12.81)
+
+- Campaign preference category labels use forest-green text at a larger readable size on their olive rows.
+- Accordion hardware must never change physical size on hover or focus. Hover may change the parent button/nameplate state, but the screw retains its canonical dimensions and only rotates when the accordion opens.
