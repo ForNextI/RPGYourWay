@@ -26,6 +26,7 @@ export type MultiplayerSessionView = {
   campaignId: string | null
   campaignName: string
   campaignFingerprint: string
+  campaignRevision: number
   status: MultiplayerSessionStatus
   coordinatorSeatId: string | null
   isCoordinator: boolean

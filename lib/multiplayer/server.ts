@@ -4,7 +4,6 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import type { MultiplayerCharacterSeat, MultiplayerParticipant, MultiplayerSessionStatus, MultiplayerSessionView } from '@/lib/multiplayer/types'
 import { MultiplayerError } from '@/lib/multiplayer/errors'
-import { isOwnerQaEmail } from '@/lib/usage/owner-qa'
 
 const MAX_MULTIPLAYER_PLAYERS = 6
 const MAX_CAMPAIGN_CHARACTERS = 6
@@ -128,6 +127,19 @@ export async function loadSessionByInvite(inviteCode: string, userId: string): P
   if (session.status === 'closed') throw new MultiplayerError('That multiplayer session has closed.', 410, 'session_closed')
   if (session.expires_at && Date.parse(session.expires_at) <= Date.now()) throw new MultiplayerError('That multiplayer invite has expired.', 410, 'session_expired')
 
+  let campaignRevision = 0
+  if (session.campaign_id) {
+    const { data: campaignData, error: campaignError } = await admin
+      .from('campaigns')
+      .select('revision')
+      .eq('id', session.campaign_id)
+      .is('deleted_at', null)
+      .maybeSingle()
+    if (campaignError) throw new MultiplayerError(campaignError.message, 503, 'multiplayer_database_unavailable')
+    if (!campaignData) throw new MultiplayerError('That multiplayer campaign is no longer available.', 410, 'campaign_closed')
+    campaignRevision = Math.max(1, Number(campaignData.revision) || 1)
+  }
+
   const [
     { data: seatData, error: seatError },
     { data: characterData, error: characterError },
@@ -196,6 +208,7 @@ export async function loadSessionByInvite(inviteCode: string, userId: string): P
     campaignId: session.campaign_id,
     campaignName: session.campaign_name,
     campaignFingerprint: session.campaign_fingerprint,
+    campaignRevision,
     status: session.status,
     coordinatorSeatId: coordinatorSeat?.id ?? null,
     isCoordinator: session.coordinator_user_id === userId,
@@ -218,7 +231,6 @@ export async function createMultiplayerSession(user: User, input: {
   campaignName: string
   characters: Array<{ characterId: string; displayName: string }>
 }) {
-  if (!isOwnerQaEmail(user.email)) throw new MultiplayerError('Native multiplayer is still in private table testing.', 403, 'multiplayer_private_test')
   const localCampaignId = cleanLabel(input.localCampaignId, '', 160)
   if (!localCampaignId) throw new MultiplayerError('Open a saved campaign before starting multiplayer.', 400, 'campaign_required')
   const campaignName = cleanLabel(input.campaignName, 'Multiplayer campaign', 120)
@@ -245,6 +257,27 @@ export async function createMultiplayerSession(user: User, input: {
     .maybeSingle()
   if (campaignError) throw new MultiplayerError(campaignError.message, 503, 'multiplayer_database_unavailable')
   if (!campaign) throw new MultiplayerError('This campaign is not configured for multiplayer.', 409, 'multiplayer_campaign_required')
+
+  // A cloud campaign has one live multiplayer table. Reopening Multiplayer from
+  // another member joins the existing table instead of creating a competing room.
+  const nowIso = new Date().toISOString()
+  await admin.from('multiplayer_sessions')
+    .update({ status: 'closed', updated_at: nowIso })
+    .eq('campaign_id', localCampaignId)
+    .neq('status', 'closed')
+    .lte('expires_at', nowIso)
+
+  const { data: existingSessions, error: existingSessionError } = await admin
+    .from('multiplayer_sessions')
+    .select('invite_code,expires_at')
+    .eq('campaign_id', localCampaignId)
+    .neq('status', 'closed')
+    .order('created_at', { ascending: false })
+    .limit(5)
+  if (existingSessionError) throw new MultiplayerError(existingSessionError.message, 503, 'multiplayer_database_unavailable')
+  const existingSession = (existingSessions || []).find((entry) => !entry.expires_at || Date.parse(entry.expires_at) > Date.now())
+  if (existingSession?.invite_code) return joinMultiplayerSession(user, existingSession.invite_code)
+
   const sessionId = randomUUID()
   const code = createInviteCode()
   const expiresAt = new Date(Date.now() + SESSION_LIFETIME_MS).toISOString()
@@ -260,7 +293,20 @@ export async function createMultiplayerSession(user: User, input: {
     status: 'lobby',
     expires_at: expiresAt,
   })
-  if (sessionError) throw new MultiplayerError(sessionError.message, 503, 'multiplayer_database_unavailable')
+  if (sessionError) {
+    if (/duplicate|unique/i.test(sessionError.message)) {
+      const { data: racedSession, error: racedSessionError } = await admin
+        .from('multiplayer_sessions')
+        .select('invite_code')
+        .eq('campaign_id', localCampaignId)
+        .neq('status', 'closed')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+      if (!racedSessionError && racedSession?.invite_code) return joinMultiplayerSession(user, racedSession.invite_code)
+    }
+    throw new MultiplayerError(sessionError.message, 503, 'multiplayer_database_unavailable')
+  }
 
   const seatId = randomUUID()
   const { error: seatError } = await admin.from('multiplayer_seats').insert({
@@ -270,6 +316,7 @@ export async function createMultiplayerSession(user: User, input: {
     display_name: multiplayerDisplayName(user),
     payer_user_id: user.id,
     is_active: true,
+    last_seen_at: new Date().toISOString(),
   })
   if (seatError) {
     await admin.from('multiplayer_sessions').delete().eq('id', sessionId)
@@ -320,6 +367,7 @@ export async function joinMultiplayerSession(user: User, inviteCode: string) {
     display_name: multiplayerDisplayName(user),
     payer_user_id: user.id,
     is_active: true,
+    last_seen_at: new Date().toISOString(),
   })
   if (error) {
     if (/duplicate|unique/i.test(error.message)) return loadSessionByInvite(inviteCode, user.id)
@@ -450,4 +498,92 @@ export async function closeMultiplayerSession(userId: string, inviteCode: string
   const { error } = await admin.from('multiplayer_sessions').update({ status: 'closed', updated_at: new Date().toISOString() }).eq('id', lobby.id).eq('coordinator_user_id', userId)
   if (error) throw new MultiplayerError(error.message, 503, 'multiplayer_database_unavailable')
   return { closed: true }
+}
+
+export async function heartbeatMultiplayerSession(userId: string, inviteCode: string) {
+  const lobby = await loadSessionByInvite(inviteCode, userId)
+  if (!lobby.selfSeatId) throw new MultiplayerError('Join this multiplayer table before sending a heartbeat.', 403, 'membership_required')
+  const admin = createAdminClient()
+  const { error } = await admin
+    .from('multiplayer_seats')
+    .update({ last_seen_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+    .eq('id', lobby.selfSeatId)
+    .eq('user_id', userId)
+    .eq('is_active', true)
+  if (error) throw new MultiplayerError(error.message, 503, 'multiplayer_database_unavailable')
+  return loadSessionByInvite(inviteCode, userId)
+}
+
+export async function beginMultiplayerTurn(user: User, inviteCode: string, turnId: string, expectedRevision: number) {
+  const lobby = await loadSessionByInvite(inviteCode, user.id)
+  if (!lobby.isMember || !lobby.selfSeatId) throw new MultiplayerError('Join this multiplayer table before sending a turn.', 403, 'membership_required')
+  if (!lobby.campaignId) throw new MultiplayerError('This multiplayer table is not attached to a cloud campaign.', 409, 'campaign_required')
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(turnId)) {
+    throw new MultiplayerError('That multiplayer turn id is not valid.', 400, 'turn_id_invalid')
+  }
+  const revision = Math.max(1, Math.trunc(expectedRevision || 0))
+  const admin = createAdminClient()
+  const { data, error } = await admin.rpc('rpgyw_begin_multiplayer_turn', {
+    p_turn_id: turnId,
+    p_session_id: lobby.id,
+    p_campaign_id: lobby.campaignId,
+    p_submitter_user_id: user.id,
+    p_expected_revision: revision,
+    p_lease_expires_at: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
+  })
+  if (error) {
+    const message = error.message || ''
+    if (message.includes('MULTIPLAYER_TURN_IN_PROGRESS')) throw new MultiplayerError('Another player is sending a turn. RPG Your Way will keep turns in order; try again after that reply finishes.', 409, 'turn_in_progress')
+    const revisionMatch = message.match(/MULTIPLAYER_REVISION_CONFLICT:(\d+)/)
+    if (revisionMatch) throw new MultiplayerError('The campaign changed on another device. RPG Your Way needs to reload the newest cloud state before you send this turn.', 409, 'revision_conflict')
+    if (message.includes('MULTIPLAYER_TURN_ID_REUSED')) throw new MultiplayerError('That turn id was already used for another multiplayer request.', 409, 'turn_id_reused')
+    throw new MultiplayerError(message || 'RPG Your Way could not reserve the multiplayer turn.', 503, 'multiplayer_turn_unavailable')
+  }
+  return { turnId, campaignId: lobby.campaignId, revision: Math.max(1, Number(data) || revision) }
+}
+
+export async function completeMultiplayerTurn(userId: string, inviteCode: string, turnId: string, finalRevision: number) {
+  const lobby = await loadSessionByInvite(inviteCode, userId)
+  if (!lobby.isMember || !lobby.campaignId) throw new MultiplayerError('This multiplayer campaign is not available to this account.', 403, 'membership_required')
+  const committedRevision = Math.max(1, Math.trunc(finalRevision || 0))
+  const admin = createAdminClient()
+  const [{ data: turnRow, error: turnReadError }, { data: campaignRow, error: campaignReadError }] = await Promise.all([
+    admin.from('multiplayer_turns').select('expected_campaign_revision,turn_status').eq('id', turnId).eq('session_id', lobby.id).eq('campaign_id', lobby.campaignId).eq('submitted_by_user_id', userId).maybeSingle(),
+    admin.from('campaigns').select('revision').eq('id', lobby.campaignId).is('deleted_at', null).maybeSingle(),
+  ])
+  if (turnReadError || campaignReadError) throw new MultiplayerError(turnReadError?.message || campaignReadError?.message || 'The shared turn could not be verified.', 503, 'multiplayer_turn_unavailable')
+  if (!turnRow || !campaignRow) throw new MultiplayerError('That multiplayer turn is no longer waiting to be committed.', 409, 'turn_not_pending')
+  if (committedRevision !== Number(campaignRow.revision) || committedRevision <= Number(turnRow.expected_campaign_revision)) {
+    throw new MultiplayerError('The shared campaign revision does not match this completed turn. RPG Your Way will resynchronize the table before another turn.', 409, 'revision_conflict')
+  }
+  const { data, error } = await admin
+    .from('multiplayer_turns')
+    .update({
+      turn_status: 'committed',
+      committed_campaign_revision: committedRevision,
+      lease_expires_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', turnId)
+    .eq('session_id', lobby.id)
+    .eq('campaign_id', lobby.campaignId)
+    .eq('submitted_by_user_id', userId)
+    .in('turn_status', ['pending', 'held', 'ai_complete'])
+    .select('id')
+    .maybeSingle()
+  if (error) throw new MultiplayerError(error.message, 503, 'multiplayer_turn_unavailable')
+  if (!data) throw new MultiplayerError('That multiplayer turn is no longer waiting to be committed.', 409, 'turn_not_pending')
+  return loadSessionByInvite(inviteCode, userId)
+}
+
+export async function releaseMultiplayerTurn(userId: string, inviteCode: string, turnId: string) {
+  const lobby = await loadSessionByInvite(inviteCode, userId)
+  if (!lobby.isMember || !lobby.campaignId) return
+  const admin = createAdminClient()
+  await admin.from('multiplayer_turns').update({ turn_status: 'released', updated_at: new Date().toISOString() })
+    .eq('id', turnId)
+    .eq('session_id', lobby.id)
+    .eq('campaign_id', lobby.campaignId)
+    .eq('submitted_by_user_id', userId)
+    .in('turn_status', ['pending', 'held', 'ai_complete'])
 }

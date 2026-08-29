@@ -1,5 +1,6 @@
 import { randomInt } from 'node:crypto'
 import { NextResponse } from 'next/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { isRateLimited } from '@/lib/aigm/rate-limit'
 import { emptyDmSecretsState, type CampaignMemoryEntry, type CampaignRetcon, type DmSecretsState } from '@/lib/aigm/campaign-storage'
 import { mergeMysteryCommitments, type DmMysteryCommitment } from '@/lib/aigm/mystery-commitments'
@@ -18,7 +19,9 @@ import { gameplayScopeDecision } from '@/lib/aigm/gameplay-scope'
 import { billingErrorResponse, releaseUsage, requireUsageAccount, reserveUsage, type UsageReservation } from '@/lib/usage/server-billing'
 import { estimateTerraMaximumMicrousd, terraProviderCostMicrousd } from '@/lib/usage/play-cost'
 import { ttsReserveMicrousd } from '@/lib/usage/audio-cost'
-import { attachPlayTurnReservation, ensurePlayTurn, markGameplayComplete, markPlayTurnReleased, recordPlayTurnComponent, successfulProviderCostSoFar } from '@/lib/usage/play-turn-billing'
+import { attachMultiplayerPlayTurn, attachPlayTurnReservation, ensurePlayTurn, markGameplayComplete, markPlayTurnReleased, recordPlayTurnComponent, successfulProviderCostSoFar } from '@/lib/usage/play-turn-billing'
+import { reserveMultiplayerTurnBilling } from '@/lib/multiplayer/turn-billing'
+import { MultiplayerError, multiplayerErrorResponse } from '@/lib/multiplayer/errors'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -164,6 +167,8 @@ interface GameplayChatBody {
   character_assistance_level?: number
   stream?: boolean
   narration_expected?: boolean
+  multiplayer_invite_code?: string
+  cloud_revision?: number
 }
 
 interface OpenAIResponsePayload {
@@ -1578,14 +1583,36 @@ This imported campaign was saved in Teen mode even though the onboarding page sh
       10,
     )
     const maximumMicrousd = terraMaximumMicrousd + providerCostBeforeGameplay + (narrationExpected ? ttsReserveMicrousd() : 0)
-    reservation = await reserveUsage(usageAccount, {
-      maximumMicrousd,
-      feature: 'gameplay-turn',
-      sourceRef,
-      operationId: turnBillingId,
-      holdMinutes: 30,
-    })
-    await attachPlayTurnReservation(usageAccount, turnBillingId, reservation, narrationExpected)
+
+    let multiplayerCampaign = false
+    if (body.adventure_id && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(body.adventure_id)) {
+      const admin = createAdminClient()
+      const { data: campaignRow, error: campaignError } = await admin.from('campaigns').select('mode').eq('id', body.adventure_id).is('deleted_at', null).maybeSingle()
+      if (campaignError) throw new MultiplayerError(campaignError.message, 503, 'multiplayer_database_unavailable')
+      multiplayerCampaign = campaignRow?.mode === 'multiplayer'
+    }
+
+    if (multiplayerCampaign && mode === 'turn') {
+      const inviteCode = body.multiplayer_invite_code?.trim() || ''
+      if (!inviteCode) throw new MultiplayerError('This multiplayer campaign needs an active table before a Game Master turn can be sent.', 409, 'multiplayer_session_required')
+      await reserveMultiplayerTurnBilling(usageAccount, {
+        inviteCode,
+        turnId: turnBillingId,
+        campaignId: body.adventure_id || '',
+        expectedRevision: Number(body.cloud_revision),
+        maximumTotalMicrousd: maximumMicrousd,
+      })
+      await attachMultiplayerPlayTurn(usageAccount, turnBillingId, maximumMicrousd, narrationExpected)
+    } else {
+      reservation = await reserveUsage(usageAccount, {
+        maximumMicrousd,
+        feature: 'gameplay-turn',
+        sourceRef,
+        operationId: turnBillingId,
+        holdMinutes: 30,
+      })
+      await attachPlayTurnReservation(usageAccount, turnBillingId, reservation, narrationExpected)
+    }
 
     async function requestGameplay(streamResponse: boolean) {
       return fetch('https://api.openai.com/v1/responses', {
@@ -1749,10 +1776,9 @@ This imported campaign was saved in Teen mode even though the onboarding page sh
       },
     }, { headers: { 'Cache-Control': 'no-store' } })
   } catch (error) {
-    if (reservation) {
-      await releaseUsage(reservation, { model, metadata: { reason: 'request_failure' } })
-      await markPlayTurnReleased(usageAccount, turnBillingId, 'request_failure')
-    }
+    if (reservation) await releaseUsage(reservation, { model, metadata: { reason: 'request_failure' } })
+    await markPlayTurnReleased(usageAccount, turnBillingId, 'request_failure').catch(() => undefined)
+    if (error instanceof MultiplayerError) return multiplayerErrorResponse(error)
     if (error && typeof error === 'object' && 'status' in error) return billingErrorResponse(error)
     return NextResponse.json({
       error: error instanceof Error ? error.message : 'The gameplay AIGM request failed.',

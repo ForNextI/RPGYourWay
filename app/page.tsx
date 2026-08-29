@@ -181,7 +181,7 @@ export default function HomePage() {
             <h2 id="landing-news-heading" className="sr-only">RPG Your Way news</h2>
             <div className="landing-news-headlines">
               <p>Reduction in prices, yay!</p>
-              <p>Multiplayer testing is underway, with chat.</p>
+              <p>Multiplayer is live, with built-in table chat.</p>
             </div>
           </div>
         </section>

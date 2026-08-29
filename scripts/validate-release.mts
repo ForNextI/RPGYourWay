@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.73')
-assert.equal(pkg.rpgywVersion, '1.12.73')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.73'", 'visible app version')
+assert.equal(pkg.version, '1.12.74')
+assert.equal(pkg.rpgywVersion, '1.12.74')
+has(read('lib/version.ts'), "APP_VERSION = '1.12.74'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -65,6 +65,10 @@ for (const file of [
   'app/api/multiplayer/sessions/route.ts',
   'app/api/multiplayer/ably-token/route.ts',
   'app/api/campaigns/[campaignId]/governance/route.ts',
+  'app/api/multiplayer/sessions/[inviteCode]/heartbeat/route.ts',
+  'app/api/multiplayer/sessions/[inviteCode]/turns/[turnId]/route.ts',
+  'lib/multiplayer/charge-allocation.ts',
+  'lib/multiplayer/turn-billing.ts',
   'supabase/migrations/20260825003000_shared_usage_balance.sql',
   'supabase/migrations/20260825060000_script_commercial_billing.sql',
   'supabase/migrations/20260825120000_play_provider_usage.sql',
@@ -73,6 +77,7 @@ for (const file of [
   'supabase/migrations/20260828073000_multiplayer_names_multi_character.sql',
   'supabase/migrations/20260828163000_cloud_campaigns.sql',
   'supabase/migrations/20260829000000_campaign_governance.sql',
+  'supabase/migrations/20260829023000_multiplayer_public_turns.sql',
   'scripts/validate-accessibility.mts',
   'scripts/test-shape-runtime.mts',
   'scripts/test-usage-money.mts',
@@ -80,6 +85,7 @@ for (const file of [
   'scripts/test-stripe-funding.mts',
   'scripts/test-audio-cost.mts',
   'scripts/test-multiplayer-phase1.mts',
+  'scripts/test-11274-multiplayer-turns.mts',
 ]) assert.ok(exists(file), `Missing ${file}`)
 
 // Dead private-beta access code is deliberately gone.
@@ -106,8 +112,8 @@ lacks(robots, "disallow: '/'")
 const home = read('app/page.tsx')
 has(home, 'Why I created RPG Your Way.')
 has(home, 'Who benefits from this site?')
-has(home, 'Multiplayer testing is underway, with chat.')
-lacks(home, 'Multiplayer is now live, with chat.')
+has(home, 'Multiplayer is live, with built-in table chat.')
+lacks(home, 'Multiplayer testing is underway, with chat.')
 const css = read('app/globals.css')
 has(css, '.landing-accordion {\n  overflow: visible;\n  border: 0;')
 has(css, '.landing-accordion-body { margin-top: .65rem;')
@@ -222,6 +228,10 @@ has(multiplayer, 'MAX_MULTIPLAYER_PLAYERS')
 has(multiplayer, 'campaign_fingerprint')
 has(multiplayer, 'campaign_id: localCampaignId')
 has(multiplayer, "from('campaign_members').upsert")
+has(multiplayer, 'beginMultiplayerTurn')
+has(multiplayer, 'completeMultiplayerTurn')
+has(multiplayer, 'heartbeatMultiplayerSession')
+lacks(multiplayer, 'private table testing')
 const tableChat = read('components/multiplayer/TableChatPanel.tsx')
 has(tableChat, 'Table Chat')
 has(tableChat, 'not sent to the AIGM')
@@ -240,10 +250,40 @@ const storage = read('lib/aigm/campaign-storage.ts')
 has(storage, 'Multiplayer table chat is separate')
 has(storage, "export type MultiplayerAdministrationMode = 'shared' | 'coordinator'")
 
+// Public multiplayer serializes one canonical cloud turn and splits the rounded whole-turn cost.
+const multiplayerTurnMigration = read('supabase/migrations/20260829023000_multiplayer_public_turns.sql')
+has(multiplayerTurnMigration, 'multiplayer_turns_one_live_per_campaign_idx')
+has(multiplayerTurnMigration, 'multiplayer_sessions_one_open_per_campaign_idx')
+has(multiplayerTurnMigration, 'rpgyw_begin_multiplayer_turn')
+has(multiplayerTurnMigration, 'rpgyw_capture_multiplayer_turn')
+has(multiplayerTurnMigration, 'Multiplayer payer roster changed before settlement')
+has(multiplayerTurnMigration, 'A shared turn is never')
+has(multiplayerTurnMigration, 'multiplayer_turn_charges')
+has(multiplayerTurnMigration, 'last_seen_at')
+const multiplayerBilling = read('lib/multiplayer/turn-billing.ts')
+has(multiplayerBilling, 'ACTIVE_SEAT_WINDOW_MS')
+has(multiplayerBilling, 'reserveMultiplayerTurnBilling')
+has(multiplayerBilling, 'rpgyw_capture_multiplayer_turn')
+has(multiplayerBilling, 'evenlyAllocateMultiplayerCharge')
+has(multiplayerBilling, 'campaign_mismatch')
+has(multiplayerBilling, 'expected_campaign_revision')
+const multiplayerHook = read('components/multiplayer/useMultiplayerSession.ts')
+has(multiplayerHook, 'prepareTurn')
+has(multiplayerHook, 'completeTurn')
+has(multiplayerHook, '/heartbeat')
+const voiceControls = read('components/aigm/aigm-voice-controls.tsx')
+has(voiceControls, 'prepareTurnBilling')
+const gameplay = read('components/aigm/aigm-gameplay-shell.tsx')
+has(gameplay, 'prepareMultiplayerTurnBilling')
+has(gameplay, 'saveAdventureState(window.localStorage, confirmedTurnState, activePartyState)')
+has(gameplay, 'The canonical cloud save already succeeded.')
+has(gameplayRoute, 'reserveMultiplayerTurnBilling')
+has(gameplayRoute, 'multiplayer_invite_code')
+
 // Accessibility foundation stays wired and the old exact-format CSS trap stays retired.
 const accessibility = read('app/accessibility/page.tsx')
 has(accessibility, 'Accessibility')
 has(css, 'outline: 3px solid var(--lime);')
 assert.match(css, /background:\s*linear-gradient\(\s*180deg,\s*color-mix\(in srgb, var\(--cream-bright\) 97%, white\),\s*var\(--cream\)\s*\) !important;/)
 
-console.log('RPG Your Way 1.12.73 campaign-control cleanup checks passed.')
+console.log('RPG Your Way 1.12.74 public-multiplayer cleanup checks passed.')

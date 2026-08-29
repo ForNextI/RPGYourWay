@@ -1,13 +1,13 @@
 {
   "name": "rpg-your-way",
-  "version": "1.12.73",
+  "version": "1.12.74",
   "private": true,
   "packageManager": "pnpm@10.14.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "validate:release": "node --no-warnings --experimental-strip-types scripts/validate-release.mts && node --no-warnings --experimental-strip-types scripts/validate-accessibility.mts && node --no-warnings --experimental-strip-types scripts/test-shape-runtime.mts && node --no-warnings --experimental-strip-types scripts/test-usage-money.mts && node --no-warnings --experimental-strip-types scripts/test-provider-cost.mts && node --no-warnings --experimental-strip-types scripts/test-stripe-funding.mts && node --no-warnings --experimental-strip-types scripts/test-audio-cost.mts && node --no-warnings --experimental-strip-types scripts/test-multiplayer-phase1.mts"
+    "validate:release": "node --no-warnings --experimental-strip-types scripts/validate-release.mts && node --no-warnings --experimental-strip-types scripts/validate-accessibility.mts && node --no-warnings --experimental-strip-types scripts/test-shape-runtime.mts && node --no-warnings --experimental-strip-types scripts/test-usage-money.mts && node --no-warnings --experimental-strip-types scripts/test-provider-cost.mts && node --no-warnings --experimental-strip-types scripts/test-stripe-funding.mts && node --no-warnings --experimental-strip-types scripts/test-audio-cost.mts && node --no-warnings --experimental-strip-types scripts/test-multiplayer-phase1.mts && node --no-warnings --experimental-strip-types scripts/test-11274-multiplayer-turns.mts"
   },
   "dependencies": {
     "next": "16.2.6",
@@ -27,5 +27,5 @@
     "postcss": "^8.5",
     "tailwindcss": "^4.3.3"
   },
-  "rpgywVersion": "1.12.73"
+  "rpgywVersion": "1.12.74"
 }

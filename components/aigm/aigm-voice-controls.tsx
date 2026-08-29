@@ -38,6 +38,7 @@ interface AigmVoiceControlsProps {
   onTranscriptComplete?: (text: string) => void
   onBusyChange?: (busy: boolean) => void
   getTurnBillingId?: () => string
+  prepareTurnBilling?: (turnBillingId: string) => Promise<void>
   onUsageSettlement?: (balanceMicrousd: number | null, ownerQaExempt: boolean) => void
   onError: (message: string) => void
 }
@@ -109,6 +110,7 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
   onTranscriptComplete,
   onBusyChange,
   getTurnBillingId,
+  prepareTurnBilling,
   onUsageSettlement,
   onError,
 }, ref) {
@@ -607,6 +609,7 @@ export const AigmVoiceControls = forwardRef<AigmVoiceControlsHandle, AigmVoiceCo
       if (!onboardingProfile) {
         const billingTurnId = getTurnBillingId?.()
         if (!billingTurnId) throw new Error('RPG Your Way could not prepare this spoken turn for billing.')
+        await prepareTurnBilling?.(billingTurnId)
         data.append('turn_id', billingTurnId)
         data.append('component_id', crypto.randomUUID())
       }

@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { roundUsageMicrousdToCent, usageMicrousd } from '@/lib/usage/money'
 import { reserveUsage, type UsageAccount, type UsageReservation } from '@/lib/usage/server-billing'
 import { ttsReserveMicrousd } from '@/lib/usage/audio-cost'
+import { markMultiplayerAiComplete, releaseMultiplayerTurnBilling, settleMultiplayerTurnBilling } from '@/lib/multiplayer/turn-billing'
 
 export type PlayTurnKind = 'live' | 'replay'
 export type PlayTurnComponentType = 'ttt' | 'gameplay' | 'tts'
@@ -39,6 +40,7 @@ type TurnRow = {
   tts_billed_microusd: number | string | null
   balance_after_microusd: number | string | null
   settlement_warning: string | null
+  multiplayer_turn_id: string | null
 }
 
 type ComponentRow = {
@@ -68,7 +70,7 @@ async function turnFor(account: UsageAccount, turnId: string): Promise<TurnRow> 
   const admin = createAdminClient()
   const { data, error } = await admin
     .from('play_turn_billing')
-    .select('id,user_id,kind,source_ref,status,usage_hold_id,maximum_microusd,owner_qa_exempt,narration_expected,gameplay_complete,audio_complete_requested,expected_tts_components,ttt_provider_microusd,gameplay_provider_microusd,tts_provider_microusd,provider_total_microusd,billed_microusd,ttt_billed_microusd,gameplay_billed_microusd,tts_billed_microusd,balance_after_microusd,settlement_warning')
+    .select('id,user_id,kind,source_ref,status,usage_hold_id,maximum_microusd,owner_qa_exempt,narration_expected,gameplay_complete,audio_complete_requested,expected_tts_components,ttt_provider_microusd,gameplay_provider_microusd,tts_provider_microusd,provider_total_microusd,billed_microusd,ttt_billed_microusd,gameplay_billed_microusd,tts_billed_microusd,balance_after_microusd,settlement_warning,multiplayer_turn_id')
     .eq('id', turnId)
     .maybeSingle()
   if (error || !data) throw new Error(error?.message || 'Play turn billing record is unavailable.')
@@ -130,6 +132,25 @@ export async function attachPlayTurnReservation(
     updated_at: new Date().toISOString(),
   }).eq('id', turnId).eq('user_id', account.userId)
   if (error) throw new Error(`Play turn reservation could not be attached: ${error.message}`)
+}
+
+export async function attachMultiplayerPlayTurn(
+  account: UsageAccount,
+  turnId: string,
+  maximumMicrousd: number,
+  narrationExpected: boolean,
+) {
+  await ensurePlayTurn(account, { turnId, kind: 'live' })
+  const admin = createAdminClient()
+  const { error } = await admin.from('play_turn_billing').update({
+    usage_hold_id: null,
+    maximum_microusd: Math.max(0, Math.trunc(maximumMicrousd || 0)),
+    narration_expected: narrationExpected,
+    multiplayer_turn_id: turnId,
+    status: 'held',
+    updated_at: new Date().toISOString(),
+  }).eq('id', turnId).eq('user_id', account.userId)
+  if (error) throw new Error(`Multiplayer Play turn could not be attached: ${error.message}`)
 }
 
 export async function ensureReplayReservation(account: UsageAccount, turnId: string) {
@@ -213,23 +234,32 @@ export async function recordPlayTurnComponent(
 }
 
 export async function markGameplayComplete(account: UsageAccount, turnId: string) {
+  const turn = await turnFor(account, turnId)
   const admin = createAdminClient()
   const { error } = await admin.from('play_turn_billing').update({
     gameplay_complete: true,
     updated_at: new Date().toISOString(),
   }).eq('id', turnId).eq('user_id', account.userId)
   if (error) throw new Error(`Play turn could not be marked gameplay-complete: ${error.message}`)
+  if (turn.multiplayer_turn_id) await markMultiplayerAiComplete(turn.multiplayer_turn_id)
 }
 
 export async function markPlayTurnReleased(account: UsageAccount, turnId: string, warning?: string | null) {
   const id = cleanId(turnId)
   if (!id) return
+  let multiplayerTurnId: string | null = null
+  try {
+    multiplayerTurnId = (await turnFor(account, id)).multiplayer_turn_id
+  } catch {
+    multiplayerTurnId = null
+  }
   const admin = createAdminClient()
   await admin.from('play_turn_billing').update({
     status: 'released',
     settlement_warning: warning || null,
     updated_at: new Date().toISOString(),
   }).eq('id', id).eq('user_id', account.userId).neq('status', 'settled')
+  if (multiplayerTurnId) await releaseMultiplayerTurnBilling(multiplayerTurnId, warning)
 }
 
 function allocateBilled(totalBilled: number, costs: { ttt: number; gameplay: number; tts: number }) {
@@ -316,8 +346,48 @@ export async function maybeSettlePlayTurn(account: UsageAccount, turnId: string)
   const providerTotal = costs.ttt + costs.gameplay + costs.tts
   const roundedCustomerCost = roundUsageMicrousdToCent(providerTotal)
   const maximumMicrousd = usageMicrousd(turn.maximum_microusd)
-  const billedMicrousd = account.ownerQa ? 0 : Math.min(roundedCustomerCost, maximumMicrousd)
+  // Multiplayer exemptions belong to each payer, not to the person who pressed
+  // Send. Split the full customer turn price first; settleMultiplayerTurnBilling
+  // then zeros only the shares whose payer is owner-QA exempt.
+  const billedMicrousd = turn.multiplayer_turn_id
+    ? Math.min(roundedCustomerCost, maximumMicrousd)
+    : account.ownerQa ? 0 : Math.min(roundedCustomerCost, maximumMicrousd)
   const allocations = allocateBilled(billedMicrousd, costs)
+
+  if (turn.multiplayer_turn_id) {
+    const multiplayerSettlement = await settleMultiplayerTurnBilling(account, {
+      turnId: turn.multiplayer_turn_id,
+      providerCosts: costs,
+      billedCategories: allocations,
+      roundedCustomerCost,
+    })
+    const now = new Date().toISOString()
+    const { error: multiplayerUpdateError } = await admin.from('play_turn_billing').update({
+      status: multiplayerSettlement.settlementWarning ? 'error' : 'settled',
+      ttt_provider_microusd: costs.ttt,
+      gameplay_provider_microusd: costs.gameplay,
+      tts_provider_microusd: costs.tts,
+      provider_total_microusd: providerTotal,
+      billed_microusd: multiplayerSettlement.billedMicrousd,
+      ttt_billed_microusd: 0,
+      gameplay_billed_microusd: 0,
+      tts_billed_microusd: 0,
+      balance_after_microusd: multiplayerSettlement.balanceMicrousd,
+      settlement_warning: multiplayerSettlement.settlementWarning,
+      settled_at: multiplayerSettlement.settlementWarning ? null : now,
+      updated_at: now,
+    }).eq('id', turnId).eq('user_id', account.userId).neq('status', 'settled')
+    if (multiplayerUpdateError) throw new Error(`Multiplayer Play turn settlement could not be saved: ${multiplayerUpdateError.message}`)
+    return {
+      settled: !multiplayerSettlement.settlementWarning,
+      pending: false,
+      billedMicrousd: multiplayerSettlement.billedMicrousd,
+      balanceMicrousd: multiplayerSettlement.balanceMicrousd,
+      ownerQaExempt: multiplayerSettlement.ownerQaExempt,
+      settlementWarning: multiplayerSettlement.settlementWarning,
+    }
+  }
+
   let balanceMicrousd: number | null = null
   let settlementWarning = ''
 

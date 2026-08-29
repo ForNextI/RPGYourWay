@@ -85,6 +85,33 @@ export function useMultiplayerSession() {
     }
   }, [session?.inviteCode])
 
+  useEffect(() => {
+    if (!session?.inviteCode) return
+    const interval = window.setInterval(() => { void refreshSession() }, 4_000)
+    return () => window.clearInterval(interval)
+  }, [session?.inviteCode, refreshSession])
+
+  useEffect(() => {
+    const code = session?.inviteCode
+    if (!code) return
+    let cancelled = false
+    async function heartbeat() {
+      try {
+        const current = await sessionResponse(await fetch(`/api/multiplayer/sessions/${encodeURIComponent(code)}/heartbeat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        }))
+        if (!cancelled) setSession(current)
+      } catch {
+        // The normal refresh path owns visible connection errors. Heartbeat is
+        // only the billing/presence freshness signal for participating seats.
+      }
+    }
+    void heartbeat()
+    const interval = window.setInterval(() => { void heartbeat() }, 30_000)
+    return () => { cancelled = true; window.clearInterval(interval) }
+  }, [session?.inviteCode])
+
   const startSession = useCallback(async (input: {
     localCampaignId: string
     campaignName: string
@@ -166,6 +193,58 @@ export function useMultiplayerSession() {
   }, [session?.inviteCode, session?.isCoordinator])
 
 
+  const prepareTurn = useCallback(async (turnId: string, expectedRevision: number) => {
+    const code = session?.inviteCode || multiplayerCodeFromUrl()
+    if (!code) return null
+    setError('')
+    const response = await fetch(`/api/multiplayer/sessions/${encodeURIComponent(code)}/turns/${encodeURIComponent(turnId)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ expected_revision: expectedRevision }),
+    })
+    const payload = await response.json().catch(() => ({})) as { turn?: { turnId?: string }; error?: string }
+    if (!response.ok || !payload.turn) {
+      const error = new MultiplayerRequestError(payload.error || 'RPG Your Way could not reserve this multiplayer turn.', response.status)
+      setError(error.message)
+      throw error
+    }
+    return payload.turn
+  }, [session?.inviteCode])
+
+  const completeTurn = useCallback(async (turnId: string, finalRevision: number) => {
+    const code = session?.inviteCode || multiplayerCodeFromUrl()
+    if (!code) return null
+    let lastError: unknown = null
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        const response = await fetch(`/api/multiplayer/sessions/${encodeURIComponent(code)}/turns/${encodeURIComponent(turnId)}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'complete', final_revision: finalRevision }),
+        })
+        const current = await sessionResponse(response)
+        setSession(current)
+        setError('')
+        return current
+      } catch (completeError) {
+        lastError = completeError
+        if (attempt === 0) await new Promise<void>((resolve) => window.setTimeout(resolve, 350))
+      }
+    }
+    throw lastError instanceof Error ? lastError : new Error('RPG Your Way could not acknowledge the committed multiplayer turn.')
+  }, [session?.inviteCode])
+
+  const releaseTurn = useCallback(async (turnId: string) => {
+    const code = session?.inviteCode || multiplayerCodeFromUrl()
+    if (!code) return
+    await fetch(`/api/multiplayer/sessions/${encodeURIComponent(code)}/turns/${encodeURIComponent(turnId)}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'release' }),
+    }).catch(() => undefined)
+  }, [session?.inviteCode])
+
+
   return {
     session,
     loading,
@@ -177,5 +256,8 @@ export function useMultiplayerSession() {
     setCharacterClaim,
     updateDisplayName,
     syncCharacters,
+    prepareTurn,
+    completeTurn,
+    releaseTurn,
   }
 }

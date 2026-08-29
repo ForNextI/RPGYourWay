@@ -80,6 +80,7 @@ import {
 } from '@/lib/aigm/campaign-storage'
 import { campaignMigrationSample, DIRECT_RECENT_MESSAGE_COUNT, isContinuityAuditRequest, searchCampaignHistory, shouldCheckCampaignNotes } from '@/lib/aigm/campaign-memory'
 import { loadAdventureState, saveAdventureState } from '@/lib/aigm/campaign-persistence'
+import { storedCloudRevision } from '@/lib/aigm/cloud-campaigns'
 import { establishedNpcNames, mergeCampaignMemory, mergeCampaignRetcons, stampCampaignMemoryUpdates } from '@/lib/aigm/campaign-entities'
 import { TableChatPanel } from '@/components/multiplayer/TableChatPanel'
 import { MultiplayerPanelSwitcher, type MultiplayerSecondaryPanel } from '@/components/multiplayer/MultiplayerPanelSwitcher'
@@ -1486,6 +1487,27 @@ export function AigmGameplayShell() {
     })))
   }, [multiplayerSession?.isCoordinator, multiplayerRosterSignature, multiplayer.syncCharacters])
 
+  useEffect(() => {
+    const campaignId = multiplayerSession?.campaignId
+    if (!campaignId || sending || voiceCaptureBusy) return
+    const localRevision = storedCloudRevision(window.localStorage, campaignId)
+    const needsCampaignSwitch = partyState?.adventure_id !== campaignId
+    const needsCloudRefresh = multiplayerSession.campaignRevision > localRevision
+    if (!needsCampaignSwitch && !needsCloudRefresh) return
+
+    let cancelled = false
+    void loadAdventureState(window.localStorage, campaignId).then((loaded) => {
+      if (cancelled || !loaded.state) return
+      window.localStorage.setItem(CURRENT_ADVENTURE_KEY, campaignId)
+      setPartyState(loaded.state)
+      setHydratingAdventure(false)
+      if (needsCloudRefresh) setScreenReaderAnnouncement('The multiplayer campaign updated from the shared cloud copy.')
+    }).catch((loadError) => {
+      if (!cancelled) setError(loadError instanceof Error ? loadError.message : 'RPG Your Way could not refresh the multiplayer campaign.')
+    })
+    return () => { cancelled = true }
+  }, [multiplayerSession?.campaignId, multiplayerSession?.campaignRevision, partyState?.adventure_id, sending, voiceCaptureBusy])
+
   function changeMultiplayerPanel(panel: MultiplayerSecondaryPanel) {
     if (isDesktopPlayLayout) setDesktopMultiplayerPanel(panel)
     else setMobilePanel(panel)
@@ -1796,6 +1818,18 @@ export function AigmGameplayShell() {
     return draftTurnBillingIdRef.current
   }
 
+  async function prepareMultiplayerTurnBilling(turnBillingId: string) {
+    if (!multiplayerActive) return
+    if (!partyState || !multiplayerSession?.campaignId || multiplayerSession.campaignId !== partyState.adventure_id) {
+      throw new Error('Open the shared multiplayer campaign before sending a turn.')
+    }
+    const expectedRevision = storedCloudRevision(window.localStorage, partyState.adventure_id)
+    if (multiplayerSession.campaignRevision > expectedRevision) {
+      throw new Error('Another player advanced the campaign. Wait a moment for the newest shared state to load, then send your turn again.')
+    }
+    await multiplayer.prepareTurn(turnBillingId, expectedRevision)
+  }
+
   function handleUsageSettlement(balanceMicrousd: number | null, ownerQaExempt: boolean) {
     if (ownerQaExempt || balanceMicrousd === null) return
     if (balanceMicrousd <= 1_000_000) {
@@ -1881,6 +1915,16 @@ export function AigmGameplayShell() {
     const nextSequence = (activeTranscript.at(-1)?.sequence ?? activeTranscript.length) + 1
     const turnBillingId = mode === 'turn' && draftTurnBillingIdRef.current ? draftTurnBillingIdRef.current : crypto.randomUUID()
     if (mode === 'turn') draftTurnBillingIdRef.current = null
+    if (mode === 'turn' && multiplayerActive) {
+      try {
+        await prepareMultiplayerTurnBilling(turnBillingId)
+      } catch (turnError) {
+        const turnMessage = turnError instanceof Error ? turnError.message : 'RPG Your Way could not reserve this multiplayer turn.'
+        setError(turnMessage)
+        setScreenReaderAnnouncement(turnMessage)
+        return
+      }
+    }
     const exchangeId = turnBillingId
     const narrationExpected = voiceAvailable ? (voiceControlsRef.current?.narrationExpected() ?? false) : false
     const exchangeTurn = mode === 'opening' ? 0 : countTurn ? activeGameplay.turn_count + 1 : activeGameplay.turn_count
@@ -1905,7 +1949,9 @@ export function AigmGameplayShell() {
     setShowJumpButton(false)
 
     if (userEntry) {
-      persist({ ...activePartyState, updated_at: new Date().toISOString(), gameplay: { ...activeGameplay, messages: messagesWithUser, transcript: transcriptWithUser } })
+      const pendingTurnState = { ...activePartyState, updated_at: new Date().toISOString(), gameplay: { ...activeGameplay, messages: messagesWithUser, transcript: transcriptWithUser } }
+      if (multiplayerActive) setPartyState(pendingTurnState)
+      else persist(pendingTurnState)
       setMessage('')
       setPendingDice(null)
       if (diceResult) setLastRoll(null)
@@ -1923,6 +1969,8 @@ export function AigmGameplayShell() {
           message: playerText,
           dice_result: diceResult,
           adventure_id: activePartyState.adventure_id,
+          multiplayer_invite_code: multiplayerActive ? multiplayerSession?.inviteCode : undefined,
+          cloud_revision: multiplayerActive ? storedCloudRevision(window.localStorage, activePartyState.adventure_id) : undefined,
           adventure_name: activePartyState.adventure_name,
           game_master_name: activePartyState.game_master_name,
           campaign_direction: activePartyState.campaign_direction,
@@ -2127,7 +2175,30 @@ export function AigmGameplayShell() {
           .filter((id) => updatedCharacters.some((character) => character.id === id)),
       }
       const nextGameMasterName = payload.game_master_name?.replace(/\s+/g, ' ').trim().slice(0, 80) || activePartyState.game_master_name
-      persist({ ...activePartyState, game_master_name: nextGameMasterName, characters: updatedCharacters, content_mode_explanation_given: Boolean(activePartyState.content_mode_explanation_given || payload.content_mode_explanation_given), updated_at: new Date().toISOString(), gameplay: nextGameplay })
+      const confirmedTurnState = { ...activePartyState, game_master_name: nextGameMasterName, characters: updatedCharacters, content_mode_explanation_given: Boolean(activePartyState.content_mode_explanation_given || payload.content_mode_explanation_given), updated_at: new Date().toISOString(), gameplay: nextGameplay }
+      if (mode === 'turn' && multiplayerActive) {
+        setPartyState(confirmedTurnState)
+        try {
+          await saveAdventureState(window.localStorage, confirmedTurnState, activePartyState)
+        } catch (saveError) {
+          await multiplayer.releaseTurn(turnBillingId)
+          throw new Error(saveError instanceof Error ? saveError.message : 'RPG Your Way could not commit the multiplayer turn to the shared cloud campaign.')
+        }
+        const committedRevision = storedCloudRevision(window.localStorage, confirmedTurnState.adventure_id)
+        try {
+          await multiplayer.completeTurn(turnBillingId, committedRevision)
+        } catch {
+          // The canonical cloud save already succeeded. Do not roll the browser
+          // back merely because the small lock-release acknowledgement was lost.
+          // Best-effort release prevents a stale lease from blocking the table;
+          // the campaign revision remains the authoritative record of the turn.
+          await multiplayer.releaseTurn(turnBillingId)
+          setError('The shared turn was saved, but RPG Your Way briefly lost the multiplayer acknowledgement. The table will resynchronize automatically.')
+          void multiplayer.refreshSession()
+        }
+      } else {
+        persist(confirmedTurnState)
+      }
       if (payload.combat_suggested && nextGameplay.initiative.length === 0) {
         setError('The situation may be entering combat. Use Roll party initiative when everyone is ready.')
       }
@@ -2135,6 +2206,10 @@ export function AigmGameplayShell() {
     } catch (caught) {
       voiceControlsRef.current?.stopNarration()
       setStreamingReply('')
+      if (mode === 'turn' && multiplayerActive) {
+        setPartyState(activePartyState)
+        await multiplayer.releaseTurn(turnBillingId)
+      }
       const errorMessage = caught instanceof Error ? caught.message : 'The browser could not reach the gameplay AIGM.'
       setError(errorMessage)
       setScreenReaderAnnouncement(errorMessage)
@@ -2492,6 +2567,7 @@ export function AigmGameplayShell() {
                   onTranscriptComplete={handleGuidedTranscriptComplete}
                   onBusyChange={(busy) => { setVoiceCaptureBusy(busy); if (!busy && !voiceGuidedPlay.enabled) requestAnimationFrame(() => textareaRef.current?.focus()) }}
                   getTurnBillingId={getDraftTurnBillingId}
+                  prepareTurnBilling={prepareMultiplayerTurnBilling}
                   onUsageSettlement={handleUsageSettlement}
                   onError={setError}
                 /> : null}
