@@ -1,10 +1,22 @@
 'use client'
 
-import { Maximize2, Minimize2 } from 'lucide-react'
+import { ArrowDownLeft, ArrowDownRight, ArrowUpLeft, ArrowUpRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 interface FullscreenToggleProps {
   className?: string
+}
+
+function FullscreenArrows({ inward }: { inward: boolean }) {
+  return (
+    <span className="fullscreen-arrow-pair" aria-hidden="true">
+      {inward ? (
+        <><ArrowDownRight /><ArrowUpLeft /></>
+      ) : (
+        <><ArrowUpRight /><ArrowDownLeft /></>
+      )}
+    </span>
+  )
 }
 
 export function FullscreenToggle({ className = '' }: FullscreenToggleProps) {
@@ -40,7 +52,7 @@ export function FullscreenToggle({ className = '' }: FullscreenToggleProps) {
       aria-label={label}
       title={label}
     >
-      {fullscreen ? <Minimize2 className="size-4" aria-hidden="true" /> : <Maximize2 className="size-4" aria-hidden="true" />}
+      <FullscreenArrows inward={fullscreen} />
       <span className="sr-only">{label}</span>
     </button>
   )

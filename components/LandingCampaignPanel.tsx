@@ -146,7 +146,7 @@ export function LandingCampaignPanel() {
           <strong>{balance || '—'}</strong>
         </div>
         <button type="button" className="button button-primary landing-return-button" onClick={returnToPlaying}>
-          Return to Adventure
+          Continue Adventure
         </button>
       </div>
     </div>

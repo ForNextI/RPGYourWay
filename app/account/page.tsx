@@ -129,7 +129,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
           <details id="sign-in" className="account-access-details" open={!user}>
             <summary>
               <span>{user ? `Signed in as ${email ?? 'RPG Your Way user'}` : 'Sign in or create an account'}</span>
-              <span className="account-details-caret" aria-hidden="true">+</span>
+              <span className="accordion-plus account-details-caret" aria-hidden="true" />
             </summary>
             <div className="account-access-body">
               {user ? (

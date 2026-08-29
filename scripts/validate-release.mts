@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.74')
-assert.equal(pkg.rpgywVersion, '1.12.74')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.74'", 'visible app version')
+assert.equal(pkg.version, '1.12.75')
+assert.equal(pkg.rpgywVersion, '1.12.75')
+has(read('lib/version.ts'), "APP_VERSION = '1.12.75'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -162,9 +162,11 @@ const startEntry = read('components/aigm/rpgyw-start-entry.tsx')
 const campaignHub = read('components/start/CampaignHub.tsx')
 has(startEntry, '<CampaignHub />', 'campaign hub above onboarding')
 before(startEntry, '<CampaignHub />', '<StartOnboarding', 'Campaign hub position')
-has(campaignHub, 'Your campaigns, multiplayer controls &amp; imports')
+has(campaignHub, 'Existing Campaigns, Controls &amp; Imports')
 has(campaignHub, 'RPG Your Way can import WardensPC exports that had already reached Play')
-has(campaignHub, 'Campaign controls')
+has(campaignHub, 'Your Campaigns')
+lacks(campaignHub, 'Campaign controls', 'redundant campaign-controls accordion')
+has(campaignHub, 'Continue Adventure')
 has(campaignHub, 'Pending decisions')
 lacks(campaignHub, 'wait for the rebuilt RPG Your Way onboarding flow')
 const gameplayShell = read('components/aigm/aigm-gameplay-shell.tsx')
@@ -280,10 +282,34 @@ has(gameplay, 'The canonical cloud save already succeeded.')
 has(gameplayRoute, 'reserveMultiplayerTurnBilling')
 has(gameplayRoute, 'multiplayer_invite_code')
 
+
+// 1.12.75 UI Bible: landing console wording, Start hierarchy, one campaign accordion,
+// one accordion screw, and two-arrow full-screen furniture.
+const landingCampaignPanel = read('components/LandingCampaignPanel.tsx')
+has(landingCampaignPanel, 'Continue Adventure')
+lacks(landingCampaignPanel, 'Return to Adventure')
+has(start, '<strong id="rules-heading">Start Here</strong>')
+has(start, 'Choose This Game System')
+lacks(start, 'Use this game system')
+has(campaignHub, 'className="campaign-hub-card"')
+has(campaignHub, 'className="campaign-hub-summary"')
+lacks(campaignHub, 'play-entry-adventure-open')
+lacks(campaignHub, 'play-entry-continue')
+const fullscreenToggle = read('components/accessibility/fullscreen-toggle.tsx')
+has(fullscreenToggle, 'ArrowUpRight')
+has(fullscreenToggle, 'ArrowDownLeft')
+has(fullscreenToggle, 'fullscreen-arrow-pair')
+lacks(fullscreenToggle, 'Maximize2')
+lacks(fullscreenToggle, 'Minimize2')
+has(css, 'RPG Your Way 1.12.75 — UI Bible pass.')
+has(css, `.start-campaign-hub > summary {\n  width: min(38%, 31rem);`)
+has(css, '.campaign-hub-card[open] > .campaign-hub-summary')
+has(css, `color: var(--forest-deep) !important;\n  box-shadow:`, 'accordion screw keeps forest ink')
+
 // Accessibility foundation stays wired and the old exact-format CSS trap stays retired.
 const accessibility = read('app/accessibility/page.tsx')
 has(accessibility, 'Accessibility')
 has(css, 'outline: 3px solid var(--lime);')
 assert.match(css, /background:\s*linear-gradient\(\s*180deg,\s*color-mix\(in srgb, var\(--cream-bright\) 97%, white\),\s*var\(--cream\)\s*\) !important;/)
 
-console.log('RPG Your Way 1.12.74 public-multiplayer cleanup checks passed.')
+console.log('RPG Your Way 1.12.75 UI Bible cleanup checks passed.')
