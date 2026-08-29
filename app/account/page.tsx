@@ -8,6 +8,7 @@ import { finalizeCheckoutSessionById } from '@/lib/stripe/server'
 import { signOut } from './actions'
 import { isOwnerQaEmail } from '@/lib/usage/owner-qa'
 import { DeleteAccountControl } from '@/components/account/DeleteAccountControl'
+import { GoogleAdsPurchaseConversion } from '@/components/analytics/GoogleAdsPurchaseConversion'
 
 export const metadata = { title: 'Account' }
 export const dynamic = 'force-dynamic'
@@ -68,6 +69,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
   const ownerQa = isOwnerQaEmail(email)
   let paymentNotice = ''
   let paymentError = ''
+  let purchaseConversion: { transactionId: string; value: number } | null = null
 
   if (user && checkoutSessionId) {
     try {
@@ -75,6 +77,12 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
       paymentNotice = finalized.credited
         ? `${finalized.pack.name} was added to your usage balance.`
         : 'Stripe has not marked that checkout paid yet. Your balance will update automatically when payment clears.'
+      if (finalized.credited) {
+        purchaseConversion = {
+          transactionId: checkoutSessionId,
+          value: finalized.pack.priceCents / 100,
+        }
+      }
     } catch (caught) {
       paymentError = caught instanceof Error ? caught.message : 'RPG Your Way could not verify that Stripe checkout yet.'
     }
@@ -122,6 +130,12 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
       <main id="main-content" tabIndex={-1} className="inner-main account-main">
         <div className="shell account-shell">
           <h1 className="sr-only">Account</h1>
+          {purchaseConversion ? (
+            <GoogleAdsPurchaseConversion
+              transactionId={purchaseConversion.transactionId}
+              value={purchaseConversion.value}
+            />
+          ) : null}
           {statusMessages[status] ? <p className="auth-message auth-message-success" role="status">{statusMessages[status]}</p> : null}
           {paymentNotice ? <p className="auth-message auth-message-success" role="status">{paymentNotice}</p> : null}
           {paymentError ? <p className="auth-message auth-message-error" role="alert">{paymentError}</p> : null}

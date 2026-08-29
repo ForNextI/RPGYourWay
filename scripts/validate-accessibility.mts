@@ -167,4 +167,4 @@ const motion = read('components/accessibility/motion-preference.tsx')
 assert.match(motion, /prefers-reduced-motion/)
 assert.doesNotMatch(motion, /Wardens PC has disabled/)
 
-console.log('RPG Your Way 1.13.1 accessibility regression checks passed.')
+console.log('RPG Your Way 1.13.2 accessibility regression checks passed.')

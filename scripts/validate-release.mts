@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.1')
-assert.equal(pkg.rpgywVersion, '1.13.1')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.1'", 'visible app version')
+assert.equal(pkg.version, '1.13.2')
+assert.equal(pkg.rpgywVersion, '1.13.2')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.2'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -109,6 +109,18 @@ has(rootLayout, 'https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_TAG_ID
 has(rootLayout, "gtag('config', '${GOOGLE_ADS_TAG_ID}');", 'Google Ads gtag config')
 assert.equal((rootLayout.match(/googletagmanager\.com\/gtag\/js/g) || []).length, 1, 'Google Ads loader should be installed once')
 has(read('app/legal/privacy/page.tsx'), 'advertising measurement', 'privacy disclosure for advertising measurement')
+
+// Google Ads purchase conversion fires only after a verified paid Stripe checkout and uses real purchase data.
+const purchaseConversion = read('components/analytics/GoogleAdsPurchaseConversion.tsx')
+has(purchaseConversion, "AW-18361311478/ub-xCO3YnOocEPbBrbNE", 'Google Ads purchase conversion destination')
+has(purchaseConversion, "gtag('event', 'conversion'", 'Google Ads purchase conversion event')
+has(purchaseConversion, 'transaction_id: transactionId', 'Google Ads purchase transaction id')
+has(purchaseConversion, "currency: 'USD'", 'Google Ads purchase currency')
+lacks(purchaseConversion, 'value: 1.0', 'Google Ads purchase placeholder value')
+const accountPage = read('app/account/page.tsx')
+has(accountPage, 'if (finalized.credited) {', 'purchase conversion gated on verified paid checkout')
+has(accountPage, 'transactionId: checkoutSessionId', 'Stripe Checkout Session used as conversion transaction id')
+has(accountPage, 'value: finalized.pack.priceCents / 100', 'actual Play Pack purchase price used as conversion value')
 
 // Public site is crawlable; API and auth machinery are not crawl targets.
 const robots = read('app/robots.ts')
@@ -422,4 +434,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.1 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.2 release and canonical UI checks passed.')
