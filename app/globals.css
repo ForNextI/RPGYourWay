@@ -9164,3 +9164,445 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
   .start-leader-explain { justify-self: center; }
 }
 
+
+/* RPG Your Way 1.12.83 — Script + character-record lookbook pass.
+   These are the two remaining pre-lookbook working surfaces. Script now uses
+   its actual three-step workflow as the composition, and character records use
+   the same raised plaques, parchment reveals, brass rims, and accordion screw
+   hardware as the landing and Start pages. */
+
+/* ---------- Script ---------- */
+.shape-intro {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 20px !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-parchment) 86%, var(--rpgyw-cream)), var(--rpgyw-parchment)) !important;
+  padding: clamp(1.25rem, 3vw, 2rem) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 76%, var(--rpgyw-brass-light)),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 10px 18px rgb(37 45 35 / .13) !important;
+}
+.shape-script-title {
+  max-width: 28ch;
+  margin-bottom: .65rem !important;
+  font-size: clamp(1.65rem, 3.6vw, 2.45rem) !important;
+  line-height: 1.05 !important;
+}
+.shape-intro .page-lede { color: var(--forest-ink); }
+.shape-limit-note {
+  margin-top: 1rem;
+  border-left: 5px solid var(--rpgyw-olive-dark);
+  border-radius: 0 12px 12px 0;
+  background: color-mix(in srgb, var(--rpgyw-olive-light) 72%, var(--rpgyw-cream));
+  padding: .8rem 1rem;
+  color: var(--rpgyw-forest);
+}
+.shape-pricing-details,
+.shape-source-help {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 16px !important;
+  background: var(--rpgyw-cream) !important;
+  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), 0 2px 0 2px var(--rpgyw-brass-dark) !important;
+}
+.shape-pricing-details > summary,
+.shape-source-help > summary {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .9rem;
+  background: var(--rpgyw-olive-dark) !important;
+  color: var(--rpgyw-cream) !important;
+  padding: .62rem .75rem .62rem 1rem !important;
+}
+.shape-pricing-details > summary:hover,
+.shape-pricing-details > summary:focus-visible,
+.shape-source-help > summary:hover,
+.shape-source-help > summary:focus-visible {
+  background: var(--rpgyw-olive-dark) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.shape-pricing-details[open] > summary .accordion-plus,
+.shape-source-help[open] > summary .accordion-plus { transform: rotate(45deg); }
+.shape-pricing-copy,
+.shape-source-help > div {
+  border-top: 2px solid var(--rpgyw-brass-mid) !important;
+  background: var(--rpgyw-parchment) !important;
+  color: var(--forest-ink) !important;
+}
+
+/* The workbench itself is no longer one generic application card. */
+.shape-workbench:not(:has(.shape-live-progress)):not(:has(.shape-result)) {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+.shape-workbench-heading {
+  margin: 2.5rem 0 0;
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: 18px;
+  background: var(--rpgyw-olive-light);
+  padding: 1rem 1.15rem;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-brass-light)),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 8px 14px rgb(37 45 35 / .11);
+}
+.shape-workbench-heading h2 { font-size: clamp(1.35rem, 2.8vw, 1.9rem); }
+.shape-beta-pill.active {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-cream) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), 0 2px 0 2px var(--rpgyw-brass-dark) !important;
+}
+
+.shape-script-step {
+  position: relative;
+  margin-top: 3rem;
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: 20px;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 68%, var(--rpgyw-brass-light)),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 11px 18px rgb(37 45 35 / .12);
+}
+.shape-script-step--upload { background: var(--rpgyw-olive-light); }
+.shape-script-step--questions { background: var(--rpgyw-cream); }
+.shape-script-step--usage { background: var(--rpgyw-olive-dark); }
+.shape-script-step-nameplate {
+  position: absolute;
+  z-index: 2;
+  left: clamp(.85rem, 2.5vw, 1.35rem);
+  top: -1.25rem;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: 13px;
+  background: var(--rpgyw-forest);
+  color: var(--rpgyw-cream);
+  padding: .48rem .9rem .48rem .55rem;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 rgb(255 255 255 / .16),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 8px 13px rgb(30 38 30 / .17);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-weight: 900;
+}
+.shape-script-step--questions .shape-script-step-nameplate { background: var(--rpgyw-olive-dark); }
+.shape-script-step-nameplate > span {
+  width: 32px;
+  height: 32px;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 32px;
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: 8px;
+  background: var(--rpgyw-cream);
+  color: var(--rpgyw-forest);
+  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), inset 0 1px 0 white, 0 2px 0 2px var(--rpgyw-brass-dark);
+  font-size: 1rem;
+  line-height: 1;
+}
+.shape-script-step-body { padding: 2.65rem clamp(1rem, 3vw, 1.55rem) 1.45rem; }
+.shape-script-step .shape-project-mode,
+.shape-script-step .shape-description { margin-top: 0; }
+.shape-script-step .shape-description { margin-top: 1.5rem; }
+.shape-script-step legend {
+  color: var(--rpgyw-forest) !important;
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(1.05rem, 2vw, 1.22rem) !important;
+}
+.shape-form-grid { margin-top: 0; }
+.shape-file-field {
+  min-height: 112px;
+  align-content: center;
+  border: 3px dashed var(--rpgyw-olive-dark) !important;
+  border-radius: 16px !important;
+  background: color-mix(in srgb, var(--rpgyw-cream) 82%, var(--rpgyw-parchment)) !important;
+  padding: 1rem !important;
+  box-shadow: inset 0 3px 8px rgb(75 66 44 / .09) !important;
+}
+.shape-file-field.dragging {
+  border-color: var(--rpgyw-forest) !important;
+  background: var(--rpgyw-parchment) !important;
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--rpgyw-lime) 28%, transparent) !important;
+}
+.shape-field input,
+.shape-field textarea,
+.shape-field select {
+  border-radius: 14px !important;
+}
+.shape-project-options > label,
+.shape-description-card {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 15px !important;
+  background: var(--rpgyw-olive-light) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), 0 2px 0 2px var(--rpgyw-brass-dark) !important;
+}
+.shape-project-options > label.selected,
+.shape-description-card.selected {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.shape-project-options > label.selected :where(strong, span),
+.shape-description-card.selected :where(strong, span) { color: var(--rpgyw-cream) !important; }
+.shape-project-options > label:hover,
+.shape-project-options > label:focus-within,
+.shape-description-card:hover,
+.shape-description-card:focus-within {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.shape-project-options > label:hover :where(strong, span),
+.shape-project-options > label:focus-within :where(strong, span),
+.shape-description-card:hover :where(strong, span),
+.shape-description-card:focus-within :where(strong, span) { color: var(--rpgyw-lime) !important; }
+.shape-project-picker {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 16px !important;
+  background: var(--rpgyw-parchment) !important;
+  box-shadow: inset 0 3px 7px rgb(75 66 44 / .11) !important;
+}
+.shape-script-step--usage .shape-public-preview-note,
+.shape-script-step--usage .shape-quote {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 15px !important;
+  background: var(--rpgyw-cream) !important;
+  color: var(--forest-ink) !important;
+  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), 0 2px 0 2px var(--rpgyw-brass-dark) !important;
+}
+.shape-script-step--usage .shape-public-preview-note { margin-top: 0; }
+.shape-script-step--usage .shape-public-preview-note :where(strong, span),
+.shape-script-step--usage .shape-quote :where(span, strong, small) { color: var(--rpgyw-forest) !important; }
+.shape-usage-actions > p { color: var(--rpgyw-cream) !important; }
+.shape-main .button {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 14px !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 70%, var(--rpgyw-brass-light)),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 8px 13px rgb(37 45 35 / .13) !important;
+}
+.shape-main .button-primary { background: var(--rpgyw-forest) !important; color: var(--rpgyw-cream) !important; }
+.shape-main .button-secondary { background: var(--rpgyw-cream) !important; color: var(--rpgyw-forest) !important; }
+.shape-main .button:not(:disabled):hover,
+.shape-main .button:not(:disabled):focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+
+/* ---------- Character record ---------- */
+.character-sheet-dialog {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 22px !important;
+  background: var(--rpgyw-cream) !important;
+  box-shadow:
+    0 0 0 3px var(--rpgyw-brass-mid),
+    0 4px 0 3px var(--rpgyw-brass-dark),
+    0 22px 42px rgb(20 28 21 / .34) !important;
+}
+.character-sheet-header {
+  border-bottom: 3px solid var(--rpgyw-brass-mid) !important;
+  background: var(--rpgyw-olive-light) !important;
+}
+.character-sheet-heading-row {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.character-sheet-portrait {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 16px !important;
+  background: var(--rpgyw-cream) !important;
+  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), 0 2px 0 2px var(--rpgyw-brass-dark) !important;
+}
+.character-sheet-header .font-mono { color: var(--rpgyw-forest) !important; }
+.character-sheet-header h2 { color: var(--rpgyw-forest) !important; }
+.character-sheet-dialog .text-primary { color: var(--rpgyw-forest) !important; }
+.character-sheet-dialog .text-muted-foreground { color: color-mix(in srgb, var(--rpgyw-forest) 72%, #625c4e) !important; }
+
+.character-record-action,
+.character-sheet-header-controls button,
+.character-record-edit-workspace button,
+.character-record-edit-workspace a[download] {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 13px !important;
+  background: var(--rpgyw-cream) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 white,
+    0 2px 0 2px var(--rpgyw-brass-dark) !important;
+}
+.character-record-action--primary,
+.character-record-edit-workspace button[class*="bg-primary"] {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.character-record-action:not(:disabled):hover,
+.character-record-action:not(:disabled):focus-visible,
+.character-sheet-header-controls button:not(:disabled):hover,
+.character-sheet-header-controls button:not(:disabled):focus-visible,
+.character-record-edit-workspace button:not(:disabled):hover,
+.character-record-edit-workspace button:not(:disabled):focus-visible,
+.character-record-edit-workspace a[download]:hover,
+.character-record-edit-workspace a[download]:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.character-record-action :where(svg),
+.character-sheet-header-controls button :where(svg) { color: currentColor !important; }
+
+/* Destructive action is still a normal house button. Confirmation changes the
+   wording/state, not the component species, and does not introduce a red slab. */
+.character-sheet-header-controls .character-remove-button,
+.character-sheet-header-controls .character-remove-button--confirm,
+.character-sheet-header-controls .character-remove-button--confirm:hover,
+.character-sheet-header-controls .character-remove-button--confirm:focus-visible {
+  border-color: var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-cream) !important;
+  color: var(--rpgyw-forest) !important;
+}
+.character-sheet-header-controls .character-remove-button--confirm {
+  background: var(--rpgyw-olive-dark) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.character-sheet-header-controls .character-remove-button--confirm:hover,
+.character-sheet-header-controls .character-remove-button--confirm:focus-visible { color: var(--rpgyw-lime) !important; }
+.character-record-close {
+  width: 42px !important;
+  height: 42px !important;
+  flex: 0 0 42px;
+}
+
+.character-profile-editor,
+.character-record-edit-workspace,
+#character-smart-level-help {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 18px !important;
+  background: var(--rpgyw-olive-light) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 10px 18px rgb(37 45 35 / .16) !important;
+}
+.character-profile-picture-card,
+.character-record-edit-workspace > div[class*="bg-card"] {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-parchment) !important;
+}
+.character-record-edit-input,
+.character-profile-editor input {
+  border-radius: 14px !important;
+  background: var(--rpgyw-parchment) !important;
+}
+
+.character-sheet-body {
+  background: color-mix(in srgb, var(--rpgyw-cream) 82%, var(--rpgyw-parchment)) !important;
+}
+.character-record-section {
+  overflow: hidden;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 17px !important;
+  background: transparent !important;
+  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), 0 3px 0 2px var(--rpgyw-brass-dark), 0 8px 13px rgb(37 45 35 / .10) !important;
+}
+.character-record-section-summary {
+  min-height: 54px;
+  display: flex;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  background: var(--rpgyw-forest);
+  color: var(--rpgyw-cream);
+  padding: .55rem .7rem .55rem 1rem;
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(1.02rem, 1.8vw, 1.22rem);
+  font-weight: 800;
+}
+.character-record-section:nth-child(even) > .character-record-section-summary { background: var(--rpgyw-olive-dark); }
+.character-record-section-summary::-webkit-details-marker,
+.character-record-nested-summary::-webkit-details-marker { display: none; }
+.character-record-section-summary:hover,
+.character-record-section-summary:focus-visible { color: var(--rpgyw-lime); }
+.character-record-section[open] > .character-record-section-summary { color: var(--rpgyw-cream); }
+.character-record-section[open] > .character-record-section-summary .character-record-section-screw,
+.character-record-nested[open] > .character-record-nested-summary .character-record-nested-screw { transform: rotate(45deg); }
+.character-record-section-body {
+  border-top: 2px solid var(--rpgyw-brass-mid);
+  background: var(--rpgyw-parchment);
+  padding: clamp(.9rem, 2.4vw, 1.25rem);
+  color: var(--forest-ink);
+}
+.character-record-nested {
+  overflow: hidden;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 14px !important;
+  background: var(--rpgyw-cream) !important;
+  box-shadow: 0 0 0 1px var(--rpgyw-brass-mid), 0 2px 0 1px var(--rpgyw-brass-dark) !important;
+}
+.character-record-nested-summary {
+  min-height: 46px;
+  display: flex;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: .7rem;
+  background: var(--rpgyw-olive-light);
+  color: var(--rpgyw-forest);
+  padding: .45rem .6rem .45rem .8rem;
+  font-weight: 900;
+}
+.character-record-nested-summary:hover,
+.character-record-nested-summary:focus-visible { background: var(--rpgyw-forest); color: var(--rpgyw-lime); }
+.character-record-nested-body {
+  border-top: 2px solid var(--rpgyw-brass-mid);
+  background: var(--rpgyw-cream);
+  padding: .85rem;
+}
+.character-record-nested .accordion-plus { width: 30px !important; height: 30px !important; }
+
+/* Replace the flat gray utility tiles inside the record with light-olive
+   recessed information cards. This catches the many extracted data grids
+   without rewriting the record model. */
+.character-record-section-body .bg-secondary,
+.character-record-section-body pre.bg-secondary {
+  border: 1px solid color-mix(in srgb, var(--rpgyw-forest-line) 72%, transparent) !important;
+  border-radius: 12px !important;
+  background: var(--rpgyw-olive-light) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow: inset 0 2px 5px rgb(58 63 41 / .08) !important;
+}
+.character-record-section-body .bg-card {
+  border-color: var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-cream) !important;
+}
+.character-record-section-body .bg-primary\/10 { background: var(--rpgyw-cream) !important; }
+.character-record-section-body :where(dt, .text-\[10px\]) { color: color-mix(in srgb, var(--rpgyw-forest) 78%, #665d4a) !important; }
+
+@media (max-width: 700px) {
+  .shape-script-step { margin-top: 2.7rem; }
+  .shape-script-step-nameplate { left: .7rem; max-width: calc(100% - 1.4rem); }
+  .shape-script-step-nameplate > span { width: 30px; height: 30px; flex-basis: 30px; }
+  .shape-script-step-body { padding-inline: .8rem; }
+  .shape-form-grid,
+  .shape-project-options,
+  .shape-description-grid { grid-template-columns: 1fr; }
+  .character-record-section-summary { min-height: 50px; padding-left: .8rem; }
+}
+.shape-pricing-details > summary,
+.shape-source-help > summary { list-style: none; }
+.shape-pricing-details > summary::-webkit-details-marker,
+.shape-source-help > summary::-webkit-details-marker { display: none; }

@@ -912,3 +912,25 @@ When continuing RPG Your Way UI work:
 - **Add another character** is a compact action button, not a full-width card.
 - The gameplay text input has rounded inner corners so its painted input surface never overlaps the rounded composer bezel.
 
+
+## Script + character-record visual rule (1.12.83)
+
+### Script
+
+- Script is an actual three-step working sequence, not a decorative explainer strip followed by unrelated controls.
+- The visible steps are **1 Upload or drop transcript**, **2 Answer the questions**, and **3 See maximum usage**, in that order.
+- Step numbers use the same cream, brass-rimmed rounded-square number tile established by Start numbered nameplates.
+- The Script intro is subordinate to the work. Its headline should be readable and welcoming, but it must not consume the page like a landing-page hero.
+- Preserve the dashed drag-and-drop boundary for transcript upload because the dashed boundary communicates a distinct interaction. Give the drop zone the same parchment/olive/brass material language as the rest of the site rather than a generic browser-upload look.
+- Script should use the full lookbook palette in deliberate rhythm: parchment intro, light-olive and cream working plaques, forest/dark-olive nameplates, and a darker final usage step with cream/parchment contents.
+- Script choice cards follow the standard state rule: unselected is light/olive, selected/open is forest + cream, hover/focus changes text to lime without adding a separate highlight slab.
+
+### Character record sheets
+
+- The character record overlay is part of RPG Your Way and must use the same dimensional furniture as Landing, Start, and Play rather than generic gray application panels.
+- Major record sections are canonical accordions. Their summary faces alternate forest and dark olive for visual rhythm, use cream text, and use the canonical cream/brass accordion screw. Opened content reveals parchment.
+- Nested record sections use a lighter olive face and cream reveal while retaining brass/forest construction.
+- Extracted stat/data tiles use light olive or cream inset surfaces rather than flat neutral gray boxes.
+- Character-record action buttons use the canonical raised-button family. Primary editing uses forest + cream; secondary actions use cream + forest; hover/focus uses lime text where appropriate.
+- **Remove this character** must not be a permanent red exception. It is a normal house button at rest. The confirmation state may become dark olive, but remains part of the same button family rather than turning into a red slab.
+- Character profile/edit workspaces use raised light-olive plaques and recessed parchment inputs with rounded inner corners.

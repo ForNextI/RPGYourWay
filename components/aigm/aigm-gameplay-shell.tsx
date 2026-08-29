@@ -526,13 +526,13 @@ function RecordSection({
     <details
       open={open}
       onToggle={(event) => onOpenChange(event.currentTarget.open)}
-      className="group rounded-2xl border border-border bg-background/50"
+      className="character-record-section group"
     >
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 font-display font-bold">
-        {title}
-        <ChevronRight className="size-4 text-muted-foreground transition-transform group-open:rotate-90" aria-hidden="true" />
+      <summary className="character-record-section-summary">
+        <span>{title}</span>
+        <span className="accordion-plus character-record-section-screw" aria-hidden="true" />
       </summary>
-      <div className="border-t border-border px-4 py-4">{children}</div>
+      <div className="character-record-section-body">{children}</div>
     </details>
   )
 }
@@ -547,12 +547,12 @@ function NestedRecordSection({
   className?: string
 }) {
   return (
-    <details className={`group/nested wardens-accordion overflow-hidden rounded-xl border border-border bg-card ${className}`}>
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-bold text-primary">
-        {title}
-        <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-open/nested:rotate-90" aria-hidden="true" />
+    <details className={`character-record-nested group/nested wardens-accordion ${className}`}>
+      <summary className="character-record-nested-summary">
+        <span>{title}</span>
+        <span className="accordion-plus character-record-nested-screw" aria-hidden="true" />
       </summary>
-      <div className="border-t border-border p-3 sm:p-4">{children}</div>
+      <div className="character-record-nested-body">{children}</div>
     </details>
   )
 }
@@ -926,16 +926,16 @@ function CharacterSheetOverlay({
                 <p className="mt-1 text-sm leading-relaxed text-muted-foreground"><span className="font-semibold text-foreground">{classSummary(result)}</span></p>
                 <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{[result.character.species, result.character.sex, result.character.pronouns, result.character.age ? `Age ${result.character.age}` : '', result.character.alignment, result.character.background].filter(Boolean).join(' · ')}</p>
                 <div className="character-sheet-actions mt-3 flex flex-wrap gap-2">
-                  <button type="button" onClick={openRecordEditor} className="inline-flex min-h-9 items-center gap-2 rounded-lg bg-primary px-3 text-xs font-bold text-primary-foreground">
+                  <button type="button" onClick={openRecordEditor} className="character-record-action character-record-action--primary inline-flex min-h-9 items-center gap-2 rounded-lg bg-primary px-3 text-xs font-bold text-primary-foreground">
                     <ClipboardPaste className="size-4" aria-hidden="true" />Edit character sheet
                   </button>
-                  <button type="button" onClick={() => { setEditingIdentity((current) => !current); setEditingRecord(false); setRecordEditProposal(null); setRecordEditError(null) }} className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-3 text-xs font-bold text-primary">
+                  <button type="button" onClick={() => { setEditingIdentity((current) => !current); setEditingRecord(false); setRecordEditProposal(null); setRecordEditError(null) }} className="character-record-action inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-3 text-xs font-bold text-primary">
                     <Pencil className="size-4" aria-hidden="true" />Edit name and profile picture
                   </button>
-                  <button type="button" onClick={() => onLevelUp(character.id)} disabled={!canLevelUp} title={canLevelUp ? 'This character has earned a level.' : 'The AIGM will make Level Up available when this character earns a level.'} className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-3 text-xs font-bold text-primary disabled:cursor-not-allowed disabled:opacity-45">
+                  <button type="button" onClick={() => onLevelUp(character.id)} disabled={!canLevelUp} title={canLevelUp ? 'This character has earned a level.' : 'The AIGM will make Level Up available when this character earns a level.'} className="character-record-action inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-3 text-xs font-bold text-primary disabled:cursor-not-allowed disabled:opacity-45">
                     <Sparkles className="size-4" aria-hidden="true" />Level Up
                   </button>
-                  <button type="button" onClick={() => setShowSmartLevelingHelp((open) => !open)} aria-expanded={showSmartLevelingHelp} aria-controls="character-smart-level-help" className="character-smart-level-button inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/45 bg-primary/10 px-3 text-xs font-bold text-primary transition hover:bg-primary/15">
+                  <button type="button" onClick={() => setShowSmartLevelingHelp((open) => !open)} aria-expanded={showSmartLevelingHelp} aria-controls="character-smart-level-help" className="character-record-action character-smart-level-button inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/45 bg-primary/10 px-3 text-xs font-bold text-primary transition hover:bg-primary/15">
                     <HelpCircle className="size-4" aria-hidden="true" />Smart way to level
                   </button>
                 </div>
@@ -971,30 +971,30 @@ function CharacterSheetOverlay({
               >
                 <Trash2 className="size-4" aria-hidden="true" />{confirmingRemove ? 'Are you sure?' : 'Remove this character'}
               </button>
-              <button type="button" onClick={onClose} className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background transition hover:border-primary/55 hover:text-primary" aria-label="Close character record">
+              <button type="button" onClick={onClose} className="character-record-close flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background transition hover:border-primary/55 hover:text-primary" aria-label="Close character record">
                 <X className="size-5" aria-hidden="true" />
               </button>
             </div>
           </div>
 
           {editingIdentity && (
-            <div className="mt-4 grid gap-3 rounded-2xl border border-primary/35 bg-background/80 p-4 sm:grid-cols-2">
+            <div className="character-profile-editor mt-4 grid gap-3 rounded-2xl border border-primary/35 bg-background/80 p-4 sm:grid-cols-2">
               <label className="text-xs font-bold text-muted-foreground">Character name
                 <input value={draftName} placeholder="Enter full character name here" onChange={(event) => setDraftName(event.target.value)} className="mt-1 w-full rounded-xl border border-input bg-card px-3 py-2 text-sm font-semibold text-foreground" />
               </label>
               <label className="text-xs font-bold text-muted-foreground">Name used in play
                 <input value={draftPlayName} maxLength={12} placeholder="Enter chosen play name here" onChange={(event) => setDraftPlayName(event.target.value)} className="mt-1 w-full rounded-xl border border-input bg-card px-3 py-2 text-sm font-semibold text-foreground" />
               </label>
-              <div className="rounded-xl border border-border bg-card p-3 sm:col-span-2">
+              <div className="character-profile-picture-card rounded-xl border border-border bg-card p-3 sm:col-span-2">
                 <p className="text-xs font-bold text-muted-foreground">Profile picture</p>
                 <div className="mt-2 flex flex-wrap items-center gap-3">
                   <div className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-background">
                     {draftPortraitUrl ? <img src={draftPortraitUrl} alt="Profile picture preview" className="size-full object-contain" /> : <UserRound className="size-7 text-muted-foreground" aria-hidden="true" />}
                   </div>
-                  <button type="button" onClick={() => portraitInputRef.current?.click()} className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-border bg-background px-3 text-xs font-bold text-muted-foreground hover:border-primary/45 hover:text-foreground">
+                  <button type="button" onClick={() => portraitInputRef.current?.click()} className="character-record-action inline-flex min-h-9 items-center gap-2 rounded-lg border border-border bg-background px-3 text-xs font-bold text-muted-foreground hover:border-primary/45 hover:text-foreground">
                     <ImagePlus className="size-4" aria-hidden="true" />{draftPortraitUrl ? 'Change picture' : 'Add picture'}
                   </button>
-                  {draftPortraitUrl && <button type="button" onClick={() => setDraftPortraitUrl('')} className="min-h-9 rounded-lg border border-border px-3 text-xs font-bold text-muted-foreground hover:border-destructive/45 hover:text-destructive">Remove picture</button>}
+                  {draftPortraitUrl && <button type="button" onClick={() => setDraftPortraitUrl('')} className="character-record-action character-record-action--quiet min-h-9 rounded-lg border border-border px-3 text-xs font-bold text-muted-foreground hover:border-destructive/45 hover:text-destructive">Remove picture</button>}
                   <input ref={portraitInputRef} type="file" accept="image/*" onChange={changePortrait} className="sr-only" tabIndex={-1} aria-hidden="true" />
                 </div>
               </div>
@@ -1015,7 +1015,7 @@ function CharacterSheetOverlay({
                   <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">Use this box to add, remove, replace, or correct information in the permanent character record. Rules questions and gameplay questions belong in the main AIGM chat. Nothing changes until you choose Save to Character.</p>
                   <p className="mt-2 max-w-3xl text-xs leading-relaxed text-muted-foreground"><strong className="text-foreground">Text updates only:</strong> ordinary character edits do not accept screenshots or photos. If you need to show RPG Your Way a class or subclass advancement chart, the Level Up interface can accept an image when advancement material is needed.</p>
                   <div className="mt-2 flex flex-wrap items-center gap-3">
-                    <a href="/downloads/rpgyourway-character-update-template-v2.txt" download="RPG Your Way_Plain_Text_Character_Update_Template_v2.txt" className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-3 text-xs font-bold text-primary">
+                    <a href="/downloads/rpgyourway-character-update-template-v2.txt" download="RPG Your Way_Plain_Text_Character_Update_Template_v2.txt" className="character-record-action inline-flex min-h-9 items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-3 text-xs font-bold text-primary">
                       <Download className="size-4" aria-hidden="true" />Blank update template, if you want to use it
                     </a>
                   </div>

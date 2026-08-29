@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.82')
-assert.equal(pkg.rpgywVersion, '1.12.82')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.82'", 'visible app version')
+assert.equal(pkg.version, '1.12.83')
+assert.equal(pkg.rpgywVersion, '1.12.83')
+has(read('lib/version.ts'), "APP_VERSION = '1.12.83'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -398,3 +398,17 @@ has(css, '.medieval-page--play #dice-quantity {', 'dice quantity uses explicit i
 has(css, '.medieval-page--play .aigm-gameplay-message-input {', 'gameplay composer input has explicit inner geometry')
 has(lookbook, 'Start/Play finishing rule (1.12.82)')
 console.log('RPG Your Way 1.12.82 Start/Play finishing QA checks passed.')
+
+
+// 1.12.83 Script + character-record lookbook pass.
+const scriptPage11283 = read('app/script/page.tsx')
+const shapeWorkspace11283 = read('components/ShapeWorkspace.tsx')
+has(css, 'RPG Your Way 1.12.83 — Script + character-record lookbook pass.')
+lacks(scriptPage11283, 'className="shape-steps"', 'obsolete Script explainer-step strip')
+before(shapeWorkspace11283, 'id="shape-step-1-title">Upload or drop transcript', 'id="shape-step-2-title">Answer the questions', 'Script step order 1 → 2')
+before(shapeWorkspace11283, 'id="shape-step-2-title">Answer the questions', 'id="shape-step-3-title">See maximum usage', 'Script step order 2 → 3')
+has(gameplayShell, 'className="character-record-section group"', 'canonical character-record sections')
+has(gameplayShell, 'accordion-plus character-record-section-screw', 'character record uses canonical accordion screw')
+has(css, '.character-sheet-header-controls .character-remove-button--confirm {\n  background: var(--rpgyw-olive-dark) !important;', 'character removal confirmation avoids red exception')
+has(lookbook, 'Script + character-record visual rule (1.12.83)')
+console.log('RPG Your Way 1.12.83 Script + character-record lookbook checks passed.')

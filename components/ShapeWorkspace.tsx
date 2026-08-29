@@ -419,138 +419,153 @@ export function ShapeWorkspace() {
 
   return (
     <section className="shape-workbench" aria-labelledby="shape-workbench-title">
-      <div className="shape-job-heading">
+      <div className="shape-job-heading shape-workbench-heading">
         <div>
           <p className="kicker">Script workbench</p>
           <h2 id="shape-workbench-title">Give Script the campaign you actually played.</h2>
-          <p>Paste a transcript or upload a file. WardensPC campaign JSON exports are recognized automatically.</p>
+          <p>Three steps: give Script the transcript, answer the story questions, then see the maximum usage before anything is charged.</p>
         </div>
         <span className="shape-beta-pill active">Available now</span>
       </div>
 
-      <div className="shape-public-preview-note testing">
-        <strong>Your balance pays for successful AI processing.</strong>
-        <span>See and approve the maximum deduction before Script begins. The final deduction can be lower, never higher.</span>
-      </div>
-
-      <div className="shape-form-grid">
-        <label className="shape-field">
-          <span>Story title</span>
-          <input value={title} maxLength={120} onChange={(event) => setTitle(event.target.value)} placeholder="Untitled adventure" />
-        </label>
-
-        <div
-          className={dragging ? 'shape-file-field dragging' : 'shape-file-field'}
-          onDragEnter={(event) => { event.preventDefault(); setDragging(true) }}
-          onDragOver={(event) => event.preventDefault()}
-          onDragLeave={() => setDragging(false)}
-          onDrop={dropFile}
-        >
-          <label htmlFor="shape-transcript-file">Upload or drop transcript</label>
-          <input id="shape-transcript-file" type="file" accept=".txt,.md,.log,.json,text/plain,application/json" onChange={readFile} />
-          <small>{fileName || 'TXT, Markdown, LOG, or a WardensPC campaign JSON export'}</small>
-        </div>
-      </div>
-
-      <label className="shape-field shape-transcript-field">
-        <span>Gameplay transcript</span>
-        <textarea value={transcript} onChange={(event) => { setTranscript(event.target.value); setDuplicateBlocked(false); setQuoteMicrousd(null) }} placeholder="Paste the campaign transcript here…" />
-      </label>
-
-      <div className="shape-count-row">
-        <span>{transcript.trim().length.toLocaleString()} / {SHAPE_MAX_INPUT_CHARACTERS.toLocaleString()} characters</span>
-        {assessment.ready ? <span>Ready for one Script request</span> : <span>Divide into at least {assessment.minimumParts} chronological parts</span>}
-      </div>
-
-      <fieldset className="shape-project-mode">
-        <legend>Is this a one-off story or part of a larger campaign?</legend>
-        <div className="shape-project-options">
-          <label className={!projectMode ? 'selected' : ''}>
-            <input type="radio" name="shape-project-mode" checked={!projectMode} onChange={() => { setProjectMode(false); setQuoteMicrousd(null) }} />
-            <strong>One transcript</strong>
-            <span>Script this submission on its own.</span>
-          </label>
-          <label className={projectMode ? 'selected' : ''}>
-            <input type="radio" name="shape-project-mode" checked={projectMode} onChange={() => { setProjectMode(true); setQuoteMicrousd(null) }} />
-            <strong>Ongoing campaign project</strong>
-            <span>Carry a compact continuity ledger into later transcript parts.</span>
-          </label>
-        </div>
-
-        {projectMode ? (
-          <div className="shape-project-picker">
-            {projects.length ? (
-              <label className="shape-field">
-                <span>Continue an existing project, or start a new one</span>
-                <select value={selectedProjectId} onChange={(event) => { setSelectedProjectId(event.target.value); setQuoteMicrousd(null) }}>
-                  <option value="">Start a new project</option>
-                  {projects.map((project) => <option key={project.id} value={project.id}>{project.title} · {project.completed_parts} completed part{project.completed_parts === 1 ? '' : 's'}</option>)}
-                </select>
-              </label>
-            ) : null}
-            {!selectedProject ? (
-              <label className="shape-field">
-                <span>Campaign project name</span>
-                <input value={projectTitle} maxLength={120} onChange={(event) => setProjectTitle(event.target.value)} placeholder={title.trim() || 'My Script Project'} />
-              </label>
-            ) : (
-              <p className="shape-project-context"><strong>{selectedProject.title}</strong> has {selectedProject.completed_parts} completed part{selectedProject.completed_parts === 1 ? '' : 's'}. This submission will become part {selectedProject.completed_parts + 1}.</p>
-            )}
-          </div>
-        ) : null}
-      </fieldset>
-
-      <fieldset className="shape-description">
-        <legend>How much description should Script add?</legend>
-        <div className="shape-description-grid">
-          {descriptions.map((choice) => (
-            <label key={choice.value} className={descriptionLevel === choice.value ? 'shape-description-card selected' : 'shape-description-card'}>
-              <input type="radio" name="description-level" value={choice.value} checked={descriptionLevel === choice.value} onChange={() => { setDescriptionLevel(choice.value); setQuoteMicrousd(null) }} />
-              <strong>{choice.label}</strong>
-              <span>{choice.detail}</span>
+      <section className="shape-script-step shape-script-step--upload" aria-labelledby="shape-step-1-title">
+        <div className="shape-script-step-nameplate"><span>1</span><strong id="shape-step-1-title">Upload or drop transcript</strong></div>
+        <div className="shape-script-step-body">
+          <div className="shape-form-grid">
+            <label className="shape-field">
+              <span>Story title</span>
+              <input value={title} maxLength={120} onChange={(event) => setTitle(event.target.value)} placeholder="Untitled adventure" />
             </label>
-          ))}
+
+            <div
+              className={dragging ? 'shape-file-field dragging' : 'shape-file-field'}
+              onDragEnter={(event) => { event.preventDefault(); setDragging(true) }}
+              onDragOver={(event) => event.preventDefault()}
+              onDragLeave={() => setDragging(false)}
+              onDrop={dropFile}
+            >
+              <label htmlFor="shape-transcript-file">Upload or drop transcript</label>
+              <input id="shape-transcript-file" type="file" accept=".txt,.md,.log,.json,text/plain,application/json" onChange={readFile} />
+              <small>{fileName || 'TXT, Markdown, LOG, or a WardensPC campaign JSON export'}</small>
+            </div>
+          </div>
+
+          <label className="shape-field shape-transcript-field">
+            <span>Gameplay transcript</span>
+            <textarea value={transcript} onChange={(event) => { setTranscript(event.target.value); setDuplicateBlocked(false); setQuoteMicrousd(null) }} placeholder="Paste the campaign transcript here…" />
+          </label>
+
+          <div className="shape-count-row">
+            <span>{transcript.trim().length.toLocaleString()} / {SHAPE_MAX_INPUT_CHARACTERS.toLocaleString()} characters</span>
+            {assessment.ready ? <span>Ready for one Script request</span> : <span>Divide into at least {assessment.minimumParts} chronological parts</span>}
+          </div>
         </div>
-      </fieldset>
+      </section>
 
-      <details className="shape-source-help">
-        <summary>What should I give Script?</summary>
-        <div>
-          <p>Use the raw gameplay transcript. Script is meant to tell the same adventure as prose, not redesign the campaign.</p>
-          <p>For campaigns larger than one million characters, divide the transcript at natural story breaks such as a session, chapter, adventure, or major location. Process the parts in chronological order using an ongoing campaign project.</p>
-          <p>Script automatically handles smaller internal chunks, continuity analysis, and prose seams. You do not need to prepare those yourself.</p>
+      <section className="shape-script-step shape-script-step--questions" aria-labelledby="shape-step-2-title">
+        <div className="shape-script-step-nameplate"><span>2</span><strong id="shape-step-2-title">Answer the questions</strong></div>
+        <div className="shape-script-step-body">
+          <fieldset className="shape-project-mode">
+            <legend>Is this a one-off story or part of a larger campaign?</legend>
+            <div className="shape-project-options">
+              <label className={!projectMode ? 'selected' : ''}>
+                <input type="radio" name="shape-project-mode" checked={!projectMode} onChange={() => { setProjectMode(false); setQuoteMicrousd(null) }} />
+                <strong>One transcript</strong>
+                <span>Script this submission on its own.</span>
+              </label>
+              <label className={projectMode ? 'selected' : ''}>
+                <input type="radio" name="shape-project-mode" checked={projectMode} onChange={() => { setProjectMode(true); setQuoteMicrousd(null) }} />
+                <strong>Ongoing campaign project</strong>
+                <span>Carry a compact continuity ledger into later transcript parts.</span>
+              </label>
+            </div>
+
+            {projectMode ? (
+              <div className="shape-project-picker">
+                {projects.length ? (
+                  <label className="shape-field">
+                    <span>Continue an existing project, or start a new one</span>
+                    <select value={selectedProjectId} onChange={(event) => { setSelectedProjectId(event.target.value); setQuoteMicrousd(null) }}>
+                      <option value="">Start a new project</option>
+                      {projects.map((project) => <option key={project.id} value={project.id}>{project.title} · {project.completed_parts} completed part{project.completed_parts === 1 ? '' : 's'}</option>)}
+                    </select>
+                  </label>
+                ) : null}
+                {!selectedProject ? (
+                  <label className="shape-field">
+                    <span>Campaign project name</span>
+                    <input value={projectTitle} maxLength={120} onChange={(event) => setProjectTitle(event.target.value)} placeholder={title.trim() || 'My Script Project'} />
+                  </label>
+                ) : (
+                  <p className="shape-project-context"><strong>{selectedProject.title}</strong> has {selectedProject.completed_parts} completed part{selectedProject.completed_parts === 1 ? '' : 's'}. This submission will become part {selectedProject.completed_parts + 1}.</p>
+                )}
+              </div>
+            ) : null}
+          </fieldset>
+
+          <fieldset className="shape-description">
+            <legend>How much description should Script add?</legend>
+            <div className="shape-description-grid">
+              {descriptions.map((choice) => (
+                <label key={choice.value} className={descriptionLevel === choice.value ? 'shape-description-card selected' : 'shape-description-card'}>
+                  <input type="radio" name="description-level" value={choice.value} checked={descriptionLevel === choice.value} onChange={() => { setDescriptionLevel(choice.value); setQuoteMicrousd(null) }} />
+                  <strong>{choice.label}</strong>
+                  <span>{choice.detail}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <details className="shape-source-help">
+            <summary>What should I give Script? <span className="accordion-plus" aria-hidden="true" /></summary>
+            <div>
+              <p>Use the raw gameplay transcript. Script is meant to tell the same adventure as prose, not redesign the campaign.</p>
+              <p>For campaigns larger than one million characters, divide the transcript at natural story breaks such as a session, chapter, adventure, or major location. Process the parts in chronological order using an ongoing campaign project.</p>
+              <p>Script automatically handles smaller internal chunks, continuity analysis, and prose seams. You do not need to prepare those yourself.</p>
+            </div>
+          </details>
         </div>
-      </details>
+      </section>
 
-      {error ? (
-        <p className="shape-error" role="alert">
-          {error}
-          {/balance|usage/i.test(error) ? <> <a href="/account#add-usage">Add usage in Account.</a></> : null}
-        </p>
-      ) : null}
+      <section className="shape-script-step shape-script-step--usage" aria-labelledby="shape-step-3-title">
+        <div className="shape-script-step-nameplate"><span>3</span><strong id="shape-step-3-title">See maximum usage</strong></div>
+        <div className="shape-script-step-body">
+          <div className="shape-public-preview-note testing">
+            <strong>Your balance pays for successful AI processing.</strong>
+            <span>See and approve the maximum deduction before Script begins. The final deduction can be lower, never higher.</span>
+          </div>
 
-      {quoteMicrousd !== null ? (
-        <div className="shape-quote" role="status">
-          <span>Maximum estimated deduction</span>
-          <strong>{formatMicrousd(quoteMicrousd)}</strong>
-          <small>The final deduction may be lower. It will not exceed this amount.</small>
+          {error ? (
+            <p className="shape-error" role="alert">
+              {error}
+              {/balance|usage/i.test(error) ? <> <a href="/account#add-usage">Add usage in Account.</a></> : null}
+            </p>
+          ) : null}
+
+          {quoteMicrousd !== null ? (
+            <div className="shape-quote" role="status">
+              <span>Maximum estimated deduction</span>
+              <strong>{formatMicrousd(quoteMicrousd)}</strong>
+              <small>The final deduction may be lower. It will not exceed this amount.</small>
+            </div>
+          ) : null}
+
+          <div className="shape-actions shape-usage-actions">
+            {quoteMicrousd === null ? (
+              <button className="button button-primary" type="button" onClick={requestQuote} disabled={running || quoting || transcript.trim().length < 250 || !assessment.ready}>
+                {quoting ? 'Estimating…' : 'See maximum usage'}
+              </button>
+            ) : (
+              <button className="button button-primary" type="button" onClick={() => createJob(false)} disabled={running}>
+                {running ? 'Creating Script job…' : `Begin Script · max ${formatMicrousd(quoteMicrousd)}`}
+              </button>
+            )}
+            {duplicateBlocked ? <button className="button button-secondary" type="button" disabled={running} onClick={() => createJob(true)}>I really need to Script this exact transcript again</button> : null}
+            {quoteMicrousd !== null ? <button className="button button-secondary" type="button" disabled={running} onClick={() => setQuoteMicrousd(null)}>Recalculate</button> : null}
+            <p>Only successful metered AI processing is deducted from your RPG Your Way balance.</p>
+          </div>
         </div>
-      ) : null}
-
-      <div className="shape-actions">
-        {quoteMicrousd === null ? (
-          <button className="button button-primary" type="button" onClick={requestQuote} disabled={running || quoting || transcript.trim().length < 250 || !assessment.ready}>
-            {quoting ? 'Estimating…' : 'See maximum usage'}
-          </button>
-        ) : (
-          <button className="button button-primary" type="button" onClick={() => createJob(false)} disabled={running}>
-            {running ? 'Creating Script job…' : `Begin Script · max ${formatMicrousd(quoteMicrousd)}`}
-          </button>
-        )}
-        {duplicateBlocked ? <button className="button button-secondary" type="button" disabled={running} onClick={() => createJob(true)}>I really need to Script this exact transcript again</button> : null}
-        {quoteMicrousd !== null ? <button className="button button-secondary" type="button" disabled={running} onClick={() => setQuoteMicrousd(null)}>Recalculate</button> : null}
-        <p>Only successful metered AI processing is deducted from your RPG Your Way balance.</p>
-      </div>
+      </section>
     </section>
   )
 }
