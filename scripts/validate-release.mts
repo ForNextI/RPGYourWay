@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.5')
-assert.equal(pkg.rpgywVersion, '1.13.5')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.5'", 'visible app version')
+assert.equal(pkg.version, '1.13.7')
+assert.equal(pkg.rpgywVersion, '1.13.7')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.7'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -39,6 +39,7 @@ for (const file of [
   'components/start/StartOnboarding.tsx',
   'components/start/CampaignHub.tsx',
   'components/aigm/rpgyw-start-entry.tsx',
+  'components/ads/AdSenseSlot.tsx',
   'components/aigm/aigm-gameplay-shell.tsx',
   'components/multiplayer/TableChatPanel.tsx',
   'components/multiplayer/MultiplayerPanelSwitcher.tsx',
@@ -97,6 +98,13 @@ has(env, 'OPENAI_MODEL=gpt-5.6-terra')
 has(env, 'OPENAI_GAMEPLAY_MODEL=gpt-5.6-terra')
 has(env, 'OPENAI_SHAPE_MODEL=gpt-5.6-terra')
 has(env, 'RPGYW_GOD_MODE_PHRASE=')
+has(env, 'NEXT_PUBLIC_ADSENSE_CLIENT_ID=ca-pub-7652380497334820')
+for (const slotEnv of [
+  'NEXT_PUBLIC_ADSENSE_SLOT_LANDING=',
+  'NEXT_PUBLIC_ADSENSE_SLOT_START=',
+  'NEXT_PUBLIC_ADSENSE_SLOT_SCRIPT=',
+  'NEXT_PUBLIC_ADSENSE_SLOT_ACCESSIBILITY=',
+]) has(env, slotEnv)
 lacks(env, 'WARDENS_GOD_MODE_PHRASE')
 const gameplayRoute = read('app/api/aigm/gameplay-chat/route.ts')
 has(gameplayRoute, 'process.env.RPGYW_GOD_MODE_PHRASE')
@@ -105,6 +113,7 @@ lacks(gameplayRoute, 'process.env.WARDENS_GOD_MODE_PHRASE')
 // Google Tag Manager and the direct Google Ads tag are installed once at the site root.
 // The direct Ads tag remains authoritative until the purchase conversion is deliberately migrated into GTM.
 const rootLayout = read('app/layout.tsx')
+const css = read('app/globals.css')
 has(rootLayout, "const GOOGLE_TAG_MANAGER_ID = 'GTM-W5TL4QHK'", 'Google Tag Manager container ID')
 has(rootLayout, 'https://www.googletagmanager.com/gtm.js?id=', 'Google Tag Manager loader')
 has(rootLayout, 'https://www.googletagmanager.com/ns.html?id=${GOOGLE_TAG_MANAGER_ID}', 'Google Tag Manager noscript fallback')
@@ -117,12 +126,45 @@ has(rootLayout, "const GOOGLE_ADS_TAG_ID = 'AW-18361311478'", 'Google Ads tag ID
 has(rootLayout, 'https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_TAG_ID}', 'Google Ads gtag loader')
 has(rootLayout, "gtag('config', '${GOOGLE_ADS_TAG_ID}');", 'Google Ads gtag config')
 assert.equal((rootLayout.match(/googletagmanager\.com\/gtag\/js/g) || []).length, 1, 'Google Ads loader should be installed once')
-has(rootLayout, "const GOOGLE_ADSENSE_ACCOUNT = 'ca-pub-7652380497334820'", 'Google AdSense publisher account')
+has(rootLayout, "const DEFAULT_GOOGLE_ADSENSE_ACCOUNT = 'ca-pub-7652380497334820'", 'Google AdSense publisher account fallback')
+has(rootLayout, 'process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID?.trim()', 'Google AdSense public client environment variable')
 has(rootLayout, "'google-adsense-account': GOOGLE_ADSENSE_ACCOUNT", 'Google AdSense ownership meta tag')
+has(rootLayout, 'pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_ADSENSE_ACCOUNT}', 'Google AdSense display loader')
+lacks(rootLayout, 'GOOGLE_ADSENSE_HAS_AD_UNITS', 'AdSense site code should not depend on configured ad units')
+has(rootLayout, 'strategy="beforeInteractive"', 'Google AdSense site code is loaded at the site root before interactive scripts')
 assert.equal((rootLayout.match(/google-adsense-account/g) || []).length, 1, 'Google AdSense ownership meta tag should be declared once')
+const adsTxt = read('public/ads.txt')
+has(adsTxt, 'google.com, pub-7652380497334820, DIRECT, f08c47fec0942fa0', 'Google AdSense ads.txt authorization')
 const privacyPage = read('app/legal/privacy/page.tsx')
-has(privacyPage, 'advertising measurement', 'privacy disclosure for advertising measurement')
+has(privacyPage, 'advertising delivery and measurement', 'privacy disclosure for advertising delivery and measurement')
+has(privacyPage, 'Google AdSense may use cookies', 'privacy disclosure for AdSense delivery')
 has(privacyPage, 'signed-in email address', 'privacy disclosure for purchase matching data')
+
+// Manual AdSense inventory is one shared responsive component with four explicit placements.
+const adSenseSlot = read('components/ads/AdSenseSlot.tsx')
+has(adSenseSlot, "type AdPlacement = 'landing' | 'start' | 'script' | 'accessibility'", 'canonical manual ad placements')
+has(adSenseSlot, 'NEXT_PUBLIC_ADSENSE_SLOT_LANDING', 'Landing AdSense slot environment variable')
+has(adSenseSlot, 'NEXT_PUBLIC_ADSENSE_SLOT_START', 'Start AdSense slot environment variable')
+has(adSenseSlot, 'NEXT_PUBLIC_ADSENSE_SLOT_SCRIPT', 'Script AdSense slot environment variable')
+has(adSenseSlot, 'NEXT_PUBLIC_ADSENSE_SLOT_ACCESSIBILITY', 'Accessibility AdSense slot environment variable')
+has(adSenseSlot, 'Advertisements', 'policy-safe ad label')
+has(adSenseSlot, 'window.adsbygoogle.push({})', 'AdSense request queue')
+const landingPage = read('app/page.tsx')
+const adScriptPage = read('app/script/page.tsx')
+const accessibilityPage = read('app/accessibility/page.tsx')
+const adStartEntry = read('components/aigm/rpgyw-start-entry.tsx')
+has(landingPage, '<AdSenseSlot placement="landing" />', 'Landing manual ad placement')
+has(adScriptPage, '<AdSenseSlot placement="script" />', 'Script manual ad placement')
+has(accessibilityPage, '<AdSenseSlot placement="accessibility" />', 'Accessibility manual ad placement')
+has(adStartEntry, '!addCharacterMode ? <AdSenseSlot placement="start" /> : null', 'Start manual ad placement excludes add-character flow')
+has(css, '.ad-placement--start {')
+has(css, 'margin-bottom: 150px;', 'Start ad safety buffer')
+has(css, 'max-width: 320px;', 'mobile ad width')
+has(css, 'height: 100px;', 'mobile ad height')
+has(css, 'width: 468px;', 'intermediate ad width')
+has(css, 'height: 60px;', 'intermediate ad height')
+has(css, 'width: 728px;', 'desktop ad width')
+has(css, 'height: 90px;', 'desktop ad height')
 
 // Verified paid Stripe checkout publishes one canonical purchase data-layer event for GTM/Reddit,
 // while the existing direct Google Ads conversion remains authoritative until deliberately migrated.
@@ -165,7 +207,6 @@ has(home, 'Why I created RPG Your Way.')
 has(home, 'Who benefits from this site?')
 has(home, 'Multiplayer is live, with built-in table chat.')
 lacks(home, 'Multiplayer testing is underway, with chat.')
-const css = read('app/globals.css')
 has(css, '.landing-accordion {\n  overflow: visible;\n  border: 0;')
 has(css, '.landing-accordion-body {')
 has(css, 'color-mix(in srgb, var(--rpgyw-olive-dark) 90%, var(--rpgyw-cream))', 'landing accordion reveal uses dark-olive plaque')
@@ -465,4 +506,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.5 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.7 release and canonical UI checks passed.')

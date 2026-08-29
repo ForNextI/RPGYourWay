@@ -1,6 +1,7 @@
 import { PageShell } from '@/components/PageShell'
 import { ShapeSignInGate } from '@/components/ShapeSignInGate'
 import { ShapeWorkspace } from '@/components/ShapeWorkspace'
+import { AdSenseSlot } from '@/components/ads/AdSenseSlot'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata = {
@@ -16,6 +17,7 @@ export default async function ScriptPage() {
   return (
     <PageShell>
       <main id="main-content" tabIndex={-1} className="inner-main shape-main">
+        <AdSenseSlot placement="script" />
         <div className="shell shape-shell">
           <section className="shape-intro">
             <p className="kicker">Script</p>

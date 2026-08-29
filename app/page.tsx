@@ -4,6 +4,7 @@ import { Megaphone } from 'lucide-react'
 import { PageShell } from '@/components/PageShell'
 import { LandingCampaignPanel } from '@/components/LandingCampaignPanel'
 import { PersistentPlayModal } from '@/components/PersistentPlayModal'
+import { AdSenseSlot } from '@/components/ads/AdSenseSlot'
 
 const features = [
   {
@@ -175,6 +176,7 @@ export default function HomePage() {
     <PageShell headerVariant="landing">
       <main id="main-content" tabIndex={-1}>
         <h1 className="sr-only">RPG Your Way: Your AI GM</h1>
+        <AdSenseSlot placement="landing" />
         <section className="landing-news-section" aria-labelledby="landing-news-heading">
           <div className="shell landing-news-panel">
             <p className="landing-news-eyebrow"><Megaphone aria-hidden="true" />News</p>

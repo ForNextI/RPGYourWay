@@ -865,7 +865,14 @@ No other exception should be invented casually. If a page requires one, document
 
 ## 20.1 AdSense
 
-Planned ads should be simple and inserted immediately below the top ribbon on the selected pages. Do not invent a new decorative ad-card language that competes with the product UI. AdSense implementation must still respect layout spacing and the canonical page hierarchy.
+Manual AdSense inventory is deliberately simple and sits immediately below the top ribbon on **Landing, Start, Script, and Accessibility**. Do not invent a decorative RPG Your Way ad-card language that could make advertising look like product UI.
+
+- Use one shared responsive ad-slot component.
+- Reserve approximately **320 × 100 px on phones**, **468 × 60 px on intermediate widths**, and **728 × 90 px on laptop/desktop widths**.
+- Before an AdSense slot ID is configured, keep the same reserved footprint visible with the permitted label **Advertisements** and an otherwise blank placeholder. No separate on/off control is needed.
+- Start uses a **150 px clear vertical buffer below the ad inventory** before the first ordinary campaign control.
+- The Start ad appears only in the normal new-campaign/management flow, not the signed-out authentication surface or the add-character utility flow.
+- AdSense client/slot identifiers are supplied through `NEXT_PUBLIC_ADSENSE_*` deployment variables so inventory can be connected without rewriting page components.
 
 ## 20.2 VTT integration
 

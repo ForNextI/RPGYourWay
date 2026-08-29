@@ -1,4 +1,5 @@
 import { PageShell } from '@/components/PageShell'
+import { AdSenseSlot } from '@/components/ads/AdSenseSlot'
 
 export const metadata = {
   title: 'Accessibility',
@@ -9,6 +10,7 @@ export default function AccessibilityPage() {
   return (
     <PageShell>
       <main id="main-content" tabIndex={-1} className="inner-main">
+        <AdSenseSlot placement="accessibility" />
         <div className="shell narrow-shell prose-page accessibility-page">
           <p className="kicker">Accessibility</p>
           <h1 className="page-title">RPG Your Way should be playable your way.</h1>

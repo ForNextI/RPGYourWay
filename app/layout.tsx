@@ -5,7 +5,8 @@ import './globals.css'
 
 const GOOGLE_ADS_TAG_ID = 'AW-18361311478'
 const GOOGLE_TAG_MANAGER_ID = 'GTM-W5TL4QHK'
-const GOOGLE_ADSENSE_ACCOUNT = 'ca-pub-7652380497334820'
+const DEFAULT_GOOGLE_ADSENSE_ACCOUNT = 'ca-pub-7652380497334820'
+const GOOGLE_ADSENSE_ACCOUNT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID?.trim() || DEFAULT_GOOGLE_ADSENSE_ACCOUNT
 
 export const metadata: Metadata = {
   title: {
@@ -40,6 +41,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <a className="skip-link" href="#main-content">Skip to main content</a>
         {children}
         <Analytics />
+        <Script
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_ADSENSE_ACCOUNT}`}
+          strategy="beforeInteractive"
+          crossOrigin="anonymous"
+        />
         <Script id="google-tag-manager" strategy="beforeInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
