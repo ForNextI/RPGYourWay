@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.0')
-assert.equal(pkg.rpgywVersion, '1.13.0')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.0'", 'visible app version')
+assert.equal(pkg.version, '1.13.1')
+assert.equal(pkg.rpgywVersion, '1.13.1')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.1'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -101,6 +101,14 @@ lacks(env, 'WARDENS_GOD_MODE_PHRASE')
 const gameplayRoute = read('app/api/aigm/gameplay-chat/route.ts')
 has(gameplayRoute, 'process.env.RPGYW_GOD_MODE_PHRASE')
 lacks(gameplayRoute, 'process.env.WARDENS_GOD_MODE_PHRASE')
+
+// Google Ads base tag is installed exactly once at the site root.
+const rootLayout = read('app/layout.tsx')
+has(rootLayout, "const GOOGLE_ADS_TAG_ID = 'AW-18361311478'", 'Google Ads tag ID')
+has(rootLayout, 'https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_TAG_ID}', 'Google Ads gtag loader')
+has(rootLayout, "gtag('config', '${GOOGLE_ADS_TAG_ID}');", 'Google Ads gtag config')
+assert.equal((rootLayout.match(/googletagmanager\.com\/gtag\/js/g) || []).length, 1, 'Google Ads loader should be installed once')
+has(read('app/legal/privacy/page.tsx'), 'advertising measurement', 'privacy disclosure for advertising measurement')
 
 // Public site is crawlable; API and auth machinery are not crawl targets.
 const robots = read('app/robots.ts')
@@ -414,4 +422,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.0 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.1 release and canonical UI checks passed.')
