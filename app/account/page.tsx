@@ -8,7 +8,7 @@ import { finalizeCheckoutSessionById } from '@/lib/stripe/server'
 import { signOut } from './actions'
 import { isOwnerQaEmail } from '@/lib/usage/owner-qa'
 import { DeleteAccountControl } from '@/components/account/DeleteAccountControl'
-import { GoogleAdsPurchaseConversion } from '@/components/analytics/GoogleAdsPurchaseConversion'
+import { PurchaseTracking } from '@/components/analytics/PurchaseTracking'
 
 export const metadata = { title: 'Account' }
 export const dynamic = 'force-dynamic'
@@ -69,7 +69,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
   const ownerQa = isOwnerQaEmail(email)
   let paymentNotice = ''
   let paymentError = ''
-  let purchaseConversion: { transactionId: string; value: number } | null = null
+  let purchaseTracking: { transactionId: string; value: number; itemId: string; itemName: string } | null = null
 
   if (user && checkoutSessionId) {
     try {
@@ -78,9 +78,11 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
         ? `${finalized.pack.name} was added to your usage balance.`
         : 'Stripe has not marked that checkout paid yet. Your balance will update automatically when payment clears.'
       if (finalized.credited) {
-        purchaseConversion = {
+        purchaseTracking = {
           transactionId: checkoutSessionId,
           value: finalized.pack.priceCents / 100,
+          itemId: finalized.pack.id,
+          itemName: finalized.pack.name,
         }
       }
     } catch (caught) {
@@ -130,10 +132,13 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
       <main id="main-content" tabIndex={-1} className="inner-main account-main">
         <div className="shell account-shell">
           <h1 className="sr-only">Account</h1>
-          {purchaseConversion ? (
-            <GoogleAdsPurchaseConversion
-              transactionId={purchaseConversion.transactionId}
-              value={purchaseConversion.value}
+          {purchaseTracking ? (
+            <PurchaseTracking
+              transactionId={purchaseTracking.transactionId}
+              value={purchaseTracking.value}
+              email={email}
+              itemId={purchaseTracking.itemId}
+              itemName={purchaseTracking.itemName}
             />
           ) : null}
           {statusMessages[status] ? <p className="auth-message auth-message-success" role="status">{statusMessages[status]}</p> : null}

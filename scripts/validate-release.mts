@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.3')
-assert.equal(pkg.rpgywVersion, '1.13.3')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.3'", 'visible app version')
+assert.equal(pkg.version, '1.13.4')
+assert.equal(pkg.rpgywVersion, '1.13.4')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.4'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -117,19 +117,38 @@ has(rootLayout, "const GOOGLE_ADS_TAG_ID = 'AW-18361311478'", 'Google Ads tag ID
 has(rootLayout, 'https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_TAG_ID}', 'Google Ads gtag loader')
 has(rootLayout, "gtag('config', '${GOOGLE_ADS_TAG_ID}');", 'Google Ads gtag config')
 assert.equal((rootLayout.match(/googletagmanager\.com\/gtag\/js/g) || []).length, 1, 'Google Ads loader should be installed once')
-has(read('app/legal/privacy/page.tsx'), 'advertising measurement', 'privacy disclosure for advertising measurement')
+const privacyPage = read('app/legal/privacy/page.tsx')
+has(privacyPage, 'advertising measurement', 'privacy disclosure for advertising measurement')
+has(privacyPage, 'signed-in email address', 'privacy disclosure for purchase matching data')
 
-// Google Ads purchase conversion fires only after a verified paid Stripe checkout and uses real purchase data.
-const purchaseConversion = read('components/analytics/GoogleAdsPurchaseConversion.tsx')
-has(purchaseConversion, "AW-18361311478/ub-xCO3YnOocEPbBrbNE", 'Google Ads purchase conversion destination')
-has(purchaseConversion, "gtag('event', 'conversion'", 'Google Ads purchase conversion event')
-has(purchaseConversion, 'transaction_id: transactionId', 'Google Ads purchase transaction id')
-has(purchaseConversion, "currency: 'USD'", 'Google Ads purchase currency')
-lacks(purchaseConversion, 'value: 1.0', 'Google Ads purchase placeholder value')
+// Verified paid Stripe checkout publishes one canonical purchase data-layer event for GTM/Reddit,
+// while the existing direct Google Ads conversion remains authoritative until deliberately migrated.
+const purchaseTracking = read('components/analytics/PurchaseTracking.tsx')
+has(purchaseTracking, "event: 'purchase'", 'purchase data-layer event')
+has(purchaseTracking, 'trackingWindow.dataLayer.push({ ecommerce: null })', 'purchase ecommerce reset')
+has(purchaseTracking, 'email_address: email', 'purchase email matching data')
+has(purchaseTracking, 'transaction_id: transactionId', 'purchase transaction id')
+has(purchaseTracking, "currency: 'USD'", 'purchase currency')
+has(purchaseTracking, 'item_id: itemId', 'purchase item id')
+has(purchaseTracking, 'item_name: itemName', 'purchase item name')
+has(purchaseTracking, "item_category: 'Play Pack'", 'purchase item category')
+has(purchaseTracking, 'price: value', 'purchase item price')
+has(purchaseTracking, 'quantity: 1', 'purchase item quantity')
+has(purchaseTracking, "AW-18361311478/ub-xCO3YnOocEPbBrbNE", 'Google Ads purchase conversion destination')
+has(purchaseTracking, "gtag('event', 'conversion'", 'Google Ads purchase conversion event')
+lacks(purchaseTracking, 'alice@site.com', 'sample purchase email')
+lacks(purchaseTracking, '+15551234567', 'sample purchase phone')
+lacks(purchaseTracking, 'SKU_12345', 'sample purchase SKU')
+lacks(purchaseTracking, 'Potato Tee', 'sample purchase item')
+lacks(purchaseTracking, 'value: 20.00', 'sample purchase value')
+assert.equal(exists('components/analytics/GoogleAdsPurchaseConversion.tsx'), false, 'superseded purchase-only component should stay removed')
 const accountPage = read('app/account/page.tsx')
-has(accountPage, 'if (finalized.credited) {', 'purchase conversion gated on verified paid checkout')
-has(accountPage, 'transactionId: checkoutSessionId', 'Stripe Checkout Session used as conversion transaction id')
-has(accountPage, 'value: finalized.pack.priceCents / 100', 'actual Play Pack purchase price used as conversion value')
+has(accountPage, 'if (finalized.credited) {', 'purchase tracking gated on verified paid checkout')
+has(accountPage, 'transactionId: checkoutSessionId', 'Stripe Checkout Session used as purchase transaction id')
+has(accountPage, 'value: finalized.pack.priceCents / 100', 'actual Play Pack purchase price used as purchase value')
+has(accountPage, 'itemId: finalized.pack.id', 'actual Play Pack id used as purchase item id')
+has(accountPage, 'itemName: finalized.pack.name', 'actual Play Pack name used as purchase item name')
+has(accountPage, 'email={email}', 'signed-in account email passed to purchase matching data')
 
 // Public site is crawlable; API and auth machinery are not crawl targets.
 const robots = read('app/robots.ts')
@@ -443,4 +462,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.3 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.4 release and canonical UI checks passed.')
