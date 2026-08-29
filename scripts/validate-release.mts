@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.1')
-assert.equal(pkg.rpgywVersion, '1.12.1')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.1'", 'visible app version')
+assert.equal(pkg.version, '1.12.72')
+assert.equal(pkg.rpgywVersion, '1.12.72')
+has(read('lib/version.ts'), "APP_VERSION = '1.12.72'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -218,4 +218,4 @@ has(accessibility, 'Accessibility')
 has(css, 'outline: 3px solid var(--lime);')
 assert.match(css, /background:\s*linear-gradient\(\s*180deg,\s*color-mix\(in srgb, var\(--cream-bright\) 97%, white\),\s*var\(--cream\)\s*\) !important;/)
 
-console.log('RPG Your Way 1.12.1 deliberate cleanup pass 1 checks passed.')
+console.log('RPG Your Way 1.12.72 cleanup-series checks passed.')
