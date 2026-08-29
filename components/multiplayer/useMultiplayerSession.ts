@@ -94,10 +94,11 @@ export function useMultiplayerSession() {
   useEffect(() => {
     const code = session?.inviteCode
     if (!code) return
+    const heartbeatUrl = `/api/multiplayer/sessions/${encodeURIComponent(code)}/heartbeat`
     let cancelled = false
     async function heartbeat() {
       try {
-        const current = await sessionResponse(await fetch(`/api/multiplayer/sessions/${encodeURIComponent(code)}/heartbeat`, {
+        const current = await sessionResponse(await fetch(heartbeatUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
         }))
