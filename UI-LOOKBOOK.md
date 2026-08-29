@@ -320,7 +320,7 @@ For the major landing-page accordions (for example, **Why I created RPG Your Way
 | State | Surface | Text | Screw |
 |---|---|---|---|
 | Rest | Light olive | Forest | Standard cream/forest/brass screw |
-| Hover/focus | Forest | Lime | **Unchanged colors** |
+| Hover/focus | Forest | Cream | **Unchanged colors** |
 | Open/selected | Forest | Cream | Screw rotates `+` → `×`; colors unchanged |
 
 The screw never turns lime merely because the parent is hovered.
@@ -351,9 +351,10 @@ Canonical landing-page stack:
 1. tan/map environment;
 2. top-level light-olive accordion button;
 3. when open, top-level button = forest/cream;
-4. large backing plaque behind nested choices = **dark olive**;
-5. nested accordion buttons = **light olive or cream**, according to the chosen component variant;
-6. deepest revealed text/content field = **parchment**.
+4. the top-level button remains a standalone object; it does **not** sit on a backing plaque while closed;
+5. opening it reveals a **separate dark-olive plaque** below the button;
+6. nested accordion buttons on that plaque = **light olive**;
+7. deepest revealed text/content field = **parchment**.
 
 Do not produce cream-on-cream-on-tan nesting with no visual depth change.
 

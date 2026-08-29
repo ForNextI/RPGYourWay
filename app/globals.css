@@ -8536,3 +8536,110 @@ body :where(button, summary, [role="button"]):focus-visible .accordion-plus {
   .brand-jewel-divider { height: 19px !important; margin-inline: .1rem !important; }
   .brand-jewel-divider::after { width: 6px; height: 6px; }
 }
+
+/* RPG Your Way 1.12.77 — Landing accordion separation correction.
+   The two top-level purpose controls are buttons, not plaques. Each opened
+   details element reveals its own separate dark-olive backing plaque. */
+.landing-reasons-grid {
+  align-items: start !important;
+}
+
+.landing-reason-card {
+  align-self: start !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Top-level purpose buttons: light olive at rest, forest/cream on hover and open. */
+.landing-accordion-summary {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 16px !important;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--rpgyw-olive-light) 88%, var(--rpgyw-cream)),
+    var(--rpgyw-olive-light)
+  ) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 78%, var(--rpgyw-brass-light)),
+    inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 10%, transparent),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 8px 13px rgb(37 45 35 / .12) !important;
+}
+.landing-accordion-summary .landing-accordion-prompt {
+  color: var(--rpgyw-forest) !important;
+}
+.landing-accordion-summary:hover,
+.landing-accordion-summary:focus-visible,
+.landing-accordion[open] > .landing-accordion-summary,
+.landing-accordion[open] > .landing-accordion-summary:hover,
+.landing-accordion[open] > .landing-accordion-summary:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.landing-accordion-summary:hover .landing-accordion-prompt,
+.landing-accordion-summary:focus-visible .landing-accordion-prompt,
+.landing-accordion[open] > .landing-accordion-summary .landing-accordion-prompt {
+  color: var(--rpgyw-cream) !important;
+}
+
+/* The opened accordion body is the plaque. Closed neighbors remain only buttons. */
+.landing-accordion-body {
+  margin-top: .9rem !important;
+  padding: .85rem !important;
+  border: 1px solid var(--rpgyw-cream) !important;
+  border-radius: 18px !important;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--rpgyw-olive-dark) 90%, var(--rpgyw-cream)),
+    var(--rpgyw-olive-dark)
+  ) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 38%, transparent),
+    inset 0 -2px 0 rgb(0 0 0 / .10),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 9px 15px rgb(32 40 31 / .14) !important;
+}
+
+/* Nested choices are canonical light-olive buttons. */
+.audience-item {
+  overflow: visible;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.audience-item > summary {
+  min-height: 60px;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 13px !important;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--rpgyw-olive-light) 88%, var(--rpgyw-cream)),
+    var(--rpgyw-olive-light)
+  ) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 78%, var(--rpgyw-brass-light)),
+    inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 10%, transparent),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 7px 11px rgb(37 45 35 / .10) !important;
+}
+.audience-item > summary:hover,
+.audience-item > summary:focus-visible,
+.audience-item[open] > summary,
+.audience-item[open] > summary:hover,
+.audience-item[open] > summary:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.audience-item > summary:hover > span:first-child,
+.audience-item > summary:focus-visible > span:first-child,
+.audience-item[open] > summary > span:first-child {
+  color: var(--rpgyw-cream) !important;
+}

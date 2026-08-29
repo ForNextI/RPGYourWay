@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.76')
-assert.equal(pkg.rpgywVersion, '1.12.76')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.76'", 'visible app version')
+assert.equal(pkg.version, '1.12.77')
+assert.equal(pkg.rpgywVersion, '1.12.77')
+has(read('lib/version.ts'), "APP_VERSION = '1.12.77'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -337,4 +337,12 @@ has(accessibility, 'Accessibility')
 has(css, 'outline: 3px solid var(--lime);')
 assert.match(css, /background:\s*linear-gradient\(\s*180deg,\s*color-mix\(in srgb, var\(--cream-bright\) 97%, white\),\s*var\(--cream\)\s*\) !important;/)
 
-console.log('RPG Your Way 1.12.76 landing-page UI overhaul checks passed.')
+// 1.12.77 Landing accordion separation correction.
+has(css, 'RPG Your Way 1.12.77 — Landing accordion separation correction.')
+has(css, '.landing-reason-card {\n  align-self: start !important;')
+has(css, '.landing-accordion-body {\n  margin-top: .9rem !important;')
+has(css, 'var(--rpgyw-olive-dark) 90%, var(--rpgyw-cream)')
+has(css, 'Nested choices are canonical light-olive buttons.')
+has(lookbook, 'opening it reveals a **separate dark-olive plaque** below the button')
+
+console.log('RPG Your Way 1.12.77 landing accordion correction checks passed.')
