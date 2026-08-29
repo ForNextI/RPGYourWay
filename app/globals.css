@@ -9606,3 +9606,149 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 .shape-source-help > summary { list-style: none; }
 .shape-pricing-details > summary::-webkit-details-marker,
 .shape-source-help > summary::-webkit-details-marker { display: none; }
+
+/* RPG Your Way 1.12.84 — Script/character-record QA II + Play/Start nips.
+   Tighten the Play party-capacity plaque, restore the intended Start leader
+   hierarchy, broaden Script's source language, and make character accordions
+   obey the canonical closed/open material states. Parchment is reserved for
+   places where text is entered or otherwise treated as a text surface. */
+
+/* Play: the party-capacity plaque must fit inside the narrow character rail. */
+.medieval-page--play .aigm-character-footer {
+  min-width: 0;
+}
+.medieval-page--play .aigm-party-capacity {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: .3rem .42rem;
+  font-size: .66rem;
+  line-height: 1.15;
+}
+
+/* Start: the label belongs in the plaque's upper-left corner; the proposed
+   leader remains the centered visual event. */
+@media (min-width: 641px) {
+  .start-leader-card > .start-leader-main > span {
+    position: absolute;
+    top: 1rem;
+    left: 1.05rem;
+    text-align: left;
+  }
+  .start-leader-card > .start-leader-main > strong {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+}
+@media (max-width: 640px) {
+  .start-leader-main {
+    position: relative;
+    display: block;
+  }
+  .start-leader-main span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: left;
+  }
+  .start-leader-main strong {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+}
+
+/* Script: every numbered step uses the standard forest nameplate. Parchment
+   belongs to transcript/text-entry surfaces, not explanatory or grouping
+   furniture. */
+.shape-script-step--questions .shape-script-step-nameplate {
+  background: var(--rpgyw-forest) !important;
+}
+.shape-pricing-copy,
+.shape-source-help > div {
+  background: var(--rpgyw-cream) !important;
+}
+.shape-project-picker {
+  background: var(--rpgyw-olive-light) !important;
+}
+.shape-file-field,
+.shape-field input,
+.shape-field textarea,
+.shape-field select {
+  background: var(--rpgyw-parchment) !important;
+}
+
+/* Character record: every closed accordion is light olive. Opening one turns
+   only its summary face forest + cream; hover/focus changes lettering to lime.
+   The revealed plaque is dark olive and its inset information panels are cream. */
+.character-record-section-summary,
+.character-record-section:nth-child(even) > .character-record-section-summary,
+.character-record-nested-summary {
+  background: var(--rpgyw-olive-light) !important;
+  color: var(--rpgyw-forest) !important;
+}
+.character-record-section[open] > .character-record-section-summary,
+.character-record-nested[open] > .character-record-nested-summary {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.character-record-section > .character-record-section-summary:hover,
+.character-record-section > .character-record-section-summary:focus-visible,
+.character-record-section[open] > .character-record-section-summary:hover,
+.character-record-section[open] > .character-record-section-summary:focus-visible,
+.character-record-nested > .character-record-nested-summary:hover,
+.character-record-nested > .character-record-nested-summary:focus-visible,
+.character-record-nested[open] > .character-record-nested-summary:hover,
+.character-record-nested[open] > .character-record-nested-summary:focus-visible {
+  color: var(--rpgyw-lime) !important;
+}
+.character-record-section-body,
+.character-record-nested-body {
+  background: var(--rpgyw-olive-dark) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.character-record-section-body .text-muted-foreground,
+.character-record-section-body .text-foreground,
+.character-record-section-body .text-primary,
+.character-record-nested-body .text-muted-foreground,
+.character-record-nested-body .text-foreground,
+.character-record-nested-body .text-primary {
+  color: var(--rpgyw-cream) !important;
+}
+.character-record-section-body .bg-secondary,
+.character-record-section-body pre.bg-secondary,
+.character-record-section-body .bg-card,
+.character-record-section-body .bg-primary\/10,
+.character-record-nested-body .bg-secondary,
+.character-record-nested-body pre.bg-secondary,
+.character-record-nested-body .bg-card,
+.character-record-nested-body .bg-primary\/10 {
+  border-color: var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-cream) !important;
+  color: var(--rpgyw-forest) !important;
+}
+.character-record-section-body :where(.bg-secondary, .bg-card, .bg-primary\/10) *,
+.character-record-nested-body :where(.bg-secondary, .bg-card, .bg-primary\/10) * {
+  color: var(--rpgyw-forest) !important;
+}
+
+/* Parchment is for actual text surfaces, not generic record furniture. */
+.character-sheet-body {
+  background: var(--rpgyw-cream) !important;
+}
+.character-profile-picture-card,
+.character-record-edit-workspace > div[class*="bg-card"] {
+  background: var(--rpgyw-cream) !important;
+}
+.character-record-edit-input,
+.character-profile-editor input,
+.character-profile-editor textarea,
+.character-profile-editor select {
+  background: var(--rpgyw-parchment) !important;
+}

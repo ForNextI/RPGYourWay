@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.83')
-assert.equal(pkg.rpgywVersion, '1.12.83')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.83'", 'visible app version')
+assert.equal(pkg.version, '1.12.84')
+assert.equal(pkg.rpgywVersion, '1.12.84')
+has(read('lib/version.ts'), "APP_VERSION = '1.12.84'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -412,3 +412,20 @@ has(gameplayShell, 'accordion-plus character-record-section-screw', 'character r
 has(css, '.character-sheet-header-controls .character-remove-button--confirm {\n  background: var(--rpgyw-olive-dark) !important;', 'character removal confirmation avoids red exception')
 has(lookbook, 'Script + character-record visual rule (1.12.83)')
 console.log('RPG Your Way 1.12.83 Script + character-record lookbook checks passed.')
+
+// 1.12.84 Script/character-record QA II + Play/Start nips.
+const scriptPage11284 = read('app/script/page.tsx')
+const shapeWorkspace11284 = read('components/ShapeWorkspace.tsx')
+has(css, 'RPG Your Way 1.12.84 — Script/character-record QA II + Play/Start nips.')
+has(css, '.medieval-page--play .aigm-party-capacity {\n  width: 100%;', 'Play party capacity is constrained to its rail')
+has(css, '.start-leader-card > .start-leader-main > span {', 'party-leader label has explicit upper-left placement')
+has(scriptPage11284, 'another text-to-play game, another game system, or a tabletop campaign you recorded digitally', 'Script intro accepts outside campaign records')
+has(shapeWorkspace11284, 'Any useful digital record of the campaign you actually played.', 'Script source help accepts outside campaign records')
+lacks(shapeWorkspace11284, '<p className="kicker">Script workbench</p>', 'redundant Script workbench kicker')
+has(css, '.shape-script-step--questions .shape-script-step-nameplate {\n  background: var(--rpgyw-forest) !important;', 'Step 2 uses standard forest nameplate')
+has(css, '.character-record-section-summary,\n.character-record-section:nth-child(even) > .character-record-section-summary,', 'closed record accordions share light-olive face')
+has(css, '.character-record-section[open] > .character-record-section-summary,', 'open record accordions use forest face')
+has(css, '.character-record-section-body,\n.character-record-nested-body {\n  background: var(--rpgyw-olive-dark) !important;', 'record reveals use dark-olive plaque')
+has(lookbook, 'Script + character-record QA rule (1.12.84)')
+console.log('RPG Your Way 1.12.84 Script/character-record QA II checks passed.')
+

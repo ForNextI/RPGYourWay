@@ -934,3 +934,24 @@ When continuing RPG Your Way UI work:
 - Character-record action buttons use the canonical raised-button family. Primary editing uses forest + cream; secondary actions use cream + forest; hover/focus uses lime text where appropriate.
 - **Remove this character** must not be a permanent red exception. It is a normal house button at rest. The confirmation state may become dark olive, but remains part of the same button family rather than turning into a red slab.
 - Character profile/edit workspaces use raised light-olive plaques and recessed parchment inputs with rounded inner corners.
+
+## Script + character-record QA rule (1.12.84)
+
+### Start and Play carryovers
+
+- The compact Play **Current party / Max party size** plaque must remain fully inside the character rail. It may be tightened, but it should not clip or force horizontal overflow.
+- In the proposed-party-leader plaque, **Proposed party leader:** is an upper-left label. The proposed leader name itself is the centered visual event.
+
+### Script
+
+- Script accepts useful **digital records of campaigns played elsewhere**, not only RPG Your Way transcripts. Copy may explicitly mention other text-to-play games, other game systems, chat/campaign logs, and digital notes or written records from home tabletop play.
+- The numbered Script step nameplates use the standard **forest + cream** button treatment consistently. Do not make Step 2 a dark-olive exception.
+- Parchment on Script is a text-surface material: use it for transcript drop/paste and text-entry controls. Explanatory copy and grouping furniture use cream or olive instead of parchment.
+
+### Character record accordions
+
+- A **closed** record accordion summary is light olive with forest lettering.
+- An **open** record accordion summary is forest with cream lettering.
+- Hover/focus changes the accordion lettering to canonical lime without changing the open/closed surface color.
+- The revealed record plaque is **dark olive**. Inset stat, condition, list, and other information panels inside it are **cream**.
+- Do not use parchment as a generic character-record background. Reserve parchment for true text-entry/text-document surfaces.

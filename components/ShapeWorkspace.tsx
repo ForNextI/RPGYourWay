@@ -421,7 +421,6 @@ export function ShapeWorkspace() {
     <section className="shape-workbench" aria-labelledby="shape-workbench-title">
       <div className="shape-job-heading shape-workbench-heading">
         <div>
-          <p className="kicker">Script workbench</p>
           <h2 id="shape-workbench-title">Give Script the campaign you actually played.</h2>
           <p>Three steps: give Script the transcript, answer the story questions, then see the maximum usage before anything is charged.</p>
         </div>
@@ -519,8 +518,10 @@ export function ShapeWorkspace() {
           <details className="shape-source-help">
             <summary>What should I give Script? <span className="accordion-plus" aria-hidden="true" /></summary>
             <div>
-              <p>Use the raw gameplay transcript. Script is meant to tell the same adventure as prose, not redesign the campaign.</p>
-              <p>For campaigns larger than one million characters, divide the transcript at natural story breaks such as a session, chapter, adventure, or major location. Process the parts in chronological order using an ongoing campaign project.</p>
+              <p><strong>Any useful digital record of the campaign you actually played.</strong> It does not have to come from RPG Your Way.</p>
+              <p>That can include RPG Your Way gameplay, transcripts from other text-to-play games or other game systems, chat or campaign logs, and digital notes or written records from a home tabletop campaign. Paste the text below or upload or drop a readable transcript file and Script will do its best to reconstruct the played adventure.</p>
+              <p>Script is meant to tell the same adventure as prose, not redesign the campaign. A chronological record with clear speaker or event information will usually give it more to work with, but you do not need to clean out every die roll, rules exchange, or bit of table chatter first.</p>
+              <p>For campaigns larger than one million characters, divide the record at natural story breaks such as a session, chapter, adventure, or major location. Process the parts in chronological order using an ongoing campaign project.</p>
               <p>Script automatically handles smaller internal chunks, continuity analysis, and prose seams. You do not need to prepare those yourself.</p>
             </div>
           </details>
