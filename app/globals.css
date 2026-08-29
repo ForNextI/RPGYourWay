@@ -8842,3 +8842,43 @@ body :where(button, summary, [role="button"]):focus-visible .accordion-plus {
   background: var(--rpgyw-forest) !important;
   color: var(--rpgyw-lime) !important;
 }
+
+
+/* RPG Your Way 1.12.79 — Start-page QA compression.
+   The chosen game-system anchor keeps cream lettering in every state, and an
+   opened campaign consumes only the vertical space its current controls need. */
+.start-rules-card--single-step .start-rules-current--display,
+.start-rules-card--single-step .start-rules-current--display:hover,
+.start-rules-card--single-step .start-rules-current--display:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.start-rules-card--single-step .start-rules-current--display .start-rules-current-copy,
+.start-rules-card--single-step .start-rules-current--display .start-rules-current-copy > strong,
+.start-rules-card--single-step .start-rules-current--display .start-rules-current-copy > span,
+.start-rules-card--single-step .start-rules-current--display:hover .start-rules-current-copy,
+.start-rules-card--single-step .start-rules-current--display:hover .start-rules-current-copy > strong,
+.start-rules-card--single-step .start-rules-current--display:hover .start-rules-current-copy > span,
+.start-rules-card--single-step .start-rules-current--display:focus-visible .start-rules-current-copy,
+.start-rules-card--single-step .start-rules-current--display:focus-visible .start-rules-current-copy > strong,
+.start-rules-card--single-step .start-rules-current--display:focus-visible .start-rules-current-copy > span {
+  color: var(--rpgyw-cream) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.start-campaign-hub .play-entry-card:first-child,
+.start-campaign-hub .play-entry-adventures,
+.campaign-hub-card,
+.campaign-hub-card[open] {
+  min-height: 0 !important;
+  height: auto !important;
+  align-self: start;
+}
+.campaign-hub-card > .campaign-control-body {
+  min-height: 0 !important;
+  height: auto !important;
+  grid-auto-rows: max-content;
+  align-content: start;
+  gap: .65rem;
+}

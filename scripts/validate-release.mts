@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.78')
-assert.equal(pkg.rpgywVersion, '1.12.78')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.78'", 'visible app version')
+assert.equal(pkg.version, '1.12.79')
+assert.equal(pkg.rpgywVersion, '1.12.79')
+has(read('lib/version.ts'), "APP_VERSION = '1.12.79'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -362,3 +362,8 @@ has(css, `.campaign-danger-button {\n  border: 1px solid var(--rpgyw-forest-line
 has(lookbook, 'Start-page Step 1 palette')
 
 console.log('RPG Your Way 1.12.78 Start-page lookbook correction checks passed.')
+
+// 1.12.79 Start-page QA compression.
+has(css, 'RPG Your Way 1.12.79 — Start-page QA compression.')
+has(css, 'grid-auto-rows: max-content', 'campaign controls size to content')
+console.log('RPG Your Way 1.12.79 Start-page QA compression checks passed.')
