@@ -8882,3 +8882,98 @@ body :where(button, summary, [role="button"]):focus-visible .accordion-plus {
   align-content: start;
   gap: .65rem;
 }
+
+
+/* RPG Your Way 1.12.80 — Start-page QA II.
+   The chosen game-system anchor uses the normal forest/cream -> forest/lime
+   interaction, Start Here gains its plain New Campaign subtitle, and campaign
+   controls shrink-wrap compact solo campaigns while expanding naturally for
+   multiplayer governance. */
+.start-rules-card--single-step .start-rules-current--display,
+.start-rules-card--single-step .start-rules-current--display:active {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.start-rules-card--single-step .start-rules-current--display .start-rules-current-copy,
+.start-rules-card--single-step .start-rules-current--display .start-rules-current-copy > strong,
+.start-rules-card--single-step .start-rules-current--display .start-rules-current-copy > span {
+  color: var(--rpgyw-cream) !important;
+}
+.start-rules-card--single-step .start-rules-current--display:hover,
+.start-rules-card--single-step .start-rules-current--display:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.start-rules-card--single-step .start-rules-current--display:hover .start-rules-current-copy,
+.start-rules-card--single-step .start-rules-current--display:hover .start-rules-current-copy > strong,
+.start-rules-card--single-step .start-rules-current--display:hover .start-rules-current-copy > span,
+.start-rules-card--single-step .start-rules-current--display:focus-visible .start-rules-current-copy,
+.start-rules-card--single-step .start-rules-current--display:focus-visible .start-rules-current-copy > strong,
+.start-rules-card--single-step .start-rules-current--display:focus-visible .start-rules-current-copy > span {
+  color: var(--rpgyw-lime) !important;
+}
+/* The screw is hardware, not hover copy: only its rotation changes. */
+.start-rules-card--single-step .start-rules-current--display .start-rules-accordion-plus,
+.start-rules-card--single-step .start-rules-current--display:hover .start-rules-accordion-plus,
+.start-rules-card--single-step .start-rules-current--display:focus-visible .start-rules-accordion-plus {
+  color: var(--rpgyw-forest) !important;
+}
+
+.start-rules-subtitle {
+  position: absolute;
+  z-index: 2;
+  top: 3.45rem;
+  left: 1.05rem;
+  width: 13.1rem;
+  margin: 0;
+  color: var(--rpgyw-forest);
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: .82rem;
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: center;
+}
+
+/* Compact campaigns put their identity and Continue action on one row. Extra
+   multiplayer members, votes and administration add rows only when present. */
+.campaign-hub-card > .campaign-control-body {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-auto-rows: max-content;
+  align-content: start;
+  align-items: center;
+  gap: .45rem .75rem !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: .55rem .7rem .65rem !important;
+}
+.campaign-hub-card > .campaign-control-body > .campaign-hub-primary-action {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  margin: 0;
+}
+.campaign-hub-card > .campaign-control-body > .campaign-control-heading {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  margin: 0;
+}
+.campaign-hub-card > .campaign-control-body > :not(.campaign-hub-primary-action):not(.campaign-control-heading) {
+  grid-column: 1 / -1;
+}
+.campaign-hub-card > .campaign-control-body > .campaign-danger-details {
+  margin: .05rem 0 0;
+  padding-top: .45rem;
+}
+@media (max-width: 680px) {
+  .start-rules-subtitle { left: .65rem; }
+  .campaign-hub-card > .campaign-control-body { grid-template-columns: 1fr; }
+  .campaign-hub-card > .campaign-control-body > .campaign-hub-primary-action,
+  .campaign-hub-card > .campaign-control-body > .campaign-control-heading {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .campaign-hub-card > .campaign-control-body > .campaign-hub-primary-action { justify-content: stretch; }
+  .campaign-hub-card > .campaign-control-body > .campaign-hub-primary-action .button { width: 100%; justify-content: center; }
+}

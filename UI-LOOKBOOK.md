@@ -885,3 +885,10 @@ When continuing RPG Your Way UI work:
 - if Brett changes a design rule, update this lookbook at the same time so the next webmaster inherits the new rule.
 
 **The design system should become simpler as the site matures, not accumulate another generation of almost-the-same components.**
+
+
+## Start-page compact campaign rule (1.12.80)
+
+- The permanent selected game-system anchor is a forest button with cream copy; hover/focus keeps the forest surface and changes only the copy to lime. The accordion screw never recolors.
+- `Start Here` carries the plain text subtitle `New Campaign` immediately beneath the nameplate.
+- Open campaign controls shrink-wrap their current content. Campaign identity and `Continue Adventure` may share the first row; multiplayer members, votes, and administration add height only when present.

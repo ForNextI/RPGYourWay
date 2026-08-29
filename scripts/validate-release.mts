@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.79')
-assert.equal(pkg.rpgywVersion, '1.12.79')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.79'", 'visible app version')
+assert.equal(pkg.version, '1.12.80')
+assert.equal(pkg.rpgywVersion, '1.12.80')
+has(read('lib/version.ts'), "APP_VERSION = '1.12.80'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -367,3 +367,12 @@ console.log('RPG Your Way 1.12.78 Start-page lookbook correction checks passed.'
 has(css, 'RPG Your Way 1.12.79 — Start-page QA compression.')
 has(css, 'grid-auto-rows: max-content', 'campaign controls size to content')
 console.log('RPG Your Way 1.12.79 Start-page QA compression checks passed.')
+
+
+// 1.12.80 Start-page QA II.
+has(css, 'RPG Your Way 1.12.80 — Start-page QA II.')
+has(start, 'className="start-rules-subtitle">New Campaign</p>', 'Start Here New Campaign subtitle')
+has(css, 'color: var(--rpgyw-lime) !important;', 'game-system hover uses lime copy')
+has(css, 'grid-template-columns: minmax(0, 1fr) auto;', 'compact campaign controls share first row')
+has(gameplayShell, 'Current saved turn: ${partyState?.gameplay.turn_count ?? 0}', 'transcript session note includes current saved turn')
+console.log('RPG Your Way 1.12.80 Start-page QA II checks passed.')

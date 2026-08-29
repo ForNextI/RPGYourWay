@@ -2227,7 +2227,7 @@ export function AigmGameplayShell() {
       const timestamp = entry.created_at ? ` · ${new Date(entry.created_at).toLocaleString()}` : ''
       return [`${speaker}${timestamp}`, entry.text.trim(), '']
     })
-    return [`${title} · RAW GAMEPLAY TRANSCRIPT`, 'This is the unedited player and Game Master gameplay transcript. Multiplayer table chat is separate and is not included.', `Exported ${new Date().toLocaleString()}`, '', ...lines].join('\n')
+    return [`${title} · RAW GAMEPLAY TRANSCRIPT`, 'This is the unedited player and Game Master gameplay transcript. Multiplayer table chat is separate and is not included.', `Current saved turn: ${partyState?.gameplay.turn_count ?? 0}`, `Exported ${new Date().toLocaleString()}`, '', ...lines].join('\n')
   }
 
   function safeFilename(value: string) {
