@@ -37,6 +37,10 @@ export function storedCloudRevision(storage: Storage, adventureId: string) {
   return Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0
 }
 
+export function forgetCloudRevision(storage: Storage, adventureId: string) {
+  storage.removeItem(revisionKey(adventureId))
+}
+
 function rememberCloudRevision(storage: Storage, adventureId: string, revision: number) {
   storage.setItem(revisionKey(adventureId), String(Math.max(1, Math.floor(revision))))
 }

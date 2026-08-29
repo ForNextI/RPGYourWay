@@ -630,6 +630,7 @@ export async function readAdventureIndexWithDatabase(storage: Storage) {
           adventure_id: core.adventure_id,
           adventure_name: canonicalAdventureName(core.state.adventure_name),
           campaign_mode: core.state.campaign_mode ?? 'solo',
+          campaign_administration: core.state.campaign_mode === 'multiplayer' ? (core.state.multiplayer_administration ?? 'shared') : 'solo',
           updated_at: core.updated_at,
           stage: core.state.stage,
           party_names: core.party_names ?? [],

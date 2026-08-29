@@ -17,6 +17,8 @@ export type { DmMysteryCommitment, DmMysteryCommitmentStatus } from '@/lib/aigm/
 export type CharacterStatus = 'queued' | 'analyzing' | 'needs_answer' | 'ready' | 'error'
 export type OnboardingStage = 'party' | 'calibration' | 'complete'
 export type CampaignMode = 'solo' | 'multiplayer'
+export type MultiplayerAdministrationMode = 'shared' | 'coordinator'
+export type CampaignAdministrationMode = 'solo' | MultiplayerAdministrationMode
 
 export interface ConversationMessage {
   role: 'user' | 'assistant'
@@ -229,6 +231,8 @@ export interface SavedAdventureState {
   adventure_name: string
   /** Solo campaigns belong to one account; multiplayer campaigns use persistent cloud membership. */
   campaign_mode?: CampaignMode
+  /** Multiplayer housekeeping is either collective Shared Control or delegated Coordinator Control. */
+  multiplayer_administration?: MultiplayerAdministrationMode
   game_master_name: string
   campaign_direction: CampaignDirection
   campaign_scale: CampaignScale
@@ -262,7 +266,9 @@ export interface AdventureSummary {
   adventure_id: string
   adventure_name: string
   campaign_mode?: CampaignMode
+  campaign_administration?: CampaignAdministrationMode
   cloud_revision?: number
+  cloud_membership?: 'solo_owner' | 'coordinator' | 'member'
   storage_source?: 'cloud' | 'legacy_local'
   updated_at: string
   stage: OnboardingStage
@@ -1157,6 +1163,7 @@ export function normalizeAdventureState(value: unknown): SavedAdventureState | n
       adventure_id: parsed.adventure_id,
       adventure_name: canonicalAdventureName(parsed.adventure_name || ''),
       campaign_mode: parsed.campaign_mode === 'multiplayer' ? 'multiplayer' : 'solo',
+      multiplayer_administration: parsed.multiplayer_administration === 'coordinator' ? 'coordinator' : 'shared',
       game_master_name: typeof parsed.game_master_name === 'string' ? parsed.game_master_name.trim().slice(0, 40) : '',
       campaign_direction: parsed.campaign_direction === 'mostly_open' || parsed.campaign_direction === 'strong_arc' ? parsed.campaign_direction : 'gentle_story',
       campaign_scale: parsed.campaign_scale === 'grounded' || parsed.campaign_scale === 'occasionally_strange' || parsed.campaign_scale === 'cosmic' ? parsed.campaign_scale : 'epic',
@@ -1225,6 +1232,7 @@ export function saveAdventureStateToLocalStorage(storage: Storage, state: SavedA
     adventure_id: state.adventure_id,
     adventure_name: canonicalAdventureName(state.adventure_name),
     campaign_mode: state.campaign_mode ?? 'solo',
+    campaign_administration: state.campaign_mode === 'multiplayer' ? (state.multiplayer_administration ?? 'shared') : 'solo',
     updated_at: state.updated_at,
     stage: state.stage,
     party_names: state.characters

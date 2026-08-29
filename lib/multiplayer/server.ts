@@ -59,6 +59,7 @@ function inviteUrl(inviteCode: string) {
 type SessionRow = {
   id: string
   invite_code: string
+  campaign_id: string | null
   campaign_name: string
   campaign_fingerprint: string
   coordinator_user_id: string
@@ -116,7 +117,7 @@ export async function loadSessionByInvite(inviteCode: string, userId: string): P
   const admin = createAdminClient()
   const { data: sessionData, error: sessionError } = await admin
     .from('multiplayer_sessions')
-    .select('id, invite_code, campaign_name, campaign_fingerprint, coordinator_user_id, status, expires_at')
+    .select('id, invite_code, campaign_id, campaign_name, campaign_fingerprint, coordinator_user_id, status, expires_at')
     .eq('invite_code', cleanCode)
     .maybeSingle()
 
@@ -192,6 +193,7 @@ export async function loadSessionByInvite(inviteCode: string, userId: string): P
   return {
     id: session.id,
     inviteCode: session.invite_code,
+    campaignId: session.campaign_id,
     campaignName: session.campaign_name,
     campaignFingerprint: session.campaign_fingerprint,
     status: session.status,
@@ -225,6 +227,24 @@ export async function createMultiplayerSession(user: User, input: {
   if (characters.length === 0) throw new MultiplayerError('This campaign needs at least one ready character before multiplayer can start.', 400, 'characters_required')
 
   const admin = createAdminClient()
+  const { data: membership, error: membershipError } = await admin
+    .from('campaign_members')
+    .select('membership_status')
+    .eq('campaign_id', localCampaignId)
+    .eq('user_id', user.id)
+    .eq('membership_status', 'active')
+    .maybeSingle()
+  if (membershipError) throw new MultiplayerError(membershipError.message, 503, 'multiplayer_database_unavailable')
+  if (!membership) throw new MultiplayerError('Open the canonical cloud campaign before starting multiplayer.', 403, 'campaign_membership_required')
+  const { data: campaign, error: campaignError } = await admin
+    .from('campaigns')
+    .select('id, mode')
+    .eq('id', localCampaignId)
+    .eq('mode', 'multiplayer')
+    .is('deleted_at', null)
+    .maybeSingle()
+  if (campaignError) throw new MultiplayerError(campaignError.message, 503, 'multiplayer_database_unavailable')
+  if (!campaign) throw new MultiplayerError('This campaign is not configured for multiplayer.', 409, 'multiplayer_campaign_required')
   const sessionId = randomUUID()
   const code = createInviteCode()
   const expiresAt = new Date(Date.now() + SESSION_LIFETIME_MS).toISOString()
@@ -233,6 +253,7 @@ export async function createMultiplayerSession(user: User, input: {
   const { error: sessionError } = await admin.from('multiplayer_sessions').insert({
     id: sessionId,
     invite_code: code,
+    campaign_id: localCampaignId,
     campaign_name: campaignName,
     campaign_fingerprint: fingerprint,
     coordinator_user_id: user.id,
@@ -272,6 +293,26 @@ export async function joinMultiplayerSession(user: User, inviteCode: string) {
   }
 
   const admin = createAdminClient()
+  if (lobby.campaignId) {
+    const { data: existingMembership, error: membershipQueryError } = await admin
+      .from('campaign_members')
+      .select('membership_status')
+      .eq('campaign_id', lobby.campaignId)
+      .eq('user_id', user.id)
+      .maybeSingle()
+    if (membershipQueryError) throw new MultiplayerError(membershipQueryError.message, 503, 'multiplayer_database_unavailable')
+    if (existingMembership?.membership_status === 'removed') throw new MultiplayerError('This campaign removed your membership. A current member must resolve that before you can rejoin.', 403, 'campaign_membership_removed')
+    const now = new Date().toISOString()
+    const { error: memberError } = await admin.from('campaign_members').upsert({
+      campaign_id: lobby.campaignId,
+      user_id: user.id,
+      membership_status: 'active',
+      joined_at: now,
+      last_opened_at: now,
+      display_name: multiplayerDisplayName(user),
+    }, { onConflict: 'campaign_id,user_id' })
+    if (memberError) throw new MultiplayerError(memberError.message, 503, 'multiplayer_database_unavailable')
+  }
   const { error } = await admin.from('multiplayer_seats').insert({
     id: randomUUID(),
     session_id: lobby.id,

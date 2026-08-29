@@ -1,7 +1,7 @@
 import type { User } from '@supabase/supabase-js'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
-import type { CampaignMode, OnboardingStage, SavedAdventureState } from '@/lib/aigm/campaign-storage'
+import type { CampaignAdministrationMode, CampaignMode, OnboardingStage, SavedAdventureState } from '@/lib/aigm/campaign-storage'
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
@@ -41,6 +41,19 @@ function campaignId(value: unknown) {
 
 function modeFrom(value: unknown): CampaignMode {
   return value === 'multiplayer' ? 'multiplayer' : 'solo'
+}
+
+function administrationFrom(mode: CampaignMode, value: unknown): CampaignAdministrationMode {
+  if (mode === 'solo') return 'solo'
+  return value === 'coordinator' ? 'coordinator' : 'shared'
+}
+
+function memberDisplayName(user: User) {
+  const metadata = user.user_metadata as Record<string, unknown> | undefined
+  const metadataName = metadata && typeof metadata.display_name === 'string' ? metadata.display_name : ''
+  const fullName = metadata && typeof metadata.full_name === 'string' ? metadata.full_name : ''
+  const emailName = user.email?.split('@')[0] ?? ''
+  return (metadataName || fullName || emailName || 'Player').replace(/\s+/g, ' ').trim().slice(0, 48) || 'Player'
 }
 
 function stageFrom(value: unknown): OnboardingStage {
@@ -97,22 +110,33 @@ export async function listCloudCampaigns(userId: string) {
 
   const { data, error } = await admin
     .from('campaigns')
-    .select('id, mode, name, stage, party_names, revision, created_at, updated_at')
+    .select('id, created_by_user_id, mode, administration_mode, coordinator_user_id, name, stage, party_names, revision, created_at, updated_at')
     .in('id', ids)
     .is('deleted_at', null)
     .order('updated_at', { ascending: false })
   if (error) throw new CloudCampaignError(error.message, 503, 'cloud_campaign_database_unavailable')
 
-  return (data ?? []).map((row: { id: string; mode: unknown; name: string; stage: unknown; party_names: unknown; revision: number | string; created_at: string; updated_at: string }) => ({
-    adventure_id: row.id as string,
-    adventure_name: row.name as string,
-    campaign_mode: modeFrom(row.mode),
-    stage: stageFrom(row.stage),
-    party_names: Array.isArray(row.party_names) ? row.party_names.filter((name: unknown): name is string => typeof name === 'string') : [],
-    cloud_revision: Number(row.revision) || 1,
-    created_at: row.created_at as string,
-    updated_at: row.updated_at as string,
-  }))
+  return (data ?? []).map((row: { id: string; created_by_user_id: string | null; mode: unknown; administration_mode: unknown; coordinator_user_id: string | null; name: string; stage: unknown; party_names: unknown; revision: number | string; created_at: string; updated_at: string }) => {
+    const mode = modeFrom(row.mode)
+    const administration = administrationFrom(mode, row.administration_mode)
+    const membership = administration === 'solo' && row.created_by_user_id === userId
+      ? 'solo_owner' as const
+      : administration === 'coordinator' && row.coordinator_user_id === userId
+        ? 'coordinator' as const
+        : 'member' as const
+    return {
+      adventure_id: row.id as string,
+      adventure_name: row.name as string,
+      campaign_mode: mode,
+      campaign_administration: administration,
+      cloud_membership: membership,
+      stage: stageFrom(row.stage),
+      party_names: Array.isArray(row.party_names) ? row.party_names.filter((name: unknown): name is string => typeof name === 'string') : [],
+      cloud_revision: Number(row.revision) || 1,
+      created_at: row.created_at as string,
+      updated_at: row.updated_at as string,
+    }
+  })
 }
 
 export async function loadCloudCampaign(userId: string, rawId: unknown) {
@@ -153,6 +177,7 @@ export async function saveCloudCampaign(user: User, rawId: unknown, input: {
   const state = stateFrom(input.state, id)
   const expectedRevision = Number.isFinite(input.expectedRevision) ? Math.max(0, Math.floor(input.expectedRevision)) : 0
   const mode = modeFrom(input.mode ?? state.campaign_mode)
+  const administration = administrationFrom(mode, state.multiplayer_administration)
   const name = cleanName(state.adventure_name)
   const stage = stageFrom(state.stage)
   const names = partyNames(state)
@@ -175,6 +200,8 @@ export async function saveCloudCampaign(user: User, rawId: unknown, input: {
       id,
       created_by_user_id: user.id,
       mode,
+      administration_mode: administration,
+      coordinator_user_id: administration === 'coordinator' ? user.id : null,
       name,
       stage,
       party_names: names,
@@ -191,6 +218,7 @@ export async function saveCloudCampaign(user: User, rawId: unknown, input: {
       membership_status: 'active',
       joined_at: now,
       last_opened_at: now,
+      display_name: memberDisplayName(user),
     })
     if (memberError) {
       await admin.from('campaigns').delete().eq('id', id)

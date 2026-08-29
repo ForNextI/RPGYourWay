@@ -165,35 +165,6 @@ export function useMultiplayerSession() {
     }
   }, [session?.inviteCode, session?.isCoordinator])
 
-  const leaveSession = useCallback(async () => {
-    const code = session?.inviteCode
-    if (!code) return
-    setError('')
-    const response = await fetch(`/api/multiplayer/sessions/${encodeURIComponent(code)}/leave`, { method: 'POST' })
-    const payload = await response.json().catch(() => ({})) as { error?: string }
-    if (!response.ok) {
-      const leaveError = new Error(payload.error || 'Could not leave the multiplayer session.')
-      setError(leaveError.message)
-      throw leaveError
-    }
-    setSession(null)
-    putMultiplayerCodeInUrl(null)
-  }, [session?.inviteCode])
-
-  const closeSession = useCallback(async () => {
-    const code = session?.inviteCode
-    if (!code) return
-    setError('')
-    const response = await fetch(`/api/multiplayer/sessions/${encodeURIComponent(code)}/close`, { method: 'POST' })
-    const payload = await response.json().catch(() => ({})) as { error?: string }
-    if (!response.ok) {
-      const closeError = new Error(payload.error || 'Could not close the multiplayer session.')
-      setError(closeError.message)
-      throw closeError
-    }
-    setSession(null)
-    putMultiplayerCodeInUrl(null)
-  }, [session?.inviteCode])
 
   return {
     session,
@@ -206,7 +177,5 @@ export function useMultiplayerSession() {
     setCharacterClaim,
     updateDisplayName,
     syncCharacters,
-    leaveSession,
-    closeSession,
   }
 }

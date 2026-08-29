@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, Copy, LoaderCircle, MessageSquareText, Send, UsersRound, X } from 'lucide-react'
+import { Check, Copy, LoaderCircle, MessageSquareText, Send, UsersRound } from 'lucide-react'
 import { FormEvent, type RefObject, useEffect, useMemo, useRef, useState } from 'react'
 import { loadAblyRealtime, type AblyErrorLike, type AblyMessageLike, type AblyPresenceLike, type AblyRealtimeLike } from '@/components/multiplayer/ably-browser'
 import { MultiplayerPanelSwitcher, type MultiplayerSecondaryPanel } from '@/components/multiplayer/MultiplayerPanelSwitcher'
@@ -31,8 +31,6 @@ export function TableChatPanel({
   onRefreshSession,
   onSetCharacterClaim,
   onUpdateDisplayName,
-  onLeaveSession,
-  onCloseSession,
   onBackToPlay,
   showBackToPlay = true,
   showPanelSwitcher = true,
@@ -47,8 +45,6 @@ export function TableChatPanel({
   onRefreshSession: () => Promise<void>
   onSetCharacterClaim: (characterId: string, claimed: boolean) => Promise<void>
   onUpdateDisplayName: (displayName: string) => Promise<unknown>
-  onLeaveSession: () => Promise<void>
-  onCloseSession: () => Promise<void>
   onBackToPlay: () => void
   showBackToPlay?: boolean
   showPanelSwitcher?: boolean
@@ -64,8 +60,6 @@ export function TableChatPanel({
   const [seatBusy, setSeatBusy] = useState(false)
   const [nameBusy, setNameBusy] = useState(false)
   const [displayNameDraft, setDisplayNameDraft] = useState('')
-  const [leaving, setLeaving] = useState(false)
-  const [closing, setClosing] = useState(false)
   const [screenReaderNotice, setScreenReaderNotice] = useState('')
   const realtimeRef = useRef<AblyRealtimeLike | null>(null)
   const logRef = useRef<HTMLDivElement | null>(null)
@@ -328,25 +322,6 @@ export function TableChatPanel({
     }
   }
 
-  async function leaveSession() {
-    if (!window.confirm('Leave this multiplayer session? Your player seat will be freed for someone else.')) return
-    setLeaving(true)
-    try {
-      await onLeaveSession()
-    } finally {
-      setLeaving(false)
-    }
-  }
-
-  async function closeSession() {
-    if (!window.confirm('Close this multiplayer session for everyone?')) return
-    setClosing(true)
-    try {
-      await onCloseSession()
-    } finally {
-      setClosing(false)
-    }
-  }
 
   const connectedCount = session.participants.filter((participant) => onlineClientIds.has(participant.realtimeClientId)).length
 
@@ -384,7 +359,6 @@ export function TableChatPanel({
               <div key={participant.seatId} className="aigm-multiplayer-participant">
                 <span className={`aigm-presence-dot ${onlineClientIds.has(participant.realtimeClientId) ? 'aigm-presence-dot--online' : ''}`} aria-hidden="true" />
                 <span><strong>{participant.displayName}{participant.isSelf ? ' (you)' : ''}</strong>{participant.characterNames.length ? ` · ${participant.characterNames.join(', ')}` : ' · no characters selected'}</span>
-                {participant.isCoordinator ? <span className="aigm-coordinator-badge">Coordinator</span> : null}
               </div>
             ))}
           </div>
@@ -418,15 +392,6 @@ export function TableChatPanel({
             </>
           ) : null}
 
-          {session.isCoordinator ? (
-            <button type="button" className="aigm-close-multiplayer" disabled={closing} onClick={() => void closeSession()}>
-              {closing ? <LoaderCircle className="animate-spin" aria-hidden="true" /> : <X aria-hidden="true" />}Close multiplayer session
-            </button>
-          ) : (
-            <button type="button" className="aigm-leave-multiplayer" disabled={leaving} onClick={() => void leaveSession()}>
-              {leaving ? <LoaderCircle className="animate-spin" aria-hidden="true" /> : <X aria-hidden="true" />}Leave multiplayer table
-            </button>
-          )}
         </div>
       </details>
 

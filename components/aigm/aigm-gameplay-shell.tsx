@@ -1304,7 +1304,6 @@ export function AigmGameplayShell() {
   const [mobilePanel, setMobilePanel] = useState<'gameplay' | 'chat' | 'tools' | 'characters'>('gameplay')
   const [desktopMultiplayerPanel, setDesktopMultiplayerPanel] = useState<MultiplayerSecondaryPanel>('chat')
   const [multiplayerUnreadCount, setMultiplayerUnreadCount] = useState(0)
-  const [exitingMultiplayer, setExitingMultiplayer] = useState(false)
   const [isDesktopPlayLayout, setIsDesktopPlayLayout] = useState(false)
   const multiplayer = useMultiplayerSession()
   const [dragTargetCharacterId, setDragTargetCharacterId] = useState<string | null>(null)
@@ -1564,23 +1563,6 @@ export function AigmGameplayShell() {
     persist({ ...partyState, characters, updated_at: new Date().toISOString() })
   }
 
-  async function exitMultiplayerToSoloPlay() {
-    if (exitingMultiplayer) return
-    const current = multiplayer.session
-    if (!current) {
-      window.location.assign('/play')
-      return
-    }
-    setExitingMultiplayer(true)
-    try {
-      if (current.isCoordinator) await multiplayer.closeSession()
-      else await multiplayer.leaveSession()
-      window.location.assign('/play')
-    } catch (exitError) {
-      setError(exitError instanceof Error ? exitError.message : 'Could not leave multiplayer cleanly.')
-      setExitingMultiplayer(false)
-    }
-  }
 
   function removePartyCharacter(characterId: string) {
     if (!partyState) return
@@ -2315,7 +2297,7 @@ export function AigmGameplayShell() {
           <section className="aigm-multiplayer-guest-intro" aria-labelledby="multiplayer-guest-title">
             <p className="aigm-table-chat-eyebrow">Multiplayer lobby</p>
             <h1 id="multiplayer-guest-title">{multiplayerSession.campaignName}</h1>
-            <p>You are connected to the table. Shared AIGM gameplay will use the coordinator’s campaign copy; this lobby keeps player presence, character seats, and human table chat synchronized.</p>
+            <p>You are connected to the table. The campaign itself lives in RPG Your Way cloud storage; this lobby keeps player presence, character seats, and human table chat synchronized.</p>
           </section>
           <TableChatPanel
             session={multiplayerSession}
@@ -2327,8 +2309,6 @@ export function AigmGameplayShell() {
             onRefreshSession={multiplayer.refreshSession}
             onSetCharacterClaim={multiplayer.setCharacterClaim}
             onUpdateDisplayName={multiplayer.updateDisplayName}
-            onLeaveSession={multiplayer.leaveSession}
-            onCloseSession={multiplayer.closeSession}
             onBackToPlay={() => undefined}
             showBackToPlay={false}
             showPanelSwitcher={false}
@@ -2542,7 +2522,7 @@ export function AigmGameplayShell() {
                       <button type="button" onClick={() => void startMultiplayerSession()} disabled={multiplayer.starting || readyCharacters.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-45">{multiplayer.starting ? <LoaderCircle className="size-3.5 animate-spin" aria-hidden="true" /> : <UsersRound className="size-3.5" aria-hidden="true" />}Start Multiplayer</button>
                     ) : null}
                     {multiplayerActive ? (
-                      <button type="button" onClick={() => void exitMultiplayerToSoloPlay()} disabled={exitingMultiplayer} className="rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-45">{exitingMultiplayer ? 'Leaving multiplayer…' : 'Back to Play'}</button>
+                      <Link href="/start" className="rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground">Campaign controls</Link>
                     ) : (
                       <Link href="/play" className="rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground">Back to Play</Link>
                     )}
@@ -2565,8 +2545,6 @@ export function AigmGameplayShell() {
             onRefreshSession={multiplayer.refreshSession}
             onSetCharacterClaim={multiplayer.setCharacterClaim}
             onUpdateDisplayName={multiplayer.updateDisplayName}
-            onLeaveSession={multiplayer.leaveSession}
-            onCloseSession={multiplayer.closeSession}
             onBackToPlay={() => setMobilePanel('gameplay')}
             panelRef={chatPanelRef}
           />

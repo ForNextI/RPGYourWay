@@ -7814,3 +7814,267 @@ html {
   outline: 3px solid var(--lime);
   outline-offset: 3px;
 }
+
+/* RPG Your Way 1.12.73 — campaign hub and multiplayer governance.
+   Start owns durable campaign administration. Table Chat remains a lightweight
+   session surface rather than a second place for destructive controls. */
+.start-campaign-hub {
+  margin: 0 0 1.15rem;
+}
+.start-campaign-hub > summary {
+  min-height: 3.1rem;
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  padding: .82rem 1rem;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 88%, white), var(--landing-pale));
+  color: var(--forest-deep);
+  cursor: pointer;
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+.start-campaign-hub[open] > summary {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.start-campaign-hub > summary:hover,
+.start-campaign-hub > summary:focus-visible {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--forest-deep) 92%, white), var(--forest-deep));
+  color: var(--cream-bright);
+}
+.start-campaign-hub .start-existing-body {
+  border-top: 1px solid var(--rpgyw-brass-edge);
+}
+.start-campaign-hub .play-entry-grid {
+  align-items: start;
+}
+.start-campaign-hub .play-entry-adventure {
+  display: grid;
+  gap: .55rem;
+  padding: .62rem;
+  cursor: default;
+  background: color-mix(in srgb, var(--cream-bright) 96%, white);
+}
+.start-campaign-hub .play-entry-adventure:hover {
+  border-color: var(--border-green);
+  background: color-mix(in srgb, var(--cream-bright) 96%, white);
+}
+.play-entry-adventure-open {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.4rem;
+  border: 1px solid color-mix(in srgb, var(--rpgyw-brass-edge) 84%, var(--forest));
+  border-radius: 13px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--cream-bright) 96%, white), var(--cream));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .8), 0 2px 0 var(--rpgyw-brass-shadow);
+  padding: .72rem .82rem;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+.play-entry-adventure-open:hover,
+.play-entry-adventure-open:focus-visible {
+  border-color: var(--forest);
+  background: var(--lime-soft);
+}
+.play-entry-adventure-open:disabled { cursor: wait; opacity: .7; }
+
+.campaign-control-details {
+  border: 1px solid color-mix(in srgb, var(--forest) 62%, var(--rpgyw-brass-edge));
+  border-radius: 12px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--landing-pale) 90%, white);
+}
+.campaign-control-details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  min-height: 2.5rem;
+  padding: .55rem .72rem;
+  cursor: pointer;
+  color: var(--forest-deep);
+  font-size: .8rem;
+  font-weight: 900;
+}
+.campaign-control-details > summary > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+}
+.campaign-control-details > summary svg { width: 1rem; height: 1rem; }
+.campaign-control-details > summary:hover,
+.campaign-control-details > summary:focus-visible {
+  background: color-mix(in srgb, var(--forest-deep) 94%, white);
+  color: var(--cream-bright);
+}
+.campaign-control-body {
+  display: grid;
+  gap: .8rem;
+  border-top: 1px solid var(--rpgyw-brass-edge);
+  padding: .75rem;
+}
+.campaign-control-status {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: .8rem;
+}
+.campaign-control-status svg { width: 1rem; height: 1rem; }
+.campaign-control-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem;
+}
+.campaign-control-heading > div { display: grid; gap: .1rem; }
+.campaign-control-heading strong { color: var(--forest-deep); font-size: .9rem; }
+.campaign-control-heading span { color: var(--muted); font-size: .72rem; }
+.campaign-control-badge {
+  border: 1px solid var(--rpgyw-brass-edge);
+  border-radius: 999px;
+  background: var(--cream-bright);
+  padding: .25rem .5rem;
+  color: var(--forest-deep) !important;
+  font-size: .65rem !important;
+  font-weight: 900;
+}
+.campaign-decisions,
+.campaign-members {
+  display: grid;
+  gap: .5rem;
+}
+.campaign-decisions h3,
+.campaign-members h3 {
+  margin: 0;
+  color: var(--forest-deep);
+  font-size: .78rem;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+.campaign-decision-card {
+  display: grid;
+  gap: .45rem;
+  border: 1px solid color-mix(in srgb, var(--rpgyw-brass-edge) 80%, var(--forest));
+  border-radius: 11px;
+  background: var(--cream-bright);
+  padding: .65rem;
+}
+.campaign-decision-card > div:first-child { display: grid; gap: .08rem; }
+.campaign-decision-card strong { color: var(--forest-deep); font-size: .83rem; }
+.campaign-decision-card span,
+.campaign-decision-card p,
+.campaign-control-note { margin: 0; color: var(--muted); font-size: .72rem; line-height: 1.35; }
+.campaign-decision-actions,
+.campaign-member-admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+.campaign-decision-actions button,
+.campaign-member-row button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .3rem;
+  min-height: 2rem;
+  border: 1px solid var(--rpgyw-brass-edge);
+  border-radius: 9px;
+  background: linear-gradient(180deg, var(--cream-bright), var(--cream));
+  padding: .3rem .52rem;
+  color: var(--forest-deep);
+  cursor: pointer;
+  font-size: .68rem;
+  font-weight: 900;
+}
+.campaign-decision-actions button svg,
+.campaign-member-row button svg { width: .9rem; height: .9rem; }
+.campaign-decision-actions button:hover,
+.campaign-decision-actions button:focus-visible,
+.campaign-member-row button:hover,
+.campaign-member-row button:focus-visible,
+.campaign-decision-actions button.is-selected {
+  background: var(--forest-deep);
+  color: var(--cream-bright);
+}
+.campaign-decision-actions button:disabled,
+.campaign-member-row button:disabled { cursor: default; opacity: .55; }
+.campaign-member-list { display: grid; gap: .38rem; }
+.campaign-member-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem;
+  border-top: 1px solid color-mix(in srgb, var(--border-green) 70%, transparent);
+  padding-top: .42rem;
+}
+.campaign-member-row > span { color: var(--muted); font-size: .75rem; }
+.campaign-member-row > span strong { color: var(--forest-deep); }
+
+.campaign-danger-details {
+  border-top: 1px solid color-mix(in srgb, var(--danger) 28%, var(--rpgyw-brass-edge));
+  padding-top: .45rem;
+}
+.campaign-danger-details > summary {
+  width: fit-content;
+  cursor: pointer;
+  color: color-mix(in srgb, var(--danger) 72%, var(--forest-deep));
+  font-size: .7rem;
+  font-weight: 900;
+}
+.campaign-danger-body {
+  display: grid;
+  gap: .65rem;
+  margin-top: .55rem;
+}
+.campaign-danger-body > div {
+  display: grid;
+  gap: .4rem;
+  border: 1px solid color-mix(in srgb, var(--danger) 25%, var(--rpgyw-brass-edge));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--cream-bright) 96%, white);
+  padding: .6rem;
+}
+.campaign-danger-body p { margin: 0; color: var(--muted); font-size: .72rem; line-height: 1.4; }
+.campaign-danger-button {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  min-height: 2.15rem;
+  border: 1px solid #6d1d18;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--danger) 9%, var(--cream-bright));
+  padding: .35rem .58rem;
+  color: #6d1d18;
+  cursor: pointer;
+  font-size: .7rem;
+  font-weight: 900;
+}
+.campaign-danger-button:hover,
+.campaign-danger-button:focus-visible { background: var(--danger); color: white; }
+.campaign-danger-button svg { width: .95rem; height: .95rem; }
+.start-multiplayer-administration {
+  display: grid;
+  gap: .55rem;
+  margin-top: .8rem;
+  border-top: 1px solid color-mix(in srgb, var(--rpgyw-brass-edge) 65%, transparent);
+  padding-top: .8rem;
+}
+
+@media (max-width: 780px) {
+  .play-entry-adventure-open,
+  .campaign-control-heading,
+  .campaign-member-row { align-items: stretch; flex-direction: column; }
+  .campaign-member-admin-actions,
+  .campaign-decision-actions { width: 100%; }
+  .campaign-member-admin-actions button,
+  .campaign-decision-actions button { flex: 1 1 auto; }
+}

@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.72')
-assert.equal(pkg.rpgywVersion, '1.12.72')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.72'", 'visible app version')
+assert.equal(pkg.version, '1.12.73')
+assert.equal(pkg.rpgywVersion, '1.12.73')
+has(read('lib/version.ts'), "APP_VERSION = '1.12.73'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -37,6 +37,7 @@ for (const file of [
   'app/legal/privacy/page.tsx',
   'app/legal/terms/page.tsx',
   'components/start/StartOnboarding.tsx',
+  'components/start/CampaignHub.tsx',
   'components/aigm/rpgyw-start-entry.tsx',
   'components/aigm/aigm-gameplay-shell.tsx',
   'components/multiplayer/TableChatPanel.tsx',
@@ -44,7 +45,9 @@ for (const file of [
   'lib/aigm/campaign-storage.ts',
   'lib/aigm/campaign-persistence.ts',
   'lib/aigm/cloud-campaigns.ts',
+  'lib/aigm/campaign-governance.ts',
   'lib/cloud-campaigns/server.ts',
+  'lib/cloud-campaigns/governance.ts',
   'lib/multiplayer/server.ts',
   'lib/usage/server-billing.ts',
   'lib/usage/play-turn-billing.ts',
@@ -61,6 +64,7 @@ for (const file of [
   'app/api/stripe/webhook/route.ts',
   'app/api/multiplayer/sessions/route.ts',
   'app/api/multiplayer/ably-token/route.ts',
+  'app/api/campaigns/[campaignId]/governance/route.ts',
   'supabase/migrations/20260825003000_shared_usage_balance.sql',
   'supabase/migrations/20260825060000_script_commercial_billing.sql',
   'supabase/migrations/20260825120000_play_provider_usage.sql',
@@ -68,6 +72,7 @@ for (const file of [
   'supabase/migrations/20260828043000_native_multiplayer_phase1.sql',
   'supabase/migrations/20260828073000_multiplayer_names_multi_character.sql',
   'supabase/migrations/20260828163000_cloud_campaigns.sql',
+  'supabase/migrations/20260829000000_campaign_governance.sql',
   'scripts/validate-accessibility.mts',
   'scripts/test-shape-runtime.mts',
   'scripts/test-usage-money.mts',
@@ -116,6 +121,9 @@ const start = read('components/start/StartOnboarding.tsx')
 has(start, "campaignMode === 'solo' ? ' start-choice--selected' : ''")
 has(start, "campaignMode === 'multiplayer' ? ' start-choice--selected' : ''")
 has(start, "ruleset === option.id ? ' start-choice--selected' : ''")
+has(start, 'Shared Control')
+has(start, 'Coordinator Control')
+has(start, "multiplayer_administration: campaignMode === 'multiplayer' ? multiplayerAdministration : undefined")
 
 // Included/free AI work still requires an account and is measured for true provider cost.
 const billing = read('lib/usage/server-billing.ts')
@@ -145,8 +153,14 @@ const account = read('app/account/page.tsx')
 has(account, 'Your account keeps purchases, usage, and cloud campaigns together.')
 lacks(account, 'Play campaigns stay in this browser unless you export them.')
 const startEntry = read('components/aigm/rpgyw-start-entry.tsx')
-has(startEntry, 'RPG Your Way can import WardensPC exports that had already reached Play')
-lacks(startEntry, 'wait for the rebuilt RPG Your Way onboarding flow')
+const campaignHub = read('components/start/CampaignHub.tsx')
+has(startEntry, '<CampaignHub />', 'campaign hub above onboarding')
+before(startEntry, '<CampaignHub />', '<StartOnboarding', 'Campaign hub position')
+has(campaignHub, 'Your campaigns, multiplayer controls &amp; imports')
+has(campaignHub, 'RPG Your Way can import WardensPC exports that had already reached Play')
+has(campaignHub, 'Campaign controls')
+has(campaignHub, 'Pending decisions')
+lacks(campaignHub, 'wait for the rebuilt RPG Your Way onboarding flow')
 const gameplayShell = read('components/aigm/aigm-gameplay-shell.tsx')
 lacks(gameplayShell, '/#wardens-latest-update')
 
@@ -202,15 +216,29 @@ const stripe = read('lib/stripe/server.ts')
 has(stripe, 'processingSurplusCents')
 has(stripe, 'stripe-surplus')
 
-// Multiplayer remains room-scoped through Ably and uses a separate human Table Chat transcript.
+// Multiplayer chat stays lightweight; durable membership and destructive actions live with the cloud campaign.
 const multiplayer = read('lib/multiplayer/server.ts')
 has(multiplayer, 'MAX_MULTIPLAYER_PLAYERS')
 has(multiplayer, 'campaign_fingerprint')
+has(multiplayer, 'campaign_id: localCampaignId')
+has(multiplayer, "from('campaign_members').upsert")
 const tableChat = read('components/multiplayer/TableChatPanel.tsx')
 has(tableChat, 'Table Chat')
 has(tableChat, 'not sent to the AIGM')
+lacks(tableChat, 'Leave multiplayer table')
+lacks(tableChat, 'Close multiplayer session')
+const governanceMigration = read('supabase/migrations/20260829000000_campaign_governance.sql')
+has(governanceMigration, 'campaign_governance_proposals')
+has(governanceMigration, 'campaign_governance_votes')
+has(governanceMigration, "administration_mode in ('solo', 'shared', 'coordinator')")
+const governanceServer = read('lib/cloud-campaigns/governance.ts')
+has(governanceServer, "proposal_type === 'remove_member'")
+has(governanceServer, "proposal_type === 'delete_campaign'")
+has(governanceServer, 'eligible.every')
+has(governanceServer, 'RECOVERY_WINDOW_MS')
 const storage = read('lib/aigm/campaign-storage.ts')
 has(storage, 'Multiplayer table chat is separate')
+has(storage, "export type MultiplayerAdministrationMode = 'shared' | 'coordinator'")
 
 // Accessibility foundation stays wired and the old exact-format CSS trap stays retired.
 const accessibility = read('app/accessibility/page.tsx')
@@ -218,4 +246,4 @@ has(accessibility, 'Accessibility')
 has(css, 'outline: 3px solid var(--lime);')
 assert.match(css, /background:\s*linear-gradient\(\s*180deg,\s*color-mix\(in srgb, var\(--cream-bright\) 97%, white\),\s*var\(--cream\)\s*\) !important;/)
 
-console.log('RPG Your Way 1.12.72 cleanup-series checks passed.')
+console.log('RPG Your Way 1.12.73 campaign-control cleanup checks passed.')

@@ -1,160 +1,20 @@
 'use client'
 
-import { type ChangeEvent, useEffect, useRef, useState } from 'react'
-import { Cloud, FileUp, LoaderCircle, Play, Shield } from 'lucide-react'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { AuthPrompt } from '@/components/AuthPrompt'
 import { StartOnboarding } from '@/components/start/StartOnboarding'
-import {
-  CURRENT_ADVENTURE_KEY,
-  canonicalAdventureName,
-  parseAdventureState,
-  type AdventureSummary,
-  type SavedAdventureState,
-} from '@/lib/aigm/campaign-storage'
-import { readAdventureIndexWithDatabase, saveAdventureState } from '@/lib/aigm/campaign-persistence'
+import { CampaignHub } from '@/components/start/CampaignHub'
 
 export function RpgywStartEntry({ addCharacterMode = false, multiplayerCode = '' }: { addCharacterMode?: boolean; multiplayerCode?: string }) {
-  const [loading, setLoading] = useState(true)
-  const [adventures, setAdventures] = useState<AdventureSummary[]>([])
-  const [notice, setNotice] = useState('')
-  const [error, setError] = useState('')
-  const importRef = useRef<HTMLInputElement | null>(null)
-
-  useEffect(() => {
-    let cancelled = false
-    async function restore() {
-      const summaries = await readAdventureIndexWithDatabase(window.localStorage)
-      if (cancelled) return
-      setAdventures(summaries)
-      setLoading(false)
-    }
-    void restore().catch(() => {
-      if (!cancelled) {
-        setError('RPG Your Way could not load your campaigns.')
-        setLoading(false)
-      }
-    })
-    return () => { cancelled = true }
-  }, [])
-
-  function openAdventure(adventureId: string) {
-    window.localStorage.setItem(CURRENT_ADVENTURE_KEY, adventureId)
-    // A full navigation gives Play a clean boot with one job only: gameplay.
-    window.location.assign('/play')
-  }
-
-  async function importAdventure(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    event.target.value = ''
-    if (!file) return
-    setError('')
-    setNotice('')
-
-    try {
-      const imported = parseAdventureState(await file.text())
-      if (!imported) {
-        setError('That file is not a compatible RPG Your Way or WardensPC exported game file.')
-        return
-      }
-      if (imported.stage !== 'complete') {
-        setError('That exported file predates a playable campaign state. RPG Your Way can import WardensPC exports that had already reached Play; use Start to create a new campaign from character information instead.')
-        return
-      }
-
-      const now = new Date().toISOString()
-      const importedState: SavedAdventureState = {
-        ...imported,
-        adventure_id: crypto.randomUUID(),
-        adventure_name: canonicalAdventureName(imported.adventure_name),
-        content_mode: imported.content_mode,
-        imported_content_mode: imported.content_mode,
-        content_mode_import_mismatch: false,
-        content_mode_explanation_given: Boolean(imported.content_mode_explanation_given),
-        created_at: now,
-        updated_at: now,
-      }
-
-      await saveAdventureState(window.localStorage, importedState, null)
-      setAdventures(await readAdventureIndexWithDatabase(window.localStorage))
-      setNotice(`Imported ${importedState.adventure_name}. Opening Play…`)
-
-      // Do not transform the Start component into the gameplay component in-place.
-      // Start owns import/selection; Play boots separately and owns gameplay.
-      window.location.assign('/play')
-    } catch {
-      setError('The exported game file could not be read.')
-    }
-  }
-
   return (
     <div className="site-frame site-frame-play site-frame-start">
       <SiteHeader />
       <main id="main-content" tabIndex={-1} className="inner-main play-entry-main start-page-main">
         <div className="shell start-page-shell">
-          <h1 className="sr-only">{addCharacterMode ? 'Add characters to the current campaign' : 'Start a new campaign or return to a saved adventure'}</h1>
+          <h1 className="sr-only">{addCharacterMode ? 'Add characters to the current campaign' : 'Start a new campaign or manage your current campaigns'}</h1>
+          {!addCharacterMode ? <CampaignHub /> : null}
           <StartOnboarding mode={addCharacterMode ? 'add-character' : 'new-campaign'} multiplayerCode={multiplayerCode} />
-
-          {!addCharacterMode ? <details className="start-existing-details">
-            <summary>Already have an RPG Your Way or WardensPC adventure?</summary>
-            <div className="start-existing-body">
-              <p className="start-existing-lede">Continue a campaign from your RPG Your Way account, or import a legacy RPG Your Way or WardensPC game file. Legacy imports become cloud campaigns when they are opened.</p>
-              {loading ? (
-                <div className="play-entry-loading" role="status">
-                  <LoaderCircle className="play-entry-icon play-entry-spin" aria-hidden="true" />
-                  <p>Loading your campaigns…</p>
-                </div>
-              ) : (
-                <div className="play-entry-grid">
-                  <section className="play-entry-card" aria-labelledby="saved-adventures-heading">
-                    <div className="play-entry-card-title">
-                      <Cloud className="play-entry-icon" aria-hidden="true" />
-                      <div>
-                        <p className="account-state-label">Your account</p>
-                        <h2 id="saved-adventures-heading">Campaigns</h2>
-                      </div>
-                    </div>
-                    {adventures.length ? (
-                      <div className="play-entry-adventures">
-                        {adventures.map((adventure) => (
-                          <button key={adventure.adventure_id} type="button" className="play-entry-adventure" onClick={() => openAdventure(adventure.adventure_id)}>
-                            <span>
-                              <strong>{adventure.adventure_name}</strong>
-                              <small>{adventure.party_names.length ? adventure.party_names.join(', ') : 'Saved party'} · {adventure.storage_source === 'cloud' ? 'Cloud' : 'This browser · moves to cloud when opened'} · Updated {new Date(adventure.updated_at).toLocaleDateString()}</small>
-                            </span>
-                            <span className="play-entry-continue"><Play aria-hidden="true" /> Continue</span>
-                          </button>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="play-entry-empty">No campaigns yet.</p>
-                    )}
-                  </section>
-
-                  <section className="play-entry-card play-entry-import" aria-labelledby="import-adventure-heading">
-                    <div className="play-entry-card-title">
-                      <FileUp className="play-entry-icon" aria-hidden="true" />
-                      <div>
-                        <p className="account-state-label">Legacy import</p>
-                        <h2 id="import-adventure-heading">Import an existing adventure</h2>
-                      </div>
-                    </div>
-                    <p>Use a full exported game JSON from WardensPC or an earlier RPG Your Way build. The imported copy gets a new cloud campaign ID, so the original file remains untouched.</p>
-                    <input ref={importRef} className="sr-only" type="file" tabIndex={-1} aria-hidden="true" accept="application/json,.json" onChange={importAdventure} />
-                    <button className="button button-primary" type="button" onClick={() => importRef.current?.click()}>Import Existing Adventure</button>
-                    <div className="play-entry-device-note">
-                      <Shield aria-hidden="true" />
-                      <p><strong>Cloud migration.</strong> Once imported, the campaign is saved to your RPG Your Way account and can be opened from your other signed-in devices.</p>
-                    </div>
-                  </section>
-                </div>
-              )}
-
-              {notice ? <p className="auth-message auth-message-success" role="status">{notice}</p> : null}
-              {error ? <p className="auth-message auth-message-error" role="alert">{error}</p> : null}
-            </div>
-          </details> : null}
         </div>
       </main>
       <SiteFooter />

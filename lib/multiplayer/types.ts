@@ -23,6 +23,7 @@ export type MultiplayerParticipant = {
 export type MultiplayerSessionView = {
   id: string
   inviteCode: string
+  campaignId: string | null
   campaignName: string
   campaignFingerprint: string
   status: MultiplayerSessionStatus
