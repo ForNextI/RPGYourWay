@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.75')
-assert.equal(pkg.rpgywVersion, '1.12.75')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.75'", 'visible app version')
+assert.equal(pkg.version, '1.12.76')
+assert.equal(pkg.rpgywVersion, '1.12.76')
+has(read('lib/version.ts'), "APP_VERSION = '1.12.76'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -306,10 +306,35 @@ has(css, `.start-campaign-hub > summary {\n  width: min(38%, 31rem);`)
 has(css, '.campaign-hub-card[open] > .campaign-hub-summary')
 has(css, `color: var(--forest-deep) !important;\n  box-shadow:`, 'accordion screw keeps forest ink')
 
+// 1.12.76 Landing Page UI Lookbook implementation.
+assert.ok(exists('UI-LOOKBOOK.md'), 'Canonical UI lookbook must travel with the source tree')
+const lookbook = read('UI-LOOKBOOK.md')
+has(lookbook, '## 1.1 Plaque')
+has(lookbook, '## 1.2 Nameplate')
+has(lookbook, '## 1.3 Button')
+has(lookbook, '## 1.6 Bezel')
+has(lookbook, '## 1.7 Accordion screw')
+has(css, 'RPG Your Way 1.12.76 — Landing Page UI Lookbook overhaul.')
+has(css, '--rpgyw-forest: #043a2d;')
+has(css, '--rpgyw-olive-dark: #6f7946;')
+has(css, '--rpgyw-olive-light: #d6d1a3;')
+has(css, '--rpgyw-cream: #f6ead4;')
+has(css, '--rpgyw-parchment: #f2dfb8;')
+has(css, '.landing-campaign-screen-stage {\n  background: var(--rpgyw-cream) !important;')
+has(css, '.landing-campaign-actions {\n  border: 0 !important;')
+has(css, '.landing-accordion-summary {\n  border: 1px solid var(--rpgyw-forest-line) !important;')
+has(css, '.landing-reason-card {\n  padding: .55rem !important;')
+has(css, '.nested-accordion-copy {\n  margin: .5rem .18rem .1rem;')
+has(css, 'width: 38px !important;\n  height: 38px !important;', 'standard accordion screw size')
+const siteHeader = read('components/SiteHeader.tsx')
+has(siteHeader, "from '@/components/accessibility/fullscreen-toggle'")
+has(siteHeader, '<FullscreenToggle className="fullscreen-toggle" />')
+assert.equal(exists('components/FullscreenToggle.tsx'), false, 'Duplicate legacy fullscreen component should stay removed')
+
 // Accessibility foundation stays wired and the old exact-format CSS trap stays retired.
 const accessibility = read('app/accessibility/page.tsx')
 has(accessibility, 'Accessibility')
 has(css, 'outline: 3px solid var(--lime);')
 assert.match(css, /background:\s*linear-gradient\(\s*180deg,\s*color-mix\(in srgb, var\(--cream-bright\) 97%, white\),\s*var\(--cream\)\s*\) !important;/)
 
-console.log('RPG Your Way 1.12.75 UI Bible cleanup checks passed.')
+console.log('RPG Your Way 1.12.76 landing-page UI overhaul checks passed.')

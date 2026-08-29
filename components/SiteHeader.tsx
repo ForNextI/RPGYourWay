@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { FullscreenToggle } from '@/components/FullscreenToggle'
+import { FullscreenToggle } from '@/components/accessibility/fullscreen-toggle'
 
 const links = [
   { href: '/start', label: 'Start' },
@@ -56,7 +56,7 @@ export function SiteHeader({ variant = 'default' }: SiteHeaderProps) {
               )}
             </span>
           ))}
-          <span className="fullscreen-nav-gap"><FullscreenToggle /></span>
+          <span className="fullscreen-nav-gap"><FullscreenToggle className="fullscreen-toggle" /></span>
         </nav>
       </div>
     </header>

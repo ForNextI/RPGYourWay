@@ -8241,3 +8241,298 @@ body :where(button, summary, [role="button"]):focus-visible .accordion-plus {
   .start-campaign-hub > summary { width: 100%; }
   .campaign-hub-summary { align-items: flex-start; }
 }
+
+/* RPG Your Way 1.12.76 — Landing Page UI Lookbook overhaul.
+   This block is the canonical landing-page implementation of UI-LOOKBOOK.md.
+   Named surface colors describe faces; brass/inner lines/depth come with the object. */
+:root {
+  --rpgyw-forest: #043a2d;
+  --rpgyw-olive-dark: #6f7946;
+  --rpgyw-olive-light: #d6d1a3;
+  --rpgyw-cream: #f6ead4;
+  --rpgyw-parchment: #f2dfb8;
+  --rpgyw-lime: #c1dc4d;
+  --rpgyw-brass-dark: #7a6031;
+  --rpgyw-brass-mid: #a88a4d;
+  --rpgyw-brass-light: #d7bd7b;
+  --rpgyw-forest-line: #07563f;
+}
+
+/* Ribbon: deliberately flatter than the page furniture, with matching hardware. */
+.site-header {
+  background: color-mix(in srgb, var(--rpgyw-cream) 94%, var(--rpgyw-parchment)) !important;
+}
+.site-brand-ribbon,
+.main-nav { min-height: 44px; }
+.site-header .brand-mark,
+.site-header .fullscreen-toggle {
+  width: 44px !important;
+  height: 44px !important;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 10px !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 92%, var(--rpgyw-parchment)), var(--rpgyw-cream)) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 70%, var(--rpgyw-brass-light)),
+    inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 18%, transparent),
+    0 2px 0 2px var(--rpgyw-brass-dark),
+    0 5px 9px rgb(39 46 36 / .11) !important;
+}
+.site-header .brand-mark img { width: 32px !important; height: 32px !important; }
+.site-header .fullscreen-toggle:hover,
+.site-header .fullscreen-toggle:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.site-header .fullscreen-toggle .fullscreen-arrow-pair { width: 21px; height: 21px; }
+.site-header .fullscreen-toggle .fullscreen-arrow-pair svg { width: 13px !important; height: 13px !important; }
+
+/* The subtitle divider is the same jeweled divider used everywhere else in the ribbon. */
+.brand-jewel-divider {
+  position: relative !important;
+  display: inline-block !important;
+  width: 1px !important;
+  height: 26px !important;
+  margin-inline: .26rem !important;
+  flex: 0 0 auto;
+  transform: none !important;
+  border: 0 !important;
+  background: color-mix(in srgb, var(--moss-deep) 58%, var(--cream-deep)) !important;
+  box-shadow: none !important;
+}
+.brand-jewel-divider::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 1px solid var(--moss-deep);
+  background: var(--cream-deep);
+}
+
+/* Cream replaces literal-white-looking furniture on the landing page. */
+.landing-news-panel { color: var(--rpgyw-cream); }
+.landing-news-headlines p { color: var(--rpgyw-cream); }
+.landing-news-eyebrow {
+  border-color: var(--rpgyw-forest-line);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 92%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  color: var(--rpgyw-forest);
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 70%, var(--rpgyw-brass-light)),
+    0 2px 0 2px var(--rpgyw-brass-dark) !important;
+}
+
+/* Hero console. It remains a special, more elaborate object, but its layers use the lookbook colors. */
+.landing-player-stack {
+  border-color: var(--rpgyw-cream) !important;
+  background: var(--rpgyw-forest) !important;
+}
+.landing-new-player.button,
+.landing-return-button.button {
+  border-color: var(--rpgyw-cream) !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-olive-dark) 88%, var(--rpgyw-cream)), var(--rpgyw-olive-dark)) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.landing-new-player.button:hover,
+.landing-new-player.button:focus-visible,
+.landing-return-button.button:hover,
+.landing-return-button.button:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.landing-campaign-summary-card {
+  border-color: var(--rpgyw-forest-line) !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-olive-light) 88%, var(--rpgyw-cream)), var(--rpgyw-olive-light)) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 78%, var(--rpgyw-brass-light)),
+    inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 10%, transparent),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 7px 12px rgb(30 43 31 / .13) !important;
+}
+.landing-campaign-summary-card .landing-campaign-turns {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-cream) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow: 0 0 0 1px var(--rpgyw-brass-mid), inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 75%, var(--rpgyw-brass-light)) !important;
+}
+
+/* The old thin forest ring around the hero screen becomes cream. The inset itself keeps the existing parchment. */
+.landing-campaign-screen-stage {
+  background: var(--rpgyw-cream) !important;
+}
+.landing-campaign-screen-olive-frame {
+  border-color: var(--rpgyw-brass-mid) !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-olive-dark) 88%, var(--rpgyw-cream)), var(--rpgyw-olive-dark)) !important;
+}
+.landing-campaign-screen-olive-frame .landing-campaign-snippet,
+.landing-campaign-snippet {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-parchment) 94%, var(--rpgyw-cream)), var(--rpgyw-parchment)) !important;
+}
+
+/* The controls already have their own rims. The action-row wrapper must not add a third gold outline around them. */
+.landing-campaign-actions {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+.landing-balance-control {
+  min-height: 52px;
+  border-color: var(--rpgyw-forest-line) !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-olive-light) 88%, var(--rpgyw-cream)), var(--rpgyw-olive-light)) !important;
+  color: var(--rpgyw-forest) !important;
+}
+.landing-return-button.button { min-height: 52px; }
+
+/* Landing-purpose area: dark-olive plaque, light-olive top button, cream nested button, parchment reading layer. */
+.landing-reason-card {
+  padding: .55rem !important;
+  border: 1px solid var(--rpgyw-cream) !important;
+  border-radius: 20px !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-olive-dark) 90%, var(--rpgyw-cream)), var(--rpgyw-olive-dark)) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 38%, transparent),
+    inset 0 -2px 0 rgb(0 0 0 / .10),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 9px 15px rgb(32 40 31 / .14) !important;
+}
+.landing-accordion-summary {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 16px !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-olive-light) 88%, var(--rpgyw-cream)), var(--rpgyw-olive-light)) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 78%, var(--rpgyw-brass-light)),
+    inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 10%, transparent),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 8px 13px rgb(37 45 35 / .12) !important;
+}
+.landing-accordion-summary .landing-accordion-prompt { color: var(--rpgyw-forest) !important; }
+.landing-accordion-summary:hover,
+.landing-accordion-summary:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.landing-accordion-summary:hover .landing-accordion-prompt,
+.landing-accordion-summary:focus-visible .landing-accordion-prompt { color: var(--rpgyw-lime) !important; }
+.landing-accordion[open] > .landing-accordion-summary,
+.landing-accordion[open] > .landing-accordion-summary:hover,
+.landing-accordion[open] > .landing-accordion-summary:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.landing-accordion[open] > .landing-accordion-summary .landing-accordion-prompt { color: var(--rpgyw-cream) !important; }
+.landing-accordion-body {
+  margin-top: .75rem !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  background: transparent !important;
+  padding: .25rem .12rem .12rem !important;
+  box-shadow: none !important;
+}
+.audience-list { gap: .75rem; }
+.audience-item {
+  overflow: visible;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.audience-item > summary {
+  min-height: 60px;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 13px !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 92%, var(--rpgyw-parchment)), var(--rpgyw-cream)) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 76%, var(--rpgyw-brass-light)),
+    inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 8%, transparent),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 7px 11px rgb(37 45 35 / .10) !important;
+}
+.audience-item > summary:hover,
+.audience-item > summary:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.audience-item > summary:hover > span:first-child,
+.audience-item > summary:focus-visible > span:first-child { color: var(--rpgyw-lime) !important; }
+.audience-item[open] > summary,
+.audience-item[open] > summary:hover,
+.audience-item[open] > summary:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.audience-item[open] > summary > span:first-child { color: var(--rpgyw-cream) !important; }
+.nested-accordion-copy {
+  margin: .5rem .18rem .1rem;
+  border: 0 !important;
+  border-radius: 11px;
+  background: var(--rpgyw-parchment) !important;
+  padding: 1rem !important;
+  color: var(--forest-ink);
+  box-shadow: inset 0 2px 5px rgb(82 60 28 / .13) !important;
+}
+
+/* One accordion screw everywhere: cream face, forest hairline, brass rim, forest symbol. Never lime. */
+.accordion-plus,
+body :where(button, summary, [role="button"]):hover .accordion-plus,
+body :where(button, summary, [role="button"]):focus-visible .accordion-plus {
+  width: 38px !important;
+  height: 38px !important;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 92%, var(--rpgyw-parchment)), var(--rpgyw-cream)) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 74%, var(--rpgyw-brass-light)),
+    inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 10%, transparent),
+    0 2px 0 2px var(--rpgyw-brass-dark),
+    0 5px 9px rgb(42 48 37 / .12) !important;
+}
+.accordion-plus::before { width: 15px !important; height: 2px !important; }
+.accordion-plus::after { width: 2px !important; height: 15px !important; }
+
+/* The lower feature cards complete the lookbook palette instead of introducing white. */
+.feature-card {
+  border-color: var(--rpgyw-forest-line) !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 94%, var(--rpgyw-parchment)), var(--rpgyw-cream)) !important;
+  color: var(--forest-ink);
+}
+.feature-card:nth-child(2) {
+  border-color: var(--rpgyw-cream) !important;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-forest) 92%, var(--rpgyw-olive-dark)), var(--rpgyw-forest)) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.feature-card:nth-child(2) h3,
+.feature-card:nth-child(2) p { color: var(--rpgyw-cream); }
+.feature-card:nth-child(1) .feature-eyebrow,
+.feature-card:nth-child(3) .feature-eyebrow {
+  border: 1px solid var(--rpgyw-cream) !important;
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.feature-card:nth-child(2) .feature-eyebrow {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-cream) !important;
+  color: var(--rpgyw-forest) !important;
+}
+.landing-return-logo {
+  border-color: var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-cream) !important;
+}
+
+@media (max-width: 620px) {
+  .site-header .brand-mark,
+  .site-header .fullscreen-toggle { width: 38px !important; height: 38px !important; }
+  .site-header .brand-mark img { width: 29px !important; height: 29px !important; }
+  .brand-jewel-divider { height: 19px !important; margin-inline: .1rem !important; }
+  .brand-jewel-divider::after { width: 6px; height: 6px; }
+}
