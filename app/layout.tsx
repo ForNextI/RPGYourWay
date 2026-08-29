@@ -5,6 +5,7 @@ import './globals.css'
 
 const GOOGLE_ADS_TAG_ID = 'AW-18361311478'
 const GOOGLE_TAG_MANAGER_ID = 'GTM-W5TL4QHK'
+const GOOGLE_ADSENSE_ACCOUNT = 'ca-pub-7652380497334820'
 
 export const metadata: Metadata = {
   title: {
@@ -13,6 +14,9 @@ export const metadata: Metadata = {
   },
   description: 'Tabletop roleplaying on your schedule, with an AI Game Master built for ongoing campaigns.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.rpgyourway.com'),
+  other: {
+    'google-adsense-account': GOOGLE_ADSENSE_ACCOUNT,
+  },
 }
 
 export const viewport: Viewport = {
