@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.2')
-assert.equal(pkg.rpgywVersion, '1.13.2')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.2'", 'visible app version')
+assert.equal(pkg.version, '1.13.3')
+assert.equal(pkg.rpgywVersion, '1.13.3')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.3'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -102,8 +102,17 @@ const gameplayRoute = read('app/api/aigm/gameplay-chat/route.ts')
 has(gameplayRoute, 'process.env.RPGYW_GOD_MODE_PHRASE')
 lacks(gameplayRoute, 'process.env.WARDENS_GOD_MODE_PHRASE')
 
-// Google Ads base tag is installed exactly once at the site root.
+// Google Tag Manager and the direct Google Ads tag are installed once at the site root.
+// The direct Ads tag remains authoritative until the purchase conversion is deliberately migrated into GTM.
 const rootLayout = read('app/layout.tsx')
+has(rootLayout, "const GOOGLE_TAG_MANAGER_ID = 'GTM-W5TL4QHK'", 'Google Tag Manager container ID')
+has(rootLayout, 'https://www.googletagmanager.com/gtm.js?id=', 'Google Tag Manager loader')
+has(rootLayout, 'https://www.googletagmanager.com/ns.html?id=${GOOGLE_TAG_MANAGER_ID}', 'Google Tag Manager noscript fallback')
+has(rootLayout, 'id="google-tag-manager"', 'Google Tag Manager root script')
+assert.equal((rootLayout.match(/googletagmanager\.com\/gtm\.js/g) || []).length, 1, 'Google Tag Manager loader should be installed once')
+assert.equal((rootLayout.match(/googletagmanager\.com\/ns\.html/g) || []).length, 1, 'Google Tag Manager noscript fallback should be installed once')
+before(rootLayout, '<body>', '<noscript>', 'GTM noscript fallback is the first body content')
+before(rootLayout, '<noscript>', '<a className="skip-link"', 'GTM noscript fallback precedes visible body content')
 has(rootLayout, "const GOOGLE_ADS_TAG_ID = 'AW-18361311478'", 'Google Ads tag ID')
 has(rootLayout, 'https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_TAG_ID}', 'Google Ads gtag loader')
 has(rootLayout, "gtag('config', '${GOOGLE_ADS_TAG_ID}');", 'Google Ads gtag config')
@@ -434,4 +443,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.2 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.3 release and canonical UI checks passed.')
