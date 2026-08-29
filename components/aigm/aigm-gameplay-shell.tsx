@@ -2344,7 +2344,7 @@ export function AigmGameplayShell() {
   if (hydratingAdventure) {
     return (
       <main id="main-content" tabIndex={-1} className="medieval-page medieval-page--play flex min-h-screen items-center justify-center px-5 text-foreground">
-        <div className="max-w-xl rounded-3xl border border-primary/30 bg-primary/10 p-8 text-center" role="status" aria-live="polite">
+        <div className="aigm-transition-card max-w-xl rounded-3xl p-8 text-center" role="status" aria-live="polite">
           <LoaderCircle className="mx-auto size-10 animate-spin text-primary" aria-hidden="true" />
           <h1 className="mt-4 font-display text-3xl font-bold">Opening your adventure…</h1>
           <p className="mt-3 text-muted-foreground">Restoring the campaign saved in this browser.</p>
@@ -2356,7 +2356,7 @@ export function AigmGameplayShell() {
   if (!partyState && multiplayer.loading) {
     return (
       <main id="main-content" tabIndex={-1} className="medieval-page medieval-page--play flex min-h-screen items-center justify-center px-5 text-foreground">
-        <div className="max-w-xl rounded-3xl border border-primary/30 bg-primary/10 p-8 text-center" role="status" aria-live="polite">
+        <div className="aigm-transition-card max-w-xl rounded-3xl p-8 text-center" role="status" aria-live="polite">
           <LoaderCircle className="mx-auto size-10 animate-spin text-primary" aria-hidden="true" />
           <h1 className="mt-4 font-display text-3xl font-bold">Joining the multiplayer table…</h1>
           <p className="mt-3 text-muted-foreground">Checking the invite and restoring your table connection.</p>
@@ -2585,9 +2585,9 @@ export function AigmGameplayShell() {
                   <span className="font-display font-bold">Session tools</span>
                   <ChevronDown className={`size-4 shrink-0 transition-transform ${sessionToolsOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                 </button>
-                <button type="button" onClick={openStoryDirectionHelp} className="aigm-session-help inline-flex min-h-10 w-full items-center justify-center gap-2 whitespace-normal rounded-xl border border-border bg-card px-4 py-2 text-center text-xs font-bold leading-snug text-muted-foreground transition hover:border-primary/55 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><BookOpen className="size-3.5 shrink-0" aria-hidden="true" />Can I direct my game?</button>
                 {sessionToolsOpen && (
-                  <div id="aigm-session-tools-panel" className="aigm-session-tools-panel flex flex-wrap items-center gap-2 pt-0.5 sm:col-span-3">
+                  <div id="aigm-session-tools-panel" className="aigm-session-tools-panel flex flex-wrap items-center gap-2 pt-0.5 sm:col-span-2">
+                    <button type="button" onClick={openStoryDirectionHelp} className="aigm-session-help inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground"><BookOpen className="size-3.5" aria-hidden="true" />Can I direct my game?</button>
                     <button type="button" onClick={downloadTranscript} disabled={transcript.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-40"><Download className="size-3.5" aria-hidden="true" />Download transcript</button>
                     <button type="button" onClick={printTranscript} disabled={transcript.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-40"><Printer className="size-3.5" aria-hidden="true" />Print</button>
                     <button type="button" onClick={() => openLevelUp()} disabled={gameplay.pending_level_ups.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-40"><Sparkles className="size-3.5" aria-hidden="true" />Level Up a character</button>

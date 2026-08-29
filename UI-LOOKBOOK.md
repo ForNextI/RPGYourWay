@@ -898,3 +898,17 @@ When continuing RPG Your Way UI work:
 
 - Campaign preference category labels use forest-green text at a larger readable size on their olive rows.
 - Accordion hardware must never change physical size on hover or focus. Hover may change the parent button/nameplate state, but the screw retains its canonical dimensions and only rotates when the accordion opens.
+
+
+## Start/Play finishing rule (1.12.82)
+
+- A completed campaign-guidance plaque carries the single prominent status **Your campaign guidance is set.** Do not add a small completion-count subtitle beneath it.
+- The proposed party leader is the visual focus of its dark plaque: center the label and leader name, and give the leader name display-scale type while keeping Change/None and explanation actions secondary.
+- On Start choice cards, hover/focus changes the **text itself** to canonical lime. Do not create a highlighted rectangle or other backing surface behind the hovered copy.
+- The final **Onward** action uses the full available Start-page width.
+- Start-to-Play transition/status cards use canonical **light olive** rather than a translucent mint/primary wash.
+- Play dice quantity uses a rounded recessed inner opening. The current quantity is large forest text; die labels are forest at rest.
+- **Can I direct my game?** belongs inside expanded Session tools rather than occupying a permanent second control beside the Session tools button.
+- **Add another character** is a compact action button, not a full-width card.
+- The gameplay text input has rounded inner corners so its painted input surface never overlaps the rounded composer bezel.
+

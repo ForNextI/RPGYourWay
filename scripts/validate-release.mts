@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.81')
-assert.equal(pkg.rpgywVersion, '1.12.81')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.81'", 'visible app version')
+assert.equal(pkg.version, '1.12.82')
+assert.equal(pkg.rpgywVersion, '1.12.82')
+has(read('lib/version.ts'), "APP_VERSION = '1.12.82'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -385,3 +385,16 @@ has(css, 'font-size: 1rem !important;', 'campaign category labels are easier to 
 has(css, '.campaign-danger-details > summary:hover .campaign-danger-screw', 'delete accordion screw keeps fixed dimensions on hover')
 has(lookbook, 'Accordion hardware must never change physical size on hover or focus.')
 console.log('RPG Your Way 1.12.81 Start-page QA III checks passed.')
+
+
+// 1.12.82 Start/Play finishing QA.
+has(css, 'RPG Your Way 1.12.82 — final Start/Play UI QA before stylesheet cleanup.')
+lacks(start, 'Six short questions answered.', 'redundant completed-guidance subtitle')
+has(start, 'start-complete-plaque start-complete-plaque--guidance', 'completed guidance modifier')
+has(css, `.start-play-button {\n  width: 100%;`, 'Onward uses full available Start width')
+has(gameplayShell, 'className="aigm-transition-card max-w-xl rounded-3xl p-8 text-center"', 'Play transition card uses canonical class')
+has(gameplayShell, '<BookOpen className="size-3.5" aria-hidden="true" />Can I direct my game?</button>', 'story-direction help lives in Session tools')
+has(css, '.medieval-page--play #dice-quantity {', 'dice quantity uses explicit inner opening')
+has(css, '.medieval-page--play .aigm-gameplay-message-input {', 'gameplay composer input has explicit inner geometry')
+has(lookbook, 'Start/Play finishing rule (1.12.82)')
+console.log('RPG Your Way 1.12.82 Start/Play finishing QA checks passed.')
