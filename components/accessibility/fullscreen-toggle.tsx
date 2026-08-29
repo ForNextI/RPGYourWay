@@ -11,7 +11,7 @@ function FullscreenArrows({ inward }: { inward: boolean }) {
   return (
     <span className="fullscreen-arrow-pair" aria-hidden="true">
       {inward ? (
-        <><ArrowDownRight /><ArrowUpLeft /></>
+        <><ArrowDownLeft /><ArrowUpRight /></>
       ) : (
         <><ArrowUpRight /><ArrowDownLeft /></>
       )}

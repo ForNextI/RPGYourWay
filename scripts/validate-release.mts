@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.12.77')
-assert.equal(pkg.rpgywVersion, '1.12.77')
-has(read('lib/version.ts'), "APP_VERSION = '1.12.77'", 'visible app version')
+assert.equal(pkg.version, '1.12.78')
+assert.equal(pkg.rpgywVersion, '1.12.78')
+has(read('lib/version.ts'), "APP_VERSION = '1.12.78'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -346,3 +346,19 @@ has(css, 'Nested choices are canonical light-olive buttons.')
 has(lookbook, 'opening it reveals a **separate dark-olive plaque** below the button')
 
 console.log('RPG Your Way 1.12.77 landing accordion correction checks passed.')
+
+
+// 1.12.78 Start-page lookbook correction.
+has(css, 'RPG Your Way 1.12.78 — Start page lookbook correction.')
+has(fullscreenToggle, '<><ArrowDownLeft /><ArrowUpRight /></>', 'inward fullscreen arrows point toward one another')
+has(css, `.start-campaign-hub {\n  border: 0 !important;`, 'campaign hub top control is not sitting on a full-width plaque')
+has(css, `.start-rules-card--single-step {\n  background: var(--rpgyw-olive-light) !important;`, 'Start Here plaque is light olive')
+has(css, `.start-rules-card--single-step .start-rules-current--display {\n  background: var(--rpgyw-forest) !important;`, 'current game-system button is forest')
+has(css, `.start-rules-card--single-step .start-rules-panel {\n  background: transparent !important;`, 'rules choices have no extra backing plaque')
+has(css, `.start-rules-card--single-step .start-rules-panel .start-choice {\n  background: var(--rpgyw-olive-dark) !important;`, 'rules choices use dark olive buttons')
+has(css, `.start-campaign-hub .play-entry-import {\n  background: var(--rpgyw-olive-light) !important;`, 'import card is light olive')
+has(campaignHub, 'className="accordion-plus campaign-danger-screw"', 'danger accordion uses standard screw')
+has(css, `.campaign-danger-button {\n  border: 1px solid var(--rpgyw-forest-line) !important;`, 'delete action uses canonical dimensional button rather than red square')
+has(lookbook, 'Start-page Step 1 palette')
+
+console.log('RPG Your Way 1.12.78 Start-page lookbook correction checks passed.')

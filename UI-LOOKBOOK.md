@@ -530,13 +530,31 @@ Current canonical wording:
 - **Start Here**
 - **Choose This Game System**
 
-Use dark structural backing and light raised controls rather than light-olive objects floating directly on tan.
+### Start-page Step 1 palette
+
+The Start page is a specific composition of the canonical objects:
+
+- **Start Here** remains the forest-green Step 1 nameplate.
+- The Step 1 backing plaque is **light olive green**.
+- The current/default game-system accordion button is **forest green with cream lettering** at rest; on hover its lettering may turn lime while the forest surface remains.
+- The standard accordion screw remains cream/brass with a forest symbol.
+- Expanding the game-system chooser introduces **no additional backing plaque**. The system-choice buttons themselves are **dark olive green**, with the selected system **forest green + cream**.
+- **Choose This Game System** is a **cream button**.
+
+This creates a deliberate stack of forest nameplate → light-olive plaque → forest current-system button / dark-olive choices → cream confirmation button.
 
 ## 10.2 Existing campaign control
 
 The compact secondary control should communicate existing-campaign management/imports without becoming a full-width competing primary action.
 
-The campaign cabinet itself may expand wide after activation.
+The campaign cabinet itself may expand wide after activation. The compact **Existing Campaigns, Controls & Imports** button must sit by itself; do not leave a full-width cream plaque behind the closed button. When opened, its contents appear on a separate **cream plaque** below.
+
+Within that plaque:
+
+- the campaign collection may use dark structural color for balance;
+- an opened campaign is treated as an **inset**, with the readable control area on parchment;
+- destructive controls still use the standard button construction and confirmation flow, not a square red exception;
+- the **Import an Older Adventure** area is a **light-olive card** with a **cream Import Older Adventure button**.
 
 ## 10.3 Campaign rows
 

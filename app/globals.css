@@ -8643,3 +8643,202 @@ body :where(button, summary, [role="button"]):focus-visible .accordion-plus {
 .audience-item[open] > summary > span:first-child {
   color: var(--rpgyw-cream) !important;
 }
+
+/* RPG Your Way 1.12.78 — Start page lookbook correction.
+   One vocabulary, one material system: standalone campaign-hub control, light-olive
+   Step 1 plaque, forest current-system button, dark-olive rules buttons, recessed
+   campaign content, and canonical non-red destructive controls. */
+
+/* The compact Existing Campaigns control is a standalone button. The inherited
+   full-width details furniture must disappear until its separate cream body opens. */
+.start-campaign-hub {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+.start-campaign-hub .start-existing-body {
+  background: var(--rpgyw-cream) !important;
+}
+
+/* Step 1: forest nameplate over a canonical light-olive plaque. */
+.start-rules-card--single-step {
+  background: var(--rpgyw-olive-light) !important;
+  border-color: var(--rpgyw-forest-line) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-brass-light)),
+    inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 10%, transparent),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 8px 13px rgb(37 45 35 / .11) !important;
+}
+
+/* The current/default system is the permanent forest anchor on the light-olive plaque. */
+.start-rules-card--single-step .start-rules-current--display {
+  background: var(--rpgyw-forest) !important;
+  border-color: var(--rpgyw-cream) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.start-rules-card--single-step .start-rules-current--display :where(span, strong) {
+  color: var(--rpgyw-cream) !important;
+}
+.start-rules-card--single-step .start-rules-current--display:hover,
+.start-rules-card--single-step .start-rules-current--display:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.start-rules-card--single-step .start-rules-current--display:hover :where(span, strong),
+.start-rules-card--single-step .start-rules-current--display:focus-visible :where(span, strong) {
+  color: var(--rpgyw-lime) !important;
+}
+
+/* Expanding the rules chooser reveals buttons, not another plaque. */
+.start-rules-card--single-step .start-rules-panel {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+.start-rules-card--single-step .start-rules-panel .start-choice {
+  background: var(--rpgyw-olive-dark) !important;
+  border: 1px solid var(--rpgyw-cream) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 32%, transparent),
+    inset 0 -2px 0 rgb(0 0 0 / .10),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 7px 11px rgb(35 42 33 / .11) !important;
+}
+.start-rules-card--single-step .start-rules-panel .start-choice :where(strong, span) {
+  color: var(--rpgyw-cream) !important;
+}
+.start-rules-card--single-step .start-rules-panel .start-choice:hover,
+.start-rules-card--single-step .start-rules-panel .start-choice:focus-visible {
+  background: var(--rpgyw-olive-dark) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.start-rules-card--single-step .start-rules-panel .start-choice:hover :where(strong, span),
+.start-rules-card--single-step .start-rules-panel .start-choice:focus-visible :where(strong, span) {
+  color: var(--rpgyw-lime) !important;
+}
+.start-rules-card--single-step .start-rules-panel .start-choice--selected,
+.start-rules-card--single-step .start-rules-panel .start-choice--selected:hover,
+.start-rules-card--single-step .start-rules-panel .start-choice--selected:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.start-rules-card--single-step .start-rules-panel .start-choice--selected :where(strong, span),
+.start-rules-card--single-step .start-rules-panel .start-choice--selected:hover :where(strong, span),
+.start-rules-card--single-step .start-rules-panel .start-choice--selected:focus-visible :where(strong, span) {
+  color: var(--rpgyw-cream) !important;
+}
+
+/* The confirmation stays a cream button so all three principal surfaces are visible. */
+.start-rules-card--single-step .start-rules-confirm-button {
+  background: var(--rpgyw-cream) !important;
+  border-color: var(--rpgyw-forest-line) !important;
+  color: var(--rpgyw-forest) !important;
+}
+.start-rules-card--single-step .start-rules-confirm-button:hover,
+.start-rules-card--single-step .start-rules-confirm-button:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.start-rules-confirm p { color: var(--rpgyw-forest) !important; }
+
+/* Campaigns read as recessed content rather than another stack of raised cards. */
+.campaign-hub-card {
+  border: 0 !important;
+  padding: 3px;
+  background: var(--rpgyw-forest) !important;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-cream) 24%, transparent),
+    inset 0 3px 7px rgb(20 35 27 / .28) !important;
+}
+.campaign-hub-card > .campaign-control-body {
+  border: 1px solid var(--rpgyw-brass-mid) !important;
+  border-radius: 0 0 11px 11px;
+  background: var(--rpgyw-parchment) !important;
+}
+
+/* Destructive administration is still deliberate, but it is not a red/square alien object. */
+.campaign-danger-details {
+  border-top: 1px solid color-mix(in srgb, var(--rpgyw-brass-mid) 68%, transparent) !important;
+  padding-top: .65rem;
+}
+.campaign-danger-details > summary {
+  width: fit-content;
+  min-height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 11px !important;
+  background: var(--rpgyw-cream) !important;
+  padding: .42rem .6rem .42rem .72rem;
+  color: var(--rpgyw-forest) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-brass-light)),
+    0 2px 0 2px var(--rpgyw-brass-dark) !important;
+}
+.campaign-danger-details > summary:hover,
+.campaign-danger-details > summary:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.campaign-danger-details[open] > summary {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.campaign-danger-details[open] > summary .campaign-danger-screw { transform: rotate(45deg); }
+.campaign-danger-screw { width: 30px !important; height: 30px !important; }
+.campaign-danger-body > div {
+  border: 1px solid var(--rpgyw-brass-mid) !important;
+  background: var(--rpgyw-parchment) !important;
+}
+.campaign-danger-button {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: 11px !important;
+  background: var(--rpgyw-cream) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-brass-light)),
+    0 2px 0 2px var(--rpgyw-brass-dark) !important;
+}
+.campaign-danger-button:hover,
+.campaign-danger-button:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+
+/* Import is a light-olive card with a canonical cream action button. */
+.start-campaign-hub .play-entry-import {
+  background: var(--rpgyw-olive-light) !important;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 70%, var(--rpgyw-brass-light)),
+    inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 10%, transparent),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 8px 13px rgb(37 45 35 / .11) !important;
+}
+.start-campaign-hub .play-entry-import :where(h2, p, strong, .account-state-label) { color: var(--rpgyw-forest) !important; }
+.start-campaign-hub .play-entry-import > .button {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-cream) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-brass-light)),
+    0 2px 0 2px var(--rpgyw-brass-dark) !important;
+}
+.start-campaign-hub .play-entry-import > .button:hover,
+.start-campaign-hub .play-entry-import > .button:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
