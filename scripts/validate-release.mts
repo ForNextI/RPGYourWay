@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.14')
-assert.equal(pkg.rpgywVersion, '1.13.14')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.14'", 'visible app version')
+assert.equal(pkg.version, '1.13.15')
+assert.equal(pkg.rpgywVersion, '1.13.15')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.15'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -160,9 +160,11 @@ has(adScriptPage, '<AdSenseSlot placement="script" />', 'Script manual ad placem
 has(accessibilityPage, '<AdSenseSlot placement="accessibility" />', 'Accessibility manual ad placement')
 has(adStartEntry, '!addCharacterMode ? <AdSenseSlot placement="start" /> : null', 'Start manual ad placement excludes add-character flow')
 has(css, '.ad-placement--start {')
-has(adStartEntry, 'className="start-here-hero" href="#start-new-campaign"', 'Start Here entry button')
-has(css, '.start-here-hero {', 'Start Here entry button styling')
-has(css, 'background: var(--rpgyw-face-olive-dark);', 'Start Here dark-olive face')
+has(adStartEntry, 'className="start-here-hero" aria-hidden="true">~ Start Here ~</div>', 'decorative Start Here parchment plaque')
+has(css, '.start-here-hero {', 'Start Here decorative plaque styling')
+assert.equal(adStartEntry.includes('start-here-hero" href='), false, 'Start Here plaque must not be interactive')
+assert.equal(css.includes('.start-here-hero:hover'), false, 'Start Here plaque must not have hover behavior')
+has(css, 'font-family: "Old English Text MT"', 'Start Here blackletter-style typography')
 has(css, 'max-width: 320px;', 'mobile ad width')
 has(css, 'height: 100px;', 'mobile ad height')
 has(css, 'width: 468px;', 'intermediate ad width')
@@ -585,4 +587,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.14 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.15 release and canonical UI checks passed.')

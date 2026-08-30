@@ -872,7 +872,7 @@ Manual AdSense inventory is deliberately simple and sits immediately below the t
 - Use one shared responsive ad-slot component.
 - Reserve approximately **320 × 100 px on phones**, **468 × 60 px on intermediate widths**, and **728 × 90 px on laptop/desktop widths**.
 - Before an AdSense slot ID is configured, keep the same reserved footprint visible with the permitted label **Advertisements** and an otherwise blank placeholder. No separate on/off control is needed.
-- Start uses the former ad-safety buffer for one oversized canonical dark-olive **Start Here** entry button. The button remains clearly separated from the ad inventory and scrolls to the campaign-creation flow.
+- Start uses the former ad-safety buffer for a compact decorative parchment **~ Start Here ~** plaque. It is orientation furniture only, not a link or button: no hover state, no lime state, and no click behavior. Use black ink and a blackletter/Gothic-style type stack.
 - The Start ad appears only in the normal new-campaign/import flow, not the signed-out authentication surface or the add-character utility flow.
 - AdSense client/slot identifiers are supplied through `NEXT_PUBLIC_ADSENSE_*` deployment variables so inventory can be connected without rewriting page components.
 
@@ -904,9 +904,9 @@ These are current composition rules that sit on top of the canonical primitives 
 
 ## 22.1 Start
 
-- Start has one oversized dark-olive **Start Here** entry button between the ad inventory and campaign creation. Step 1 itself is **New Campaign**; do not repeat a separate New Campaign subtitle beneath it.
+- Start has one compact decorative parchment **~ Start Here ~** plaque between the ad inventory and campaign creation. It is not interactive. Step 1 itself is **New Campaign**; do not repeat a separate New Campaign subtitle beneath it.
 - The persistent selected game-system control is forest with cream copy. Hover/focus keeps the forest face and changes the copy to lime. Its accordion screw does not recolor or resize.
-- The compact top utility on Start is **Import older adventures** only. It uses a dark-olive face and does not contain campaign management or multiplayer controls.
+- The compact top utility on Start is **Import older adventures** only. It uses the canonical dark-olive raised-control recipe with the standard control radius, cream inner line, 2px brass rim/depth, and unclipped overflow clearance. It does not contain campaign management or multiplayer controls.
 - Campaign-preference category labels are readable forest text on their olive rows.
 - A completed guidance plaque carries the single prominent status **Your campaign guidance is set.** Do not add a completion-count subtitle.
 - In the proposed-party-leader plaque, **Proposed party leader:** is an upper-left label. The proposed leader name is centered and is the visual event; Change/None/explanation actions remain secondary.
