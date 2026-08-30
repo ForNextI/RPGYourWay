@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.16')
-assert.equal(pkg.rpgywVersion, '1.13.16')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.16'", 'visible app version')
+assert.equal(pkg.version, '1.13.17')
+assert.equal(pkg.rpgywVersion, '1.13.17')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.17'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -590,4 +590,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.16 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.17 release and canonical UI checks passed.')

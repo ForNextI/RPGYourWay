@@ -8540,7 +8540,7 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
    campaign-creation step. */
 .start-import-hub {
   width: 100%;
-  margin: 0 0 2rem;
+  margin: 0 0 1rem;
   overflow: visible;
   border: 0 !important;
   background: transparent !important;
