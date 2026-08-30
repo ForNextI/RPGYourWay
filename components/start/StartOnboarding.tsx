@@ -748,7 +748,8 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
       ) : (
         <>
           {activeStep === 1 ? <section className="start-rules-step" aria-labelledby="rules-heading">
-            <div className="start-step-nameplate start-step-nameplate--rules"><span>1</span><strong id="rules-heading">New Campaign</strong></div>
+            <div className="start-step-nameplate start-step-nameplate--rules"><span>1</span><strong id="rules-heading">Start Here</strong></div>
+            <p className="start-rules-subtitle">New Campaign</p>
             <div className="start-rules-card start-rules-card--single-step">
               <button type="button" className="start-rules-current start-rules-current--display" aria-expanded={rulesOpen} aria-controls="start-rules-panel" onClick={() => setRulesOpen((open) => !open)}><span className="start-rules-current-copy"><strong>{publicRulesetLabel(ruleset)}{ruleset === 'dnd-5.5e-srd-5.2.1' ? ' (default)' : ''}</strong><span>or choose a different one</span></span><span className="accordion-plus start-rules-accordion-plus" aria-hidden="true" /></button>
               {rulesOpen ? <div className="start-rules-panel" id="start-rules-panel"><div className="start-rules-grid">{RULESETS.map((option) => <button key={option.id} type="button" className={`start-choice${ruleset === option.id ? ' start-choice--selected' : ''}`} aria-pressed={ruleset === option.id} onClick={() => setRuleset(option.id)}><strong>{option.label}</strong><span>{option.detail}</span></button>)}</div></div> : null}

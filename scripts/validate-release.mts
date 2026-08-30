@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.15')
-assert.equal(pkg.rpgywVersion, '1.13.15')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.15'", 'visible app version')
+assert.equal(pkg.version, '1.13.16')
+assert.equal(pkg.rpgywVersion, '1.13.16')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.16'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -160,11 +160,13 @@ has(adScriptPage, '<AdSenseSlot placement="script" />', 'Script manual ad placem
 has(accessibilityPage, '<AdSenseSlot placement="accessibility" />', 'Accessibility manual ad placement')
 has(adStartEntry, '!addCharacterMode ? <AdSenseSlot placement="start" /> : null', 'Start manual ad placement excludes add-character flow')
 has(css, '.ad-placement--start {')
-has(adStartEntry, 'className="start-here-hero" aria-hidden="true">~ Start Here ~</div>', 'decorative Start Here parchment plaque')
-has(css, '.start-here-hero {', 'Start Here decorative plaque styling')
-assert.equal(adStartEntry.includes('start-here-hero" href='), false, 'Start Here plaque must not be interactive')
-assert.equal(css.includes('.start-here-hero:hover'), false, 'Start Here plaque must not have hover behavior')
-has(css, 'font-family: "Old English Text MT"', 'Start Here blackletter-style typography')
+assert.equal(adStartEntry.includes('start-here-hero'), false, 'Start page must keep the ad-to-controls breathing gap empty')
+const startStepOnboarding = read('components/start/StartOnboarding.tsx')
+has(startStepOnboarding, '<strong id="rules-heading">Start Here</strong>', 'Step 1 Start Here label')
+has(startStepOnboarding, '<p className="start-rules-subtitle">New Campaign</p>', 'Step 1 New Campaign subtitle')
+has(css, '.start-rules-subtitle {', 'Step 1 subtitle styling')
+has(css, 'background: var(--rpgyw-face-olive-dark) !important;', 'dark-olive current game-system control')
+has(css, 'background: var(--rpgyw-face-forest) !important;', 'forest Choose This Game System action')
 has(css, 'max-width: 320px;', 'mobile ad width')
 has(css, 'height: 100px;', 'mobile ad height')
 has(css, 'width: 468px;', 'intermediate ad width')
@@ -396,7 +398,8 @@ has(gameplayRoute, 'multiplayer_invite_code')
 const landingCampaignPanel = read('components/LandingCampaignPanel.tsx')
 has(landingCampaignPanel, 'Continue Adventure')
 lacks(landingCampaignPanel, 'Return to Adventure')
-has(start, '<strong id="rules-heading">New Campaign</strong>')
+has(start, '<strong id="rules-heading">Start Here</strong>')
+has(start, '<p className="start-rules-subtitle">New Campaign</p>')
 has(start, 'Choose This Game System')
 lacks(start, 'Use this game system')
 has(multiplayerManager, 'className="campaign-hub-card"')
@@ -490,7 +493,7 @@ for (const file of [
 has(css, '.inner-main > .shell.prose-page {')
 
 // Start and Play retain the finished composition while sharing the common primitives.
-lacks(start, 'start-rules-subtitle', 'redundant New Campaign subtitle')
+has(start, 'start-rules-subtitle', 'New Campaign subtitle beneath Step 1 nameplate')
 has(start, 'id="start-new-campaign"', 'Start Here destination anchor')
 lacks(start, 'Six short questions answered.', 'redundant completed-guidance subtitle')
 has(start, 'start-complete-plaque start-complete-plaque--guidance', 'completed guidance modifier')
@@ -587,4 +590,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.15 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.16 release and canonical UI checks passed.')

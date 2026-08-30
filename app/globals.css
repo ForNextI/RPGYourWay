@@ -173,30 +173,9 @@ button, input, textarea, select { font: inherit; }
   background: transparent;
 }
 .ad-placement--start {
-  margin-bottom: clamp(1.25rem, 3vw, 2rem);
-}
-.start-here-hero {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  max-width: calc(100% - 2rem);
-  min-height: 0;
-  margin: .35rem auto clamp(2rem, 4vw, 2.85rem);
-  border: 1px solid color-mix(in srgb, var(--rpgyw-forest-line) 45%, var(--rpgyw-parchment));
-  border-radius: var(--rpgyw-radius-plaque);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-parchment) 92%, var(--rpgyw-cream)), var(--rpgyw-parchment));
-  color: #18120b;
-  box-shadow: var(--rpgyw-raised-light-shadow);
-  padding: .7rem 1.55rem .78rem;
-  font-family: "Old English Text MT", "Blackadder ITC", "Goudy Text MT", "Bookman Old Style", Georgia, serif;
-  font-size: clamp(2.1rem, 4.8vw, 3.5rem);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: .015em;
-  text-align: center;
-  user-select: none;
-  pointer-events: none;
+  /* Keep a deliberate breathing gap between advertising and Start controls.
+     This is orientation space, not another decorative or interactive object. */
+  margin-bottom: clamp(3rem, 6vw, 4.6875rem);
 }
 
 @media (min-width: 500px) {
@@ -6999,21 +6978,28 @@ html {
 .campaign-hub-primary-action .button { display: inline-flex; align-items: center; gap: .4rem; }
 .campaign-hub-primary-action svg { width: 1rem; height: 1rem; }
 
-/* Start Step 1 gets a dark olive chassis, then cream controls one layer above it. */
-
-.start-rules-card--single-step .start-rules-current--display,
-.start-rules-card--single-step .start-rules-confirm-button {
-  border-color: var(--rpgyw-forest) !important;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 98%, var(--rpgyw-parchment)), var(--rpgyw-cream)) !important;
-  color: var(--rpgyw-forest) !important;
+/* Start Step 1 hierarchy: dark-olive system selector, forest confirmation. */
+.start-rules-card--single-step .start-rules-current--display {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-olive-dark) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
-.start-rules-card--single-step .start-rules-current--display span,
-.start-rules-card--single-step .start-rules-current--display strong { color: var(--rpgyw-forest) !important; }
+.start-rules-card--single-step .start-rules-current--display :where(span, strong) { color: var(--rpgyw-cream) !important; }
 .start-rules-card--single-step .start-rules-current--display:hover,
-.start-rules-card--single-step .start-rules-current--display:focus-visible,
+.start-rules-card--single-step .start-rules-current--display:focus-visible {
+  background: var(--rpgyw-face-olive-dark) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.start-rules-card--single-step .start-rules-confirm-button {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-forest) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
 .start-rules-card--single-step .start-rules-confirm-button:hover,
 .start-rules-card--single-step .start-rules-confirm-button:focus-visible {
-  background: var(--rpgyw-forest) !important;
+  background: var(--rpgyw-face-forest) !important;
   color: var(--rpgyw-lime) !important;
 }
 
@@ -7406,11 +7392,12 @@ html {
     0 8px 13px rgb(37 45 35 / .11) !important;
 }
 
-/* The current/default system is the permanent forest anchor on the light-olive plaque. */
+/* The current/default system is the dark-olive selector on the light-olive plaque. */
 .start-rules-card--single-step .start-rules-current--display {
-  background: var(--rpgyw-forest) !important;
-  border-color: var(--rpgyw-cream) !important;
+  background: var(--rpgyw-face-olive-dark) !important;
+  border-color: var(--rpgyw-control-inner-light) !important;
   color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
 .start-rules-card--single-step .start-rules-current--display :where(span, strong) {
   color: var(--rpgyw-cream) !important;
@@ -7462,15 +7449,16 @@ html {
 .start-rules-card--single-step .start-rules-panel .start-choice--selected:hover :where(strong, span),
 .start-rules-card--single-step .start-rules-panel .start-choice--selected:focus-visible :where(strong, span) { color: var(--rpgyw-lime) !important; }
 
-/* The confirmation stays a cream button so all three principal surfaces are visible. */
+/* The confirmation is the primary forest action beneath the dark-olive system selector. */
 .start-rules-card--single-step .start-rules-confirm-button {
-  background: var(--rpgyw-cream) !important;
-  border-color: var(--rpgyw-forest-line) !important;
-  color: var(--rpgyw-forest) !important;
+  background: var(--rpgyw-face-forest) !important;
+  border-color: var(--rpgyw-control-inner-light) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
 .start-rules-card--single-step .start-rules-confirm-button:hover,
 .start-rules-card--single-step .start-rules-confirm-button:focus-visible {
-  background: var(--rpgyw-forest) !important;
+  background: var(--rpgyw-face-forest) !important;
   color: var(--rpgyw-lime) !important;
 }
 .start-rules-confirm p { color: var(--rpgyw-forest) !important; }
@@ -7572,24 +7560,29 @@ html {
 }
 
 
-.start-rules-card--single-step .start-rules-current--display,
-.start-rules-card--single-step .start-rules-current--display:hover,
-.start-rules-card--single-step .start-rules-current--display:focus-visible {
-  background: var(--rpgyw-forest) !important;
+.start-rules-card--single-step .start-rules-current--display {
+  background: var(--rpgyw-face-olive-dark) !important;
   color: var(--rpgyw-cream) !important;
 }
 .start-rules-card--single-step .start-rules-current--display .start-rules-current-copy,
 .start-rules-card--single-step .start-rules-current--display .start-rules-current-copy > strong,
-.start-rules-card--single-step .start-rules-current--display .start-rules-current-copy > span,
+.start-rules-card--single-step .start-rules-current--display .start-rules-current-copy > span {
+  color: var(--rpgyw-cream) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.start-rules-card--single-step .start-rules-current--display:hover,
+.start-rules-card--single-step .start-rules-current--display:focus-visible {
+  background: var(--rpgyw-face-olive-dark) !important;
+  color: var(--rpgyw-lime) !important;
+}
 .start-rules-card--single-step .start-rules-current--display:hover .start-rules-current-copy,
 .start-rules-card--single-step .start-rules-current--display:hover .start-rules-current-copy > strong,
 .start-rules-card--single-step .start-rules-current--display:hover .start-rules-current-copy > span,
 .start-rules-card--single-step .start-rules-current--display:focus-visible .start-rules-current-copy,
 .start-rules-card--single-step .start-rules-current--display:focus-visible .start-rules-current-copy > strong,
 .start-rules-card--single-step .start-rules-current--display:focus-visible .start-rules-current-copy > span {
-  color: var(--rpgyw-cream) !important;
-  opacity: 1 !important;
-  visibility: visible !important;
+  color: var(--rpgyw-lime) !important;
 }
 
 .start-campaign-hub .play-entry-card:first-child,
@@ -7605,7 +7598,7 @@ html {
 
 .start-rules-card--single-step .start-rules-current--display,
 .start-rules-card--single-step .start-rules-current--display:active {
-  background: var(--rpgyw-forest) !important;
+  background: var(--rpgyw-face-olive-dark) !important;
   color: var(--rpgyw-cream) !important;
 }
 .start-rules-card--single-step .start-rules-current--display .start-rules-current-copy,
@@ -7615,7 +7608,7 @@ html {
 }
 .start-rules-card--single-step .start-rules-current--display:hover,
 .start-rules-card--single-step .start-rules-current--display:focus-visible {
-  background: var(--rpgyw-forest) !important;
+  background: var(--rpgyw-face-olive-dark) !important;
   color: var(--rpgyw-lime) !important;
 }
 .start-rules-card--single-step .start-rules-current--display:hover .start-rules-current-copy,
@@ -7625,6 +7618,22 @@ html {
 .start-rules-card--single-step .start-rules-current--display:focus-visible .start-rules-current-copy > strong,
 .start-rules-card--single-step .start-rules-current--display:focus-visible .start-rules-current-copy > span {
   color: var(--rpgyw-lime) !important;
+}
+
+
+.start-rules-subtitle {
+  position: absolute;
+  z-index: 2;
+  top: 3.45rem;
+  left: 1.05rem;
+  width: 13.1rem;
+  margin: 0;
+  color: var(--rpgyw-forest);
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: .82rem;
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: center;
 }
 
 
@@ -7661,6 +7670,7 @@ html {
   padding-top: .45rem;
 }
 @media (max-width: 680px) {
+  .start-rules-subtitle { left: .65rem; }
   .campaign-hub-card > .campaign-control-body { grid-template-columns: 1fr; }
   .campaign-hub-card > .campaign-control-body > .campaign-hub-primary-action,
   .campaign-hub-card > .campaign-control-body > .campaign-control-heading {
@@ -8541,7 +8551,8 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
   max-width: 100%;
   min-width: 0;
   min-height: 3.15rem;
-  margin-inline: auto;
+  margin-left: auto;
+  margin-right: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
