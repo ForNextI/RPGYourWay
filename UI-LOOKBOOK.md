@@ -915,7 +915,8 @@ These are current composition rules that sit on top of the canonical primitives 
 ## 22.2 Play
 
 - The compact **Current party / Max party size** plaque stays fully inside the character rail and never clips or forces horizontal overflow.
-- Dice quantity uses a rounded recessed opening. The quantity and die numbers are large forest text at rest.
+- Dice quantity uses a rounded recessed opening. The quantity is large forest text at rest.
+- Die type selection uses the dragon-dice artwork as one square interactive tray: a simple three-column hit grid covers d4/d6/d8, d10/d12/d20, and the bottom percentile pair as d100. Hit areas may be rectangular rather than tracing the irregular die silhouettes; hover/focus reveals the active area without obscuring the artwork.
 - **Can I direct my game?** lives inside expanded Session tools rather than as a permanent second control.
 - **Add another character** is a compact action button, not a full-width card.
 - Gameplay text input has rounded inner corners and remains inside the composer bezel.

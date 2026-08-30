@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.7')
-assert.equal(pkg.rpgywVersion, '1.13.7')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.7'", 'visible app version')
+assert.equal(pkg.version, '1.13.8')
+assert.equal(pkg.rpgywVersion, '1.13.8')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.8'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -473,6 +473,11 @@ has(css, '.start-mini-rating-item > span {')
 has(css, '.start-leader-card > .start-leader-main > span {')
 has(css, '.medieval-page--play .aigm-party-capacity {')
 has(css, '.medieval-page--play #dice-quantity {')
+has(gameplayShell, 'src="/images/dragon-dice-selector.webp"', 'dragon dice selector artwork')
+has(gameplayShell, 'className="aigm-dice-art-button aigm-dice-art-button--percentile"', 'percentile dice hit area')
+has(css, '.aigm-dice-art-selector {', 'dragon dice selector frame')
+lacks(gameplayShell, 'className="aigm-die-button', 'retired generic die buttons')
+assert.equal(exists('public/images/dragon-dice-selector.webp'), true, 'Dragon dice selector artwork should ship with Play')
 has(css, '.medieval-page--play .aigm-gameplay-message-input {')
 has(gameplayShell, '<BookOpen className="size-3.5" aria-hidden="true" />Can I direct my game?</button>', 'story-direction help lives in Session tools')
 has(gameplayShell, 'Current saved turn: ${partyState?.gameplay.turn_count ?? 0}', 'transcript session note includes current saved turn')
@@ -506,4 +511,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.7 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.8 release and canonical UI checks passed.')

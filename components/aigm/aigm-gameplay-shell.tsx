@@ -34,6 +34,7 @@ import {
   Volume2,
   X,
 } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { type ChangeEvent, FormEvent, type KeyboardEvent, type ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { AigmVoiceControls, type AigmVoiceControlsHandle } from '@/components/aigm/aigm-voice-controls'
@@ -2426,8 +2427,41 @@ export function AigmGameplayShell() {
               <button type="button" onClick={() => setDiceQuantity((value) => Math.min(MAX_DICE_QUANTITY, value + 1))} disabled={gameplay.dice_mode === 'purist' && Boolean(lastRoll)} className="aigm-dice-stepper flex min-h-11 items-center justify-center border-l border-border text-primary transition disabled:opacity-40" aria-label="Use one more die"><Plus className="size-4" aria-hidden="true" /></button>
             </div>
             <p id="dice-kind-label" className="mt-2 text-sm font-semibold text-foreground">Of which kind?</p>
-            <div className="mt-3 flex flex-wrap justify-center gap-2" role="group" aria-labelledby="dice-kind-label">
-              {DICE.map((sides) => <button key={sides} type="button" onClick={() => rollDice(sides)} disabled={sending || (gameplay.dice_mode === 'purist' && Boolean(lastRoll))} className="aigm-die-button min-h-11 w-[calc(33.333%-0.4rem)] whitespace-nowrap rounded-xl border px-2 py-2 text-base font-bold disabled:cursor-not-allowed disabled:opacity-40">d{sides}</button>)}
+            <div className="aigm-dice-art-selector mt-3" role="group" aria-labelledby="dice-kind-label">
+              <Image
+                src="/images/dragon-dice-selector.webp"
+                alt=""
+                width={900}
+                height={900}
+                sizes="(max-width: 860px) min(92vw, 360px), 260px"
+                className="aigm-dice-art-image"
+              />
+              <div className="aigm-dice-art-grid" aria-hidden="false">
+                {DICE.slice(0, 6).map((sides, index) => (
+                  <button
+                    key={sides}
+                    type="button"
+                    onClick={() => rollDice(sides)}
+                    disabled={sending || (gameplay.dice_mode === 'purist' && Boolean(lastRoll))}
+                    className="aigm-dice-art-button"
+                    style={{ gridColumn: (index % 3) + 1, gridRow: Math.floor(index / 3) + 1 }}
+                    aria-label={`Roll d${sides}`}
+                    title={`Roll d${sides}`}
+                  >
+                    <span className="aigm-dice-art-label">d{sides}</span>
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => rollDice(100)}
+                  disabled={sending || (gameplay.dice_mode === 'purist' && Boolean(lastRoll))}
+                  className="aigm-dice-art-button aigm-dice-art-button--percentile"
+                  aria-label="Roll d100 percentile dice"
+                  title="Roll d100"
+                >
+                  <span className="aigm-dice-art-label">d100</span>
+                </button>
+              </div>
             </div>
             {lastRoll && (
               <div className="aigm-roll-result mt-3 rounded-xl border p-3 text-sm" role="status" aria-live="polite">
