@@ -106,6 +106,69 @@ const QUESTION_HELP = [
   'These ratings shape the opening pace, how strongly a long-term story develops, and how weird or reality-bending the campaign is allowed to become.',
 ] as const
 
+const CHARACTER_CREATION_RESOURCES = [
+  {
+    name: 'D&D Beyond',
+    systems: 'D&D 5.5e + 5e',
+    description: 'Official guided builder; both rulesets remain supported.',
+    href: 'https://www.dndbeyond.com/en/players?utm_source=chatgpt.com',
+  },
+  {
+    name: 'Roll20 Characters',
+    systems: 'D&D 5.5e + 5e',
+    description: 'Free character builder with support for both current and 2014 rules.',
+    href: 'https://pages.roll20.net/free-dnd-character-builder?utm_source=chatgpt.com',
+  },
+  {
+    name: 'MythWeaver',
+    systems: 'ALL FIVE',
+    description: 'Particularly valuable because its rules engines explicitly support 5.5e/2024, 5e, 3.5e, PF1e, and PF2e.',
+    href: 'https://mythweaver.gg/characters?utm_source=chatgpt.com',
+  },
+  {
+    name: 'Dungeon Master’s Vault',
+    systems: 'D&D 5e',
+    description: 'Free browser-based SRD character builder with export and customization.',
+    href: 'https://www.dungeonmastersvault.com/pages/dnd/5e/character-builder?utm_source=chatgpt.com',
+  },
+  {
+    name: 'Shard Tabletop',
+    systems: 'D&D 5e',
+    description: 'Free SRD-based character creation and digital sheets, browser-based on any device.',
+    href: 'https://www.shardtabletop.com/?utm_source=chatgpt.com',
+  },
+  {
+    name: 'Pathbuilder 2e',
+    systems: 'Pathfinder 2e',
+    description: 'Excellent dedicated PF2e builder, planner, and sheet.',
+    href: 'https://pathbuilder2e.com/?utm_source=chatgpt.com',
+  },
+  {
+    name: 'Pathfinder Nexus / Demiplane',
+    systems: 'Pathfinder 2e',
+    description: 'Officially licensed guided Pathfinder builder.',
+    href: 'https://app.demiplane.com/nexus/pathfinder2e?utm_source=chatgpt.com',
+  },
+  {
+    name: 'Wanderer’s Guide',
+    systems: 'Pathfinder 2e',
+    description: 'Dedicated online Pathfinder 2e character manager.',
+    href: 'https://wanderersguide.app/?utm_source=chatgpt.com',
+  },
+  {
+    name: 'PathCompanion',
+    systems: 'Pathfinder 1e',
+    description: 'Dedicated PF1e character creator and tracker, with six characters available on its free tier.',
+    href: 'https://pathcompanion.com/?utm_source=chatgpt.com',
+  },
+  {
+    name: 'Myth-Weavers',
+    systems: 'D&D 3.5e + Pathfinder 1e',
+    description: 'Better described as free online character sheets than a heavily guided builder, but valuable for the two older systems where good browser tools are scarce.',
+    href: 'https://www.myth-weavers.com/?utm_source=chatgpt.com',
+  },
+] as const
+
 const CAMPAIGN_TOPICS = ['Humor', 'Serious drama', 'Exploration', 'Mystery', 'Social interaction', 'Combat', 'Tactical challenge', 'Politics and intrigue', 'Puzzles', 'NPC relationships'] as const
 const CHARACTER_TOPICS = ['Character backstory usage', 'Inter-party romance', 'Character secret reveals'] as const
 
@@ -210,11 +273,33 @@ function StartModal({ title, children, onClose, wide = false }: { title: string;
   )
 }
 
+function CharacterCreationResourceList() {
+  return (
+    <div className="start-character-builder-help">
+      <p className="start-modal-lede"><strong>Recommended character-creation links</strong></p>
+      <div className="start-character-builder-list">
+        {CHARACTER_CREATION_RESOURCES.map((resource, index) => (
+          <details key={resource.name} className="start-character-builder-item">
+            <summary className="start-character-builder-summary">
+              <span><strong>{index + 1}. {resource.name}</strong><small>{resource.systems}</small></span>
+              <span className="accordion-plus" aria-hidden="true" />
+            </summary>
+            <div className="start-character-builder-reveal">
+              <p>{resource.description}</p>
+              <a className="start-character-builder-link" href={resource.href} target="_blank" rel="noreferrer">{resource.name}</a>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }: { mode?: 'new-campaign' | 'add-character'; multiplayerCode?: string }) {
   const [ageBand, setAgeBand] = useState<AiAgeBand | null>(null)
   const [ageReady, setAgeReady] = useState(false)
   const [ageModalOpen, setAgeModalOpen] = useState(false)
-  const [modal, setModal] = useState<'faq' | 'ai-help' | 'starters' | 'import-help' | 'leader' | 'leader-change' | 'question-help' | 'character-questions' | 'character-review' | 'paid-import' | null>(null)
+  const [modal, setModal] = useState<'faq' | 'ai-help' | 'starters' | 'character-builders' | 'import-help' | 'leader' | 'leader-change' | 'question-help' | 'character-questions' | 'character-review' | 'paid-import' | null>(null)
   const [ruleset, setRuleset] = useState<RulesetId>('dnd-5.5e-srd-5.2.1')
   const [rulesOpen, setRulesOpen] = useState(false)
   const [activeStep, setActiveStep] = useState<1 | 2 | 3 | 4>(1)
@@ -609,7 +694,7 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
               <button type="button" className="start-primary-control" onClick={() => setPasteOpen((open) => !open)} disabled={remainingPartySlots === 0}>And/or paste your<br />character&apos;s information</button>
             </div>
             <input ref={fileRef} className="sr-only" type="file" multiple tabIndex={-1} aria-hidden="true" accept=".pdf,.json,.xml,.txt,.md,.markdown,application/pdf,application/json,text/plain,text/markdown,application/xml,text/xml" onChange={(event) => { addFiles(Array.from(event.target.files ?? [])); event.target.value = '' }} />
-            <div className="start-character-actions start-character-actions--secondary"><button type="button" className="start-info-control" onClick={() => setModal('import-help')}>Character import help</button></div>
+            <div className="start-character-actions start-character-actions--secondary"><button type="button" className="start-forest-control" onClick={() => setModal('character-builders')}>Where to generate characters</button><button type="button" className="start-forest-control" onClick={() => setModal('import-help')}>How to import characters</button></div>
 
             {pasteOpen ? <div className="start-paste-panel"><label><span>Paste your character&apos;s information, then add characters one at a time</span><textarea rows={7} value={pasteText} onChange={(event) => setPasteText(event.target.value)} placeholder="Paste the character record here." /></label><div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={addPastedCharacter} disabled={!pasteText.trim() || totalPartyCount >= 6}>Add this character</button><button type="button" className="start-info-control" onClick={() => setPasteOpen(false)}>Cancel</button></div></div> : null}
             {importMessage ? <p className="auth-message" role="status">{importMessage}</p> : null}
@@ -627,7 +712,7 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
                     {member.status === 'file-added' || member.status === 'error' ? <button type="button" onClick={() => void importCharacter(member.id)} disabled={importBusy || Boolean(activeImportWorkflow && activeImportWorkflow.id !== member.id)}>Import into RPG Your Way</button> : null}
                     {member.status === 'needs-required' || member.status === 'needs-recommended' ? <button type="button" onClick={() => { setActiveCharacterId(member.id); setClarificationText(''); setModal('character-questions') }}>{member.status === 'needs-required' ? 'Answer required questions' : 'Review recommended questions'}</button> : null}
                     {member.imported && member.status === 'ready' && member.result ? <button type="button" onClick={() => { setActiveCharacterId(member.id); setModal('character-review') }}>Review</button> : null}
-                    <button type="button" onClick={() => removeMember(member.id)} disabled={importBusy}>Remove</button>
+                    <button type="button" className="start-remove-control" onClick={() => removeMember(member.id)} disabled={importBusy}>Remove</button>
                   </div>
                 </article>
               ))}
@@ -640,7 +725,8 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
         ) : null}
 
         {ageModalOpen ? <StartModal title="Before AI gameplay" onClose={() => { if (ageBand) setAgeModalOpen(false) }}><div className="start-age-choices"><button type="button" onClick={() => chooseAge('adult')}>I am 18 or older</button><button type="button" onClick={() => chooseAge('teen')}>I am 13–17 and have permission from a parent or guardian</button><button type="button" onClick={() => chooseAge('under-13')}>I am under 13</button></div></StartModal> : null}
-        {modal === 'import-help' ? <StartModal title="Character import help" onClose={() => setModal(null)} wide><p>Add PDF, JSON, XML, TXT, or Markdown character records by browsing for the files, or paste the character information directly. Files may be up to 8 MB.</p><p>After the file is added, choose <strong>Import into RPG Your Way</strong>. RPG Your Way reads the record, converts it into the character structure used during play, and asks only clarifications worth resolving.</p><p>New characters enter the existing campaign fully rested. The current campaign, existing characters, transcript, settings, and story state are not reset.</p><p>Importing a normal character is generally free. If a character is unusually large or complex, RPG Your Way tells you before additional AI processing uses part of your available usage balance.</p><a className="start-inline-link" href="/downloads/rpgyourway-character-update-template-v2.txt" download>Download the blank plain-text character template</a><a className="start-inline-link" href="/legal/privacy">Read the full Privacy information</a></StartModal> : null}
+        {modal === 'character-builders' ? <StartModal title="Where to generate characters" onClose={() => setModal(null)} wide><CharacterCreationResourceList /></StartModal> : null}
+        {modal === 'import-help' ? <StartModal title="How to import characters" onClose={() => setModal(null)} wide><p>Add PDF, JSON, XML, TXT, or Markdown character records by browsing for the files, or paste the character information directly. Files may be up to 8 MB.</p><p>After the file is added, choose <strong>Import into RPG Your Way</strong>. RPG Your Way reads the record, converts it into the character structure used during play, and asks only clarifications worth resolving.</p><p>New characters enter the existing campaign fully rested. The current campaign, existing characters, transcript, settings, and story state are not reset.</p><p>Importing a normal character is generally free. If a character is unusually large or complex, RPG Your Way tells you before additional AI processing uses part of your available usage balance.</p><a className="start-inline-link" href="/downloads/rpgyourway-character-update-template-v2.txt" download>Download the blank plain-text character template</a><a className="start-inline-link" href="/legal/privacy">Read the full Privacy information</a></StartModal> : null}
         {modal === 'starters' ? <StartModal title="Add ready-to-play characters" onClose={() => setModal(null)} wide><p className="start-modal-lede">Choose any available characters up to the six-character party limit. These default characters are built for the D&amp;D 5.5e system.</p><div className="start-starter-grid">{STARTERS.map((starter) => { const selected = party.some((member) => member.id === starter.id); const alreadyPresent = existingStarterIds.has(starter.id); const disabled = alreadyPresent || (!selected && remainingPartySlots === 0); return <button type="button" key={starter.id} className={`start-starter-choice${selected ? ' is-selected' : ''}`} onClick={() => toggleStarter(starter.id)} aria-pressed={selected} disabled={disabled}><Image src={starter.portraitUrl!} alt="" width={100} height={100} /><strong>{starter.className}</strong><span>{alreadyPresent ? 'Already in party' : selected ? 'Adding' : 'Add'}</span></button> })}</div><p className="start-party-count">Current party: {totalPartyCount} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p></StartModal> : null}
         {modal === 'paid-import' && activeCharacter ? <StartModal title="Additional AI processing" onClose={() => setModal(null)}><p>This character is unusually large or complex. Importing it requires additional AI processing and will use part of your available usage balance.</p><p>No usage will be deducted unless you continue.</p><div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={() => { setModal(null); void importCharacter(activeCharacter.id, true) }}>Continue and use my balance</button><button type="button" className="start-info-control" onClick={() => setModal(null)}>Cancel</button></div></StartModal> : null}
         {modal === 'character-questions' && activeCharacter?.result ? <CharacterQuestionsModal member={activeCharacter} clarificationText={clarificationText} setClarificationText={setClarificationText} busy={clarificationBusy} onSend={() => void sendCharacterClarification()} onSkip={() => skipRecommended(activeCharacter.id)} onClose={() => setModal(null)} /> : null}
@@ -683,7 +769,7 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
               <button type="button" className="start-primary-control" onClick={() => setPasteOpen((open) => !open)}>And/or paste your<br />character&apos;s information</button>
             </div>
             <input ref={fileRef} className="sr-only" type="file" multiple tabIndex={-1} aria-hidden="true" accept=".pdf,.json,.xml,.txt,.md,.markdown,application/pdf,application/json,text/plain,text/markdown,application/xml,text/xml" onChange={(event) => { addFiles(Array.from(event.target.files ?? [])); event.target.value = '' }} />
-            <div className="start-character-actions start-character-actions--secondary"><button type="button" className="start-info-control" onClick={() => setModal('import-help')}>Character import help</button></div>
+            <div className="start-character-actions start-character-actions--secondary"><button type="button" className="start-forest-control" onClick={() => setModal('character-builders')}>Where to generate characters</button><button type="button" className="start-forest-control" onClick={() => setModal('import-help')}>How to import characters</button></div>
             {pasteOpen ? <div className="start-paste-panel"><label><span>Paste your character&apos;s information, then add characters one at a time</span><textarea rows={7} value={pasteText} onChange={(event) => setPasteText(event.target.value)} placeholder="Paste the character record here." /></label><div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={addPastedCharacter} disabled={!pasteText.trim() || totalPartyCount >= 6}>Add this character</button><button type="button" className="start-info-control" onClick={() => setPasteOpen(false)}>Cancel</button></div></div> : null}
             {importMessage ? <p className="auth-message" role="status">{importMessage}</p> : null}
 
@@ -700,14 +786,14 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
                     {member.status === 'file-added' || member.status === 'error' ? <button type="button" onClick={() => void importCharacter(member.id)} disabled={importBusy || Boolean(activeImportWorkflow && activeImportWorkflow.id !== member.id)}>Import into RPG Your Way</button> : null}
                     {member.status === 'needs-required' || member.status === 'needs-recommended' ? <button type="button" onClick={() => { setActiveCharacterId(member.id); setClarificationText(''); setModal('character-questions') }}>{member.status === 'needs-required' ? 'Answer required questions' : 'Review recommended questions'}</button> : null}
                     {member.imported && member.status === 'ready' && member.result ? <button type="button" onClick={() => { setActiveCharacterId(member.id); setModal('character-review') }}>Review</button> : null}
-                    <button type="button" onClick={() => removeMember(member.id)} disabled={importBusy}>Remove</button>
+                    <button type="button" className="start-remove-control" onClick={() => removeMember(member.id)} disabled={importBusy}>Remove</button>
                   </div>
                 </article>
               ))}
             </div>
 
             <p className="start-party-count start-party-count--main">Current party: {totalPartyCount} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p>
-            {partyReady ? <div className="start-party-confirm"><button type="button" className="start-primary-control" onClick={() => { setImportMessage(''); setActiveStep(3) }}>Use this party</button><p>{party.length} {party.length === 1 ? 'character is' : 'characters are'} ready.</p></div> : null}
+            {partyReady ? <div className="start-party-confirm"><button type="button" className="start-forest-control" onClick={() => { setImportMessage(''); setActiveStep(3) }}>Use this party</button><p>{party.length} {party.length === 1 ? 'character is' : 'characters are'} ready.</p></div> : null}
             <button type="button" className="start-reset-link" onClick={() => { if (window.confirm('Reset this setup and start again?')) window.location.reload() }}>Or reset everything and start again</button>
           </section> : null}
 
@@ -738,7 +824,8 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
       {ageModalOpen ? <StartModal title="Before you begin, which applies to you?" onClose={() => { if (ageBand) setAgeModalOpen(false) }}><div className="start-age-choices"><button type="button" onClick={() => chooseAge('adult')}>I am 18 or older</button><button type="button" onClick={() => chooseAge('teen')}>I am 13–17 and have permission from a parent or guardian</button><button type="button" onClick={() => chooseAge('under-13')}>I am under 13</button></div></StartModal> : null}
       {modal === 'faq' ? <StartModal title="I need help with all of this" onClose={() => setModal(null)} wide><div className="start-faq-list">{START_FAQ.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div><div className="start-faq-more"><strong>Still need help?</strong><p>Start Page Help can answer questions about setting up your campaign.</p><button type="button" className="start-primary-control" onClick={() => setModal('ai-help')}>My question wasn&apos;t above. I still need help.</button></div></StartModal> : null}
       {modal === 'ai-help' ? <StartModal title="Start Page Help" onClose={() => setModal(null)} wide><p className="start-modal-lede">Ask about the choices on this page or about getting a campaign started. You have {Math.max(0, 25 - helpCount)} of 25 free questions remaining in this onboarding session.</p><div className="start-ai-dialogue" role="log" aria-live="polite" aria-relevant="additions text" aria-label="Start Page Help conversation">{helpConversation.map((turn) => <div key={turn.id} className={`start-ai-turn start-ai-turn--${turn.role}`}><strong>{turn.role === 'assistant' ? 'Start Page Help' : 'You'}</strong><p>{turn.text}</p>{turn.role === 'assistant' ? <button type="button" data-aigm-manual-listen="true" className="start-listen-link" onClick={() => helpVoiceRef.current?.replay(turn.text)}><Volume2 aria-hidden="true" />Listen</button> : null}</div>)}{helpBusy ? <div className="start-ai-turn start-ai-turn--assistant"><strong>Start Page Help</strong><p>Thinking…</p></div> : null}<div ref={helpEndRef} /></div><div className="start-ai-composer"><label><span>Your question</span><span className="start-field-bezel"><textarea ref={helpInputRef} rows={4} value={helpQuestion} onChange={(event) => setHelpQuestion(event.target.value)} placeholder="What do you want help with?" /></span></label><div className="start-ai-composer-actions"><AigmVoiceControls ref={helpVoiceRef} profile="onboarding" assistantName="Start Page Help" currentMessage={helpQuestion} onTranscriptUpdate={setHelpQuestion} onError={setHelpError} disabled={helpBusy || helpCount >= 25} /><button type="button" className="start-primary-control" disabled={!helpQuestion.trim() || helpBusy || helpCount >= 25} onClick={() => void askStartHelp()}>{helpBusy ? 'Checking…' : 'Ask Start Page Help'}</button></div>{helpError ? <p className="auth-message auth-message-error" role="alert">{helpError}</p> : null}<small>{Math.max(0, 25 - helpCount)} questions remaining.</small></div></StartModal> : null}
-      {modal === 'import-help' ? <StartModal title="Character import help" onClose={() => setModal(null)} wide><p>Add PDF, JSON, XML, TXT, or Markdown character records by browsing for the files, or paste the character information directly. Files may be up to 8 MB.</p><p>After the file is added, choose <strong>Import into RPG Your Way</strong>. RPG Your Way will read the record, convert it into the character structure used during play, and ask only the clarifications that are worth resolving.</p><p><strong>New campaign</strong> and <strong>Don&apos;t sweat the small stuff</strong> are applied automatically. New campaign starts the character fully rested. Don&apos;t sweat the small stuff assumes ordinary inexpensive class necessities while still tracking consequential equipment and priced or consumed components.</p><p>Importing a normal character is generally free. If a character is unusually large or complex, RPG Your Way will tell you before additional AI processing uses part of your available usage balance.</p><p>Names and portraits can be changed later on the Play page through the Characters sidebar.</p><p>Character information is sent to the AI service when RPG Your Way imports or uses the character. Signed-in campaigns are saved automatically to your RPG Your Way account. Browser storage is used only as a local cache and legacy-import bridge.</p><a className="start-inline-link" href="/downloads/rpgyourway-character-update-template-v2.txt" download>Download the blank plain-text character template</a><a className="start-inline-link" href="/legal/privacy">Read the full Privacy information</a></StartModal> : null}
+      {modal === 'character-builders' ? <StartModal title="Where to generate characters" onClose={() => setModal(null)} wide><CharacterCreationResourceList /></StartModal> : null}
+      {modal === 'import-help' ? <StartModal title="How to import characters" onClose={() => setModal(null)} wide><p>Add PDF, JSON, XML, TXT, or Markdown character records by browsing for the files, or paste the character information directly. Files may be up to 8 MB.</p><p>After the file is added, choose <strong>Import into RPG Your Way</strong>. RPG Your Way will read the record, convert it into the character structure used during play, and ask only the clarifications that are worth resolving.</p><p><strong>New campaign</strong> and <strong>Don&apos;t sweat the small stuff</strong> are applied automatically. New campaign starts the character fully rested. Don&apos;t sweat the small stuff assumes ordinary inexpensive class necessities while still tracking consequential equipment and priced or consumed components.</p><p>Importing a normal character is generally free. If a character is unusually large or complex, RPG Your Way will tell you before additional AI processing uses part of your available usage balance.</p><p>Names and portraits can be changed later on the Play page through the Characters sidebar.</p><p>Character information is sent to the AI service when RPG Your Way imports or uses the character. Signed-in campaigns are saved automatically to your RPG Your Way account. Browser storage is used only as a local cache and legacy-import bridge.</p><a className="start-inline-link" href="/downloads/rpgyourway-character-update-template-v2.txt" download>Download the blank plain-text character template</a><a className="start-inline-link" href="/legal/privacy">Read the full Privacy information</a></StartModal> : null}
       {modal === 'starters' ? <StartModal title="Choose these ready-to-play characters" onClose={() => setModal(null)} wide><p className="start-modal-lede">Choose up to six. These default characters are built for the D&amp;D 5.5e system.</p><div className="start-starter-grid">{STARTERS.map((starter) => { const selected = party.some((member) => member.id === starter.id); return <button type="button" key={starter.id} className={`start-starter-choice${selected ? ' is-selected' : ''}`} onClick={() => toggleStarter(starter.id)} aria-pressed={selected}><Image src={starter.portraitUrl!} alt="" width={100} height={100} /><strong>{starter.className}</strong><span>{selected ? 'In party' : 'Add'}</span></button> })}</div><p className="start-party-count">Current party: {totalPartyCount} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p></StartModal> : null}
       {modal === 'paid-import' && activeCharacter ? <StartModal title="Additional AI processing" onClose={() => setModal(null)}><p>This character is unusually large or complex. Importing it requires additional AI processing and will use part of your available usage balance.</p><p>No usage will be deducted unless you continue.</p><div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={() => { setModal(null); void importCharacter(activeCharacter.id, true) }}>Continue and use my balance</button><button type="button" className="start-info-control" onClick={() => setModal(null)}>Cancel</button></div></StartModal> : null}
       {modal === 'character-questions' && activeCharacter?.result ? <CharacterQuestionsModal member={activeCharacter} clarificationText={clarificationText} setClarificationText={setClarificationText} busy={clarificationBusy} onSend={() => void sendCharacterClarification()} onSkip={() => skipRecommended(activeCharacter.id)} onClose={() => setModal(null)} /> : null}

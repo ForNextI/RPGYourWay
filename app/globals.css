@@ -4121,6 +4121,63 @@ body :where(button, .button, summary, [role="button"]) {
 .start-faq-list summary:hover,
 .start-faq-list summary:focus-visible { background: var(--rpgyw-forest); color: var(--rpgyw-lime); }
 .start-faq-list details p { margin: 0; border-top: 1px solid color-mix(in srgb, var(--rpgyw-brass-mid) 54%, transparent); padding: .7rem .75rem; line-height: 1.55; }
+
+.start-character-builder-help { display: grid; gap: .8rem; }
+.start-character-builder-help > .start-modal-lede { margin: 0; }
+.start-character-builder-list { display: grid; gap: .65rem; }
+.start-character-builder-item { background: transparent; }
+.start-character-builder-summary {
+  min-height: 54px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .75rem;
+  border: 1px solid var(--rpgyw-control-inner-light);
+  border-radius: 11px;
+  background: var(--rpgyw-face-olive-dark);
+  color: var(--rpgyw-cream);
+  padding: .55rem .65rem .55rem .85rem;
+  box-shadow: var(--rpgyw-raised-dark-shadow);
+  cursor: pointer;
+  list-style: none;
+}
+.start-character-builder-summary::-webkit-details-marker { display: none; }
+.start-character-builder-summary > span:first-child { display: grid; gap: .1rem; min-width: 0; }
+.start-character-builder-summary strong { color: inherit; font-size: .92rem; }
+.start-character-builder-summary small { color: inherit; font-size: .72rem; font-weight: 750; opacity: .92; }
+.start-character-builder-summary:hover,
+.start-character-builder-summary:focus-visible { color: var(--rpgyw-lime); }
+.start-character-builder-item[open] > .start-character-builder-summary { color: var(--rpgyw-cream); }
+.start-character-builder-item[open] > .start-character-builder-summary:hover,
+.start-character-builder-item[open] > .start-character-builder-summary:focus-visible { color: var(--rpgyw-lime); }
+.start-character-builder-item[open] > .start-character-builder-summary .accordion-plus { transform: rotate(45deg); }
+.start-character-builder-reveal {
+  margin: .55rem .2rem .15rem;
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: 11px;
+  background: var(--rpgyw-face-cream);
+  color: var(--rpgyw-forest);
+  padding: .8rem .85rem;
+  box-shadow: var(--rpgyw-raised-light-shadow);
+}
+.start-character-builder-reveal p { margin: 0 0 .7rem; color: var(--rpgyw-forest); line-height: 1.5; }
+.start-character-builder-link {
+  width: fit-content;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--rpgyw-control-inner-light);
+  border-radius: 10px;
+  background: var(--rpgyw-face-forest);
+  color: var(--rpgyw-cream);
+  padding: .42rem .72rem;
+  box-shadow: var(--rpgyw-raised-dark-shadow);
+  font-weight: 900;
+  text-decoration: none;
+}
+.start-character-builder-link:hover,
+.start-character-builder-link:focus-visible { color: var(--rpgyw-lime); }
 .start-faq-more { margin-top: 1rem; border: 1px solid var(--rpgyw-forest-line); border-radius: 12px; background: var(--rpgyw-face-olive-light); padding: .85rem; box-shadow: var(--rpgyw-raised-light-shadow); }
 .start-faq-more strong { color: var(--rpgyw-forest); font-size: 1.05rem; }
 .start-faq-more p { margin: .22rem 0 .6rem; color: var(--muted); }
@@ -4278,6 +4335,7 @@ body :where(button, .button, summary, [role="button"]) {
   .start-step-heading-row,
 .start-question-footer{ align-items: stretch; flex-direction: column; }
   .start-character-actions{ display: grid; grid-template-columns: 1fr; }
+  .start-character-actions--secondary { width: 100%; grid-template-columns: 1fr; }
   .start-primary-control,
 .start-secondary-control{ width: 100%; }
   .start-party-card { grid-template-columns: 60px minmax(0, 1fr); }
@@ -4406,14 +4464,21 @@ body :where(button, .button, summary, [role="button"]) {
 
 
 /* Step 2 regains its parchment plaque, with Default party hanging over the upper edge. */
-.start-party-step {
+.start-step.start-party-step {
   position: relative;
   margin-top: .35rem;
-  border: 1px solid var(--rpgyw-forest-line);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 18px;
-  background: var(--rpgyw-face-cream);
+  background: var(--rpgyw-face-olive-dark);
+  color: var(--rpgyw-cream);
   padding: 2.85rem .9rem 1rem;
-  box-shadow: var(--rpgyw-raised-light-shadow);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
+}
+.start-step.start-party-step > .start-step-heading-row h2,
+.start-step.start-party-step > .start-step-heading-row p,
+.start-step.start-party-step > .start-party-count,
+.start-step.start-party-step > .start-party-confirm p {
+  color: var(--rpgyw-cream) !important;
 }
 .start-party-step .start-step-nameplate {
   left: 1.05rem;
@@ -4621,19 +4686,65 @@ body :where(button, .button, summary, [role="button"]) {
 /* Step 2 primary choices are explicit mix-and-match actions. */
 .start-character-actions--primary .start-primary-control {
   min-height: 70px;
+  border-color: var(--rpgyw-forest-line);
+  background: var(--rpgyw-face-olive-light);
+  color: var(--rpgyw-forest);
+  box-shadow: var(--rpgyw-raised-light-shadow);
   line-height: 1.18;
   text-align: center;
+}
+.start-character-actions--primary .start-primary-control:hover:not(:disabled),
+.start-character-actions--primary .start-primary-control:focus-visible:not(:disabled) {
+  background: var(--rpgyw-face-forest);
+  color: var(--rpgyw-lime) !important;
 }
 .start-character-actions--primary .start-primary-control > span {
   display: inline-block;
 }
 .start-character-actions--secondary {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: .7rem;
+  width: min(66.666%, 760px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .55rem;
+  margin: .7rem auto .9rem;
 }
-.start-character-actions--secondary .start-info-control {
-  width: min(320px, 100%);
+.start-forest-control {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  border: 1px solid var(--rpgyw-control-inner-light);
+  border-radius: 11px;
+  background: var(--rpgyw-face-forest);
+  color: var(--rpgyw-cream);
+  padding: .55rem .78rem;
+  box-shadow: var(--rpgyw-raised-dark-shadow);
+  cursor: pointer;
+  font-weight: 900;
+  text-align: center;
+  transition: color 120ms ease, transform 80ms ease;
+}
+.start-forest-control:hover:not(:disabled),
+.start-forest-control:focus-visible:not(:disabled) {
+  color: var(--rpgyw-lime);
+}
+.start-forest-control:active:not(:disabled) {
+  transform: translateY(2px);
+}
+.start-character-actions--secondary .start-forest-control {
+  width: 100%;
+}
+.start-party-card-actions .start-remove-control {
+  border-color: var(--rpgyw-forest-line);
+  background: var(--rpgyw-face-cream);
+  color: var(--rpgyw-forest);
+  box-shadow: var(--rpgyw-raised-light-shadow);
+}
+.start-party-card-actions .start-remove-control:hover:not(:disabled),
+.start-party-card-actions .start-remove-control:focus-visible:not(:disabled) {
+  background: var(--rpgyw-face-forest);
+  color: var(--rpgyw-lime) !important;
 }
 
 /* Step 3's landing choices sit on the plaque; the olive bezel appears once customization opens. */
@@ -4980,7 +5091,8 @@ body :where(button, .button, summary, [role="button"]) {
   gap: .34rem;
   margin-top: .8rem;
 }
-.start-party-confirm .start-primary-control {
+.start-party-confirm .start-primary-control,
+.start-party-confirm .start-forest-control {
   width: min(300px, 100%);
   min-height: 46px;
 }
@@ -4989,6 +5101,13 @@ body :where(button, .button, summary, [role="button"]) {
   color: var(--muted);
   font-size: .78rem;
   font-weight: 800;
+}
+.start-step.start-party-step .start-reset-link {
+  color: var(--rpgyw-cream);
+}
+.start-step.start-party-step .start-reset-link:hover,
+.start-step.start-party-step .start-reset-link:focus-visible {
+  color: var(--rpgyw-lime);
 }
 .start-settings-leader {
   display: grid;
@@ -8395,4 +8514,177 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 .character-profile-editor textarea,
 .character-profile-editor select {
   background: var(--rpgyw-parchment) !important;
+}
+
+/* ---------- Multiplayer page + Start import separation ---------- */
+/* Start now keeps only the legacy-adventure importer. The compact control is
+   intentionally dark olive so it reads as a secondary utility rather than a
+   campaign-creation step. */
+.start-import-hub {
+  width: 100%;
+  margin: 0 0 2rem;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.start-import-hub > summary {
+  width: min(38%, 31rem);
+  min-height: 3.15rem;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  border: 1px solid var(--rpgyw-control-inner-light) !important;
+  border-radius: 15px !important;
+  background: var(--rpgyw-face-olive-dark) !important;
+  color: var(--rpgyw-cream) !important;
+  padding: .7rem .8rem .7rem 1rem;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+  cursor: pointer;
+  font-weight: 900;
+}
+.start-import-hub > summary:hover,
+.start-import-hub > summary:focus-visible { color: var(--rpgyw-lime) !important; }
+.start-import-hub[open] > summary { color: var(--rpgyw-cream) !important; }
+.start-import-hub[open] > summary:hover,
+.start-import-hub[open] > summary:focus-visible { color: var(--rpgyw-lime) !important; }
+.start-import-hub[open] > summary .accordion-plus { transform: rotate(45deg); }
+.start-import-hub .start-existing-body {
+  margin-top: .75rem;
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: var(--rpgyw-radius-card);
+  background: var(--rpgyw-face-cream);
+  padding: 1rem;
+  box-shadow: var(--rpgyw-raised-light-shadow);
+}
+.start-import-hub .play-entry-import {
+  margin: 0;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0;
+  box-shadow: none !important;
+}
+.start-import-hub .play-entry-import > .button {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-forest) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
+.start-import-hub .play-entry-import > .button:hover,
+.start-import-hub .play-entry-import > .button:focus-visible { color: var(--rpgyw-lime) !important; }
+
+.multiplayer-page-main {
+  padding: clamp(1.25rem, 3vw, 2.4rem) 0 clamp(3rem, 7vw, 5rem);
+}
+.multiplayer-page-shell {
+  width: min(1120px, calc(100% - 2rem));
+  display: grid;
+  gap: 1.25rem;
+}
+.multiplayer-page-intro,
+.multiplayer-campaign-manager,
+.multiplayer-vtt-card,
+.multiplayer-signin-card {
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: var(--rpgyw-radius-plaque);
+  box-shadow: var(--rpgyw-raised-light-shadow);
+}
+.multiplayer-page-intro {
+  background: var(--rpgyw-face-cream);
+  padding: clamp(1.15rem, 3vw, 1.65rem);
+}
+.multiplayer-page-intro .page-title { margin-bottom: .55rem; }
+.multiplayer-page-notice {
+  margin: .9rem 0 .7rem;
+  border: 1px solid var(--rpgyw-control-inner-light);
+  border-radius: var(--rpgyw-radius-card);
+  background: var(--rpgyw-face-olive-dark);
+  color: var(--rpgyw-cream);
+  padding: .9rem 1rem;
+  box-shadow: var(--rpgyw-raised-dark-shadow);
+  line-height: 1.55;
+}
+.multiplayer-page-notice strong { color: inherit; }
+.multiplayer-campaign-manager {
+  background: var(--rpgyw-face-olive-dark);
+  color: var(--rpgyw-cream);
+  padding: clamp(1rem, 2.8vw, 1.35rem);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
+}
+.multiplayer-section-heading { margin-bottom: 1rem; }
+.multiplayer-section-heading :where(.kicker, h2, p) { color: var(--rpgyw-cream); }
+.multiplayer-section-heading h2 { margin: .12rem 0 .4rem; font-size: clamp(1.45rem, 3vw, 2rem); }
+.multiplayer-section-heading p:last-child { margin: 0; line-height: 1.55; }
+.multiplayer-campaign-list { display: grid; gap: .7rem; }
+.multiplayer-campaign-manager .campaign-hub-card {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  border-radius: var(--rpgyw-radius-card) !important;
+  background: var(--rpgyw-face-cream) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
+}
+.multiplayer-campaign-manager .campaign-hub-summary {
+  border: 0 !important;
+  background: var(--rpgyw-face-olive-light) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow: none !important;
+}
+.multiplayer-campaign-manager .campaign-hub-card[open] > .campaign-hub-summary {
+  border-bottom: 2px solid var(--rpgyw-brass-mid) !important;
+  background: var(--rpgyw-face-forest) !important;
+  color: var(--rpgyw-cream) !important;
+}
+.multiplayer-campaign-manager .campaign-hub-summary:hover,
+.multiplayer-campaign-manager .campaign-hub-summary:focus-visible,
+.multiplayer-campaign-manager .campaign-hub-card[open] > .campaign-hub-summary:hover,
+.multiplayer-campaign-manager .campaign-hub-card[open] > .campaign-hub-summary:focus-visible { color: var(--rpgyw-lime) !important; }
+.multiplayer-campaign-manager .campaign-hub-summary:hover .campaign-hub-summary-copy small,
+.multiplayer-campaign-manager .campaign-hub-summary:focus-visible .campaign-hub-summary-copy small,
+.multiplayer-campaign-manager .campaign-hub-card[open] > .campaign-hub-summary:hover .campaign-hub-summary-copy small,
+.multiplayer-campaign-manager .campaign-hub-card[open] > .campaign-hub-summary:focus-visible .campaign-hub-summary-copy small { color: var(--rpgyw-lime) !important; }
+.multiplayer-campaign-manager .campaign-hub-card > .campaign-control-body {
+  background: var(--rpgyw-cream) !important;
+  color: var(--rpgyw-forest) !important;
+}
+.multiplayer-empty-state {
+  display: flex;
+  align-items: flex-start;
+  gap: .7rem;
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: var(--rpgyw-radius-card);
+  background: var(--rpgyw-face-cream);
+  color: var(--rpgyw-forest);
+  padding: 1rem;
+  box-shadow: var(--rpgyw-raised-light-shadow);
+}
+.multiplayer-empty-state svg { width: 1.25rem; height: 1.25rem; flex: 0 0 auto; }
+.multiplayer-empty-state p { margin: 0; color: var(--rpgyw-forest); }
+.multiplayer-vtt-card {
+  background: var(--rpgyw-face-olive-light);
+  color: var(--rpgyw-forest);
+  padding: clamp(1rem, 2.8vw, 1.35rem);
+}
+.multiplayer-vtt-card h2 { margin: .12rem 0 .4rem; font-size: clamp(1.35rem, 2.8vw, 1.9rem); }
+.multiplayer-vtt-card p { color: var(--rpgyw-forest); line-height: 1.55; }
+.multiplayer-vtt-coming-soon {
+  width: fit-content;
+  margin-top: .8rem;
+  border: 1px solid var(--rpgyw-control-inner-light);
+  border-radius: var(--rpgyw-radius-control);
+  background: var(--rpgyw-face-forest);
+  color: var(--rpgyw-cream);
+  padding: .55rem .8rem;
+  box-shadow: var(--rpgyw-raised-dark-shadow);
+  font-weight: 900;
+}
+.multiplayer-signin-card {
+  background: var(--rpgyw-face-olive-light);
+  padding: clamp(1rem, 2.8vw, 1.35rem);
+}
+.multiplayer-signin-card h2 { margin: 0 0 .35rem; color: var(--rpgyw-forest); }
+.multiplayer-signin-card > p { color: var(--rpgyw-forest); }
+
+@media (max-width: 760px) {
+  .start-import-hub > summary { width: 100%; }
+  .multiplayer-page-shell { width: min(100% - 1rem, 1120px); }
 }

@@ -14,7 +14,7 @@ export function RpgywStartEntry({ addCharacterMode = false, multiplayerCode = ''
       <main id="main-content" tabIndex={-1} className="inner-main play-entry-main start-page-main">
         {!addCharacterMode ? <AdSenseSlot placement="start" /> : null}
         <div className="shell start-page-shell">
-          <h1 className="sr-only">{addCharacterMode ? 'Add characters to the current campaign' : 'Start a new campaign or manage your current campaigns'}</h1>
+          <h1 className="sr-only">{addCharacterMode ? 'Add characters to the current campaign' : 'Start a new campaign or import an older adventure'}</h1>
           {!addCharacterMode ? <CampaignHub /> : null}
           <StartOnboarding mode={addCharacterMode ? 'add-character' : 'new-campaign'} multiplayerCode={multiplayerCode} />
         </div>

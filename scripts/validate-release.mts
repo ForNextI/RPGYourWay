@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.12')
-assert.equal(pkg.rpgywVersion, '1.13.12')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.12'", 'visible app version')
+assert.equal(pkg.version, '1.13.13')
+assert.equal(pkg.rpgywVersion, '1.13.13')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.13'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -31,6 +31,7 @@ for (const file of [
   'app/robots.ts',
   'app/start/page.tsx',
   'app/play/page.tsx',
+  'app/multiplayer/page.tsx',
   'app/script/page.tsx',
   'app/account/page.tsx',
   'app/support/page.tsx',
@@ -43,6 +44,7 @@ for (const file of [
   'components/aigm/aigm-gameplay-shell.tsx',
   'components/multiplayer/TableChatPanel.tsx',
   'components/multiplayer/MultiplayerPanelSwitcher.tsx',
+  'components/multiplayer/MultiplayerCampaignManager.tsx',
   'lib/aigm/campaign-storage.ts',
   'lib/aigm/campaign-persistence.ts',
   'lib/aigm/cloud-campaigns.ts',
@@ -252,14 +254,24 @@ has(account, 'Your account keeps purchases, usage, and cloud campaigns together.
 lacks(account, 'Play campaigns stay in this browser unless you export them.')
 const startEntry = read('components/aigm/rpgyw-start-entry.tsx')
 const campaignHub = read('components/start/CampaignHub.tsx')
-has(startEntry, '<CampaignHub />', 'campaign hub above onboarding')
-before(startEntry, '<CampaignHub />', '<StartOnboarding', 'Campaign hub position')
-has(campaignHub, 'Existing Campaigns, Controls &amp; Imports')
+const multiplayerPage = read('app/multiplayer/page.tsx')
+const multiplayerManager = read('components/multiplayer/MultiplayerCampaignManager.tsx')
+has(startEntry, '<CampaignHub />', 'import hub above onboarding')
+before(startEntry, '<CampaignHub />', '<StartOnboarding', 'import hub position')
+has(campaignHub, 'Import older adventures', 'Start import-only control')
 has(campaignHub, 'RPG Your Way can import WardensPC exports that had already reached Play')
-has(campaignHub, 'Your Campaigns')
-lacks(campaignHub, 'Campaign controls', 'redundant campaign-controls accordion')
-has(campaignHub, 'Continue Adventure')
-has(campaignHub, 'Pending decisions')
+lacks(campaignHub, 'Your Campaigns', 'campaign list retired from Start')
+lacks(campaignHub, 'Pending decisions', 'multiplayer governance retired from Start')
+lacks(campaignHub, 'Continue Adventure', 'campaign continuation retired from Start import control')
+has(multiplayerPage, 'This page is for controlling multiplayer and VTT.', 'Multiplayer creation/management notice')
+has(multiplayerPage, 'you will do so in Start, as part of the normal campaign creation workflow.', 'Start remains campaign-creation home')
+has(multiplayerPage, '<MultiplayerCampaignManager />', 'Multiplayer management component')
+has(multiplayerPage, 'VTT connections are coming next.', 'VTT placeholder')
+has(multiplayerManager, 'Campaign and multiplayer controls')
+has(multiplayerManager, 'Continue Adventure')
+has(multiplayerManager, 'Pending decisions')
+has(multiplayerManager, 'Members')
+has(multiplayerManager, 'Make coordinator')
 lacks(campaignHub, 'wait for the rebuilt RPG Your Way onboarding flow')
 const gameplayShell = read('components/aigm/aigm-gameplay-shell.tsx')
 lacks(gameplayShell, '/#wardens-latest-update')
@@ -383,10 +395,10 @@ lacks(landingCampaignPanel, 'Return to Adventure')
 has(start, '<strong id="rules-heading">Start Here</strong>')
 has(start, 'Choose This Game System')
 lacks(start, 'Use this game system')
-has(campaignHub, 'className="campaign-hub-card"')
-has(campaignHub, 'className="campaign-hub-summary"')
-lacks(campaignHub, 'play-entry-adventure-open')
-lacks(campaignHub, 'play-entry-continue')
+has(multiplayerManager, 'className="campaign-hub-card"')
+has(multiplayerManager, 'className="campaign-hub-summary"')
+lacks(multiplayerManager, 'play-entry-adventure-open')
+lacks(multiplayerManager, 'play-entry-continue')
 
 const fullscreenToggle = read('components/accessibility/fullscreen-toggle.tsx')
 has(fullscreenToggle, 'ArrowUpRight')
@@ -498,6 +510,36 @@ has(css, '.medieval-page--play .aigm-gameplay-message-input {')
 has(gameplayShell, '<BookOpen className="size-3.5" aria-hidden="true" />Can I direct my game?</button>', 'story-direction help lives in Session tools')
 has(gameplayShell, 'Current saved turn: ${partyState?.gameplay.turn_count ?? 0}', 'transcript session note includes current saved turn')
 
+// Gather Your Party follows the current dark-plaque/light-card hierarchy and exposes character-creation resources.
+const startOnboarding = read('components/start/StartOnboarding.tsx')
+has(startOnboarding, 'Where to generate characters', 'character-generation helper')
+has(startOnboarding, 'How to import characters', 'character-import helper')
+has(startOnboarding, "name: 'D&D Beyond'", 'D&D Beyond character resource')
+has(startOnboarding, "name: 'Roll20 Characters'", 'Roll20 character resource')
+has(startOnboarding, "name: 'MythWeaver'", 'MythWeaver character resource')
+has(startOnboarding, "name: 'Dungeon Master’s Vault'", 'Dungeon Master’s Vault resource')
+has(startOnboarding, "name: 'Shard Tabletop'", 'Shard Tabletop resource')
+has(startOnboarding, "name: 'Pathbuilder 2e'", 'Pathbuilder 2e resource')
+has(startOnboarding, "name: 'Pathfinder Nexus / Demiplane'", 'Pathfinder Nexus resource')
+has(startOnboarding, "name: 'Wanderer’s Guide'", 'Wanderer’s Guide resource')
+has(startOnboarding, "name: 'PathCompanion'", 'PathCompanion resource')
+has(startOnboarding, "name: 'Myth-Weavers'", 'Myth-Weavers resource')
+has(startOnboarding, 'className="start-remove-control"', 'cream Remove control hook')
+has(startOnboarding, '>Use this party</button>', 'Use This Party action')
+has(css, '.start-step.start-party-step {', 'dark-olive Gather Your Party plaque')
+has(css, '.start-party-card-actions .start-remove-control {', 'cream Remove recipe')
+has(css, '.start-character-builder-summary {', 'character resource accordion recipe')
+has(css, '.start-character-builder-reveal {', 'character resource cream reveal')
+has(css, '.start-forest-control {', 'forest helper/confirmation button recipe')
+has(css, '.start-import-hub > summary {', 'dark-olive Start import control')
+const siteHeader = read('components/SiteHeader.tsx')
+has(siteHeader, "{ href: '/multiplayer', label: 'Multiplayer' }", 'Multiplayer primary-navigation item')
+before(siteHeader, "{ href: '/play', label: 'Play' }", "{ href: '/multiplayer', label: 'Multiplayer' }", 'Play before Multiplayer navigation')
+before(siteHeader, "{ href: '/multiplayer', label: 'Multiplayer' }", "{ href: '/script', label: 'Script' }", 'Multiplayer before Script navigation')
+has(css, '.multiplayer-page-notice {', 'Multiplayer management notice styling')
+has(css, '.multiplayer-campaign-manager {', 'Multiplayer campaign-control plaque')
+has(css, '.multiplayer-vtt-card {', 'VTT future-work plaque')
+
 // Script is the actual three-step converter and accepts outside campaign records.
 const scriptPageUi = read('app/script/page.tsx')
 const shapeWorkspace = read('components/ShapeWorkspace.tsx')
@@ -540,4 +582,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.12 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.13 release and canonical UI checks passed.')

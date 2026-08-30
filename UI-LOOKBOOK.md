@@ -873,7 +873,7 @@ Manual AdSense inventory is deliberately simple and sits immediately below the t
 - Reserve approximately **320 × 100 px on phones**, **468 × 60 px on intermediate widths**, and **728 × 90 px on laptop/desktop widths**.
 - Before an AdSense slot ID is configured, keep the same reserved footprint visible with the permitted label **Advertisements** and an otherwise blank placeholder. No separate on/off control is needed.
 - Start uses a **150 px clear vertical buffer below the ad inventory** before the first ordinary campaign control.
-- The Start ad appears only in the normal new-campaign/management flow, not the signed-out authentication surface or the add-character utility flow.
+- The Start ad appears only in the normal new-campaign/import flow, not the signed-out authentication surface or the add-character utility flow.
 - AdSense client/slot identifiers are supplied through `NEXT_PUBLIC_ADSENSE_*` deployment variables so inventory can be connected without rewriting page components.
 
 ## 20.2 VTT integration
@@ -906,10 +906,11 @@ These are current composition rules that sit on top of the canonical primitives 
 
 - `Start Here` carries the plain subtitle **New Campaign** immediately beneath the nameplate.
 - The persistent selected game-system control is forest with cream copy. Hover/focus keeps the forest face and changes the copy to lime. Its accordion screw does not recolor or resize.
-- Open campaign controls shrink-wrap their current content. Campaign identity and **Continue Adventure** may share the first row; multiplayer members, votes, and administration add height only when present.
+- The compact top utility on Start is **Import older adventures** only. It uses a dark-olive face and does not contain campaign management or multiplayer controls.
 - Campaign-preference category labels are readable forest text on their olive rows.
 - A completed guidance plaque carries the single prominent status **Your campaign guidance is set.** Do not add a completion-count subtitle.
 - In the proposed-party-leader plaque, **Proposed party leader:** is an upper-left label. The proposed leader name is centered and is the visual event; Change/None/explanation actions remain secondary.
+- **Gather Your Party** uses a dark-olive backing plaque. The three character-source choices remain light olive; the two centered helper actions (**Where to generate characters** and **How to import characters**) and **Use This Party** are canonical forest buttons. Party cards stay light olive, and Remove is a canonical cream button. The character-generation modal uses dark-olive accordion buttons with cream reveals.
 - Choice hover/focus changes the letters themselves to lime. Do not paint a separate highlighted slab behind the hovered copy.
 - The final **Onward** control is a centered canonical forest button, roughly one-third of the available desktop width. On narrow/mobile screens it may use the full available width.
 - Start-to-Play transition/status cards use canonical light olive rather than an ad-hoc translucent green.
@@ -958,7 +959,16 @@ These are current composition rules that sit on top of the canonical primitives 
 - Support, Privacy, Terms, Accessibility, Read, and 404 use the same cream/brass/forest prose-card construction rather than generic framework cards.
 - Semantic error, warning, and live-recording states may use dedicated warning colors when that distinction conveys real state. Those colors do not become ordinary furniture colors.
 
-## 22.6 Validation and maintenance
+## 22.6 Multiplayer
+
+- `/multiplayer` is the permanent management home for native multiplayer and future VTT connections. Campaign creation still begins in Start through the ordinary campaign-creation workflow.
+- The top notice explicitly distinguishes **creation in Start** from **management here**.
+- Existing campaign/governance controls live on Multiplayer rather than inside Start. Multiplayer campaigns expose member, voting, coordinator, leave, and deletion controls without duplicating those controls in Table Chat.
+- The page may list existing campaigns so users can continue or manage them; multiplayer campaigns reveal the additional multiplayer governance controls.
+- The VTT area is a canonical RPG Your Way plaque and may say **Coming soon** until a real integration is available. Do not invent a separate VTT visual language.
+- Primary navigation includes **Multiplayer** between Play and Script.
+
+## 22.7 Validation and maintenance
 
 - Release validation protects the **current semantic UI contract**, not exact CSS strings from old releases.
 - When a canonical primitive changes, update its one source of truth and this lookbook rather than adding a new page-local override.
