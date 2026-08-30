@@ -145,7 +145,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
           {paymentNotice ? <p className="auth-message auth-message-success" role="status">{paymentNotice}</p> : null}
           {paymentError ? <p className="auth-message auth-message-error" role="alert">{paymentError}</p> : null}
 
-          <details id="sign-in" className="account-access-details" open={!user}>
+          <details id="sign-in" className={`account-access-details${user ? ' account-access-details--signed-in' : ''}`} open={!user}>
             <summary>
               <span>{user ? `Signed in as ${email ?? 'RPG Your Way user'}` : 'Sign in or create an account'}</span>
               <span className="accordion-plus account-details-caret" aria-hidden="true" />
@@ -191,7 +191,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                 )}
               </section>
 
-              {!ownerQa ? <section id="add-usage" className="play-pack-section" aria-labelledby="add-usage-heading">
+              {!ownerQa ? <section id="add-usage" className="play-pack-section play-pack-section--catalog" aria-labelledby="add-usage-heading">
                 <div className="play-pack-heading">
                   <div>
                     <p className="account-state-label">Add usage</p>
@@ -248,7 +248,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
               ) : null}
 
               {!ownerQa && !walletUnavailable ? (
-                <section className="usage-activity" aria-labelledby="purchase-history-heading">
+                <section className="usage-activity usage-activity--purchase-history" aria-labelledby="purchase-history-heading">
                   <div className="usage-activity-heading">
                     <div>
                       <p className="account-state-label">Play Pack purchases</p>

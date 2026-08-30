@@ -118,7 +118,7 @@ export function ShapeWorkspace() {
   useEffect(() => {
     cancelled.current = false
     loadProjects()
-    fetch('/api/shape/jobs', { cache: 'no-store' })
+    fetch('/api/shape/jobs?active=1', { cache: 'no-store' })
       .then(async (response) => {
         if (!response.ok) return null
         return response.json() as Promise<{ job?: ShapeJob | null }>
@@ -291,10 +291,10 @@ export function ShapeWorkspace() {
     setError('')
     setDuplicateBlocked(false)
     setQuoteMicrousd(null)
-    if (continuingProject) {
-      setProjectMode(true)
-      setSelectedProjectId(continuingProject)
-    }
+    setDescriptionLevel('light')
+    setProjectTitle('')
+    setProjectMode(Boolean(continuingProject))
+    setSelectedProjectId(continuingProject)
   }
 
   function downloadResult() {
@@ -347,7 +347,7 @@ export function ShapeWorkspace() {
     const visibleError = error || persistedError
     const progress = realProgress(job)
     return (
-      <section className="shape-workbench" aria-labelledby="shape-job-title">
+      <section className={`shape-workbench${job.status === 'completed' ? ' shape-workbench--completed' : ''}`} aria-labelledby="shape-job-title">
         <div className="shape-job-heading">
           <div>
             <p className="kicker">{job.status === 'completed' ? 'Script complete' : 'Saved Script job'}</p>
@@ -405,8 +405,8 @@ export function ShapeWorkspace() {
             {job.project_id ? <p className="shape-project-success"><strong>Campaign project updated.</strong> The compact continuity ledger from this part is ready to carry into the next transcript section.</p> : null}
             <div className="shape-actions">
               <button className="button button-primary" type="button" onClick={downloadResult}>Download story as text</button>
-              <button className="button button-secondary" type="button" onClick={copyResult}>Copy story</button>
-              <button className="button button-secondary" type="button" onClick={startAnother}>{job.project_id ? 'Script the next project part' : 'Script another transcript'}</button>
+              <button className="button button-primary" type="button" onClick={copyResult}>Copy story</button>
+              <button className="button button-primary" type="button" onClick={startAnother}>{job.project_id ? 'Script the next project part' : 'Script another transcript'}</button>
             </div>
             <article className="shape-result" aria-label="Finished Script prose">
               {job.result_text?.split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => <p key={`${index}-${paragraph.slice(0, 24)}`}>{paragraph}</p>)}

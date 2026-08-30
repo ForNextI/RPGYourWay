@@ -593,6 +593,8 @@ For controls with persistent state, the standard selected/open state is:
 - forest surface;
 - cream lettering.
 
+A hovered or focused selected/open control still uses **lime copy**. Persistent state determines the resting face; interaction feedback does not disappear merely because the control is already selected/open.
+
 ## 11.3 Focus visibility
 
 Keyboard focus must remain obvious. Use a visible lime or brass/forest focus treatment that does not destroy the component's dimensional construction.
@@ -909,7 +911,7 @@ These are current composition rules that sit on top of the canonical primitives 
 - A completed guidance plaque carries the single prominent status **Your campaign guidance is set.** Do not add a completion-count subtitle.
 - In the proposed-party-leader plaque, **Proposed party leader:** is an upper-left label. The proposed leader name is centered and is the visual event; Change/None/explanation actions remain secondary.
 - Choice hover/focus changes the letters themselves to lime. Do not paint a separate highlighted slab behind the hovered copy.
-- The final **Onward** control uses the full available Start-page width.
+- The final **Onward** control is a centered canonical forest button, roughly one-third of the available desktop width. On narrow/mobile screens it may use the full available width.
 - Start-to-Play transition/status cards use canonical light olive rather than an ad-hoc translucent green.
 
 ## 22.2 Play
@@ -931,6 +933,8 @@ These are current composition rules that sit on top of the canonical primitives 
 - Script accepts useful digital campaign records from RPG Your Way, other text-to-play games, other game systems, chat/campaign logs, and digitally recorded notes or written records from home tabletop play. The converter should do its best with any useful digital transcript/record.
 - **Parchment means text/document surface on Script.** Use it for transcript drop/paste, text entry, and produced prose. Explanatory copy and grouping furniture use cream, light olive, dark olive, or forest instead.
 - Script choice cards follow the standard state language: resting light/olive, selected/open forest + cream, hover/focus lime copy without a separate highlight slab.
+- A completed Script job uses a **dark-olive result plaque** with cream copy, light-olive readout tiles, and canonical forest action buttons for Download, Copy, and Script another transcript.
+- Clicking **Script another transcript** clears the completed result from the working UI. Returning to Script resumes only genuinely active/error jobs; a previously completed job must not replace the fresh entry workbench.
 
 ## 22.4 Character record
 
@@ -947,6 +951,10 @@ These are current composition rules that sit on top of the canonical primitives 
 
 - Account/Auth uses the same raised button, accordion, plaque, and parchment-input recipes as the rest of the site. A sign-in/create-account action must never become a flat lime slab or another page-local color species.
 - Account accordion: closed summary light olive + forest; open summary forest + cream; hover/focus copy lime; revealed backing may use dark olive with light cards on top.
+- When signed in, the account identity control is a rounded canonical forest button at roughly half desktop width (full width is acceptable on mobile).
+- **Choose a Play Pack** uses a dark-olive backing plaque. Individual Play Pack cards remain light olive, and their purchase actions are canonical forest buttons.
+- **Where your balance has gone** keeps its existing light account treatment.
+- **Purchase history** uses a forest backing plaque with cream headings and light-olive raised purchase records.
 - Support, Privacy, Terms, Accessibility, Read, and 404 use the same cream/brass/forest prose-card construction rather than generic framework cards.
 - Semantic error, warning, and live-recording states may use dedicated warning colors when that distinction conveys real state. Those colors do not become ordinary furniture colors.
 

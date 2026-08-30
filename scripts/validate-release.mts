@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.9')
-assert.equal(pkg.rpgywVersion, '1.13.9')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.9'", 'visible app version')
+assert.equal(pkg.version, '1.13.12')
+assert.equal(pkg.rpgywVersion, '1.13.12')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.12'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -425,6 +425,12 @@ for (const token of [
   '--rpgyw-radius-control: 14px;',
   '--rpgyw-radius-card: 18px;',
   '--rpgyw-radius-plaque: 20px;',
+  '--rpgyw-face-cream:',
+  '--rpgyw-face-olive-light:',
+  '--rpgyw-face-olive-dark:',
+  '--rpgyw-face-forest:',
+  '--rpgyw-raised-light-shadow:',
+  '--rpgyw-raised-dark-shadow:',
 ]) has(css, token)
 for (const retired of [
   '--cream-bright', '--forest-deep', '--landing-mint', '--landing-olive', '--rpgyw-pale-olive',
@@ -438,6 +444,10 @@ has(css, 'height: var(--rpgyw-accordion-screw);')
 assert.equal((css.match(/^\.accordion-plus\s*\{/gm) ?? []).length, 1, 'Accordion screw hardware must have one physical recipe')
 has(css, 'span:not(.accordion-plus)', 'accordion hardware is excluded from copy hover recoloring')
 lacks(css, '.landing-reason-card .accordion-plus,', 'landing accordions must not override screw hardware')
+has(css, '.aigm-conversation-olive-frame {', 'Play conversation olive bezel rail')
+has(css, '.aigm-conversation-scroll {', 'Play conversation parchment opening')
+has(css, 'border: 2px solid var(--rpgyw-brass-mid);', 'brass is available for true inner openings')
+
 
 // Retired UI species stay retired rather than lingering behind the final cascade.
 for (const retiredSelector of [
@@ -468,7 +478,9 @@ has(start, 'className="start-rules-subtitle">New Campaign</p>', 'Start Here New 
 lacks(start, 'Six short questions answered.', 'redundant completed-guidance subtitle')
 has(start, 'start-complete-plaque start-complete-plaque--guidance', 'completed guidance modifier')
 has(css, '.start-play-button {')
-has(css, 'width: 100%;', 'full-width controls are available for Onward')
+has(css, 'width: min(34%, 32rem);', 'desktop Onward is centered at roughly one-third width')
+has(css, '.start-play-step {\n  display: flex;\n  justify-content: center;', 'Onward is centered')
+has(css, '@media (max-width: 640px) {\n  .start-play-button {\n    width: 100%;', 'Onward expands on mobile')
 has(css, '.start-mini-rating-item > span {')
 has(css, '.start-leader-card > .start-leader-main > span {')
 has(css, '.medieval-page--play .aigm-party-capacity {')
@@ -496,6 +508,12 @@ lacks(shapeWorkspace, '<p className="kicker">Script workbench</p>', 'redundant S
 before(shapeWorkspace, 'id="shape-step-1-title">Upload or drop transcript', 'id="shape-step-2-title">Answer the questions', 'Script step order 1 → 2')
 before(shapeWorkspace, 'id="shape-step-2-title">Answer the questions', 'id="shape-step-3-title">See maximum usage', 'Script step order 2 → 3')
 has(css, '.shape-script-step--questions .shape-script-step-nameplate {')
+has(shapeWorkspace, "fetch('/api/shape/jobs?active=1'", 'Script revisits resume only active jobs')
+has(shapeWorkspace, "shape-workbench--completed", 'completed Script result modifier')
+has(shapeWorkspace, "setDescriptionLevel('light')", 'Script another resets description level')
+has(shapeWorkspace, "setProjectTitle('')", 'Script another resets project title')
+has(css, '.shape-workbench--completed {', 'completed Script dark-olive plaque')
+has(css, '.shape-workbench--completed .shape-actions .button {', 'completed Script actions use one canonical family')
 
 // Character record material/state language is explicit and consistent.
 has(gameplayShell, 'className="character-record-section group"', 'character-record accordions')
@@ -507,6 +525,13 @@ has(css, 'background: var(--rpgyw-olive-dark) !important;', 'dark-olive record r
 has(css, '.character-sheet-header-controls .character-remove-button--confirm {')
 
 // Account/Auth follows the same accordion, button, and text-entry materials.
+has(accountPage, 'account-access-details--signed-in', 'compact signed-in account control')
+has(accountPage, 'play-pack-section--catalog', 'Play Pack catalog material modifier')
+has(accountPage, 'usage-activity--purchase-history', 'Purchase history material modifier')
+has(css, '.account-main .account-access-details--signed-in {')
+has(css, 'width: min(50%, 34rem);', 'signed-in account control desktop width')
+has(css, '.account-main .play-pack-section--catalog {')
+has(css, '.account-main .usage-activity--purchase-history {')
 has(css, '.account-main .account-access-details[open] > summary {')
 has(css, 'background: var(--rpgyw-forest);')
 has(css, '.account-main .account-access-body {')
@@ -515,4 +540,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.9 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.12 release and canonical UI checks passed.')

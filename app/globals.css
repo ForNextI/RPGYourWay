@@ -26,7 +26,23 @@
   --rpgyw-radius-card: 18px;
   --rpgyw-radius-plaque: 20px;
   --rpgyw-control-inner-light: color-mix(in srgb, var(--rpgyw-cream) 88%, var(--rpgyw-parchment));
-  --rpgyw-control-inner-dark: var(--rpgyw-forest);
+  --rpgyw-control-inner-dark: var(--rpgyw-forest-line);
+  --rpgyw-face-cream: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 94%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  --rpgyw-face-olive-light: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-olive-light) 90%, var(--rpgyw-cream)), var(--rpgyw-olive-light));
+  --rpgyw-face-olive-dark: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-olive-dark) 90%, var(--rpgyw-cream)), var(--rpgyw-olive-dark));
+  --rpgyw-face-forest: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-forest) 92%, var(--rpgyw-olive-dark)), var(--rpgyw-forest));
+  --rpgyw-raised-light-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-brass-light)),
+    inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 10%, transparent),
+    0 3px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-dark),
+    0 7px 12px rgb(29 38 29 / .12);
+  --rpgyw-raised-dark-shadow:
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 22%, transparent),
+    inset 0 -2px 0 rgb(0 0 0 / .11),
+    0 3px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-dark),
+    0 7px 12px rgb(24 32 25 / .15);
 
   /* Semantic text and state values. */
   --ink: #25352f;
@@ -353,23 +369,19 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
   justify-content: center;
   border: 1px solid var(--rpgyw-forest-line);
   border-radius: var(--rpgyw-radius-control);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 92%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  background: var(--rpgyw-face-cream);
   padding: .76rem 1.08rem;
   color: var(--rpgyw-forest);
   text-decoration: none;
   font-weight: 900;
-  box-shadow:
-    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-mid),
-    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-brass-light)),
-    0 3px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-dark),
-    0 7px 12px rgb(29 38 29 / .12);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .button-primary {
   border-color: color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-forest-line));
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-forest) 92%, var(--rpgyw-olive-dark)), var(--rpgyw-forest));
+  background: var(--rpgyw-face-forest);
   color: var(--rpgyw-cream);
 }
-.button-secondary { background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 92%, var(--rpgyw-parchment)), var(--rpgyw-cream)); color: var(--rpgyw-forest); }
+.button-secondary { background: var(--rpgyw-face-cream); color: var(--rpgyw-forest); }
 .button:not(:disabled):hover,
 .button:not(:disabled):focus-visible {
   background: var(--rpgyw-forest);
@@ -503,13 +515,13 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 
 .inner-main { min-height: calc(100vh - 150px); padding: clamp(2.5rem, 7vw, 5.5rem) 0; }
 .inner-main > .shell {
-  border: 2px solid var(--rpgyw-forest-line);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 22px;
-  background: color-mix(in srgb, var(--rpgyw-cream) 96%, transparent);
+  background: var(--rpgyw-face-cream);
   padding: clamp(1.45rem, 4vw, 2.6rem);
-  box-shadow: var(--shadow);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
-.site-frame-play .inner-main > .shell { background: color-mix(in srgb, var(--rpgyw-cream) 90%, transparent); }
+.site-frame-play .inner-main > .shell { background: var(--rpgyw-face-cream); }
 .page-title { margin-bottom: 1rem; font-size: clamp(2.55rem, 7vw, 5rem); line-height: .98; letter-spacing: -.035em; }
 .page-lede { max-width: 720px; margin-bottom: 2rem; }
 
@@ -551,11 +563,11 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 }
 .auth-card,
 .account-signed-in {
-  border: 2px solid color-mix(in srgb, var(--rpgyw-forest-line) 58%, var(--border));
-  border-radius: var(--radius);
-  background: var(--rpgyw-cream);
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: var(--rpgyw-radius-card);
+  background: var(--rpgyw-face-cream);
   padding: clamp(1.2rem, 3vw, 1.6rem);
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .auth-card h2,
 .account-signed-in h2 { margin-bottom: .9rem; font-size: 1.55rem; }
@@ -588,8 +600,18 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
   padding: .9rem 1rem;
   font-weight: 800;
 }
-.auth-message-success { border: 2px solid var(--rpgyw-lime); background: var(--lime-soft); color: var(--rpgyw-forest); }
-.auth-message-error { border: 2px solid color-mix(in srgb, var(--danger) 52%, var(--rpgyw-cream)); background: color-mix(in srgb, var(--danger) 12%, var(--rpgyw-cream)); color: var(--danger); }
+.auth-message-success {
+  border: 1px solid var(--rpgyw-forest-line);
+  background: var(--rpgyw-face-olive-light);
+  color: var(--rpgyw-forest);
+  box-shadow: var(--rpgyw-raised-light-shadow);
+}
+.auth-message-error {
+  border: 1px solid color-mix(in srgb, var(--danger) 52%, var(--rpgyw-forest-line));
+  background: var(--rpgyw-face-cream);
+  color: var(--danger);
+  box-shadow: var(--rpgyw-raised-light-shadow);
+}
 .account-signed-in {
   display: flex;
   align-items: center;
@@ -1281,10 +1303,10 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
   gap: .5rem;
   border: 1px solid var(--rpgyw-forest-line);
   border-radius: var(--rpgyw-radius-control);
-  background: var(--rpgyw-olive-light);
+  background: var(--rpgyw-face-olive-light);
   padding: .35rem .45rem .35rem .7rem;
   color: var(--rpgyw-forest);
-  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), 0 2px 0 2px var(--rpgyw-brass-dark);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .medieval-page .motion-settings-select.motion-settings-select--compact {
   width: auto;
@@ -1318,10 +1340,10 @@ h1, h2, h3 { font-family: Georgia, Cambria, "Times New Roman", serif; color: var
 
 .play-entry-loading,
 .play-entry-card{
-  border: 2px solid color-mix(in srgb, var(--rpgyw-forest-line) 48%, var(--rpgyw-parchment));
-  border-radius: var(--radius);
-  background: color-mix(in srgb, var(--rpgyw-cream) 94%, transparent);
-  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: var(--rpgyw-radius-card);
+  background: var(--rpgyw-face-cream);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .play-entry-loading { display: flex; align-items: center; gap: .8rem; padding: 1.2rem; }
 .play-entry-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr); gap: 1rem; align-items: stretch; }
@@ -2271,26 +2293,25 @@ body :where(button, .button, summary, [role="button"]) {
    than the main pair so the hierarchy stays readable. */
 
 
-/* Console: same all-around brass logic for every raised plane. */
-.landing-player-stack,
+/* Console: the hero chassis keeps its explicit brass edge exception. Ordinary
+   raised controls/cards use the canonical 1 px detail line + 2 px outer brass rim. */
+.landing-player-stack {
+  border: 2px solid var(--rpgyw-brass-mid);
+}
 .landing-new-player.button,
 .landing-campaign-summary-card,
 .landing-balance-control,
 .landing-return-button.button,
 .landing-return-logo,
 .feature-card {
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
 }
 
 .landing-new-player.button,
 .landing-campaign-summary-card,
 .landing-balance-control,
 .landing-return-button.button {
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 72%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .36),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 7px 12px rgb(29 38 29 / .14);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 
 .landing-campaign-snippet {
@@ -2301,13 +2322,15 @@ body :where(button, .button, summary, [role="button"]) {
     0 1px 0 var(--rpgyw-brass-light);
 }
 
-/* Static content cards stand off the map, but less aggressively than buttons. */
+/* Static content cards stand off the map with the same rim thickness but a
+   quieter cast shadow than action buttons. */
 .feature-card,
 .landing-return-logo {
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 64%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .72),
-    0 3px 0 var(--rpgyw-brass-dark),
+    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-brass-light)),
+    inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 8%, transparent),
+    0 3px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-dark),
     0 9px 16px rgb(43 47 38 / .11);
 }
 
@@ -2432,19 +2455,9 @@ body :where(button, .button, summary, [role="button"]) {
 .usage-balance-card,
 .play-pack-section,
 .usage-activity {
-  border: 2px solid var(--rpgyw-brass-mid);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-cream) 90%, var(--rpgyw-parchment)),
-      var(--rpgyw-cream)
-    );
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 68%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .76),
-    inset 0 -2px 0 rgb(111 82 42 / .08),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 9px 18px rgb(43 47 38 / .11);
+  border: 1px solid var(--rpgyw-forest-line);
+  background: var(--rpgyw-face-cream);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 
 .shape-main .kicker,
@@ -2467,18 +2480,9 @@ body :where(button, .button, summary, [role="button"]) {
 .shape-quote,
 .shape-public-preview-note,
 .shape-live-progress{
-  border: 2px solid var(--rpgyw-brass-mid);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-olive-light) 88%, var(--rpgyw-cream)),
-      var(--rpgyw-olive-light)
-    );
-  box-shadow:
-    inset 0 1px 0 rgb(246 234 212 / .72),
-    inset 0 -2px 0 rgb(68 84 63 / .10),
-    0 2px 0 var(--rpgyw-brass-dark),
-    0 6px 10px rgb(34 45 34 / .09);
+  border: 1px solid var(--rpgyw-forest-line);
+  background: var(--rpgyw-face-olive-light);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 
 
@@ -2607,13 +2611,9 @@ body :where(button, .button, summary, [role="button"]) {
 }
 
 .usage-note-details {
-  border: 2px solid var(--rpgyw-brass-mid);
-  background: var(--rpgyw-forest);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 62%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .12),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 7px 12px rgb(29 38 29 / .13);
+  border: 1px solid var(--rpgyw-control-inner-light);
+  background: var(--rpgyw-face-forest);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 .usage-note-details > summary:hover,
 .usage-note-details > summary:focus-visible {
@@ -2686,19 +2686,10 @@ body :where(button, .button, summary, [role="button"]) {
 .aigm-session-tools-panel > button,
 .aigm-session-tools-panel > a,
 .aigm-leave-roll {
-  border: 2px solid var(--rpgyw-brass-mid) !important;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-cream) 92%, var(--rpgyw-parchment)),
-      var(--rpgyw-cream)
-    ) !important;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-face-cream) !important;
   color: var(--rpgyw-forest) !important;
-  box-shadow:
-    inset 0 1px 0 rgb(246 234 212 / .78),
-    inset 0 -2px 0 rgb(111 82 42 / .07),
-    0 2px 0 var(--rpgyw-brass-dark),
-    0 5px 9px rgb(39 46 36 / .09);
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 
 .aigm-dice-stepper {
@@ -2707,59 +2698,37 @@ body :where(button, .button, summary, [role="button"]) {
 }
 
 .aigm-roll-result {
-  border: 2px solid var(--rpgyw-brass-mid) !important;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-olive-light) 88%, var(--rpgyw-cream)),
-      var(--rpgyw-olive-light)
-    ) !important;
-  box-shadow:
-    inset 0 1px 0 rgb(246 234 212 / .68),
-    0 2px 0 var(--rpgyw-brass-dark);
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-face-olive-light) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 
 .aigm-send-roll,
 .aigm-roll-initiative,
 .aigm-gameplay-send {
-  border: 2px solid var(--rpgyw-brass-mid) !important;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-olive-dark) 88%, var(--rpgyw-cream)),
-      var(--rpgyw-olive-dark)
-    ) !important;
+  border: 1px solid var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-olive-dark) !important;
   color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 
 }
 
 .aigm-character-card {
-  border: 2px solid var(--rpgyw-brass-mid) !important;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-olive-light) 84%, var(--rpgyw-cream)),
-      var(--rpgyw-olive-light)
-    ) !important;
-  box-shadow:
-    inset 0 1px 0 rgb(246 234 212 / .65),
-    0 2px 0 var(--rpgyw-brass-dark),
-    0 5px 9px rgb(36 45 35 / .08);
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-face-olive-light) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .aigm-character-card--leader {
-  border-color: var(--rpgyw-brass-light) !important;
+  border-color: var(--rpgyw-forest-line) !important;
   box-shadow:
-    inset 0 0 0 2px color-mix(in srgb, var(--rpgyw-lime) 32%, transparent),
-    inset 0 1px 0 rgb(246 234 212 / .68),
-    0 2px 0 var(--rpgyw-brass-dark),
-    0 0 0 2px color-mix(in srgb, var(--rpgyw-forest-line) 18%, transparent),
-    0 6px 10px rgb(36 45 35 / .09);
+    var(--rpgyw-raised-light-shadow),
+    inset 0 0 0 2px color-mix(in srgb, var(--rpgyw-lime) 24%, transparent) !important;
 }
 .aigm-leader-badge {
-  border: 2px solid var(--rpgyw-brass-light);
-  background: var(--rpgyw-forest);
+  border: 1px solid var(--rpgyw-control-inner-light);
+  background: var(--rpgyw-face-forest);
   color: var(--rpgyw-lime);
-  box-shadow: inset 0 1px 0 rgb(246 234 212 / .12);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 
 /* The Play page's promise: pale controls turn forest, and their words/icons
@@ -2781,18 +2750,16 @@ body :where(button, .button, summary, [role="button"]) {
 
 /* Static message plaques keep the same family without pretending to be controls. */
 .aigm-assistant-message .aigm-message-bubble {
-  border: 1px solid color-mix(in srgb, var(--rpgyw-brass-mid) 76%, var(--rpgyw-olive-light));
-  background: color-mix(in srgb, var(--rpgyw-olive-light) 82%, var(--rpgyw-cream)) !important;
+  border: 1px solid var(--rpgyw-forest-line);
+  background: var(--rpgyw-face-olive-light) !important;
   color: var(--forest-ink);
-  box-shadow: 0 2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 62%, transparent);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .aigm-user-message .aigm-message-bubble {
-  border: 2px solid var(--rpgyw-brass-light);
-  background: var(--rpgyw-forest) !important;
+  border: 1px solid var(--rpgyw-control-inner-light);
+  background: var(--rpgyw-face-forest) !important;
   color: var(--rpgyw-cream);
-  box-shadow:
-    inset 0 1px 0 rgb(246 234 212 / .12),
-    0 2px 0 var(--rpgyw-brass-dark);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 
 @media (max-width: 639px) {
@@ -2814,17 +2781,9 @@ body :where(button, .button, summary, [role="button"]) {
 /* Smaller plaques within the working pages. */
 .account-main .auth-card,
 .account-main .account-signed-in {
-  border: 2px solid var(--rpgyw-brass-mid) !important;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-olive-light) 88%, var(--rpgyw-cream)),
-      var(--rpgyw-olive-light)
-    );
-  box-shadow:
-    inset 0 1px 0 rgb(246 234 212 / .72),
-    0 2px 0 var(--rpgyw-brass-dark),
-    0 6px 10px rgb(34 45 34 / .08) !important;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-face-olive-light);
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .account-access-body {
   border-top-color: var(--rpgyw-brass-mid);
@@ -2836,29 +2795,21 @@ body :where(button, .button, summary, [role="button"]) {
   border-top: 0;
 }
 .usage-activity-row {
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 12px;
-  background: color-mix(in srgb, var(--rpgyw-olive-light) 56%, var(--rpgyw-cream));
+  background: var(--rpgyw-face-olive-light);
   padding: .75rem .85rem;
-  box-shadow: inset 0 1px 0 rgb(246 234 212 / .58), 0 1px 0 var(--rpgyw-brass-dark);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 
 .aigm-dice-heading,
 .aigm-characters-heading {
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 14px;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-forest) 90%, var(--rpgyw-cream)),
-      var(--rpgyw-forest)
-    );
+  background: var(--rpgyw-face-forest);
   padding: .48rem .58rem;
   color: var(--rpgyw-cream);
-  box-shadow:
-    inset 0 1px 0 rgb(246 234 212 / .14),
-    inset 0 -2px 0 rgb(0 0 0 / .12),
-    0 2px 0 var(--rpgyw-brass-dark);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 .aigm-dice-heading h2,
 .aigm-characters-heading h2 {
@@ -2889,9 +2840,9 @@ body :where(button, .button, summary, [role="button"]) {
 }
 .shape-progress-pill,
 .shape-beta-pill {
-  border: 2px solid var(--rpgyw-brass-mid);
-  background: color-mix(in srgb, var(--rpgyw-olive-light) 70%, var(--rpgyw-cream));
-  box-shadow: inset 0 1px 0 rgb(246 234 212 / .64), 0 2px 0 var(--rpgyw-brass-dark);
+  border: 1px solid var(--rpgyw-forest-line);
+  background: var(--rpgyw-face-olive-light);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .shape-beta-pill.active {
   border-color: var(--rpgyw-brass-light);
@@ -2914,12 +2865,8 @@ body :where(button, .button, summary, [role="button"]) {
 .aigm-tools-panel,
 .aigm-gameplay-conversation,
 .aigm-characters-panel {
-  border: 2px solid var(--rpgyw-brass-mid) !important;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 74%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .72),
-    0 1px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 72%, transparent),
-    0 5px 12px rgb(37 44 36 / .10) !important;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 
 /* Dice mode is a pair of actual brass-rimmed buttons. */
@@ -2933,35 +2880,6 @@ body :where(button, .button, summary, [role="button"]) {
 }
 
 
-/* Thin all-around brass trim for the ordinary Play plaques and controls. */
-.aigm-initiative-toggle,
-.aigm-add-character,
-.aigm-session-help,
-.aigm-session-tools-panel > button,
-.aigm-session-tools-panel > a,
-.aigm-leave-roll,
-.aigm-roll-result,
-.aigm-send-roll,
-.aigm-roll-initiative,
-.aigm-gameplay-send,
-.aigm-character-card,
-.aigm-dice-quantity-control,
-.aigm-composer-plaque {
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 66%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .58),
-    0 1px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 72%, transparent),
-    0 4px 8px rgb(37 44 36 / .08) !important;
-}
-.aigm-send-roll,
-.aigm-roll-initiative,
-.aigm-gameplay-send {
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 70%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .24),
-    0 1px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 78%, transparent),
-    0 4px 8px rgb(29 38 29 / .10) !important;
-}
 
 /* The character heading has to share its narrow rail with the party-count
    badge. Keep both on one line and let the title yield the space. */
@@ -2990,7 +2908,7 @@ body :where(button, .button, summary, [role="button"]) {
   overflow: hidden;
   background: var(--rpgyw-forest);
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-mid) 72%, var(--rpgyw-forest)),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 22%, transparent),
     inset 0 2px 5px rgb(0 0 0 / .12);
 }
 .aigm-conversation-olive-frame {
@@ -2999,32 +2917,19 @@ body :where(button, .button, summary, [role="button"]) {
   flex: 1 1 auto;
   padding: .42rem;
   overflow: hidden;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 0;
   border-radius: .8rem;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-olive-dark) 90%, var(--rpgyw-cream)),
-      var(--rpgyw-olive-dark)
-    );
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 64%, var(--rpgyw-cream)),
-    inset 0 3px 6px rgb(0 0 0 / .10);
+  background: var(--rpgyw-olive-dark);
+  box-shadow: inset 0 3px 6px rgb(0 0 0 / .10);
 }
 .aigm-conversation-scroll {
   flex: 1 1 auto;
-  border: 2px solid var(--rpgyw-brass-dark);
+  border: 2px solid var(--rpgyw-brass-mid);
   border-radius: .58rem;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-parchment) 94%, var(--rpgyw-cream)),
-      var(--rpgyw-parchment)
-    ) !important;
+  background: var(--rpgyw-parchment) !important;
   box-shadow:
     inset 0 5px 9px rgb(82 60 28 / .14),
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 54%, transparent),
-    0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 38%, transparent) !important;
+    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 54%, transparent) !important;
 }
 
 @media (max-width: 639px) {
@@ -3055,14 +2960,11 @@ body :where(button, .button, summary, [role="button"]) {
   width: 100%;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: .35rem;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 13px;
-  background: var(--rpgyw-forest);
+  background: var(--rpgyw-face-forest);
   padding: .35rem;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 56%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .11),
-    0 1px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 62%, transparent);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 .aigm-dice-mode-button {
   width: 100%;
@@ -3070,21 +2972,21 @@ body :where(button, .button, summary, [role="button"]) {
   min-height: 2.55rem;
   justify-content: center;
   white-space: nowrap;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 9px;
   padding-inline: .42rem;
   font-size: .72rem;
   line-height: 1;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 66%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .68),
-    0 1px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 60%, transparent) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .aigm-dice-mode-button--active {
-  border-color: var(--rpgyw-brass-light) !important;
+  border-color: var(--rpgyw-control-inner-light) !important;
   background: var(--rpgyw-forest) !important;
-  color: var(--rpgyw-lime) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
+.aigm-dice-mode-button--active:hover,
+.aigm-dice-mode-button--active:focus-visible { color: var(--rpgyw-lime) !important; }
 
 /* Characters is one uninterrupted title plaque. Capacity information lives
    with the Add control at the bottom, where it describes the party rather
@@ -3107,23 +3009,15 @@ body :where(button, .button, summary, [role="button"]) {
 .aigm-party-capacity {
   display: grid;
   gap: .08rem;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 11px;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-olive-light) 88%, var(--rpgyw-cream)),
-      var(--rpgyw-olive-light)
-    );
+  background: var(--rpgyw-face-olive-light);
   padding: .45rem .65rem;
   color: var(--rpgyw-forest);
   font-size: .72rem;
   line-height: 1.25;
   text-align: center;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 68%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .68),
-    0 1px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 62%, transparent);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .aigm-party-capacity span,
 .aigm-party-capacity strong {
@@ -3182,44 +3076,24 @@ body :where(button, .button, summary, [role="button"]) {
 .auth-panel-compact .auth-grid { margin-top: 0; }
 
 
-/* Account page: one coherent stack of raised brass-edged plaques. */
+/* Account page: one coherent stack of canonical raised plaques. */
 .account-main .account-access-details,
 .account-main .usage-balance-card,
 .account-main .play-pack-section,
 .account-main .usage-activity {
-  border: 2px solid var(--rpgyw-brass-mid) !important;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-cream) 90%, var(--rpgyw-parchment)),
-      var(--rpgyw-cream)
-    ) !important;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 68%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .76),
-    inset 0 -2px 0 rgb(111 82 42 / .08),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 9px 18px rgb(43 47 38 / .11) !important;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-face-cream) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 
-/* Authentication choices and signed-in state sit one physical level above
-   their parent plaque, matching the landing page's smaller raised controls. */
+/* Authentication choices and pack cards sit one physical level above
+   their parent plaque, using the same light raised-object construction. */
 .account-main .auth-card,
 .account-main .account-signed-in,
 .account-main .play-pack-card {
-  border: 2px solid var(--rpgyw-brass-mid) !important;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-olive-light) 90%, var(--rpgyw-cream)),
-      var(--rpgyw-olive-light)
-    ) !important;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 62%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .72),
-    inset 0 -1px 0 rgb(68 84 63 / .08),
-    0 2px 0 var(--rpgyw-brass-dark),
-    0 6px 10px rgb(34 45 34 / .09) !important;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-face-olive-light) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 
 .account-main .account-access-details > summary {
@@ -3232,6 +3106,11 @@ body :where(button, .button, summary, [role="button"]) {
   background: var(--rpgyw-forest);
   color: var(--rpgyw-cream);
 }
+.account-main .account-access-details[open] > summary:hover,
+.account-main .account-access-details[open] > summary:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
 .account-main .account-access-details[open] > summary > span:first-child { color: var(--rpgyw-cream); }
 .account-main .account-access-details[open] > summary:hover > span:first-child,
 .account-main .account-access-details[open] > summary:focus-visible > span:first-child { color: var(--rpgyw-lime); }
@@ -3240,16 +3119,102 @@ body :where(button, .button, summary, [role="button"]) {
   background: var(--rpgyw-olive-dark);
 }
 
+/* A signed-in identity is a compact forest button, not a full-width pale bar. */
+.account-main .account-access-details--signed-in {
+  width: min(50%, 34rem);
+  margin-right: auto;
+  overflow: visible;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.account-main .account-access-details--signed-in > summary,
+.account-main .account-access-details--signed-in[open] > summary {
+  min-height: 3.15rem;
+  border: 1px solid var(--rpgyw-control-inner-light) !important;
+  border-radius: var(--rpgyw-radius-control) !important;
+  background: var(--rpgyw-face-forest) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
+.account-main .account-access-details--signed-in > summary:hover,
+.account-main .account-access-details--signed-in > summary:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+.account-main .account-access-details--signed-in > summary:hover > span:first-child,
+.account-main .account-access-details--signed-in > summary:focus-visible > span:first-child {
+  color: var(--rpgyw-lime) !important;
+}
+.account-main .account-access-details--signed-in .account-access-body {
+  margin-top: .7rem;
+  border: 1px solid var(--rpgyw-control-inner-light) !important;
+  border-radius: var(--rpgyw-radius-plaque);
+  background: var(--rpgyw-face-olive-dark) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
+
+/* Play Pack catalog: dark-olive structural plaque, light-olive pack cards,
+   and forest purchase buttons. */
+.account-main .play-pack-section--catalog {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-olive-dark) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
+.account-main .play-pack-section--catalog :where(.account-state-label, .play-pack-heading h2, .play-pack-heading > p) {
+  color: var(--rpgyw-cream) !important;
+}
+.account-main .play-pack-section--catalog .play-pack-card {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-face-olive-light) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
+}
+.account-main .play-pack-section--catalog .play-pack-card .button {
+  border: 1px solid var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-forest) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
+.account-main .play-pack-section--catalog .play-pack-card .button:hover,
+.account-main .play-pack-section--catalog .play-pack-card .button:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+
+/* Purchase history is the dark forest account anchor. Its individual entries
+   remain light-olive raised records rather than parchment text surfaces. */
+.account-main .usage-activity--purchase-history {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-forest) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
+.account-main .usage-activity--purchase-history :where(.account-state-label, h2, .usage-activity-heading > p) {
+  color: var(--rpgyw-cream) !important;
+}
+.account-main .usage-activity--purchase-history .usage-activity-row {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-face-olive-light) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
+}
+.account-main .usage-activity--purchase-history .usage-activity-row :where(strong, span) {
+  color: var(--rpgyw-forest) !important;
+}
+@media (max-width: 640px) {
+  .account-main .account-access-details--signed-in { width: 100%; }
+}
+
 /* Smaller account readouts are inset/raised with brass rather than generic
    gray rules, so the page keeps the same physical vocabulary throughout. */
 .account-main .usage-disclosure-copy,
 .account-main .usage-activity-row {
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 11px;
-  background: var(--rpgyw-cream);
-  box-shadow:
-    inset 0 1px 0 rgb(246 234 212 / .66),
-    0 1px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 54%, transparent);
+  background: var(--rpgyw-face-cream);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .account-main .usage-activity-list {
   gap: .55rem;
@@ -3283,14 +3248,8 @@ body :where(button, .button, summary, [role="button"]) {
 
 
 .feature-card {
-  border: 2px solid var(--rpgyw-brass-mid);
-
-
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 64%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .78),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 9px 16px rgb(43 47 38 / .11);
+  border: 1px solid var(--rpgyw-forest-line);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 
 /* Counterchange the center feature: pale nameplate over a forest-green card. */
@@ -3311,7 +3270,7 @@ body :where(button, .button, summary, [role="button"]) {
   align-items: center;
   justify-content: center;
   margin: 0 0 1.25rem;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 12px;
   padding: .44rem .76rem;
   font-size: .75rem;
@@ -3319,12 +3278,7 @@ body :where(button, .button, summary, [role="button"]) {
   line-height: 1;
   letter-spacing: .12em;
   text-transform: uppercase;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 76%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .18),
-    inset 0 -2px 0 rgb(0 0 0 / .12),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 7px 12px rgb(35 43 34 / .13);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 
 .feature-card:nth-child(1) .feature-eyebrow,
@@ -3346,19 +3300,15 @@ body :where(button, .button, summary, [role="button"]) {
   width: 100% !important;
   min-height: 46px !important;
   margin-top: 1rem;
-  border: 2px solid var(--rpgyw-brass-mid) !important;
+  border: 1px solid var(--rpgyw-forest-line) !important;
   border-radius: 11px !important;
   padding: .6rem .9rem !important;
-  background: var(--rpgyw-cream) !important;
+  background: var(--rpgyw-face-cream) !important;
   color: var(--rpgyw-forest) !important;
   font: inherit;
   font-weight: 900;
   cursor: pointer;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 72%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .82),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 8px 14px rgb(43 47 37 / .12) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .landing-reason-card .persistent-play-trigger:hover,
 .landing-reason-card .persistent-play-trigger:focus-visible {
@@ -3387,13 +3337,12 @@ body :where(button, .button, summary, [role="button"]) {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 20px;
-  background: var(--rpgyw-cream);
+  background: var(--rpgyw-face-cream);
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 62%, var(--rpgyw-cream)),
-    0 5px 0 var(--rpgyw-brass-dark),
-    0 24px 58px rgb(0 0 0 / .34);
+    var(--rpgyw-raised-light-shadow),
+    0 24px 58px rgb(0 0 0 / .30);
 }
 .persistent-play-modal-header {
   display: grid;
@@ -3422,16 +3371,16 @@ body :where(button, .button, summary, [role="button"]) {
   min-height: 40px !important;
   margin: 0 !important;
   padding: 0 !important;
-  border: 2px solid var(--rpgyw-brass-mid) !important;
+  border: 1px solid var(--rpgyw-forest-line) !important;
   border-radius: 999px !important;
-  background: var(--rpgyw-cream) !important;
+  background: var(--rpgyw-face-cream) !important;
   color: var(--rpgyw-forest) !important;
   font: inherit;
   font-size: 1.45rem;
   font-weight: 900;
   line-height: 1;
   cursor: pointer;
-  box-shadow: 0 2px 0 var(--rpgyw-brass-dark) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .landing-reason-card .persistent-play-close-x:hover,
 .landing-reason-card .persistent-play-close-x:focus-visible {
@@ -3460,13 +3409,11 @@ body :where(button, .button, summary, [role="button"]) {
 }
 .persistent-play-thesis {
   padding: .8rem 1rem;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 11px;
-  background: var(--rpgyw-forest);
+  background: var(--rpgyw-face-forest);
   text-align: center;
-  box-shadow:
-    inset 0 0 0 1px var(--rpgyw-brass-light),
-    0 3px 0 var(--rpgyw-brass-dark);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 .persistent-play-modal-footer {
   padding: .75rem 1rem 1rem;
@@ -3476,14 +3423,14 @@ body :where(button, .button, summary, [role="button"]) {
 .landing-reason-card .persistent-play-modal-footer button {
   width: 100% !important;
   min-height: 44px !important;
-  border: 2px solid var(--rpgyw-brass-mid) !important;
+  border: 1px solid var(--rpgyw-control-inner-light) !important;
   border-radius: 10px !important;
-  background: var(--rpgyw-forest) !important;
+  background: var(--rpgyw-face-forest) !important;
   color: var(--rpgyw-cream) !important;
   font: inherit;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 3px 0 var(--rpgyw-brass-dark) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
 .landing-reason-card .persistent-play-modal-footer button:hover,
 .landing-reason-card .persistent-play-modal-footer button:focus-visible {
@@ -3547,28 +3494,23 @@ body :where(button, .button, summary, [role="button"]) {
   width: 2.3rem;
   height: 2.3rem;
   flex: 0 0 2.3rem;
-  border: 2px solid var(--rpgyw-brass-mid) !important;
+  border: 1px solid var(--rpgyw-forest-line) !important;
   border-radius: 11px !important;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-cream) 94%, var(--rpgyw-parchment)),
-      var(--rpgyw-cream)
-    ) !important;
+  background: var(--rpgyw-face-cream) !important;
   color: var(--rpgyw-forest) !important;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 68%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .76),
-    0 1px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 72%, transparent),
-    0 3px 6px rgb(37 44 36 / .08) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .aigm-gameplay-summary-icon.aigm-topbar-nameplate {
-  background: var(--rpgyw-forest) !important;
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-forest) !important;
   color: var(--rpgyw-lime) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
 .aigm-topbar-nameplate--active {
-  background: var(--rpgyw-forest) !important;
-  color: var(--rpgyw-lime) !important;
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-forest) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
 .aigm-gameplay-title-controls .aigm-topbar-nameplate:not(:disabled):hover,
 .aigm-gameplay-title-controls .aigm-topbar-nameplate:not(:disabled):focus-visible {
@@ -3722,12 +3664,16 @@ body :where(button, .button, summary, [role="button"]) {
   color: var(--rpgyw-lime) !important;
   border-color: var(--rpgyw-brass-light) !important;
 }
-.aigm-dice-mode-button--active,
+.aigm-dice-mode-button--active {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+  border-color: var(--rpgyw-control-inner-light) !important;
+}
 .aigm-dice-mode-button--active:hover,
 .aigm-dice-mode-button--active:focus-visible {
   background: var(--rpgyw-forest) !important;
-  color: var(--rpgyw-cream) !important;
-  border-color: var(--rpgyw-brass-light) !important;
+  color: var(--rpgyw-lime) !important;
+  border-color: var(--rpgyw-control-inner-light) !important;
 }
 
 
@@ -3759,16 +3705,10 @@ body :where(button, .button, summary, [role="button"]) {
 }
 .start-step,
 .start-existing-details{
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 22px;
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 91%, var(--rpgyw-parchment)), var(--rpgyw-cream));
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 72%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .78),
-    inset 0 -2px 0 rgb(88 67 35 / .08),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 10px 18px rgb(43 47 38 / .11);
+  background: var(--rpgyw-face-cream);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 
 
@@ -3783,16 +3723,11 @@ body :where(button, .button, summary, [role="button"]) {
 .start-question-nav button,
 .start-starter-choice,
 .start-play-button{
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 11px;
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 94%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  background: var(--rpgyw-face-cream);
   color: var(--rpgyw-forest);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 68%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .72),
-    0 2px 0 var(--rpgyw-brass-dark),
-    0 5px 10px rgb(43 47 38 / .10);
+  box-shadow: var(--rpgyw-raised-light-shadow);
   cursor: pointer;
   font-weight: 900;
   transition: background 120ms ease, color 120ms ease, border-color 120ms ease, transform 80ms ease;
@@ -3842,16 +3777,12 @@ body :where(button, .button, summary, [role="button"]) {
   display: inline-flex;
   align-items: center;
   gap: .55rem;
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 12px;
-  background: var(--rpgyw-forest);
+  background: var(--rpgyw-face-forest);
   color: var(--rpgyw-cream);
   padding: .55rem .9rem;
-  box-shadow:
-    inset 0 1px 0 rgb(246 234 212 / .14),
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 52%, transparent),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 7px 12px rgb(30 38 30 / .14);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
   font-size: clamp(.92rem, 2vw, 1.04rem);
   font-weight: 900;
 }
@@ -3956,12 +3887,11 @@ body :where(button, .button, summary, [role="button"]) {
   grid-template-columns: 70px minmax(0, 1fr) auto;
   align-items: center;
   gap: .72rem;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-olive-dark) 62%, var(--rpgyw-cream)), color-mix(in srgb, var(--rpgyw-olive-dark) 78%, var(--rpgyw-cream)));
+  background: var(--rpgyw-face-olive-light);
   padding: .62rem;
-  box-shadow: inset 0 1px 0 rgb(246 234 212 / .74), 0 2px 0 var(--rpgyw-brass-dark);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .start-party-portrait,
 .start-party-placeholder {
@@ -4020,10 +3950,10 @@ body :where(button, .button, summary, [role="button"]) {
 .start-question-panel,
 .start-name-grid{
   margin-top: .8rem;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 14px;
-  background: color-mix(in srgb, var(--rpgyw-cream) 88%, var(--rpgyw-parchment));
-  box-shadow: inset 0 1px 0 rgb(246 234 212 / .72), 0 2px 0 var(--rpgyw-brass-dark);
+  background: var(--rpgyw-face-cream);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .start-paste-panel { padding: .85rem; }
 .start-paste-panel label { display: grid; gap: .35rem; color: var(--rpgyw-forest); font-weight: 900; }
@@ -4034,13 +3964,13 @@ body :where(button, .button, summary, [role="button"]) {
 
 
 .start-leader-card {
-
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: .65rem 1rem;
-  background: var(--rpgyw-forest);
+  border-color: var(--rpgyw-control-inner-light);
+  background: var(--rpgyw-face-forest);
   color: var(--rpgyw-cream);
-
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 
 .start-leader-main span {   font-weight: 900; text-transform: uppercase;  }
@@ -4146,13 +4076,12 @@ body :where(button, .button, summary, [role="button"]) {
   width: min(680px, 100%);
   max-height: min(88dvh, 820px);
   overflow: hidden;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 20px;
-  background: var(--rpgyw-cream);
+  background: var(--rpgyw-face-cream);
   box-shadow:
-    inset 0 0 0 1px var(--rpgyw-brass-light),
-    0 4px 0 var(--rpgyw-brass-dark),
-    0 24px 60px rgb(0 0 0 / .35);
+    var(--rpgyw-raised-light-shadow),
+    0 24px 60px rgb(0 0 0 / .30);
 }
 .start-modal--wide { width: min(900px, 100%); }
 .start-modal-heading {
@@ -4171,12 +4100,12 @@ body :where(button, .button, summary, [role="button"]) {
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 10px;
-  background: color-mix(in srgb, var(--rpgyw-cream) 92%, var(--rpgyw-parchment));
+  background: var(--rpgyw-face-cream);
   color: var(--rpgyw-forest);
   cursor: pointer;
-  box-shadow: 0 2px 0 var(--rpgyw-brass-dark);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .start-modal-x:hover,
 .start-modal-x:focus-visible { background: var(--rpgyw-forest-line); color: var(--rpgyw-lime); }
@@ -4187,12 +4116,12 @@ body :where(button, .button, summary, [role="button"]) {
 .start-age-choices { display: grid; gap: .65rem; }
 .start-age-choices button { min-height: 54px; padding: .7rem .85rem; text-align: left; }
 .start-faq-list { display: grid; gap: .55rem; }
-.start-faq-list details { border: 2px solid var(--rpgyw-brass-mid); border-radius: 10px; background: color-mix(in srgb, var(--rpgyw-cream) 86%, var(--rpgyw-parchment)); overflow: hidden; }
+.start-faq-list details { border: 1px solid var(--rpgyw-forest-line); border-radius: 10px; background: var(--rpgyw-face-cream); overflow: hidden; box-shadow: var(--rpgyw-raised-light-shadow); }
 .start-faq-list summary { padding: .68rem .75rem; color: var(--rpgyw-forest); cursor: pointer; font-weight: 900; }
 .start-faq-list summary:hover,
 .start-faq-list summary:focus-visible { background: var(--rpgyw-forest); color: var(--rpgyw-lime); }
 .start-faq-list details p { margin: 0; border-top: 1px solid color-mix(in srgb, var(--rpgyw-brass-mid) 54%, transparent); padding: .7rem .75rem; line-height: 1.55; }
-.start-faq-more { margin-top: 1rem; border: 2px solid var(--rpgyw-brass-mid); border-radius: 12px; background: color-mix(in srgb, var(--rpgyw-olive-dark) 58%, var(--rpgyw-cream)); padding: .85rem; }
+.start-faq-more { margin-top: 1rem; border: 1px solid var(--rpgyw-forest-line); border-radius: 12px; background: var(--rpgyw-face-olive-light); padding: .85rem; box-shadow: var(--rpgyw-raised-light-shadow); }
 .start-faq-more strong { color: var(--rpgyw-forest); font-size: 1.05rem; }
 .start-faq-more p { margin: .22rem 0 .6rem; color: var(--muted); }
 
@@ -4236,14 +4165,10 @@ body :where(button, .button, summary, [role="button"]) {
 }
 .start-top-help{
   min-height: 58px;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 12px;
   padding: .62rem .82rem;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 68%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .30),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 6px 11px rgb(43 47 38 / .10);
+  box-shadow: var(--rpgyw-raised-light-shadow);
   cursor: pointer;
   font-weight: 900;
 }
@@ -4385,20 +4310,20 @@ body :where(button, .button, summary, [role="button"]) {
 .start-name-grid { padding: .72rem .82rem; }
 
 .start-rules-card {
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 18px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 92%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  background: var(--rpgyw-face-cream);
   padding: 1.1rem .9rem .85rem;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 72%, var(--rpgyw-cream)), inset 0 1px 0 rgb(246 234 212 / .76), 0 3px 0 var(--rpgyw-brass-dark), 0 8px 14px rgb(43 47 38 / .10);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 
 .start-rules-current{
   min-height: 54px;
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 11px;
-  background: linear-gradient(180deg, var(--rpgyw-olive-dark), var(--rpgyw-olive-dark));
+  background: var(--rpgyw-face-olive-dark);
   color: var(--rpgyw-cream);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 58%, var(--rpgyw-cream)), inset 0 1px 0 rgb(246 234 212 / .20), 0 3px 0 var(--rpgyw-brass-dark), 0 6px 10px rgb(43 47 38 / .10);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
   cursor: pointer;
   font-weight: 900;
   transition: color 120ms ease, border-color 120ms ease, transform 80ms ease;
@@ -4484,11 +4409,11 @@ body :where(button, .button, summary, [role="button"]) {
 .start-party-step {
   position: relative;
   margin-top: .35rem;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 18px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 92%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  background: var(--rpgyw-face-cream);
   padding: 2.85rem .9rem 1rem;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 72%, var(--rpgyw-cream)), inset 0 1px 0 rgb(246 234 212 / .76), 0 3px 0 var(--rpgyw-brass-dark), 0 8px 14px rgb(43 47 38 / .10);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .start-party-step .start-step-nameplate {
   left: 1.05rem;
@@ -4510,15 +4435,11 @@ body :where(button, .button, summary, [role="button"]) {
 /* Every numbered onboarding step is a raised parchment plaque floating directly on the map. */
 .start-step {
   position: relative;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 18px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 92%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  background: var(--rpgyw-face-cream);
   padding: 2.85rem .9rem 1rem;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 72%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .76),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 8px 14px rgb(43 47 38 / .10);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .start-step .start-step-nameplate {
   left: 1.05rem;
@@ -4529,9 +4450,10 @@ body :where(button, .button, summary, [role="button"]) {
 /* Forest + cream is reserved for the numbered nameplates. Olive + cream is the active/action layer. */
 .start-primary-control,
 .start-leader-controls button {
-  border-color: var(--rpgyw-brass-light);
-  background: linear-gradient(180deg, var(--rpgyw-olive-dark), var(--rpgyw-olive-dark));
+  border-color: var(--rpgyw-control-inner-light);
+  background: var(--rpgyw-face-olive-dark);
   color: var(--rpgyw-cream);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 .start-primary-control:hover:not(:disabled),
 .start-primary-control:focus-visible:not(:disabled),
@@ -4543,9 +4465,8 @@ body :where(button, .button, summary, [role="button"]) {
 .start-leader-controls .is-selected {
   background: var(--rpgyw-olive-dark);
   color: var(--rpgyw-cream);
-  box-shadow:
-    inset 0 0 0 2px color-mix(in srgb, var(--rpgyw-brass-light) 74%, var(--rpgyw-cream)),
-    0 2px 0 var(--rpgyw-brass-dark);
+  border-color: var(--rpgyw-control-inner-light);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 
 /* Tertiary information controls are pale with forest lettering. */
@@ -4556,16 +4477,12 @@ body :where(button, .button, summary, [role="button"]) {
   align-items: center;
   justify-content: center;
   gap: .45rem;
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 11px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 97%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  background: var(--rpgyw-face-cream);
   color: var(--rpgyw-forest);
   padding: .55rem .78rem;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 64%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .80),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 6px 10px rgb(43 47 38 / .10);
+  box-shadow: var(--rpgyw-raised-light-shadow);
   cursor: pointer;
   font-weight: 900;
   text-align: center;
@@ -4592,16 +4509,14 @@ body :where(button, .button, summary, [role="button"]) {
 /* Step 3 receives the same recessed olive/brass bezel language as character drag/drop. */
 .start-settings-bezel {
   border: 7px solid var(--rpgyw-olive-dark);
-  outline: 2px solid var(--rpgyw-brass-mid);
-  outline-offset: 0;
+  outline: 0;
   border-radius: 16px;
   background: color-mix(in srgb, var(--rpgyw-cream) 93%, var(--rpgyw-parchment));
   padding: .8rem;
   box-shadow:
-    inset 0 0 0 2px var(--rpgyw-brass-light),
+    inset 0 0 0 2px var(--rpgyw-brass-mid),
     inset 0 9px 18px rgb(43 47 38 / .14),
-    inset 0 -2px 0 rgb(246 234 212 / .58),
-    0 3px 0 var(--rpgyw-brass-dark);
+    inset 0 -2px 0 rgb(246 234 212 / .58);
 }
 .start-settings-bezel .start-question-panel,
 .start-settings-bezel .start-complete-plaque {
@@ -4615,16 +4530,16 @@ body :where(button, .button, summary, [role="button"]) {
 /* The open-ended exclusions answer is itself a recessed entry well. */
 .start-question-textarea {
   border: 7px solid var(--rpgyw-olive-dark) !important;
-  outline: 2px solid var(--rpgyw-brass-mid);
-  outline-offset: 0;
+  outline: 0;
   border-radius: 14px !important;
-  background: color-mix(in srgb, var(--rpgyw-cream) 96%, var(--rpgyw-parchment)) !important;
+  background: var(--rpgyw-parchment) !important;
   box-shadow:
-    inset 0 0 0 2px var(--rpgyw-brass-light),
+    inset 0 0 0 2px var(--rpgyw-brass-mid),
     inset 0 7px 14px rgb(43 47 38 / .12) !important;
 }
 .start-question-textarea:focus {
-  outline: 2px solid var(--rpgyw-brass-light) !important;
+  outline: 3px solid var(--rpgyw-lime) !important;
+  outline-offset: 3px;
   border-color: var(--rpgyw-olive-dark) !important;
 }
 
@@ -4650,9 +4565,10 @@ body :where(button, .button, summary, [role="button"]) {
 .start-age-choices button,
 .start-choice,
 .start-rating-scale button {
-  border-color: var(--rpgyw-brass-light);
-  background: linear-gradient(180deg, var(--rpgyw-olive-dark), var(--rpgyw-olive-dark));
+  border-color: var(--rpgyw-control-inner-light);
+  background: var(--rpgyw-face-olive-dark);
   color: var(--rpgyw-cream);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 .start-choice span { color: var(--rpgyw-cream); }
 .start-age-choices button:hover,
@@ -4682,20 +4598,14 @@ body :where(button, .button, summary, [role="button"]) {
 /* Numbered step nameplates should read as substantial brass-edged furniture, not flat labels. */
 .start-step-nameplate,
 .start-rules-step .start-step-nameplate--rules {
-  border: 2px solid var(--rpgyw-brass-light);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-forest) 96%, var(--rpgyw-cream)), var(--rpgyw-forest));
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 68%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .16),
-    0 4px 0 var(--rpgyw-brass-dark),
-    0 10px 16px rgb(30 38 30 / .18);
+  border: 1px solid var(--rpgyw-control-inner-light);
+  background: var(--rpgyw-face-forest);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 .start-step-nameplate > span {
-  border: 2px solid var(--rpgyw-brass-light);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 98%, var(--rpgyw-parchment)), var(--rpgyw-cream));
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 52%, var(--rpgyw-cream)),
-    0 2px 0 var(--rpgyw-brass-dark);
+  border: 1px solid var(--rpgyw-forest-line);
+  background: var(--rpgyw-face-cream);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 
 /* Give the numbered plaques enough breathing room that each step is unmistakably separate. */
@@ -4740,15 +4650,11 @@ body :where(button, .button, summary, [role="button"]) {
 /* Every question lives on a dimensional parchment plaque inside the recessed settings well. */
 .start-settings-bezel .start-question-panel {
   margin: 0;
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 14px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 96%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  background: var(--rpgyw-face-cream);
   padding: clamp(.8rem, 2vw, 1.05rem);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 58%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .76),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 7px 12px rgb(43 47 38 / .10);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .start-question-panel h2 {
   color: var(--rpgyw-forest);
@@ -4756,15 +4662,11 @@ body :where(button, .button, summary, [role="button"]) {
 
 /* Rating questions are plaques carrying brass-edged number buttons. */
 .start-rating-control {
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 13px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 95%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  background: var(--rpgyw-face-cream);
   padding: .62rem .7rem .55rem;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 56%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .74),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 6px 10px rgb(43 47 38 / .09);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .start-rating-control > strong {
   font-size: .86rem;
@@ -4772,15 +4674,11 @@ body :where(button, .button, summary, [role="button"]) {
 }
 .start-rating-scale button {
   min-height: 42px;
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 9px;
-  background: linear-gradient(180deg, var(--rpgyw-olive-dark), var(--rpgyw-olive-dark));
+  background: var(--rpgyw-face-olive-dark);
   color: var(--rpgyw-cream);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 48%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .16),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 5px 8px rgb(43 47 38 / .08);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 .start-rating-scale button:hover,
 .start-rating-scale button:focus-visible {
@@ -4790,25 +4688,19 @@ body :where(button, .button, summary, [role="button"]) {
 .start-rating-scale button.is-selected {
   background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-forest) 94%, var(--rpgyw-cream)), var(--rpgyw-forest));
   color: var(--rpgyw-cream) !important;
-  box-shadow:
-    inset 0 0 0 2px color-mix(in srgb, var(--rpgyw-brass-light) 76%, var(--rpgyw-cream)),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 6px 10px rgb(30 38 30 / .14);
+  border-color: var(--rpgyw-control-inner-light);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 
 /* Questions 2 and 3: every category is dimensional, with the current selector planted on top. */
 .start-mini-ratings label {
   min-height: 58px;
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 11px;
-  background: linear-gradient(180deg, var(--rpgyw-olive-dark), var(--rpgyw-olive-dark));
+  background: var(--rpgyw-face-olive-dark);
   color: var(--rpgyw-cream);
   padding: .48rem .55rem .48rem .72rem;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 48%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .16),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 6px 10px rgb(43 47 38 / .10);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 .start-mini-ratings label > span {
   color: var(--rpgyw-cream);
@@ -4817,14 +4709,11 @@ body :where(button, .button, summary, [role="button"]) {
 .start-mini-ratings select {
   min-width: 64px;
   min-height: 40px;
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 9px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-forest) 94%, var(--rpgyw-cream)), var(--rpgyw-forest));
+  background: var(--rpgyw-face-forest);
   color: var(--rpgyw-cream);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 62%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .14),
-    0 3px 0 var(--rpgyw-brass-dark);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
   cursor: pointer;
   font-weight: 900;
   text-align: center;
@@ -4840,14 +4729,12 @@ body :where(button, .button, summary, [role="button"]) {
 }
 .start-text-help {
   min-height: 38px;
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 9px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 97%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  background: var(--rpgyw-face-cream);
   color: var(--rpgyw-forest);
   padding: .42rem .68rem;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 58%, var(--rpgyw-cream)),
-    0 2px 0 var(--rpgyw-brass-dark);
+  box-shadow: var(--rpgyw-raised-light-shadow);
   cursor: pointer;
   font-weight: 900;
   text-decoration: none;
@@ -4864,43 +4751,45 @@ body :where(button, .button, summary, [role="button"]) {
 .start-field-bezel {
   display: block;
   border: 7px solid var(--rpgyw-olive-dark);
-  outline: 2px solid var(--rpgyw-brass-mid);
-  outline-offset: 0;
+  outline: 0;
   border-radius: 14px;
-  background: color-mix(in srgb, var(--rpgyw-cream) 96%, var(--rpgyw-parchment));
+  background: var(--rpgyw-olive-dark);
   padding: 3px;
-  box-shadow:
-    inset 0 0 0 2px var(--rpgyw-brass-light),
-    inset 0 7px 14px rgb(43 47 38 / .12),
-    0 3px 0 var(--rpgyw-brass-dark);
+  box-shadow: inset 0 7px 14px rgb(43 47 38 / .12);
 }
 .start-field-bezel > input {
   width: 100%;
   min-height: 48px;
-  border: 0 !important;
+  border: 2px solid var(--rpgyw-brass-mid) !important;
   border-radius: 7px !important;
-  background: color-mix(in srgb, var(--rpgyw-cream) 98%, var(--rpgyw-parchment)) !important;
-  box-shadow: inset 0 2px 6px rgb(43 47 38 / .08) !important;
+  background: var(--rpgyw-parchment) !important;
+  box-shadow: inset 0 2px 6px rgb(43 47 38 / .10) !important;
 }
 .start-field-bezel:focus-within {
-  outline-color: var(--rpgyw-brass-light);
+  outline: 3px solid var(--rpgyw-lime);
+  outline-offset: 3px;
 }
 
-/* The final UI handoff is a single dimensional Onward control. */
+/* The final UI handoff is a centered forest action using the standard
+   dark-button construction rather than a page-wide slab. */
 .start-play-step {
+  display: flex;
+  justify-content: center;
   padding-top: .2rem;
 }
 .start-play-button {
-  border: 2px solid var(--rpgyw-brass-light);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 66%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .14),
-    0 4px 0 var(--rpgyw-brass-dark),
-    0 9px 14px rgb(30 38 30 / .14);
+  width: min(34%, 32rem);
+  min-width: 18rem;
+  border: 1px solid var(--rpgyw-control-inner-light) !important;
+  border-radius: var(--rpgyw-radius-control);
+  background: var(--rpgyw-face-forest) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
 .start-play-button:hover:not(:disabled),
 .start-play-button:focus-visible:not(:disabled) {
-  color: var(--rpgyw-lime);
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
 }
 
 @media (max-width: 640px) {
@@ -4913,12 +4802,12 @@ body :where(button, .button, summary, [role="button"]) {
 /* Review/change actions on completed settings remain proper tertiary buttons. */
 .start-complete-plaque button {
   min-height: 36px;
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 9px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 97%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  background: var(--rpgyw-face-cream);
   color: var(--rpgyw-forest);
   padding: .38rem .62rem;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 56%, var(--rpgyw-cream)), 0 2px 0 var(--rpgyw-brass-dark);
+  box-shadow: var(--rpgyw-raised-light-shadow);
   cursor: pointer;
   font-weight: 900;
   text-decoration: none;
@@ -4955,11 +4844,11 @@ body :where(button, .button, summary, [role="button"]) {
   gap: .55rem;
   margin-top: .85rem;
   border: 7px solid var(--rpgyw-olive-dark);
-  outline: 2px solid var(--rpgyw-brass-mid);
+  outline: 0;
   border-radius: 15px;
   background: color-mix(in srgb, var(--rpgyw-cream) 95%, var(--rpgyw-parchment));
   padding: .75rem;
-  box-shadow: inset 0 0 0 2px var(--rpgyw-brass-light), inset 0 8px 16px rgb(43 47 38 / .13), 0 3px 0 var(--rpgyw-brass-dark);
+  box-shadow: inset 0 0 0 2px var(--rpgyw-brass-mid), inset 0 8px 16px rgb(43 47 38 / .13);
 }
 .start-clarification-tier--required { border-color: color-mix(in srgb, var(--danger) 70%, var(--rpgyw-olive-dark)); }
 .start-clarification-tier h3 { margin: 0; color: var(--rpgyw-forest); font-size: 1.05rem; }
@@ -4967,11 +4856,11 @@ body :where(button, .button, summary, [role="button"]) {
 .start-question-card {
   display: grid;
   gap: .22rem;
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 11px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 98%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  background: var(--rpgyw-face-cream);
   padding: .65rem .72rem;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 54%, var(--rpgyw-cream)), 0 2px 0 var(--rpgyw-brass-dark);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .start-question-card strong { color: var(--rpgyw-forest); }
 .start-question-card p { margin: 0; }
@@ -4980,13 +4869,13 @@ body :where(button, .button, summary, [role="button"]) {
 .start-clarification-answer .start-field-bezel textarea {
   width: 100%;
   min-height: 94px;
-  border: 0;
+  border: 2px solid var(--rpgyw-brass-mid);
   border-radius: 7px;
-  background: color-mix(in srgb, var(--rpgyw-cream) 98%, var(--rpgyw-parchment));
+  background: var(--rpgyw-parchment);
   padding: .65rem .7rem;
   color: var(--ink);
   resize: vertical;
-  box-shadow: inset 0 2px 6px rgb(43 47 38 / .08);
+  box-shadow: inset 0 2px 6px rgb(43 47 38 / .10);
 }
 .start-review-summary { display: grid; gap: .35rem; }
 .start-review-summary p { margin: 0; }
@@ -5127,10 +5016,10 @@ body :where(button, .button, summary, [role="button"]) {
 .start-ai-dialogue--character { max-height: 48dvh; }
 .start-ai-turn {
   width: min(88%, 720px);
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 14px;
   padding: .7rem .78rem;
-  box-shadow: inset 0 0 0 2px var(--rpgyw-brass-light), 0 4px 0 var(--rpgyw-brass-dark), 0 8px 14px rgb(43 47 38 / .13);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .start-ai-turn > strong { display: block; margin-bottom: .28rem; font-size: .78rem; letter-spacing: .035em; }
 .start-ai-turn > p { margin: 0; white-space: pre-wrap; line-height: 1.48; }
@@ -5142,9 +5031,10 @@ body :where(button, .button, summary, [role="button"]) {
 .start-ai-turn--assistant > strong { color: var(--rpgyw-forest); }
 .start-ai-turn--user {
   justify-self: end;
-  border-color: color-mix(in srgb, var(--rpgyw-olive-dark) 72%, var(--rpgyw-brass-mid));
-  background: linear-gradient(180deg, var(--rpgyw-olive-dark), var(--rpgyw-olive-dark));
+  border-color: var(--rpgyw-control-inner-light);
+  background: var(--rpgyw-face-olive-dark);
   color: var(--rpgyw-cream);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 .start-ai-turn--user > strong { color: var(--rpgyw-cream); }
 .start-ai-turn .start-clarification-tier { margin-top: .7rem; }
@@ -5167,11 +5057,11 @@ body :where(button, .button, summary, [role="button"]) {
   display: grid;
   gap: .62rem;
   border: 7px solid var(--rpgyw-olive-dark);
-  outline: 2px solid var(--rpgyw-brass-mid);
+  outline: 0;
   border-radius: 16px;
-  background: color-mix(in srgb, var(--rpgyw-cream) 96%, var(--rpgyw-parchment));
+  background: var(--rpgyw-olive-dark);
   padding: .75rem;
-  box-shadow: inset 0 0 0 2px var(--rpgyw-brass-light), inset 0 7px 14px rgb(43 47 38 / .12), 0 3px 0 var(--rpgyw-brass-dark);
+  box-shadow: inset 0 7px 14px rgb(43 47 38 / .12);
 }
 .start-ai-composer label { display: grid; gap: .35rem; color: var(--rpgyw-forest); font-weight: 900; }
 .start-ai-composer textarea {
@@ -5187,10 +5077,10 @@ body :where(button, .button, summary, [role="button"]) {
 }
 .start-ai-composer-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; }
 .start-ai-composer .aigm-voice-controls > button {
-  border: 2px solid var(--rpgyw-brass-mid) !important;
-  background: color-mix(in srgb, var(--rpgyw-cream) 95%, var(--rpgyw-parchment)) !important;
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-face-cream) !important;
   color: var(--rpgyw-forest) !important;
-  box-shadow: inset 0 0 0 1px var(--rpgyw-brass-light), 0 3px 0 var(--rpgyw-brass-dark);
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .start-ai-composer .aigm-voice-controls > button:hover,
 .start-ai-composer .aigm-voice-controls > button:focus-visible { color: var(--rpgyw-lime) !important; background: var(--rpgyw-forest) !important; }
@@ -5209,22 +5099,32 @@ body :where(button, .button, summary, [role="button"]) {
 body :where(button, .button, summary, [role="button"]) {
   border: 1px solid var(--rpgyw-control-inner-dark) !important;
   background-color: var(--rpgyw-olive-light);
-  box-shadow:
-    0 0 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-mid),
-    inset 0 1px 0 rgb(246 234 212 / .72),
-    inset 0 -2px 0 rgb(63 74 49 / .09),
-    0 3px 0 var(--rpgyw-rim-spread) var(--rpgyw-brass-dark),
-    0 8px 13px rgb(37 45 35 / .12) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 
 /* Unclassified buttons no longer default to transparent/flat furniture. */
 body :where(button, summary, [role="button"]):not(:disabled) {
-  background-image: linear-gradient(180deg, var(--rpgyw-olive-light), var(--rpgyw-olive-light));
+  background-image: var(--rpgyw-face-olive-light);
   color: var(--rpgyw-forest);
 }
 
 /* Dark/active/action faces use the inverse single-pixel inner line before the brass. */
-
+body :where(
+  .button-primary,
+  .start-primary-control,
+  .start-play-button,
+  .aigm-send-roll,
+  .aigm-roll-initiative,
+  .aigm-gameplay-send,
+  .aigm-dice-mode-button--active,
+  .character-record-action--primary,
+  .account-access-details--signed-in > summary,
+  details[open] > summary,
+  [aria-pressed="true"]
+) {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
 
 /* One hover language across the application: forest face, house lime words/icons. */
 body :where(button, .button, summary, [role="button"]):not(:disabled):hover,
@@ -5328,32 +5228,17 @@ body :where(
   select
 ):not(.start-field-bezel *):not(.start-ai-composer *):not(.start-clarification-answer *):not(.aigm-composer-plaque *):not(.shape-file-field *) {
   border: 5px solid var(--rpgyw-olive-dark) !important;
-  outline: 2px solid var(--rpgyw-brass-mid);
-  outline-offset: 0;
-  background: color-mix(in srgb, var(--rpgyw-cream) 97%, var(--rpgyw-parchment)) !important;
+  outline: 0;
+  background: var(--rpgyw-parchment) !important;
   color: var(--ink);
   box-shadow:
-    inset 0 0 0 1px var(--rpgyw-brass-light),
-    inset 0 4px 8px rgb(43 47 38 / .12),
-    0 2px 0 var(--rpgyw-brass-dark) !important;
+    inset 0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 0 0 3px color-mix(in srgb, var(--rpgyw-brass-light) 58%, transparent),
+    inset 0 4px 8px rgb(43 47 38 / .12) !important;
 }
 
-/* Existing dedicated inset wells keep their deeper seven-pixel olive bezel. */
-:where(
-  .start-settings-bezel,
-  .start-field-bezel,
-  .start-ai-composer,
-  .start-clarification-tier,
-  .start-question-textarea,
-  .aigm-conversation-stage,
-  .landing-campaign-screen-stage
-) {
-  box-shadow:
-    inset 0 0 0 2px var(--rpgyw-brass-light),
-    inset 0 8px 16px rgb(43 47 38 / .14),
-    0 0 0 2px var(--rpgyw-brass-mid),
-    0 3px 0 2px var(--rpgyw-brass-dark) !important;
-}
+/* Purpose-built bezels own their own rail geometry. Do not put a second brass
+   rim around their outside edge: brass belongs at the inner parchment opening. */
 
 /* Small previously-flat text controls become miniature tertiary plaques too. */
 :where(
@@ -5434,12 +5319,27 @@ body label:has(> input[type="checkbox"]) {
 body label:has(> input[type="radio"]:checked),
 body label:has(> input[type="checkbox"]:checked) {
   border-color: var(--rpgyw-control-inner-light) !important;
-  background: var(--rpgyw-forest) !important;
+  background: var(--rpgyw-face-forest) !important;
   color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
 body label:has(> input[type="radio"]:checked) :where(span, strong, p),
 body label:has(> input[type="checkbox"]:checked) :where(span, strong, p) {
   color: var(--rpgyw-cream) !important;
+}
+body label:has(> input[type="radio"]):hover,
+body label:has(> input[type="radio"]):focus-within,
+body label:has(> input[type="checkbox"]):hover,
+body label:has(> input[type="checkbox"]):focus-within {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+body label:has(> input[type="radio"]):hover :where(span, strong, p),
+body label:has(> input[type="radio"]):focus-within :where(span, strong, p),
+body label:has(> input[type="checkbox"]):hover :where(span, strong, p),
+body label:has(> input[type="checkbox"]):focus-within :where(span, strong, p) {
+  color: var(--rpgyw-lime) !important;
 }
 
 /* Utility-class links in the Play workspace are visually buttons even when they are
@@ -5477,20 +5377,10 @@ body a[class*="rounded"][class*="bg-"]:focus-visible {
 }
 .account-main .usage-summary-item,
 .account-main .usage-estimate-row {
-  border: 1px solid var(--rpgyw-forest);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 11px;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--rpgyw-olive-light) 78%, var(--rpgyw-cream)),
-      color-mix(in srgb, var(--rpgyw-olive-light) 68%, var(--rpgyw-cream))
-    );
-  box-shadow:
-    0 0 0 2px var(--rpgyw-brass-mid),
-    inset 0 1px 0 rgb(246 234 212 / .72),
-    inset 0 -2px 0 rgb(63 74 49 / .08),
-    0 2px 0 2px var(--rpgyw-brass-dark),
-    0 6px 10px rgb(37 45 35 / .09);
+  background: var(--rpgyw-face-olive-light);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .account-main .usage-summary-item {
   display: grid;
@@ -5700,9 +5590,8 @@ html {
 }
 
 :where(a[href], button, input:not([type="hidden"]), select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
-  outline: 3px solid var(--rpgyw-cream) !important;
-  outline-offset: 2px !important;
-  box-shadow: 0 0 0 5px var(--rpgyw-forest) !important;
+  outline: 3px solid var(--rpgyw-lime) !important;
+  outline-offset: 3px !important;
 }
 
 :where(button, [role="button"], summary, input:not([type="hidden"]), select, textarea) {
@@ -5772,14 +5661,11 @@ html {
   min-width: 0;
   flex-direction: column;
   overflow: hidden;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 18px;
-  background: var(--background);
+  background: var(--rpgyw-face-cream);
   padding: .65rem;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 58%, transparent),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 8px 14px rgb(29 38 29 / .12);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .aigm-table-chat-panel--visible { display: flex; }
 .aigm-mp-back-to-play {
@@ -5797,17 +5683,12 @@ html {
   align-items: flex-start;
   justify-content: space-between;
   gap: .65rem;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 14px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-forest) 94%, var(--rpgyw-cream)), var(--rpgyw-forest));
+  background: var(--rpgyw-face-forest);
   padding: .65rem .75rem;
   color: var(--rpgyw-cream);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 68%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .15),
-    inset 0 -2px 0 rgb(0 0 0 / .12),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 7px 12px rgb(29 38 29 / .12);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 .aigm-table-chat-eyebrow {
   margin: 0 0 .08rem;
@@ -5842,9 +5723,10 @@ html {
 
 .aigm-multiplayer-lobby-details {
   margin-top: .5rem;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 12px;
-  background: var(--rpgyw-cream);
+  background: var(--rpgyw-face-cream);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .aigm-multiplayer-lobby-details > summary {
   display: flex;
@@ -5941,13 +5823,12 @@ html {
   margin: .65rem .15rem .15rem;
   border: 6px solid var(--rpgyw-olive-dark);
   border-radius: 14px;
-  background: var(--background);
+  background: var(--rpgyw-parchment);
   padding: .7rem;
   box-shadow:
-    0 0 0 2px var(--rpgyw-brass-mid),
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 70%, var(--rpgyw-cream)),
-    inset 0 5px 9px rgb(82 60 28 / .11),
-    0 3px 0 var(--rpgyw-brass-dark);
+    inset 0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 0 0 3px color-mix(in srgb, var(--rpgyw-brass-light) 58%, transparent),
+    inset 0 5px 9px rgb(82 60 28 / .11);
   scrollbar-gutter: stable;
 }
 .aigm-table-chat-empty {
@@ -6044,11 +5925,11 @@ html {
 }
 .aigm-multiplayer-guest-intro {
   align-self: start;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 18px;
-  background: var(--background);
+  background: var(--rpgyw-face-cream);
   padding: clamp(1rem, 3vw, 1.6rem);
-  box-shadow: 0 3px 0 var(--rpgyw-brass-dark), 0 9px 18px rgb(29 38 29 / .1);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .aigm-multiplayer-guest-intro h1 { margin: .15rem 0 .6rem; color: var(--rpgyw-forest); font-size: clamp(1.65rem, 4vw, 2.5rem); }
 .aigm-multiplayer-guest-intro p:last-child { margin: 0; color: var(--muted); line-height: 1.6; }
@@ -6107,11 +5988,11 @@ html {
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 18px;
-
+  background: var(--rpgyw-face-cream);
   padding: clamp(1rem, 2.5vw, 1.45rem);
-  box-shadow: 0 3px 0 var(--rpgyw-brass-dark), 0 8px 14px rgb(29 38 29 / .1);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .start-add-character-header h1 {
   margin: .1rem 0 .35rem;
@@ -6317,8 +6198,8 @@ html {
 }
 .character-remove-button:not(:disabled):hover,
 .character-remove-button:not(:disabled):focus-visible {
-  color: var(--destructive) !important;
-  background: color-mix(in srgb, var(--destructive) 10%, var(--background)) !important;
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
 }
 
 /* Landing news is deliberately terse: two headlines, first thing after the ribbon. */
@@ -6330,15 +6211,11 @@ html {
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: .8rem 1rem;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 18px;
-  background: var(--rpgyw-forest);
+  background: var(--rpgyw-face-forest);
   padding: .7rem .9rem;
-
-  box-shadow:
-    inset 0 1px 0 rgb(246 234 212 / .11),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 8px 15px rgb(29 38 29 / .10);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
 }
 .landing-news-eyebrow {
   display: inline-flex;
@@ -6347,9 +6224,8 @@ html {
   align-items: center;
   gap: .42rem;
   margin: 0;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 11px;
-
   padding: .38rem .62rem;
 
   font-size: .72rem;
@@ -6507,16 +6383,12 @@ html {
   align-items: center;
   justify-content: space-between;
   gap: .55rem;
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-control-inner-light);
   border-radius: 11px;
-  background: linear-gradient(180deg, var(--rpgyw-olive-dark), var(--rpgyw-olive-dark));
+  background: var(--rpgyw-face-olive-dark);
   color: var(--rpgyw-cream);
   padding: .48rem .55rem .48rem .72rem;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 48%, var(--rpgyw-cream)),
-    inset 0 1px 0 rgb(246 234 212 / .16),
-    0 3px 0 var(--rpgyw-brass-dark),
-    0 6px 10px rgb(43 47 38 / .10);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
   font-size: .78rem;
   font-weight: 800;
 }
@@ -6533,15 +6405,13 @@ html {
   justify-content: center;
   gap: .3rem;
   list-style: none;
-  border: 2px solid var(--rpgyw-brass-light);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 9px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 97%, var(--rpgyw-parchment)), var(--rpgyw-cream));
+  background: var(--rpgyw-face-cream);
   color: var(--rpgyw-forest);
   padding: .3rem .45rem;
   cursor: pointer;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-brass-light) 62%, var(--rpgyw-cream)),
-    0 3px 0 var(--rpgyw-brass-dark);
+  box-shadow: var(--rpgyw-raised-light-shadow);
   font-weight: 900;
 }
 .start-mini-rating-menu > summary::-webkit-details-marker { display: none; }
@@ -6553,11 +6423,18 @@ html {
 }
 .start-mini-rating-menu[open] > summary svg { transform: rotate(180deg); }
 .start-mini-rating-menu > summary:hover,
-.start-mini-rating-menu > summary:focus-visible,
-.start-mini-rating-menu[open] > summary {
-  background: var(--rpgyw-lime) !important;
-  color: var(--rpgyw-forest) !important;
+.start-mini-rating-menu > summary:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
 }
+.start-mini-rating-menu[open] > summary {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
+.start-mini-rating-menu[open] > summary:hover,
+.start-mini-rating-menu[open] > summary:focus-visible { color: var(--rpgyw-lime) !important; }
 .start-mini-rating-options {
   position: absolute;
   z-index: 90;
@@ -6567,10 +6444,10 @@ html {
   min-width: 64px;
   display: grid;
   overflow: hidden;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 10px;
-  background: var(--rpgyw-cream);
-  box-shadow: 0 5px 0 var(--rpgyw-brass-dark), 0 12px 22px rgb(35 45 35 / .2);
+  background: var(--rpgyw-face-cream);
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .start-mini-rating-options button {
   min-height: 34px;
@@ -6588,8 +6465,8 @@ html {
 .start-mini-rating-options button:focus-visible,
 .start-mini-rating-options button.is-selected:hover,
 .start-mini-rating-options button.is-selected:focus-visible {
-  background: var(--rpgyw-lime) !important;
-  color: var(--rpgyw-forest) !important;
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
 }
 .start-mini-rating-options button.is-selected {
   background: color-mix(in srgb, var(--rpgyw-olive-dark) 58%, var(--rpgyw-cream));
@@ -6621,18 +6498,19 @@ html {
 }
 .account-delete-cancel {
   min-height: 38px;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 9px;
-  background: var(--rpgyw-cream);
+  background: var(--rpgyw-face-cream);
   color: var(--rpgyw-forest);
   padding: .35rem .6rem;
   cursor: pointer;
   font-weight: 900;
+  box-shadow: var(--rpgyw-raised-light-shadow);
 }
 .account-delete-cancel:hover,
 .account-delete-cancel:focus-visible {
-  background: var(--rpgyw-lime);
-  color: var(--rpgyw-forest);
+  background: var(--rpgyw-forest);
+  color: var(--rpgyw-lime);
 }
 
 @media (max-width: 700px) {
@@ -6643,16 +6521,6 @@ html {
     width: 100%;
     justify-content: flex-end;
   }
-}
-
-.start-mini-rating-menu > summary:hover,
-.start-mini-rating-menu > summary:focus,
-.start-mini-rating-menu > summary:focus-visible,
-.start-mini-rating-menu[open] > summary {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-cream) 97%, var(--rpgyw-parchment)), var(--rpgyw-cream)) !important;
-  color: var(--rpgyw-forest) !important;
-  outline: 3px solid var(--rpgyw-lime);
-  outline-offset: 3px;
 }
 
 .start-campaign-hub {
@@ -6708,9 +6576,10 @@ html {
 .campaign-control-heading strong { color: var(--rpgyw-forest); font-size: .9rem; }
 .campaign-control-heading span { color: var(--muted); font-size: .72rem; }
 .campaign-control-badge {
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 999px;
-  background: var(--rpgyw-cream);
+  background: var(--rpgyw-face-cream);
+  box-shadow: var(--rpgyw-raised-light-shadow);
   padding: .25rem .5rem;
   color: var(--rpgyw-forest) !important;
   font-size: .65rem !important;
@@ -6755,10 +6624,11 @@ html {
   justify-content: center;
   gap: .3rem;
   min-height: 2rem;
-  border: 2px solid var(--rpgyw-brass-mid);
+  border: 1px solid var(--rpgyw-forest-line);
   border-radius: 9px;
-  background: linear-gradient(180deg, var(--rpgyw-cream), var(--rpgyw-cream));
+  background: var(--rpgyw-face-cream);
   padding: .3rem .52rem;
+  box-shadow: var(--rpgyw-raised-light-shadow);
   color: var(--rpgyw-forest);
   cursor: pointer;
   font-size: .68rem;
@@ -6769,11 +6639,16 @@ html {
 .campaign-decision-actions button:hover,
 .campaign-decision-actions button:focus-visible,
 .campaign-member-row button:hover,
-.campaign-member-row button:focus-visible,
+.campaign-member-row button:focus-visible {
+  background: var(--rpgyw-forest);
+  color: var(--rpgyw-lime);
+}
 .campaign-decision-actions button.is-selected {
   background: var(--rpgyw-forest);
   color: var(--rpgyw-cream);
 }
+.campaign-decision-actions button.is-selected:hover,
+.campaign-decision-actions button.is-selected:focus-visible { color: var(--rpgyw-lime); }
 .campaign-decision-actions button:disabled,
 .campaign-member-row button:disabled { cursor: default; opacity: .55; }
 .campaign-member-list { display: grid; gap: .38rem; }
@@ -6894,7 +6769,7 @@ html {
 }
 .start-campaign-hub > summary:hover,
 .start-campaign-hub > summary:focus-visible {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-olive-dark) 88%, var(--rpgyw-cream)), var(--rpgyw-olive-dark)) !important;
+  background: var(--rpgyw-forest) !important;
   color: var(--rpgyw-lime) !important;
 }
 .start-campaign-hub[open] > summary {
@@ -6902,7 +6777,8 @@ html {
   background: var(--rpgyw-forest) !important;
   color: var(--rpgyw-cream) !important;
 }
-.start-campaign-hub[open] > summary:hover { color: var(--rpgyw-cream) !important; }
+.start-campaign-hub[open] > summary:hover,
+.start-campaign-hub[open] > summary:focus-visible { color: var(--rpgyw-lime) !important; }
 .start-campaign-hub[open] > summary .accordion-plus { transform: rotate(45deg); }
 .start-campaign-hub .start-existing-body {
   margin-top: .75rem;
@@ -6960,15 +6836,17 @@ html {
 }
 .campaign-hub-summary:hover .campaign-hub-summary-copy small,
 .campaign-hub-summary:focus-visible .campaign-hub-summary-copy small { color: var(--rpgyw-lime) !important; }
-.campaign-hub-card[open] > .campaign-hub-summary,
-.campaign-hub-card[open] > .campaign-hub-summary:hover,
-.campaign-hub-card[open] > .campaign-hub-summary:focus-visible {
+.campaign-hub-card[open] > .campaign-hub-summary {
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
   background: var(--rpgyw-forest) !important;
   color: var(--rpgyw-cream) !important;
 }
 .campaign-hub-card[open] > .campaign-hub-summary .campaign-hub-summary-copy :where(strong, small) { color: var(--rpgyw-cream) !important; }
+.campaign-hub-card[open] > .campaign-hub-summary:hover,
+.campaign-hub-card[open] > .campaign-hub-summary:focus-visible { color: var(--rpgyw-lime) !important; }
+.campaign-hub-card[open] > .campaign-hub-summary:hover .campaign-hub-summary-copy :where(strong, small),
+.campaign-hub-card[open] > .campaign-hub-summary:focus-visible .campaign-hub-summary-copy :where(strong, small) { color: var(--rpgyw-lime) !important; }
 .campaign-hub-card[open] > .campaign-hub-summary .accordion-plus { transform: rotate(45deg); }
 .campaign-hub-card > .campaign-control-body {
   border-top: 1px solid var(--rpgyw-brass-mid);
@@ -7102,9 +6980,10 @@ html {
 }
 .landing-new-player.button,
 .landing-return-button.button {
-  border-color: var(--rpgyw-cream) !important;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-olive-dark) 88%, var(--rpgyw-cream)), var(--rpgyw-olive-dark)) !important;
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-olive-dark) !important;
   color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
 .landing-new-player.button:hover,
 .landing-new-player.button:focus-visible,
@@ -7212,9 +7091,10 @@ html {
   color: var(--forest-ink);
 }
 .feature-card:nth-child(2) {
-  border-color: var(--rpgyw-cream) !important;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--rpgyw-forest) 92%, var(--rpgyw-olive-dark)), var(--rpgyw-forest)) !important;
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-forest) !important;
   color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
 .feature-card:nth-child(2) h3,
 .feature-card:nth-child(2) p { color: var(--rpgyw-cream); }
@@ -7226,8 +7106,9 @@ html {
 }
 .feature-card:nth-child(2) .feature-eyebrow {
   border: 1px solid var(--rpgyw-forest-line) !important;
-  background: var(--rpgyw-cream) !important;
+  background: var(--rpgyw-face-cream) !important;
   color: var(--rpgyw-forest) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .landing-return-logo {
   border-color: var(--rpgyw-forest-line) !important;
@@ -7276,18 +7157,25 @@ html {
   color: var(--rpgyw-forest) !important;
 }
 .landing-accordion-summary:hover,
-.landing-accordion-summary:focus-visible,
-.landing-accordion[open] > .landing-accordion-summary,
-.landing-accordion[open] > .landing-accordion-summary:hover,
-.landing-accordion[open] > .landing-accordion-summary:focus-visible {
+.landing-accordion-summary:focus-visible {
   background: var(--rpgyw-forest) !important;
-  color: var(--rpgyw-cream) !important;
+  color: var(--rpgyw-lime) !important;
 }
+.landing-accordion[open] > .landing-accordion-summary {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-forest) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
+.landing-accordion[open] > .landing-accordion-summary:hover,
+.landing-accordion[open] > .landing-accordion-summary:focus-visible { color: var(--rpgyw-lime) !important; }
 .landing-accordion-summary:hover .landing-accordion-prompt,
 .landing-accordion-summary:focus-visible .landing-accordion-prompt,
-.landing-accordion[open] > .landing-accordion-summary .landing-accordion-prompt {
-  color: var(--rpgyw-cream) !important;
+.landing-accordion[open] > .landing-accordion-summary:hover .landing-accordion-prompt,
+.landing-accordion[open] > .landing-accordion-summary:focus-visible .landing-accordion-prompt {
+  color: var(--rpgyw-lime) !important;
 }
+.landing-accordion[open] > .landing-accordion-summary .landing-accordion-prompt { color: var(--rpgyw-cream) !important; }
 
 /* The opened accordion body is the plaque. Closed neighbors remain only buttons. */
 .landing-accordion-body {
@@ -7333,18 +7221,23 @@ html {
     0 7px 11px rgb(37 45 35 / .10) !important;
 }
 .audience-item > summary:hover,
-.audience-item > summary:focus-visible,
-.audience-item[open] > summary,
-.audience-item[open] > summary:hover,
-.audience-item[open] > summary:focus-visible {
+.audience-item > summary:focus-visible {
   background: var(--rpgyw-forest) !important;
-  color: var(--rpgyw-cream) !important;
+  color: var(--rpgyw-lime) !important;
 }
+.audience-item[open] > summary {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-forest) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
+.audience-item[open] > summary:hover,
+.audience-item[open] > summary:focus-visible { color: var(--rpgyw-lime) !important; }
 .audience-item > summary:hover > span:first-child,
 .audience-item > summary:focus-visible > span:first-child,
-.audience-item[open] > summary > span:first-child {
-  color: var(--rpgyw-cream) !important;
-}
+.audience-item[open] > summary:hover > span:first-child,
+.audience-item[open] > summary:focus-visible > span:first-child { color: var(--rpgyw-lime) !important; }
+.audience-item[open] > summary > span:first-child { color: var(--rpgyw-cream) !important; }
 
 /* The compact Existing Campaigns control is a standalone button. The inherited
    full-width details furniture must disappear until its separate cream body opens. */
@@ -7417,17 +7310,15 @@ html {
 .start-rules-card--single-step .start-rules-panel .start-choice:focus-visible :where(strong, span) {
   color: var(--rpgyw-lime) !important;
 }
-.start-rules-card--single-step .start-rules-panel .start-choice--selected,
-.start-rules-card--single-step .start-rules-panel .start-choice--selected:hover,
-.start-rules-card--single-step .start-rules-panel .start-choice--selected:focus-visible {
+.start-rules-card--single-step .start-rules-panel .start-choice--selected {
   background: var(--rpgyw-forest) !important;
   color: var(--rpgyw-cream) !important;
 }
-.start-rules-card--single-step .start-rules-panel .start-choice--selected :where(strong, span),
+.start-rules-card--single-step .start-rules-panel .start-choice--selected :where(strong, span) { color: var(--rpgyw-cream) !important; }
+.start-rules-card--single-step .start-rules-panel .start-choice--selected:hover,
+.start-rules-card--single-step .start-rules-panel .start-choice--selected:focus-visible { color: var(--rpgyw-lime) !important; }
 .start-rules-card--single-step .start-rules-panel .start-choice--selected:hover :where(strong, span),
-.start-rules-card--single-step .start-rules-panel .start-choice--selected:focus-visible :where(strong, span) {
-  color: var(--rpgyw-cream) !important;
-}
+.start-rules-card--single-step .start-rules-panel .start-choice--selected:focus-visible :where(strong, span) { color: var(--rpgyw-lime) !important; }
 
 /* The confirmation stays a cream button so all three principal surfaces are visible. */
 .start-rules-card--single-step .start-rules-confirm-button {
@@ -7444,16 +7335,26 @@ html {
 
 /* Campaigns read as recessed content rather than another stack of raised cards. */
 .campaign-hub-card {
+  overflow: visible;
   border: 0 !important;
-  padding: 3px;
-  background: var(--rpgyw-forest) !important;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--rpgyw-cream) 24%, transparent),
-    inset 0 3px 7px rgb(20 35 27 / .28) !important;
+  padding: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.campaign-hub-summary {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-face-olive-light) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
+}
+.campaign-hub-card[open] > .campaign-hub-summary {
+  border-color: var(--rpgyw-control-inner-light) !important;
+  border-radius: 13px !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
 .campaign-hub-card > .campaign-control-body {
+  margin-top: .7rem;
   border: 2px solid var(--rpgyw-brass-mid) !important;
-  border-radius: 0 0 11px 11px;
+  border-radius: 11px;
   background: var(--rpgyw-parchment) !important;
 }
 
@@ -7473,10 +7374,7 @@ html {
   background: var(--rpgyw-cream) !important;
   padding: .42rem .6rem .42rem .72rem;
   color: var(--rpgyw-forest) !important;
-  box-shadow:
-    0 0 0 2px var(--rpgyw-brass-mid),
-    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-brass-light)),
-    0 2px 0 2px var(--rpgyw-brass-dark) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .campaign-danger-details > summary:hover,
 .campaign-danger-details > summary:focus-visible {
@@ -7487,6 +7385,8 @@ html {
   background: var(--rpgyw-forest) !important;
   color: var(--rpgyw-cream) !important;
 }
+.campaign-danger-details[open] > summary:hover,
+.campaign-danger-details[open] > summary:focus-visible { color: var(--rpgyw-lime) !important; }
 .campaign-danger-details[open] > summary .campaign-danger-screw { transform: rotate(45deg); }
 .campaign-danger-body > div {
   border: 2px solid var(--rpgyw-brass-mid) !important;
@@ -7497,10 +7397,7 @@ html {
   border-radius: 11px !important;
   background: var(--rpgyw-cream) !important;
   color: var(--rpgyw-forest) !important;
-  box-shadow:
-    0 0 0 2px var(--rpgyw-brass-mid),
-    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-brass-light)),
-    0 2px 0 2px var(--rpgyw-brass-dark) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .campaign-danger-button:hover,
 .campaign-danger-button:focus-visible {
@@ -7524,10 +7421,7 @@ html {
   border: 1px solid var(--rpgyw-forest-line) !important;
   background: var(--rpgyw-cream) !important;
   color: var(--rpgyw-forest) !important;
-  box-shadow:
-    0 0 0 2px var(--rpgyw-brass-mid),
-    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-brass-light)),
-    0 2px 0 2px var(--rpgyw-brass-dark) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .start-campaign-hub .play-entry-import > .button:hover,
 .start-campaign-hub .play-entry-import > .button:focus-visible {
@@ -7726,10 +7620,12 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
   box-shadow: none !important;
 }
 
-/* Onward is the full-width primary handoff from Start to Play. */
-.start-play-button {
-  width: 100%;
-  min-width: 0;
+/* On small screens the same Onward control simply uses the available width. */
+@media (max-width: 640px) {
+  .start-play-button {
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 /* Route-transition/status furniture is a canonical light-olive card rather
@@ -7939,8 +7835,8 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 .shape-source-help {
   border: 1px solid var(--rpgyw-forest-line) !important;
   border-radius: 16px !important;
-  background: var(--rpgyw-cream) !important;
-  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), 0 2px 0 2px var(--rpgyw-brass-dark) !important;
+  background: var(--rpgyw-face-cream) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .shape-pricing-details > summary,
 .shape-source-help > summary {
@@ -7957,7 +7853,7 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 .shape-pricing-details > summary:focus-visible,
 .shape-source-help > summary:hover,
 .shape-source-help > summary:focus-visible {
-  background: var(--rpgyw-olive-dark) !important;
+  background: var(--rpgyw-forest) !important;
   color: var(--rpgyw-lime) !important;
 }
 .shape-pricing-details[open] > summary .accordion-plus,
@@ -7976,6 +7872,45 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
   padding: 0 !important;
   box-shadow: none !important;
 }
+/* A completed Script result is a dark-olive backing plaque. The result itself
+   remains parchment because it is actual produced text, while progress/readout
+   cards remain light furniture on top of the plaque. */
+.shape-workbench--completed {
+  border: 1px solid var(--rpgyw-control-inner-light) !important;
+  border-radius: var(--rpgyw-radius-plaque) !important;
+  background: var(--rpgyw-face-olive-dark) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
+.shape-workbench--completed .shape-job-heading :where(.kicker, h2, p) {
+  color: var(--rpgyw-cream) !important;
+}
+.shape-workbench--completed .shape-progress-pill {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-face-olive-light) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
+}
+.shape-workbench--completed .shape-commercial-progress > div {
+  border: 1px solid var(--rpgyw-forest-line) !important;
+  background: var(--rpgyw-face-olive-light) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
+}
+.shape-workbench--completed .shape-commercial-progress :where(strong, span) {
+  color: var(--rpgyw-forest) !important;
+}
+.shape-workbench--completed .shape-actions .button {
+  border: 1px solid var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-forest) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
+.shape-workbench--completed .shape-actions .button:hover,
+.shape-workbench--completed .shape-actions .button:focus-visible {
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
 .shape-workbench-heading {
   margin: 2.5rem 0 0;
   border: 1px solid var(--rpgyw-forest-line);
@@ -7991,9 +7926,9 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 .shape-workbench-heading h2 { font-size: clamp(1.35rem, 2.8vw, 1.9rem); }
 .shape-beta-pill.active {
   border: 1px solid var(--rpgyw-forest-line) !important;
-  background: var(--rpgyw-cream) !important;
+  background: var(--rpgyw-face-cream) !important;
   color: var(--rpgyw-forest) !important;
-  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), 0 2px 0 2px var(--rpgyw-brass-dark) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 
 .shape-script-step {
@@ -8080,14 +8015,16 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 .shape-description-card {
   border: 1px solid var(--rpgyw-forest-line) !important;
   border-radius: 15px !important;
-  background: var(--rpgyw-olive-light) !important;
+  background: var(--rpgyw-face-olive-light) !important;
   color: var(--rpgyw-forest) !important;
-  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), 0 2px 0 2px var(--rpgyw-brass-dark) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .shape-project-options > label.selected,
 .shape-description-card.selected {
-  background: var(--rpgyw-forest) !important;
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-forest) !important;
   color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
 .shape-project-options > label.selected :where(strong, span),
 .shape-description-card.selected :where(strong, span) { color: var(--rpgyw-cream) !important; }
@@ -8112,9 +8049,9 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 .shape-script-step--usage .shape-quote {
   border: 1px solid var(--rpgyw-forest-line) !important;
   border-radius: 15px !important;
-  background: var(--rpgyw-cream) !important;
+  background: var(--rpgyw-face-cream) !important;
   color: var(--forest-ink) !important;
-  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), 0 2px 0 2px var(--rpgyw-brass-dark) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .shape-script-step--usage .shape-public-preview-note { margin-top: 0; }
 .shape-script-step--usage .shape-public-preview-note :where(strong, span),
@@ -8142,8 +8079,8 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 .character-sheet-portrait {
   border: 1px solid var(--rpgyw-forest-line) !important;
   border-radius: 16px !important;
-  background: var(--rpgyw-cream) !important;
-  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), 0 2px 0 2px var(--rpgyw-brass-dark) !important;
+  background: var(--rpgyw-face-cream) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .character-sheet-header .font-mono { color: var(--rpgyw-forest) !important; }
 .character-sheet-header h2 { color: var(--rpgyw-forest) !important; }
@@ -8156,17 +8093,16 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 .character-record-edit-workspace a[download] {
   border: 1px solid var(--rpgyw-forest-line) !important;
   border-radius: 13px !important;
-  background: var(--rpgyw-cream) !important;
+  background: var(--rpgyw-face-cream) !important;
   color: var(--rpgyw-forest) !important;
-  box-shadow:
-    0 0 0 2px var(--rpgyw-brass-mid),
-    inset 0 1px 0 var(--rpgyw-cream),
-    0 2px 0 2px var(--rpgyw-brass-dark) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .character-record-action--primary,
 .character-record-edit-workspace button[class*="bg-primary"] {
-  background: var(--rpgyw-forest) !important;
+  border-color: var(--rpgyw-control-inner-light) !important;
+  background: var(--rpgyw-face-forest) !important;
   color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
 }
 .character-record-action:not(:disabled):hover,
 .character-record-action:not(:disabled):focus-visible,
@@ -8209,11 +8145,8 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 #character-smart-level-help {
   border: 1px solid var(--rpgyw-forest-line) !important;
   border-radius: 18px !important;
-  background: var(--rpgyw-olive-light) !important;
-  box-shadow:
-    0 0 0 2px var(--rpgyw-brass-mid),
-    0 3px 0 2px var(--rpgyw-brass-dark),
-    0 10px 18px rgb(37 45 35 / .16) !important;
+  background: var(--rpgyw-face-olive-light) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .character-profile-picture-card,
 .character-record-edit-workspace > div[class*="bg-card"] {
@@ -8267,8 +8200,8 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
   overflow: hidden;
   border: 1px solid var(--rpgyw-forest-line) !important;
   border-radius: 14px !important;
-  background: var(--rpgyw-cream) !important;
-  box-shadow: 0 0 0 2px var(--rpgyw-brass-mid), 0 2px 0 2px var(--rpgyw-brass-dark) !important;
+  background: var(--rpgyw-face-cream) !important;
+  box-shadow: var(--rpgyw-raised-light-shadow) !important;
 }
 .character-record-nested-summary {
   min-height: 46px;
