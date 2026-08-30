@@ -7844,17 +7844,17 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
   place-items: center;
   pointer-events: none;
   font-family: Georgia, Cambria, "Times New Roman", serif;
-  font-size: clamp(5.6rem, 11.2vw, 8.25rem);
+  font-size: clamp(5.05rem, 10.1vw, 7.45rem);
   font-weight: 900;
   letter-spacing: -.08em;
   line-height: .82;
-  transform: translate(-9%, -1%);
+  transform: translate(-6%, -1%);
 }
 .aigm-dice-selection-feedback[data-die-length="3"] {
-  font-size: clamp(4.85rem, 9.5vw, 6.9rem);
+  font-size: clamp(4.35rem, 8.55vw, 6.2rem);
 }
 .aigm-dice-selection-feedback[data-die-length="4"] {
-  font-size: clamp(4rem, 8vw, 5.75rem);
+  font-size: clamp(3.6rem, 7.2vw, 5.2rem);
 }
 .aigm-dice-selection-feedback-layer {
   grid-area: 1 / 1;
