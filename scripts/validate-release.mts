@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.17')
-assert.equal(pkg.rpgywVersion, '1.13.17')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.17'", 'visible app version')
+assert.equal(pkg.version, '1.13.18')
+assert.equal(pkg.rpgywVersion, '1.13.18')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.18'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -547,6 +547,11 @@ before(siteHeader, "{ href: '/multiplayer', label: 'Multiplayer' }", "{ href: '/
 has(css, '.multiplayer-page-notice {', 'Multiplayer management notice styling')
 has(css, '.multiplayer-campaign-manager {', 'Multiplayer campaign-control plaque')
 has(css, '.multiplayer-vtt-card {', 'VTT future-work plaque')
+has(multiplayerPage, 'Hey, did you miss a session or two? Click here for a key trick.', 'Multiplayer catch-up tip')
+has(multiplayerPage, '<strong>Download transcript</strong>', 'Multiplayer transcript catch-up instruction')
+has(multiplayerPage, '<strong>Script</strong>', 'Multiplayer Script catch-up instruction')
+has(css, '.multiplayer-catchup-tip > summary {', 'Multiplayer catch-up action styling')
+has(css, '.multiplayer-catchup-tip-body {', 'Multiplayer catch-up reveal styling')
 
 // Script is the actual three-step converter and accepts outside campaign records.
 const scriptPageUi = read('app/script/page.tsx')
@@ -590,4 +595,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.17 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.18 release and canonical UI checks passed.')

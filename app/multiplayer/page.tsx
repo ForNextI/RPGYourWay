@@ -23,6 +23,13 @@ export default async function MultiplayerPage() {
             <h1 id="multiplayer-page-heading" className="page-title">Multiplayer</h1>
             <p className="multiplayer-page-notice"><strong>This page is for controlling multiplayer and VTT.</strong> If you&apos;re creating a campaign that uses those, you will do so in Start, as part of the normal campaign creation workflow.</p>
             <p className="page-lede">Use this page after creation to continue campaigns, manage native multiplayer membership and campaign decisions, and, soon, connect virtual tabletop tools.</p>
+            <details className="multiplayer-catchup-tip">
+              <summary>Hey, did you miss a session or two? Click here for a key trick.</summary>
+              <div className="multiplayer-catchup-tip-body">
+                <p>If you missed some gameplay, go to the bottom of the Play page, open <strong>Session tools</strong>, and choose <strong>Download transcript</strong>. Find the section that covers the time you missed and copy that section into a new document.</p>
+                <p>Then take that new document to <strong>Script</strong> and paste or upload it there. Script can turn the missed gameplay into third-person narrative prose, which can make catching up much more pleasant. If you would rather read the raw transcript, that is what the downloaded transcript is there for too.</p>
+              </div>
+            </details>
           </section>
 
           {!user ? (

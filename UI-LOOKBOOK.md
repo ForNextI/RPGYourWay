@@ -976,3 +976,8 @@ These are current composition rules that sit on top of the canonical primitives 
 - When a canonical primitive changes, update its one source of truth and this lookbook rather than adding a new page-local override.
 - Prefer deletion/merging over accumulating another late stylesheet layer.
 
+
+### Multiplayer orientation and catch-up tip
+- The `/multiplayer` intro plaque is light olive and is the orientation surface for multiplayer/VTT management.
+- Its optional missed-session tip is a canonical forest raised action with cream copy and lime hover/focus copy.
+- Opening that tip reveals a cream reading panel explaining how to download a Play transcript and send an excerpt through Script for narrative catch-up prose.

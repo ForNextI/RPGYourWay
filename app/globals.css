@@ -8713,3 +8713,49 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
   }
   .multiplayer-page-shell { width: min(100% - 1rem, 1120px); }
 }
+
+/* Multiplayer catch-up tip: the intro plaque is the light-olive orientation
+   surface; the optional transcript-to-Script trick is a canonical forest
+   action that reveals a cream reading panel without introducing client state. */
+.multiplayer-page-intro {
+  background: var(--rpgyw-face-olive-light);
+  padding: clamp(1.35rem, 3.2vw, 1.9rem);
+}
+.multiplayer-catchup-tip {
+  margin-top: 1rem;
+}
+.multiplayer-catchup-tip > summary {
+  list-style: none;
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--rpgyw-control-inner-light);
+  border-radius: var(--rpgyw-radius-control);
+  background: var(--rpgyw-face-forest);
+  color: var(--rpgyw-cream);
+  padding: .8rem 1rem;
+  box-shadow: var(--rpgyw-raised-dark-shadow);
+  font-weight: 900;
+  text-align: center;
+  cursor: pointer;
+}
+.multiplayer-catchup-tip > summary::-webkit-details-marker { display: none; }
+.multiplayer-catchup-tip > summary:hover,
+.multiplayer-catchup-tip > summary:focus-visible { color: var(--rpgyw-lime); }
+.multiplayer-catchup-tip-body {
+  margin-top: .8rem;
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: var(--rpgyw-radius-card);
+  background: var(--rpgyw-face-cream);
+  color: var(--rpgyw-forest);
+  padding: 1rem 1.1rem;
+  box-shadow: var(--rpgyw-raised-light-shadow);
+}
+.multiplayer-catchup-tip-body p {
+  margin: 0;
+  color: var(--rpgyw-forest);
+  line-height: 1.6;
+}
+.multiplayer-catchup-tip-body p + p { margin-top: .75rem; }
