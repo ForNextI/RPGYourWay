@@ -916,7 +916,7 @@ These are current composition rules that sit on top of the canonical primitives 
 
 - The compact **Current party / Max party size** plaque stays fully inside the character rail and never clips or forces horizontal overflow.
 - Dice quantity uses a rounded recessed opening. The quantity is large forest text at rest.
-- Die type selection uses the dragon-dice artwork as one square interactive tray: a simple three-column hit grid covers d4/d6/d8, d10/d12/d20, and the bottom percentile pair as d100. Hit areas may be rectangular rather than tracing the irregular die silhouettes; hover/focus reveals the active area without obscuring the artwork.
+- Die type selection uses the dragon-dice pile directly on the Play plaque with no surrounding card or visible mouse grid. A simple three-column hit grid covers d4/d6/d8, d10/d12/d20, and the bottom percentile pair as d100. Clicking a target briefly shows one large center-centered `dX` label over the entire pile; the label is lime with a black outline and cream outer edge, while the normal roll result remains below. Keyboard focus may reveal its rectangular hit area for accessibility.
 - **Can I direct my game?** lives inside expanded Session tools rather than as a permanent second control.
 - **Add another character** is a compact action button, not a full-width card.
 - Gameplay text input has rounded inner corners and remains inside the composer bezel.

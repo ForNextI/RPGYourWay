@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.8')
-assert.equal(pkg.rpgywVersion, '1.13.8')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.8'", 'visible app version')
+assert.equal(pkg.version, '1.13.9')
+assert.equal(pkg.rpgywVersion, '1.13.9')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.9'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -475,7 +475,11 @@ has(css, '.medieval-page--play .aigm-party-capacity {')
 has(css, '.medieval-page--play #dice-quantity {')
 has(gameplayShell, 'src="/images/dragon-dice-selector.webp"', 'dragon dice selector artwork')
 has(gameplayShell, 'className="aigm-dice-art-button aigm-dice-art-button--percentile"', 'percentile dice hit area')
-has(css, '.aigm-dice-art-selector {', 'dragon dice selector frame')
+has(css, '.aigm-dice-art-selector {', 'dragon dice selector')
+has(css, 'border: 0;', 'frameless dragon dice selector')
+has(gameplayShell, 'className="aigm-dice-selection-feedback"', 'centered die-selection feedback')
+has(gameplayShell, 'setDieSelectionFeedback(`d${sides}`)', 'die-selection feedback names the die kind')
+lacks(css, '.aigm-dice-art-label {', 'retired per-cell die labels')
 lacks(gameplayShell, 'className="aigm-die-button', 'retired generic die buttons')
 assert.equal(exists('public/images/dragon-dice-selector.webp'), true, 'Dragon dice selector artwork should ship with Play')
 has(css, '.medieval-page--play .aigm-gameplay-message-input {')
@@ -511,4 +515,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.8 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.9 release and canonical UI checks passed.')

@@ -1293,6 +1293,7 @@ export function AigmGameplayShell() {
   const [diceQuantity, setDiceQuantity] = useState(1)
   const [lastRoll, setLastRoll] = useState<string | null>(null)
   const [pendingDice, setPendingDice] = useState<string | null>(null)
+  const [dieSelectionFeedback, setDieSelectionFeedback] = useState<string | null>(null)
   const [showJumpButton, setShowJumpButton] = useState(false)
   const [ownerGodModeActive, setOwnerGodModeActive] = useState(false)
   const [ownerQaAccess, setOwnerQaAccess] = useState(false)
@@ -1327,6 +1328,11 @@ export function AigmGameplayShell() {
   const initiallyPositionedAdventureRef = useRef<string | null>(null)
   const queuedVoiceTurnRef = useRef<string | null>(null)
   const draftTurnBillingIdRef = useRef<string | null>(null)
+  const dieSelectionFeedbackTimerRef = useRef<number | null>(null)
+
+  useEffect(() => () => {
+    if (dieSelectionFeedbackTimerRef.current !== null) window.clearTimeout(dieSelectionFeedbackTimerRef.current)
+  }, [])
 
   useEffect(() => {
     if (!mobilePanelFocusReadyRef.current) {
@@ -2288,6 +2294,12 @@ export function AigmGameplayShell() {
 
   function rollDice(sides: number) {
     if (gameplay.dice_mode === 'purist' && lastRoll) return
+    if (dieSelectionFeedbackTimerRef.current !== null) window.clearTimeout(dieSelectionFeedbackTimerRef.current)
+    setDieSelectionFeedback(`d${sides}`)
+    dieSelectionFeedbackTimerRef.current = window.setTimeout(() => {
+      setDieSelectionFeedback(null)
+      dieSelectionFeedbackTimerRef.current = null
+    }, 650)
     const results = Array.from({ length: diceQuantity }, () => rollDie(sides))
     const total = results.reduce((sum, value) => sum + value, 0)
     const label = `${diceQuantity}d${sides}: ${results.join(', ')}${diceQuantity > 1 ? ` (total ${total})` : ''}`
@@ -2431,11 +2443,18 @@ export function AigmGameplayShell() {
               <Image
                 src="/images/dragon-dice-selector.webp"
                 alt=""
-                width={900}
-                height={900}
+                width={1120}
+                height={1120}
                 sizes="(max-width: 860px) min(92vw, 360px), 260px"
                 className="aigm-dice-art-image"
               />
+              {dieSelectionFeedback && (
+                <div className="aigm-dice-selection-feedback" data-die-length={dieSelectionFeedback.length} aria-hidden="true">
+                  <span className="aigm-dice-selection-feedback-layer aigm-dice-selection-feedback-layer--cream">{dieSelectionFeedback}</span>
+                  <span className="aigm-dice-selection-feedback-layer aigm-dice-selection-feedback-layer--black">{dieSelectionFeedback}</span>
+                  <span className="aigm-dice-selection-feedback-layer aigm-dice-selection-feedback-layer--lime">{dieSelectionFeedback}</span>
+                </div>
+              )}
               <div className="aigm-dice-art-grid" aria-hidden="false">
                 {DICE.slice(0, 6).map((sides, index) => (
                   <button
@@ -2447,9 +2466,7 @@ export function AigmGameplayShell() {
                     style={{ gridColumn: (index % 3) + 1, gridRow: Math.floor(index / 3) + 1 }}
                     aria-label={`Roll d${sides}`}
                     title={`Roll d${sides}`}
-                  >
-                    <span className="aigm-dice-art-label">d{sides}</span>
-                  </button>
+                  />
                 ))}
                 <button
                   type="button"
@@ -2458,9 +2475,7 @@ export function AigmGameplayShell() {
                   className="aigm-dice-art-button aigm-dice-art-button--percentile"
                   aria-label="Roll d100 percentile dice"
                   title="Roll d100"
-                >
-                  <span className="aigm-dice-art-label">d100</span>
-                </button>
+                />
               </div>
             </div>
             {lastRoll && (
