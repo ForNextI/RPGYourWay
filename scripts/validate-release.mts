@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.13')
-assert.equal(pkg.rpgywVersion, '1.13.13')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.13'", 'visible app version')
+assert.equal(pkg.version, '1.13.14')
+assert.equal(pkg.rpgywVersion, '1.13.14')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.14'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -160,7 +160,9 @@ has(adScriptPage, '<AdSenseSlot placement="script" />', 'Script manual ad placem
 has(accessibilityPage, '<AdSenseSlot placement="accessibility" />', 'Accessibility manual ad placement')
 has(adStartEntry, '!addCharacterMode ? <AdSenseSlot placement="start" /> : null', 'Start manual ad placement excludes add-character flow')
 has(css, '.ad-placement--start {')
-has(css, 'margin-bottom: 150px;', 'Start ad safety buffer')
+has(adStartEntry, 'className="start-here-hero" href="#start-new-campaign"', 'Start Here entry button')
+has(css, '.start-here-hero {', 'Start Here entry button styling')
+has(css, 'background: var(--rpgyw-face-olive-dark);', 'Start Here dark-olive face')
 has(css, 'max-width: 320px;', 'mobile ad width')
 has(css, 'height: 100px;', 'mobile ad height')
 has(css, 'width: 468px;', 'intermediate ad width')
@@ -392,7 +394,7 @@ has(gameplayRoute, 'multiplayer_invite_code')
 const landingCampaignPanel = read('components/LandingCampaignPanel.tsx')
 has(landingCampaignPanel, 'Continue Adventure')
 lacks(landingCampaignPanel, 'Return to Adventure')
-has(start, '<strong id="rules-heading">Start Here</strong>')
+has(start, '<strong id="rules-heading">New Campaign</strong>')
 has(start, 'Choose This Game System')
 lacks(start, 'Use this game system')
 has(multiplayerManager, 'className="campaign-hub-card"')
@@ -486,7 +488,8 @@ for (const file of [
 has(css, '.inner-main > .shell.prose-page {')
 
 // Start and Play retain the finished composition while sharing the common primitives.
-has(start, 'className="start-rules-subtitle">New Campaign</p>', 'Start Here New Campaign subtitle')
+lacks(start, 'start-rules-subtitle', 'redundant New Campaign subtitle')
+has(start, 'id="start-new-campaign"', 'Start Here destination anchor')
 lacks(start, 'Six short questions answered.', 'redundant completed-guidance subtitle')
 has(start, 'start-complete-plaque start-complete-plaque--guidance', 'completed guidance modifier')
 has(css, '.start-play-button {')
@@ -582,4 +585,4 @@ has(css, '.auth-form input {')
 has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
-console.log('RPG Your Way 1.13.13 release and canonical UI checks passed.')
+console.log('RPG Your Way 1.13.14 release and canonical UI checks passed.')

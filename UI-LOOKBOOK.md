@@ -872,7 +872,7 @@ Manual AdSense inventory is deliberately simple and sits immediately below the t
 - Use one shared responsive ad-slot component.
 - Reserve approximately **320 × 100 px on phones**, **468 × 60 px on intermediate widths**, and **728 × 90 px on laptop/desktop widths**.
 - Before an AdSense slot ID is configured, keep the same reserved footprint visible with the permitted label **Advertisements** and an otherwise blank placeholder. No separate on/off control is needed.
-- Start uses a **150 px clear vertical buffer below the ad inventory** before the first ordinary campaign control.
+- Start uses the former ad-safety buffer for one oversized canonical dark-olive **Start Here** entry button. The button remains clearly separated from the ad inventory and scrolls to the campaign-creation flow.
 - The Start ad appears only in the normal new-campaign/import flow, not the signed-out authentication surface or the add-character utility flow.
 - AdSense client/slot identifiers are supplied through `NEXT_PUBLIC_ADSENSE_*` deployment variables so inventory can be connected without rewriting page components.
 
@@ -904,7 +904,7 @@ These are current composition rules that sit on top of the canonical primitives 
 
 ## 22.1 Start
 
-- `Start Here` carries the plain subtitle **New Campaign** immediately beneath the nameplate.
+- Start has one oversized dark-olive **Start Here** entry button between the ad inventory and campaign creation. Step 1 itself is **New Campaign**; do not repeat a separate New Campaign subtitle beneath it.
 - The persistent selected game-system control is forest with cream copy. Hover/focus keeps the forest face and changes the copy to lime. Its accordion screw does not recolor or resize.
 - The compact top utility on Start is **Import older adventures** only. It uses a dark-olive face and does not contain campaign management or multiplayer controls.
 - Campaign-preference category labels are readable forest text on their olive rows.
