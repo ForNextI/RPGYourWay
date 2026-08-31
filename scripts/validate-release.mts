@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.22')
-assert.equal(pkg.rpgywVersion, '1.13.22')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.22'", 'visible app version')
+assert.equal(pkg.version, '1.13.23')
+assert.equal(pkg.rpgywVersion, '1.13.23')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.23'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -108,8 +108,11 @@ for (const file of [
   'app/api/integrations/foundry/player-link/approve/route.ts',
   'app/api/integrations/foundry/turn/route.ts',
   'app/api/integrations/foundry/command-result/route.ts',
+  'app/api/integrations/foundry/session/roster/route.ts',
+  'app/api/integrations/foundry/state-sync/route.ts',
   'supabase/migrations/20260831000000_foundry_integrator_phase1.sql',
   'supabase/migrations/20260831010000_foundry_player_links.sql',
+  'supabase/migrations/20260831133000_foundry_character_state.sql',
 ]) assert.ok(exists(file), `Missing ${file}`)
 
 // Dead private-beta access code is deliberately gone.
