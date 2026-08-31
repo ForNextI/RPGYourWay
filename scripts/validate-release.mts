@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.20')
-assert.equal(pkg.rpgywVersion, '1.13.20')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.20'", 'visible app version')
+assert.equal(pkg.version, '1.13.21')
+assert.equal(pkg.rpgywVersion, '1.13.21')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.21'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -301,6 +301,11 @@ has(multiplayerManager, 'Make coordinator')
 lacks(campaignHub, 'wait for the rebuilt RPG Your Way onboarding flow')
 const gameplayShell = read('components/aigm/aigm-gameplay-shell.tsx')
 lacks(gameplayShell, '/#wardens-latest-update')
+has(gameplayShell, "partyState.campaign_mode !== 'multiplayer'", 'multiplayer Play auto-start is campaign-mode gated')
+has(gameplayShell, 'multiplayerAutoStartCampaignRef', 'multiplayer Play auto-start guard')
+has(gameplayShell, "searchParams.has('multiplayer')", 'invite URLs stay on the invite join path')
+has(gameplayShell, "partyState.campaign_mode === 'multiplayer' ? (", 'multiplayer retry is available to ordinary campaign members')
+lacks(gameplayShell, ") : ownerQaAccess ? (", 'owner-only multiplayer start gate')
 
 // Support/legal pages must not describe already-live systems as future work.
 const support = read('app/support/page.tsx')

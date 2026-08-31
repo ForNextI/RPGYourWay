@@ -1328,6 +1328,7 @@ export function AigmGameplayShell() {
   const initiallyPositionedAdventureRef = useRef<string | null>(null)
   const queuedVoiceTurnRef = useRef<string | null>(null)
   const draftTurnBillingIdRef = useRef<string | null>(null)
+  const multiplayerAutoStartCampaignRef = useRef<string | null>(null)
   const dieSelectionFeedbackTimerRef = useRef<number | null>(null)
 
   useEffect(() => () => {
@@ -1532,6 +1533,24 @@ export function AigmGameplayShell() {
       setScreenReaderAnnouncement('Multiplayer table started. The invite link and table chat are ready.')
     }
   }
+
+  useEffect(() => {
+    const campaignId = partyState?.adventure_id
+    if (!campaignId || partyState.campaign_mode !== 'multiplayer') return
+    if (!multiplayerRosterSignature || multiplayerSession || multiplayer.loading || multiplayer.starting) return
+    if (new URL(window.location.href).searchParams.has('multiplayer')) return
+    if (multiplayerAutoStartCampaignRef.current === campaignId) return
+
+    multiplayerAutoStartCampaignRef.current = campaignId
+    void startMultiplayerSession()
+  }, [
+    partyState?.adventure_id,
+    partyState?.campaign_mode,
+    multiplayerRosterSignature,
+    multiplayerSession,
+    multiplayer.loading,
+    multiplayer.starting,
+  ])
 
   const selectedCharacter = selectedCharacterId
     ? partyState?.characters.find((character) => character.id === selectedCharacterId) ?? null
@@ -2639,7 +2658,7 @@ export function AigmGameplayShell() {
                     <button type="button" onClick={() => setCharacterAssistanceDialogOpen(true)} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground"><BookOpen className="size-3.5" aria-hidden="true" />Character help: {characterAssistanceLevel} out of 10</button>
                     {multiplayerActive ? (
                       <button type="button" onClick={() => changeMultiplayerPanel('chat')} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground"><UsersRound className="size-3.5" aria-hidden="true" />Open multiplayer table</button>
-                    ) : ownerQaAccess ? (
+                    ) : partyState.campaign_mode === 'multiplayer' ? (
                       <button type="button" onClick={() => void startMultiplayerSession()} disabled={multiplayer.starting || readyCharacters.length === 0} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground disabled:opacity-45">{multiplayer.starting ? <LoaderCircle className="size-3.5 animate-spin" aria-hidden="true" /> : <UsersRound className="size-3.5" aria-hidden="true" />}Start Multiplayer</button>
                     ) : null}
                     {multiplayerActive ? (
