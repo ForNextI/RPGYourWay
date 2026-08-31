@@ -22,6 +22,8 @@ type GrantPayload = {
   integratorWorldId: string
   foundryUserId: string
   exp: number
+  scope?: 'controller' | 'player'
+  playerLinkId?: string
 }
 
 export class FoundryIntegrationError extends Error {
@@ -148,6 +150,15 @@ function parseGrant(token: string): GrantPayload {
     || typeof candidate.integratorWorldId !== 'string'
     || typeof candidate.foundryUserId !== 'string'
     || typeof candidate.exp !== 'number'
+    || (
+      candidate.scope !== undefined
+      && candidate.scope !== 'controller'
+      && candidate.scope !== 'player'
+    )
+    || (
+      candidate.scope === 'player'
+      && typeof candidate.playerLinkId !== 'string'
+    )
   ) {
     throw new FoundryIntegrationError('The Foundry session grant is not valid.', 401, 'invalid_session_grant')
   }
@@ -341,6 +352,266 @@ export async function approveFoundryPairing(user: User, rawCode: unknown, rawCam
   }
 }
 
+
+export async function startFoundryPlayerLink(input: PairingStartInput, origin: string) {
+  const integratorWorldId = cleanRequiredText(input.integratorWorldId, 'Integrator world ID', 160)
+  const foundryUserId = cleanRequiredText(input.foundryUserId, 'Foundry user ID', 160)
+  const foundryUserName = cleanOptionalText(input.foundryUserName, 160)
+  const foundryWorldLabel = cleanOptionalText(input.foundryWorldLabel, 160)
+  const admin = createAdminClient()
+
+  const { data: connection, error: connectionError } = await admin
+    .from('foundry_connections')
+    .select('id, campaign_id, integrator_world_id, foundry_world_label, status')
+    .eq('integrator_world_id', integratorWorldId)
+    .eq('status', 'active')
+    .maybeSingle()
+
+  if (connectionError) throw new FoundryIntegrationError(connectionError.message, 503, 'database_unavailable')
+  if (!connection) {
+    throw new FoundryIntegrationError(
+      'This Foundry world is not connected to RPG Your Way yet.',
+      409,
+      'world_not_connected',
+    )
+  }
+
+  await admin
+    .from('foundry_player_link_requests')
+    .update({ status: 'expired' })
+    .eq('connection_id', connection.id)
+    .eq('foundry_user_id', foundryUserId)
+    .eq('status', 'pending')
+
+  const expiresAt = new Date(Date.now() + PAIRING_LIFETIME_MS).toISOString()
+  let row: { id: string; user_code: string; expires_at: string } | null = null
+  let lastError: Error | null = null
+
+  for (let attempt = 0; attempt < 5 && !row; attempt += 1) {
+    const userCode = generateUserCode()
+    const { data, error } = await admin
+      .from('foundry_player_link_requests')
+      .insert({
+        user_code: userCode,
+        connection_id: connection.id,
+        campaign_id: connection.campaign_id,
+        integrator_world_id: connection.integrator_world_id,
+        foundry_user_id: foundryUserId,
+        foundry_user_name: foundryUserName,
+        foundry_world_label: foundryWorldLabel || connection.foundry_world_label,
+        status: 'pending',
+        expires_at: expiresAt,
+      })
+      .select('id, user_code, expires_at')
+      .single()
+
+    if (!error && data) {
+      row = data as { id: string; user_code: string; expires_at: string }
+      break
+    }
+
+    lastError = new Error(error?.message || 'Unable to create Foundry player-link request.')
+  }
+
+  if (!row) {
+    throw new FoundryIntegrationError(
+      lastError?.message || 'Unable to create Foundry player-link request.',
+      503,
+      'player_link_unavailable',
+    )
+  }
+
+  const verificationUrl = new URL('/foundry/link-player', origin)
+  verificationUrl.searchParams.set('code', row.user_code)
+
+  return {
+    pairId: row.id,
+    userCode: row.user_code,
+    verificationUrl: verificationUrl.toString(),
+    expiresAt: row.expires_at,
+  }
+}
+
+export async function getFoundryPlayerLinkStatus(rawPairId: unknown) {
+  const pairId = requireUuid(rawPairId, 'Player-link pairing ID')
+  const admin = createAdminClient()
+
+  const { data, error } = await admin
+    .from('foundry_player_link_requests')
+    .select('id, status, player_link_id, connection_id, campaign_id, integrator_world_id, foundry_user_id, expires_at, session_expires_at')
+    .eq('id', pairId)
+    .maybeSingle()
+
+  if (error) throw new FoundryIntegrationError(error.message, 503, 'database_unavailable')
+  if (!data) throw new FoundryIntegrationError('That Foundry player-link request was not found.', 404, 'player_link_not_found')
+
+  if (data.status === 'pending' && Date.now() >= Date.parse(data.expires_at)) {
+    await admin
+      .from('foundry_player_link_requests')
+      .update({ status: 'expired' })
+      .eq('id', pairId)
+      .eq('status', 'pending')
+    return { status: 'expired' as const }
+  }
+
+  if (data.status !== 'approved') {
+    return { status: data.status as 'pending' | 'denied' | 'expired' }
+  }
+
+  if (!data.player_link_id || !data.session_expires_at) {
+    throw new FoundryIntegrationError('That Foundry player link is incomplete.', 409, 'incomplete_player_link')
+  }
+
+  const sessionExpiresAt = Date.parse(data.session_expires_at)
+  if (!Number.isFinite(sessionExpiresAt) || Date.now() >= sessionExpiresAt) {
+    return { status: 'expired' as const }
+  }
+
+  return {
+    status: 'approved' as const,
+    sessionGrant: issueGrant({
+      v: 1,
+      scope: 'player',
+      playerLinkId: data.player_link_id,
+      connectionId: data.connection_id,
+      campaignId: data.campaign_id,
+      integratorWorldId: data.integrator_world_id,
+      foundryUserId: data.foundry_user_id,
+      exp: sessionExpiresAt,
+    }),
+  }
+}
+
+export async function approveFoundryPlayerLink(user: User, rawCode: unknown) {
+  const userCode = normalizeUserCode(rawCode)
+  const admin = createAdminClient()
+
+  const { data: pairing, error: pairingError } = await admin
+    .from('foundry_player_link_requests')
+    .select('id, status, expires_at, connection_id, campaign_id, integrator_world_id, foundry_user_id, foundry_user_name, foundry_world_label')
+    .eq('user_code', userCode)
+    .maybeSingle()
+
+  if (pairingError) throw new FoundryIntegrationError(pairingError.message, 503, 'database_unavailable')
+  if (!pairing) throw new FoundryIntegrationError('That Foundry player-link code was not found.', 404, 'player_link_not_found')
+  if (pairing.status !== 'pending') {
+    throw new FoundryIntegrationError(
+      'That Foundry player-link code has already been used or expired.',
+      409,
+      'player_link_not_pending',
+    )
+  }
+
+  if (Date.now() >= Date.parse(pairing.expires_at)) {
+    await admin
+      .from('foundry_player_link_requests')
+      .update({ status: 'expired' })
+      .eq('id', pairing.id)
+
+    throw new FoundryIntegrationError(
+      'That Foundry player-link code has expired. Start a new link from Foundry.',
+      410,
+      'player_link_expired',
+    )
+  }
+
+  const { data: connection, error: connectionError } = await admin
+    .from('foundry_connections')
+    .select('id, campaign_id, integrator_world_id, foundry_world_label, status')
+    .eq('id', pairing.connection_id)
+    .eq('status', 'active')
+    .maybeSingle()
+
+  if (connectionError) throw new FoundryIntegrationError(connectionError.message, 503, 'database_unavailable')
+  if (
+    !connection
+    || connection.campaign_id !== pairing.campaign_id
+    || connection.integrator_world_id !== pairing.integrator_world_id
+  ) {
+    throw new FoundryIntegrationError(
+      'The connected Foundry world is no longer available.',
+      409,
+      'world_connection_changed',
+    )
+  }
+
+  if (!await activeCampaignMembership(user.id, connection.campaign_id)) {
+    throw new FoundryIntegrationError(
+      'Your RPG Your Way account is not an active member of the connected campaign.',
+      403,
+      'campaign_membership_required',
+    )
+  }
+
+  const { data: campaign, error: campaignError } = await admin
+    .from('campaigns')
+    .select('id, name, mode')
+    .eq('id', connection.campaign_id)
+    .is('deleted_at', null)
+    .maybeSingle()
+
+  if (campaignError) throw new FoundryIntegrationError(campaignError.message, 503, 'database_unavailable')
+  if (!campaign) throw new FoundryIntegrationError('The connected campaign is not available.', 404, 'campaign_not_found')
+
+  const now = new Date().toISOString()
+  const sessionExpiresAt = new Date(Date.now() + SESSION_LIFETIME_MS).toISOString()
+
+  const { data: playerLink, error: playerLinkError } = await admin
+    .from('foundry_user_links')
+    .upsert({
+      connection_id: connection.id,
+      foundry_user_id: pairing.foundry_user_id,
+      foundry_user_name: pairing.foundry_user_name,
+      rpg_user_id: user.id,
+      status: 'active',
+      updated_at: now,
+      last_seen_at: now,
+    }, { onConflict: 'connection_id,foundry_user_id' })
+    .select('id')
+    .single()
+
+  if (playerLinkError || !playerLink) {
+    throw new FoundryIntegrationError(
+      playerLinkError?.message || 'Unable to save the Foundry player link.',
+      503,
+      'database_unavailable',
+    )
+  }
+
+  const { data: approved, error: approvalError } = await admin
+    .from('foundry_player_link_requests')
+    .update({
+      status: 'approved',
+      approved_by_user_id: user.id,
+      player_link_id: playerLink.id,
+      approved_at: now,
+      session_expires_at: sessionExpiresAt,
+    })
+    .eq('id', pairing.id)
+    .eq('status', 'pending')
+    .select('id')
+    .maybeSingle()
+
+  if (approvalError) throw new FoundryIntegrationError(approvalError.message, 503, 'database_unavailable')
+  if (!approved) {
+    throw new FoundryIntegrationError(
+      'That Foundry player-link request changed before it could be approved.',
+      409,
+      'player_link_changed',
+    )
+  }
+
+  return {
+    linked: true,
+    linkId: playerLink.id,
+    campaignId: campaign.id as string,
+    campaignName: campaign.name as string,
+    campaignMode: campaign.mode as string,
+    worldLabel: pairing.foundry_world_label || connection.foundry_world_label || 'Foundry world',
+    foundryUserName: pairing.foundry_user_name || 'Foundry player',
+  }
+}
+
 function bearerToken(request: Request) {
   const authorization = request.headers.get('authorization') || ''
   const match = authorization.match(/^Bearer\s+(.+)$/i)
@@ -350,6 +621,14 @@ function bearerToken(request: Request) {
 
 export async function requireFoundrySession(request: Request) {
   const grant = parseGrant(bearerToken(request))
+  if (grant.scope === 'player') {
+    throw new FoundryIntegrationError(
+      'A controller Foundry session grant is required.',
+      403,
+      'controller_grant_required',
+    )
+  }
+
   const admin = createAdminClient()
 
   const { data: connection, error } = await admin
@@ -386,6 +665,97 @@ export async function requireFoundrySession(request: Request) {
   return {
     connection,
     campaign,
+  }
+}
+
+
+export async function requireFoundryPlayerSession(request: Request) {
+  const grant = parseGrant(bearerToken(request))
+
+  if (grant.scope !== 'player' || !grant.playerLinkId) {
+    throw new FoundryIntegrationError(
+      'A Foundry player session grant is required.',
+      403,
+      'player_grant_required',
+    )
+  }
+
+  const admin = createAdminClient()
+
+  const { data: playerLink, error: playerLinkError } = await admin
+    .from('foundry_user_links')
+    .select('id, connection_id, foundry_user_id, foundry_user_name, rpg_user_id, status')
+    .eq('id', grant.playerLinkId)
+    .eq('status', 'active')
+    .maybeSingle()
+
+  if (playerLinkError) throw new FoundryIntegrationError(playerLinkError.message, 503, 'database_unavailable')
+  if (
+    !playerLink
+    || playerLink.connection_id !== grant.connectionId
+    || playerLink.foundry_user_id !== grant.foundryUserId
+  ) {
+    throw new FoundryIntegrationError(
+      'That Foundry player link is no longer active.',
+      401,
+      'player_link_revoked',
+    )
+  }
+
+  const { data: connection, error: connectionError } = await admin
+    .from('foundry_connections')
+    .select('id, campaign_id, integrator_world_id, foundry_world_label, status')
+    .eq('id', grant.connectionId)
+    .eq('status', 'active')
+    .maybeSingle()
+
+  if (connectionError) throw new FoundryIntegrationError(connectionError.message, 503, 'database_unavailable')
+  if (
+    !connection
+    || connection.campaign_id !== grant.campaignId
+    || connection.integrator_world_id !== grant.integratorWorldId
+  ) {
+    throw new FoundryIntegrationError(
+      'The Foundry player session grant does not match this world.',
+      401,
+      'player_grant_mismatch',
+    )
+  }
+
+  const { data: campaign, error: campaignError } = await admin
+    .from('campaigns')
+    .select('id, name, mode, revision, updated_at')
+    .eq('id', connection.campaign_id)
+    .is('deleted_at', null)
+    .maybeSingle()
+
+  if (campaignError) throw new FoundryIntegrationError(campaignError.message, 503, 'database_unavailable')
+  if (!campaign) throw new FoundryIntegrationError('The connected RPG Your Way campaign is not available.', 404, 'campaign_not_found')
+
+  await admin
+    .from('foundry_user_links')
+    .update({ last_seen_at: new Date().toISOString() })
+    .eq('id', playerLink.id)
+
+  return {
+    playerLink,
+    connection,
+    campaign,
+  }
+}
+
+export async function getFoundryPlayerLink(request: Request) {
+  const { playerLink, connection, campaign } = await requireFoundryPlayerSession(request)
+
+  return {
+    linked: true,
+    linkId: playerLink.id as string,
+    campaignId: campaign.id as string,
+    campaignName: campaign.name as string,
+    campaignMode: campaign.mode as string,
+    worldLabel: connection.foundry_world_label || 'Foundry world',
+    foundryUserId: playerLink.foundry_user_id as string,
+    foundryUserName: (playerLink.foundry_user_name as string | null) || 'Foundry player',
   }
 }
 

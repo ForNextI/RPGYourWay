@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.19')
-assert.equal(pkg.rpgywVersion, '1.13.19')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.19'", 'visible app version')
+assert.equal(pkg.version, '1.13.20')
+assert.equal(pkg.rpgywVersion, '1.13.20')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.20'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -33,6 +33,7 @@ for (const file of [
   'app/play/page.tsx',
   'app/campaigns/page.tsx',
   'app/foundry/connect/page.tsx',
+  'app/foundry/link-player/page.tsx',
   'app/script/page.tsx',
   'app/account/page.tsx',
   'app/support/page.tsx',
@@ -94,13 +95,19 @@ for (const file of [
   'app/foundry/connect/page.tsx',
   'components/foundry/FoundryConnectionsPanel.tsx',
   'components/foundry/FoundryPairingApproval.tsx',
+  'components/foundry/FoundryPlayerLinkApproval.tsx',
   'lib/foundry/server.ts',
   'app/api/integrations/foundry/pair/start/route.ts',
   'app/api/integrations/foundry/pair/status/route.ts',
   'app/api/integrations/foundry/pair/approve/route.ts',
   'app/api/integrations/foundry/connection/route.ts',
   'app/api/integrations/foundry/connections/route.ts',
+  'app/api/integrations/foundry/player-link/route.ts',
+  'app/api/integrations/foundry/player-link/start/route.ts',
+  'app/api/integrations/foundry/player-link/status/route.ts',
+  'app/api/integrations/foundry/player-link/approve/route.ts',
   'supabase/migrations/20260831000000_foundry_integrator_phase1.sql',
+  'supabase/migrations/20260831010000_foundry_player_links.sql',
 ]) assert.ok(exists(file), `Missing ${file}`)
 
 // Dead private-beta access code is deliberately gone.
