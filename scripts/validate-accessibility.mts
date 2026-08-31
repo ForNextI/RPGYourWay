@@ -62,7 +62,8 @@ for (const relative of [
   'app/accessibility/page.tsx',
   'app/legal/privacy/page.tsx',
   'app/legal/terms/page.tsx',
-  'app/multiplayer/page.tsx',
+  'app/campaigns/page.tsx',
+  'app/foundry/connect/page.tsx',
   'app/read/page.tsx',
   'app/script/page.tsx',
   'app/support/page.tsx',
@@ -77,9 +78,6 @@ assert.match(startPage, /<main\b[^>]*id="main-content"/)
 assert.match(startPage, /<h1\b/)
 assert.match(startEntry, /<main\b[^>]*id="main-content"/)
 assert.match(startEntry, /<h1\b/)
-const multiplayerPage = read('app/multiplayer/page.tsx')
-assert.match(multiplayerPage, /<main\b[^>]*id="main-content"/)
-assert.match(multiplayerPage, /<h1\b/)
 const playShell = read('components/aigm/aigm-gameplay-shell.tsx')
 assert.match(playShell, /<main\b[^>]*id="main-content"/)
 assert.match(playShell, /<h1\b/)

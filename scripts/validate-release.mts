@@ -31,7 +31,8 @@ for (const file of [
   'app/robots.ts',
   'app/start/page.tsx',
   'app/play/page.tsx',
-  'app/multiplayer/page.tsx',
+  'app/campaigns/page.tsx',
+  'app/foundry/connect/page.tsx',
   'app/script/page.tsx',
   'app/account/page.tsx',
   'app/support/page.tsx',
@@ -89,6 +90,17 @@ for (const file of [
   'scripts/test-audio-cost.mts',
   'scripts/test-multiplayer-phase1.mts',
   'scripts/test-multiplayer-turns.mts',
+  'app/campaigns/page.tsx',
+  'app/foundry/connect/page.tsx',
+  'components/foundry/FoundryConnectionsPanel.tsx',
+  'components/foundry/FoundryPairingApproval.tsx',
+  'lib/foundry/server.ts',
+  'app/api/integrations/foundry/pair/start/route.ts',
+  'app/api/integrations/foundry/pair/status/route.ts',
+  'app/api/integrations/foundry/pair/approve/route.ts',
+  'app/api/integrations/foundry/connection/route.ts',
+  'app/api/integrations/foundry/connections/route.ts',
+  'supabase/migrations/20260831000000_foundry_integrator_phase1.sql',
 ]) assert.ok(exists(file), `Missing ${file}`)
 
 // Dead private-beta access code is deliberately gone.
@@ -260,7 +272,8 @@ has(account, 'Your account keeps purchases, usage, and cloud campaigns together.
 lacks(account, 'Play campaigns stay in this browser unless you export them.')
 const startEntry = read('components/aigm/rpgyw-start-entry.tsx')
 const campaignHub = read('components/start/CampaignHub.tsx')
-const multiplayerPage = read('app/multiplayer/page.tsx')
+const campaignsPage = read('app/campaigns/page.tsx')
+const multiplayerRedirect = read('app/multiplayer/page.tsx')
 const multiplayerManager = read('components/multiplayer/MultiplayerCampaignManager.tsx')
 has(startEntry, '<CampaignHub />', 'import hub above onboarding')
 before(startEntry, '<CampaignHub />', '<StartOnboarding', 'import hub position')
@@ -269,10 +282,10 @@ has(campaignHub, 'RPG Your Way can import WardensPC exports that had already rea
 lacks(campaignHub, 'Your Campaigns', 'campaign list retired from Start')
 lacks(campaignHub, 'Pending decisions', 'multiplayer governance retired from Start')
 lacks(campaignHub, 'Continue Adventure', 'campaign continuation retired from Start import control')
-has(multiplayerPage, 'This page is for controlling multiplayer and VTT.', 'Multiplayer creation/management notice')
-has(multiplayerPage, 'you will do so in Start, as part of the normal campaign creation workflow.', 'Start remains campaign-creation home')
-has(multiplayerPage, '<MultiplayerCampaignManager />', 'Multiplayer management component')
-has(multiplayerPage, 'VTT connections are coming next.', 'VTT placeholder')
+has(campaignsPage, 'This is the home for all of your saved campaigns.', 'Campaigns management notice')
+has(campaignsPage, '<MultiplayerCampaignManager />', 'Campaign management component')
+has(campaignsPage, '<FoundryConnectionsPanel />', 'Foundry VTT management component')
+has(multiplayerRedirect, "redirect('/campaigns')", 'Legacy Multiplayer route redirects to Campaigns')
 has(multiplayerManager, 'Campaign and multiplayer controls')
 has(multiplayerManager, 'Continue Adventure')
 has(multiplayerManager, 'Pending decisions')
@@ -541,15 +554,12 @@ has(css, '.start-character-builder-reveal {', 'character resource cream reveal')
 has(css, '.start-forest-control {', 'forest helper/confirmation button recipe')
 has(css, '.start-import-hub > summary {', 'dark-olive Start import control')
 const siteHeader = read('components/SiteHeader.tsx')
-has(siteHeader, "{ href: '/multiplayer', label: 'Multiplayer' }", 'Multiplayer primary-navigation item')
-before(siteHeader, "{ href: '/play', label: 'Play' }", "{ href: '/multiplayer', label: 'Multiplayer' }", 'Play before Multiplayer navigation')
-before(siteHeader, "{ href: '/multiplayer', label: 'Multiplayer' }", "{ href: '/script', label: 'Script' }", 'Multiplayer before Script navigation')
-has(css, '.multiplayer-page-notice {', 'Multiplayer management notice styling')
-has(css, '.multiplayer-campaign-manager {', 'Multiplayer campaign-control plaque')
-has(css, '.multiplayer-vtt-card {', 'VTT future-work plaque')
-has(multiplayerPage, 'Hey, did you miss a session or two? Click here for a cute trick.', 'Multiplayer catch-up tip')
-has(multiplayerPage, '<strong>Download transcript</strong>', 'Multiplayer transcript catch-up instruction')
-has(multiplayerPage, '<strong>Script</strong>', 'Multiplayer Script catch-up instruction')
+has(siteHeader, "{ href: '/campaigns', label: 'Campaigns' }", 'Campaigns primary-navigation item')
+before(siteHeader, "{ href: '/play', label: 'Play' }", "{ href: '/campaigns', label: 'Campaigns' }", 'Play before Campaigns navigation')
+before(siteHeader, "{ href: '/campaigns', label: 'Campaigns' }", "{ href: '/script', label: 'Script' }", 'Campaigns before Script navigation')
+has(campaignsPage, 'Hey, did you miss a session or two? Click here for a cute trick.', 'Campaigns catch-up tip')
+has(campaignsPage, '<strong>Download transcript</strong>', 'Campaigns transcript catch-up instruction')
+has(campaignsPage, '<strong>Script</strong>', 'Campaigns Script catch-up instruction')
 has(css, '.multiplayer-catchup-tip > summary {', 'Multiplayer catch-up action styling')
 has(css, '.multiplayer-catchup-tip-body {', 'Multiplayer catch-up reveal styling')
 
