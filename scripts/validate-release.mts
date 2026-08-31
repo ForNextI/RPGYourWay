@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.21')
-assert.equal(pkg.rpgywVersion, '1.13.21')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.21'", 'visible app version')
+assert.equal(pkg.version, '1.13.22')
+assert.equal(pkg.rpgywVersion, '1.13.22')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.22'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -106,6 +106,8 @@ for (const file of [
   'app/api/integrations/foundry/player-link/start/route.ts',
   'app/api/integrations/foundry/player-link/status/route.ts',
   'app/api/integrations/foundry/player-link/approve/route.ts',
+  'app/api/integrations/foundry/turn/route.ts',
+  'app/api/integrations/foundry/command-result/route.ts',
   'supabase/migrations/20260831000000_foundry_integrator_phase1.sql',
   'supabase/migrations/20260831010000_foundry_player_links.sql',
 ]) assert.ok(exists(file), `Missing ${file}`)
