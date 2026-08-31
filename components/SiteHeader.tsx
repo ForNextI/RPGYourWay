@@ -8,7 +8,7 @@ import { FullscreenToggle } from '@/components/accessibility/fullscreen-toggle'
 const links = [
   { href: '/start', label: 'Start' },
   { href: '/play', label: 'Play' },
-  { href: '/multiplayer', label: 'Multiplayer' },
+  { href: '/campaigns', label: 'Campaigns' },
   { href: '/script', label: 'Script' },
   { href: 'https://www.thereadingofthewardens.com', label: 'Read', external: true },
   { href: '/account', label: 'Account' },
