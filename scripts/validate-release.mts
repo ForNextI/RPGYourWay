@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '1.13.23')
-assert.equal(pkg.rpgywVersion, '1.13.23')
-has(read('lib/version.ts'), "APP_VERSION = '1.13.23'", 'visible app version')
+assert.equal(pkg.version, '1.13.24')
+assert.equal(pkg.rpgywVersion, '1.13.24')
+has(read('lib/version.ts'), "APP_VERSION = '1.13.24'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -97,6 +97,9 @@ for (const file of [
   'components/foundry/FoundryPairingApproval.tsx',
   'components/foundry/FoundryPlayerLinkApproval.tsx',
   'lib/foundry/server.ts',
+  'lib/foundry/usage-account.ts',
+  'lib/foundry/aigm-turn.ts',
+  'app/api/integrations/foundry/aigm-turn/route.ts',
   'app/api/integrations/foundry/pair/start/route.ts',
   'app/api/integrations/foundry/pair/status/route.ts',
   'app/api/integrations/foundry/pair/approve/route.ts',

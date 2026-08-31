@@ -55,7 +55,14 @@ async function releaseHold(userId: string, holdId: string | null) {
 
 export async function reserveMultiplayerTurnBilling(
   account: UsageAccount,
-  input: { inviteCode: string; turnId: string; campaignId: string; expectedRevision: number; maximumTotalMicrousd: number },
+  input: {
+    inviteCode: string
+    turnId: string
+    campaignId: string
+    expectedRevision: number
+    maximumTotalMicrousd: number
+    seatSelection?: 'heartbeat' | 'session'
+  },
 ) {
   const lobby = await loadSessionByInvite(input.inviteCode, account.userId)
   if (!lobby.isMember || !lobby.selfSeatId || !lobby.campaignId) throw new MultiplayerError('Join this multiplayer campaign before sending a turn.', 403, 'membership_required')
@@ -78,12 +85,20 @@ export async function reserveMultiplayerTurnBilling(
   if (turn.turn_status === 'released' || turn.turn_status === 'failed') throw new MultiplayerError('That multiplayer turn is no longer active.', 409, 'turn_not_active')
 
   const activeAfter = new Date(Date.now() - ACTIVE_SEAT_WINDOW_MS).toISOString()
-  const { data: seatsData, error: seatsError } = await admin
+  let seatQuery = admin
     .from('multiplayer_seats')
     .select('id,user_id,payer_user_id,display_name,joined_at,last_seen_at')
     .eq('session_id', lobby.id)
     .eq('is_active', true)
-    .gte('last_seen_at', activeAfter)
+
+  // Native web multiplayer keeps the existing recent-heartbeat filter. Foundry
+  // uses the explicit RPG Your Way table roster because the humans are playing
+  // in Foundry and are not required to keep an RPG Your Way browser tab alive.
+  if (input.seatSelection !== 'session') {
+    seatQuery = seatQuery.gte('last_seen_at', activeAfter)
+  }
+
+  const { data: seatsData, error: seatsError } = await seatQuery
     .order('joined_at', { ascending: true })
   if (seatsError) throw new UsageBillingError(seatsError.message, 503, 'billing_unavailable')
   const seats: FrozenSeat[] = (seatsData || []).map((row: { id: string; user_id: string; payer_user_id: string; display_name: string }) => ({

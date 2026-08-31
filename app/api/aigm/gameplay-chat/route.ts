@@ -17,6 +17,7 @@ import { aiContentSafetyPrompt, normalizeAiContentMode } from '@/lib/site/ai-con
 import { decodeJsonStringFieldPrefix } from '@/lib/aigm/voice-streaming'
 import { gameplayScopeDecision } from '@/lib/aigm/gameplay-scope'
 import { billingErrorResponse, releaseUsage, requireUsageAccount, reserveUsage, type UsageReservation } from '@/lib/usage/server-billing'
+import { requireFoundryUsageAccount } from '@/lib/foundry/usage-account'
 import { estimateTerraMaximumMicrousd, terraProviderCostMicrousd } from '@/lib/usage/play-cost'
 import { ttsReserveMicrousd } from '@/lib/usage/audio-cost'
 import { attachMultiplayerPlayTurn, attachPlayTurnReservation, ensurePlayTurn, markGameplayComplete, markPlayTurnReleased, recordPlayTurnComponent, successfulProviderCostSoFar } from '@/lib/usage/play-turn-billing'
@@ -169,6 +170,20 @@ interface GameplayChatBody {
   narration_expected?: boolean
   multiplayer_invite_code?: string
   cloud_revision?: number
+  foundry_player_context?: {
+    participant_id?: string
+    display_name?: string
+    character_ids?: string[]
+    character_names?: string[]
+    campaign_id?: string
+  }
+  foundry_table_state?: Array<{
+    campaign_character_id?: string
+    scene_id?: string
+    x?: number
+    y?: number
+    updated_at?: string
+  }>
 }
 
 interface OpenAIResponsePayload {
@@ -989,8 +1004,14 @@ export async function POST(request: Request) {
   }
 
   let usageAccount
+  let foundryPlayerRequest = false
   try {
-    usageAccount = await requireUsageAccount()
+    if (request.headers.get('x-rpgyw-foundry-player') === '1') {
+      usageAccount = (await requireFoundryUsageAccount(request)).account
+      foundryPlayerRequest = true
+    } else {
+      usageAccount = await requireUsageAccount()
+    }
   } catch (error) {
     return billingErrorResponse(error)
   }
@@ -1149,6 +1170,31 @@ export async function POST(request: Request) {
     dice_result: diceResult,
     party,
     recent_messages: recentMessages,
+    foundry_player_context: body.foundry_player_context && typeof body.foundry_player_context === 'object'
+      ? {
+          participant_id: clipped(body.foundry_player_context.participant_id, 180),
+          display_name: clipped(body.foundry_player_context.display_name, 80),
+          character_ids: clippedList(body.foundry_player_context.character_ids, 6, 180),
+          character_names: clippedList(body.foundry_player_context.character_names, 6, 96),
+          campaign_id: clipped(body.foundry_player_context.campaign_id, 180),
+        }
+      : null,
+    foundry_table_state: Array.isArray(body.foundry_table_state)
+      ? body.foundry_table_state.slice(0, 12).flatMap((entry) => {
+          const x = Number(entry?.x)
+          const y = Number(entry?.y)
+          const characterId = clipped(entry?.campaign_character_id, 180)
+          const sceneId = clipped(entry?.scene_id, 180)
+          if (!characterId || !sceneId || !Number.isFinite(x) || !Number.isFinite(y)) return []
+          return [{
+            campaign_character_id: characterId,
+            scene_id: sceneId,
+            x,
+            y,
+            updated_at: clipped(entry?.updated_at, 80),
+          }]
+        })
+      : [],
     pending_level_up_character_ids: clippedList(body.pending_level_up_character_ids, 6, 80).filter((id) => validCharacterIds.has(id)),
     npc_name_candidates: npcNameCandidates,
     place_name_candidates: placeNameCandidates,
@@ -1162,6 +1208,11 @@ export async function POST(request: Request) {
 Your jobs are to narrate scenes, portray NPCs, answer questions about this campaign and the player characters, adjudicate actions using context.selected_ruleset (defaulting to D&D 5.5e / SRD 5.2.1 when the player does not choose something else), request player-character rolls when uncertainty matters, respect the six setup preferences, and preserve continuity. You may discuss setting lore and game rules when relevant to this adventure and supported by the supplied context.
 
 Party leadership is explicit in context.party: the current active leader, if there is one, is the sole party member whose is_current_party_active_leader field is true. If every member is false, the party currently has no active leader. Never infer current leadership from historical prose such as captain, commander, crew leader, or leader of a named group.
+
+FOUNDRY MULTIPLAYER CONTROL:
+- When context.foundry_player_context is present, it identifies the human who submitted this Foundry turn and the RPG Your Way characters currently assigned to that human. Use those assignments when interpreting first-person statements such as "I move" or "my character" when the intended character is otherwise clear.
+- Foundry role names are technical permissions only. A human using Foundry's Game Master role may still be an ordinary RPG Your Way player. Never treat that human as the campaign Game Master or as controlling every player character merely because Foundry gives the account broad permissions.
+- context.foundry_table_state contains the latest structured positions received for mapped RPG Your Way player characters. Treat those positions as authoritative tabletop state when relevant. The x/y values are Foundry coordinates, not narration-ready distances. Never quote raw coordinates to players or infer feet-per-square when grid scale was not supplied.
 
 Use context.built_in_rules_reference as the first rules authority when it is present, then the structured character record and player-supplied rules information. Use context.built_in_setting_reference as the primary general-canon reference for context.selected_setting when it is present. Explicit player choices and established campaign facts override the setting pack for this campaign. Respect the pack's era, edition, timeline, and canon-boundary notes. The rules and setting references contain only the excerpts retrieved for this turn, so do not claim that an omitted rule, place, faction, or historical fact does not exist. When the setting reference marks a conflict or uncertainty that materially affects play, qualify the answer or ask the player instead of inventing a reconciliation. Do not claim access to proprietary sourcebooks, reconstruct restricted material, or pretend that the site grants rules access. You are not a general-purpose assistant and must briefly redirect unrelated requests back to the game.
 
@@ -1597,6 +1648,7 @@ This imported campaign was saved in Teen mode even though the onboarding page sh
         campaignId: body.adventure_id || '',
         expectedRevision: Number(body.cloud_revision),
         maximumTotalMicrousd: maximumMicrousd,
+        seatSelection: foundryPlayerRequest ? 'session' : 'heartbeat',
       })
       await attachMultiplayerPlayTurn(usageAccount, turnBillingId, maximumMicrousd, narrationExpected)
     } else {
