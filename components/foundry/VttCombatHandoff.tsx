@@ -2,6 +2,7 @@
 
 import { Cable, ExternalLink, LoaderCircle, MonitorUp, Swords, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import {
   initialLiveState,
   normalizeLiveState,
@@ -285,10 +286,10 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
         <p className="mt-2 text-xs font-semibold text-destructive" role="alert">{handoffError}</p>
       ) : null}
 
-      {offerOpen ? (
-        <div className="fixed inset-0 z-[90] grid place-items-center bg-black/55 p-4" role="presentation">
+      {offerOpen && typeof document !== 'undefined' ? createPortal(
+        <div className="fixed inset-0 z-[2147483000] overflow-y-auto overscroll-contain bg-black/55 px-4 py-4" role="presentation">
           <div
-            className="relative w-full max-w-lg rounded-2xl border border-border bg-card p-5 shadow-2xl"
+            className="relative mx-auto w-full max-w-lg rounded-2xl border border-border bg-card p-5 shadow-2xl"
             role="dialog"
             aria-modal="true"
             aria-labelledby="vtt-combat-heading"
@@ -384,7 +385,8 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
               </>
             )}
           </div>
-        </div>
+        </div>,
+        document.body,
       ) : null}
     </>
   )
