@@ -316,6 +316,7 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
         armorClass: live.armor_class,
         initiative: initiativeByCharacter.get(character.id) ?? null,
         visualTags: characterVisualTags(partyState, character.id),
+        preferredTokenAsset: character.vttTokenAsset || null,
       }]
     })
 

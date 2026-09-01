@@ -1,0 +1,182 @@
+{
+  "package": "RTP Master Gallery",
+  "version": "1.0.0",
+  "format": "image/webp",
+  "dimensions": {
+    "width": 1024,
+    "height": 1024
+  },
+  "transparency": {
+    "original_portrait": "source background retained",
+    "portrait_pog": "transparent beyond circular edge",
+    "true_top_down": "transparent around character",
+    "iso": "transparent around character"
+  },
+  "asset_count": 48,
+  "variants_per_character": [
+    "original-portrait",
+    "portrait-pog",
+    "true-top-down",
+    "iso"
+  ],
+  "parties": {
+    "city": {
+      "ring_color": "#4C78A8",
+      "classes": ["fighter", "wizard", "cleric", "rogue"]
+    },
+    "town": {
+      "ring_color": "#8A70B2",
+      "classes": ["monk", "sorcerer", "paladin", "ranger"]
+    },
+    "wild": {
+      "ring_color": "#5E8145",
+      "classes": ["barbarian", "warlock", "bard", "druid"]
+    }
+  },
+  "characters": [
+    {
+      "id": "city-fighter",
+      "party": "city",
+      "class": "fighter",
+      "character": "Mountain Marked Goliath",
+      "assets": {
+        "original_portrait": "original-portraits/rtp-city-fighter-portrait.webp",
+        "portrait_pog": "portrait-pogs/rtp-city-fighter-pog.webp",
+        "true_top_down": "true-top-down/rtp-city-fighter-top-down.webp",
+        "iso": "iso/rtp-city-fighter-iso.webp"
+      }
+    },
+    {
+      "id": "city-wizard",
+      "party": "city",
+      "class": "wizard",
+      "character": "High Elf Wizard",
+      "assets": {
+        "original_portrait": "original-portraits/rtp-city-wizard-portrait.webp",
+        "portrait_pog": "portrait-pogs/rtp-city-wizard-pog.webp",
+        "true_top_down": "true-top-down/rtp-city-wizard-top-down.webp",
+        "iso": "iso/rtp-city-wizard-iso.webp"
+      }
+    },
+    {
+      "id": "city-cleric",
+      "party": "city",
+      "class": "cleric",
+      "character": "Human Cleric",
+      "assets": {
+        "original_portrait": "original-portraits/rtp-city-cleric-portrait.webp",
+        "portrait_pog": "portrait-pogs/rtp-city-cleric-pog.webp",
+        "true_top_down": "true-top-down/rtp-city-cleric-top-down.webp",
+        "iso": "iso/rtp-city-cleric-iso.webp"
+      }
+    },
+    {
+      "id": "city-rogue",
+      "party": "city",
+      "class": "rogue",
+      "character": "Freckled Halfling Rogue",
+      "assets": {
+        "original_portrait": "original-portraits/rtp-city-rogue-portrait.webp",
+        "portrait_pog": "portrait-pogs/rtp-city-rogue-pog.webp",
+        "true_top_down": "true-top-down/rtp-city-rogue-top-down.webp",
+        "iso": "iso/rtp-city-rogue-iso.webp"
+      }
+    },
+    {
+      "id": "town-monk",
+      "party": "town",
+      "class": "monk",
+      "character": "Golden Eyed Tiefling",
+      "assets": {
+        "original_portrait": "original-portraits/rtp-town-monk-portrait.webp",
+        "portrait_pog": "portrait-pogs/rtp-town-monk-pog.webp",
+        "true_top_down": "true-top-down/rtp-town-monk-top-down.webp",
+        "iso": "iso/rtp-town-monk-iso.webp"
+      }
+    },
+    {
+      "id": "town-sorcerer",
+      "party": "town",
+      "class": "sorcerer",
+      "character": "Wood Elf Sorcerer",
+      "assets": {
+        "original_portrait": "original-portraits/rtp-town-sorcerer-portrait.webp",
+        "portrait_pog": "portrait-pogs/rtp-town-sorcerer-pog.webp",
+        "true_top_down": "true-top-down/rtp-town-sorcerer-top-down.webp",
+        "iso": "iso/rtp-town-sorcerer-iso.webp"
+      }
+    },
+    {
+      "id": "town-paladin",
+      "party": "town",
+      "class": "paladin",
+      "character": "Armored Dwarf with Blue Emblem",
+      "assets": {
+        "original_portrait": "original-portraits/rtp-town-paladin-portrait.webp",
+        "portrait_pog": "portrait-pogs/rtp-town-paladin-pog.webp",
+        "true_top_down": "true-top-down/rtp-town-paladin-top-down.webp",
+        "iso": "iso/rtp-town-paladin-iso.webp"
+      }
+    },
+    {
+      "id": "town-ranger",
+      "party": "town",
+      "class": "ranger",
+      "character": "Copper Curled Gnome",
+      "assets": {
+        "original_portrait": "original-portraits/rtp-town-ranger-portrait.webp",
+        "portrait_pog": "portrait-pogs/rtp-town-ranger-pog.webp",
+        "true_top_down": "true-top-down/rtp-town-ranger-top-down.webp",
+        "iso": "iso/rtp-town-ranger-iso.webp"
+      }
+    },
+    {
+      "id": "wild-barbarian",
+      "party": "wild",
+      "class": "barbarian",
+      "character": "Scarlet Dragonborn",
+      "assets": {
+        "original_portrait": "original-portraits/rtp-wild-barbarian-portrait.webp",
+        "portrait_pog": "portrait-pogs/rtp-wild-barbarian-pog.webp",
+        "true_top_down": "true-top-down/rtp-wild-barbarian-top-down.webp",
+        "iso": "iso/rtp-wild-barbarian-iso.webp"
+      }
+    },
+    {
+      "id": "wild-warlock",
+      "party": "wild",
+      "class": "warlock",
+      "character": "Orc Scholar",
+      "assets": {
+        "original_portrait": "original-portraits/rtp-wild-warlock-portrait.webp",
+        "portrait_pog": "portrait-pogs/rtp-wild-warlock-pog.webp",
+        "true_top_down": "true-top-down/rtp-wild-warlock-top-down.webp",
+        "iso": "iso/rtp-wild-warlock-iso.webp"
+      }
+    },
+    {
+      "id": "wild-bard",
+      "party": "wild",
+      "class": "bard",
+      "character": "High Elf Bagpiper",
+      "assets": {
+        "original_portrait": "original-portraits/rtp-wild-bard-portrait.webp",
+        "portrait_pog": "portrait-pogs/rtp-wild-bard-pog.webp",
+        "true_top_down": "true-top-down/rtp-wild-bard-top-down.webp",
+        "iso": "iso/rtp-wild-bard-iso.webp"
+      }
+    },
+    {
+      "id": "wild-druid",
+      "party": "wild",
+      "class": "druid",
+      "character": "Moss Horned Dragonborn",
+      "assets": {
+        "original_portrait": "original-portraits/rtp-wild-druid-portrait.webp",
+        "portrait_pog": "portrait-pogs/rtp-wild-druid-pog.webp",
+        "true_top_down": "true-top-down/rtp-wild-druid-top-down.webp",
+        "iso": "iso/rtp-wild-druid-iso.webp"
+      }
+    }
+  ]
+}

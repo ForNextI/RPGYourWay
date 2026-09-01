@@ -166,6 +166,7 @@ interface GameplayChatBody {
   guidance_level?: number
   dice_preference?: 'player_rolls' | 'aigm_rolls' | 'ask_each_time'
   character_assistance_level?: number
+  gameplay_preferences?: unknown
   stream?: boolean
   narration_expected?: boolean
   multiplayer_invite_code?: string
@@ -699,6 +700,18 @@ function safeVttSetup(value: unknown): VttSetupReply {
         })
       : [],
     asset_search_terms: clippedList(source.asset_search_terms, 16, 80),
+  }
+}
+
+function safeGameplayPreferences(value: unknown) {
+  const source = value && typeof value === 'object' && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : {}
+  return {
+    full_hit_points: source.full_hit_points !== false,
+    dont_sweat_small_stuff: source.dont_sweat_small_stuff !== false,
+    dont_worry_about_npcs: source.dont_worry_about_npcs !== false,
+    dont_worry_about_food: source.dont_worry_about_food !== false,
   }
 }
 
@@ -1413,6 +1426,7 @@ export async function POST(request: Request) {
     voice_guided_play: voiceGuidedPlay,
     guidance_level: guidanceLevel,
     character_assistance_level: characterAssistanceLevel,
+    gameplay_preferences: safeGameplayPreferences(body.gameplay_preferences),
     dice_preference: dicePreference,
     setup_preferences: {
       gm_style: setupAnswers[0] || '',
@@ -1481,6 +1495,14 @@ export async function POST(request: Request) {
 Your jobs are to narrate scenes, portray NPCs, answer questions about this campaign and the player characters, adjudicate actions using context.selected_ruleset (defaulting to D&D 5.5e / SRD 5.2.1 when the player does not choose something else), request player-character rolls when uncertainty matters, respect the six setup preferences, and preserve continuity. You may discuss setting lore and game rules when relevant to this adventure and supported by the supplied context.
 
 Party leadership is explicit in context.party: the current active leader, if there is one, is the sole party member whose is_current_party_active_leader field is true. If every member is false, the party currently has no active leader. Never infer current leadership from historical prose such as captain, commander, crew leader, or leader of a named group.
+
+GAMEPLAY ABSTRACTION PREFERENCES:
+- context.gameplay_preferences contains the player's campaign-level abstraction choices. Apply them quietly; do not expose internal field names.
+- full_hit_points records whether new-campaign character intake began fully rested. It is not permission to heal characters during ordinary play.
+- When dont_sweat_small_stuff is true, assume ordinary inexpensive class necessities and routine pouch/focus access unless a priced, consumed, scarce, or story-consequential item matters. When false, allow mundane inventory details to matter when the fiction calls for them.
+- When dont_worry_about_npcs is true, incidental bystander welfare may stay abstract unless an NPC becomes named, important, directly threatened, or central to a player choice. When false, keep bystanders and ordinary NPCs materially present in danger and consequences rather than letting them disappear when initiative starts.
+- When dont_worry_about_food is true, assume ordinary meals, water, and routine rations are handled unless scarcity is a story element. When false, food and water can be tracked when travel, scarcity, cost, or survival makes them relevant.
+- These are RPG Your Way/AIGM preferences, not Foundry commands. If a preference affects the VTT, resolve it into a concrete tactical decision before handing anything to Foundry.
 
 FOUNDRY MULTIPLAYER CONTROL:
 - When context.foundry_player_context is present, it identifies the human who submitted this Foundry turn and the RPG Your Way characters currently assigned to that human. Use those assignments when interpreting first-person statements such as "I move" or "my character" when the intended character is otherwise clear.

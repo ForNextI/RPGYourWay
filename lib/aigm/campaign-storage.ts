@@ -112,6 +112,15 @@ export interface VttSetupPlan {
 
 export type DiceMode = 'purist' | 'cheat'
 export type VoiceGuidedDicePreference = 'player_rolls' | 'aigm_rolls' | 'ask_each_time'
+export type ReadyToPlayArtStyle = 'portrait' | 'pog' | 'iso' | 'top-down'
+export type ReadyToPlayPartyPreset = 'city' | 'town' | 'wild'
+
+export interface GameplayPreferences {
+  full_hit_points: boolean
+  dont_sweat_small_stuff: boolean
+  dont_worry_about_npcs: boolean
+  dont_worry_about_food: boolean
+}
 
 export interface VoiceGuidedPlaySettings {
   enabled: boolean
@@ -250,6 +259,10 @@ export interface StoredPartyCharacter {
   sourceMimeType?: string
   portraitUrl?: string
   starterId?: string
+  /** Ready-to-Play art choice used by RPG Your Way. Imported characters leave this unset. */
+  readyToPlayArtStyle?: ReadyToPlayArtStyle
+  /** Concrete Foundry Integrator asset decision for a Ready-to-Play character. */
+  vttTokenAsset?: string
   /** Player-supplied level progression, stored as a compact chart rather than sourcebook prose. */
   advancementProfiles?: CharacterAdvancementProfile[]
   /** RPG Your Way-owned per-class advancement bookkeeping. Older campaigns may omit it. */
@@ -295,6 +308,12 @@ export interface SavedAdventureState {
   voice_guided_play?: VoiceGuidedPlaySettings
   /** How proactively the AIGM should point out applicable character abilities, 1 (hands off) to 10 (very active). */
   character_assistance_level?: number
+  /** Canonical Ready-to-Play preset most recently chosen during onboarding. */
+  ready_to_play_party_preset?: ReadyToPlayPartyPreset
+  /** Default art style for supplied Ready-to-Play characters. */
+  ready_to_play_art_style?: ReadyToPlayArtStyle
+  /** Campaign-level abstraction/simulation preferences supplied to the AIGM. */
+  gameplay_preferences?: GameplayPreferences
 }
 
 export interface AdventureSummary {
@@ -1141,6 +1160,8 @@ function normalizeStoredCharacter(character: Partial<StoredPartyCharacter>): Sto
     sourceMimeType: typeof character.sourceMimeType === 'string' ? character.sourceMimeType.slice(0, 120) : '',
     portraitUrl: typeof character.portraitUrl === 'string' ? character.portraitUrl.slice(0, 900_000) : '',
     starterId,
+    readyToPlayArtStyle: character.readyToPlayArtStyle === 'pog' || character.readyToPlayArtStyle === 'iso' || character.readyToPlayArtStyle === 'top-down' ? character.readyToPlayArtStyle : starterId ? 'portrait' : undefined,
+    vttTokenAsset: typeof character.vttTokenAsset === 'string' ? character.vttTokenAsset.replace(/\s+/g, ' ').trim().slice(0, 500) : '',
     advancementProfiles,
     classRecords: normalizeClassRecords(character.classRecords, result?.character.classes ?? []),
   }
@@ -1302,6 +1323,14 @@ export function normalizeAdventureState(value: unknown): SavedAdventureState | n
       character_assistance_level: typeof parsed.character_assistance_level === 'number' && Number.isFinite(parsed.character_assistance_level)
         ? Math.max(1, Math.min(10, Math.round(parsed.character_assistance_level)))
         : 5,
+      ready_to_play_party_preset: parsed.ready_to_play_party_preset === 'town' || parsed.ready_to_play_party_preset === 'wild' ? parsed.ready_to_play_party_preset : 'city',
+      ready_to_play_art_style: parsed.ready_to_play_art_style === 'pog' || parsed.ready_to_play_art_style === 'iso' || parsed.ready_to_play_art_style === 'top-down' ? parsed.ready_to_play_art_style : 'portrait',
+      gameplay_preferences: {
+        full_hit_points: parsed.gameplay_preferences?.full_hit_points !== false,
+        dont_sweat_small_stuff: parsed.gameplay_preferences?.dont_sweat_small_stuff !== false,
+        dont_worry_about_npcs: parsed.gameplay_preferences?.dont_worry_about_npcs !== false,
+        dont_worry_about_food: parsed.gameplay_preferences?.dont_worry_about_food !== false,
+      },
     }
   } catch {
     return null

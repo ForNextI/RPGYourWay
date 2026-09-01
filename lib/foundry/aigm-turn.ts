@@ -397,6 +397,7 @@ function gameplayBody(
     guidance_level: state.voice_guided_play?.guidance_level ?? 5,
     dice_preference: state.voice_guided_play?.dice_preference ?? 'player_rolls',
     character_assistance_level: state.character_assistance_level ?? 5,
+    gameplay_preferences: state.gameplay_preferences,
     stream: false,
     narration_expected: false,
     multiplayer_invite_code: inviteCode,
@@ -619,6 +620,7 @@ function vttEncounterInput(
         ...record.armor_and_shields.slice(0, 3).map((entry) => entry.name),
         ...record.attacks.slice(0, 3).map((entry) => entry.name),
       ].filter(Boolean).slice(0, 12),
+      preferredTokenAsset: character.vttTokenAsset || null,
     }]
   })
 

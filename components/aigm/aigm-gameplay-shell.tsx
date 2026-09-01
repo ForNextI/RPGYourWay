@@ -2028,6 +2028,7 @@ export function AigmGameplayShell() {
           narration_expected: narrationExpected,
           guidance_level: voiceGuidedPlay.guidance_level,
           character_assistance_level: characterAssistanceLevel,
+          gameplay_preferences: activePartyState.gameplay_preferences,
           dice_preference: voiceGuidedPlay.dice_preference,
           stream: true,
         }),

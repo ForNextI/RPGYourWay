@@ -118,6 +118,9 @@ function normalizeParty(value: unknown) {
             .filter(Boolean)
             .slice(0, 12)
         : [],
+      preferredTokenAsset: typeof entry.preferredTokenAsset === 'string'
+        ? entry.preferredTokenAsset.replace(/\s+/g, ' ').trim().slice(0, 500)
+        : '',
     }
   })
 }

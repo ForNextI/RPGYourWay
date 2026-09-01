@@ -8759,3 +8759,155 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
   line-height: 1.6;
 }
 .multiplayer-catchup-tip-body p + p { margin-top: .75rem; }
+
+/* 2.11 onboarding: reversible navigation, nearby help, RTP presets, and optional detail controls. */
+.start-step-nameplate,
+.start-step-nameplate--rules {
+  position: relative;
+  padding-right: clamp(9.5rem, 28vw, 15rem);
+}
+
+.start-step-help-button {
+  position: absolute;
+  right: 0.65rem;
+  bottom: 0.45rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.76rem;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+  cursor: pointer;
+}
+
+.start-step-help-button:hover,
+.start-step-help-button:focus-visible {
+  color: var(--rpgyw-lime);
+}
+
+.start-nitpicky {
+  margin-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--rpgyw-brass-dark) 55%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--rpgyw-brass-dark) 55%, transparent);
+}
+
+.start-nitpicky-summary {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 0.2rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+}
+
+.start-nitpicky-summary:hover span:not(.accordion-plus),
+.start-nitpicky-summary:focus-visible span:not(.accordion-plus) {
+  color: var(--rpgyw-lime);
+}
+
+.start-nitpicky-panel {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0 0.15rem 0.9rem;
+}
+
+.start-nitpicky-panel label {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.7rem;
+  align-items: start;
+}
+
+.start-nitpicky-panel input {
+  margin-top: 0.25rem;
+}
+
+.start-nitpicky-panel label > span {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.start-nitpicky-panel small {
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.start-rtp-style,
+.start-rtp-individual-label {
+  margin-top: 1rem;
+}
+
+.start-rtp-style-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.45rem;
+}
+
+.start-rtp-style-options button,
+.start-rtp-presets > button {
+  border: 1px solid var(--rpgyw-brass-dark);
+  background: var(--rpgyw-olive-dark);
+  color: var(--rpgyw-cream);
+  cursor: pointer;
+}
+
+.start-rtp-style-options button {
+  padding: 0.5rem 0.75rem;
+}
+
+.start-rtp-style-options button.is-selected,
+.start-rtp-presets > button.is-selected {
+  background: var(--rpgyw-forest);
+}
+
+.start-rtp-presets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.start-rtp-presets > button {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.8rem;
+  text-align: left;
+}
+
+.start-rtp-presets span {
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+.start-history-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 720px) {
+  .start-step-nameplate,
+  .start-step-nameplate--rules {
+    padding-right: 0.8rem;
+    padding-bottom: 2.2rem;
+  }
+
+  .start-step-help-button {
+    left: 0.8rem;
+    right: auto;
+  }
+
+  .start-rtp-presets {
+    grid-template-columns: 1fr;
+  }
+}

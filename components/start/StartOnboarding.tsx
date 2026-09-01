@@ -26,6 +26,9 @@ import {
   type CampaignMode,
   type MultiplayerAdministrationMode,
   type CampaignScale,
+  type GameplayPreferences,
+  type ReadyToPlayArtStyle,
+  type ReadyToPlayPartyPreset,
   type SavedAdventureState,
   type StoredPartyCharacter,
 } from '@/lib/aigm/campaign-storage'
@@ -59,6 +62,9 @@ type PartyMember = {
   portraitUrl?: string
   starter?: boolean
   starterSlug?: string
+  starterParty?: ReadyToPlayPartyPreset
+  readyToPlayArtStyle?: ReadyToPlayArtStyle
+  vttTokenAsset?: string
   imported?: boolean
   status: ImportStatus
   file?: File
@@ -81,21 +87,65 @@ type PartyMember = {
 type StarterDefinition = PartyMember & { starter: true; starterSlug: string }
 
 const STARTERS: StarterDefinition[] = [
-  { id: 'wardens-pc-starter-barbarian', starterSlug: 'barbarian', label: 'Barbarian', className: 'Barbarian', portraitUrl: '/images/starter-characters/barbarian.webp', starter: true, status: 'ready', strength: 15, intelligence: 10, wisdom: 12, charisma: 8, maximumHitPoints: 15 },
-  { id: 'wardens-pc-starter-bard', starterSlug: 'bard', label: 'Bard', className: 'Bard', portraitUrl: '/images/starter-characters/bard.webp', starter: true, status: 'ready', strength: 8, intelligence: 14, wisdom: 10, charisma: 17, maximumHitPoints: 9 },
-  { id: 'wardens-pc-starter-cleric', starterSlug: 'cleric', label: 'Cleric', className: 'Cleric', portraitUrl: '/images/starter-characters/cleric.webp', starter: true, status: 'ready', strength: 14, intelligence: 10, wisdom: 17, charisma: 12, maximumHitPoints: 10 },
-  { id: 'wardens-pc-starter-druid', starterSlug: 'druid', label: 'Druid', className: 'Druid', portraitUrl: '/images/starter-characters/druid.webp', starter: true, status: 'ready', strength: 8, intelligence: 13, wisdom: 17, charisma: 10, maximumHitPoints: 10 },
-  { id: 'wardens-pc-starter-fighter', starterSlug: 'fighter', label: 'Fighter', className: 'Fighter', portraitUrl: '/images/starter-characters/fighter.webp', starter: true, status: 'ready', strength: 17, intelligence: 8, wisdom: 10, charisma: 12, maximumHitPoints: 12 },
-  { id: 'wardens-pc-starter-monk', starterSlug: 'monk', label: 'Monk', className: 'Monk', portraitUrl: '/images/starter-characters/monk.webp', starter: true, status: 'ready', strength: 12, intelligence: 10, wisdom: 14, charisma: 8, maximumHitPoints: 10 },
-  { id: 'wardens-pc-starter-paladin', starterSlug: 'paladin', label: 'Paladin', className: 'Paladin', portraitUrl: '/images/starter-characters/paladin.webp', starter: true, status: 'ready', strength: 17, intelligence: 8, wisdom: 12, charisma: 14, maximumHitPoints: 13 },
-  { id: 'wardens-pc-starter-ranger', starterSlug: 'ranger', label: 'Ranger', className: 'Ranger', portraitUrl: '/images/starter-characters/ranger.webp', starter: true, status: 'ready', strength: 12, intelligence: 8, wisdom: 14, charisma: 10, maximumHitPoints: 12 },
-  { id: 'wardens-pc-starter-rogue', starterSlug: 'rogue', label: 'Rogue', className: 'Rogue', portraitUrl: '/images/starter-characters/rogue.webp', starter: true, status: 'ready', strength: 12, intelligence: 14, wisdom: 10, charisma: 8, maximumHitPoints: 10 },
-  { id: 'wardens-pc-starter-sorcerer', starterSlug: 'sorcerer', label: 'Sorcerer', className: 'Sorcerer', portraitUrl: '/images/starter-characters/sorcerer.webp', starter: true, status: 'ready', strength: 10, intelligence: 8, wisdom: 13, charisma: 17, maximumHitPoints: 8 },
-  { id: 'wardens-pc-starter-warlock', starterSlug: 'warlock', label: 'Warlock', className: 'Warlock', portraitUrl: '/images/starter-characters/warlock.webp', starter: true, status: 'ready', strength: 8, intelligence: 13, wisdom: 10, charisma: 17, maximumHitPoints: 9 },
-  { id: 'wardens-pc-starter-wizard', starterSlug: 'wizard', label: 'Wizard', className: 'Wizard', portraitUrl: '/images/starter-characters/wizard.webp', starter: true, status: 'ready', strength: 8, intelligence: 17, wisdom: 14, charisma: 10, maximumHitPoints: 8 },
+  { id: 'wardens-pc-starter-barbarian', starterSlug: 'barbarian', starterParty: 'wild', label: 'Barbarian', className: 'Barbarian', portraitUrl: '/images/ready-to-play/original-portraits/rtp-wild-barbarian-portrait.webp', starter: true, status: 'ready', strength: 15, intelligence: 10, wisdom: 12, charisma: 8, maximumHitPoints: 15 },
+  { id: 'wardens-pc-starter-bard', starterSlug: 'bard', starterParty: 'wild', label: 'Bard', className: 'Bard', portraitUrl: '/images/ready-to-play/original-portraits/rtp-wild-bard-portrait.webp', starter: true, status: 'ready', strength: 8, intelligence: 14, wisdom: 10, charisma: 17, maximumHitPoints: 9 },
+  { id: 'wardens-pc-starter-cleric', starterSlug: 'cleric', starterParty: 'city', label: 'Cleric', className: 'Cleric', portraitUrl: '/images/ready-to-play/original-portraits/rtp-city-cleric-portrait.webp', starter: true, status: 'ready', strength: 14, intelligence: 10, wisdom: 17, charisma: 12, maximumHitPoints: 10 },
+  { id: 'wardens-pc-starter-druid', starterSlug: 'druid', starterParty: 'wild', label: 'Druid', className: 'Druid', portraitUrl: '/images/ready-to-play/original-portraits/rtp-wild-druid-portrait.webp', starter: true, status: 'ready', strength: 8, intelligence: 13, wisdom: 17, charisma: 10, maximumHitPoints: 10 },
+  { id: 'wardens-pc-starter-fighter', starterSlug: 'fighter', starterParty: 'city', label: 'Fighter', className: 'Fighter', portraitUrl: '/images/ready-to-play/original-portraits/rtp-city-fighter-portrait.webp', starter: true, status: 'ready', strength: 17, intelligence: 8, wisdom: 10, charisma: 12, maximumHitPoints: 12 },
+  { id: 'wardens-pc-starter-monk', starterSlug: 'monk', starterParty: 'town', label: 'Monk', className: 'Monk', portraitUrl: '/images/ready-to-play/original-portraits/rtp-town-monk-portrait.webp', starter: true, status: 'ready', strength: 12, intelligence: 10, wisdom: 14, charisma: 8, maximumHitPoints: 10 },
+  { id: 'wardens-pc-starter-paladin', starterSlug: 'paladin', starterParty: 'town', label: 'Paladin', className: 'Paladin', portraitUrl: '/images/ready-to-play/original-portraits/rtp-town-paladin-portrait.webp', starter: true, status: 'ready', strength: 17, intelligence: 8, wisdom: 12, charisma: 14, maximumHitPoints: 13 },
+  { id: 'wardens-pc-starter-ranger', starterSlug: 'ranger', starterParty: 'town', label: 'Ranger', className: 'Ranger', portraitUrl: '/images/ready-to-play/original-portraits/rtp-town-ranger-portrait.webp', starter: true, status: 'ready', strength: 12, intelligence: 8, wisdom: 14, charisma: 10, maximumHitPoints: 12 },
+  { id: 'wardens-pc-starter-rogue', starterSlug: 'rogue', starterParty: 'city', label: 'Rogue', className: 'Rogue', portraitUrl: '/images/ready-to-play/original-portraits/rtp-city-rogue-portrait.webp', starter: true, status: 'ready', strength: 12, intelligence: 14, wisdom: 10, charisma: 8, maximumHitPoints: 10 },
+  { id: 'wardens-pc-starter-sorcerer', starterSlug: 'sorcerer', starterParty: 'town', label: 'Sorcerer', className: 'Sorcerer', portraitUrl: '/images/ready-to-play/original-portraits/rtp-town-sorcerer-portrait.webp', starter: true, status: 'ready', strength: 10, intelligence: 8, wisdom: 13, charisma: 17, maximumHitPoints: 8 },
+  { id: 'wardens-pc-starter-warlock', starterSlug: 'warlock', starterParty: 'wild', label: 'Warlock', className: 'Warlock', portraitUrl: '/images/ready-to-play/original-portraits/rtp-wild-warlock-portrait.webp', starter: true, status: 'ready', strength: 8, intelligence: 13, wisdom: 10, charisma: 17, maximumHitPoints: 9 },
+  { id: 'wardens-pc-starter-wizard', starterSlug: 'wizard', starterParty: 'city', label: 'Wizard', className: 'Wizard', portraitUrl: '/images/ready-to-play/original-portraits/rtp-city-wizard-portrait.webp', starter: true, status: 'ready', strength: 8, intelligence: 17, wisdom: 14, charisma: 10, maximumHitPoints: 8 },
 ]
 
 const DEFAULT_STARTER_IDS = ['wardens-pc-starter-fighter', 'wardens-pc-starter-wizard', 'wardens-pc-starter-cleric', 'wardens-pc-starter-rogue']
+
+const READY_TO_PLAY_PARTIES: Record<ReadyToPlayPartyPreset, readonly string[]> = {
+  city: ['wardens-pc-starter-fighter', 'wardens-pc-starter-wizard', 'wardens-pc-starter-cleric', 'wardens-pc-starter-rogue'],
+  town: ['wardens-pc-starter-monk', 'wardens-pc-starter-sorcerer', 'wardens-pc-starter-paladin', 'wardens-pc-starter-ranger'],
+  wild: ['wardens-pc-starter-barbarian', 'wardens-pc-starter-warlock', 'wardens-pc-starter-bard', 'wardens-pc-starter-druid'],
+}
+
+const READY_TO_PLAY_STYLE_LABELS: Array<{ id: ReadyToPlayArtStyle; label: string }> = [
+  { id: 'portrait', label: 'Portrait' },
+  { id: 'pog', label: 'POG' },
+  { id: 'iso', label: 'ISO' },
+  { id: 'top-down', label: 'Top-down' },
+]
+
+const STEP_HELP = [
+  'Choose the game system first. D&D 5.5e is the default. The optional nitpicky choices below already have normal defaults, so you can leave them alone unless you want a different level of bookkeeping or realism.',
+  'Choose a Ready-to-Play party, import your own characters, or mix the two. Ready-to-Play art has its own Portrait, POG, ISO, and Top-down selector. Imported characters keep the art you bring.',
+  'These questions tune how your AI Game Master runs this campaign. Use the defaults if you do not care, or customize the parts that matter to you.',
+  'Give the campaign and Game Master names, then choose Solo or Multiplayer. You can go Back through completed steps without resetting anything.',
+] as const
+
+const DEFAULT_GAMEPLAY_PREFERENCES: GameplayPreferences = {
+  full_hit_points: true,
+  dont_sweat_small_stuff: true,
+  dont_worry_about_npcs: true,
+  dont_worry_about_food: true,
+}
+
+function readyToPlayAsset(starter: StarterDefinition, style: ReadyToPlayArtStyle) {
+  const party = starter.starterParty ?? 'city'
+  const stem = `rtp-${party}-${starter.starterSlug}`
+  if (style === 'pog') return `/images/ready-to-play/portrait-pogs/${stem}-pog.webp`
+  if (style === 'iso') return `/images/ready-to-play/iso/${stem}-iso.webp`
+  if (style === 'top-down') return `/images/ready-to-play/true-top-down/${stem}-top-down.webp`
+  return `/images/ready-to-play/original-portraits/${stem}-portrait.webp`
+}
+
+function readyToPlayFoundryAsset(starter: StarterDefinition, style: ReadyToPlayArtStyle) {
+  return `modules/rpg-your-way-integrator/assets/ready-to-play/${readyToPlayAsset(starter, style).split('/images/ready-to-play/')[1]}`
+}
+
+function starterWithArt(starter: StarterDefinition, style: ReadyToPlayArtStyle): StarterDefinition {
+  return { ...starter, portraitUrl: readyToPlayAsset(starter, style), readyToPlayArtStyle: style, vttTokenAsset: readyToPlayFoundryAsset(starter, style) }
+}
 
 const QUESTION_HELP = [
   'This controls how proactive the Game Master should be. A low number leaves more initiative with you; a high number keeps new events, complications, and opportunities arriving more often.',
@@ -172,8 +222,9 @@ const CHARACTER_CREATION_RESOURCES = [
 const CAMPAIGN_TOPICS = ['Humor', 'Serious drama', 'Exploration', 'Mystery', 'Social interaction', 'Combat', 'Tactical challenge', 'Politics and intrigue', 'Puzzles', 'NPC relationships'] as const
 const CHARACTER_TOPICS = ['Character backstory usage', 'Inter-party romance', 'Character secret reveals'] as const
 
-function defaultParty() {
-  return DEFAULT_STARTER_IDS.map((id) => STARTERS.find((starter) => starter.id === id)!).filter(Boolean)
+function defaultParty(preset: ReadyToPlayPartyPreset = 'city', style: ReadyToPlayArtStyle = 'portrait') {
+  const ids = READY_TO_PLAY_PARTIES[preset] ?? DEFAULT_STARTER_IDS
+  return ids.map((id) => STARTERS.find((starter) => starter.id === id)).filter((starter): starter is StarterDefinition => Boolean(starter)).map((starter) => starterWithArt(starter, style))
 }
 
 function maxBy<T>(items: T[], score: (item: T) => number) {
@@ -299,10 +350,15 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
   const [ageBand, setAgeBand] = useState<AiAgeBand | null>(null)
   const [ageReady, setAgeReady] = useState(false)
   const [ageModalOpen, setAgeModalOpen] = useState(false)
-  const [modal, setModal] = useState<'faq' | 'ai-help' | 'starters' | 'character-builders' | 'import-help' | 'leader' | 'leader-change' | 'question-help' | 'character-questions' | 'character-review' | 'paid-import' | null>(null)
+  const [modal, setModal] = useState<'faq' | 'ai-help' | 'beginner-help' | 'step-help' | 'starters' | 'character-builders' | 'import-help' | 'leader' | 'leader-change' | 'question-help' | 'character-questions' | 'character-review' | 'paid-import' | null>(null)
   const [ruleset, setRuleset] = useState<RulesetId>('dnd-5.5e-srd-5.2.1')
   const [rulesOpen, setRulesOpen] = useState(false)
   const [activeStep, setActiveStep] = useState<1 | 2 | 3 | 4>(1)
+  const [furthestStep, setFurthestStep] = useState<1 | 2 | 3 | 4>(1)
+  const [readyToPlayPreset, setReadyToPlayPreset] = useState<ReadyToPlayPartyPreset>('city')
+  const [readyToPlayArtStyle, setReadyToPlayArtStyle] = useState<ReadyToPlayArtStyle>('portrait')
+  const [nitpickyOpen, setNitpickyOpen] = useState(false)
+  const [gameplayPreferences, setGameplayPreferences] = useState<GameplayPreferences>(DEFAULT_GAMEPLAY_PREFERENCES)
   const [party, setParty] = useState<PartyMember[]>([])
   const [existingAdventure, setExistingAdventure] = useState<SavedAdventureState | null>(null)
   const [existingAdventureLoading, setExistingAdventureLoading] = useState(mode === 'add-character')
@@ -360,7 +416,12 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
       setExistingAdventure(state)
       setExistingAdventureLoading(false)
       setParty([])
-      if (state) setRuleset(rulesetIdFromStoredLabel(state.settings.ruleset))
+      if (state) {
+        setRuleset(rulesetIdFromStoredLabel(state.settings.ruleset))
+        if (state.gameplay_preferences) setGameplayPreferences(state.gameplay_preferences)
+        if (state.ready_to_play_art_style) setReadyToPlayArtStyle(state.ready_to_play_art_style)
+        if (state.ready_to_play_party_preset) setReadyToPlayPreset(state.ready_to_play_party_preset)
+      }
       if (!state) setCreateError('No current campaign is selected. Return to Play or Start and choose a campaign first.')
       else if (state.characters.length >= 6) setCreateError('This campaign already has the maximum of six characters.')
     }
@@ -378,7 +439,7 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
       setParty((current) => current.filter((member) => member.imported || ruleset === 'dnd-5.5e-srd-5.2.1'))
       return
     }
-    if (ruleset === 'dnd-5.5e-srd-5.2.1') setParty((current) => current.length ? current : defaultParty())
+    if (ruleset === 'dnd-5.5e-srd-5.2.1') setParty((current) => current.length ? current : defaultParty(readyToPlayPreset, readyToPlayArtStyle))
     else setParty((current) => current.filter((member) => member.imported))
     setLeaderChoice('auto')
   }, [ruleset, mode])
@@ -396,6 +457,36 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
   const totalPartyCount = existingCharacterCount + party.length
   const remainingPartySlots = Math.max(0, 6 - totalPartyCount)
   const existingStarterIds = useMemo(() => new Set(existingAdventure?.characters.map((character) => character.starterId).filter((value): value is string => Boolean(value)) ?? []), [existingAdventure])
+
+  useEffect(() => {
+    if (ruleset !== 'dnd-5.5e-srd-5.2.1') return
+    setParty((current) => current.map((member) => {
+      if (!member.starter) return member
+      const definition = STARTERS.find((starter) => starter.id === member.id)
+      if (!definition) return member
+      const styled = starterWithArt(definition, readyToPlayArtStyle)
+      return { ...member, portraitUrl: styled.portraitUrl, readyToPlayArtStyle, vttTokenAsset: styled.vttTokenAsset }
+    }))
+  }, [readyToPlayArtStyle, ruleset])
+
+  function advanceToStep(step: 1 | 2 | 3 | 4) {
+    setFurthestStep((current) => Math.max(current, step) as 1 | 2 | 3 | 4)
+    setActiveStep(step)
+  }
+
+  function updateGameplayPreference(key: keyof GameplayPreferences, checked: boolean) {
+    setGameplayPreferences((current) => ({ ...current, [key]: checked }))
+  }
+
+  function chooseReadyToPlayPreset(preset: ReadyToPlayPartyPreset) {
+    setReadyToPlayPreset(preset)
+    setParty((current) => {
+      const imported = current.filter((member) => !member.starter)
+      const room = Math.max(0, 6 - existingCharacterCount - imported.length)
+      return [...imported, ...defaultParty(preset, readyToPlayArtStyle).slice(0, room)]
+    })
+    setLeaderChoice('auto')
+  }
 
   function chooseAge(next: AiAgeBand) {
     window.localStorage.setItem(AI_AGE_BAND_STORAGE_KEY, next)
@@ -452,8 +543,8 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
     updateMember(memberId, (entry) => ({ ...entry, status: 'importing', error: undefined }))
     const form = new FormData()
     form.set('file', member.file)
-    form.set('campaign_start_mode', 'new_fully_rested')
-    form.set('dont_sweat_small_stuff', 'true')
+    form.set('campaign_start_mode', gameplayPreferences.full_hit_points ? 'new_fully_rested' : 'continuing')
+    form.set('dont_sweat_small_stuff', String(gameplayPreferences.dont_sweat_small_stuff))
     form.set('ruleset', publicRulesetLabel(ruleset))
     form.set('content_mode', contentModeForAgeBand(ageBand ?? 'adult'))
     if (allowPaid) form.set('allow_paid', 'true')
@@ -530,7 +621,7 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
       if (exists) return current.filter((member) => member.id !== id)
       if (existingStarterIds.has(id) || existingCharacterCount + current.length >= 6) return current
       const starter = STARTERS.find((member) => member.id === id)
-      return starter ? [...current, starter] : current
+      return starter ? [...current, starterWithArt(starter, readyToPlayArtStyle)] : current
     })
   }
 
@@ -579,7 +670,7 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
       if (!response.ok) throw new Error(`Could not load the ready-to-play ${member.className}.`)
       const payload = await response.json() as StoredPartyCharacter
       const result = { ...payload.result!, character: { ...payload.result!.character, is_current_party_active_leader: member.id === leaderId } }
-      return { ...payload, id: member.id, portraitUrl: member.portraitUrl, starterId: member.id, status: 'ready', result, playName: payload.playName || inferPlayName(result), error: null, conversation: payload.conversation ?? [], fileFingerprint: payload.fileFingerprint || `starter:${member.starterSlug}` }
+      return { ...payload, id: member.id, portraitUrl: member.portraitUrl, starterId: member.id, readyToPlayArtStyle: member.readyToPlayArtStyle ?? readyToPlayArtStyle, vttTokenAsset: member.vttTokenAsset, status: 'ready', result, playName: payload.playName || inferPlayName(result), error: null, conversation: payload.conversation ?? [], fileFingerprint: payload.fileFingerprint || `starter:${member.starterSlug}` }
     }
     if (!member.result) throw new Error(`${member.label} has not been imported yet.`)
     const result = { ...member.result, character: { ...member.result.character, is_current_party_active_leader: member.id === leaderId } }
@@ -617,7 +708,7 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
       const characters = await Promise.all(party.map((member) => storedCharacterFor(member, leaderId)))
       const now = new Date().toISOString()
       const adventureId = crypto.randomUUID()
-      const settings: CharacterIntakeSettings = { campaign_start_mode: 'new_fully_rested', dont_sweat_small_stuff: true, ruleset: publicRulesetLabel(ruleset) }
+      const settings: CharacterIntakeSettings = { campaign_start_mode: gameplayPreferences.full_hit_points ? 'new_fully_rested' : 'continuing', dont_sweat_small_stuff: gameplayPreferences.dont_sweat_small_stuff, ruleset: publicRulesetLabel(ruleset) }
       const state: SavedAdventureState = {
         storage_schema: ADVENTURE_STORAGE_SCHEMA, version: CHARACTER_INTAKE_VERSION, analysis_revision: CHARACTER_INTAKE_ANALYSIS_REVISION,
         adventure_id: adventureId, adventure_name: campaignName.trim(), game_master_name: gmName.trim().slice(0, 80), campaign_mode: campaignMode,
@@ -627,6 +718,7 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
         content_mode: contentModeForAgeBand(ageBand ?? 'adult'), created_at: now, updated_at: now, settings, characters,
         setup_answers: setupAnswers(), setup_conversation: [], general_conversation: [], stage: 'complete', gameplay: emptyGameplayState(),
         starter_defaults_seeded: party.some((member) => member.starter), party_choice_confirmed: true, character_assistance_level: 5,
+        ready_to_play_party_preset: readyToPlayPreset, ready_to_play_art_style: readyToPlayArtStyle, gameplay_preferences: gameplayPreferences,
       }
       await saveAdventureState(window.localStorage, state, null)
       window.localStorage.setItem(CURRENT_ADVENTURE_KEY, adventureId)
@@ -727,7 +819,7 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
         {ageModalOpen ? <StartModal title="Before AI gameplay" onClose={() => { if (ageBand) setAgeModalOpen(false) }}><div className="start-age-choices"><button type="button" onClick={() => chooseAge('adult')}>I am 18 or older</button><button type="button" onClick={() => chooseAge('teen')}>I am 13–17 and have permission from a parent or guardian</button><button type="button" onClick={() => chooseAge('under-13')}>I am under 13</button></div></StartModal> : null}
         {modal === 'character-builders' ? <StartModal title="Where to generate characters" onClose={() => setModal(null)} wide><CharacterCreationResourceList /></StartModal> : null}
         {modal === 'import-help' ? <StartModal title="How to import characters" onClose={() => setModal(null)} wide><p>Add PDF, JSON, XML, TXT, or Markdown character records by browsing for the files, or paste the character information directly. Files may be up to 8 MB.</p><p>After the file is added, choose <strong>Import into RPG Your Way</strong>. RPG Your Way reads the record, converts it into the character structure used during play, and asks only clarifications worth resolving.</p><p>New characters enter the existing campaign fully rested. The current campaign, existing characters, transcript, settings, and story state are not reset.</p><p>Importing a normal character is generally free. If a character is unusually large or complex, RPG Your Way tells you before additional AI processing uses part of your available usage balance.</p><a className="start-inline-link" href="/downloads/rpgyourway-character-update-template-v2.txt" download>Download the blank plain-text character template</a><a className="start-inline-link" href="/legal/privacy">Read the full Privacy information</a></StartModal> : null}
-        {modal === 'starters' ? <StartModal title="Add ready-to-play characters" onClose={() => setModal(null)} wide><p className="start-modal-lede">Choose any available characters up to the six-character party limit. These default characters are built for the D&amp;D 5.5e system.</p><div className="start-starter-grid">{STARTERS.map((starter) => { const selected = party.some((member) => member.id === starter.id); const alreadyPresent = existingStarterIds.has(starter.id); const disabled = alreadyPresent || (!selected && remainingPartySlots === 0); return <button type="button" key={starter.id} className={`start-starter-choice${selected ? ' is-selected' : ''}`} onClick={() => toggleStarter(starter.id)} aria-pressed={selected} disabled={disabled}><Image src={starter.portraitUrl!} alt="" width={100} height={100} /><strong>{starter.className}</strong><span>{alreadyPresent ? 'Already in party' : selected ? 'Adding' : 'Add'}</span></button> })}</div><p className="start-party-count">Current party: {totalPartyCount} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p></StartModal> : null}
+        {modal === 'starters' ? <StartModal title="Add ready-to-play characters" onClose={() => setModal(null)} wide><p className="start-modal-lede">Choose City, Town, or Wild as a canonical four-character preset, or adjust the individual characters below. These default characters use D&amp;D 5.5e.</p><div className="start-rtp-style"><strong>Ready-to-Play image style</strong><div className="start-rtp-style-options">{READY_TO_PLAY_STYLE_LABELS.map((option) => <button type="button" key={option.id} className={readyToPlayArtStyle === option.id ? 'is-selected' : ''} aria-pressed={readyToPlayArtStyle === option.id} onClick={() => setReadyToPlayArtStyle(option.id)}>{option.label}{option.id === 'portrait' ? ' (default)' : ''}</button>)}</div></div><div className="start-rtp-presets">{(['city', 'town', 'wild'] as ReadyToPlayPartyPreset[]).map((preset) => <button type="button" key={preset} className={readyToPlayPreset === preset ? 'is-selected' : ''} aria-pressed={readyToPlayPreset === preset} onClick={() => chooseReadyToPlayPreset(preset)}><strong>{preset[0].toUpperCase() + preset.slice(1)}</strong><span>{READY_TO_PLAY_PARTIES[preset].map((id) => STARTERS.find((starter) => starter.id === id)?.className).filter(Boolean).join(' · ')}</span></button>)}</div><p className="start-rtp-individual-label">Individual Ready-to-Play characters</p><div className="start-starter-grid">{STARTERS.map((starter) => { const selected = party.some((member) => member.id === starter.id); const alreadyPresent = existingStarterIds.has(starter.id); const disabled = alreadyPresent || (!selected && remainingPartySlots === 0); return <button type="button" key={starter.id} className={`start-starter-choice${selected ? ' is-selected' : ''}`} onClick={() => toggleStarter(starter.id)} aria-pressed={selected} disabled={disabled}><Image src={readyToPlayAsset(starter, readyToPlayArtStyle)} alt="" width={100} height={100} /><strong>{starter.className}</strong><span>{alreadyPresent ? 'Already in party' : selected ? 'Adding' : 'Add'}</span></button> })}</div><p className="start-party-count">Current party: {totalPartyCount} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p></StartModal> : null}
         {modal === 'paid-import' && activeCharacter ? <StartModal title="Additional AI processing" onClose={() => setModal(null)}><p>This character is unusually large or complex. Importing it requires additional AI processing and will use part of your available usage balance.</p><p>No usage will be deducted unless you continue.</p><div className="start-inline-actions"><button type="button" className="start-primary-control" onClick={() => { setModal(null); void importCharacter(activeCharacter.id, true) }}>Continue and use my balance</button><button type="button" className="start-info-control" onClick={() => setModal(null)}>Cancel</button></div></StartModal> : null}
         {modal === 'character-questions' && activeCharacter?.result ? <CharacterQuestionsModal member={activeCharacter} clarificationText={clarificationText} setClarificationText={setClarificationText} busy={clarificationBusy} onSend={() => void sendCharacterClarification()} onSkip={() => skipRecommended(activeCharacter.id)} onClose={() => setModal(null)} /> : null}
         {modal === 'character-review' && activeCharacter?.result ? <StartModal title={`Review ${activeCharacter.result.character.name}`} onClose={() => setModal(null)} wide><div className="start-review-summary">{activeCharacter.result.sheet_summary.map((line) => <p key={line}>{line}</p>)}</div>{activeCharacter.result.detected_issues.length ? <div className="start-review-notices"><h3>Notices</h3>{activeCharacter.result.detected_issues.map((issue, index) => <div className="start-question-card" key={`${issue.category}-${index}`}><strong>{issue.category}</strong><p>{issue.issue}</p><small>{issue.why_it_matters}</small></div>)}</div> : <p>No unresolved notices were recorded.</p>}</StartModal> : null}
@@ -747,21 +839,31 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
         </>
       ) : (
         <>
+          {activeStep === 1 ? <div className="start-top-controls"><button type="button" className="start-top-help" onClick={() => setModal('faq')}><CircleHelp aria-hidden="true" />Help</button><button type="button" className="start-top-help" onClick={() => setModal('beginner-help')}><CircleHelp aria-hidden="true" />Help, I&apos;ve never played D&amp;D. What do I do?</button></div> : null}
           {activeStep === 1 ? <section className="start-rules-step" aria-labelledby="rules-heading">
-            <div className="start-step-nameplate start-step-nameplate--rules"><span>1</span><strong id="rules-heading">Start Here</strong></div>
+            <div className="start-step-nameplate start-step-nameplate--rules"><span>1</span><strong id="rules-heading">Start Here</strong><button type="button" className="start-step-help-button" onClick={() => setModal('step-help')}>Explain this step to me</button></div>
             <p className="start-rules-subtitle">New Campaign</p>
             <div className="start-rules-card start-rules-card--single-step">
               <button type="button" className="start-rules-current start-rules-current--display" aria-expanded={rulesOpen} aria-controls="start-rules-panel" onClick={() => setRulesOpen((open) => !open)}><span className="start-rules-current-copy"><strong>{publicRulesetLabel(ruleset)}{ruleset === 'dnd-5.5e-srd-5.2.1' ? ' (default)' : ''}</strong><span>or choose a different one</span></span><span className="accordion-plus start-rules-accordion-plus" aria-hidden="true" /></button>
               {rulesOpen ? <div className="start-rules-panel" id="start-rules-panel"><div className="start-rules-grid">{RULESETS.map((option) => <button key={option.id} type="button" className={`start-choice${ruleset === option.id ? ' start-choice--selected' : ''}`} aria-pressed={ruleset === option.id} onClick={() => setRuleset(option.id)}><strong>{option.label}</strong><span>{option.detail}</span></button>)}</div></div> : null}
+              <div className="start-nitpicky">
+                <button type="button" className="start-nitpicky-summary" aria-expanded={nitpickyOpen} onClick={() => setNitpickyOpen((open) => !open)}><span>Optional nitpicky character choices</span><span className="accordion-plus" aria-hidden="true" /></button>
+                {nitpickyOpen ? <div className="start-nitpicky-panel">
+                  <label><input type="checkbox" checked={gameplayPreferences.full_hit_points} onChange={(event) => updateGameplayPreference('full_hit_points', event.target.checked)} /><span><strong>Full Hit Points</strong><small>New campaign characters begin fully rested. Turn this off to preserve imported current HP and other continuing-state details.</small></span></label>
+                  <label><input type="checkbox" checked={gameplayPreferences.dont_sweat_small_stuff} onChange={(event) => updateGameplayPreference('dont_sweat_small_stuff', event.target.checked)} /><span><strong>Don&apos;t Sweat the Small Stuff</strong><small>Assume ordinary inexpensive class necessities unless they become consequential.</small></span></label>
+                  <label><input type="checkbox" checked={gameplayPreferences.dont_worry_about_npcs} onChange={(event) => updateGameplayPreference('dont_worry_about_npcs', event.target.checked)} /><span><strong>Don&apos;t Worry About NPCs</strong><small>Keep incidental bystander welfare abstract unless the story makes it important.</small></span></label>
+                  <label><input type="checkbox" checked={gameplayPreferences.dont_worry_about_food} onChange={(event) => updateGameplayPreference('dont_worry_about_food', event.target.checked)} /><span><strong>Don&apos;t Worry About Food</strong><small>Assume ordinary meals and rations are handled unless scarcity matters.</small></span></label>
+                </div> : null}
+              </div>
               <div className="start-rules-confirm">
-                <button type="button" className="start-primary-control start-rules-confirm-button" onClick={() => { setRulesOpen(false); setActiveStep(2) }}>Choose This Game System</button>
+                <button type="button" className="start-primary-control start-rules-confirm-button" onClick={() => { setRulesOpen(false); advanceToStep(2) }}>Choose This Game System</button>
                 <p><strong>Selected:</strong> {publicRulesetLabel(ruleset)}</p>
               </div>
             </div>
           </section> : null}
 
           {activeStep === 2 ? <section className="start-step start-party-step" aria-labelledby="party-heading">
-            <div className="start-step-nameplate"><span>2</span>Gather Your Party</div>
+            <div className="start-step-nameplate"><span>2</span>Gather Your Party<button type="button" className="start-step-help-button" onClick={() => setModal('step-help')}>Explain this step to me</button></div>
             <div className="start-step-heading-row"><div><h2 id="party-heading" className="sr-only">Gather Your Party</h2><p>{ruleset === 'dnd-5.5e-srd-5.2.1' ? 'Fighter, Wizard, Cleric, and Rogue are loaded. Keep them, change them, or mix in your own characters.' : 'Add your own characters for this ruleset. The current ready-to-play library uses D&D 5.5e.'}</p><p className="start-party-note">Names and portraits can be changed later on the Play page through the Characters sidebar.</p></div></div>
             <div className="start-character-actions start-character-actions--primary">
               <button type="button" className="start-primary-control" onClick={() => setModal('starters')} disabled={ruleset !== 'dnd-5.5e-srd-5.2.1'}>Choose from<br />ready-to-play characters</button>
@@ -793,12 +895,11 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
             </div>
 
             <p className="start-party-count start-party-count--main">Current party: {totalPartyCount} · {remainingPartySlots} {remainingPartySlots === 1 ? 'place' : 'places'} remaining · Max party size: 6</p>
-            {partyReady ? <div className="start-party-confirm"><button type="button" className="start-forest-control" onClick={() => { setImportMessage(''); setActiveStep(3) }}>Use this party</button><p>{party.length} {party.length === 1 ? 'character is' : 'characters are'} ready.</p></div> : null}
-            <button type="button" className="start-reset-link" onClick={() => { if (window.confirm('Reset this setup and start again?')) window.location.reload() }}>Or reset everything and start again</button>
+            {partyReady ? <div className="start-party-confirm"><button type="button" className="start-forest-control" onClick={() => { setImportMessage(''); advanceToStep(3) }}>Use this party</button><p>{party.length} {party.length === 1 ? 'character is' : 'characters are'} ready.</p></div> : null}
           </section> : null}
 
           {activeStep === 3 && partyReady ? <section className="start-step start-settings-step" aria-labelledby="questions-heading">
-            <div className="start-step-nameplate"><span>3</span>Adjustable gameplay settings</div>
+            <div className="start-step-nameplate"><span>3</span>Adjustable gameplay settings<button type="button" className="start-step-help-button" onClick={() => setModal('step-help')}>Explain this step to me</button></div>
             <div className={questionMode === 'answer' ? 'start-settings-bezel' : 'start-settings-body'}>
               {questionMode === 'pending' ? <div className="start-question-choice" id="questions-heading"><button type="button" className="start-primary-control start-big-control" onClick={() => { setQuestionMode('answer'); setQuestionIndex(0) }}>Customize</button><button type="button" className="start-info-control start-big-control" onClick={() => setQuestionMode('skip')}>Use default settings</button></div> : questionMode === 'skip' ? <div className="start-complete-plaque"><Sparkles aria-hidden="true" /><div><strong>Using the default gameplay settings.</strong><span>You can still change campaign guidance later.</span></div><button type="button" onClick={() => setQuestionMode('pending')}>Change</button></div> : questionMode === 'complete' ? <div className="start-complete-plaque start-complete-plaque--guidance"><Sparkles aria-hidden="true" /><div><strong>Your campaign guidance is set.</strong></div><button type="button" onClick={() => { setQuestionMode('answer'); setQuestionIndex(0) }}>Review</button></div> : <div className="start-question-panel">
                 <div className="start-question-progress">Question {questionIndex + 1} of 6</div>
@@ -811,18 +912,19 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
                 <div className="start-question-footer"><button type="button" className="start-text-help" onClick={() => openQuestionHelp(questionIndex)}>Explain this question</button><div className="start-question-nav"><button type="button" className="start-secondary-control" disabled={questionIndex === 0} onClick={() => setQuestionIndex((index) => Math.max(0, index - 1))}><ChevronLeft aria-hidden="true" />Back</button><button type="button" className="start-primary-control" onClick={() => questionIndex === 5 ? setQuestionMode('complete') : setQuestionIndex((index) => Math.min(5, index + 1))}>{questionIndex === 5 ? 'Continue' : <>Next<ChevronRight aria-hidden="true" /></>}</button></div></div>
               </div>}
             </div>
-            {questionsDone ? <div className="start-settings-leader"><div className="start-leader-card"><div className="start-leader-main"><span>Proposed party leader:</span><strong>{leader?.label ?? 'None'}</strong></div><div className="start-leader-controls"><button type="button" onClick={() => setModal('leader-change')}>Change</button><button type="button" className={leaderChoice === 'none' ? 'is-selected' : ''} aria-pressed={leaderChoice === 'none'} onClick={() => setLeaderChoice('none')}>None</button></div><button type="button" className="start-leader-explain" onClick={() => setModal('leader')}>How did we choose this leader?</button></div><button type="button" className="start-primary-control start-step-continue" onClick={() => setActiveStep(4)}>Continue</button></div> : null}
-            <button type="button" className="start-reset-link" onClick={() => { if (window.confirm('Reset this setup and start again?')) window.location.reload() }}>Or reset everything and start again</button>
+            {questionsDone ? <div className="start-settings-leader"><div className="start-leader-card"><div className="start-leader-main"><span>Proposed party leader:</span><strong>{leader?.label ?? 'None'}</strong></div><div className="start-leader-controls"><button type="button" onClick={() => setModal('leader-change')}>Change</button><button type="button" className={leaderChoice === 'none' ? 'is-selected' : ''} aria-pressed={leaderChoice === 'none'} onClick={() => setLeaderChoice('none')}>None</button></div><button type="button" className="start-leader-explain" onClick={() => setModal('leader')}>How did we choose this leader?</button></div><button type="button" className="start-primary-control start-step-continue" onClick={() => advanceToStep(4)}>Continue</button></div> : null}
           </section> : null}
 
-          {activeStep === 4 && questionsDone ? <section className="start-step" aria-labelledby="names-heading"><div className="start-step-nameplate"><span>4</span><strong id="names-heading">The naming of the names</strong></div><div className="start-name-grid"><label className="start-field"><span className="sr-only">Campaign name</span><span className="start-field-bezel"><input value={campaignName} onChange={(event) => setCampaignName(event.target.value)} placeholder="Descriptive campaign name here — have fun" /></span></label><label className="start-field"><span className="sr-only">Game Master name</span><span className="start-field-bezel"><input value={gmName} onChange={(event) => setGmName(event.target.value)} placeholder="Game Master name" /></span></label></div><div className="start-question-block"><div className="start-question-heading"><div><span className="start-question-number">Cloud</span><strong>How are you playing?</strong></div></div><div className="start-rules-grid"><button type="button" className={`start-choice${campaignMode === 'solo' ? ' start-choice--selected' : ''}`} aria-pressed={campaignMode === 'solo'} onClick={() => setCampaignMode('solo')}><strong>Solo</strong><span>Just me. This campaign saves to my account and follows me between signed-in devices.</span></button><button type="button" className={`start-choice${campaignMode === 'multiplayer' ? ' start-choice--selected' : ''}`} aria-pressed={campaignMode === 'multiplayer'} onClick={() => setCampaignMode('multiplayer')}><strong>Multiplayer</strong><span>Persistent cloud campaign. Members join once and can reopen it from their own accounts.</span></button></div>{campaignMode === 'multiplayer' ? <div className="start-multiplayer-administration"><div className="start-question-heading"><div><span className="start-question-number">Control</span><strong>How should campaign housekeeping work?</strong></div></div><div className="start-rules-grid"><button type="button" className={`start-choice${multiplayerAdministration === 'shared' ? ' start-choice--selected' : ''}`} aria-pressed={multiplayerAdministration === 'shared'} onClick={() => setMultiplayerAdministration('shared')}><strong>Shared Control</strong><span>Everyone is on equal footing. Removing a member or deleting the campaign requires the group.</span></button><button type="button" className={`start-choice${multiplayerAdministration === 'coordinator' ? ' start-choice--selected' : ''}`} aria-pressed={multiplayerAdministration === 'coordinator'} onClick={() => setMultiplayerAdministration('coordinator')}><strong>Coordinator Control</strong><span>One coordinator handles membership and campaign housekeeping. Gameplay remains equal.</span></button></div></div> : null}</div></section> : null}
+          {activeStep === 4 && questionsDone ? <section className="start-step" aria-labelledby="names-heading"><div className="start-step-nameplate"><span>4</span><strong id="names-heading">The naming of the names</strong><button type="button" className="start-step-help-button" onClick={() => setModal('step-help')}>Explain this step to me</button></div><div className="start-name-grid"><label className="start-field"><span className="sr-only">Campaign name</span><span className="start-field-bezel"><input value={campaignName} onChange={(event) => setCampaignName(event.target.value)} placeholder="Descriptive campaign name here — have fun" /></span></label><label className="start-field"><span className="sr-only">Game Master name</span><span className="start-field-bezel"><input value={gmName} onChange={(event) => setGmName(event.target.value)} placeholder="Game Master name" /></span></label></div><div className="start-question-block"><div className="start-question-heading"><div><span className="start-question-number">Cloud</span><strong>How are you playing?</strong></div></div><div className="start-rules-grid"><button type="button" className={`start-choice${campaignMode === 'solo' ? ' start-choice--selected' : ''}`} aria-pressed={campaignMode === 'solo'} onClick={() => setCampaignMode('solo')}><strong>Solo</strong><span>Just me. This campaign saves to my account and follows me between signed-in devices.</span></button><button type="button" className={`start-choice${campaignMode === 'multiplayer' ? ' start-choice--selected' : ''}`} aria-pressed={campaignMode === 'multiplayer'} onClick={() => setCampaignMode('multiplayer')}><strong>Multiplayer</strong><span>Persistent cloud campaign. Members join once and can reopen it from their own accounts.</span></button></div>{campaignMode === 'multiplayer' ? <div className="start-multiplayer-administration"><div className="start-question-heading"><div><span className="start-question-number">Control</span><strong>How should campaign housekeeping work?</strong></div></div><div className="start-rules-grid"><button type="button" className={`start-choice${multiplayerAdministration === 'shared' ? ' start-choice--selected' : ''}`} aria-pressed={multiplayerAdministration === 'shared'} onClick={() => setMultiplayerAdministration('shared')}><strong>Shared Control</strong><span>Everyone is on equal footing. Removing a member or deleting the campaign requires the group.</span></button><button type="button" className={`start-choice${multiplayerAdministration === 'coordinator' ? ' start-choice--selected' : ''}`} aria-pressed={multiplayerAdministration === 'coordinator'} onClick={() => setMultiplayerAdministration('coordinator')}><strong>Coordinator Control</strong><span>One coordinator handles membership and campaign housekeeping. Gameplay remains equal.</span></button></div></div> : null}</div></section> : null}
           {activeStep === 4 && questionsDone ? <section className="start-play-step" aria-label="Continue to Play"><button type="button" className="start-play-button" disabled={!namesReady || !playReadyForEngine || creatingCampaign} onClick={() => void continueToPlay()}>{creatingCampaign ? 'Creating campaign…' : 'Onward'}</button>{createError ? <p className="auth-message auth-message-error" role="alert">{createError}</p> : null}</section> : null}
-          {activeStep === 4 && questionsDone ? <button type="button" className="start-reset-link" onClick={() => { if (window.confirm('Reset this setup and start again?')) window.location.reload() }}>Or reset everything and start again</button> : null}
+          <div className="start-history-nav" aria-label="Onboarding navigation"><button type="button" className="start-secondary-control" disabled={activeStep === 1} onClick={() => setActiveStep(Math.max(1, activeStep - 1) as 1 | 2 | 3 | 4)}><ChevronLeft aria-hidden="true" />Back</button><button type="button" className="start-secondary-control" disabled={activeStep >= furthestStep} onClick={() => setActiveStep(Math.min(furthestStep, activeStep + 1) as 1 | 2 | 3 | 4)}>Forward<ChevronRight aria-hidden="true" /></button></div>
         </>
       )}
 
       {ageModalOpen ? <StartModal title="Before you begin, which applies to you?" onClose={() => { if (ageBand) setAgeModalOpen(false) }}><div className="start-age-choices"><button type="button" onClick={() => chooseAge('adult')}>I am 18 or older</button><button type="button" onClick={() => chooseAge('teen')}>I am 13–17 and have permission from a parent or guardian</button><button type="button" onClick={() => chooseAge('under-13')}>I am under 13</button></div></StartModal> : null}
       {modal === 'faq' ? <StartModal title="I need help with all of this" onClose={() => setModal(null)} wide><div className="start-faq-list">{START_FAQ.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div><div className="start-faq-more"><strong>Still need help?</strong><p>Start Page Help can answer questions about setting up your campaign.</p><button type="button" className="start-primary-control" onClick={() => setModal('ai-help')}>My question wasn&apos;t above. I still need help.</button></div></StartModal> : null}
+      {modal === 'step-help' ? <StartModal title={`Help with step ${activeStep}`} onClose={() => setModal(null)}><p>{STEP_HELP[activeStep - 1]}</p></StartModal> : null}
+      {modal === 'beginner-help' ? <StartModal title="I&apos;ve never played D&amp;D. What do I do?" onClose={() => setModal(null)} wide><p>You can play even if you have never played D&amp;D before. Work through setup and choose whatever sounds right to you. Every step has a Help button if you are unsure what a choice means.</p><p>When you reach <strong>How much help do I want from the AI GM?</strong>, set it to <strong>10</strong>. That tells your AI GM to give you the most guidance during play.</p><p>Once play begins, ask your AI GM D&amp;D questions whenever you need to. Ask what an ability does, what your reasonable choices are, how a rule works, what you can do on your turn, why a roll is needed, or what something on your character sheet means. You can ask those questions out of character.</p><p>RPG Your Way does not require a separate D&amp;D tutorial. The AI GM can coach you while you actually play. You can also come Back here through completed setup steps and change your choices without resetting the campaign setup.</p></StartModal> : null}
       {modal === 'ai-help' ? <StartModal title="Start Page Help" onClose={() => setModal(null)} wide><p className="start-modal-lede">Ask about the choices on this page or about getting a campaign started. You have {Math.max(0, 25 - helpCount)} of 25 free questions remaining in this onboarding session.</p><div className="start-ai-dialogue" role="log" aria-live="polite" aria-relevant="additions text" aria-label="Start Page Help conversation">{helpConversation.map((turn) => <div key={turn.id} className={`start-ai-turn start-ai-turn--${turn.role}`}><strong>{turn.role === 'assistant' ? 'Start Page Help' : 'You'}</strong><p>{turn.text}</p>{turn.role === 'assistant' ? <button type="button" data-aigm-manual-listen="true" className="start-listen-link" onClick={() => helpVoiceRef.current?.replay(turn.text)}><Volume2 aria-hidden="true" />Listen</button> : null}</div>)}{helpBusy ? <div className="start-ai-turn start-ai-turn--assistant"><strong>Start Page Help</strong><p>Thinking…</p></div> : null}<div ref={helpEndRef} /></div><div className="start-ai-composer"><label><span>Your question</span><span className="start-field-bezel"><textarea ref={helpInputRef} rows={4} value={helpQuestion} onChange={(event) => setHelpQuestion(event.target.value)} placeholder="What do you want help with?" /></span></label><div className="start-ai-composer-actions"><AigmVoiceControls ref={helpVoiceRef} profile="onboarding" assistantName="Start Page Help" currentMessage={helpQuestion} onTranscriptUpdate={setHelpQuestion} onError={setHelpError} disabled={helpBusy || helpCount >= 25} /><button type="button" className="start-primary-control" disabled={!helpQuestion.trim() || helpBusy || helpCount >= 25} onClick={() => void askStartHelp()}>{helpBusy ? 'Checking…' : 'Ask Start Page Help'}</button></div>{helpError ? <p className="auth-message auth-message-error" role="alert">{helpError}</p> : null}<small>{Math.max(0, 25 - helpCount)} questions remaining.</small></div></StartModal> : null}
       {modal === 'character-builders' ? <StartModal title="Where to generate characters" onClose={() => setModal(null)} wide><CharacterCreationResourceList /></StartModal> : null}
       {modal === 'import-help' ? <StartModal title="How to import characters" onClose={() => setModal(null)} wide><p>Add PDF, JSON, XML, TXT, or Markdown character records by browsing for the files, or paste the character information directly. Files may be up to 8 MB.</p><p>After the file is added, choose <strong>Import into RPG Your Way</strong>. RPG Your Way will read the record, convert it into the character structure used during play, and ask only the clarifications that are worth resolving.</p><p><strong>New campaign</strong> and <strong>Don&apos;t sweat the small stuff</strong> are applied automatically. New campaign starts the character fully rested. Don&apos;t sweat the small stuff assumes ordinary inexpensive class necessities while still tracking consequential equipment and priced or consumed components.</p><p>Importing a normal character is generally free. If a character is unusually large or complex, RPG Your Way will tell you before additional AI processing uses part of your available usage balance.</p><p>Names and portraits can be changed later on the Play page through the Characters sidebar.</p><p>Character information is sent to the AI service when RPG Your Way imports or uses the character. Signed-in campaigns are saved automatically to your RPG Your Way account. Browser storage is used only as a local cache and legacy-import bridge.</p><a className="start-inline-link" href="/downloads/rpgyourway-character-update-template-v2.txt" download>Download the blank plain-text character template</a><a className="start-inline-link" href="/legal/privacy">Read the full Privacy information</a></StartModal> : null}
