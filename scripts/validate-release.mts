@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '2.8.1')
-assert.equal(pkg.rpgywVersion, '2.8.1')
-has(read('lib/version.ts'), "APP_VERSION = '2.8.1'", 'visible app version')
+assert.equal(pkg.version, '2.9.0')
+assert.equal(pkg.rpgywVersion, '2.9.0')
+has(read('lib/version.ts'), "APP_VERSION = '2.9.0'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',

@@ -44,9 +44,72 @@ function characterVisualTags(state: SavedAdventureState, characterId: string) {
     .slice(0, 12)
 }
 
+const FOUNDRY_WINDOW_NAME = 'rpgyw-foundry-vtt'
+const FOUNDRY_FOCUS_PING = 'rpgyw.vtt.focus.ping'
+const FOUNDRY_FOCUS_PONG = 'rpgyw.vtt.focus.pong'
+const WEB_FOCUS_PING = 'rpgyw.web.focus.ping'
+const WEB_FOCUS_PONG = 'rpgyw.web.focus.pong'
+
 function launchNamedWindow(url: string, target: string) {
   const opened = window.open(url, target)
   try { opened?.focus() } catch { /* browser focus is best-effort */ }
+}
+
+async function focusOrOpenFoundry(url: string) {
+  let targetOrigin = ''
+  try {
+    targetOrigin = new URL(url).origin
+  } catch {
+    launchNamedWindow(url, FOUNDRY_WINDOW_NAME)
+    return
+  }
+
+  const candidate = window.open('', FOUNDRY_WINDOW_NAME)
+  if (!candidate) {
+    launchNamedWindow(url, FOUNDRY_WINDOW_NAME)
+    return
+  }
+
+  const requestId = crypto.randomUUID()
+  let acknowledged = false
+
+  const receivePong = (event: MessageEvent) => {
+    const data = event.data as { source?: unknown; type?: unknown; requestId?: unknown } | null
+    if (
+      event.origin === targetOrigin
+      && data?.source === 'rpgyw-foundry'
+      && data.type === FOUNDRY_FOCUS_PONG
+      && data.requestId === requestId
+    ) {
+      acknowledged = true
+    }
+  }
+
+  window.addEventListener('message', receivePong)
+
+  try {
+    candidate.postMessage({
+      source: 'rpgyw-web',
+      type: FOUNDRY_FOCUS_PING,
+      requestId,
+    }, '*')
+  } catch {
+    // If the ping cannot be delivered, navigation below is the fallback.
+  }
+
+  await new Promise((resolve) => window.setTimeout(resolve, 300))
+  window.removeEventListener('message', receivePong)
+
+  if (!acknowledged) {
+    try {
+      candidate.location.href = url
+    } catch {
+      launchNamedWindow(url, FOUNDRY_WINDOW_NAME)
+      return
+    }
+  }
+
+  try { candidate.focus() } catch { /* browser focus is best-effort */ }
 }
 
 export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureState | null }) {
@@ -126,6 +189,40 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
   }, [campaignId])
 
   useEffect(() => {
+    const launchUrl = foundryStatus?.launchUrl
+    if (!launchUrl) return
+
+    let expectedOrigin = ''
+    try {
+      expectedOrigin = new URL(launchUrl).origin
+    } catch {
+      return
+    }
+
+    const receiveFocusPing = (event: MessageEvent) => {
+      const data = event.data as { source?: unknown; type?: unknown; requestId?: unknown } | null
+      if (
+        event.origin !== expectedOrigin
+        || data?.source !== 'rpgyw-foundry'
+        || data.type !== WEB_FOCUS_PING
+        || typeof data.requestId !== 'string'
+      ) return
+
+      try { window.focus() } catch { /* browser focus is best-effort */ }
+
+      const source = event.source as Window | null
+      source?.postMessage({
+        source: 'rpgyw-web',
+        type: WEB_FOCUS_PONG,
+        requestId: data.requestId,
+      }, event.origin)
+    }
+
+    window.addEventListener('message', receiveFocusPing)
+    return () => window.removeEventListener('message', receiveFocusPing)
+  }, [foundryStatus?.launchUrl])
+
+  useEffect(() => {
     if (!statusLoaded || !combatKey || offeredCombatRef.current === combatKey) return
     offeredCombatRef.current = combatKey
     setOfferOpen(true)
@@ -174,7 +271,7 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
   function goToVtt() {
     const url = foundryStatus?.launchUrl
     if (!url) return
-    launchNamedWindow(url, 'rpgyw-foundry-vtt')
+    void focusOrOpenFoundry(url)
   }
 
   function openSetup() {
@@ -211,6 +308,12 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
       displayName: entry.name,
       initiative: entry.total,
     }))
+    const latestAigmNarration = [...gameplay.messages]
+      .reverse()
+      .find((entry) => entry.role === 'assistant')
+      ?.text
+      || gameplay.scene
+      || ''
 
     setPreparing(true)
     setHandoffError('')
@@ -223,7 +326,7 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
           campaignId: partyState.adventure_id,
           turnNumber: gameplay.turn_count,
           sceneLabel: gameplay.scene || 'Combat',
-          sceneSummary: gameplay.scene || '',
+          sceneSummary: latestAigmNarration,
           party,
           enemies,
         }),
