@@ -86,6 +86,7 @@ import { establishedNpcNames, mergeCampaignMemory, mergeCampaignRetcons, stampCa
 import { TableChatPanel } from '@/components/multiplayer/TableChatPanel'
 import { MultiplayerPanelSwitcher, type MultiplayerSecondaryPanel } from '@/components/multiplayer/MultiplayerPanelSwitcher'
 import { useMultiplayerSession } from '@/components/multiplayer/useMultiplayerSession'
+import { VttCombatHandoff } from '@/components/foundry/VttCombatHandoff'
 
 const DICE = [4, 6, 8, 10, 12, 20, 100] as const
 const MAX_DICE_QUANTITY = 20
@@ -2637,6 +2638,8 @@ export function AigmGameplayShell() {
                 /> : null}
                 <button type="submit" disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0 || !message.trim()} className={`aigm-gameplay-send ${message.trim() && !sending && !voiceCaptureBusy && gameplay.messages.length > 0 ? 'aigm-gameplay-send--ready' : ''} flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground disabled:opacity-45`} aria-label="Send gameplay turn">{sending ? <LoaderCircle className="size-5 animate-spin" aria-hidden="true" /> : <Send className="size-5" aria-hidden="true" />}</button>
               </form>
+
+              <VttCombatHandoff partyState={partyState} />
 
               <div className="aigm-session-tools mt-2 grid gap-2 border-t border-border/70 pt-2 sm:grid-cols-[auto_minmax(0,1fr)]" data-open={sessionToolsOpen ? 'true' : 'false'} aria-label="Session tools">
                 <button

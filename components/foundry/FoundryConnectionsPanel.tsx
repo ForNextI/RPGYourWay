@@ -44,7 +44,7 @@ export function FoundryConnectionsPanel() {
     <section className="multiplayer-vtt-card" aria-labelledby="foundry-connections-heading">
       <p className="kicker">Virtual tabletop</p>
       <h2 id="foundry-connections-heading">Foundry VTT</h2>
-      <p>RPG Your Way Foundry Integrator 0.2.0 begins the live connection between a campaign and a Foundry world. In Foundry chat, type <strong>/rpgyw connect</strong>. Foundry will give you a short approval link. Open it, choose the RPG Your Way campaign, and approve the connection.</p>
+      <p>RPG Your Way Foundry Integrator 2.8.0 connects this campaign to a Foundry world for optional tactical combat. In Foundry chat, the Foundry license owner or designated technical GM types <strong>/rpgyw connect</strong> once for the world. Each human player then uses <strong>/rpgyw link</strong> for their own account. The Foundry world name does not have to match the campaign name.</p>
 
       {loading ? (
         <p className="campaign-control-status" role="status"><LoaderCircle className="play-entry-spin" aria-hidden="true" />Loading Foundry connections…</p>

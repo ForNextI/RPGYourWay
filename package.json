@@ -1,6 +1,6 @@
 {
   "name": "rpg-your-way",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "private": true,
   "packageManager": "pnpm@10.14.0",
   "scripts": {
@@ -27,5 +27,5 @@
     "postcss": "^8.5",
     "tailwindcss": "^4.3.3"
   },
-  "rpgywVersion": "2.7.0"
+  "rpgywVersion": "2.8.0"
 }

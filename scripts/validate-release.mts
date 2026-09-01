@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '2.7.0')
-assert.equal(pkg.rpgywVersion, '2.7.0')
-has(read('lib/version.ts'), "APP_VERSION = '2.7.0'", 'visible app version')
+assert.equal(pkg.version, '2.8.0')
+assert.equal(pkg.rpgywVersion, '2.8.0')
+has(read('lib/version.ts'), "APP_VERSION = '2.8.0'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -96,10 +96,17 @@ for (const file of [
   'components/foundry/FoundryConnectionsPanel.tsx',
   'components/foundry/FoundryPairingApproval.tsx',
   'components/foundry/FoundryPlayerLinkApproval.tsx',
+  'components/foundry/VttCombatHandoff.tsx',
   'lib/foundry/server.ts',
   'lib/foundry/usage-account.ts',
   'lib/foundry/aigm-turn.ts',
+  'lib/foundry/combat-handoff.ts',
   'app/api/integrations/foundry/aigm-turn/route.ts',
+  'app/api/integrations/foundry/campaigns/[campaignId]/status/route.ts',
+  'app/api/integrations/foundry/encounters/route.ts',
+  'app/api/integrations/foundry/encounters/next/route.ts',
+  'app/api/integrations/foundry/encounters/[encounterId]/route.ts',
+  'app/api/integrations/foundry/encounters/[encounterId]/result/route.ts',
   'app/api/integrations/foundry/pair/start/route.ts',
   'app/api/integrations/foundry/pair/status/route.ts',
   'app/api/integrations/foundry/pair/approve/route.ts',
@@ -116,6 +123,7 @@ for (const file of [
   'supabase/migrations/20260831000000_foundry_integrator_phase1.sql',
   'supabase/migrations/20260831010000_foundry_player_links.sql',
   'supabase/migrations/20260831133000_foundry_character_state.sql',
+  'supabase/migrations/20260901013000_foundry_combat_handoff.sql',
 ]) assert.ok(exists(file), `Missing ${file}`)
 
 // Dead private-beta access code is deliberately gone.
