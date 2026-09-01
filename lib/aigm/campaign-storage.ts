@@ -77,6 +77,39 @@ export interface InitiativeEntry {
   total: number
 }
 
+export interface VttSetupFeature {
+  label: string
+  kind: 'room' | 'wall' | 'door' | 'obstacle' | 'furniture' | 'terrain'
+  x_ft: number
+  y_ft: number
+  width_ft: number
+  height_ft: number
+}
+
+export interface VttSetupActorHint {
+  name: string
+  side: 'enemy' | 'ally'
+  visual_tags: string[]
+  x_ft: number
+  y_ft: number
+}
+
+export interface VttSetupPlan {
+  enabled: boolean
+  environment: string
+  width_ft: number
+  height_ft: number
+  player_start_area: {
+    x_ft: number
+    y_ft: number
+    width_ft: number
+    height_ft: number
+  }
+  features: VttSetupFeature[]
+  actors: VttSetupActorHint[]
+  asset_search_terms: string[]
+}
+
 export type DiceMode = 'purist' | 'cheat'
 export type VoiceGuidedDicePreference = 'player_rolls' | 'aigm_rolls' | 'ask_each_time'
 
@@ -122,6 +155,8 @@ export interface GameplayState {
   turn_count: number
   combat_active: boolean
   initiative: InitiativeEntry[]
+  /** Latest tactical board setup requested by the AIGM. */
+  vtt_setup: VttSetupPlan | null
   /** Manual roller behavior. Cheat mode is the default for existing saves. */
   dice_mode: DiceMode
   /** Private future-facing Game Master notes. Not shown in ordinary play. */
@@ -774,6 +809,76 @@ function normalizeMemoryIndex(value: unknown): CampaignMemoryEntry[] {
   return canonicalizeCampaignMemory(normalized)
 }
 
+function normalizeVttSetup(value: unknown): VttSetupPlan | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null
+  const source = value as Partial<VttSetupPlan>
+  if (source.enabled !== true) return null
+
+  const snap = (raw: unknown, fallback = 0, maximum = 300) => {
+    const number = typeof raw === 'number' && Number.isFinite(raw) ? raw : fallback
+    return Math.max(0, Math.min(maximum, Math.round(number / 5) * 5))
+  }
+  const width = Math.max(20, snap(source.width_ft, 60))
+  const height = Math.max(20, snap(source.height_ft, 40))
+  const start = source.player_start_area && typeof source.player_start_area === 'object'
+    ? source.player_start_area
+    : { x_ft: 5, y_ft: 5, width_ft: 15, height_ft: Math.max(10, height - 10) }
+
+  const features: VttSetupFeature[] = Array.isArray(source.features)
+    ? source.features.slice(0, 16).flatMap((entry) => {
+        if (!entry || typeof entry !== 'object') return []
+        const feature = entry as Partial<VttSetupFeature>
+        const kind = feature.kind === 'wall'
+          || feature.kind === 'door'
+          || feature.kind === 'obstacle'
+          || feature.kind === 'furniture'
+          || feature.kind === 'terrain'
+          ? feature.kind
+          : 'room'
+        return [{
+          label: safeShortText(feature.label, 80) || kind,
+          kind,
+          x_ft: snap(feature.x_ft, 0, width),
+          y_ft: snap(feature.y_ft, 0, height),
+          width_ft: Math.max(5, snap(feature.width_ft, 5, width)),
+          height_ft: Math.max(5, snap(feature.height_ft, 5, height)),
+        }]
+      })
+    : []
+
+  const actors = Array.isArray(source.actors)
+    ? source.actors.slice(0, 40).flatMap((entry) => {
+        if (!entry || typeof entry !== 'object') return []
+        const actor = entry as Partial<VttSetupActorHint>
+        const name = safeShortText(actor.name, 80)
+        if (!name) return []
+        return [{
+          name,
+          side: actor.side === 'ally' ? 'ally' as const : 'enemy' as const,
+          visual_tags: normalizedStringList(actor.visual_tags, 10, 80),
+          x_ft: snap(actor.x_ft, width - 10, width),
+          y_ft: snap(actor.y_ft, 5, height),
+        }]
+      })
+    : []
+
+  return {
+    enabled: true,
+    environment: safeShortText(source.environment, 120) || 'combat area',
+    width_ft: width,
+    height_ft: height,
+    player_start_area: {
+      x_ft: snap(start.x_ft, 5, width),
+      y_ft: snap(start.y_ft, 5, height),
+      width_ft: Math.max(5, snap(start.width_ft, 15, width)),
+      height_ft: Math.max(5, snap(start.height_ft, Math.max(10, height - 10), height)),
+    },
+    features,
+    actors,
+    asset_search_terms: normalizedStringList(source.asset_search_terms, 16, 80),
+  }
+}
+
 function normalizeRetcons(value: unknown): CampaignRetcon[] {
   if (!Array.isArray(value)) return []
   const normalized = value.flatMap((entry) => {
@@ -828,6 +933,7 @@ export function emptyGameplayState(): GameplayState {
     turn_count: 0,
     combat_active: false,
     initiative: [],
+    vtt_setup: null,
     dice_mode: 'cheat',
     dm_secrets: emptyDmSecretsState(),
     memory_index: [],
@@ -1082,6 +1188,7 @@ function normalizeGameplayState(value: Partial<GameplayState> | null | undefined
     scene: typeof value.scene === 'string' ? value.scene : '',
     turn_count: typeof value.turn_count === 'number' && Number.isFinite(value.turn_count) ? Math.max(0, Math.floor(value.turn_count)) : 0,
     combat_active: Boolean(value.combat_active),
+    vtt_setup: normalizeVttSetup(value.vtt_setup),
     dice_mode: value.dice_mode === 'purist' ? 'purist' : 'cheat',
     dm_secrets: normalizeDmSecrets(value.dm_secrets),
     memory_index: normalizeMemoryIndex(value.memory_index),

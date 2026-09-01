@@ -24,12 +24,16 @@ import {
   FoundryIntegrationError,
 } from '@/lib/foundry/server'
 import {
+  createFoundryCombatEncounter,
+} from '@/lib/foundry/combat-handoff'
+import {
   requireFoundryUsageAccount,
 } from '@/lib/foundry/usage-account'
 
 type FoundryAigmBody = {
   version?: unknown
   message?: unknown
+  tableSnapshot?: unknown
 }
 
 type FoundryGameplayReply = {
@@ -41,6 +45,7 @@ type FoundryGameplayReply = {
   campaign_summary?: string
   scene?: string
   combat_suggested?: boolean
+  vtt_setup?: SavedAdventureState['gameplay']['vtt_setup']
   npc_initiative?: Array<{
     name?: string
     modifier?: number
@@ -342,6 +347,7 @@ function gameplayBody(
   revision: number,
   foundryPlayerContext: Awaited<ReturnType<typeof playerContext>>,
   tableState: Awaited<ReturnType<typeof foundryTableState>>,
+  tableSnapshot: unknown,
 ) {
   const memory = state.gameplay.memory_index ?? []
   const transcript = state.gameplay.transcript ?? []
@@ -397,6 +403,7 @@ function gameplayBody(
     cloud_revision: revision,
     foundry_player_context: foundryPlayerContext,
     foundry_table_state: tableState,
+    foundry_vtt_snapshot: tableSnapshot,
   }
 }
 
@@ -560,6 +567,7 @@ function applyGameplayReply(
         : state.gameplay.scene,
       turn_count: nextTurn,
       combat_active: state.gameplay.combat_active || reply.combat_suggested === true,
+      vtt_setup: reply.vtt_setup?.enabled ? reply.vtt_setup : state.gameplay.vtt_setup,
       initiative: [
         ...state.gameplay.initiative,
         ...npcInitiative.filter(
@@ -578,6 +586,59 @@ function applyGameplayReply(
       pending_level_ups: [...ready],
     },
   } satisfies SavedAdventureState
+}
+
+function vttEncounterInput(
+  state: SavedAdventureState,
+  setup: NonNullable<SavedAdventureState['gameplay']['vtt_setup']>,
+  sceneSummary: string,
+) {
+  const initiativeById = new Map(
+    state.gameplay.initiative
+      .filter((entry) => entry.entity_type === 'player')
+      .map((entry) => [entry.character_id, entry.total] as const),
+  )
+
+  const party = state.characters.flatMap((character) => {
+    if (character.status !== 'ready' || !character.result) return []
+    const record = character.result.character
+    const live = character.liveState
+    const current = live?.current_hit_points ?? character.result.opening_state.current_hit_points
+    const maximum = live?.maximum_hit_points ?? record.hit_points.maximum
+    return [{
+      campaignCharacterId: character.id,
+      displayName: playNameFor(character),
+      currentHitPoints: current,
+      maximumHitPoints: maximum,
+      temporaryHitPoints: live?.temporary_hit_points ?? character.result.opening_state.temporary_hit_points,
+      armorClass: live?.armor_class ?? record.armor_class,
+      initiative: initiativeById.get(character.id) ?? null,
+      visualTags: [
+        record.species,
+        ...record.classes.map((entry) => entry.name),
+        ...record.armor_and_shields.slice(0, 3).map((entry) => entry.name),
+        ...record.attacks.slice(0, 3).map((entry) => entry.name),
+      ].filter(Boolean).slice(0, 12),
+    }]
+  })
+
+  const enemies = state.gameplay.initiative
+    .filter((entry) => entry.entity_type === 'npc')
+    .map((entry) => ({
+      combatantId: entry.character_id,
+      displayName: entry.name,
+      initiative: entry.total,
+    }))
+
+  return {
+    campaignId: state.adventure_id,
+    turnNumber: state.gameplay.turn_count,
+    sceneLabel: state.gameplay.scene || setup.environment || 'Combat',
+    sceneSummary,
+    vttSetup: setup,
+    party,
+    enemies,
+  }
 }
 
 function forwardedHeaders(request: Request, turnId: string) {
@@ -696,6 +757,7 @@ export async function runFoundryAigmTurn(request: Request) {
           revision,
           speaker,
           tableState,
+          rawBody.tableSnapshot,
         ),
       ),
     })
@@ -738,6 +800,26 @@ export async function runFoundryAigmTurn(request: Request) {
       saved.revision,
     )
 
+    let vttQueued = false
+    let vttWarning = ''
+    if (reply.vtt_setup?.enabled) {
+      try {
+        await createFoundryCombatEncounter(
+          user,
+          vttEncounterInput(
+            nextState,
+            reply.vtt_setup,
+            typeof reply.message === 'string' ? reply.message : nextState.gameplay.scene,
+          ),
+        )
+        vttQueued = true
+      } catch (queueError) {
+        vttWarning = queueError instanceof Error
+          ? queueError.message
+          : 'RPG Your Way could not queue the VTT setup.'
+      }
+    }
+
     let settlement = null
     if (billingPrepared) {
       settlement = await markAudioComplete(
@@ -774,6 +856,8 @@ export async function runFoundryAigmTurn(request: Request) {
         ? reply.scene
         : state.gameplay.scene,
       combatSuggested: reply.combat_suggested === true,
+      vttQueued,
+      vttWarning,
       billing: settlement,
     }
   } catch (error) {

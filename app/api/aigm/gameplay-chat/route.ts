@@ -184,6 +184,7 @@ interface GameplayChatBody {
     y?: number
     updated_at?: string
   }>
+  foundry_vtt_snapshot?: unknown
 }
 
 interface OpenAIResponsePayload {
@@ -237,6 +238,35 @@ interface CharacterRecordUpdateReply {
   player_corrections: string[]
 }
 
+interface VttSetupReply {
+  enabled: boolean
+  environment: string
+  width_ft: number
+  height_ft: number
+  player_start_area: {
+    x_ft: number
+    y_ft: number
+    width_ft: number
+    height_ft: number
+  }
+  features: Array<{
+    label: string
+    kind: 'room' | 'wall' | 'door' | 'obstacle' | 'furniture' | 'terrain'
+    x_ft: number
+    y_ft: number
+    width_ft: number
+    height_ft: number
+  }>
+  actors: Array<{
+    name: string
+    side: 'enemy' | 'ally'
+    visual_tags: string[]
+    x_ft: number
+    y_ft: number
+  }>
+  asset_search_terms: string[]
+}
+
 interface GameplayReply {
   dm_secrets: DmSecretsState
   memory_updates: CampaignMemoryEntry[]
@@ -247,6 +277,7 @@ interface GameplayReply {
   campaign_summary: string
   scene: string
   combat_suggested: boolean
+  vtt_setup: VttSetupReply
   npc_initiative: NpcInitiativeReply[]
   character_updates: CharacterStateUpdateReply[]
   character_record_updates: CharacterRecordUpdateReply[]
@@ -254,6 +285,63 @@ interface GameplayReply {
   level_up_resolved_character_ids: string[]
   content_mode_explanation_given: boolean
 }
+
+const VTT_SETUP_SCHEMA = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    enabled: { type: 'boolean' },
+    environment: { type: 'string' },
+    width_ft: { type: 'integer', minimum: 0, maximum: 300 },
+    height_ft: { type: 'integer', minimum: 0, maximum: 300 },
+    player_start_area: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        x_ft: { type: 'integer', minimum: 0, maximum: 300 },
+        y_ft: { type: 'integer', minimum: 0, maximum: 300 },
+        width_ft: { type: 'integer', minimum: 0, maximum: 300 },
+        height_ft: { type: 'integer', minimum: 0, maximum: 300 },
+      },
+      required: ['x_ft', 'y_ft', 'width_ft', 'height_ft'],
+    },
+    features: {
+      type: 'array',
+      maxItems: 16,
+      items: {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          label: { type: 'string' },
+          kind: { type: 'string', enum: ['room', 'wall', 'door', 'obstacle', 'furniture', 'terrain'] },
+          x_ft: { type: 'integer', minimum: 0, maximum: 300 },
+          y_ft: { type: 'integer', minimum: 0, maximum: 300 },
+          width_ft: { type: 'integer', minimum: 0, maximum: 300 },
+          height_ft: { type: 'integer', minimum: 0, maximum: 300 },
+        },
+        required: ['label', 'kind', 'x_ft', 'y_ft', 'width_ft', 'height_ft'],
+      },
+    },
+    actors: {
+      type: 'array',
+      maxItems: 40,
+      items: {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          name: { type: 'string' },
+          side: { type: 'string', enum: ['enemy', 'ally'] },
+          visual_tags: { type: 'array', maxItems: 10, items: { type: 'string' } },
+          x_ft: { type: 'integer', minimum: 0, maximum: 300 },
+          y_ft: { type: 'integer', minimum: 0, maximum: 300 },
+        },
+        required: ['name', 'side', 'visual_tags', 'x_ft', 'y_ft'],
+      },
+    },
+    asset_search_terms: { type: 'array', maxItems: 16, items: { type: 'string' } },
+  },
+  required: ['enabled', 'environment', 'width_ft', 'height_ft', 'player_start_area', 'features', 'actors', 'asset_search_terms'],
+} as const
 
 const NPC_INITIATIVE_SCHEMA = {
   type: 'array',
@@ -458,6 +546,7 @@ const RESPONSE_SCHEMA = {
     campaign_summary: { type: 'string' },
     scene: { type: 'string' },
     combat_suggested: { type: 'boolean' },
+    vtt_setup: VTT_SETUP_SCHEMA,
     npc_initiative: NPC_INITIATIVE_SCHEMA,
     character_updates: CHARACTER_UPDATE_SCHEMA,
     character_record_updates: CHARACTER_RECORD_UPDATE_SCHEMA,
@@ -465,7 +554,7 @@ const RESPONSE_SCHEMA = {
     level_up_resolved_character_ids: { type: 'array', items: { type: 'string' } },
     content_mode_explanation_given: { type: 'boolean' },
   },
-  required: ['message', 'game_master_name', 'dm_secrets', 'memory_updates', 'retcon_updates', 'red_herring_question', 'campaign_summary', 'scene', 'combat_suggested', 'npc_initiative', 'character_updates', 'character_record_updates', 'level_up_ready_character_ids', 'level_up_resolved_character_ids', 'content_mode_explanation_given'],
+  required: ['message', 'game_master_name', 'dm_secrets', 'memory_updates', 'retcon_updates', 'red_herring_question', 'campaign_summary', 'scene', 'combat_suggested', 'vtt_setup', 'npc_initiative', 'character_updates', 'character_record_updates', 'level_up_ready_character_ids', 'level_up_resolved_character_ids', 'content_mode_explanation_given'],
 } as const
 
 function normalizedOwnerCommand(value: string) {
@@ -535,6 +624,159 @@ function safeCount(value: unknown, fallback = 0, maximum = 9999) {
   return typeof value === 'number' && Number.isFinite(value)
     ? Math.min(maximum, Math.max(0, Math.floor(value)))
     : fallback
+}
+
+function safeVttSetup(value: unknown): VttSetupReply {
+  const disabled: VttSetupReply = {
+    enabled: false,
+    environment: '',
+    width_ft: 0,
+    height_ft: 0,
+    player_start_area: { x_ft: 0, y_ft: 0, width_ft: 0, height_ft: 0 },
+    features: [],
+    actors: [],
+    asset_search_terms: [],
+  }
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return disabled
+  const source = value as Partial<VttSetupReply>
+  if (source.enabled !== true) return disabled
+
+  const snap = (raw: unknown, fallback: number, maximum: number) => {
+    const number = typeof raw === 'number' && Number.isFinite(raw) ? raw : fallback
+    return Math.max(0, Math.min(maximum, Math.round(number / 5) * 5))
+  }
+  const width = Math.max(20, snap(source.width_ft, 60, 300))
+  const height = Math.max(20, snap(source.height_ft, 40, 300))
+  const start = source.player_start_area && typeof source.player_start_area === 'object'
+    ? source.player_start_area
+    : { x_ft: 5, y_ft: 5, width_ft: 15, height_ft: Math.max(10, height - 10) }
+
+  return {
+    enabled: true,
+    environment: clipped(source.environment, 120).trim() || 'combat area',
+    width_ft: width,
+    height_ft: height,
+    player_start_area: {
+      x_ft: snap(start.x_ft, 5, width),
+      y_ft: snap(start.y_ft, 5, height),
+      width_ft: Math.max(5, snap(start.width_ft, 15, width)),
+      height_ft: Math.max(5, snap(start.height_ft, Math.max(10, height - 10), height)),
+    },
+    features: Array.isArray(source.features)
+      ? source.features.slice(0, 16).flatMap((entry) => {
+          if (!entry || typeof entry !== 'object') return []
+          const feature = entry as VttSetupReply['features'][number]
+          const kind: VttSetupReply['features'][number]['kind'] = feature.kind === 'wall'
+            || feature.kind === 'door'
+            || feature.kind === 'obstacle'
+            || feature.kind === 'furniture'
+            || feature.kind === 'terrain'
+            ? feature.kind
+            : 'room'
+          return [{
+            label: clipped(feature.label, 80).trim() || kind,
+            kind,
+            x_ft: snap(feature.x_ft, 0, width),
+            y_ft: snap(feature.y_ft, 0, height),
+            width_ft: Math.max(5, snap(feature.width_ft, 5, width)),
+            height_ft: Math.max(5, snap(feature.height_ft, 5, height)),
+          }]
+        })
+      : [],
+    actors: Array.isArray(source.actors)
+      ? source.actors.slice(0, 40).flatMap((entry) => {
+          if (!entry || typeof entry !== 'object') return []
+          const actor = entry as VttSetupReply['actors'][number]
+          const name = clipped(actor.name, 80).trim()
+          if (!name) return []
+          return [{
+            name,
+            side: actor.side === 'ally' ? 'ally' as const : 'enemy' as const,
+            visual_tags: clippedList(actor.visual_tags, 10, 80),
+            x_ft: snap(actor.x_ft, width - 10, width),
+            y_ft: snap(actor.y_ft, 5, height),
+          }]
+        })
+      : [],
+    asset_search_terms: clippedList(source.asset_search_terms, 16, 80),
+  }
+}
+
+function safeFoundryVttSnapshot(value: unknown) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null
+  const source = value as Record<string, unknown>
+  const rawScene = source.scene
+  if (!rawScene || typeof rawScene !== 'object' || Array.isArray(rawScene)) return null
+  const scene = rawScene as Record<string, unknown>
+
+  const number = (raw: unknown, fallback = 0, maximum = 100_000) => (
+    typeof raw === 'number' && Number.isFinite(raw)
+      ? Math.max(0, Math.min(maximum, raw))
+      : fallback
+  )
+  const tokens = Array.isArray(source.tokens)
+    ? source.tokens.slice(0, 60).flatMap((entry) => {
+        if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return []
+        const token = entry as Record<string, unknown>
+        const id = clipped(token.id, 180)
+        if (!id) return []
+        return [{
+          id,
+          name: clipped(token.name, 100),
+          campaign_character_id: clipped(token.campaignCharacterId, 180),
+          combatant_id: clipped(token.combatantId, 180),
+          x: number(token.x),
+          y: number(token.y),
+          width: number(token.width, 1, 20),
+          height: number(token.height, 1, 20),
+          disposition: typeof token.disposition === 'number' && Number.isFinite(token.disposition)
+            ? token.disposition
+            : 0,
+        }]
+      })
+    : []
+
+  const rawCombat = source.combat
+  const combat = rawCombat && typeof rawCombat === 'object' && !Array.isArray(rawCombat)
+    ? rawCombat as Record<string, unknown>
+    : null
+  const combatants = Array.isArray(combat?.combatants)
+    ? (combat!.combatants as unknown[]).slice(0, 60).flatMap((entry) => {
+        if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return []
+        const row = entry as Record<string, unknown>
+        return [{
+          name: clipped(row.name, 100),
+          token_id: clipped(row.tokenId, 180),
+          initiative: typeof row.initiative === 'number' && Number.isFinite(row.initiative)
+            ? row.initiative
+            : null,
+          defeated: row.defeated === true,
+        }]
+      })
+    : []
+
+  return {
+    scene: {
+      id: clipped(scene.id, 180),
+      name: clipped(scene.name, 160),
+      width: number(scene.width),
+      height: number(scene.height),
+      grid_size: number(scene.gridSize, 100, 500),
+      grid_distance: number(scene.gridDistance, 5, 100),
+      grid_units: clipped(scene.gridUnits, 30) || 'ft',
+    },
+    combat: combat
+      ? {
+          started: combat.started === true,
+          round: safeCount(combat.round, 0, 999),
+          turn: typeof combat.turn === 'number' && Number.isFinite(combat.turn)
+            ? Math.max(0, Math.floor(combat.turn))
+            : null,
+          combatants,
+        }
+      : null,
+    tokens,
+  }
 }
 
 function safeLiveState(value: PartyMember['live_state']) {
@@ -925,6 +1167,21 @@ function outOfScopeReply(summary: string, scene: string, dmSecrets: DmSecretsSta
     campaign_summary: summary,
     scene,
     combat_suggested: false,
+    vtt_setup: {
+      enabled: false,
+      environment: '',
+      width_ft: 0,
+      height_ft: 0,
+      player_start_area: {
+        x_ft: 0,
+        y_ft: 0,
+        width_ft: 0,
+        height_ft: 0,
+      },
+      features: [],
+      actors: [],
+      asset_search_terms: [],
+    },
     npc_initiative: [],
     character_updates: [],
     character_record_updates: [],
@@ -945,6 +1202,21 @@ function gameRejectionReply(summary: string, scene: string, dmSecrets: DmSecrets
     campaign_summary: summary,
     scene,
     combat_suggested: false,
+    vtt_setup: {
+      enabled: false,
+      environment: '',
+      width_ft: 0,
+      height_ft: 0,
+      player_start_area: {
+        x_ft: 0,
+        y_ft: 0,
+        width_ft: 0,
+        height_ft: 0,
+      },
+      features: [],
+      actors: [],
+      asset_search_terms: [],
+    },
     npc_initiative: [],
     character_updates: [],
     character_record_updates: [],
@@ -1195,6 +1467,7 @@ export async function POST(request: Request) {
           }]
         })
       : [],
+    foundry_vtt_snapshot: safeFoundryVttSnapshot(body.foundry_vtt_snapshot),
     pending_level_up_character_ids: clippedList(body.pending_level_up_character_ids, 6, 80).filter((id) => validCharacterIds.has(id)),
     npc_name_candidates: npcNameCandidates,
     place_name_candidates: placeNameCandidates,
@@ -1212,7 +1485,15 @@ Party leadership is explicit in context.party: the current active leader, if the
 FOUNDRY MULTIPLAYER CONTROL:
 - When context.foundry_player_context is present, it identifies the human who submitted this Foundry turn and the RPG Your Way characters currently assigned to that human. Use those assignments when interpreting first-person statements such as "I move" or "my character" when the intended character is otherwise clear.
 - Foundry role names are technical permissions only. A human using Foundry's Game Master role may still be an ordinary RPG Your Way player. Never treat that human as the campaign Game Master or as controlling every player character merely because Foundry gives the account broad permissions.
-- context.foundry_table_state contains the latest structured positions received for mapped RPG Your Way player characters. Treat those positions as authoritative tabletop state when relevant. The x/y values are Foundry coordinates, not narration-ready distances. Never quote raw coordinates to players or infer feet-per-square when grid scale was not supplied.
+- context.foundry_table_state contains the latest structured positions received for mapped RPG Your Way player characters. Treat those positions as authoritative tabletop state when relevant.
+- context.foundry_vtt_snapshot, when present, is the active RPG Your Way tactical scene. Its scene width/height and token x/y values are pixels; convert them to game distance using grid_size and grid_distance. Never quote raw pixel coordinates to players. Its Combat and token positions are authoritative tactical truth.
+- If context.foundry_vtt_snapshot.combat.started is false, this is pre-combat setup. Players may move their own characters into sensible starting positions without spending movement, actions, reactions, or a combat turn. You control enemy and NPC starting positions.
+- Always return vtt_setup. If no Foundry snapshot is present and combat is beginning or active, set vtt_setup.enabled true and provide the initial board plan. If a Foundry snapshot is present, set enabled true only when combat has not started and the player explicitly asks you to prepare, rebuild, resize, correct, or reconfigure the RPG Your Way-managed tactical scene. Otherwise set enabled false with empty strings, zero dimensions/start-area values, and empty arrays.
+- vtt_setup is only a tactical-board plan. When enabled, choose the smallest believable playable scene dimensions in 5-foot increments that fit the established fiction. Use player_start_area to say where PCs may set up; do not choose the voluntary final positions of player characters.
+- Use vtt_setup.features for a small number of rectilinear room, wall, door, obstacle, furniture, or terrain outlines aligned to the 5-foot grid. Use vtt_setup.actors only for enemies or allied NPCs you control. Give each actor short visual_tags and a starting x_ft/y_ft measured from the scene's top-left.
+- asset_search_terms are short generic visual concepts Foundry may use locally to look for eligible maps or token art. Never name or assume a specific commercial module, compendium, or asset pack.
+- When vtt_setup is enabled, do not say that you categorically cannot prepare the RPG Your Way-managed Foundry scene. The Integrator can execute this limited setup plan. Do not claim control over unrelated Foundry worlds, arbitrary user content, advanced lighting/walls/fog, or unsupported automation.
+- Once Foundry combat has started, do not emit a structural vtt_setup rebuild in this version. Reason from the supplied tactical snapshot and continue the fight.
 
 Use context.built_in_rules_reference as the first rules authority when it is present, then the structured character record and player-supplied rules information. Use context.built_in_setting_reference as the primary general-canon reference for context.selected_setting when it is present. Explicit player choices and established campaign facts override the setting pack for this campaign. Respect the pack's era, edition, timeline, and canon-boundary notes. The rules and setting references contain only the excerpts retrieved for this turn, so do not claim that an omitted rule, place, faction, or historical fact does not exist. When the setting reference marks a conflict or uncertainty that materially affects play, qualify the answer or ask the player instead of inventing a reconciliation. Do not claim access to proprietary sourcebooks, reconstruct restricted material, or pretend that the site grants rules access. You are not a general-purpose assistant and must briefly redirect unrelated requests back to the game.
 
@@ -1605,6 +1886,7 @@ This imported campaign was saved in Teen mode even though the onboarding page sh
       campaign_summary: clipped(naturalizeRawHumanAppearanceLabels(stripLoreSourceDecorations(parsed.campaign_summary)), 8000),
       scene: clipped(naturalizeRawHumanAppearanceLabels(stripLoreSourceDecorations(parsed.scene)), 700),
       combat_suggested: Boolean(parsed.combat_suggested),
+      vtt_setup: safeVttSetup(parsed.vtt_setup),
       npc_initiative: npcInitiative,
       character_updates: characterUpdates,
       character_record_updates: characterRecordUpdates,

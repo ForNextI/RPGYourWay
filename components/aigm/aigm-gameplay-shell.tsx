@@ -77,6 +77,7 @@ import {
   type InitiativeEntry,
   type SavedAdventureState,
   type StoredPartyCharacter,
+  type VttSetupPlan,
   type VoiceGuidedPlaySettings,
 } from '@/lib/aigm/campaign-storage'
 import { campaignMigrationSample, DIRECT_RECENT_MESSAGE_COUNT, isContinuityAuditRequest, searchCampaignHistory, shouldCheckCampaignNotes } from '@/lib/aigm/campaign-memory'
@@ -112,6 +113,7 @@ interface GameplayApiResponse {
   campaign_summary?: string
   scene?: string
   combat_suggested?: boolean
+  vtt_setup?: VttSetupPlan
   npc_initiative?: Array<{
     name: string
     modifier: number
@@ -2188,6 +2190,7 @@ export function AigmGameplayShell() {
         turn_count: activeGameplay.turn_count + (mode === 'turn' && countTurn ? 1 : 0),
         combat_active: activeGameplay.combat_active || mergedInitiative.length > 0,
         initiative: mergedInitiative,
+        vtt_setup: payload.vtt_setup?.enabled ? payload.vtt_setup : activeGameplay.vtt_setup,
         dm_secrets: payload.dm_secrets ?? activeGameplay.dm_secrets,
         memory_index: mergeCampaignMemory(activeGameplay.memory_index, stampCampaignMemoryUpdates(payload.memory_updates ?? [], exchangeTurn)),
         retcons: mergeCampaignRetcons(activeGameplay.retcons, payload.retcon_updates ?? []),

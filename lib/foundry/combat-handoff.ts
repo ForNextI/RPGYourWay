@@ -122,6 +122,76 @@ function normalizeParty(value: unknown) {
   })
 }
 
+function normalizeVttSetup(value: unknown) {
+  if (!plainObject(value) || value.enabled !== true) return null
+
+  const snap = (raw: unknown, fallback: number, maximum: number) => {
+    const number = finiteNumber(raw, fallback) ?? fallback
+    return Math.max(0, Math.min(maximum, Math.round(number / 5) * 5))
+  }
+  const width = Math.max(20, snap(value.width_ft, 60, 300))
+  const height = Math.max(20, snap(value.height_ft, 40, 300))
+  const start = plainObject(value.player_start_area) ? value.player_start_area : {}
+
+  return {
+    enabled: true,
+    environment: cleanText(value.environment, 'VTT environment', 120, false) || 'combat area',
+    width_ft: width,
+    height_ft: height,
+    player_start_area: {
+      x_ft: snap(start.x_ft, 5, width),
+      y_ft: snap(start.y_ft, 5, height),
+      width_ft: Math.max(5, snap(start.width_ft, 15, width)),
+      height_ft: Math.max(5, snap(start.height_ft, Math.max(10, height - 10), height)),
+    },
+    features: Array.isArray(value.features)
+      ? value.features.slice(0, 16).flatMap((entry) => {
+          if (!plainObject(entry)) return []
+          const kind = entry.kind === 'wall'
+            || entry.kind === 'door'
+            || entry.kind === 'obstacle'
+            || entry.kind === 'furniture'
+            || entry.kind === 'terrain'
+            ? entry.kind
+            : 'room'
+          return [{
+            label: cleanText(entry.label, 'VTT feature label', 80, false) || kind,
+            kind,
+            x_ft: snap(entry.x_ft, 0, width),
+            y_ft: snap(entry.y_ft, 0, height),
+            width_ft: Math.max(5, snap(entry.width_ft, 5, width)),
+            height_ft: Math.max(5, snap(entry.height_ft, 5, height)),
+          }]
+        })
+      : [],
+    actors: Array.isArray(value.actors)
+      ? value.actors.slice(0, 40).flatMap((entry) => {
+          if (!plainObject(entry)) return []
+          const name = cleanText(entry.name, 'VTT actor name', 80, false)
+          if (!name) return []
+          return [{
+            name,
+            side: entry.side === 'ally' ? 'ally' : 'enemy',
+            visual_tags: Array.isArray(entry.visual_tags)
+              ? entry.visual_tags.filter((tag): tag is string => typeof tag === 'string')
+                  .map((tag) => tag.replace(/\s+/g, ' ').trim().slice(0, 80))
+                  .filter(Boolean)
+                  .slice(0, 10)
+              : [],
+            x_ft: snap(entry.x_ft, width - 10, width),
+            y_ft: snap(entry.y_ft, 5, height),
+          }]
+        })
+      : [],
+    asset_search_terms: Array.isArray(value.asset_search_terms)
+      ? value.asset_search_terms.filter((term): term is string => typeof term === 'string')
+          .map((term) => term.replace(/\s+/g, ' ').trim().slice(0, 80))
+          .filter(Boolean)
+          .slice(0, 16)
+      : [],
+  }
+}
+
 function normalizeEnemies(value: unknown) {
   if (!Array.isArray(value) || value.length > MAX_ENEMIES) {
     throw new FoundryIntegrationError('The VTT enemy list is not valid.', 400, 'invalid_foundry_encounter')
@@ -208,6 +278,7 @@ export async function createFoundryCombatEncounter(user: User, input: unknown) {
   const enemies = normalizeEnemies(input.enemies)
   const sceneLabel = cleanText(input.sceneLabel, 'Scene label', 160, false) || 'Combat'
   const sceneSummary = cleanText(input.sceneSummary, 'Scene summary', 1200, false)
+  const vttSetup = normalizeVttSetup(input.vttSetup)
 
   const payload = {
     version: 1,
@@ -218,6 +289,7 @@ export async function createFoundryCombatEncounter(user: User, input: unknown) {
       label: sceneLabel,
       summary: sceneSummary,
     },
+    vttSetup,
     party,
     enemies,
   }

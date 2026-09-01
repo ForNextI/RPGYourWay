@@ -55,20 +55,20 @@ function launchNamedWindow(url: string, target: string) {
   try { opened?.focus() } catch { /* browser focus is best-effort */ }
 }
 
-async function focusOrOpenFoundry(url: string) {
+async function focusOrOpenFoundry(url: string, protectActiveSession = false) {
   let targetOrigin = ''
   try {
     targetOrigin = new URL(url).origin
   } catch {
-    launchNamedWindow(url, FOUNDRY_WINDOW_NAME)
-    return
+    if (!protectActiveSession) launchNamedWindow(url, FOUNDRY_WINDOW_NAME)
+    return !protectActiveSession
   }
 
   const candidate = window.open('', FOUNDRY_WINDOW_NAME)
-  if (!candidate) {
-    launchNamedWindow(url, FOUNDRY_WINDOW_NAME)
-    return
-  }
+  if (!candidate) return false
+
+  let disposableBlank = false
+  try { disposableBlank = candidate.location.href === 'about:blank' } catch { /* cross-origin live window */ }
 
   const requestId = crypto.randomUUID()
   let acknowledged = false
@@ -94,22 +94,30 @@ async function focusOrOpenFoundry(url: string) {
       requestId,
     }, '*')
   } catch {
-    // If the ping cannot be delivered, navigation below is the fallback.
+    // The safe fallback below decides whether navigation is allowed.
   }
 
   await new Promise((resolve) => window.setTimeout(resolve, 300))
   window.removeEventListener('message', receivePong)
+
+  if (!acknowledged && protectActiveSession) {
+    if (disposableBlank) {
+      try { candidate.close() } catch { /* best-effort cleanup */ }
+    }
+    return false
+  }
 
   if (!acknowledged) {
     try {
       candidate.location.href = url
     } catch {
       launchNamedWindow(url, FOUNDRY_WINDOW_NAME)
-      return
+      return true
     }
   }
 
   try { candidate.focus() } catch { /* browser focus is best-effort */ }
+  return true
 }
 
 export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureState | null }) {
@@ -271,7 +279,15 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
   function goToVtt() {
     const url = foundryStatus?.launchUrl
     if (!url) return
-    void focusOrOpenFoundry(url)
+
+    void focusOrOpenFoundry(url, foundryStatus?.controllerActive === true)
+      .then((focused) => {
+        if (!focused && foundryStatus?.controllerActive) {
+          setHandoffError(
+            'Foundry is already active, but this browser will not let RPG Your Way focus that existing tab safely. Switch to the open Foundry tab instead; RPG Your Way will not reload it.',
+          )
+        }
+      })
   }
 
   function openSetup() {
@@ -327,6 +343,7 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
           turnNumber: gameplay.turn_count,
           sceneLabel: gameplay.scene || 'Combat',
           sceneSummary: latestAigmNarration,
+          vttSetup: gameplay.vtt_setup,
           party,
           enemies,
         }),
