@@ -7,7 +7,9 @@ import {
   initialLiveState,
   normalizeLiveState,
   playNameFor,
+  type CharacterLiveState,
   type SavedAdventureState,
+  type StoredPartyCharacter,
 } from '@/lib/aigm/campaign-storage'
 
 type FoundryStatus = {
@@ -42,6 +44,72 @@ function characterVisualTags(state: SavedAdventureState, characterId: string) {
     .map((entry) => String(entry || '').replace(/\s+/g, ' ').trim())
     .filter(Boolean)
     .slice(0, 12)
+}
+
+const FOUNDRY_MODERN_RULESET_LABEL = 'D&D 5.5e (2024 rules)'
+const FOUNDRY_MODERN_RULESET_ID = 'dnd-5.5e-srd-5.2.1'
+
+function foundryModernMechanics(character: StoredPartyCharacter, live: CharacterLiveState) {
+  const record = character.result?.character
+  if (!record) return null
+
+  return {
+    schema: 1,
+    totalLevel: record.total_level,
+    classes: (record.classes ?? []).map((entry) => ({
+      name: entry.name,
+      level: entry.level,
+      subclass: entry.subclass,
+    })),
+    species: record.species,
+    background: record.background,
+    speed: record.speed,
+    initiativeModifier: record.initiative_modifier,
+    proficiencyBonus: record.proficiency_bonus,
+    abilityScores: record.ability_scores,
+    savingThrows: record.saving_throws ?? [],
+    skills: record.skills ?? [],
+    attacks: (record.attacks ?? []).map((entry) => ({
+      name: entry.name,
+      attackBonus: entry.attack_bonus,
+      damage: entry.damage,
+      properties: entry.properties ?? [],
+    })),
+    armorAndShields: (record.armor_and_shields ?? []).map((entry) => ({
+      name: entry.name,
+      quantity: entry.quantity,
+      sheetStatus: entry.sheet_status,
+    })),
+    equipment: (record.equipment_highlights ?? []).map((entry) => ({
+      name: entry.name,
+      quantity: entry.quantity,
+      sheetStatus: entry.sheet_status,
+    })),
+    currency: live.currency,
+    resources: live.resources,
+    conditions: live.conditions,
+    concentration: live.concentration,
+    deathSaves: live.death_saves,
+    spellcasting: {
+      ability: record.spellcasting?.ability ?? '',
+      saveDc: record.spellcasting?.save_dc ?? '',
+      attackBonus: record.spellcasting?.attack_bonus ?? '',
+      slots: live.spell_slots,
+      cantrips: record.spellcasting?.cantrips ?? [],
+      preparedOrKnownSpells: record.spellcasting?.prepared_or_known_spells ?? [],
+      spellbookOrOtherSpells: record.spellcasting?.spellbook_or_other_spells ?? [],
+    },
+    features: (record.features ?? []).map((entry) => ({
+      id: entry.id,
+      name: entry.name,
+      detail: entry.detail,
+      category: entry.category,
+      className: entry.class_name,
+      subclassName: entry.subclass_name,
+      levelGained: entry.level_gained,
+      source: entry.source,
+    })),
+  }
 }
 
 const FOUNDRY_WINDOW_NAME = 'rpgyw-foundry-vtt'
@@ -298,6 +366,11 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
   async function prepareVttEncounter() {
     if (!partyState || !gameplay || !foundryStatus?.connected) return
 
+    if (partyState.settings.ruleset !== FOUNDRY_MODERN_RULESET_LABEL) {
+      setHandoffError('Foundry full-character integration currently supports D&D 5.5e (2024 rules) only.')
+      return
+    }
+
     const initiativeByCharacter = new Map(
       playerInitiative.map((entry) => [entry.character_id, entry.total]),
     )
@@ -317,6 +390,9 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
         initiative: initiativeByCharacter.get(character.id) ?? null,
         visualTags: characterVisualTags(partyState, character.id),
         preferredTokenAsset: character.vttTokenAsset || null,
+        rulesetId: FOUNDRY_MODERN_RULESET_ID,
+        foundryRulesVersion: '2024',
+        mechanics: foundryModernMechanics(character, live),
       }]
     })
 

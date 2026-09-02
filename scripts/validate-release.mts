@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '2.11.3')
-assert.equal(pkg.rpgywVersion, '2.11.3')
-has(read('lib/version.ts'), "APP_VERSION = '2.11.3'", 'visible app version')
+assert.equal(pkg.version, '2.12.0')
+assert.equal(pkg.rpgywVersion, '2.12.0')
+has(read('lib/version.ts'), "APP_VERSION = '2.12.0'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -143,6 +143,14 @@ for (const slotEnv of [
   'NEXT_PUBLIC_ADSENSE_SLOT_ACCESSIBILITY=',
 ]) has(env, slotEnv)
 lacks(env, 'WARDENS_GOD_MODE_PHRASE')
+const foundryCombatHandoff = read('lib/foundry/combat-handoff.ts')
+const foundryCombatUi = read('components/foundry/VttCombatHandoff.tsx')
+has(foundryCombatUi, "FOUNDRY_MODERN_RULESET_ID = 'dnd-5.5e-srd-5.2.1'", 'Foundry Modern ruleset ID')
+has(foundryCombatUi, "foundryRulesVersion: '2024'", 'Foundry 2024 rules marker')
+has(foundryCombatUi, 'mechanics: foundryModernMechanics(character, live)', 'rich Foundry character handoff')
+has(foundryCombatHandoff, 'function normalizeModernMechanics(value: unknown)', 'Foundry mechanics normalizer')
+has(foundryCombatHandoff, "rulesetId: entry.rulesetId === 'dnd-5.5e-srd-5.2.1'", 'Foundry Modern-only server guard')
+has(foundryCombatHandoff, 'version: 2,', 'Foundry encounter payload v2')
 const gameplayRoute = read('app/api/aigm/gameplay-chat/route.ts')
 has(gameplayRoute, 'dont_worry_about_npcs: source.dont_worry_about_npcs === true', 'AIGM NPC preference defaults to material NPCs')
 has(gameplayRoute, 'which is the normal default, keep bystanders and ordinary NPCs materially present', 'AIGM NPC consequence semantics')

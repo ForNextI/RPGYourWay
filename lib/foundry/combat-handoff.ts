@@ -89,6 +89,146 @@ async function activeConnection(campaignId: string) {
   return data
 }
 
+function cleanStringList(value: unknown, maximumItems = 80, maximumLength = 160) {
+  return Array.isArray(value)
+    ? value
+        .filter((entry): entry is string => typeof entry === 'string')
+        .map((entry) => entry.replace(/\s+/g, ' ').trim().slice(0, maximumLength))
+        .filter(Boolean)
+        .slice(0, maximumItems)
+    : []
+}
+
+function cleanRecordList(value: unknown, maximumItems: number, mapper: (entry: JsonObject) => JsonObject | null) {
+  if (!Array.isArray(value)) return []
+  return value.slice(0, maximumItems).flatMap((entry) => {
+    if (!plainObject(entry)) return []
+    const mapped = mapper(entry)
+    return mapped ? [mapped] : []
+  })
+}
+
+function normalizeModernMechanics(value: unknown) {
+  if (!plainObject(value) || value.schema !== 1) {
+    throw new FoundryIntegrationError(
+      'The D&D 5.5e character mechanics payload is not valid.',
+      400,
+      'invalid_foundry_character_mechanics',
+    )
+  }
+
+  const abilities = plainObject(value.abilityScores) ? value.abilityScores : {}
+  const currency = plainObject(value.currency) ? value.currency : {}
+  const deathSaves = plainObject(value.deathSaves) ? value.deathSaves : {}
+  const spellcasting = plainObject(value.spellcasting) ? value.spellcasting : {}
+
+  return {
+    schema: 1,
+    totalLevel: Math.max(1, Math.min(20, safeInteger(value.totalLevel, 1))),
+    classes: cleanRecordList(value.classes, 8, (entry) => {
+      const name = cleanText(entry.name, 'Class name', 80, false)
+      if (!name) return null
+      return {
+        name,
+        level: Math.max(1, Math.min(20, safeInteger(entry.level, 1))),
+        subclass: cleanText(entry.subclass, 'Subclass name', 120, false),
+      }
+    }),
+    species: cleanText(value.species, 'Species', 120, false),
+    background: cleanText(value.background, 'Background', 120, false),
+    speed: cleanText(value.speed, 'Speed', 80, false),
+    initiativeModifier: safeInteger(value.initiativeModifier, 0),
+    proficiencyBonus: cleanText(value.proficiencyBonus, 'Proficiency bonus', 40, false),
+    abilityScores: {
+      strength: Math.max(1, Math.min(30, safeInteger(abilities.strength, 10))),
+      dexterity: Math.max(1, Math.min(30, safeInteger(abilities.dexterity, 10))),
+      constitution: Math.max(1, Math.min(30, safeInteger(abilities.constitution, 10))),
+      intelligence: Math.max(1, Math.min(30, safeInteger(abilities.intelligence, 10))),
+      wisdom: Math.max(1, Math.min(30, safeInteger(abilities.wisdom, 10))),
+      charisma: Math.max(1, Math.min(30, safeInteger(abilities.charisma, 10))),
+    },
+    savingThrows: cleanStringList(value.savingThrows, 12, 100),
+    skills: cleanStringList(value.skills, 40, 120),
+    attacks: cleanRecordList(value.attacks, 40, (entry) => {
+      const name = cleanText(entry.name, 'Attack name', 120, false)
+      if (!name) return null
+      return {
+        name,
+        attackBonus: cleanText(entry.attackBonus, 'Attack bonus', 80, false),
+        damage: cleanText(entry.damage, 'Attack damage', 160, false),
+        properties: cleanStringList(entry.properties, 20, 80),
+      }
+    }),
+    armorAndShields: cleanRecordList(value.armorAndShields, 40, (entry) => {
+      const name = cleanText(entry.name, 'Armor name', 120, false)
+      if (!name) return null
+      return {
+        name,
+        quantity: cleanText(entry.quantity, 'Armor quantity', 40, false),
+        sheetStatus: cleanText(entry.sheetStatus, 'Armor status', 100, false),
+      }
+    }),
+    equipment: cleanRecordList(value.equipment, 80, (entry) => {
+      const name = cleanText(entry.name, 'Equipment name', 120, false)
+      if (!name) return null
+      return {
+        name,
+        quantity: cleanText(entry.quantity, 'Equipment quantity', 40, false),
+        sheetStatus: cleanText(entry.sheetStatus, 'Equipment status', 100, false),
+      }
+    }),
+    currency: {
+      cp: Math.max(0, safeInteger(currency.cp, 0)),
+      sp: Math.max(0, safeInteger(currency.sp, 0)),
+      ep: Math.max(0, safeInteger(currency.ep, 0)),
+      gp: Math.max(0, safeInteger(currency.gp, 0)),
+      pp: Math.max(0, safeInteger(currency.pp, 0)),
+    },
+    resources: cleanRecordList(value.resources, 30, (entry) => {
+      const name = cleanText(entry.name, 'Resource name', 120, false)
+      if (!name) return null
+      return {
+        name,
+        current: cleanText(entry.current, 'Resource current value', 80, false),
+        maximum: cleanText(entry.maximum, 'Resource maximum value', 80, false),
+      }
+    }),
+    conditions: cleanStringList(value.conditions, 30, 100),
+    concentration: cleanText(value.concentration, 'Concentration', 160, false),
+    deathSaves: {
+      successes: Math.max(0, Math.min(3, safeInteger(deathSaves.successes, 0))),
+      failures: Math.max(0, Math.min(3, safeInteger(deathSaves.failures, 0))),
+    },
+    spellcasting: {
+      ability: cleanText(spellcasting.ability, 'Spellcasting ability', 40, false),
+      saveDc: cleanText(spellcasting.saveDc, 'Spell save DC', 40, false),
+      attackBonus: cleanText(spellcasting.attackBonus, 'Spell attack bonus', 40, false),
+      slots: cleanRecordList(spellcasting.slots, 12, (entry) => ({
+        level: cleanText(entry.level, 'Spell slot level', 40, false),
+        total: cleanText(entry.total, 'Spell slot total', 40, false),
+        used: cleanText(entry.used, 'Spell slots used', 40, false),
+      })),
+      cantrips: cleanStringList(spellcasting.cantrips, 40, 120),
+      preparedOrKnownSpells: cleanStringList(spellcasting.preparedOrKnownSpells, 120, 120),
+      spellbookOrOtherSpells: cleanStringList(spellcasting.spellbookOrOtherSpells, 160, 120),
+    },
+    features: cleanRecordList(value.features, 160, (entry) => {
+      const name = cleanText(entry.name, 'Feature name', 160, false)
+      if (!name) return null
+      return {
+        id: cleanText(entry.id, 'Feature ID', 180, false),
+        name,
+        detail: typeof entry.detail === 'string' ? entry.detail.trim().slice(0, 4000) : '',
+        category: cleanText(entry.category, 'Feature category', 40, false),
+        className: cleanText(entry.className, 'Feature class', 80, false),
+        subclassName: cleanText(entry.subclassName, 'Feature subclass', 120, false),
+        levelGained: Math.max(0, Math.min(20, safeInteger(entry.levelGained, 0))),
+        source: cleanText(entry.source, 'Feature source', 160, false),
+      }
+    }),
+  }
+}
+
 function normalizeParty(value: unknown) {
   if (!Array.isArray(value) || value.length === 0 || value.length > MAX_PARTY) {
     throw new FoundryIntegrationError('The VTT party list is not valid.', 400, 'invalid_foundry_encounter')
@@ -121,6 +261,25 @@ function normalizeParty(value: unknown) {
       preferredTokenAsset: typeof entry.preferredTokenAsset === 'string'
         ? entry.preferredTokenAsset.replace(/\s+/g, ' ').trim().slice(0, 500)
         : '',
+      rulesetId: entry.rulesetId === 'dnd-5.5e-srd-5.2.1'
+        ? 'dnd-5.5e-srd-5.2.1'
+        : (() => {
+            throw new FoundryIntegrationError(
+              'Foundry full-character integration currently supports D&D 5.5e (2024 rules) only.',
+              400,
+              'unsupported_foundry_ruleset',
+            )
+          })(),
+      foundryRulesVersion: entry.foundryRulesVersion === '2024'
+        ? '2024'
+        : (() => {
+            throw new FoundryIntegrationError(
+              'The Foundry character handoff is not marked for 2024 Modern rules.',
+              400,
+              'invalid_foundry_rules_version',
+            )
+          })(),
+      mechanics: normalizeModernMechanics(entry.mechanics),
     }
   })
 }
@@ -284,7 +443,7 @@ export async function createFoundryCombatEncounter(user: User, input: unknown) {
   const vttSetup = normalizeVttSetup(input.vttSetup)
 
   const payload = {
-    version: 1,
+    version: 2,
     campaignId,
     campaignName: campaign.name as string,
     turnNumber,
