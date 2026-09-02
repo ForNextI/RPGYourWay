@@ -992,3 +992,12 @@ Start-page contextual help follows the ordinary control vocabulary rather than c
 - Do not create a full-width adult Help row above Start Here. Help controls must remain visually secondary to the current onboarding decision.
 - **New Campaign** remains the Step 1 eyebrow/subtitle.
 - New Start-page accordions and chooser buttons use the canonical control/card radii and raised shadows. Do not introduce square page-local controls.
+
+## 22.2 Start system and Ready-to-Play chooser
+
+- The collapsed Step 1 system control reads **Default system: D&D 5.5e** and **or choose a different one**. If another ruleset is selected, the control may identify it as the selected system.
+- The system accordion screw always shows a **black +**, rotating to a **black X** when open. Hover/focus never recolors the screw itself.
+- **Optional nitpicky character choices** exists only inside the expanded system chooser, below the five ruleset choices. It is not visible in the collapsed Step 1 state.
+- **Where to generate characters** and **How to import characters** are canonical forest-green action buttons.
+- The Ready-to-Play chooser offers **City / Town / Wild** preset parties with short explanations.
+- Ready-to-Play art uses one campaign-wide selection among **Portrait / POG / ISO / Top-down**. The chooser must not allow mixed Ready-to-Play art styles. Changing the style updates all twelve character previews immediately.

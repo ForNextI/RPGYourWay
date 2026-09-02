@@ -8967,3 +8967,75 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
     grid-template-columns: 1fr;
   }
 }
+
+/* 2.11.2 Start cleanup: system accordion, forest secondary actions, and RTP chooser. */
+.start-rules-card--single-step .start-rules-current--display .start-rules-accordion-plus,
+.start-rules-card--single-step .start-rules-current--display:hover .start-rules-accordion-plus,
+.start-rules-card--single-step .start-rules-current--display:focus-visible .start-rules-accordion-plus,
+.start-nitpicky-summary .accordion-plus,
+.start-nitpicky-summary:hover .accordion-plus,
+.start-nitpicky-summary:focus-visible .accordion-plus {
+  color: #000 !important;
+}
+
+.start-rules-card--single-step .start-rules-current--display .start-rules-accordion-plus::before,
+.start-rules-card--single-step .start-rules-current--display .start-rules-accordion-plus::after,
+.start-nitpicky-summary .accordion-plus::before,
+.start-nitpicky-summary .accordion-plus::after {
+  background: #000 !important;
+}
+
+.start-rules-current--display[aria-expanded="true"] .start-rules-accordion-plus,
+.start-nitpicky-summary[aria-expanded="true"] .accordion-plus {
+  transform: rotate(45deg);
+  color: #000 !important;
+}
+
+.start-rules-panel .start-nitpicky {
+  width: min(36rem, 100%);
+  margin: 1rem auto .15rem;
+}
+
+.start-character-actions--secondary .start-forest-control {
+  border: 1px solid var(--rpgyw-control-inner-light) !important;
+  border-radius: var(--rpgyw-radius-control) !important;
+  background: var(--rpgyw-face-forest) !important;
+  color: var(--rpgyw-cream) !important;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+}
+.start-character-actions--secondary .start-forest-control:hover,
+.start-character-actions--secondary .start-forest-control:focus-visible {
+  border-color: var(--rpgyw-brass-light) !important;
+  background: var(--rpgyw-face-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}
+
+.start-rtp-presets-heading {
+  display: grid;
+  gap: .2rem;
+  margin-top: 1rem;
+}
+.start-rtp-presets-heading > strong,
+.start-rtp-individual-label strong,
+.start-rtp-style > strong {
+  color: var(--rpgyw-forest);
+}
+.start-rtp-presets-heading > span,
+.start-rtp-style > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.45;
+}
+.start-rtp-presets > button small {
+  display: block;
+  margin-top: .3rem;
+  color: inherit;
+  font-size: .74rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.start-rtp-style-options button,
+.start-rtp-presets > button {
+  transition: transform 90ms ease, border-color 140ms ease, background 140ms ease, color 140ms ease;
+}

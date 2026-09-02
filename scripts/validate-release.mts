@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '2.11.1')
-assert.equal(pkg.rpgywVersion, '2.11.1')
-has(read('lib/version.ts'), "APP_VERSION = '2.11.1'", 'visible app version')
+assert.equal(pkg.version, '2.11.2')
+assert.equal(pkg.rpgywVersion, '2.11.2')
+has(read('lib/version.ts'), "APP_VERSION = '2.11.2'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -199,6 +199,11 @@ assert.equal(adStartEntry.includes('start-here-hero'), false, 'Start page must k
 const startStepOnboarding = read('components/start/StartOnboarding.tsx')
 has(startStepOnboarding, '<strong id="rules-heading">Start Here</strong>', 'Step 1 Start Here label')
 has(startStepOnboarding, '<p className="start-rules-subtitle">New Campaign</p>', 'Step 1 New Campaign subtitle')
+has(startStepOnboarding, 'Default system: D&D 5.5e', 'Step 1 default-system wording')
+has(startStepOnboarding, 'READY_TO_PLAY_PARTY_DETAILS[preset]', 'Ready-to-Play preset explanations')
+has(startStepOnboarding, 'Choose one style for all Ready-to-Play characters.', 'single Ready-to-Play art-style rule')
+assert.equal((startStepOnboarding.match(/Choose Ready-to-Play characters/g) ?? []).length, 2, 'Both Ready-to-Play entry paths must use the complete chooser')
+lacks(startStepOnboarding, '</div> : null}\n              <div className="start-nitpicky">', 'nitpicky choices outside expanded system chooser')
 has(startStepOnboarding, 'start-step-help-rail start-step-help-rail--first', 'Step 1 paired bottom help rail')
 has(startStepOnboarding, 'start-info-control start-beginner-help-button', 'small beginner onboarding help control')
 has(startStepOnboarding, 'start-info-control start-step-help-button', 'small contextual onboarding help control')
@@ -207,6 +212,9 @@ lacks(startStepOnboarding, '<strong id="rules-heading">Start Here</strong><butto
 has(css, '.start-step-help-rail {', 'onboarding bottom help rail styling')
 has(css, '.start-nitpicky-summary {', 'rounded optional gameplay accordion styling')
 has(css, '.start-history-nav .start-secondary-control {', 'rounded onboarding history navigation')
+has(css, '.start-rules-current--display[aria-expanded="true"] .start-rules-accordion-plus,', 'black rotating Start system screw')
+has(css, '.start-character-actions--secondary .start-forest-control {', 'forest character-resource actions')
+has(css, '.start-rtp-presets > button small {', 'Ready-to-Play preset explanation styling')
 has(css, '.start-rules-subtitle {', 'Step 1 subtitle styling')
 has(css, 'background: var(--rpgyw-face-olive-dark) !important;', 'dark-olive current game-system control')
 has(css, 'background: var(--rpgyw-face-forest) !important;', 'forest Choose This Game System action')
@@ -471,6 +479,7 @@ has(lookbook, '**35 px × 35 px** nominal size', 'canonical 35 px accordion scre
 has(lookbook, 'The visible brass surround on a canonical raised object is **2 px**', 'canonical 2 px brass surround')
 has(lookbook, '# 22. Current page-specific composition rules')
 has(lookbook, '## 22.1 Start onboarding helper controls', 'Start onboarding help composition rule')
+has(lookbook, '## 22.2 Start system and Ready-to-Play chooser', 'Start system and RTP chooser composition rule')
 lacks(lookbook, '1.12.80')
 lacks(lookbook, '1.12.81')
 lacks(lookbook, '1.12.82')
