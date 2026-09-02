@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '2.12.0')
-assert.equal(pkg.rpgywVersion, '2.12.0')
-has(read('lib/version.ts'), "APP_VERSION = '2.12.0'", 'visible app version')
+assert.equal(pkg.version, '2.12.1')
+assert.equal(pkg.rpgywVersion, '2.12.1')
+has(read('lib/version.ts'), "APP_VERSION = '2.12.1'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -111,6 +111,7 @@ for (const file of [
   'app/api/integrations/foundry/pair/status/route.ts',
   'app/api/integrations/foundry/pair/approve/route.ts',
   'app/api/integrations/foundry/connection/route.ts',
+  'app/api/integrations/foundry/session/refresh/route.ts',
   'app/api/integrations/foundry/connections/route.ts',
   'app/api/integrations/foundry/player-link/route.ts',
   'app/api/integrations/foundry/player-link/start/route.ts',
@@ -151,6 +152,16 @@ has(foundryCombatUi, 'mechanics: foundryModernMechanics(character, live)', 'rich
 has(foundryCombatHandoff, 'function normalizeModernMechanics(value: unknown)', 'Foundry mechanics normalizer')
 has(foundryCombatHandoff, "rulesetId: entry.rulesetId === 'dnd-5.5e-srd-5.2.1'", 'Foundry Modern-only server guard')
 has(foundryCombatHandoff, 'version: 2,', 'Foundry encounter payload v2')
+const foundryConnectionsUi = read('components/foundry/FoundryConnectionsPanel.tsx')
+const foundryServer = read('lib/foundry/server.ts')
+has(foundryConnectionsUi, 'controller_active: boolean', 'Foundry paired/online distinction')
+has(foundryConnectionsUi, 'id="foundry-vtt"', 'Foundry campaign-page anchor')
+lacks(foundryConnectionsUi, 'Foundry Integrator 2.8.0', 'stale Foundry Integrator UI version')
+has(foundryCombatUi, 'Open Foundry in browser', 'explicit Foundry browser navigation')
+has(foundryCombatUi, 'Use Foundry', 'explicit Foundry combat handoff')
+lacks(foundryCombatUi, 'Foundry 2.8.0', 'stale Foundry combat UI version')
+has(foundryServer, "kind?: 'session' | 'device'", 'Foundry durable device grant type')
+has(foundryServer, 'refreshFoundryDeviceSession', 'Foundry automatic session refresh')
 const gameplayRoute = read('app/api/aigm/gameplay-chat/route.ts')
 has(gameplayRoute, 'dont_worry_about_npcs: source.dont_worry_about_npcs === true', 'AIGM NPC preference defaults to material NPCs')
 has(gameplayRoute, 'which is the normal default, keep bystanders and ordinary NPCs materially present', 'AIGM NPC consequence semantics')

@@ -7,6 +7,8 @@ const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3
 const USER_CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 const PAIRING_LIFETIME_MS = 10 * 60 * 1000
 const SESSION_LIFETIME_MS = 8 * 60 * 60 * 1000
+const DEVICE_GRANT_LIFETIME_MS = 180 * 24 * 60 * 60 * 1000
+const CONTROLLER_ACTIVE_MS = 15_000
 
 type PairingStartInput = {
   integratorWorldId?: unknown
@@ -17,6 +19,7 @@ type PairingStartInput = {
 
 type GrantPayload = {
   v: 1
+  kind?: 'session' | 'device'
   connectionId: string
   campaignId: string
   integratorWorldId: string
@@ -145,6 +148,11 @@ function parseGrant(token: string): GrantPayload {
   const candidate = payload as Partial<GrantPayload>
   if (
     candidate.v !== 1
+    || (
+      candidate.kind !== undefined
+      && candidate.kind !== 'session'
+      && candidate.kind !== 'device'
+    )
     || typeof candidate.connectionId !== 'string'
     || typeof candidate.campaignId !== 'string'
     || typeof candidate.integratorWorldId !== 'string'
@@ -265,11 +273,23 @@ export async function getFoundryPairingStatus(rawPairId: unknown) {
     status: 'approved' as const,
     sessionGrant: issueGrant({
       v: 1,
+      kind: 'session',
+      scope: 'controller',
       connectionId: data.connection_id,
       campaignId: data.campaign_id,
       integratorWorldId: data.integrator_world_id,
       foundryUserId: data.foundry_user_id,
       exp: sessionExpiresAt,
+    }),
+    deviceGrant: issueGrant({
+      v: 1,
+      kind: 'device',
+      scope: 'controller',
+      connectionId: data.connection_id,
+      campaignId: data.campaign_id,
+      integratorWorldId: data.integrator_world_id,
+      foundryUserId: data.foundry_user_id,
+      exp: Date.now() + DEVICE_GRANT_LIFETIME_MS,
     }),
   }
 }
@@ -471,6 +491,7 @@ export async function getFoundryPlayerLinkStatus(rawPairId: unknown) {
     status: 'approved' as const,
     sessionGrant: issueGrant({
       v: 1,
+      kind: 'session',
       scope: 'player',
       playerLinkId: data.player_link_id,
       connectionId: data.connection_id,
@@ -478,6 +499,17 @@ export async function getFoundryPlayerLinkStatus(rawPairId: unknown) {
       integratorWorldId: data.integrator_world_id,
       foundryUserId: data.foundry_user_id,
       exp: sessionExpiresAt,
+    }),
+    deviceGrant: issueGrant({
+      v: 1,
+      kind: 'device',
+      scope: 'player',
+      playerLinkId: data.player_link_id,
+      connectionId: data.connection_id,
+      campaignId: data.campaign_id,
+      integratorWorldId: data.integrator_world_id,
+      foundryUserId: data.foundry_user_id,
+      exp: Date.now() + DEVICE_GRANT_LIFETIME_MS,
     }),
   }
 }
@@ -619,9 +651,154 @@ function bearerToken(request: Request) {
   return match[1].trim()
 }
 
+
+function renewedFoundryGrants(grant: GrantPayload) {
+  const now = Date.now()
+
+  return {
+    sessionGrant: issueGrant({
+      v: 1,
+      kind: 'session',
+      scope: grant.scope,
+      playerLinkId: grant.playerLinkId,
+      connectionId: grant.connectionId,
+      campaignId: grant.campaignId,
+      integratorWorldId: grant.integratorWorldId,
+      foundryUserId: grant.foundryUserId,
+      exp: now + SESSION_LIFETIME_MS,
+    }),
+    deviceGrant: issueGrant({
+      v: 1,
+      kind: 'device',
+      scope: grant.scope,
+      playerLinkId: grant.playerLinkId,
+      connectionId: grant.connectionId,
+      campaignId: grant.campaignId,
+      integratorWorldId: grant.integratorWorldId,
+      foundryUserId: grant.foundryUserId,
+      exp: now + DEVICE_GRANT_LIFETIME_MS,
+    }),
+  }
+}
+
+export async function refreshFoundryDeviceSession(request: Request) {
+  const grant = parseGrant(bearerToken(request))
+
+  if (grant.kind !== 'device') {
+    throw new FoundryIntegrationError(
+      'A persistent Foundry device grant is required.',
+      403,
+      'device_grant_required',
+    )
+  }
+
+  const admin = createAdminClient()
+  const now = new Date().toISOString()
+
+  if (grant.scope === 'player') {
+    if (!grant.playerLinkId) {
+      throw new FoundryIntegrationError(
+        'That Foundry player device grant is incomplete.',
+        401,
+        'invalid_device_grant',
+      )
+    }
+
+    const { data: playerLink, error: playerLinkError } = await admin
+      .from('foundry_user_links')
+      .select('id, connection_id, foundry_user_id, status')
+      .eq('id', grant.playerLinkId)
+      .eq('status', 'active')
+      .maybeSingle()
+
+    if (playerLinkError) {
+      throw new FoundryIntegrationError(playerLinkError.message, 503, 'database_unavailable')
+    }
+
+    if (
+      !playerLink
+      || playerLink.connection_id !== grant.connectionId
+      || playerLink.foundry_user_id !== grant.foundryUserId
+    ) {
+      throw new FoundryIntegrationError(
+        'That Foundry player link is no longer active.',
+        401,
+        'player_link_revoked',
+      )
+    }
+
+    const { data: connection, error: connectionError } = await admin
+      .from('foundry_connections')
+      .select('id, campaign_id, integrator_world_id, status')
+      .eq('id', grant.connectionId)
+      .eq('status', 'active')
+      .maybeSingle()
+
+    if (connectionError) {
+      throw new FoundryIntegrationError(connectionError.message, 503, 'database_unavailable')
+    }
+
+    if (
+      !connection
+      || connection.campaign_id !== grant.campaignId
+      || connection.integrator_world_id !== grant.integratorWorldId
+    ) {
+      throw new FoundryIntegrationError(
+        'The Foundry player device grant does not match this world.',
+        401,
+        'device_grant_mismatch',
+      )
+    }
+
+    await admin
+      .from('foundry_user_links')
+      .update({ last_seen_at: now })
+      .eq('id', playerLink.id)
+
+    return {
+      scope: 'player' as const,
+      ...renewedFoundryGrants(grant),
+    }
+  }
+
+  const { data: connection, error: connectionError } = await admin
+    .from('foundry_connections')
+    .select('id, campaign_id, integrator_world_id, controller_foundry_user_id, status')
+    .eq('id', grant.connectionId)
+    .eq('status', 'active')
+    .maybeSingle()
+
+  if (connectionError) {
+    throw new FoundryIntegrationError(connectionError.message, 503, 'database_unavailable')
+  }
+
+  if (
+    !connection
+    || connection.campaign_id !== grant.campaignId
+    || connection.integrator_world_id !== grant.integratorWorldId
+    || connection.controller_foundry_user_id !== grant.foundryUserId
+  ) {
+    throw new FoundryIntegrationError(
+      'That Foundry controller connection is no longer active.',
+      401,
+      'connection_revoked',
+    )
+  }
+
+  await admin
+    .from('foundry_connections')
+    .update({ last_seen_at: now })
+    .eq('id', connection.id)
+
+  return {
+    scope: 'controller' as const,
+    ...renewedFoundryGrants(grant),
+  }
+}
+
 export async function requireFoundrySession(request: Request) {
   const grant = parseGrant(bearerToken(request))
-  if (grant.scope === 'player') {
+  if (grant.kind === 'device' || grant.scope === 'player') {
     throw new FoundryIntegrationError(
       'A controller Foundry session grant is required.',
       403,
@@ -672,7 +849,7 @@ export async function requireFoundrySession(request: Request) {
 export async function requireFoundryPlayerSession(request: Request) {
   const grant = parseGrant(bearerToken(request))
 
-  if (grant.scope !== 'player' || !grant.playerLinkId) {
+  if (grant.kind === 'device' || grant.scope !== 'player' || !grant.playerLinkId) {
     throw new FoundryIntegrationError(
       'A Foundry player session grant is required.',
       403,
@@ -811,6 +988,10 @@ export async function listUserFoundryConnections(userId: string) {
       integrator_world_id: connection.integrator_world_id,
       world_label: connection.foundry_world_label || 'Foundry world',
       controller_name: connection.controller_foundry_user_name || 'Foundry GM',
+      controller_active: (() => {
+        const seen = Date.parse(connection.last_seen_at)
+        return Number.isFinite(seen) && Date.now() - seen <= CONTROLLER_ACTIVE_MS
+      })(),
       last_seen_at: connection.last_seen_at,
       updated_at: connection.updated_at,
     }]

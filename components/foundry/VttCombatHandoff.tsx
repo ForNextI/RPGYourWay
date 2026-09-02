@@ -348,18 +348,18 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
     const url = foundryStatus?.launchUrl
     if (!url) return
 
-    void focusOrOpenFoundry(url, foundryStatus?.controllerActive === true)
+    void focusOrOpenFoundry(url, false)
       .then((focused) => {
-        if (!focused && foundryStatus?.controllerActive) {
+        if (!focused) {
           setHandoffError(
-            'Foundry is already active, but this browser will not let RPG Your Way focus that existing tab safely. Switch to the open Foundry tab instead; RPG Your Way will not reload it.',
+            'Your browser blocked the Foundry window. Allow pop-ups for RPG Your Way, or open Foundry normally. Desktop Foundry controllers can simply switch to Foundry.exe.',
           )
         }
       })
   }
 
   function openSetup() {
-    launchNamedWindow('/campaigns', 'rpgyw-campaigns')
+    launchNamedWindow('/campaigns#foundry-vtt', 'rpgyw-campaigns')
     setOfferOpen(false)
   }
 
@@ -447,9 +447,9 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
 
   const connectedAndLaunchable = Boolean(foundryStatus?.connected && foundryStatus.launchUrl)
   const encounterLabel = encounter?.status === 'rendered'
-    ? 'VTT encounter ready'
+    ? 'Foundry combat ready'
     : encounter && encounter.status !== 'failed'
-      ? 'Preparing VTT encounter…'
+      ? 'Preparing Foundry combat…'
       : ''
 
   return (
@@ -466,7 +466,7 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
             }`}
           >
             <MonitorUp className="size-4" aria-hidden="true" />
-            Go to VTT
+            Open Foundry in browser
           </button>
           {encounterLabel ? (
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground" role="status">
@@ -508,8 +508,8 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
                 <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-primary">Combat</p>
                 <h2 id="vtt-combat-heading" className="font-display text-xl font-bold">
                   {foundryStatus?.connected
-                    ? 'Would you like to use VTT for this combat?'
-                    : 'Would you like to set up VTT for combat?'}
+                    ? 'Would you like to use Foundry for this combat?'
+                    : 'Would you like to set up Foundry for combat?'}
                 </h2>
               </div>
             </div>
@@ -517,18 +517,18 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
             {foundryStatus?.connected ? (
               <>
                 <p className="mt-4 text-sm text-muted-foreground">
-                  RPG Your Way will queue this fight for your connected Foundry world. Foundry is the tactical board; RPG Your Way remains the campaign authority.
+                  RPG Your Way will queue this fight for your paired Foundry world. The desktop controller can switch to Foundry.exe manually; browser participants can use the separate Open Foundry in browser button. Foundry is the tactical board while RPG Your Way remains the campaign authority.
                 </p>
 
                 {!foundryStatus.controllerActive ? (
                   <p className="mt-3 rounded-xl border border-border bg-muted/40 p-3 text-sm">
-                    The Foundry world is connected, but its controller is not currently checking in. Open the Foundry world. If the controller session expired, use <strong>/rpgyw connect</strong> once to reauthorize it.
+                    This Foundry world is paired, but its controller is currently offline. Open the paired World in Foundry. The Integrator should restore its working session automatically; use <strong>/rpgyw connect</strong> only if pairing needs repair.
                   </p>
                 ) : null}
 
                 {!foundryStatus.launchUrl ? (
                   <p className="mt-3 rounded-xl border border-border bg-muted/40 p-3 text-sm">
-                    Foundry has not reported its browser address yet. Open the Foundry 2.8.0 world as the controller and leave it open for a few seconds.
+                    Foundry has not reported a browser join address yet. Open the paired World as the controller and leave it running for a few seconds.
                   </p>
                 ) : null}
 
@@ -549,7 +549,7 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
                     {preparing
                       ? <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />
                       : <MonitorUp className="size-4" aria-hidden="true" />}
-                    Use VTT
+                    Use Foundry
                   </button>
                 </div>
               </>
@@ -575,7 +575,7 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
                     className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground"
                   >
                     <Cable className="size-4" aria-hidden="true" />
-                    VTT setup
+                    Foundry setup
                     <ExternalLink className="size-3.5" aria-hidden="true" />
                   </button>
                 </div>
