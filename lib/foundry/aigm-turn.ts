@@ -405,6 +405,7 @@ function gameplayBody(
     foundry_player_context: foundryPlayerContext,
     foundry_table_state: tableState,
     foundry_vtt_snapshot: tableSnapshot,
+    foundry_actor_templates: (state.gameplay.vtt_setup?.actors ?? []).map((actor) => ({ name: actor.name, srd_template: actor.srd_template, side: actor.side })),
   }
 }
 
@@ -589,58 +590,87 @@ function applyGameplayReply(
   } satisfies SavedAdventureState
 }
 
+function foundryModernMechanics(character: StoredPartyCharacter) {
+  const result = character.result
+  if (!result) return null
+  const record = result.character
+  const live = character.liveState
+  return {
+    schema: 1,
+    totalLevel: record.total_level,
+    classes: record.classes.map((entry) => ({ name: entry.name, level: entry.level, subclass: entry.subclass })),
+    species: record.species,
+    background: record.background,
+    speed: record.speed,
+    initiativeModifier: record.initiative_modifier,
+    proficiencyBonus: record.proficiency_bonus,
+    abilityScores: record.ability_scores,
+    savingThrows: record.saving_throws,
+    skills: record.skills,
+    attacks: record.attacks.map((entry) => ({ name: entry.name, attackBonus: entry.attack_bonus, damage: entry.damage, properties: entry.properties })),
+    armorAndShields: record.armor_and_shields.map((entry) => ({ name: entry.name, quantity: entry.quantity, sheetStatus: entry.sheet_status })),
+    equipment: record.equipment_highlights.map((entry) => ({ name: entry.name, quantity: entry.quantity, sheetStatus: entry.sheet_status })),
+    currency: live?.currency ?? record.currency,
+    resources: live?.resources ?? record.resources.map((entry) => ({ name: entry.name, current: entry.current_shown_on_sheet, maximum: entry.maximum_or_frequency })),
+    conditions: live?.conditions ?? [],
+    concentration: live?.concentration ?? '',
+    deathSaves: live?.death_saves ?? { successes: 0, failures: 0 },
+    spellcasting: {
+      ability: record.spellcasting.ability,
+      saveDc: record.spellcasting.save_dc,
+      attackBonus: record.spellcasting.attack_bonus,
+      slots: live?.spell_slots ?? record.spellcasting.slots.map((entry) => ({ level: entry.level, total: entry.total_shown, used: entry.used_shown })),
+      cantrips: record.spellcasting.cantrips,
+      preparedOrKnownSpells: record.spellcasting.prepared_or_known_spells,
+      spellbookOrOtherSpells: record.spellcasting.spellbook_or_other_spells,
+    },
+    features: (record.features ?? []).map((entry) => ({
+      id: entry.id,
+      name: entry.name,
+      detail: entry.detail,
+      category: entry.category,
+      className: entry.class_name,
+      subclassName: entry.subclass_name,
+      levelGained: entry.level_gained,
+      source: entry.source,
+    })),
+  }
+}
+
+function vttNameKey(value: string) {
+  return value.normalize('NFKD').toLocaleLowerCase('en-US').replace(/[^a-z0-9]+/g, ' ').replace(/\s+/g, ' ').trim()
+}
+
 function vttEncounterInput(
   state: SavedAdventureState,
   setup: NonNullable<SavedAdventureState['gameplay']['vtt_setup']>,
   sceneSummary: string,
 ) {
-  const initiativeById = new Map(
-    state.gameplay.initiative
-      .filter((entry) => entry.entity_type === 'player')
-      .map((entry) => [entry.character_id, entry.total] as const),
-  )
-
+  const initiativeById = new Map(state.gameplay.initiative.filter((entry) => entry.entity_type === 'player').map((entry) => [entry.character_id, entry.total] as const))
+  const hintByName = new Map(setup.actors.map((actor) => [vttNameKey(actor.name), actor] as const))
+  const bystanderNames = new Set(setup.actors.filter((actor) => actor.side === 'bystander').map((actor) => vttNameKey(actor.name)))
   const party = state.characters.flatMap((character) => {
     if (character.status !== 'ready' || !character.result) return []
-    const record = character.result.character
-    const live = character.liveState
+    const record = character.result.character, live = character.liveState
     const current = live?.current_hit_points ?? character.result.opening_state.current_hit_points
     const maximum = live?.maximum_hit_points ?? record.hit_points.maximum
-    return [{
-      campaignCharacterId: character.id,
-      displayName: playNameFor(character),
-      currentHitPoints: current,
-      maximumHitPoints: maximum,
+    const mechanics = foundryModernMechanics(character)
+    if (!mechanics) return []
+    return [{ campaignCharacterId: character.id, displayName: playNameFor(character), currentHitPoints: current, maximumHitPoints: maximum,
       temporaryHitPoints: live?.temporary_hit_points ?? character.result.opening_state.temporary_hit_points,
-      armorClass: live?.armor_class ?? record.armor_class,
-      initiative: initiativeById.get(character.id) ?? null,
-      visualTags: [
-        record.species,
-        ...record.classes.map((entry) => entry.name),
-        ...record.armor_and_shields.slice(0, 3).map((entry) => entry.name),
-        ...record.attacks.slice(0, 3).map((entry) => entry.name),
-      ].filter(Boolean).slice(0, 12),
-      preferredTokenAsset: character.vttTokenAsset || null,
-    }]
+      armorClass: live?.armor_class ?? record.armor_class, initiative: initiativeById.get(character.id) ?? null,
+      visualTags: [record.species, ...record.classes.map((entry) => entry.name), ...record.armor_and_shields.slice(0,3).map((entry)=>entry.name), ...record.attacks.slice(0,3).map((entry)=>entry.name)].filter(Boolean).slice(0,12),
+      preferredTokenAsset: character.vttTokenAsset || null, rulesetId: 'dnd-5.5e-srd-5.2.1', foundryRulesVersion: '2024', mechanics }]
   })
-
-  const enemies = state.gameplay.initiative
-    .filter((entry) => entry.entity_type === 'npc')
-    .map((entry) => ({
-      combatantId: entry.character_id,
-      displayName: entry.name,
-      initiative: entry.total,
-    }))
-
-  return {
-    campaignId: state.adventure_id,
-    turnNumber: state.gameplay.turn_count,
-    sceneLabel: state.gameplay.scene || setup.environment || 'Combat',
-    sceneSummary,
-    vttSetup: setup,
-    party,
-    enemies,
-  }
+  const enemies = state.gameplay.initiative.filter((entry) => entry.entity_type === 'npc' && !bystanderNames.has(vttNameKey(entry.name))).map((entry) => {
+    const hint=hintByName.get(vttNameKey(entry.name)); return { combatantId: entry.character_id, displayName: entry.name, initiative: entry.total,
+      side: hint?.side === 'ally' ? 'ally' : 'enemy', srdTemplate: hint?.srd_template || entry.name, visualTags: hint?.visual_tags ?? [] }
+  })
+  const bystanders = setup.actors.filter((actor) => actor.side === 'bystander').map((actor,index) => ({
+    combatantId: `foundry-bystander:${state.gameplay.turn_count}:${index}`, displayName: actor.name, initiative: 5, side: 'bystander',
+    srdTemplate: actor.srd_template || 'Commoner', visualTags: actor.visual_tags,
+  }))
+  return { campaignId: state.adventure_id, turnNumber: state.gameplay.turn_count, sceneLabel: state.gameplay.scene || setup.environment || 'Combat', sceneSummary, vttSetup: setup, party, enemies, bystanders }
 }
 
 function forwardedHeaders(request: Request, turnId: string) {

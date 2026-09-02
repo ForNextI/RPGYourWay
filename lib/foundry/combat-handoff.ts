@@ -8,6 +8,7 @@ import {
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const MAX_PARTY = 12
 const MAX_ENEMIES = 40
+const MAX_BYSTANDERS = 40
 const CONTROLLER_ACTIVE_MS = 15_000
 
 type JsonObject = Record<string, unknown>
@@ -291,8 +292,8 @@ function normalizeVttSetup(value: unknown) {
     const number = finiteNumber(raw, fallback) ?? fallback
     return Math.max(0, Math.min(maximum, Math.round(number / 5) * 5))
   }
-  const width = Math.max(20, snap(value.width_ft, 60, 300))
-  const height = Math.max(20, snap(value.height_ft, 40, 300))
+  const width = 200
+  const height = 200
   const start = plainObject(value.player_start_area) ? value.player_start_area : {}
 
   return {
@@ -311,6 +312,7 @@ function normalizeVttSetup(value: unknown) {
           if (!plainObject(entry)) return []
           const kind = entry.kind === 'wall'
             || entry.kind === 'door'
+            || entry.kind === 'window'
             || entry.kind === 'obstacle'
             || entry.kind === 'furniture'
             || entry.kind === 'terrain'
@@ -333,7 +335,8 @@ function normalizeVttSetup(value: unknown) {
           if (!name) return []
           return [{
             name,
-            side: entry.side === 'ally' ? 'ally' : 'enemy',
+            side: entry.side === 'ally' ? 'ally' : entry.side === 'bystander' ? 'bystander' : 'enemy',
+            srd_template: cleanText(entry.srd_template, 'VTT SRD template', 120, false),
             visual_tags: Array.isArray(entry.visual_tags)
               ? entry.visual_tags.filter((tag): tag is string => typeof tag === 'string')
                   .map((tag) => tag.replace(/\s+/g, ' ').trim().slice(0, 80))
@@ -354,22 +357,23 @@ function normalizeVttSetup(value: unknown) {
   }
 }
 
-function normalizeEnemies(value: unknown) {
-  if (!Array.isArray(value) || value.length > MAX_ENEMIES) {
-    throw new FoundryIntegrationError('The VTT enemy list is not valid.', 400, 'invalid_foundry_encounter')
+function normalizedNpcRow(entry: JsonObject, index: number, label: string) {
+  return {
+    combatantId: cleanText(entry.combatantId, `${label} ${index + 1} ID`, 180),
+    displayName: cleanText(entry.displayName, `${label} ${index + 1} name`, 80),
+    initiative: finiteNumber(entry.initiative),
+    side: entry.side === 'ally' ? 'ally' : entry.side === 'bystander' ? 'bystander' : 'enemy',
+    srdTemplate: cleanText(entry.srdTemplate, `${label} ${index + 1} SRD template`, 120, false),
+    visualTags: cleanStringList(entry.visualTags, 12, 80),
   }
-
-  return value.map((entry, index) => {
-    if (!plainObject(entry)) {
-      throw new FoundryIntegrationError(`Enemy ${index + 1} is not valid.`, 400, 'invalid_foundry_encounter')
-    }
-
-    return {
-      combatantId: cleanText(entry.combatantId, `Enemy ${index + 1} ID`, 180),
-      displayName: cleanText(entry.displayName, `Enemy ${index + 1} name`, 80),
-      initiative: finiteNumber(entry.initiative),
-    }
-  })
+}
+function normalizeEnemies(value: unknown) {
+  if (!Array.isArray(value) || value.length > MAX_ENEMIES) throw new FoundryIntegrationError('The VTT enemy list is not valid.', 400, 'invalid_foundry_encounter')
+  return value.map((entry,index) => { if (!plainObject(entry)) throw new FoundryIntegrationError(`Enemy ${index + 1} is not valid.`,400,'invalid_foundry_encounter'); return normalizedNpcRow(entry,index,'Enemy') })
+}
+function normalizeBystanders(value: unknown) {
+  if (!Array.isArray(value) || value.length > MAX_BYSTANDERS) throw new FoundryIntegrationError('The VTT bystander list is not valid.', 400, 'invalid_foundry_encounter')
+  return value.map((entry,index) => { if (!plainObject(entry)) throw new FoundryIntegrationError(`Bystander ${index + 1} is not valid.`,400,'invalid_foundry_encounter'); const row=normalizedNpcRow(entry,index,'Bystander'); return { ...row, side: 'bystander', initiative: finiteNumber(entry.initiative, 5) } })
 }
 
 function controllerActive(lastSeenAt: unknown) {
@@ -438,12 +442,13 @@ export async function createFoundryCombatEncounter(user: User, input: unknown) {
   const turnNumber = Math.max(0, safeInteger(input.turnNumber))
   const party = normalizeParty(input.party)
   const enemies = normalizeEnemies(input.enemies)
+  const bystanders = normalizeBystanders(input.bystanders ?? [])
   const sceneLabel = cleanText(input.sceneLabel, 'Scene label', 160, false) || 'Combat'
   const sceneSummary = cleanText(input.sceneSummary, 'Scene summary', 1200, false)
   const vttSetup = normalizeVttSetup(input.vttSetup)
 
   const payload = {
-    version: 2,
+    version: 3,
     campaignId,
     campaignName: campaign.name as string,
     turnNumber,
@@ -454,6 +459,7 @@ export async function createFoundryCombatEncounter(user: User, input: unknown) {
     vttSetup,
     party,
     enemies,
+    bystanders,
   }
 
   const { data: existing, error: existingError } = await admin

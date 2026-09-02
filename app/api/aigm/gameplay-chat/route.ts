@@ -7,6 +7,7 @@ import { mergeMysteryCommitments, type DmMysteryCommitment } from '@/lib/aigm/my
 import { advanceFailedWeirdnessGate, failedWeirdnessGate } from '@/lib/aigm/weirdness-gate'
 import { selectedRulesetFromSetupAnswers } from '@/lib/aigm/supported-systems'
 import { formatRulesReference, rulesReferenceFor } from '@/lib/aigm/rules-library'
+import { formatSrdCreatureCatalogForAigm } from '@/lib/aigm/srd-creature-catalog'
 import { formatSettingReference, selectedSettingFromSetupAnswers, settingReferenceFor, supportedSettingFor } from '@/lib/aigm/setting-library'
 import { playerFacingLoreText, stripLoreSourceDecorations } from '@/lib/aigm/lore-presentation'
 import { npcNameHand } from '@/lib/aigm/npc-names'
@@ -186,6 +187,7 @@ interface GameplayChatBody {
     updated_at?: string
   }>
   foundry_vtt_snapshot?: unknown
+  foundry_actor_templates?: Array<{ name?: string; srd_template?: string; side?: 'enemy' | 'ally' | 'bystander' }>
 }
 
 interface OpenAIResponsePayload {
@@ -252,7 +254,7 @@ interface VttSetupReply {
   }
   features: Array<{
     label: string
-    kind: 'room' | 'wall' | 'door' | 'obstacle' | 'furniture' | 'terrain'
+    kind: 'room' | 'wall' | 'door' | 'window' | 'obstacle' | 'furniture' | 'terrain'
     x_ft: number
     y_ft: number
     width_ft: number
@@ -260,7 +262,8 @@ interface VttSetupReply {
   }>
   actors: Array<{
     name: string
-    side: 'enemy' | 'ally'
+    side: 'enemy' | 'ally' | 'bystander'
+    srd_template: string
     visual_tags: string[]
     x_ft: number
     y_ft: number
@@ -308,13 +311,13 @@ const VTT_SETUP_SCHEMA = {
     },
     features: {
       type: 'array',
-      maxItems: 16,
+      maxItems: 48,
       items: {
         type: 'object',
         additionalProperties: false,
         properties: {
           label: { type: 'string' },
-          kind: { type: 'string', enum: ['room', 'wall', 'door', 'obstacle', 'furniture', 'terrain'] },
+          kind: { type: 'string', enum: ['room', 'wall', 'door', 'window', 'obstacle', 'furniture', 'terrain'] },
           x_ft: { type: 'integer', minimum: 0, maximum: 300 },
           y_ft: { type: 'integer', minimum: 0, maximum: 300 },
           width_ft: { type: 'integer', minimum: 0, maximum: 300 },
@@ -331,12 +334,13 @@ const VTT_SETUP_SCHEMA = {
         additionalProperties: false,
         properties: {
           name: { type: 'string' },
-          side: { type: 'string', enum: ['enemy', 'ally'] },
+          side: { type: 'string', enum: ['enemy', 'ally', 'bystander'] },
+          srd_template: { type: 'string' },
           visual_tags: { type: 'array', maxItems: 10, items: { type: 'string' } },
           x_ft: { type: 'integer', minimum: 0, maximum: 300 },
           y_ft: { type: 'integer', minimum: 0, maximum: 300 },
         },
-        required: ['name', 'side', 'visual_tags', 'x_ft', 'y_ft'],
+        required: ['name', 'side', 'srd_template', 'visual_tags', 'x_ft', 'y_ft'],
       },
     },
     asset_search_terms: { type: 'array', maxItems: 16, items: { type: 'string' } },
@@ -646,8 +650,8 @@ function safeVttSetup(value: unknown): VttSetupReply {
     const number = typeof raw === 'number' && Number.isFinite(raw) ? raw : fallback
     return Math.max(0, Math.min(maximum, Math.round(number / 5) * 5))
   }
-  const width = Math.max(20, snap(source.width_ft, 60, 300))
-  const height = Math.max(20, snap(source.height_ft, 40, 300))
+  const width = 200
+  const height = 200
   const start = source.player_start_area && typeof source.player_start_area === 'object'
     ? source.player_start_area
     : { x_ft: 5, y_ft: 5, width_ft: 15, height_ft: Math.max(10, height - 10) }
@@ -669,6 +673,7 @@ function safeVttSetup(value: unknown): VttSetupReply {
           const feature = entry as VttSetupReply['features'][number]
           const kind: VttSetupReply['features'][number]['kind'] = feature.kind === 'wall'
             || feature.kind === 'door'
+            || feature.kind === 'window'
             || feature.kind === 'obstacle'
             || feature.kind === 'furniture'
             || feature.kind === 'terrain'
@@ -692,7 +697,8 @@ function safeVttSetup(value: unknown): VttSetupReply {
           if (!name) return []
           return [{
             name,
-            side: actor.side === 'ally' ? 'ally' as const : 'enemy' as const,
+            side: actor.side === 'ally' ? 'ally' as const : actor.side === 'bystander' ? 'bystander' as const : 'enemy' as const,
+            srd_template: clipped(actor.srd_template, 120).trim(),
             visual_tags: clippedList(actor.visual_tags, 10, 80),
             x_ft: snap(actor.x_ft, width - 10, width),
             y_ft: snap(actor.y_ft, 5, height),
@@ -1375,7 +1381,8 @@ export async function POST(request: Request) {
   const relevantFeatureNames = party.flatMap((member) => member.features)
     .filter((feature) => comparableText(feature.name).length > 3 && comparableText(message).includes(comparableText(feature.name)))
     .map((feature) => feature.name)
-  const referenceQuery = [selectedSettingName, message, diceResult, scene, campaignSummary, ...relevantFeatureNames, ...safeRecentMessages(body.recent_messages).map((entry) => entry.text)].filter(Boolean).join('\n')
+  const foundryActorTemplates = Array.isArray(body.foundry_actor_templates) ? body.foundry_actor_templates.slice(0, 60).flatMap((entry) => { const name = clipped(entry?.name, 80); const srd_template = clipped(entry?.srd_template, 120); if (!name && !srd_template) return []; return [{ name, srd_template, side: entry?.side === 'ally' ? 'ally' : entry?.side === 'bystander' ? 'bystander' : 'enemy' }]; }) : []
+  const referenceQuery = [selectedSettingName, message, diceResult, scene, campaignSummary, ...foundryActorTemplates.map((entry) => entry.srd_template), ...initiative.filter((entry) => entry.entity_type === 'npc').map((entry) => entry.name), ...relevantFeatureNames, ...safeRecentMessages(body.recent_messages).map((entry) => entry.text)].filter(Boolean).join('\n')
   const rulesReference = rulesReferenceFor(selectedRuleset, referenceQuery)
   const settingReference = settingReferenceFor(selectedSetting, referenceQuery)
   const loreFidelity = Number.isFinite(body.lore_fidelity) ? Math.max(1, Math.min(10, Math.floor(body.lore_fidelity ?? 7))) : 7
@@ -1406,6 +1413,7 @@ export async function POST(request: Request) {
     scene,
   ])
   const npcGenerationProfile = npcGenerationDefaults()
+  const includeSrdCreatureCatalog = selectedRuleset.id === 'dnd-5.5e-srd-5.2.1' && (foundryPlayerRequest || Boolean(body.foundry_vtt_snapshot) || Boolean(body.combat_active) || /\b(foundry|initiative|combat|fight|attack|ambush|encounter)\b/i.test(message))
   const context = {
     mode,
     adventure_name: clipped(body.adventure_name, 180),
@@ -1420,6 +1428,8 @@ export async function POST(request: Request) {
     selected_ruleset: selectedRuleset,
     selected_setting: selectedSetting,
     built_in_rules_reference: formatRulesReference(rulesReference),
+    srd_creature_catalog: formatSrdCreatureCatalogForAigm(selectedRuleset.id, includeSrdCreatureCatalog),
+    foundry_actor_templates: foundryActorTemplates,
     built_in_setting_reference: formatSettingReference(settingReference),
     lore_web_search_available: loreWebSearchEnabled,
     owner_god_mode_active: ownerGodModeActive,
@@ -1512,9 +1522,12 @@ FOUNDRY MULTIPLAYER CONTROL:
 - If context.foundry_vtt_snapshot.combat.started is false, this is pre-combat setup. Players may move their own characters into sensible starting positions without spending movement, actions, reactions, or a combat turn. You control enemy and NPC starting positions.
 - Always return vtt_setup. If no Foundry snapshot is present and combat is beginning or active, set vtt_setup.enabled true and provide the initial board plan. If a Foundry snapshot is present, set enabled true only when combat has not started and the player explicitly asks you to prepare, rebuild, resize, correct, or reconfigure the RPG Your Way-managed tactical scene. Otherwise set enabled false with empty strings, zero dimensions/start-area values, and empty arrays.
 - Never claim that Foundry has prepared, rendered, sent, placed, updated, or confirmed a scene, token, combat, or tactical change unless context.foundry_vtt_snapshot is present and directly supports that claim. Without a Foundry snapshot, you may say you prepared or revised the tactical plan for handoff, not that Foundry executed it.
-- vtt_setup is only a tactical-board plan. When enabled, choose the smallest believable playable scene dimensions in 5-foot increments that fit the established fiction. Use player_start_area to say where PCs may set up; do not choose the voluntary final positions of player characters.
-- Use vtt_setup.features for a small number of rectilinear room, wall, door, obstacle, furniture, or terrain outlines aligned to the 5-foot grid. Use vtt_setup.actors only for enemies or allied NPCs you control. Give each actor short visual_tags and a starting x_ft/y_ft measured from the scene's top-left.
-- asset_search_terms are short generic visual concepts Foundry may use locally to look for eligible maps or token art. Never name or assume a specific commercial module, compendium, or asset pack.
+- vtt_setup is a tactical-board plan on a fixed 200 by 200 foot canvas: 40 by 40 squares, 5 feet per square. When enabled, always return width_ft 200 and height_ft 200. The architectural or terrain footprint may occupy only part of that canvas, but make it generously playable for all PCs, active NPCs, bystanders, furniture, and expected movement. Do not compress a populated fight into the smallest believable room.
+- Use vtt_setup.features for grid-aligned room, wall, door, window, obstacle, furniture, and terrain geometry. Walls, doors, and windows should be 5-foot-grid segments. Split a wall at each door/window instead of drawing one uninterrupted wall through the opening. Simple rectangles are preferred over decorative complexity.
+- Use vtt_setup.actors for every materially present non-PC whose tactical location or safety can matter. side may be enemy, ally, or bystander. Give every actor a stable useful label, even when that is a role such as Road Worker 1 or Family Child 1.
+- When context.srd_creature_catalog is present, ordinary D&D 5.5e enemies should preferentially use an appropriate exact SRD name from that catalog in srd_template. Foundry will clone that native Actor and may rename the world copy to the fictional actor name. Bespoke creatures remain allowed when the fiction genuinely calls for them.
+- Bystanders should preferentially use appropriate low-powered Humanoid SRD templates from the catalog, especially Commoner, Guard, Noble, or Warrior Infantry when they fit. Do not use powerful incidental templates merely because they exist. Bystanders do not roll initiative here; the Foundry handoff gives them fixed initiative 5.
+- asset_search_terms are short generic visual concepts. The Integrator supplies one of RPG Your Way's four gridless core combat floors and renders the structured geometry above it.
 - When vtt_setup is enabled, do not say that you categorically cannot prepare the RPG Your Way-managed Foundry scene. The Integrator can execute this limited setup plan. Do not claim control over unrelated Foundry worlds, arbitrary user content, advanced lighting/walls/fog, or unsupported automation.
 - Once Foundry combat has started, do not emit a structural vtt_setup rebuild in this version. Reason from the supplied tactical snapshot and continue the fight.
 

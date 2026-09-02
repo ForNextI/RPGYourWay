@@ -1,0 +1,2937 @@
+{
+  "_meta": {
+    "name": "RPG Your Way SRD 5.2.1 Creature Catalog v2",
+    "srd_version": "5.2.1",
+    "system": "D&D 5.5e / 2024 rules",
+    "creature_count": 330,
+    "humanoid_count": 26,
+    "purpose": "Compact local AIGM creature-selection index. General creatures contain name, CR, and natural habitat tags. Humanoids retain HP and RPG Your Way NPC-use metadata for bystanders and scene population.",
+    "license": "CC BY 4.0",
+    "attribution": "This work includes material from the System Reference Document 5.2.1 (SRD 5.2.1) by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2.1 is licensed under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode.",
+    "notes": [
+      "npc_use and incidental_npc are RPG Your Way metadata, not SRD classifications.",
+      "Narrative occupation may reuse an appropriate Humanoid stat block; for example, a dockworker can use Commoner statistics.",
+      "SRD swarm stat blocks are grouped under Beast or Undead so the catalog uses the 14 standard creature types.",
+      "Habitat is intentionally compact. Empty habitat arrays are valid and do not mean the creature cannot appear elsewhere."
+    ],
+    "incidental_npc_values": {
+      "preferred": "Good default for ordinary scene population or bystanders.",
+      "situational": "Useful for a particular role or scene, but not a default civilian.",
+      "not_incidental": "Too specialized, powerful, or narratively significant for routine bystander use."
+    },
+    "catalog_version": 2,
+    "habitat_source": "2024 Free Basic Rules / Monsters by Habitat tables. Habitat arrays are natural-habitat suggestions; an empty array means no natural habitat was listed there, commonly for extraplanar or specially placed creatures."
+  },
+  "creatures_by_type": {
+    "Aberration": [
+      {
+        "name": "Aboleth",
+        "cr": "10",
+        "habitat": [
+          "Underdark",
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Chuul",
+        "cr": "4",
+        "habitat": [
+          "Coastal",
+          "Swamp",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Cloaker",
+        "cr": "8",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Darkmantle",
+        "cr": "1/2",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Gibbering Mouther",
+        "cr": "2",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Grick",
+        "cr": "2",
+        "habitat": [
+          "Forest",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Grimlock",
+        "cr": "1/4",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Otyugh",
+        "cr": "5",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Roper",
+        "cr": "5",
+        "habitat": [
+          "Underdark"
+        ]
+      }
+    ],
+    "Beast": [
+      {
+        "name": "Allosaurus",
+        "cr": "2",
+        "habitat": [
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Ankylosaurus",
+        "cr": "3",
+        "habitat": [
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Ape",
+        "cr": "1/2",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Archelon",
+        "cr": "4",
+        "habitat": [
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Baboon",
+        "cr": "0",
+        "habitat": [
+          "Forest",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Badger",
+        "cr": "0",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Bat",
+        "cr": "0",
+        "habitat": [
+          "Forest",
+          "Mountain",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Black Bear",
+        "cr": "1/2",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Blood Hawk",
+        "cr": "1/8",
+        "habitat": [
+          "Arctic",
+          "Coastal",
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Boar",
+        "cr": "1/4",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Brown Bear",
+        "cr": "1",
+        "habitat": [
+          "Arctic",
+          "Forest",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Camel",
+        "cr": "1/8",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Cat",
+        "cr": "0",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Constrictor Snake",
+        "cr": "1/4",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Swamp",
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Crab",
+        "cr": "0",
+        "habitat": [
+          "Coastal",
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Crocodile",
+        "cr": "1/2",
+        "habitat": [
+          "Coastal",
+          "Swamp",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Deer",
+        "cr": "0",
+        "habitat": [
+          "Forest",
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Dire Wolf",
+        "cr": "1",
+        "habitat": [
+          "Forest",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Draft Horse",
+        "cr": "1/4",
+        "habitat": [
+          "Urban"
+        ]
+      },
+      {
+        "name": "Eagle",
+        "cr": "0",
+        "habitat": [
+          "Coastal",
+          "Grassland",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Elephant",
+        "cr": "4",
+        "habitat": [
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Elk",
+        "cr": "1/4",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Frog",
+        "cr": "0",
+        "habitat": [
+          "Forest",
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Giant Ape",
+        "cr": "7",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Giant Badger",
+        "cr": "1/4",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Giant Bat",
+        "cr": "1/4",
+        "habitat": [
+          "Forest",
+          "Mountain",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Giant Boar",
+        "cr": "2",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Giant Centipede",
+        "cr": "1/4",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Giant Constrictor Snake",
+        "cr": "2",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Swamp",
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Giant Crab",
+        "cr": "1/8",
+        "habitat": [
+          "Coastal",
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Giant Crocodile",
+        "cr": "5",
+        "habitat": [
+          "Coastal",
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Giant Fire Beetle",
+        "cr": "0",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Giant Frog",
+        "cr": "1/4",
+        "habitat": [
+          "Forest",
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Giant Goat",
+        "cr": "1/2",
+        "habitat": [
+          "Grassland",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Giant Hyena",
+        "cr": "1",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Giant Lizard",
+        "cr": "1/4",
+        "habitat": [
+          "Coastal",
+          "Desert",
+          "Forest",
+          "Swamp",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Giant Octopus",
+        "cr": "1",
+        "habitat": [
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Giant Rat",
+        "cr": "1/8",
+        "habitat": [
+          "Forest",
+          "Swamp",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Giant Scorpion",
+        "cr": "3",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Giant Seahorse",
+        "cr": "1/2",
+        "habitat": [
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Giant Shark",
+        "cr": "5",
+        "habitat": [
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Giant Spider",
+        "cr": "1",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Swamp",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Giant Toad",
+        "cr": "1",
+        "habitat": [
+          "Coastal",
+          "Forest",
+          "Swamp",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Giant Venomous Snake",
+        "cr": "1/4",
+        "habitat": [
+          "Coastal",
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Giant Wasp",
+        "cr": "1/2",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Giant Weasel",
+        "cr": "1/8",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Giant Wolf Spider",
+        "cr": "1/4",
+        "habitat": [
+          "Coastal",
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Goat",
+        "cr": "0",
+        "habitat": [
+          "Grassland",
+          "Hill",
+          "Mountain",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Hawk",
+        "cr": "0",
+        "habitat": [
+          "Arctic",
+          "Coastal",
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Hippopotamus",
+        "cr": "4",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Hunter Shark",
+        "cr": "2",
+        "habitat": [
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Hyena",
+        "cr": "0",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Jackal",
+        "cr": "0",
+        "habitat": [
+          "Desert",
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Killer Whale",
+        "cr": "3",
+        "habitat": [
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Lion",
+        "cr": "1",
+        "habitat": [
+          "Desert",
+          "Grassland",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Lizard",
+        "cr": "0",
+        "habitat": [
+          "Coastal",
+          "Desert",
+          "Forest",
+          "Swamp",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Mammoth",
+        "cr": "6",
+        "habitat": [
+          "Arctic"
+        ]
+      },
+      {
+        "name": "Mastiff",
+        "cr": "1/8",
+        "habitat": [
+          "Forest",
+          "Hill",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Mule",
+        "cr": "1/8",
+        "habitat": [
+          "Desert",
+          "Hill",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Octopus",
+        "cr": "0",
+        "habitat": [
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Owl",
+        "cr": "0",
+        "habitat": [
+          "Arctic",
+          "Forest",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Panther",
+        "cr": "1/4",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Piranha",
+        "cr": "0",
+        "habitat": [
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Plesiosaurus",
+        "cr": "2",
+        "habitat": [
+          "Coastal",
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Polar Bear",
+        "cr": "2",
+        "habitat": [
+          "Arctic"
+        ]
+      },
+      {
+        "name": "Pony",
+        "cr": "1/8",
+        "habitat": [
+          "Grassland",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Pteranodon",
+        "cr": "1/4",
+        "habitat": [
+          "Coastal",
+          "Grassland",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Rat",
+        "cr": "0",
+        "habitat": [
+          "Forest",
+          "Swamp",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Raven",
+        "cr": "0",
+        "habitat": [
+          "Hill",
+          "Swamp",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Reef Shark",
+        "cr": "1/2",
+        "habitat": [
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Rhinoceros",
+        "cr": "2",
+        "habitat": [
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Riding Horse",
+        "cr": "1/4",
+        "habitat": [
+          "Grassland",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Saber-Toothed Tiger",
+        "cr": "2",
+        "habitat": [
+          "Arctic",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Scorpion",
+        "cr": "0",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Seahorse",
+        "cr": "0",
+        "habitat": [
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Spider",
+        "cr": "0",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Swamp",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Swarm of Bats",
+        "cr": "1/4",
+        "habitat": [
+          "Forest",
+          "Mountain",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Swarm of Insects",
+        "cr": "1/2",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Swamp",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Swarm of Piranhas",
+        "cr": "1",
+        "habitat": [
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Swarm of Rats",
+        "cr": "1/4",
+        "habitat": [
+          "Forest",
+          "Swamp",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Swarm of Ravens",
+        "cr": "1/4",
+        "habitat": [
+          "Hill",
+          "Swamp",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Swarm of Venomous Snakes",
+        "cr": "2",
+        "habitat": [
+          "Coastal",
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Tiger",
+        "cr": "1",
+        "habitat": [
+          "Forest",
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Triceratops",
+        "cr": "5",
+        "habitat": [
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Tyrannosaurus Rex",
+        "cr": "8",
+        "habitat": [
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Venomous Snake",
+        "cr": "1/8",
+        "habitat": [
+          "Coastal",
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Vulture",
+        "cr": "0",
+        "habitat": [
+          "Desert",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Warhorse",
+        "cr": "1/2",
+        "habitat": [
+          "Urban"
+        ]
+      },
+      {
+        "name": "Weasel",
+        "cr": "0",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Wolf",
+        "cr": "1/4",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      }
+    ],
+    "Celestial": [
+      {
+        "name": "Couatl",
+        "cr": "4",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Deva",
+        "cr": "10",
+        "habitat": []
+      },
+      {
+        "name": "Giant Eagle",
+        "cr": "1",
+        "habitat": [
+          "Coastal",
+          "Grassland",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Giant Elk",
+        "cr": "2",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Giant Owl",
+        "cr": "1/4",
+        "habitat": [
+          "Arctic",
+          "Forest",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Guardian Naga",
+        "cr": "10",
+        "habitat": [
+          "Desert",
+          "Forest"
+        ]
+      },
+      {
+        "name": "Pegasus",
+        "cr": "2",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Planetar",
+        "cr": "16",
+        "habitat": []
+      },
+      {
+        "name": "Solar",
+        "cr": "21",
+        "habitat": []
+      },
+      {
+        "name": "Sphinx of Lore",
+        "cr": "11",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Sphinx of Valor",
+        "cr": "17",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Sphinx of Wonder",
+        "cr": "1",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Unicorn",
+        "cr": "5",
+        "habitat": [
+          "Forest"
+        ]
+      }
+    ],
+    "Construct": [
+      {
+        "name": "Animated Armor",
+        "cr": "1",
+        "habitat": [
+          "Urban"
+        ]
+      },
+      {
+        "name": "Animated Flying Sword",
+        "cr": "1/4",
+        "habitat": [
+          "Urban"
+        ]
+      },
+      {
+        "name": "Animated Rug of Smothering",
+        "cr": "2",
+        "habitat": [
+          "Urban"
+        ]
+      },
+      {
+        "name": "Clay Golem",
+        "cr": "9",
+        "habitat": [
+          "Urban"
+        ]
+      },
+      {
+        "name": "Flesh Golem",
+        "cr": "5",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Gorgon",
+        "cr": "5",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Homunculus",
+        "cr": "0",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Iron Golem",
+        "cr": "16",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Shield Guardian",
+        "cr": "7",
+        "habitat": [
+          "Urban"
+        ]
+      },
+      {
+        "name": "Stone Golem",
+        "cr": "10",
+        "habitat": [
+          "Any"
+        ]
+      }
+    ],
+    "Dragon": [
+      {
+        "name": "Adult Black Dragon",
+        "cr": "14",
+        "habitat": [
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Adult Blue Dragon",
+        "cr": "16",
+        "habitat": [
+          "Coastal",
+          "Desert"
+        ]
+      },
+      {
+        "name": "Adult Brass Dragon",
+        "cr": "13",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Adult Bronze Dragon",
+        "cr": "15",
+        "habitat": [
+          "Coastal"
+        ]
+      },
+      {
+        "name": "Adult Copper Dragon",
+        "cr": "14",
+        "habitat": [
+          "Hill"
+        ]
+      },
+      {
+        "name": "Adult Gold Dragon",
+        "cr": "17",
+        "habitat": [
+          "Forest",
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Adult Green Dragon",
+        "cr": "15",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Adult Red Dragon",
+        "cr": "17",
+        "habitat": [
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Adult Silver Dragon",
+        "cr": "16",
+        "habitat": [
+          "Mountain",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Adult White Dragon",
+        "cr": "13",
+        "habitat": [
+          "Arctic"
+        ]
+      },
+      {
+        "name": "Ancient Black Dragon",
+        "cr": "21",
+        "habitat": [
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Ancient Blue Dragon",
+        "cr": "23",
+        "habitat": [
+          "Coastal",
+          "Desert"
+        ]
+      },
+      {
+        "name": "Ancient Brass Dragon",
+        "cr": "20",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Ancient Bronze Dragon",
+        "cr": "22",
+        "habitat": [
+          "Coastal"
+        ]
+      },
+      {
+        "name": "Ancient Copper Dragon",
+        "cr": "21",
+        "habitat": [
+          "Hill"
+        ]
+      },
+      {
+        "name": "Ancient Gold Dragon",
+        "cr": "24",
+        "habitat": [
+          "Forest",
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Ancient Green Dragon",
+        "cr": "22",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Ancient Red Dragon",
+        "cr": "24",
+        "habitat": [
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Ancient Silver Dragon",
+        "cr": "23",
+        "habitat": [
+          "Mountain",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Ancient White Dragon",
+        "cr": "20",
+        "habitat": [
+          "Arctic"
+        ]
+      },
+      {
+        "name": "Black Dragon Wyrmling",
+        "cr": "2",
+        "habitat": [
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Blue Dragon Wyrmling",
+        "cr": "3",
+        "habitat": [
+          "Coastal",
+          "Desert"
+        ]
+      },
+      {
+        "name": "Brass Dragon Wyrmling",
+        "cr": "1",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Bronze Dragon Wyrmling",
+        "cr": "2",
+        "habitat": [
+          "Coastal"
+        ]
+      },
+      {
+        "name": "Copper Dragon Wyrmling",
+        "cr": "1",
+        "habitat": [
+          "Hill"
+        ]
+      },
+      {
+        "name": "Dragon Turtle",
+        "cr": "17",
+        "habitat": [
+          "Coastal",
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Gold Dragon Wyrmling",
+        "cr": "3",
+        "habitat": [
+          "Forest",
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Green Dragon Wyrmling",
+        "cr": "2",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Half-Dragon",
+        "cr": "5",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Kobold Warrior",
+        "cr": "1/8",
+        "habitat": [
+          "Arctic",
+          "Coastal",
+          "Desert",
+          "Forest",
+          "Hill",
+          "Mountain",
+          "Swamp",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Pseudodragon",
+        "cr": "1/4",
+        "habitat": [
+          "Coastal",
+          "Desert",
+          "Forest",
+          "Hill",
+          "Mountain",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Red Dragon Wyrmling",
+        "cr": "4",
+        "habitat": [
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Silver Dragon Wyrmling",
+        "cr": "2",
+        "habitat": [
+          "Mountain",
+          "Urban"
+        ]
+      },
+      {
+        "name": "White Dragon Wyrmling",
+        "cr": "2",
+        "habitat": [
+          "Arctic"
+        ]
+      },
+      {
+        "name": "Wyvern",
+        "cr": "6",
+        "habitat": [
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Young Black Dragon",
+        "cr": "7",
+        "habitat": [
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Young Blue Dragon",
+        "cr": "9",
+        "habitat": [
+          "Coastal",
+          "Desert"
+        ]
+      },
+      {
+        "name": "Young Brass Dragon",
+        "cr": "6",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Young Bronze Dragon",
+        "cr": "8",
+        "habitat": [
+          "Coastal"
+        ]
+      },
+      {
+        "name": "Young Copper Dragon",
+        "cr": "7",
+        "habitat": [
+          "Hill"
+        ]
+      },
+      {
+        "name": "Young Gold Dragon",
+        "cr": "10",
+        "habitat": [
+          "Forest",
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Young Green Dragon",
+        "cr": "8",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Young Red Dragon",
+        "cr": "10",
+        "habitat": [
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Young Silver Dragon",
+        "cr": "9",
+        "habitat": [
+          "Mountain",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Young White Dragon",
+        "cr": "6",
+        "habitat": [
+          "Arctic"
+        ]
+      }
+    ],
+    "Elemental": [
+      {
+        "name": "Air Elemental",
+        "cr": "5",
+        "habitat": [
+          "Desert",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Azer Sentinel",
+        "cr": "2",
+        "habitat": [
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Djinni",
+        "cr": "11",
+        "habitat": [
+          "Coastal"
+        ]
+      },
+      {
+        "name": "Dust Mephit",
+        "cr": "1/2",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Earth Elemental",
+        "cr": "5",
+        "habitat": [
+          "Mountain",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Efreeti",
+        "cr": "11",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Fire Elemental",
+        "cr": "5",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Gargoyle",
+        "cr": "2",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Ice Mephit",
+        "cr": "1/2",
+        "habitat": [
+          "Arctic"
+        ]
+      },
+      {
+        "name": "Invisible Stalker",
+        "cr": "6",
+        "habitat": [
+          "Urban"
+        ]
+      },
+      {
+        "name": "Magma Mephit",
+        "cr": "1/2",
+        "habitat": []
+      },
+      {
+        "name": "Magmin",
+        "cr": "1/2",
+        "habitat": []
+      },
+      {
+        "name": "Merfolk Skirmisher",
+        "cr": "1/8",
+        "habitat": [
+          "Coastal",
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Salamander",
+        "cr": "5",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Steam Mephit",
+        "cr": "1/4",
+        "habitat": []
+      },
+      {
+        "name": "Water Elemental",
+        "cr": "5",
+        "habitat": [
+          "Coastal",
+          "Swamp",
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Xorn",
+        "cr": "5",
+        "habitat": [
+          "Underdark"
+        ]
+      }
+    ],
+    "Fey": [
+      {
+        "name": "Blink Dog",
+        "cr": "1/4",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Bugbear Stalker",
+        "cr": "3",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Bugbear Warrior",
+        "cr": "1",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Centaur Trooper",
+        "cr": "2",
+        "habitat": [
+          "Forest",
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Dryad",
+        "cr": "1",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Goblin Boss",
+        "cr": "1",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Goblin Minion",
+        "cr": "1/8",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Goblin Warrior",
+        "cr": "1/4",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Green Hag",
+        "cr": "3",
+        "habitat": [
+          "Forest",
+          "Hill",
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Hobgoblin Captain",
+        "cr": "3",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Mountain",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Hobgoblin Warrior",
+        "cr": "1/2",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Mountain",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Satyr",
+        "cr": "1/2",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Sea Hag",
+        "cr": "2",
+        "habitat": [
+          "Coastal",
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Sprite",
+        "cr": "1/4",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Worg",
+        "cr": "1/2",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      }
+    ],
+    "Fiend": [
+      {
+        "name": "Balor",
+        "cr": "19",
+        "habitat": []
+      },
+      {
+        "name": "Barbed Devil",
+        "cr": "5",
+        "habitat": []
+      },
+      {
+        "name": "Bearded Devil",
+        "cr": "3",
+        "habitat": []
+      },
+      {
+        "name": "Bone Devil",
+        "cr": "9",
+        "habitat": []
+      },
+      {
+        "name": "Chain Devil",
+        "cr": "8",
+        "habitat": []
+      },
+      {
+        "name": "Dretch",
+        "cr": "1/4",
+        "habitat": []
+      },
+      {
+        "name": "Erinyes",
+        "cr": "12",
+        "habitat": []
+      },
+      {
+        "name": "Glabrezu",
+        "cr": "9",
+        "habitat": []
+      },
+      {
+        "name": "Gnoll Warrior",
+        "cr": "1/2",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Hell Hound",
+        "cr": "3",
+        "habitat": [
+          "Mountain",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Hezrou",
+        "cr": "8",
+        "habitat": []
+      },
+      {
+        "name": "Horned Devil",
+        "cr": "11",
+        "habitat": []
+      },
+      {
+        "name": "Ice Devil",
+        "cr": "14",
+        "habitat": []
+      },
+      {
+        "name": "Imp",
+        "cr": "1",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Incubus",
+        "cr": "4",
+        "habitat": [
+          "Urban"
+        ]
+      },
+      {
+        "name": "Lamia",
+        "cr": "4",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Lemure",
+        "cr": "0",
+        "habitat": []
+      },
+      {
+        "name": "Marilith",
+        "cr": "16",
+        "habitat": []
+      },
+      {
+        "name": "Nalfeshnee",
+        "cr": "13",
+        "habitat": []
+      },
+      {
+        "name": "Night Hag",
+        "cr": "5",
+        "habitat": []
+      },
+      {
+        "name": "Nightmare",
+        "cr": "3",
+        "habitat": []
+      },
+      {
+        "name": "Oni",
+        "cr": "7",
+        "habitat": [
+          "Forest",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Pit Fiend",
+        "cr": "20",
+        "habitat": []
+      },
+      {
+        "name": "Quasit",
+        "cr": "1",
+        "habitat": []
+      },
+      {
+        "name": "Rakshasa",
+        "cr": "13",
+        "habitat": [
+          "Urban"
+        ]
+      },
+      {
+        "name": "Sahuagin Warrior",
+        "cr": "1/2",
+        "habitat": [
+          "Coastal",
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Spirit Naga",
+        "cr": "8",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Succubus",
+        "cr": "4",
+        "habitat": [
+          "Urban"
+        ]
+      },
+      {
+        "name": "Vrock",
+        "cr": "6",
+        "habitat": []
+      }
+    ],
+    "Giant": [
+      {
+        "name": "Cloud Giant",
+        "cr": "9",
+        "habitat": [
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Ettin",
+        "cr": "4",
+        "habitat": [
+          "Hill",
+          "Mountain",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Fire Giant",
+        "cr": "9",
+        "habitat": [
+          "Mountain",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Frost Giant",
+        "cr": "8",
+        "habitat": [
+          "Arctic",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Hill Giant",
+        "cr": "5",
+        "habitat": [
+          "Hill"
+        ]
+      },
+      {
+        "name": "Ogre",
+        "cr": "2",
+        "habitat": [
+          "Arctic",
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Mountain",
+          "Swamp",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Stone Giant",
+        "cr": "7",
+        "habitat": [
+          "Hill",
+          "Mountain",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Storm Giant",
+        "cr": "13",
+        "habitat": [
+          "Coastal",
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Troll",
+        "cr": "5",
+        "habitat": [
+          "Arctic",
+          "Forest",
+          "Hill",
+          "Mountain",
+          "Swamp",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Troll Limb",
+        "cr": "1/2",
+        "habitat": []
+      }
+    ],
+    "Humanoid": [
+      {
+        "name": "Archmage",
+        "cr": "12",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Assassin",
+        "cr": "8",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Bandit",
+        "cr": "1/8",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Bandit Captain",
+        "cr": "2",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Berserker",
+        "cr": "2",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Commoner",
+        "cr": "0",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Cultist",
+        "cr": "1/8",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Cultist Fanatic",
+        "cr": "2",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Druid",
+        "cr": "2",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Gladiator",
+        "cr": "5",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Guard",
+        "cr": "1/8",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Guard Captain",
+        "cr": "4",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Knight",
+        "cr": "3",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Mage",
+        "cr": "6",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Noble",
+        "cr": "1/8",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Pirate",
+        "cr": "1",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Pirate Captain",
+        "cr": "6",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Priest",
+        "cr": "2",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Priest Acolyte",
+        "cr": "1/4",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Scout",
+        "cr": "1/2",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Spy",
+        "cr": "1",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Tough",
+        "cr": "1/2",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Tough Boss",
+        "cr": "4",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Vampire Familiar",
+        "cr": "3",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Warrior Infantry",
+        "cr": "1/8",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Warrior Veteran",
+        "cr": "3",
+        "habitat": [
+          "Any"
+        ]
+      }
+    ],
+    "Monstrosity": [
+      {
+        "name": "Ankheg",
+        "cr": "2",
+        "habitat": [
+          "Forest",
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Axe Beak",
+        "cr": "1/4",
+        "habitat": [
+          "Arctic",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Basilisk",
+        "cr": "3",
+        "habitat": [
+          "Mountain",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Behir",
+        "cr": "11",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Bulette",
+        "cr": "5",
+        "habitat": [
+          "Grassland",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Chimera",
+        "cr": "6",
+        "habitat": [
+          "Grassland",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Cockatrice",
+        "cr": "1/2",
+        "habitat": [
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Death Dog",
+        "cr": "1",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Doppelganger",
+        "cr": "3",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Drider",
+        "cr": "6",
+        "habitat": [
+          "Forest",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Ettercap",
+        "cr": "2",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Flying Snake",
+        "cr": "1/8",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Giant Vulture",
+        "cr": "1",
+        "habitat": [
+          "Desert",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Griffon",
+        "cr": "2",
+        "habitat": [
+          "Arctic",
+          "Coastal",
+          "Grassland",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Harpy",
+        "cr": "1",
+        "habitat": [
+          "Coastal",
+          "Forest",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Hippogriff",
+        "cr": "1",
+        "habitat": [
+          "Grassland",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Hydra",
+        "cr": "8",
+        "habitat": [
+          "Coastal",
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Kraken",
+        "cr": "23",
+        "habitat": [
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Manticore",
+        "cr": "3",
+        "habitat": [
+          "Arctic",
+          "Coastal",
+          "Grassland",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Medusa",
+        "cr": "6",
+        "habitat": [
+          "Desert"
+        ]
+      },
+      {
+        "name": "Merrow",
+        "cr": "2",
+        "habitat": [
+          "Coastal",
+          "Underwater"
+        ]
+      },
+      {
+        "name": "Mimic",
+        "cr": "2",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Minotaur of Baphomet",
+        "cr": "3",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Owlbear",
+        "cr": "3",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Phase Spider",
+        "cr": "3",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Purple Worm",
+        "cr": "15",
+        "habitat": [
+          "Desert",
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Remorhaz",
+        "cr": "11",
+        "habitat": [
+          "Arctic"
+        ]
+      },
+      {
+        "name": "Roc",
+        "cr": "11",
+        "habitat": [
+          "Arctic",
+          "Coastal",
+          "Desert",
+          "Hill",
+          "Mountain"
+        ]
+      },
+      {
+        "name": "Rust Monster",
+        "cr": "1/2",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Stirge",
+        "cr": "1/8",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Grassland",
+          "Hill",
+          "Mountain",
+          "Swamp",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Tarrasque",
+        "cr": "30",
+        "habitat": [
+          "Urban"
+        ]
+      },
+      {
+        "name": "Werebear",
+        "cr": "5",
+        "habitat": [
+          "Arctic",
+          "Forest",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Wereboar",
+        "cr": "4",
+        "habitat": [
+          "Forest",
+          "Grassland",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Wererat",
+        "cr": "2",
+        "habitat": [
+          "Forest",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Weretiger",
+        "cr": "4",
+        "habitat": [
+          "Desert",
+          "Forest",
+          "Grassland"
+        ]
+      },
+      {
+        "name": "Werewolf",
+        "cr": "3",
+        "habitat": [
+          "Forest",
+          "Hill"
+        ]
+      },
+      {
+        "name": "Winter Wolf",
+        "cr": "3",
+        "habitat": [
+          "Arctic"
+        ]
+      }
+    ],
+    "Ooze": [
+      {
+        "name": "Black Pudding",
+        "cr": "4",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Gelatinous Cube",
+        "cr": "2",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Gray Ooze",
+        "cr": "1/2",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Ochre Jelly",
+        "cr": "2",
+        "habitat": [
+          "Underdark"
+        ]
+      }
+    ],
+    "Plant": [
+      {
+        "name": "Awakened Shrub",
+        "cr": "0",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Awakened Tree",
+        "cr": "2",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Shambling Mound",
+        "cr": "5",
+        "habitat": [
+          "Forest",
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Shrieker Fungus",
+        "cr": "0",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Treant",
+        "cr": "9",
+        "habitat": [
+          "Forest"
+        ]
+      },
+      {
+        "name": "Violet Fungus",
+        "cr": "1/4",
+        "habitat": [
+          "Underdark"
+        ]
+      }
+    ],
+    "Undead": [
+      {
+        "name": "Ghast",
+        "cr": "2",
+        "habitat": [
+          "Swamp",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Ghost",
+        "cr": "4",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Ghoul",
+        "cr": "1",
+        "habitat": [
+          "Swamp",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Lich",
+        "cr": "21",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Minotaur Skeleton",
+        "cr": "2",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Mummy",
+        "cr": "3",
+        "habitat": [
+          "Desert",
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Mummy Lord",
+        "cr": "15",
+        "habitat": [
+          "Desert",
+          "Swamp"
+        ]
+      },
+      {
+        "name": "Ogre Zombie",
+        "cr": "2",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Shadow",
+        "cr": "1/2",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Skeleton",
+        "cr": "1/4",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Specter",
+        "cr": "1",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Swarm of Crawling Claws",
+        "cr": "3",
+        "habitat": [
+          "Any"
+        ]
+      },
+      {
+        "name": "Vampire",
+        "cr": "13",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Vampire Spawn",
+        "cr": "5",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Warhorse Skeleton",
+        "cr": "1/2",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Wight",
+        "cr": "3",
+        "habitat": [
+          "Desert",
+          "Swamp",
+          "Underdark",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Will-o'-Wisp",
+        "cr": "2",
+        "habitat": [
+          "Forest",
+          "Swamp",
+          "Urban"
+        ]
+      },
+      {
+        "name": "Wraith",
+        "cr": "5",
+        "habitat": [
+          "Underdark"
+        ]
+      },
+      {
+        "name": "Zombie",
+        "cr": "1/4",
+        "habitat": [
+          "Underdark",
+          "Urban"
+        ]
+      }
+    ]
+  },
+  "humanoid_npc_profiles": [
+    {
+      "name": "Archmage",
+      "cr": "12",
+      "hp": 170,
+      "npc_use": [
+        "elite caster",
+        "patron",
+        "major NPC"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Assassin",
+      "cr": "8",
+      "hp": 97,
+      "npc_use": [
+        "elite killer",
+        "specialist",
+        "major threat"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Bandit",
+      "cr": "1/8",
+      "hp": 11,
+      "npc_use": [
+        "criminal",
+        "outlaw",
+        "armed rough"
+      ],
+      "incidental_npc": "situational"
+    },
+    {
+      "name": "Bandit Captain",
+      "cr": "2",
+      "hp": 52,
+      "npc_use": [
+        "criminal leader",
+        "boss"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Berserker",
+      "cr": "2",
+      "hp": 67,
+      "npc_use": [
+        "brute",
+        "warrior",
+        "dangerous combatant"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Commoner",
+      "cr": "0",
+      "hp": 4,
+      "npc_use": [
+        "civilian",
+        "worker",
+        "shopkeeper",
+        "bystander"
+      ],
+      "incidental_npc": "preferred"
+    },
+    {
+      "name": "Cultist",
+      "cr": "1/8",
+      "hp": 9,
+      "npc_use": [
+        "cult member",
+        "low-level hostile civilian"
+      ],
+      "incidental_npc": "situational"
+    },
+    {
+      "name": "Cultist Fanatic",
+      "cr": "2",
+      "hp": 44,
+      "npc_use": [
+        "cult leader",
+        "caster",
+        "elite cultist"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Druid",
+      "cr": "2",
+      "hp": 44,
+      "npc_use": [
+        "professional caster",
+        "wilderness expert",
+        "healer"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Gladiator",
+      "cr": "5",
+      "hp": 112,
+      "npc_use": [
+        "elite fighter",
+        "arena combatant",
+        "bodyguard"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Guard",
+      "cr": "1/8",
+      "hp": 11,
+      "npc_use": [
+        "guard",
+        "watch",
+        "ordinary security"
+      ],
+      "incidental_npc": "preferred"
+    },
+    {
+      "name": "Guard Captain",
+      "cr": "4",
+      "hp": 75,
+      "npc_use": [
+        "officer",
+        "elite guard",
+        "commander"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Knight",
+      "cr": "3",
+      "hp": 52,
+      "npc_use": [
+        "knight",
+        "elite soldier",
+        "noble warrior"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Mage",
+      "cr": "6",
+      "hp": 81,
+      "npc_use": [
+        "professional caster",
+        "specialist",
+        "major NPC"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Noble",
+      "cr": "1/8",
+      "hp": 9,
+      "npc_use": [
+        "important civilian",
+        "aristocrat",
+        "official"
+      ],
+      "incidental_npc": "preferred"
+    },
+    {
+      "name": "Pirate",
+      "cr": "1",
+      "hp": 33,
+      "npc_use": [
+        "pirate",
+        "sailor",
+        "armed criminal"
+      ],
+      "incidental_npc": "situational"
+    },
+    {
+      "name": "Pirate Captain",
+      "cr": "6",
+      "hp": 84,
+      "npc_use": [
+        "pirate leader",
+        "boss"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Priest",
+      "cr": "2",
+      "hp": 38,
+      "npc_use": [
+        "senior clergy",
+        "healer",
+        "caster"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Priest Acolyte",
+      "cr": "1/4",
+      "hp": 11,
+      "npc_use": [
+        "junior clergy",
+        "temple attendant",
+        "healer"
+      ],
+      "incidental_npc": "situational"
+    },
+    {
+      "name": "Scout",
+      "cr": "1/2",
+      "hp": 16,
+      "npc_use": [
+        "scout",
+        "ranger",
+        "guide",
+        "professional"
+      ],
+      "incidental_npc": "situational"
+    },
+    {
+      "name": "Spy",
+      "cr": "1",
+      "hp": 27,
+      "npc_use": [
+        "spy",
+        "agent",
+        "social specialist"
+      ],
+      "incidental_npc": "situational"
+    },
+    {
+      "name": "Tough",
+      "cr": "1/2",
+      "hp": 32,
+      "npc_use": [
+        "bruiser",
+        "thug",
+        "hardened laborer"
+      ],
+      "incidental_npc": "situational"
+    },
+    {
+      "name": "Tough Boss",
+      "cr": "4",
+      "hp": 82,
+      "npc_use": [
+        "gang leader",
+        "boss",
+        "elite brute"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Vampire Familiar",
+      "cr": "3",
+      "hp": 65,
+      "npc_use": [
+        "vampire servant",
+        "elite minion",
+        "special NPC"
+      ],
+      "incidental_npc": "not_incidental"
+    },
+    {
+      "name": "Warrior Infantry",
+      "cr": "1/8",
+      "hp": 9,
+      "npc_use": [
+        "soldier",
+        "militia",
+        "ordinary armed professional"
+      ],
+      "incidental_npc": "preferred"
+    },
+    {
+      "name": "Warrior Veteran",
+      "cr": "3",
+      "hp": 65,
+      "npc_use": [
+        "veteran soldier",
+        "elite professional",
+        "officer"
+      ],
+      "incidental_npc": "not_incidental"
+    }
+  ]
+}

@@ -79,7 +79,7 @@ export interface InitiativeEntry {
 
 export interface VttSetupFeature {
   label: string
-  kind: 'room' | 'wall' | 'door' | 'obstacle' | 'furniture' | 'terrain'
+  kind: 'room' | 'wall' | 'door' | 'window' | 'obstacle' | 'furniture' | 'terrain'
   x_ft: number
   y_ft: number
   width_ft: number
@@ -88,7 +88,8 @@ export interface VttSetupFeature {
 
 export interface VttSetupActorHint {
   name: string
-  side: 'enemy' | 'ally'
+  side: 'enemy' | 'ally' | 'bystander'
+  srd_template: string
   visual_tags: string[]
   x_ft: number
   y_ft: number
@@ -837,8 +838,8 @@ function normalizeVttSetup(value: unknown): VttSetupPlan | null {
     const number = typeof raw === 'number' && Number.isFinite(raw) ? raw : fallback
     return Math.max(0, Math.min(maximum, Math.round(number / 5) * 5))
   }
-  const width = Math.max(20, snap(source.width_ft, 60))
-  const height = Math.max(20, snap(source.height_ft, 40))
+  const width = 200
+  const height = 200
   const start = source.player_start_area && typeof source.player_start_area === 'object'
     ? source.player_start_area
     : { x_ft: 5, y_ft: 5, width_ft: 15, height_ft: Math.max(10, height - 10) }
@@ -849,6 +850,7 @@ function normalizeVttSetup(value: unknown): VttSetupPlan | null {
         const feature = entry as Partial<VttSetupFeature>
         const kind = feature.kind === 'wall'
           || feature.kind === 'door'
+          || feature.kind === 'window'
           || feature.kind === 'obstacle'
           || feature.kind === 'furniture'
           || feature.kind === 'terrain'
@@ -873,7 +875,8 @@ function normalizeVttSetup(value: unknown): VttSetupPlan | null {
         if (!name) return []
         return [{
           name,
-          side: actor.side === 'ally' ? 'ally' as const : 'enemy' as const,
+          side: actor.side === 'ally' ? 'ally' as const : actor.side === 'bystander' ? 'bystander' as const : 'enemy' as const,
+          srd_template: safeShortText(actor.srd_template, 120),
           visual_tags: normalizedStringList(actor.visual_tags, 10, 80),
           x_ft: snap(actor.x_ft, width - 10, width),
           y_ft: snap(actor.y_ft, 5, height),
