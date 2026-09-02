@@ -1,8 +1,8 @@
 'use client'
 
-import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { CheckCircle2, LoaderCircle } from 'lucide-react'
+import { CURRENT_ADVENTURE_KEY } from '@/lib/aigm/campaign-storage'
 
 type CampaignSummary = {
   adventure_id: string
@@ -41,7 +41,12 @@ export function FoundryPairingApproval({ initialCode = '' }: { initialCode?: str
         if (cancelled) return
         const next = Array.isArray(body.campaigns) ? body.campaigns as CampaignSummary[] : []
         setCampaigns(next)
-        if (next.length === 1) setCampaignId(next[0].adventure_id)
+        const currentAdventureId = window.localStorage.getItem(CURRENT_ADVENTURE_KEY) || ''
+        if (currentAdventureId && next.some((campaign) => campaign.adventure_id === currentAdventureId)) {
+          setCampaignId(currentAdventureId)
+        } else if (next.length === 1) {
+          setCampaignId(next[0].adventure_id)
+        }
       })
       .catch((caught) => {
         if (!cancelled) setError(caught instanceof Error ? caught.message : 'Could not load your campaigns.')
@@ -84,8 +89,7 @@ export function FoundryPairingApproval({ initialCode = '' }: { initialCode?: str
         <CheckCircle2 aria-hidden="true" />
         <h2 id="foundry-connected-heading">Foundry is connected.</h2>
         <p><strong>{result.worldLabel}</strong> is now linked to <strong>{result.campaignName}</strong>.</p>
-        <p>Return to Foundry. The Integrator should finish pairing automatically within a few seconds.</p>
-        <Link className="button button-primary" href="/campaigns">Back to Campaigns</Link>
+        <p>Return to Foundry. The Integrator should finish pairing automatically within a few seconds. This approval page is finished; you do not need to visit Campaigns.</p>
       </section>
     )
   }

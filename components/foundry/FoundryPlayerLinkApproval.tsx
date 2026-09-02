@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { useState } from 'react'
 import { CheckCircle2, LoaderCircle } from 'lucide-react'
 
@@ -57,8 +56,7 @@ export function FoundryPlayerLinkApproval({ initialCode = '' }: { initialCode?: 
         <CheckCircle2 aria-hidden="true" />
         <h2 id="foundry-player-linked-heading">Foundry player linked.</h2>
         <p><strong>{result.foundryUserName}</strong> is linked to your RPG Your Way account for <strong>{result.campaignName}</strong>.</p>
-        <p>Return to Foundry. The Integrator should finish the player link automatically within a few seconds.</p>
-        <Link className="button button-primary" href="/campaigns">Back to Campaigns</Link>
+        <p>Return to Foundry. The Integrator should finish the player link automatically within a few seconds. This approval page is finished; you do not need to visit Campaigns.</p>
       </section>
     )
   }

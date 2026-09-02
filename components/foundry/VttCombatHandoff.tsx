@@ -11,6 +11,7 @@ import {
   type SavedAdventureState,
   type StoredPartyCharacter,
 } from '@/lib/aigm/campaign-storage'
+import { supportedSystemFor } from '@/lib/aigm/supported-systems'
 
 type FoundryStatus = {
   connected: boolean
@@ -46,8 +47,8 @@ function characterVisualTags(state: SavedAdventureState, characterId: string) {
     .slice(0, 12)
 }
 
-const FOUNDRY_MODERN_RULESET_LABEL = 'D&D 5.5e (2024 rules)'
 const FOUNDRY_MODERN_RULESET_ID = 'dnd-5.5e-srd-5.2.1'
+const FOUNDRY_OFFER_STATE_PREFIX = 'rpgyw-foundry-combat-offer:v1:'
 
 function foundryModernMechanics(character: StoredPartyCharacter, live: CharacterLiveState) {
   const record = character.result?.character
@@ -216,10 +217,26 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
   const combatKey = combatReady && partyState
     ? [
         partyState.adventure_id,
-        gameplay?.turn_count ?? 0,
-        ...npcInitiative.map((entry) => entry.character_id),
+        gameplay?.scene || 'combat',
+        ...playerInitiative.map((entry) => entry.character_id).sort(),
+        ...npcInitiative.map((entry) => entry.character_id).sort(),
       ].join(':')
     : ''
+
+  function storedOfferState(key = combatKey) {
+    if (!key || typeof window === 'undefined') return ''
+    return window.sessionStorage.getItem(`${FOUNDRY_OFFER_STATE_PREFIX}${key}`) || ''
+  }
+
+  function rememberOfferState(state: 'dismissed' | 'submitted', key = combatKey) {
+    if (!key || typeof window === 'undefined') return
+    window.sessionStorage.setItem(`${FOUNDRY_OFFER_STATE_PREFIX}${key}`, state)
+  }
+
+  function dismissOffer() {
+    rememberOfferState('dismissed')
+    setOfferOpen(false)
+  }
 
   async function refreshFoundryStatus() {
     if (!campaignId) return
@@ -301,6 +318,7 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
   useEffect(() => {
     if (!statusLoaded || !combatKey || offeredCombatRef.current === combatKey) return
     offeredCombatRef.current = combatKey
+    if (storedOfferState(combatKey)) return
     setOfferOpen(true)
   }, [combatKey, statusLoaded])
 
@@ -366,52 +384,57 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
   async function prepareVttEncounter() {
     if (!partyState || !gameplay || !foundryStatus?.connected) return
 
-    if (partyState.settings.ruleset !== FOUNDRY_MODERN_RULESET_LABEL) {
-      setHandoffError('Foundry full-character integration currently supports D&D 5.5e (2024 rules) only.')
-      return
-    }
-
-    const initiativeByCharacter = new Map(
-      playerInitiative.map((entry) => [entry.character_id, entry.total]),
-    )
-
-    const party = partyState.characters.flatMap((character) => {
-      if (character.status !== 'ready' || !character.result) return []
-      const live = normalizeLiveState(character.liveState, character.result)
-        ?? initialLiveState(character.result)
-
-      return [{
-        campaignCharacterId: character.id,
-        displayName: playNameFor(character),
-        currentHitPoints: live.current_hit_points,
-        maximumHitPoints: live.maximum_hit_points,
-        temporaryHitPoints: live.temporary_hit_points,
-        armorClass: live.armor_class,
-        initiative: initiativeByCharacter.get(character.id) ?? null,
-        visualTags: characterVisualTags(partyState, character.id),
-        preferredTokenAsset: character.vttTokenAsset || null,
-        rulesetId: FOUNDRY_MODERN_RULESET_ID,
-        foundryRulesVersion: '2024',
-        mechanics: foundryModernMechanics(character, live),
-      }]
-    })
-
-    const enemies = npcInitiative.map((entry) => ({
-      combatantId: entry.character_id,
-      displayName: entry.name,
-      initiative: entry.total,
-    }))
-    const latestAigmNarration = [...gameplay.messages]
-      .reverse()
-      .find((entry) => entry.role === 'assistant')
-      ?.text
-      || gameplay.scene
-      || ''
-
     setPreparing(true)
     setHandoffError('')
 
     try {
+      const normalizedRuleset = supportedSystemFor(partyState.settings.ruleset || '')
+      if (normalizedRuleset.id !== FOUNDRY_MODERN_RULESET_ID) {
+        throw new Error('Foundry full-character integration currently supports D&D 5.5e (2024 rules) only.')
+      }
+
+      const initiativeByCharacter = new Map(
+        playerInitiative.map((entry) => [entry.character_id, entry.total]),
+      )
+
+      const party = partyState.characters.flatMap((character) => {
+        if (character.status !== 'ready' || !character.result) return []
+        const live = normalizeLiveState(character.liveState, character.result)
+          ?? initialLiveState(character.result)
+
+        return [{
+          campaignCharacterId: character.id,
+          displayName: playNameFor(character),
+          currentHitPoints: live.current_hit_points,
+          maximumHitPoints: live.maximum_hit_points,
+          temporaryHitPoints: live.temporary_hit_points,
+          armorClass: live.armor_class,
+          initiative: initiativeByCharacter.get(character.id) ?? null,
+          visualTags: characterVisualTags(partyState, character.id),
+          preferredTokenAsset: character.vttTokenAsset || null,
+          rulesetId: FOUNDRY_MODERN_RULESET_ID,
+          foundryRulesVersion: '2024',
+          mechanics: foundryModernMechanics(character, live),
+        }]
+      })
+
+      if (!party.length) {
+        throw new Error('RPG Your Way could not find any ready player characters to send to Foundry.')
+      }
+
+      const enemies = npcInitiative.map((entry) => ({
+        combatantId: entry.character_id,
+        displayName: entry.name,
+        initiative: entry.total,
+      }))
+
+      const latestAigmNarration = [...gameplay.messages]
+        .reverse()
+        .find((entry) => entry.role === 'assistant')
+        ?.text
+        || gameplay.scene
+        || ''
+
       const response = await fetch('/api/integrations/foundry/encounters', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -427,17 +450,18 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
       })
       const body = await response.json().catch(() => ({}))
       if (!response.ok) {
-        throw new Error(typeof body.error === 'string' ? body.error : 'Could not prepare the VTT encounter.')
+        throw new Error(typeof body.error === 'string' ? body.error : 'Could not prepare the Foundry encounter.')
       }
 
       setEncounter({
         encounterId: String(body.encounterId),
         status: String(body.status || 'pending'),
       })
+      rememberOfferState('submitted')
       setOfferOpen(false)
       await refreshFoundryStatus()
     } catch (caught) {
-      setHandoffError(caught instanceof Error ? caught.message : 'Could not prepare the VTT encounter.')
+      setHandoffError(caught instanceof Error ? caught.message : 'Could not prepare the Foundry encounter.')
     } finally {
       setPreparing(false)
     }
@@ -493,7 +517,7 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
           >
             <button
               type="button"
-              onClick={() => setOfferOpen(false)}
+              onClick={dismissOffer}
               className="absolute right-3 top-3 inline-flex size-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
               aria-label="Close VTT combat offer"
             >
@@ -513,6 +537,12 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
                 </h2>
               </div>
             </div>
+
+            {handoffError ? (
+              <p className="mt-4 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-sm font-semibold text-destructive" role="alert">
+                {handoffError}
+              </p>
+            ) : null}
 
             {foundryStatus?.connected ? (
               <>
@@ -535,7 +565,7 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
                 <div className="mt-5 flex flex-wrap justify-end gap-2">
                   <button
                     type="button"
-                    onClick={() => setOfferOpen(false)}
+                    onClick={dismissOffer}
                     className="min-h-10 rounded-xl border border-border px-4 py-2 text-sm font-bold"
                   >
                     Not this time
