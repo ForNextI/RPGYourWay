@@ -1001,3 +1001,10 @@ Start-page contextual help follows the ordinary control vocabulary rather than c
 - **Where to generate characters** and **How to import characters** are canonical forest-green action buttons.
 - The Ready-to-Play chooser offers **City / Town / Wild** preset parties with short explanations.
 - Ready-to-Play art uses one campaign-wide selection among **Portrait / POG / ISO / Top-down**. The chooser must not allow mixed Ready-to-Play art styles. Changing the style updates all twelve character previews immediately.
+
+## 22.3 NPC consequence default
+
+- **Worry About NPCs** is checked by default under Optional nitpicky character choices.
+- Checked means incidental NPCs and bystanders materially exist in the world and remain part of danger, rescue, injury, death, and consequence when events reach them.
+- Unchecking **Worry About NPCs** is the opt-out that allows incidental bystander welfare to remain abstract unless the story makes those NPCs important.
+- The implementation may retain an inverted internal storage key for backward compatibility, but the player-facing control is always expressed positively.

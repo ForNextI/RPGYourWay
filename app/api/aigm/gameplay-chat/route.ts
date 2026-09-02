@@ -710,7 +710,7 @@ function safeGameplayPreferences(value: unknown) {
   return {
     full_hit_points: source.full_hit_points !== false,
     dont_sweat_small_stuff: source.dont_sweat_small_stuff !== false,
-    dont_worry_about_npcs: source.dont_worry_about_npcs !== false,
+    dont_worry_about_npcs: source.dont_worry_about_npcs === true,
     dont_worry_about_food: source.dont_worry_about_food !== false,
   }
 }
@@ -1500,7 +1500,7 @@ GAMEPLAY ABSTRACTION PREFERENCES:
 - context.gameplay_preferences contains the player's campaign-level abstraction choices. Apply them quietly; do not expose internal field names.
 - full_hit_points records whether new-campaign character intake began fully rested. It is not permission to heal characters during ordinary play.
 - When dont_sweat_small_stuff is true, assume ordinary inexpensive class necessities and routine pouch/focus access unless a priced, consumed, scarce, or story-consequential item matters. When false, allow mundane inventory details to matter when the fiction calls for them.
-- When dont_worry_about_npcs is true, incidental bystander welfare may stay abstract unless an NPC becomes named, important, directly threatened, or central to a player choice. When false, keep bystanders and ordinary NPCs materially present in danger and consequences rather than letting them disappear when initiative starts.
+- When dont_worry_about_npcs is false, which is the normal default, keep bystanders and ordinary NPCs materially present in danger and consequences rather than letting them disappear when initiative starts. When true, incidental bystander welfare may stay abstract unless an NPC becomes named, important, directly threatened, or central to a player choice.
 - When dont_worry_about_food is true, assume ordinary meals, water, and routine rations are handled unless scarcity is a story element. When false, food and water can be tracked when travel, scarcity, cost, or survival makes them relevant.
 - These are RPG Your Way/AIGM preferences, not Foundry commands. If a preference affects the VTT, resolve it into a concrete tactical decision before handing anything to Foundry.
 

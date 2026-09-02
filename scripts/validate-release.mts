@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '2.11.2')
-assert.equal(pkg.rpgywVersion, '2.11.2')
-has(read('lib/version.ts'), "APP_VERSION = '2.11.2'", 'visible app version')
+assert.equal(pkg.version, '2.11.3')
+assert.equal(pkg.rpgywVersion, '2.11.3')
+has(read('lib/version.ts'), "APP_VERSION = '2.11.3'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -144,6 +144,8 @@ for (const slotEnv of [
 ]) has(env, slotEnv)
 lacks(env, 'WARDENS_GOD_MODE_PHRASE')
 const gameplayRoute = read('app/api/aigm/gameplay-chat/route.ts')
+has(gameplayRoute, 'dont_worry_about_npcs: source.dont_worry_about_npcs === true', 'AIGM NPC preference defaults to material NPCs')
+has(gameplayRoute, 'which is the normal default, keep bystanders and ordinary NPCs materially present', 'AIGM NPC consequence semantics')
 has(gameplayRoute, 'process.env.RPGYW_GOD_MODE_PHRASE')
 lacks(gameplayRoute, 'process.env.WARDENS_GOD_MODE_PHRASE')
 
@@ -202,6 +204,10 @@ has(startStepOnboarding, '<p className="start-rules-subtitle">New Campaign</p>',
 has(startStepOnboarding, 'Default system: D&D 5.5e', 'Step 1 default-system wording')
 has(startStepOnboarding, 'READY_TO_PLAY_PARTY_DETAILS[preset]', 'Ready-to-Play preset explanations')
 has(startStepOnboarding, 'Choose one style for all Ready-to-Play characters.', 'single Ready-to-Play art-style rule')
+has(startStepOnboarding, 'dont_worry_about_npcs: false', 'NPCs matter by default')
+has(startStepOnboarding, '<strong>Worry About NPCs</strong>', 'positive NPC preference label')
+has(startStepOnboarding, "checked={!gameplayPreferences.dont_worry_about_npcs}", 'positive NPC checkbox polarity')
+has(startStepOnboarding, 'Unchecking this keeps incidental bystander welfare abstract', 'NPC abstraction opt-out explanation')
 assert.equal((startStepOnboarding.match(/Choose Ready-to-Play characters/g) ?? []).length, 2, 'Both Ready-to-Play entry paths must use the complete chooser')
 lacks(startStepOnboarding, '</div> : null}\n              <div className="start-nitpicky">', 'nitpicky choices outside expanded system chooser')
 has(startStepOnboarding, 'start-step-help-rail start-step-help-rail--first', 'Step 1 paired bottom help rail')
@@ -480,6 +486,7 @@ has(lookbook, 'The visible brass surround on a canonical raised object is **2 px
 has(lookbook, '# 22. Current page-specific composition rules')
 has(lookbook, '## 22.1 Start onboarding helper controls', 'Start onboarding help composition rule')
 has(lookbook, '## 22.2 Start system and Ready-to-Play chooser', 'Start system and RTP chooser composition rule')
+has(lookbook, '## 22.3 NPC consequence default', 'NPC consequence default rule')
 lacks(lookbook, '1.12.80')
 lacks(lookbook, '1.12.81')
 lacks(lookbook, '1.12.82')

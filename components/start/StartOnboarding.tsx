@@ -132,7 +132,7 @@ const STEP_HELP = [
 const DEFAULT_GAMEPLAY_PREFERENCES: GameplayPreferences = {
   full_hit_points: true,
   dont_sweat_small_stuff: true,
-  dont_worry_about_npcs: true,
+  dont_worry_about_npcs: false,
   dont_worry_about_food: true,
 }
 
@@ -865,7 +865,7 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '' }:
                   {nitpickyOpen ? <div className="start-nitpicky-panel">
                     <label><input type="checkbox" checked={gameplayPreferences.full_hit_points} onChange={(event) => updateGameplayPreference('full_hit_points', event.target.checked)} /><span><strong>Full Hit Points</strong><small>New campaign characters begin fully rested. Turn this off to preserve imported current HP and other continuing-state details.</small></span></label>
                     <label><input type="checkbox" checked={gameplayPreferences.dont_sweat_small_stuff} onChange={(event) => updateGameplayPreference('dont_sweat_small_stuff', event.target.checked)} /><span><strong>Don&apos;t Sweat the Small Stuff</strong><small>Assume ordinary inexpensive class necessities unless they become consequential.</small></span></label>
-                    <label><input type="checkbox" checked={gameplayPreferences.dont_worry_about_npcs} onChange={(event) => updateGameplayPreference('dont_worry_about_npcs', event.target.checked)} /><span><strong>Don&apos;t Worry About NPCs</strong><small>Keep incidental bystander welfare abstract unless the story makes it important.</small></span></label>
+                    <label><input type="checkbox" checked={!gameplayPreferences.dont_worry_about_npcs} onChange={(event) => updateGameplayPreference('dont_worry_about_npcs', !event.target.checked)} /><span><strong>Worry About NPCs</strong><small>Checked by default. NPCs materially matter in the world. Unchecking this keeps incidental bystander welfare abstract unless the story makes it important.</small></span></label>
                     <label><input type="checkbox" checked={gameplayPreferences.dont_worry_about_food} onChange={(event) => updateGameplayPreference('dont_worry_about_food', event.target.checked)} /><span><strong>Don&apos;t Worry About Food</strong><small>Assume ordinary meals and rations are handled unless scarcity matters.</small></span></label>
                   </div> : null}
                 </div>

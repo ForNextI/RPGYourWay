@@ -1328,7 +1328,7 @@ export function normalizeAdventureState(value: unknown): SavedAdventureState | n
       gameplay_preferences: {
         full_hit_points: parsed.gameplay_preferences?.full_hit_points !== false,
         dont_sweat_small_stuff: parsed.gameplay_preferences?.dont_sweat_small_stuff !== false,
-        dont_worry_about_npcs: parsed.gameplay_preferences?.dont_worry_about_npcs !== false,
+        dont_worry_about_npcs: parsed.gameplay_preferences?.dont_worry_about_npcs === true,
         dont_worry_about_food: parsed.gameplay_preferences?.dont_worry_about_food !== false,
       },
     }
