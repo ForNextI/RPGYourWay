@@ -981,3 +981,14 @@ These are current composition rules that sit on top of the canonical primitives 
 - The `/multiplayer` intro plaque is light olive and is the orientation surface for multiplayer/VTT management.
 - Its optional missed-session tip is a canonical forest raised action with cream copy and lime hover/focus copy.
 - Opening that tip reveals a cream reading panel explaining how to download a Play transcript and send an excerpt through Script for narrative catch-up prose.
+
+## 22.1 Start onboarding helper controls
+
+Start-page contextual help follows the ordinary control vocabulary rather than creating another plaque type.
+
+- The numbered **Start Here / Gather Your Party / Adjustable gameplay settings / naming** nameplate contains only the step identity. Help is never embedded inside that nameplate.
+- **Explain this step to me** is a small **cream, rounded information control** at the lower-right of the active step.
+- On Step 1 only, **Help, I've never played D&D. What do I do?** is a second small cream information control at the lower-left, opposite the step explanation control.
+- Do not create a full-width adult Help row above Start Here. Help controls must remain visually secondary to the current onboarding decision.
+- **New Campaign** remains the Step 1 eyebrow/subtitle.
+- New Start-page accordions and chooser buttons use the canonical control/card radii and raised shadows. Do not introduce square page-local controls.
