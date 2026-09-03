@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '3.0.0')
-assert.equal(pkg.rpgywVersion, '3.0.0')
-has(read('lib/version.ts'), "APP_VERSION = '3.0.0'", 'visible app version')
+assert.equal(pkg.version, '3.0.3')
+assert.equal(pkg.rpgywVersion, '3.0.3')
+has(read('lib/version.ts'), "APP_VERSION = '3.0.3'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -737,3 +737,10 @@ has(gameplay300, 'ensureAdventureUsageAccess()', 'Begin Adventure client gate')
 has(gameplay300, 'purpose=\"adventure\"', 'Play contextual usage dialog')
 has(helpKnowledge300, 'Detailed Start Page Help uses RPG Your Way', 'Help knowledge paid-usage rule')
 has(lookbook300, '## 7.4 Contrast over sameness', 'canonical contrast-over-sameness rule')
+
+
+// RPGYW 3.0.3 landing typography contract.
+has(css, 'font-size: clamp(1.34rem, 2.35vw, 1.72rem);', 'larger landing lead heading')
+has(css, 'font-size: clamp(1.06rem, 1.45vw, 1.20rem);', 'larger landing intro copy')
+has(css, 'font-size: clamp(1.04rem, 1.6vw, 1.18rem);', 'larger differentiator buttons')
+has(css, 'font-size: clamp(1.18rem, 2.65vw, 1.48rem);', 'larger lower major landing buttons')
