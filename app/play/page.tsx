@@ -17,22 +17,18 @@ export default async function PlayPage({ searchParams }: { searchParams: PlaySea
   const supabase = await createClient()
   const [{ data }, params] = await Promise.all([supabase.auth.getUser(), searchParams])
   const multiplayerCode = firstQueryValue(params.multiplayer).trim().slice(0, 96)
+  const signedIn = Boolean(data.user)
 
-  if (!data.user && !multiplayerCode) redirect('/start')
-  if (!data.user) {
-    const query = new URLSearchParams({ multiplayer: multiplayerCode })
-    const authStatus = firstQueryValue(params.authStatus)
-    const authError = firstQueryValue(params.authError)
-    if (authStatus) query.set('authStatus', authStatus)
-    if (authError) query.set('authError', authError)
-    redirect(`/start?${query.toString()}`)
-  }
+  // A visitor may inspect an ordinary locally-created Play page without an account.
+  // A direct multiplayer invitation identifies a real shared cloud table and remains
+  // account-only.
+  if (!signedIn && multiplayerCode) redirect('/account#sign-in')
 
   return (
     <div className="site-frame site-frame-play play-page-frame">
       <SiteHeader />
       <MotionPreferenceProvider>
-        <AigmGameplayShell />
+        <AigmGameplayShell signedIn={signedIn} />
       </MotionPreferenceProvider>
     </div>
   )

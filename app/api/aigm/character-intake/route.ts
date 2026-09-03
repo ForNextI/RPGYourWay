@@ -16,7 +16,7 @@ import { aiContentSafetyPrompt, normalizeAiContentMode } from '@/lib/site/ai-con
 import { supportedSystemFor } from '@/lib/aigm/supported-systems'
 import { formatRulesReference, rulesReferenceFor } from '@/lib/aigm/rules-library'
 import { estimateTerraMaximumMicrousd, terraProviderCostMicrousd } from '@/lib/usage/play-cost'
-import { billingErrorResponse, recordIncludedProviderUsage, releaseUsage, requireUsageAccount, reserveUsage, settleUsage, type UsageAccount, type UsageReservation } from '@/lib/usage/server-billing'
+import { billingErrorResponse, releaseUsage, requireUsageAccount, reserveUsage, settleUsage, type UsageAccount, type UsageReservation } from '@/lib/usage/server-billing'
 import type {
   CampaignStartMode,
   CharacterIntakeApiError,
@@ -358,8 +358,8 @@ export async function POST(request: Request) {
     text: `${buildCharacterIntakeUserPrompt(settings)}\n\nThe source may come from a character builder, a digital character sheet, or player-supplied structured text. Do not require a D&D Beyond layout. Analyze it as the selected ruleset/system in the intake settings. Use only the character information supplied; do not reproduce or invent sourcebook text.`,
   })
 
-  // Ordinary character import is included. Very large inputs require explicit
-  // permission before any customer balance can be used.
+  // Every custom-character import uses purchased usage. Very large inputs still
+  // require an additional explicit confirmation before the larger request begins.
   const demandingImport = isPdf ? upload.size > 2 * 1024 * 1024 : sourceText.length > 60_000
   const allowPaid = formData.get('allow_paid') === 'true'
   const estimatedInputCharacters = isPdf
@@ -377,17 +377,15 @@ export async function POST(request: Request) {
   }
 
   let reservation: UsageReservation | null = null
-  if (demandingImport) {
-    try {
-      reservation = await reserveUsage(account, {
-        maximumMicrousd: maximumDeductionMicrousd,
-        feature: 'character_import',
-        sourceRef: upload.name,
-        operationId: request.headers.get('x-rpgyw-operation-id') || requestId,
-      })
-    } catch (error) {
-      return billingErrorResponse(error)
-    }
+  try {
+    reservation = await reserveUsage(account, {
+      maximumMicrousd: maximumDeductionMicrousd,
+      feature: 'character_import',
+      sourceRef: upload.name,
+      operationId: request.headers.get('x-rpgyw-operation-id') || requestId,
+    })
+  } catch (error) {
+    return billingErrorResponse(error)
   }
 
   try {
@@ -502,19 +500,6 @@ export async function POST(request: Request) {
       })
       reservation = null
       usageBilling = { billed_microusd: billing.billedMicrousd, balance_microusd: billing.balanceMicrousd, owner_qa_exempt: billing.ownerQaExempt, settlement_warning: billing.settlementWarning }
-    } else {
-      await recordIncludedProviderUsage(account, {
-        feature: 'character_import_included',
-        operationId: request.headers.get('x-rpgyw-operation-id') || requestId,
-        sourceRef: upload.name,
-        model,
-        providerCostMicrousd,
-        metadata: {
-          provider_request_id: payload.id || openAIResponse.headers.get('x-request-id'),
-          verification_request_id: verificationRequestId,
-          verification_provider_cost_microusd: verificationCostMicrousd,
-        },
-      })
     }
 
     const response: CharacterIntakeApiResponse & { paid_processing: boolean; usage_billing?: typeof usageBilling } = {
@@ -524,7 +509,7 @@ export async function POST(request: Request) {
       intake_version: CHARACTER_INTAKE_VERSION,
       analysis_revision: CHARACTER_INTAKE_ANALYSIS_REVISION,
       source_text: sourceText,
-      paid_processing: demandingImport,
+      paid_processing: true,
       ...(usageBilling ? { usage_billing: usageBilling } : {}),
     }
 

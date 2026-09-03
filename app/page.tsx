@@ -6,6 +6,25 @@ import { LandingCampaignPanel } from '@/components/LandingCampaignPanel'
 import { PersistentPlayModal } from '@/components/PersistentPlayModal'
 import { AdSenseSlot } from '@/components/ads/AdSenseSlot'
 
+const differences = [
+  {
+    title: 'I think campaigns should last.',
+    copy: 'I wanted to be able to take a character from level 1 to level 20 without the beginning of the campaign disappearing behind me. If, 2,000 turns and 15 levels later, I need the name of the conductor on the first train my party ever rode, I want the AIGM to be able to go back and find it.',
+  },
+  {
+    title: 'I think everything you spend should go into your play.',
+    copy: 'There is no monthly subscription and no cut-rate AI tier. Everyone gets the same high-level AIGM. The money you buy for usage goes exclusively toward the AI you actually use. The only additional costs are payment processing and the minor expense of keeping RPG Your Way running. What you buy stays yours until you use it.',
+  },
+  {
+    title: 'I wanted a Game Master with secrets.',
+    copy: 'So I built one that will make plans you don’t know about, keep information from you that only the GM should know, and set things in motion behind the scenes. You may chase those threads, ignore them, or stumble into them much later, but they’re there to give the campaign a spine.',
+  },
+  {
+    title: 'Then I realized we could turn the campaign into a story.',
+    copy: 'Because RPG Your Way preserves the raw chat data from your game, Script can turn the adventure you actually played into readable fiction. You can keep the story of a favorite campaign, read it later, or use it to catch up on a multiplayer session you missed instead of digging through hundreds of turns of chat.',
+  },
+]
+
 const features = [
   {
     eyebrow: 'Your campaign',
@@ -123,11 +142,11 @@ type AccordionItem = {
   persistentPlay?: boolean
 }
 
-function NestedAccordionList({ items }: { items: AccordionItem[] }) {
+function NestedAccordionList({ items, initiallyOpen = false }: { items: AccordionItem[]; initiallyOpen?: boolean }) {
   return (
     <div className="audience-list">
       {items.map((item) => (
-        <details className="audience-item" key={item.title}>
+        <details className="audience-item" key={item.title} open={initiallyOpen}>
           <summary>
             <span>{item.title}</span>
             <AccordionPlus />
@@ -145,13 +164,13 @@ function NestedAccordionList({ items }: { items: AccordionItem[] }) {
 
 function WhyCreatedAccordion() {
   return (
-    <details className="landing-accordion unique-accordion">
+    <details className="landing-accordion unique-accordion" open>
       <summary className="landing-accordion-summary">
         <span className="landing-accordion-prompt">Why I created RPG Your Way.</span>
         <AccordionPlus />
       </summary>
       <div className="landing-accordion-body unique-body">
-        <NestedAccordionList items={whyCreated} />
+        <NestedAccordionList items={whyCreated} initiallyOpen />
       </div>
     </details>
   )
@@ -159,15 +178,49 @@ function WhyCreatedAccordion() {
 
 function AudienceAccordion() {
   return (
-    <details className="landing-accordion audience-accordion">
+    <details className="landing-accordion audience-accordion" open>
       <summary className="landing-accordion-summary audience-summary">
         <span className="landing-accordion-prompt audience-prompt">Who benefits from this site?</span>
         <AccordionPlus />
       </summary>
       <div className="landing-accordion-body audience-body">
-        <NestedAccordionList items={audiences} />
+        <NestedAccordionList items={audiences} initiallyOpen />
       </div>
     </details>
+  )
+}
+
+function DifferenceSection() {
+  return (
+    <section className="landing-difference-section" aria-labelledby="landing-difference-heading">
+      <div className="shell landing-difference-plaque">
+        <div className="landing-difference-nameplate">
+          <h2 id="landing-difference-heading">What’s different at RPG Your Way?</h2>
+        </div>
+
+        <div className="landing-difference-intro">
+          <p>
+            <strong>This site isn’t trying to make a profit. I’m a gamer offering a service to other gamers.</strong>{' '}
+            I built the kind of AI RPG experience I wanted to play myself, and I’m making that same experience
+            available to other players without turning it into another subscription machine.
+          </p>
+        </div>
+
+        <div className="landing-difference-accordions">
+          {differences.map((difference, index) => (
+            <details className="landing-difference-item" key={difference.title}>
+              <summary>
+                <span><strong>{index + 1}.</strong> {difference.title}</span>
+                <AccordionPlus />
+              </summary>
+              <div className="landing-difference-copy">
+                <p>{difference.copy}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -177,6 +230,9 @@ export default function HomePage() {
       <main id="main-content" tabIndex={-1}>
         <h1 className="sr-only">RPG Your Way: Your AI GM</h1>
         <AdSenseSlot placement="landing" />
+
+        <DifferenceSection />
+
         <section className="landing-news-section" aria-labelledby="landing-news-heading">
           <div className="shell landing-news-panel">
             <div className="landing-news-header">
@@ -207,6 +263,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
         <section className="landing-return-section landing-return-section--hero" aria-label="Start or return to a campaign">
           <div className="shell landing-return-grid">
             <div className="brand-logo-card landing-return-logo">

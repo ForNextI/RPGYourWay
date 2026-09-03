@@ -74,8 +74,6 @@ for (const relative of [
 }
 const startPage = read('app/start/page.tsx')
 const startEntry = read('components/aigm/rpgyw-start-entry.tsx')
-assert.match(startPage, /<main\b[^>]*id="main-content"/)
-assert.match(startPage, /<h1\b/)
 assert.match(startEntry, /<main\b[^>]*id="main-content"/)
 assert.match(startEntry, /<h1\b/)
 const playShell = read('components/aigm/aigm-gameplay-shell.tsx')

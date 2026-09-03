@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { AuthPrompt } from '@/components/AuthPrompt'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 
@@ -15,7 +14,6 @@ export function PageShell({ children, variant = 'site', headerVariant = 'default
       <SiteHeader variant={headerVariant} />
       {children}
       <SiteFooter />
-      <AuthPrompt />
     </div>
   )
 }

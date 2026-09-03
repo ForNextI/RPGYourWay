@@ -37,7 +37,7 @@ export async function requireUsageAccount(): Promise<UsageAccount> {
   const supabase = await createClient()
   const { data, error } = await supabase.auth.getUser()
   if (error || !data.user) {
-    throw new UsageBillingError('Sign in to use Play.', 401, 'authentication_required')
+    throw new UsageBillingError('Sign in to use RPG Your Way’s AI services.', 401, 'authentication_required')
   }
   const email = data.user.email ?? null
   return {

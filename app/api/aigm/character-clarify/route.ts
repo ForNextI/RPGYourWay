@@ -9,7 +9,7 @@ import {
 } from '@/lib/aigm/version'
 import { aiContentSafetyPrompt, normalizeAiContentMode } from '@/lib/site/ai-content-mode'
 import { estimateTerraMaximumMicrousd, terraProviderCostMicrousd } from '@/lib/usage/play-cost'
-import { billingErrorResponse, recordIncludedProviderUsage, releaseUsage, requireUsageAccount, reserveUsage, settleUsage, type UsageAccount, type UsageReservation } from '@/lib/usage/server-billing'
+import { billingErrorResponse, releaseUsage, requireUsageAccount, reserveUsage, settleUsage, type UsageAccount, type UsageReservation } from '@/lib/usage/server-billing'
 import type {
   CharacterIntakeApiError,
   CharacterIntakeApiResponse,
@@ -152,17 +152,15 @@ export async function POST(request: Request) {
   const contentMode = normalizeAiContentMode(body.content_mode)
   const model = process.env.OPENAI_MODEL?.trim() || DEFAULT_MODEL
   let reservation: UsageReservation | null = null
-  if (body.bill_usage === true) {
-    try {
-      reservation = await reserveUsage(account, {
-        maximumMicrousd: estimateTerraMaximumMicrousd(serializedIntake.length + message.length + 12_000, 10_000, 1.6, 10),
-        feature: 'character_import_clarification',
-        sourceRef: body.intake.character.name || 'character',
-        operationId: request.headers.get('x-rpgyw-operation-id') || requestId,
-      })
-    } catch (error) {
-      return billingErrorResponse(error)
-    }
+  try {
+    reservation = await reserveUsage(account, {
+      maximumMicrousd: estimateTerraMaximumMicrousd(serializedIntake.length + message.length + 12_000, 10_000, 1.6, 10),
+      feature: 'character_import_clarification',
+      sourceRef: body.intake.character.name || 'character',
+      operationId: request.headers.get('x-rpgyw-operation-id') || requestId,
+    })
+  } catch (error) {
+    return billingErrorResponse(error)
   }
 
   try {
@@ -256,15 +254,6 @@ export async function POST(request: Request) {
       })
       reservation = null
       usageBilling = { billed_microusd: billing.billedMicrousd, balance_microusd: billing.balanceMicrousd, owner_qa_exempt: billing.ownerQaExempt, settlement_warning: billing.settlementWarning }
-    } else {
-      await recordIncludedProviderUsage(account, {
-        feature: 'character_import_clarification_included',
-        operationId: request.headers.get('x-rpgyw-operation-id') || requestId,
-        sourceRef: body.intake.character.name || 'character',
-        model,
-        providerCostMicrousd,
-        metadata: { provider_request_id: payload.id || openAIResponse.headers.get('x-request-id') },
-      })
     }
 
     const response: CharacterIntakeApiResponse & { usage_billing?: typeof usageBilling } = {

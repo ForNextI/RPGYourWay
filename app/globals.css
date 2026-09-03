@@ -9281,3 +9281,231 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 .landing-news-headlines p + p::before {
   content: none !important;
 }
+
+/* RPGYW 3.0.0 browse-first landing and usage gates */
+
+/* Landing lead: contrast is the hierarchy.
+   dark-olive plaque -> forest nameplate -> cream intro -> light-olive controls -> parchment reading. */
+.landing-difference-section {
+  padding: clamp(.8rem, 2vw, 1.35rem) 0 .35rem;
+}
+
+.landing-difference-plaque {
+  border: 1px solid color-mix(in srgb, var(--rpgyw-cream) 78%, var(--rpgyw-forest-line));
+  border-radius: var(--rpgyw-radius-plaque);
+  background: var(--rpgyw-face-olive-dark);
+  padding: clamp(.8rem, 2vw, 1.15rem);
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 22%, transparent),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 10px 20px rgb(30 37 27 / .16);
+}
+
+.landing-difference-nameplate {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 0 .85rem;
+  border: 1px solid color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-forest-line));
+  border-radius: var(--rpgyw-radius-control);
+  background: var(--rpgyw-face-forest);
+  padding: .55rem .85rem;
+  color: var(--rpgyw-cream);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
+}
+
+.landing-difference-nameplate h2 {
+  margin: 0;
+  color: var(--rpgyw-cream);
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  line-height: 1.15;
+}
+
+.landing-difference-intro {
+  margin-bottom: .9rem;
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: var(--rpgyw-radius-card);
+  background: var(--rpgyw-face-cream);
+  padding: clamp(.8rem, 2vw, 1.1rem);
+  color: var(--forest-ink);
+  box-shadow: var(--rpgyw-raised-light-shadow);
+}
+
+.landing-difference-intro p {
+  margin: 0;
+  color: var(--forest-ink);
+  font-size: clamp(.97rem, 1.25vw, 1.08rem);
+  line-height: 1.55;
+}
+
+.landing-difference-intro strong {
+  color: var(--rpgyw-forest);
+}
+
+.landing-difference-accordions {
+  display: grid;
+  gap: .72rem;
+}
+
+.landing-difference-item {
+  overflow: visible;
+  border: 0;
+  background: transparent;
+}
+
+.landing-difference-item > summary {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: var(--rpgyw-radius-control);
+  background: var(--rpgyw-face-olive-light);
+  padding: .68rem .78rem .68rem 1rem;
+  color: var(--rpgyw-forest);
+  font-weight: 900;
+  box-shadow: var(--rpgyw-raised-light-shadow);
+}
+
+.landing-difference-item > summary::-webkit-details-marker {
+  display: none;
+}
+
+.landing-difference-item > summary:hover,
+.landing-difference-item > summary:focus-visible {
+  background: var(--rpgyw-face-forest);
+  color: var(--rpgyw-lime);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
+}
+
+.landing-difference-item[open] > summary {
+  border-color: var(--rpgyw-control-inner-light);
+  background: var(--rpgyw-face-forest);
+  color: var(--rpgyw-cream);
+  box-shadow: var(--rpgyw-raised-dark-shadow);
+}
+
+.landing-difference-item[open] > summary:hover,
+.landing-difference-item[open] > summary:focus-visible {
+  color: var(--rpgyw-lime);
+}
+
+.landing-difference-item[open] > summary .accordion-plus {
+  transform: rotate(45deg);
+}
+
+.landing-difference-copy {
+  margin: .62rem .45rem 0;
+  border: 1px solid color-mix(in srgb, var(--rpgyw-forest-line) 78%, var(--rpgyw-brass-mid));
+  border-radius: 13px;
+  background: var(--rpgyw-parchment);
+  padding: .85rem 1rem;
+  box-shadow:
+    inset 0 2px 5px rgb(61 52 32 / .14),
+    0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 55%, transparent);
+}
+
+.landing-difference-copy p {
+  margin: 0;
+  color: var(--forest-ink);
+  line-height: 1.55;
+}
+
+/* Contextual AI gate. Small, deliberate, and shared by Play, Detailed Help,
+   and custom-character import. It is not the retired global account prompt. */
+.usage-gate-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgb(17 30 24 / .62);
+}
+
+.usage-gate-dialog {
+  width: min(620px, 100%);
+  max-height: min(88vh, 760px);
+  overflow: auto;
+  border: 1px solid color-mix(in srgb, var(--rpgyw-cream) 76%, var(--rpgyw-forest-line));
+  border-radius: var(--rpgyw-radius-plaque);
+  background: var(--rpgyw-face-olive-dark);
+  padding: clamp(.8rem, 2vw, 1.05rem);
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    0 4px 0 2px var(--rpgyw-brass-dark),
+    0 24px 60px rgb(12 20 16 / .34);
+}
+
+.usage-gate-nameplate {
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: .8rem;
+  border: 1px solid color-mix(in srgb, var(--rpgyw-cream) 72%, var(--rpgyw-forest-line));
+  border-radius: var(--rpgyw-radius-control);
+  background: var(--rpgyw-face-forest);
+  padding: .55rem .78rem;
+  box-shadow: var(--rpgyw-raised-dark-shadow);
+}
+
+.usage-gate-nameplate h2 {
+  margin: 0;
+  color: var(--rpgyw-cream);
+  font-size: clamp(1.08rem, 3vw, 1.4rem);
+  line-height: 1.2;
+  outline: none;
+}
+
+.usage-gate-copy {
+  border: 1px solid var(--rpgyw-forest-line);
+  border-radius: 13px;
+  background: var(--rpgyw-parchment);
+  padding: .85rem 1rem;
+  color: var(--forest-ink);
+  box-shadow: inset 0 2px 5px rgb(61 52 32 / .14);
+}
+
+.usage-gate-copy p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.usage-gate-copy p + p {
+  margin-top: .65rem;
+}
+
+.usage-gate-preview-note {
+  color: var(--rpgyw-forest);
+}
+
+.usage-gate-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: .75rem;
+  margin-top: .9rem;
+}
+
+.usage-gate-actions .button {
+  width: 100%;
+  min-height: 54px;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .landing-difference-nameplate {
+    width: 100%;
+  }
+
+  .landing-difference-item > summary {
+    padding-left: .78rem;
+  }
+
+  .usage-gate-actions {
+    grid-template-columns: 1fr;
+  }
+}
+

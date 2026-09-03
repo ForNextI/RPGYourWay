@@ -49,7 +49,7 @@ function UsageNote() {
           ))}
         </div>
         <p>These are estimates, not guaranteed minimums or maximums. A mature, complex campaign with frequent talk-to-text and readback can use balance faster. A simpler campaign or lighter voice use may stretch it farther.</p>
-        <p>During Play, gameplay AI, talk-to-text, and AI readback all draw from the same prepaid balance. You can always see your remaining balance and your aggregate usage totals below.</p>
+        <p>Gameplay AI, talk-to-text, AI readback, Script, Detailed Help, and custom-character AI processing all draw from the same prepaid balance. You can always see your remaining balance and your aggregate usage totals below.</p>
       </div>
     </details>
   )
@@ -173,18 +173,18 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                 <div className="usage-balance-heading-row">
                   <div>
                     <p className="account-state-label">{ownerQa ? 'Owner QA account' : 'Usage balance'}</p>
-                    <h2 id="usage-balance-heading">{ownerQa ? 'Provider usage tracked; wallet not deducted' : 'Available for Play and Script'}</h2>
+                    <h2 id="usage-balance-heading">{ownerQa ? 'Provider usage tracked; wallet not deducted' : 'Available across RPG Your Way'}</h2>
                   </div>
                   {!ownerQa && !walletUnavailable ? <p className="usage-balance-amount" aria-label={`${formatUsageDollars(available)} available`}>{formatUsageDollars(available)}</p> : null}
                 </div>
 
                 {ownerQa ? (
-                  <p className="usage-balance-copy">This account is the RPG Your Way owner QA account. Play and Script provider usage is still measured for internal cost tracking, but customer balance deductions are skipped. No Play Pack purchase is required.</p>
+                  <p className="usage-balance-copy">This account is the RPG Your Way owner QA account. RPG Your Way provider usage is still measured for internal cost tracking, but customer balance deductions are skipped. No Play Pack purchase is required.</p>
                 ) : walletUnavailable ? (
                   <p className="auth-message auth-message-error" role="alert">The usage balance is not available yet. Apply the shared-balance database migration, then reload this page.</p>
                 ) : (
                   <>
-                    <p className="usage-balance-copy">Your balance stays in your account until you use it. During Play, gameplay AI, talk-to-text, and AI readback use this balance; Script processing uses the same balance too.</p>
+                    <p className="usage-balance-copy">Your balance stays in your account until you use it. Gameplay AI, talk-to-text, AI readback, Script, Detailed Help, and custom-character AI processing all use this same balance.</p>
                     {reserved > 0 ? <p className="usage-balance-reserved"><strong>{formatUsageDollars(reserved)}</strong> is temporarily reserved for work already in progress. Total balance: {formatUsageDollars(balance)}.</p> : null}
                     {lowBalance ? <p className="usage-low-balance" role="status"><strong>Low balance:</strong> {formatUsageDollars(available)} remaining. Add usage before your next larger request.</p> : null}
                   </>

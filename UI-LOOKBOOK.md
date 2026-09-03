@@ -442,6 +442,24 @@ Preferred semantic depth progression:
 
 Active/selected controls use forest as the strongest state signal.
 
+## 7.4 Contrast over sameness
+
+**Contrast is part of the hierarchy, not decoration.**
+
+Do not build a page from a large dark-green field with a collection of slightly lighter green objects simply because those colors are available. Repetition of one material family flattens the interface and makes important actions harder to find.
+
+Prefer deliberate contrast:
+
+- dark olive for broad structural plaques;
+- cream or light olive for raised controls on those plaques;
+- forest for the strongest action, selected, and open-state anchors;
+- parchment for true reading/content surfaces;
+- lime for hover/focus lettering and emphasis, not for major surface acreage.
+
+The user should gradually learn that the action most likely to move them forward is usually the **forest-green control**. Preserve that training across pages.
+
+Color changes should also help the eye follow depth and flow. A composition may reuse a material, but adjacent hierarchy levels should rarely collapse into near-identical color fields when a canonical contrasting material can express the relationship more clearly.
+
 ---
 
 # 8. Top ribbon/header
@@ -496,7 +514,20 @@ The console may retain its more elaborate bezel/layer stack.
 
 The console's warm inset field defines canonical parchment.
 
-## 9.3 Purpose accordions
+## 9.3 What's different lead section
+
+The landing-page lead explanation is the reference for strong contrast within one information hierarchy:
+
+- dark-olive backing plaque;
+- forest static nameplate;
+- cream always-visible introductory text surface;
+- light-olive closed accordion buttons;
+- forest/cream open accordion buttons;
+- parchment revealed reading content.
+
+The introductory cream surface is intentional. Do not turn it into parchment merely because it contains prose.
+
+## 9.4 Purpose accordions
 
 **Why I created RPG Your Way** and **Who benefits from this site?** use the state table in §5.2.
 
@@ -506,7 +537,9 @@ Their opened nested area uses:
 - canonical raised nested buttons;
 - parchment final text/content fields.
 
-## 9.4 Landing-page color rhythm
+They are **open by default all the way through**, including their nested items. They remain accordions so a repeat visitor may close them when desired.
+
+## 9.5 Landing-page color rhythm
 
 The landing page should deliberately alternate dark/light surfaces. The three-card feature row is a reference for this rhythm.
 

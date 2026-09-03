@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '2.13.3')
-assert.equal(pkg.rpgywVersion, '2.13.3')
-has(read('lib/version.ts'), "APP_VERSION = '2.13.3'", 'visible app version')
+assert.equal(pkg.version, '3.0.0')
+assert.equal(pkg.rpgywVersion, '3.0.0')
+has(read('lib/version.ts'), "APP_VERSION = '3.0.0'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -316,18 +316,25 @@ has(billing, "onConflict: 'user_id,surface,feature,operation_id'")
 const intake = read('app/api/aigm/character-intake/route.ts')
 const intakePost = intake.slice(intake.indexOf('export async function POST'))
 before(intakePost, 'account = await requireUsageAccount()', "fetch('https://api.openai.com/v1/responses'", 'Character Intake authentication gate')
-has(intake, "feature: 'character_import_included'")
+has(intake, "feature: 'character_import'")
+lacks(intake, 'character_import_included', 'free character-import billing path')
+has(intake, 'reservation = await reserveUsage(account', 'character import usage reservation')
 has(intake, 'verification_provider_cost_microusd')
 has(intake, 'terraProviderCostMicrousd(payload.usage) + verificationCostMicrousd')
 
 const clarify = read('app/api/aigm/character-clarify/route.ts')
 const clarifyPost = clarify.slice(clarify.indexOf('export async function POST'))
 before(clarifyPost, 'account = await requireUsageAccount()', "fetch('https://api.openai.com/v1/responses'", 'Character Clarify authentication gate')
-has(clarify, "feature: 'character_import_clarification_included'")
+has(clarify, "feature: 'character_import_clarification'")
+lacks(clarify, 'character_import_clarification_included', 'free character-clarification billing path')
+has(clarify, 'reservation = await reserveUsage(account', 'character clarification usage reservation')
 
 const startHelp = read('app/api/start/help/route.ts')
 before(startHelp, 'account = await requireUsageAccount()', "fetch('https://api.openai.com/v1/responses'", 'Start Page Help authentication gate')
-has(startHelp, "feature: 'start_page_help_included'")
+has(startHelp, "feature: 'start_page_help'")
+lacks(startHelp, 'start_page_help_included', 'free Detailed Help billing path')
+has(startHelp, 'reservation = await reserveUsage(account', 'Detailed Help usage reservation')
+has(startHelp, 'await settleUsage(reservation', 'Detailed Help usage settlement')
 has(startHelp, 'terraProviderCostMicrousd(payload.usage)')
 
 // Account and transition copy reflect the current cloud architecture.
@@ -339,8 +346,8 @@ const campaignHub = read('components/start/CampaignHub.tsx')
 const campaignsPage = read('app/campaigns/page.tsx')
 const multiplayerRedirect = read('app/multiplayer/page.tsx')
 const multiplayerManager = read('components/multiplayer/MultiplayerCampaignManager.tsx')
-has(startEntry, '<CampaignHub />', 'import hub above onboarding')
-before(startEntry, '<CampaignHub />', '<StartOnboarding', 'import hub position')
+has(startEntry, '<CampaignHub signedIn={signedIn} />', 'import hub above onboarding')
+before(startEntry, '<CampaignHub signedIn={signedIn} />', '<StartOnboarding', 'import hub position')
 has(campaignHub, 'Import older adventures', 'Start import-only control')
 has(campaignHub, 'RPG Your Way can import WardensPC exports that had already reached Play')
 lacks(campaignHub, 'Your Campaigns', 'campaign list retired from Start')
@@ -678,3 +685,55 @@ has(css, 'background: var(--rpgyw-parchment);')
 lacks(css, '.account-delete-submit {\n  background: red', 'red delete slab')
 
 console.log('RPG Your Way 1.13.19 release and canonical UI checks passed.')
+
+
+// RPGYW 3.0.0 browse-first architecture contract.
+assert.equal(exists('components/AuthPrompt.tsx'), false, 'The retired global account modal must stay deleted')
+for (const file of [
+  'components/account/UsageGateDialog.tsx',
+  'lib/usage/client-access.ts',
+]) assert.ok(exists(file), `Missing ${file}`)
+
+const pageShell300 = read('components/PageShell.tsx')
+const startEntry300 = read('components/aigm/rpgyw-start-entry.tsx')
+const startPage300 = read('app/start/page.tsx')
+const playPage300 = read('app/play/page.tsx')
+const landing300 = read('app/page.tsx')
+const start300 = read('components/start/StartOnboarding.tsx')
+const gameplay300 = read('components/aigm/aigm-gameplay-shell.tsx')
+const gate300 = read('components/account/UsageGateDialog.tsx')
+const campaignHub300 = read('components/start/CampaignHub.tsx')
+const helpKnowledge300 = read('lib/start/help-knowledge.ts')
+const lookbook300 = read('UI-LOOKBOOK.md')
+
+lacks(pageShell300, 'AuthPrompt', 'global AuthPrompt mount')
+lacks(startEntry300, 'AuthPrompt', 'Start AuthPrompt mount')
+has(startPage300, 'signedIn={signedIn}', 'anonymous Start plumbing')
+has(playPage300, '<AigmGameplayShell signedIn={signedIn} />', 'anonymous Play plumbing')
+lacks(playPage300, "redirect('/start')", 'anonymous Play redirect')
+has(start300, 'saveAdventureStateToLocalStorage(window.localStorage, state, true)', 'anonymous campaign local persistence')
+has(campaignHub300, 'saveAdventureStateToLocalStorage(window.localStorage, importedState, true)', 'anonymous legacy import local persistence')
+
+before(landing300, 'landing-difference-section', 'landing-news-section', 'What’s different appears above News')
+has(landing300, 'What’s different at RPG Your Way?', 'landing differentiator heading')
+has(landing300, 'The money you buy for usage goes exclusively toward the AI you actually use.', 'usage positioning copy')
+has(landing300, 'raw chat data', 'Script raw-chat positioning copy')
+has(landing300, 'landing-accordion unique-accordion\" open', 'Why-created default-open accordion')
+has(landing300, 'landing-accordion audience-accordion\" open', 'Audience default-open accordion')
+has(landing300, '<NestedAccordionList items={whyCreated} initiallyOpen />', 'Why-created nested default-open accordions')
+has(landing300, '<NestedAccordionList items={audiences} initiallyOpen />', 'Audience nested default-open accordions')
+
+has(gate300, 'Ready to begin your adventure?', 'Begin Adventure contextual gate')
+has(gate300, 'Detailed Help is for account holders.', 'Detailed Help contextual gate')
+has(gate300, 'Importing your own characters uses RPG Your Way’s AI.', 'custom-character contextual gate')
+has(gate300, 'pre-made Ready-to-Play characters', 'free Ready-to-Play exploration guidance')
+has(gate300, 'Yeah, I’d like to create an account.', 'account action wording')
+has(gate300, 'Oh right, I need to add some usage.', 'usage action wording')
+has(gate300, 'Not now, I want to continue looking around.', 'browse-on wording')
+
+has(start300, "ensurePaidAiAccess('help')", 'Detailed Help client gate')
+has(start300, "ensurePaidAiAccess('character')", 'custom-character client gate')
+has(gameplay300, 'ensureAdventureUsageAccess()', 'Begin Adventure client gate')
+has(gameplay300, 'purpose=\"adventure\"', 'Play contextual usage dialog')
+has(helpKnowledge300, 'Detailed Start Page Help uses RPG Your Way', 'Help knowledge paid-usage rule')
+has(lookbook300, '## 7.4 Contrast over sameness', 'canonical contrast-over-sameness rule')

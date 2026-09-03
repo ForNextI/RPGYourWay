@@ -58,6 +58,7 @@ import {
 import { dnd55ClassFeatureNamesThroughLevel, dnd55ClassMetadata, dnd55SubclassFeatureNamesThroughLevel } from '@/lib/aigm/multiclassing'
 import {
   CURRENT_ADVENTURE_KEY,
+  saveAdventureStateToLocalStorage,
   defaultVoiceGuidedPlaySettings,
   emptyGameplayState,
   playNameFor,
@@ -88,6 +89,8 @@ import { TableChatPanel } from '@/components/multiplayer/TableChatPanel'
 import { MultiplayerPanelSwitcher, type MultiplayerSecondaryPanel } from '@/components/multiplayer/MultiplayerPanelSwitcher'
 import { useMultiplayerSession } from '@/components/multiplayer/useMultiplayerSession'
 import { VttCombatHandoff } from '@/components/foundry/VttCombatHandoff'
+import { UsageGateDialog, type UsageGateReason } from '@/components/account/UsageGateDialog'
+import { checkUsageAccess } from '@/lib/usage/client-access'
 
 const DICE = [4, 6, 8, 10, 12, 20, 100] as const
 const MAX_DICE_QUANTITY = 20
@@ -1281,7 +1284,7 @@ Properties: finesse, light`}
 }
 
 
-export function AigmGameplayShell() {
+export function AigmGameplayShell({ signedIn = false }: { signedIn?: boolean }) {
   const { reducedMotion } = useMotionPreference()
   const [partyState, setPartyState] = useState<SavedAdventureState | null>(null)
   const [hydratingAdventure, setHydratingAdventure] = useState(true)
@@ -1303,6 +1306,7 @@ export function AigmGameplayShell() {
   const [voiceAvailable, setVoiceAvailable] = useState(false)
   const [billingNotice, setBillingNotice] = useState<string | null>(null)
   const [billingActionUrl, setBillingActionUrl] = useState<string | null>(null)
+  const [usageGateReason, setUsageGateReason] = useState<UsageGateReason | null>(null)
   const [mobilePanel, setMobilePanel] = useState<'gameplay' | 'chat' | 'tools' | 'characters'>('gameplay')
   const [desktopMultiplayerPanel, setDesktopMultiplayerPanel] = useState<MultiplayerSecondaryPanel>('chat')
   const [multiplayerUnreadCount, setMultiplayerUnreadCount] = useState(0)
@@ -1521,6 +1525,10 @@ export function AigmGameplayShell() {
   }
 
   async function startMultiplayerSession() {
+    if (!signedIn) {
+      window.location.assign('/account#sign-in')
+      return
+    }
     if (!partyState) return
     const started = await multiplayer.startSession({
       localCampaignId: partyState.adventure_id,
@@ -1538,6 +1546,7 @@ export function AigmGameplayShell() {
   }
 
   useEffect(() => {
+    if (!signedIn) return
     const campaignId = partyState?.adventure_id
     if (!campaignId || partyState.campaign_mode !== 'multiplayer') return
     if (!multiplayerRosterSignature || multiplayerSession || multiplayer.loading || multiplayer.starting) return
@@ -1569,6 +1578,14 @@ export function AigmGameplayShell() {
   function persist(nextState: SavedAdventureState) {
     const previousState = partyState
     setPartyState(nextState)
+    if (!signedIn) {
+      try {
+        saveAdventureStateToLocalStorage(window.localStorage, nextState, true)
+      } catch {
+        setError('RPG Your Way could not save this local preview in the browser.')
+      }
+      return
+    }
     void saveAdventureState(window.localStorage, nextState, previousState).catch(() => {
       setError('RPG Your Way could not confirm this turn in the cloud. The local cache still has the current state, but do not continue this campaign on another device until cloud saving reconnects. Reload the campaign if another device may have advanced it.')
     })
@@ -1877,7 +1894,23 @@ export function AigmGameplayShell() {
     }
   }
 
-  function requestAdventureOpening() {
+  async function ensureAdventureUsageAccess() {
+    if (!signedIn) {
+      setUsageGateReason('account')
+      return false
+    }
+    const access = await checkUsageAccess()
+    if (access.status === 'ready') return true
+    if (access.status === 'account' || access.status === 'usage') {
+      setUsageGateReason(access.status)
+      return false
+    }
+    setError('RPG Your Way could not verify your usage balance right now. Try again in a moment.')
+    return false
+  }
+
+  async function requestAdventureOpening() {
+    if (!(await ensureAdventureUsageAccess())) return
     if (document.fullscreenEnabled && !document.fullscreenElement) {
       void document.documentElement.requestFullscreen().catch(() => undefined)
     }
@@ -2044,8 +2077,12 @@ export function AigmGameplayShell() {
         payload = (await response.json()) as GameplayApiResponse
       }
       if (!response.ok || !payload.message) {
+        if (response.status === 401 || payload.code === 'authentication_required') {
+          setUsageGateReason('account')
+        }
         if (response.status === 402 || payload.code === 'insufficient_balance') {
           setBillingActionUrl(payload.add_usage_url || '/account#add-usage')
+          setUsageGateReason('usage')
         }
         throw new Error([payload.error || 'The gameplay AIGM could not answer.', payload.details, payload.request_id ? `Reference: ${payload.request_id}` : ''].filter(Boolean).join(' '))
       }
@@ -2760,6 +2797,12 @@ export function AigmGameplayShell() {
         }}
         onSaveAdvancementProfile={saveAdvancementProfile}
         onSaveLevelUp={saveLevelUpRecord}
+      />
+      <UsageGateDialog
+        open={usageGateReason !== null}
+        purpose="adventure"
+        reason={usageGateReason ?? 'account'}
+        onClose={() => setUsageGateReason(null)}
       />
       <StoryDirectionDialog
         open={storyDirectionDialogOpen}

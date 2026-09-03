@@ -5,11 +5,12 @@ import { FileUp, Shield } from 'lucide-react'
 import {
   canonicalAdventureName,
   parseAdventureState,
+  saveAdventureStateToLocalStorage,
   type SavedAdventureState,
 } from '@/lib/aigm/campaign-storage'
 import { saveAdventureState } from '@/lib/aigm/campaign-persistence'
 
-export function CampaignHub() {
+export function CampaignHub({ signedIn = false }: { signedIn?: boolean }) {
   const [notice, setNotice] = useState('')
   const [error, setError] = useState('')
   const importRef = useRef<HTMLInputElement | null>(null)
@@ -43,7 +44,10 @@ export function CampaignHub() {
         created_at: now,
         updated_at: now,
       }
-      await saveAdventureState(window.localStorage, importedState, null)
+
+      if (signedIn) await saveAdventureState(window.localStorage, importedState, null)
+      else saveAdventureStateToLocalStorage(window.localStorage, importedState, true)
+
       setNotice(`Imported ${importedState.adventure_name}. Opening Play…`)
       window.location.assign('/play')
     } catch {
@@ -63,10 +67,17 @@ export function CampaignHub() {
             <FileUp className="play-entry-icon" aria-hidden="true" />
             <div><p className="account-state-label">Import</p><h2 id="import-adventure-heading">Import an Older Adventure</h2></div>
           </div>
-          <p>Use a full exported game JSON from WardensPC or an earlier RPG Your Way build. The imported copy gets a new cloud campaign ID, so the original file remains untouched.</p>
+          <p>Use a full exported game JSON from WardensPC or an earlier RPG Your Way build. The imported copy gets a new campaign ID, so the original file remains untouched.</p>
           <input ref={importRef} className="sr-only" type="file" tabIndex={-1} aria-hidden="true" accept="application/json,.json" onChange={importAdventure} />
           <button className="button button-primary" type="button" onClick={() => importRef.current?.click()}>Import Older Adventure</button>
-          <div className="play-entry-device-note"><Shield aria-hidden="true" /><p><strong>Cloud migration.</strong> Once imported, the campaign is saved to your RPG Your Way account and can be opened from your other signed-in devices.</p></div>
+          <div className="play-entry-device-note">
+            <Shield aria-hidden="true" />
+            <p>
+              {signedIn
+                ? <><strong>Cloud migration.</strong> Once imported, the campaign is saved to your RPG Your Way account and can be opened from your other signed-in devices.</>
+                : <><strong>Local preview.</strong> You can import and inspect the adventure in this browser without using any AI services.</>}
+            </p>
+          </div>
         </section>
         {notice ? <p className="auth-message auth-message-success" role="status">{notice}</p> : null}
         {error ? <p className="auth-message auth-message-error" role="alert">{error}</p> : null}
