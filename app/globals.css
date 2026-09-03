@@ -7176,11 +7176,15 @@ html {
 }
 .landing-accordion-summary:hover .landing-accordion-prompt,
 .landing-accordion-summary:focus-visible .landing-accordion-prompt { color: var(--rpgyw-lime) !important; }
-.landing-accordion[open] > .landing-accordion-summary,
+.landing-accordion[open] > .landing-accordion-summary {
+  background: var(--rpgyw-face-olive-light) !important;
+  color: var(--rpgyw-forest) !important;
+}
+
 .landing-accordion[open] > .landing-accordion-summary:hover,
 .landing-accordion[open] > .landing-accordion-summary:focus-visible {
   background: var(--rpgyw-forest) !important;
-  color: var(--rpgyw-cream) !important;
+  color: var(--rpgyw-lime) !important;
 }
 .landing-accordion[open] > .landing-accordion-summary .landing-accordion-prompt { color: var(--rpgyw-cream) !important; }
 
