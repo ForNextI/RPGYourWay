@@ -189,7 +189,13 @@ async function focusOrOpenFoundry(url: string, protectActiveSession = false) {
   return true
 }
 
-export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureState | null }) {
+export function VttCombatHandoff({
+  partyState,
+  compact = false,
+}: {
+  partyState: SavedAdventureState | null
+  compact?: boolean
+}) {
   const [foundryStatus, setFoundryStatus] = useState<FoundryStatus | null>(null)
   const [statusLoaded, setStatusLoaded] = useState(false)
   const [offerOpen, setOfferOpen] = useState(false)
@@ -479,7 +485,12 @@ export function VttCombatHandoff({ partyState }: { partyState: SavedAdventureSta
   return (
     <>
       {connectedAndLaunchable ? (
-        <div className="mt-2 flex flex-wrap items-center gap-2 border-t border-border/70 pt-2" aria-label="Virtual tabletop">
+        <div
+          className={compact
+            ? "aigm-foundry-inline flex flex-row-reverse flex-wrap items-center justify-start gap-2 sm:justify-self-end"
+            : "mt-2 flex flex-wrap items-center gap-2 border-t border-border/70 pt-2"}
+          aria-label="Virtual tabletop"
+        >
           <button
             type="button"
             onClick={goToVtt}

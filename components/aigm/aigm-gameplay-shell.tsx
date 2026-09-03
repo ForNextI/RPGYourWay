@@ -2643,19 +2643,18 @@ export function AigmGameplayShell() {
                 <button type="submit" disabled={sending || voiceCaptureBusy || gameplay.messages.length === 0 || !message.trim()} className={`aigm-gameplay-send ${message.trim() && !sending && !voiceCaptureBusy && gameplay.messages.length > 0 ? 'aigm-gameplay-send--ready' : ''} flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground disabled:opacity-45`} aria-label="Send gameplay turn">{sending ? <LoaderCircle className="size-5 animate-spin" aria-hidden="true" /> : <Send className="size-5" aria-hidden="true" />}</button>
               </form>
 
-              <VttCombatHandoff partyState={partyState} />
-
               <div className="aigm-session-tools mt-2 grid gap-2 border-t border-border/70 pt-2 sm:grid-cols-[auto_minmax(0,1fr)]" data-open={sessionToolsOpen ? 'true' : 'false'} aria-label="Session tools">
                 <button
                   type="button"
                   onClick={() => setSessionToolsOpen((open) => !open)}
                   aria-expanded={sessionToolsOpen}
                   aria-controls="aigm-session-tools-panel"
-                  className="aigm-session-tools-toggle inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-border px-3 py-1.5 font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="aigm-session-tools-toggle inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-border px-4 py-2 font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <span className="font-display font-bold">Session tools</span>
                   <ChevronDown className={`size-4 shrink-0 transition-transform ${sessionToolsOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                 </button>
+                <VttCombatHandoff partyState={partyState} compact />
                 {sessionToolsOpen && (
                   <div id="aigm-session-tools-panel" className="aigm-session-tools-panel flex flex-wrap items-center gap-2 pt-0.5 sm:col-span-2">
                     <button type="button" onClick={openStoryDirectionHelp} className="aigm-session-help inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-primary/55 hover:text-foreground"><BookOpen className="size-3.5" aria-hidden="true" />Can I direct my game?</button>

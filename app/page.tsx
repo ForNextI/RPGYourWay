@@ -179,11 +179,25 @@ export default function HomePage() {
         <AdSenseSlot placement="landing" />
         <section className="landing-news-section" aria-labelledby="landing-news-heading">
           <div className="shell landing-news-panel">
-            <p className="landing-news-eyebrow"><Megaphone aria-hidden="true" />News</p>
+            <p className="landing-news-eyebrow">
+              <Megaphone aria-hidden="true" />
+              <span>News</span>
+              <span className="landing-news-deck">The latest happenings here at RPG Your Way</span>
+            </p>
             <h2 id="landing-news-heading" className="sr-only">RPG Your Way news</h2>
             <div className="landing-news-headlines">
-              <p>Reduction in prices, yay!</p>
-              <p>Multiplayer is live, with built-in table chat.</p>
+              <p className="landing-news-line">
+                <strong>Reduction in prices, yay!</strong>
+                <span className="landing-news-separator" aria-hidden="true">•</span>
+                <span>Multiplayer is live, with built-in table chat.</span>
+              </p>
+              <p className="landing-news-line">
+                <strong>In the works: VTT Light</strong>
+                <span>for native tactical sketch maps, with no third-party VTT required.</span>
+                <span className="landing-news-separator" aria-hidden="true">•</span>
+                <strong>In the works: VTT Heavy</strong>
+                <span>for fully immersive virtual tabletop play through Foundry.</span>
+              </p>
             </div>
           </div>
         </section>
