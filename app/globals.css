@@ -9235,3 +9235,33 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
     margin-left: .22rem !important;
   }
 }
+
+
+/* RPGYW 2.13.3 landing News cream plaque */
+.landing-news-panel {
+  border-color: var(--rpgyw-brass-mid) !important;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--rpgyw-cream) 96%, var(--rpgyw-parchment)),
+    var(--rpgyw-cream)
+  ) !important;
+  box-shadow:
+    inset 0 0 0 1px var(--rpgyw-forest-line),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 70%, var(--rpgyw-brass-light)),
+    0 3px 0 var(--rpgyw-brass-dark),
+    0 7px 16px rgb(35 31 20 / .16) !important;
+  color: var(--rpgyw-forest) !important;
+}
+
+/* The eyebrow itself intentionally keeps its existing forest surface. */
+.landing-news-panel .landing-news-deck,
+.landing-news-panel .landing-news-headlines,
+.landing-news-panel .landing-news-line,
+.landing-news-panel .landing-news-line strong,
+.landing-news-panel .landing-news-line span:not(.landing-news-separator) {
+  color: var(--rpgyw-forest) !important;
+}
+
+.landing-news-panel .landing-news-separator {
+  color: var(--rpgyw-brass-dark) !important;
+}
