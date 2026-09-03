@@ -194,11 +194,15 @@ export default function HomePage() {
                 <span>Multiplayer is live, with built-in table chat.</span>
               </p>
               <p className="landing-news-line">
+                <span className="landing-news-separator" aria-hidden="true">•</span>
                 <strong>In the works: VTT Light</strong>
                 <span>our native, no-third-party tactical sketch VTT.</span>
-                <span className="landing-news-separator" aria-hidden="true">•</span>
-                <strong>VTT Heavy</strong>
-                <span>fully immersive VTT play through Foundry.</span>
+              </p>
+
+              <p className="landing-news-line">
+               <span className="landing-news-separator" aria-hidden="true">•</span>
+               <strong>In the works: VTT Heavy</strong>
+               <span>fully immersive VTT play through Foundry.</span>
               </p>
             </div>
           </div>
