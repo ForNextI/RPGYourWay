@@ -7186,8 +7186,7 @@ html {
   background: var(--rpgyw-forest) !important;
   color: var(--rpgyw-lime) !important;
 }
-.landing-accordion[open] > .landing-accordion-summary .landing-accordion-prompt { color: var(--rpgyw-cream) !important; }
-
+.landing-accordion[open] > .landing-accordion-summary .landing-accordion-prompt { color: var(--rpgyw-forest) !important; }
 .audience-list { gap: .75rem; }
 
 
@@ -7294,10 +7293,19 @@ html {
   color: var(--rpgyw-lime) !important;
 }
 .landing-accordion[open] > .landing-accordion-summary {
-  border-color: var(--rpgyw-control-inner-light) !important;
-  background: var(--rpgyw-face-forest) !important;
-  color: var(--rpgyw-cream) !important;
-  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+  border-color: var(--rpgyw-forest-line) !important;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--rpgyw-olive-light) 88%, var(--rpgyw-cream)),
+    var(--rpgyw-olive-light)
+  ) !important;
+  color: var(--rpgyw-forest) !important;
+  box-shadow:
+    0 0 0 2px var(--rpgyw-brass-mid),
+    inset 0 1px 0 color-mix(in srgb, var(--rpgyw-cream) 78%, var(--rpgyw-brass-light)),
+    inset 0 -2px 0 color-mix(in srgb, var(--rpgyw-brass-dark) 10%, transparent),
+    0 3px 0 2px var(--rpgyw-brass-dark),
+    0 8px 13px rgb(37 45 35 / .12) !important;
 }
 .landing-accordion[open] > .landing-accordion-summary:hover,
 .landing-accordion[open] > .landing-accordion-summary:focus-visible { color: var(--rpgyw-lime) !important; }
@@ -7307,8 +7315,7 @@ html {
 .landing-accordion[open] > .landing-accordion-summary:focus-visible .landing-accordion-prompt {
   color: var(--rpgyw-lime) !important;
 }
-.landing-accordion[open] > .landing-accordion-summary .landing-accordion-prompt { color: var(--rpgyw-cream) !important; }
-
+.landing-accordion[open] > .landing-accordion-summary .landing-accordion-prompt { color: var(--rpgyw-forest) !important; }
 /* The opened accordion body is the plaque. Closed neighbors remain only buttons. */
 .landing-accordion-body {
   margin-top: .9rem !important;
