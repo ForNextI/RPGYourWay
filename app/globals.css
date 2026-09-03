@@ -9145,3 +9145,93 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
     justify-content: flex-end;
   }
 }
+
+
+/* RPGYW 2.13.2 emergency landing News composition hotfix */
+.landing-news-panel {
+  grid-template-columns: minmax(0, 1fr) !important;
+  align-items: start !important;
+  gap: .34rem !important;
+  padding: .52rem .72rem .58rem !important;
+}
+
+.landing-news-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .35rem .6rem;
+  min-width: 0;
+}
+
+.landing-news-eyebrow {
+  flex: 0 0 auto;
+  margin: 0 !important;
+  padding: .22rem .5rem !important;
+  font-size: .82rem !important;
+  line-height: 1 !important;
+}
+
+.landing-news-eyebrow svg {
+  width: .9rem !important;
+  height: .9rem !important;
+}
+
+.landing-news-deck {
+  margin: 0 !important;
+  color: var(--rpgyw-cream) !important;
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: .76rem !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  letter-spacing: .015em;
+  opacity: .92;
+}
+
+.landing-news-headlines {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: .08rem !important;
+  min-width: 0;
+  margin: 0 !important;
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(.9rem, 1.2vw, 1.04rem) !important;
+  line-height: 1.22 !important;
+}
+
+.landing-news-line {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: baseline !important;
+  justify-content: flex-start !important;
+  gap: .08rem .34rem !important;
+  min-width: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.landing-news-line strong,
+.landing-news-line span {
+  margin: 0 !important;
+}
+
+.landing-news-separator {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 760px) {
+  .landing-news-header {
+    gap: .3rem .45rem;
+  }
+
+  .landing-news-headlines {
+    font-size: .9rem !important;
+  }
+
+  .landing-news-line {
+    display: block !important;
+  }
+
+  .landing-news-line > * + * {
+    margin-left: .22rem !important;
+  }
+}
