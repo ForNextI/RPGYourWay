@@ -9265,3 +9265,19 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 .landing-news-panel .landing-news-separator {
   color: var(--rpgyw-brass-dark) !important;
 }
+
+/* News alignment cleanup */
+.landing-news-headlines {
+  margin-left: 10.5rem !important;
+}
+
+/* VTT items are one outline level beneath the main news line. */
+.landing-news-headlines .landing-news-line:nth-of-type(n + 2) {
+  margin-left: 1.5rem !important;
+}
+
+/* Kill the old automatic diamond bullets.
+   The VTT lines already contain their own bullet spans. */
+.landing-news-headlines p + p::before {
+  content: none !important;
+}
