@@ -715,7 +715,7 @@ has(start300, 'saveAdventureStateToLocalStorage(window.localStorage, state, true
 has(campaignHub300, 'saveAdventureStateToLocalStorage(window.localStorage, importedState, true)', 'anonymous legacy import local persistence')
 
 before(landing300, 'landing-difference-section', 'landing-news-section', 'What’s different appears above News')
-has(landing300, 'What’s different at RPG Your Way?', 'landing differentiator heading')
+has(landing300, 'Why would you spend your money at RPG Your Way?', 'landing differentiator heading')
 has(landing300, 'The money you buy for usage goes exclusively toward the AI you actually use.', 'usage positioning copy')
 has(landing300, 'raw chat data', 'Script raw-chat positioning copy')
 has(landing300, 'landing-accordion unique-accordion\" open', 'Why-created default-open accordion')

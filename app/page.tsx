@@ -195,7 +195,7 @@ function DifferenceSection() {
     <section className="landing-difference-section" aria-labelledby="landing-difference-heading">
       <div className="shell landing-difference-plaque">
         <div className="landing-difference-nameplate">
-          <h2 id="landing-difference-heading">What’s different at RPG Your Way?</h2>
+          <h2 id="landing-difference-heading">Why would you spend your money at RPG Your Way?</h2>
         </div>
 
         <div className="landing-difference-intro">
