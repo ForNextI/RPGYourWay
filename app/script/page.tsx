@@ -22,8 +22,8 @@ export default async function ScriptPage() {
           <section className="shape-intro">
             <p className="kicker">Script</p>
             <h1 className="page-title shape-script-title">Turn the campaign you played into a story you can read.</h1>
-            <p className="page-lede">Give Script a digital record of a campaign you actually played. It can come from RPG Your Way, another text-to-play game, another game system, or a tabletop campaign you recorded digitally. Script sorts out what happened, removes dice arithmetic and table chatter where appropriate, keeps the chronology straight, and writes the adventure as third-person narrative prose.</p>
-            <p className="shape-limit-note"><strong>Up to 1,000,000 characters per Script request.</strong> Larger campaigns can be divided at natural story breaks and carried forward as an ongoing campaign project.</p>
+            <p className="page-lede">Give Script a digital record of a campaign you played. It turns your play into readable third-person prose, keeping the story while removing dice math, table chatter, and other gameplay clutter.</p>
+            <p className="shape-limit-note"><strong>Up to 1,000,000 characters per Script request.</strong> Larger campaigns can be split at natural story breaks and continued as one project.</p>
 
             <details className="shape-pricing-details">
               <summary>How Script uses your RPG Your Way balance <span className="accordion-plus" aria-hidden="true" /></summary>

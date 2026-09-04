@@ -9694,3 +9694,29 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
   margin: 0;
 }
 
+/* RPG Your Way 3.0.10: stable Step 1 selected-system status. */
+.start-rules-selection-status {
+  min-height: 1.35em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0 .28em;
+  margin: 0 !important;
+  color: var(--rpgyw-forest) !important;
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+}
+.start-rules-selection-status strong {
+  color: inherit;
+  font-weight: 900;
+}
+@media (max-width: 640px) {
+  .start-rules-confirm { gap: .5rem; }
+  .start-rules-selection-status {
+    width: 100%;
+    padding-inline: .35rem;
+  }
+}

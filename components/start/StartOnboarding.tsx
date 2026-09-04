@@ -918,8 +918,8 @@ export function StartOnboarding({ mode = 'new-campaign', multiplayerCode = '', s
                 </div>
               </div> : null}
               <div className="start-rules-confirm">
-                <button type="button" className="start-primary-control start-rules-confirm-button" onClick={() => { setRulesOpen(false); advanceToStep(2) }}>Choose This Game System</button>
-                <p><strong>Selected:</strong> {publicRulesetLabel(ruleset)}</p>
+                <button type="button" className="start-primary-control start-rules-confirm-button" aria-describedby="start-selected-game-system" onClick={() => { setRulesOpen(false); advanceToStep(2) }}>Choose This Game System</button>
+                <p id="start-selected-game-system" className="start-rules-selection-status" role="status" aria-live="polite">Selected game system: <strong>{publicRulesetLabel(ruleset)}</strong></p>
               </div>
             </div>
             <div className="start-step-help-rail start-step-help-rail--first">
