@@ -165,13 +165,13 @@ function NestedAccordionList({ items, initiallyOpen = false }: { items: Accordio
 
 function WhyCreatedAccordion() {
   return (
-    <details className="landing-accordion unique-accordion" open>
+    <details className="landing-accordion unique-accordion">
       <summary className="landing-accordion-summary">
         <span className="landing-accordion-prompt">Why I created RPG Your Way.</span>
         <AccordionPlus />
       </summary>
       <div className="landing-accordion-body unique-body">
-        <NestedAccordionList items={whyCreated} initiallyOpen />
+        <NestedAccordionList items={whyCreated} />
       </div>
     </details>
   )
@@ -179,13 +179,13 @@ function WhyCreatedAccordion() {
 
 function AudienceAccordion() {
   return (
-    <details className="landing-accordion audience-accordion" open>
+    <details className="landing-accordion audience-accordion">
       <summary className="landing-accordion-summary audience-summary">
         <span className="landing-accordion-prompt audience-prompt">Who benefits from this site?</span>
         <AccordionPlus />
       </summary>
       <div className="landing-accordion-body audience-body">
-        <NestedAccordionList items={audiences} initiallyOpen />
+        <NestedAccordionList items={audiences} />
       </div>
     </details>
   )
@@ -258,13 +258,13 @@ export default function HomePage() {
               </p>
               <p className="landing-news-line">
                 <span className="landing-news-separator" aria-hidden="true">•</span>
-                <strong>In the works: VTT Light</strong>
+                <strong>In the works: VTT Light</strong>{' '}
                 <span>our native, no-third-party tactical sketch VTT.</span>
               </p>
 
               <p className="landing-news-line">
                <span className="landing-news-separator" aria-hidden="true">•</span>
-               <strong>In the works: VTT Heavy</strong>
+               <strong>In the works: VTT Heavy</strong>{' '}
                <span>fully immersive VTT play through Foundry.</span>
               </p>
             </div>

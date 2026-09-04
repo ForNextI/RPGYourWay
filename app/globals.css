@@ -9640,3 +9640,57 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
     grid-template-columns: minmax(0, 1fr) !important;
   }
 }
+
+/* RPG Your Way 3.0.9: fixed landing console geometry.
+   The whole control station is a square, matching the logo beside/above it.
+   The screen is the flexible middle region; controls never grow the station.
+   Long current-turn text is bottom-anchored so the latest/end of the reply is visible. */
+.landing-player-stack {
+  aspect-ratio: 1 / 1;
+  min-height: 0;
+}
+
+.landing-campaign-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.landing-campaign-summary-card,
+.landing-campaign-actions {
+  flex: 0 0 auto;
+}
+
+.landing-campaign-screen-stage {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow: hidden;
+}
+
+.landing-campaign-screen-olive-frame {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.landing-campaign-screen-olive-frame .landing-campaign-snippet,
+.landing-campaign-snippet {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: hidden !important;
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: initial !important;
+}
+
+.landing-campaign-snippet > span,
+.landing-campaign-snippet--preview > p {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
