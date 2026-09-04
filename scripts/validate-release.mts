@@ -646,8 +646,9 @@ has(css, '.multiplayer-catchup-tip-body {', 'Multiplayer catch-up reveal styling
 const scriptPageUi = read('app/script/page.tsx')
 const shapeWorkspace = read('components/ShapeWorkspace.tsx')
 lacks(scriptPageUi, 'className="shape-steps"', 'obsolete Script explainer strip')
-has(scriptPageUi, 'another text-to-play game, another game system, or a tabletop campaign you recorded digitally', 'Script accepts outside campaign records')
-has(shapeWorkspace, 'Any useful digital record of the campaign you actually played.', 'Script source guidance accepts outside records')
+has(scriptPageUi, 'It turns your play into readable third-person prose', 'Script concise converter positioning')
+has(shapeWorkspace, 'Any useful digital record of the campaign you actually played.', 'Script accepts outside campaign records')
+
 lacks(shapeWorkspace, '<p className="kicker">Script workbench</p>', 'redundant Script workbench kicker')
 before(shapeWorkspace, 'id="shape-step-1-title">Upload or drop transcript', 'id="shape-step-2-title">Answer the questions', 'Script step order 1 → 2')
 before(shapeWorkspace, 'id="shape-step-2-title">Answer the questions', 'id="shape-step-3-title">See maximum usage', 'Script step order 2 → 3')
