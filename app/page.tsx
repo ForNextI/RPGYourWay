@@ -9,6 +9,7 @@ import { AdSenseSlot } from '@/components/ads/AdSenseSlot'
 const differences = [
   {
     title: 'I think campaigns should last.',
+    persistentPlay: true,
     copy: 'I wanted to be able to take a character from level 1 to level 20 without the beginning of the campaign disappearing behind me. If, 2,000 turns and 15 levels later, I need the name of the conductor on the first train my party ever rode, I want the AIGM to be able to go back and find it.',
   },
   {
@@ -215,6 +216,12 @@ function DifferenceSection() {
               </summary>
               <div className="landing-difference-copy">
                 <p>{difference.copy}</p>
+                {difference.persistentPlay ? (
+                  <PersistentPlayModal
+                    triggerLabel="Find Out More"
+                    triggerClassName="landing-difference-more-button"
+                  />
+                ) : null}
               </div>
             </details>
           ))}

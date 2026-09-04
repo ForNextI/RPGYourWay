@@ -1,9 +1,19 @@
 'use client'
 
-import { useRef } from 'react'
+import { useId, useRef } from 'react'
 
-export function PersistentPlayModal() {
+type PersistentPlayModalProps = {
+  triggerLabel?: string
+  triggerClassName?: string
+}
+
+export function PersistentPlayModal({
+  triggerLabel = 'Persistent Campaign?',
+  triggerClassName = '',
+}: PersistentPlayModalProps = {}) {
   const dialogRef = useRef<HTMLDialogElement>(null)
+  const titleId = useId()
+  const triggerClasses = ['persistent-play-trigger', triggerClassName].filter(Boolean).join(' ')
 
   function openDialog() {
     dialogRef.current?.showModal()
@@ -15,21 +25,21 @@ export function PersistentPlayModal() {
 
   return (
     <>
-      <button className="persistent-play-trigger" type="button" onClick={openDialog}>
-        Persistent Campaign?
+      <button className={triggerClasses} type="button" onClick={openDialog}>
+        {triggerLabel}
       </button>
 
       <dialog
         className="persistent-play-dialog"
         ref={dialogRef}
-        aria-labelledby="persistent-play-title"
+        aria-labelledby={titleId}
         onClick={(event) => {
           if (event.target === event.currentTarget) closeDialog()
         }}
       >
         <article className="persistent-play-modal-card">
           <header className="persistent-play-modal-header">
-            <h2 id="persistent-play-title">Okay. So what the hell do we mean by persistent play?</h2>
+            <h2 id={titleId}>Okay. So what the hell do we mean by persistent play?</h2>
             <button
               className="persistent-play-close-x"
               type="button"

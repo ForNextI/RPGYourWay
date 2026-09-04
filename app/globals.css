@@ -9521,3 +9521,28 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
   }
 }
 
+
+
+/* 3.0.4: top persistence explainer button. */
+.landing-difference-copy .landing-difference-more-button {
+  width: auto !important;
+  min-height: 44px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: .9rem;
+  border: 1px solid var(--rpgyw-control-inner-light) !important;
+  border-radius: 11px !important;
+  background: var(--rpgyw-face-olive-dark) !important;
+  padding: .62rem 1rem !important;
+  color: var(--rpgyw-cream) !important;
+  font-weight: 900;
+  box-shadow: var(--rpgyw-raised-dark-shadow) !important;
+  cursor: pointer;
+}
+.landing-difference-copy .landing-difference-more-button:hover,
+.landing-difference-copy .landing-difference-more-button:focus-visible {
+  border-color: var(--rpgyw-brass-light) !important;
+  background: var(--rpgyw-forest) !important;
+  color: var(--rpgyw-lime) !important;
+}

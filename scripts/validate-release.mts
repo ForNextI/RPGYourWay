@@ -20,9 +20,9 @@ const pkg = JSON.parse(read('package.json')) as {
   dependencies?: Record<string, string>
 }
 assert.equal(pkg.name, 'rpg-your-way')
-assert.equal(pkg.version, '3.0.3')
-assert.equal(pkg.rpgywVersion, '3.0.3')
-has(read('lib/version.ts'), "APP_VERSION = '3.0.3'", 'visible app version')
+assert.equal(pkg.version, '3.0.4')
+assert.equal(pkg.rpgywVersion, '3.0.4')
+has(read('lib/version.ts'), "APP_VERSION = '3.0.4'", 'visible app version')
 
 for (const file of [
   'app/page.tsx',
@@ -744,3 +744,13 @@ has(css, 'font-size: clamp(1.34rem, 2.35vw, 1.72rem);', 'larger landing lead hea
 has(css, 'font-size: clamp(1.06rem, 1.45vw, 1.20rem);', 'larger landing intro copy')
 has(css, 'font-size: clamp(1.04rem, 1.6vw, 1.18rem);', 'larger differentiator buttons')
 has(css, 'font-size: clamp(1.18rem, 2.65vw, 1.48rem);', 'larger lower major landing buttons')
+
+
+// RPGYW 3.0.4 persistent-play cross-link contract.
+const persistentPlayModal304 = read('components/PersistentPlayModal.tsx')
+has(home, 'triggerLabel="Find Out More"', 'top persistence Find Out More label')
+has(home, 'triggerClassName="landing-difference-more-button"', 'top persistence styling hook')
+has(persistentPlayModal304, "triggerLabel = 'Persistent Campaign?'", 'persistent modal default trigger')
+has(persistentPlayModal304, 'const titleId = useId()', 'duplicate-safe persistent modal title id')
+has(persistentPlayModal304, 'aria-labelledby={titleId}', 'persistent modal dynamic aria label')
+has(css, '.landing-difference-copy .landing-difference-more-button {', 'top persistence button style')
