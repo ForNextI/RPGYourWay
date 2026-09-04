@@ -9523,19 +9523,23 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 
 
 
-/* 3.0.4: compact persistence explainer button. */
+/* 3.0.4: compact persistence explainer button flows with the copy. */
 .landing-difference-copy:has(.landing-difference-more-button) {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
-  gap: .6rem;
+  display: block;
+}
+
+.landing-difference-copy:has(.landing-difference-more-button) > p {
+  display: inline;
 }
 
 .landing-difference-copy .landing-difference-more-button {
   width: auto !important;
   min-height: 30px !important;
-  align-self: end;
-  margin: 0 0 .05rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: baseline;
+  margin: 0 0 0 .45rem;
   border: 1px solid var(--rpgyw-control-inner-light) !important;
   border-radius: 8px !important;
   background: var(--rpgyw-face-olive-dark) !important;
