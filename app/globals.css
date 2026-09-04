@@ -9523,23 +9523,32 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
 
 
 
-/* 3.0.4: top persistence explainer button. */
+/* 3.0.4: compact persistence explainer button. */
+.landing-difference-copy:has(.landing-difference-more-button) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: .6rem;
+}
+
 .landing-difference-copy .landing-difference-more-button {
   width: auto !important;
-  min-height: 44px !important;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: .9rem;
+  min-height: 30px !important;
+  align-self: end;
+  margin: 0 0 .05rem;
   border: 1px solid var(--rpgyw-control-inner-light) !important;
-  border-radius: 11px !important;
+  border-radius: 8px !important;
   background: var(--rpgyw-face-olive-dark) !important;
-  padding: .62rem 1rem !important;
+  padding: .28rem .58rem !important;
   color: var(--rpgyw-cream) !important;
+  font-size: .78rem;
   font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
   box-shadow: var(--rpgyw-raised-dark-shadow) !important;
   cursor: pointer;
 }
+
 .landing-difference-copy .landing-difference-more-button:hover,
 .landing-difference-copy .landing-difference-more-button:focus-visible {
   border-color: var(--rpgyw-brass-light) !important;
