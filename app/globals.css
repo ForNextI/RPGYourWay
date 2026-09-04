@@ -9559,3 +9559,84 @@ body .start-choice.start-choice--selected:focus-visible :where(strong, span) {
   background: var(--rpgyw-forest) !important;
   color: var(--rpgyw-lime) !important;
 }
+
+/* Emergency landing-page News mobile composition repair.
+   Desktop News composition is intentionally left untouched. */
+@media (max-width: 700px) {
+  .landing-news-panel {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: .65rem !important;
+    align-items: start !important;
+  }
+
+  .landing-news-header {
+    display: grid !important;
+    grid-template-columns: max-content minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: .45rem .7rem !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .landing-news-eyebrow,
+  .landing-news-deck {
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  .landing-news-deck {
+    text-align: left !important;
+  }
+
+  .landing-news-headlines {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: .45rem !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    justify-self: stretch !important;
+    align-self: start !important;
+    text-align: left !important;
+    transform: none !important;
+  }
+
+  .landing-news-headlines .landing-news-line,
+  .landing-news-headlines .landing-news-line:nth-of-type(n + 2) {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+    transform: none !important;
+  }
+
+  .landing-news-line > strong,
+  .landing-news-line > span {
+    display: inline !important;
+  }
+
+  .landing-news-line > .landing-news-separator {
+    margin-inline: .18em !important;
+  }
+
+  .landing-news-line:nth-of-type(n + 2) > .landing-news-separator:first-child {
+    margin-left: 0 !important;
+    margin-right: .24em !important;
+  }
+
+  .landing-news-headlines p + p::before {
+    content: none !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .landing-news-header {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
